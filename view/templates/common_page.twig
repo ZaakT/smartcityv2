@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../public/assets/css/bootstrap/bootstrap.min.css">
+
+    <title>{% block title %}Title{% endblock %}</title>
+    <style type="text/css">
+        div{
+            background-color:lightskyblue;
+            border: 1px solid;
+        }
+    </style>
+</head>
+
+<body>
+    {% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+            1 of 3
+            </div>
+            <div class="col-6">
+            2 of 3 (wider)
+            </div>
+            <div class="col">
+            3 of 3
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+            1 of 3
+            </div>
+            <div class="col-5">
+            2 of 3 (wider)
+            </div>
+            <div class="col">
+            3 of 3
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    <script src="../../public/assets/js/bootstrap/bootstrap.min.js"></script>
+    <script src="../../public/assets/js/jquery-3.4.1.min.js"></script>
+</body>
+
+</html>
