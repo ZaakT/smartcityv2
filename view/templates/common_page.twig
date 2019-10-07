@@ -7,45 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../public/assets/css/bootstrap/bootstrap.min.css">
-
-    <title>{% block title %}Title{% endblock %}</title>
+    <link href="../../public/img/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
+	<link href="../../public/assets/css/simple-sidebar.css" rel="stylesheet">
     <style type="text/css">
-        div{
-            background-color:lightskyblue;
-            border: 1px solid;
-        }
+		.oi{
+			padding:0 10px;
+		}
+
+		p{
+			text-align:justify;
+			text-justify:auto;
+		}
+		.sidebar{
+			border: solid 1px;
+		}
     </style>
+    <title>{% block title %}Title{% endblock %}</title>
 </head>
 
 <body>
-    {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-            1 of 3
-            </div>
-            <div class="col-6">
-            2 of 3 (wider)
-            </div>
-            <div class="col">
-            3 of 3
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-            1 of 3
-            </div>
-            <div class="col-5">
-            2 of 3 (wider)
-            </div>
-            <div class="col">
-            3 of 3
-            </div>
-        </div>
-    </div>
-    {% endblock %}
-    <script src="../../public/assets/js/bootstrap/bootstrap.min.js"></script>
-    <script src="../../public/assets/js/jquery-3.4.1.min.js"></script>
+    <div class="d-flex" id="wrapper">
+
+		<!-- Sidebar -->
+		{% block sidebar %}{% endblock %}
+		<!-- /#sidebar-wrapper -->
+
+		<!-- Page Content -->
+		<div id="page-content-wrapper">
+			{% block navbar %}{% endblock %}
+			<div class="container-fluid">
+				{% block content %}{% endblock %}
+			</div>
+		</div>
+		<!-- /#page-content-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+<!-- Menu Toggle Script -->
+    <script src="../../public/assets/js/jquery.min.js"></script>
+    <script src="../../public/assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+	<script>
+		$("#menu-toggle").click(function(e) {
+			e.preventDefault();
+			$("#wrapper").toggleClass("toggled");
+		});
+	</script>
 </body>
 
 </html>
