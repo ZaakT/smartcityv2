@@ -4,8 +4,8 @@
         <!-- Project Developement -->
     {% if page=="project_dev" %}
         <h4 class="nav-item align-self-center">Project Developement</h4>
-        <a class="nav-item nav-link" href="/index.php?path=/input/project_design">Project Design</a>
-        <a class="nav-item nav-link" href="/index.php?path=/input/project_scoping">Project Scoping</a>
+        <a class="nav-item nav-link" href="?action=project_design">Project Design</a>
+        <a class="nav-item nav-link" href="?action=project_scoping">Project Scoping</a>
     {% elseif page=="project_design" %}
         <h4 class="nav-item align-self-center">Project Design</h4>
         <a class="nav-item nav-link" href="#">1 - Use Cases Menu</a>
@@ -39,8 +39,8 @@
         <!-- Input / Financing -->
     {% elseif page=="financing" %}
         <h4 class="nav-item align-self-center">Financing</h4>
-        <a class="nav-item nav-link" href="/index.php?path=/input/business_model">Business Model</a>
-        <a class="nav-item nav-link" href="/index.php?path=/input/funding">Funding</a>
+        <a class="nav-item nav-link" href="?action=business_model">Business Model</a>
+        <a class="nav-item nav-link" href="?action=funding">Funding</a>
     {% elseif page=="business_model" %}
         <h4 class="nav-item align-self-center">Business Model</h4>
         <a class="nav-item nav-link" href="#">1 - Use Cases Menu</a>
@@ -64,7 +64,7 @@
         <a class="nav-item nav-link" href="#">Budget</a>
         <a class="nav-item nav-link" href="#">Financing</a>
         <a class="nav-item nav-link" href="#">Bankability</a>
-        <a class="nav-item nav-link" disabled href="#">Environmental</a>
+        <a class="nav-item nav-link disabled" href="#">Environmental</a>
         <!-- Output / Scenarios -->
     {% elseif page=="scenarios" %}
         <h4 class="nav-item align-self-center">Scenarios</h4>

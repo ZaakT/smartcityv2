@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <div class="d-flex" style="height: 100vh;" id="wrapper">
+    <div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
 		{% block sidebar %}{% endblock %}
@@ -24,7 +24,7 @@
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 			{% block navbar %}{% endblock %}
-			<div class="container-fluid">
+			<div class="container-fluid page-content">
 				{% block content %}{% endblock %}
 			</div>
 		</div>

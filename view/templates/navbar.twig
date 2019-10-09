@@ -1,22 +1,22 @@
 {% macro navbar(is_connected=false,is_admin=false) %}
   {% if is_connected %}
-<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href="/index.php">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Input Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="/index.php?path=/input/project_dev">Project Developpement</a>
-          <a class="dropdown-item" href="/index.php?path=/input/cost_benefits">Cost Benefits</a>
-          <a class="dropdown-item" href="/index.php?path=/input/financing">Financing</a>
+          <a class="dropdown-item" href="?action=project_dev">Project Developpement</a>
+          <a class="dropdown-item" href="?action=cost_benefits">Cost Benefits</a>
+          <a class="dropdown-item" href="?action=financing">Financing</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -24,18 +24,18 @@
           Output Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Dashboards</a>
-          <a class="dropdown-item" href="#">Scenario</a>
+          <a class="dropdown-item" href="?action=dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?action=scenarios">Scenarios</a>
         </div>
       </li>
     </ul>
   </div>
   <ul class="navbar-nav">
       {% if is_admin %}
-      <li class="nav-item"><a href="/index.php?path=/others/admin"><span class="oi oi-wrench nav-link"  title="wrench" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="?action=admin"><span class="oi oi-wrench nav-link"  title="wrench" aria-hidden="true"></span></a></li>
       {% endif %}      
-      <li class="nav-item"><a href="/index.php?path=/others/profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
-      <li class="nav-item"><a href="/index.php"><span class="oi oi-account-logout nav-link" href="" title="account-logout" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="?action=profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="?action=disconnect"><span class="oi oi-account-logout nav-link" href="" title="account-logout" aria-hidden="true"></span></a></li>
       <li class="nav-item"><span class="oi oi-cog nav-link" href="#" title="cog" aria-hidden="true"></span></li>
   </ul>
 </nav>
