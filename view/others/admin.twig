@@ -1,0 +1,22 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("admin") }}{% endblock %}
+
+{% block title %}Admin Page{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class="row my-5 align-items-center">
+        <div class="col-lg-6 text-center">
+            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+        </div>
+        <div class="col-lg-5">
+            <h2 class="text-center">Admin Page</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}

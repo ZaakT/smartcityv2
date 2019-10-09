@@ -1,0 +1,19 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mt-5" >
+    <div class="col-lg-6 text-center">
+        <img src="../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+    </div>
+    <div class="col-lg-5">
+        <h2 class="text-center">Decision Support Toolkit<br>Value and Financial modeling</h2>
+        <h5 class="text-center">Version 2.0.0</h5>
+        <h4 class="text-center mt-5">Make the case for Smart City projects</h4>
+    </div>
+</div>
+{% endblock %}

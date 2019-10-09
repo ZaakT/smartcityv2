@@ -9,24 +9,13 @@
     <link rel="stylesheet" href="../../public/assets/css/bootstrap/bootstrap.min.css">
     <link href="../../public/img/open-iconic-master/font/css/open-iconic-bootstrap.css" rel="stylesheet">
 	<link href="../../public/assets/css/simple-sidebar.css" rel="stylesheet">
-    <style type="text/css">
-		.oi{
-			padding:0 10px;
-		}
-
-		p{
-			text-align:justify;
-			text-justify:auto;
-		}
-		.sidebar{
-			border: solid 1px;
-		}
-    </style>
+	<link href="../../public/assets/css/custom.css" rel="stylesheet">
+    {#<style type="text/css"></style>#}
     <title>{% block title %}Title{% endblock %}</title>
 </head>
 
 <body>
-    <div class="d-flex" id="wrapper">
+    <div class="d-flex" style="height: 100vh;" id="wrapper">
 
 		<!-- Sidebar -->
 		{% block sidebar %}{% endblock %}

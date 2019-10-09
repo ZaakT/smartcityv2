@@ -1,0 +1,28 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("financing") }}{% endblock %}
+
+{% block title %}Financing{% endblock %}
+
+{% block content %}
+<div class="row m-5 align-items-center">
+    <div class="col-lg-6 text-center">
+        <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+    </div>
+    <div class="col-lg-5">
+        <h2 class="text-center">Input / Financing</h2>
+    </div>
+</div>
+<div class="row m-5">
+    <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+</div>
+<div class="row m-5">
+    <a class="offset-3 col-2 btn btn-dark" href="/index.php?path=/input/business_model" role="button">Business Model</a>
+    <a class="offset-2 col-2 btn btn-dark" href="/index.php?path=/input/funding" role="button">Funding</a>
+</div>
+
+{% endblock %}

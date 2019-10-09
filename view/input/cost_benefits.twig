@@ -1,0 +1,22 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("cost_benefits") }}{% endblock %}
+
+{% block title %}Cost Benefits{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class="row m-5 align-items-center">
+        <div class="col-lg-6 text-center">
+            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+        </div>
+        <div class="col-lg-5">
+            <h2 class="text-center">Input / Cost Benefits</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}
