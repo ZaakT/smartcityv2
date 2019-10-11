@@ -19,7 +19,23 @@
         </div>
     </div>
     <div class="row mt-5" >
-        <h1 class="col text-center">Hello <span class="font-weight-bold">{{username}}</span> :  n°{{id_user}}  / {{ is_admin ? "admin" : "common" }}</h1>
+        <ul>
+            <li>
+                <span class="font-weight-bold">ID</span> : {{id_user}}
+            </li>
+            <li>
+                <span class="font-weight-bold">Username</span> : {{username}}
+            </li>
+            <li>
+                <span class="font-weight-bold">Password</span> : {{password}}
+            </li>
+            <li>
+                <span class="font-weight-bold">Role</span> : {{ is_admin ? "admin" : "common" }}
+            </li>
+            <li>
+                <span class="font-weight-bold">City</span> : {{ city }}
+            </li>
+        </ul>
     </div>
 </div>
 {% endblock %}

@@ -15,7 +15,7 @@ $loader = new FilesystemLoader(__DIR__ . '/view');
 $twig = new Environment($loader);
 
 $is_connected = true; //à déduire si login dans $_COOKIE
-$id_user = 1;
+$id_user = 2;
 
 //stocker un token (clé aléatoire générée à la connexion) dans la table token et l'username en cookie
 try{
