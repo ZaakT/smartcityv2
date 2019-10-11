@@ -1,85 +1,89 @@
 {% macro sidebar(page) %}
+
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
-        <a class="navbar-brand p-4" href="#">Decision Support Toolkit</a>
+        <a class="navbar-brand p-4" href="?action=home">Decision Support Toolkit</a>
+       
         <!-- Project Developement -->
     {% if page=="project_dev" %}
-        <h4 class="nav-item align-self-center">Project Developement</h4>
+        <h4 class="nav-item text-center">- Input -<br>Project Developement</h4>
         <a class="nav-item nav-link" href="?action=project_design">Project Design</a>
         <a class="nav-item nav-link" href="?action=project_scoping">Project Scoping</a>
     {% elseif page=="project_design" %}
-        <h4 class="nav-item align-self-center">Project Design</h4>
-        <a class="nav-item nav-link" href="#">1 - Use Cases Menu</a>
-        <a class="nav-item nav-link" href="#">2 - Criteria</a>
-        <a class="nav-item nav-link" href="#">3 - Geography</a>
-        <a class="nav-item nav-link" href="#">4 - Use Case</a>
-        <a class="nav-item nav-link" href="#">5 - Rating</a>
-        <a class="nav-item nav-link" href="#">6 - Scoring</a>
-        <a class="nav-item nav-link" href="#">7 - Global Score</a>
+        <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
+        <a class="nav-item nav-link" id="ucm" href="?action=project_design&amp;action2=ucm">1 - Use Cases Menu</a>
+        <a class="nav-item nav-link" id="criteria" href="?action=project_design&amp;action2=criteria">2 - Criteria</a>
+        <a class="nav-item nav-link" id="geography" href="?action=project_design&amp;action2=geography">3 - Geography</a>
+        <a class="nav-item nav-link" id="use_case" href="?action=project_design&amp;action2=use_case">4 - Use Case</a>
+        <a class="nav-item nav-link" id="rating"  href="?action=project_design&amp;action2=rating">5 - Rating</a>
+        <a class="nav-item nav-link" id="scoring"  href="?action=project_design&amp;action2=scoring">6 - Scoring</a>
+        <a class="nav-item nav-link" id="global_score"  href="?action=project_design&amp;action2=global_score">7 - Global Score</a>
     {% elseif page=="project_scoping" %}
-        <h4 class="nav-item align-self-center">Project Scoping</h4>
-        <a class="nav-item nav-link" href="#">1 - Project</a>
-        <a class="nav-item nav-link" href="#">2 - Scope</a>
-        <a class="nav-item nav-link" href="#">3 - Perimeter</a>
-        <a class="nav-item nav-link" href="#">4 - Size</a>
-        <a class="nav-item nav-link" href="#">5 - Volumes</a>
-        <a class="nav-item nav-link" href="#">6 - Schedule</a>
-        <a class="nav-item nav-link" href="#">7 - Discount Rate</a>
-        <!-- Input / Cost Benefits -->
+        <h4 class="nav-item text-center">- Input -<br>Project Scoping</h4>
+        <a class="nav-item nav-link" id="project" href="?action=project_scoping&amp;action2=project">1 - Project</a>
+        <a class="nav-item nav-link" id="scope" href="?action=project_scoping&amp;action2=scope">2 - Scope</a>
+        <a class="nav-item nav-link" id="perimeter" href="?action=project_scoping&amp;action2=perimeter">3 - Perimeter</a>
+        <a class="nav-item nav-link" id="size" href="?action=project_scoping&amp;action2=size">4 - Size</a>
+        <a class="nav-item nav-link" id="volumes" href="?action=project_scoping&amp;action2=volumes">5 - Volumes</a>
+        <a class="nav-item nav-link" id="schedule" href="?action=project_scoping&amp;action2=schedule">6 - Schedule</a>
+        <a class="nav-item nav-link" id="discount_rate" href="?action=project_scoping&amp;action2=discount_rate">7 - Discount Rate</a>
+        
+        <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
-        <h4 class="nav-item align-self-center">Cost Benefits</h4>
-        <a class="nav-item nav-link" href="#">1 - Use Case</a>
-        <a class="nav-item nav-link" href="#">2 - Capex</a>
-        <a class="nav-item nav-link" href="#">3 - Implementation</a>
-        <a class="nav-item nav-link" href="#">4 - Opex</a>
-        <a class="nav-item nav-link" href="#">5 - Revenues</a>
-        <a class="nav-item nav-link" href="#">6 - Cash Releasing Benefits</a>
-        <a class="nav-item nav-link" href="#">7 - Wider Cash Benefits</a>
-        <a class="nav-item nav-link" href="#">8 - Non Cash Benefits</a>
-        <a class="nav-item nav-link" href="#">9 - Risks</a>
-        <!-- Input / Financing -->
+        <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>
+        <a class="nav-item nav-link" id="use_case_cb" href="?action=cost_benefits&amp;action2=use_case_cb">1 - Use Case</a>
+        <a class="nav-item nav-link" id="capex" href="?action=cost_benefits&amp;action2=capex">2 - Capex</a>
+        <a class="nav-item nav-link" id="implem" href="?action=cost_benefits&amp;action2=implem">3 - Implementation</a>
+        <a class="nav-item nav-link" id="opex" href="?action=cost_benefits&amp;action2=opex">4 - Opex</a>
+        <a class="nav-item nav-link" id="revenues" href="?action=cost_benefits&amp;action2=revenues">5 - Revenues</a>
+        <a class="nav-item nav-link" id="cashreleasing" href="?action=cost_benefits&amp;action2=cashreleasing">6 - Cash Releasing Benefits</a>
+        <a class="nav-item nav-link" id="widercash" href="?action=cost_benefits&amp;action2=widercash">7 - Wider Cash Benefits</a>
+        <a class="nav-item nav-link" id="noncash" href="?action=cost_benefits&amp;action2=noncash">8 - Non Cash Benefits</a>
+        <a class="nav-item nav-link" id="risks" href="?action=cost_benefits&amp;action2=risks">9 - Risks</a>
+        
+        <!-- - Input - / Financing -->
     {% elseif page=="financing" %}
-        <h4 class="nav-item align-self-center">Financing</h4>
+        <h4 class="nav-item text-center">- Input -<br>Financing</h4>
         <a class="nav-item nav-link" href="?action=business_model">Business Model</a>
         <a class="nav-item nav-link" href="?action=funding">Funding</a>
     {% elseif page=="business_model" %}
-        <h4 class="nav-item align-self-center">Business Model</h4>
-        <a class="nav-item nav-link" href="#">1 - Use Cases Menu</a>
-        <a class="nav-item nav-link" href="#">2 - Criteria</a>
-        <a class="nav-item nav-link" href="#">3 - Geography</a>
-        <a class="nav-item nav-link" href="#">4 - Use Case</a>
-        <a class="nav-item nav-link" href="#">5 - Rating</a>
-        <a class="nav-item nav-link" href="#">6 - Scoring</a>
-        <a class="nav-item nav-link" href="#">7 - Global Score</a>
+        <h4 class="nav-item text-center">- Input -<br>Business Model</h4>
+        <a class="nav-item nav-link disabled" id="id" href="#">0 - item</a>
     {% elseif page=="funding" %}        
-        <h4 class="nav-item align-self-center">Funding</h4>
-        <a class="nav-item nav-link" href="#">1 - Scenario</a>
-        <a class="nav-item nav-link" href="#">2 - Input</a>
-        <a class="nav-item nav-link" href="#">3 - Output</a>
-        <a class="nav-item nav-link" href="#">4 - Beneficiary</a>
-        <a class="nav-item nav-link" href="#">5 - Scenarios Comparison</a>
-        <!-- Output / Dashboards -->
+        <h4 class="nav-item text-center">- Input -<br>Funding</h4>
+        <a class="nav-item nav-link" id="scenario" href="?action=funding&amp;action2=scenario">1 - Scenario</a>
+        <a class="nav-item nav-link" id="input" href="?action=funding&amp;action2=input">2 - Input</a>
+        <a class="nav-item nav-link" id="output" href="?action=funding&amp;action2=output">3 - Output</a>
+        <a class="nav-item nav-link" id="benef" href="?action=funding&amp;action2=benef">4 - Beneficiary</a>
+        <a class="nav-item nav-link" id="scen_comp" href="?action=funding&amp;action2=scen_comp">5 - Scenarios Comparison</a>
+        
+        <!-- - Output - / Dashboards -->
     {% elseif page=="dashboards" %}
-        <h4 class="nav-item align-self-center">Dashboards</h4>
-        <a class="nav-item nav-link" href="#">Cost Benefits</a>
-        <a class="nav-item nav-link" href="#">Budget</a>
-        <a class="nav-item nav-link" href="#">Financing</a>
-        <a class="nav-item nav-link" href="#">Bankability</a>
-        <a class="nav-item nav-link disabled" href="#">Environmental</a>
-        <!-- Output / Scenarios -->
+        <h4 class="nav-item text-center">- Output -<br>Dashboards</h4>
+        <a class="nav-item nav-link" id="cost_benefits_out" href="?action=dashboards&amp;action2=cost_benefits_out">Cost Benefits</a>
+        <a class="nav-item nav-link" id="budget" href="?action=dashboards&amp;action2=budget">Budget</a>
+        <a class="nav-item nav-link" id="financing" href="?action=dashboards&amp;action2=financing">Financing</a>
+        <a class="nav-item nav-link" id="bankability" href="?action=dashboards&amp;action2=bankability">Bankability</a>
+        <a class="nav-item nav-link disabled" id="environmental" href="?action=dashboards&amp;action2=environmental">Environmental</a>
+        
+        <!-- - Output - / Scenarios -->
     {% elseif page=="scenarios" %}
-        <h4 class="nav-item align-self-center">Scenarios</h4>
-        <a class="nav-item nav-link" href="#">Comparison</a>
-        <a class="nav-item nav-link" href="#">Combination</a>
+        <h4 class="nav-item text-center">- Output -<br>Scenarios</h4>
+        <a class="nav-item nav-link disabled" id="id" href="?action=scenarios&amp;action2=id">Comparison</a>
+        <a class="nav-item nav-link disabled" id="id" href="?action=scenarios&amp;action2=id">Combination</a>
+        
         <!-- Admin -->
     {% elseif page=="admin" %}
-        <h4 class="nav-item align-self-center">Administration</h4>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-pencil nav-link" href="#" title="pencil" aria-hidden="true"></span>Modify Database</a>
-        <a class="nav-item nav-link" href="#">Other</a>
+        <h4 class="nav-item text-center">Administration</h4>
+        <a class="nav-item nav-link disabled" id="id" href="?action=admin&amp;action2=id"><span class="oi oi-pencil nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="pencil" aria-hidden="true"></span>Modify Database</a>
+        <a class="nav-item nav-link disabled" id="id" href="?action=admin&amp;action2=id">Other</a>
+        
         <!-- Profile -->
     {% elseif page=="profile" %}
-        <h4 class="nav-item align-self-center">Profile</h4>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-spreadsheet nav-link" href="#" title="spreadsheet" aria-hidden="true"></span>Informations</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-people nav-link" href="#" title="people" aria-hidden="true"></span>Groups</a>
+        <h4 class="nav-item text-center">Profile</h4>
+        <a class="nav-item nav-link disabled" id="id" href="?action=profile&amp;action2=id"><span class="oi oi-spreadsheet nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="spreadsheet" aria-hidden="true"></span>Informations</a>
+        <a class="nav-item nav-link disabled" id="id" href="?action=profile&amp;action2=id"><span class="oi oi-people nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="people" aria-hidden="true"></span>Groups</a>
+    
+    
     {% endif %}
     </div>    
 {% endmacro %}

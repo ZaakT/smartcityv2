@@ -6,15 +6,13 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("dashboards") }}{% endblock %}
 
-{% block title %}Output / Budget{% endblock %}
-
 {% block content %}
 <div class="row m-5 align-items-center">
     <div class="col-lg-6 text-center">
         <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
     </div>
     <div class="col-lg-5">
-        <h2 class="text-center">Output / Budget</h2>
+        <h2 class="text-center">{% block title %}Financing - Output{% endblock %}</h2>
     </div>
 </div>
 <div class="row m-5">

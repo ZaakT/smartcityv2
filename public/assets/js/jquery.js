@@ -1346,8 +1346,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 		assert(function( el ) {
 			// Check to see if it's possible to do matchesSelector
-			// on a disconnected node (IE 9)
-			support.disconnectedMatch = matches.call( el, "*" );
+			// on a logouted node (IE 9)
+			support.logoutedMatch = matches.call( el, "*" );
 
 			// This should fail with an exception
 			// Gecko does not error, returns false instead
@@ -1410,10 +1410,10 @@ setDocument = Sizzle.setDocument = function( node ) {
 		compare = ( a.ownerDocument || a ) === ( b.ownerDocument || b ) ?
 			a.compareDocumentPosition( b ) :
 
-			// Otherwise we know they are disconnected
+			// Otherwise we know they are logouted
 			1;
 
-		// Disconnected nodes
+		// logouted nodes
 		if ( compare & 1 ||
 			(!support.sortDetached && b.compareDocumentPosition( a ) === compare) ) {
 
@@ -1447,7 +1447,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			ap = [ a ],
 			bp = [ b ];
 
-		// Parentless nodes are either documents or disconnected
+		// Parentless nodes are either documents or logouted
 		if ( !aup || !bup ) {
 			return a === document ? -1 :
 				b === document ? 1 :
@@ -1508,9 +1508,9 @@ Sizzle.matchesSelector = function( elem, expr ) {
 		try {
 			var ret = matches.call( elem, expr );
 
-			// IE 9's matchesSelector returns false on disconnected nodes
-			if ( ret || support.disconnectedMatch ||
-					// As well, disconnected nodes are said to be in a document
+			// IE 9's matchesSelector returns false on logouted nodes
+			if ( ret || support.logoutedMatch ||
+					// As well, logouted nodes are said to be in a document
 					// fragment in IE 9
 					elem.document && elem.document.nodeType !== 11 ) {
 				return ret;
@@ -4521,7 +4521,7 @@ var isHiddenWithinTree = function( elem, el ) {
 
 			// Otherwise, check computed style
 			// Support: Firefox <=43 - 45
-			// Disconnected elements can have computed display: none, so first confirm that elem is
+			// logouted elements can have computed display: none, so first confirm that elem is
 			// in the document.
 			isAttached( elem ) &&
 
@@ -6565,7 +6565,7 @@ function getWidthOrHeight( elem, dimension, extra ) {
 	// Also use offsetWidth/offsetHeight for misreported inline dimensions (gh-3602)
 	// Support: IE 9-11 only
 	// Also use offsetWidth/offsetHeight for when box sizing is unreliable
-	// We use getClientRects() to check for hidden/disconnected.
+	// We use getClientRects() to check for hidden/logouted.
 	// In those cases, the computed value can be trusted to be border-box
 	if ( ( !support.boxSizingReliable() && isBorderBox ||
 		val === "auto" ||
@@ -6777,7 +6777,7 @@ jQuery.each( [ "height", "width" ], function( i, dimension ) {
 					// Table columns in Safari have non-zero offsetWidth & zero
 					// getBoundingClientRect().width unless display is changed.
 					// Support: IE <=11 only
-					// Running getBoundingClientRect on a disconnected node
+					// Running getBoundingClientRect on a logouted node
 					// in IE throws an error.
 					( !elem.getClientRects().length || !elem.getBoundingClientRect().width ) ?
 						swap( elem, cssShow, function() {
@@ -6992,7 +6992,7 @@ Tween.propHooks = {
 };
 
 // Support: IE <=9 only
-// Panic based approach to setting things on disconnected nodes
+// Panic based approach to setting things on logouted nodes
 Tween.propHooks.scrollTop = Tween.propHooks.scrollLeft = {
 	set: function( tween ) {
 		if ( tween.elem.nodeType && tween.elem.parentNode ) {
@@ -10247,7 +10247,7 @@ jQuery.fn.extend( {
 			return;
 		}
 
-		// Return zeros for disconnected and hidden (display: none) elements (gh-2310)
+		// Return zeros for logouted and hidden (display: none) elements (gh-2310)
 		// Support: IE <=11 only
 		// Running getBoundingClientRect on a
 		// disconnected node in IE throws an error

@@ -6,8 +6,6 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("project_scoping") }}{% endblock %}
 
-{% block title %}Project Design{% endblock %}
-
 {% block content %}
 <div class="">
     <div class="row m-5 align-items-center">
@@ -15,7 +13,7 @@
             <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
-            <h2 class="text-center">Input / Project Developement / Project Scoping</h2>
+            <h2 class="text-center">{% block title %}Project Scoping{% endblock %}</h2>
         </div>
     </div>
 </div>

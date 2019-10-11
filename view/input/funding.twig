@@ -6,7 +6,6 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("funding") }}{% endblock %}
 
-{% block title %}Funding{% endblock %}
 
 {% block content %}
 <div class="">
@@ -15,7 +14,7 @@
             <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
-            <h2 class="text-center">Financing / Funding</h2>
+            <h2 class="text-center">{% block title %}Funding{% endblock %}</h2>
         </div>
     </div>
 </div>
