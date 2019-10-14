@@ -14,9 +14,9 @@
           Input Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?action=project_dev">Project Developpement</a>
-          <a class="dropdown-item" href="?action=cost_benefits">Cost Benefits</a>
-          <a class="dropdown-item" href="?action=financing">Financing</a>
+          <a class="dropdown-item" href="?A=project_dev">Project Developpement</a>
+          <a class="dropdown-item" href="?A=cost_benefits">Cost Benefits</a>
+          <a class="dropdown-item" href="?A=financing">Financing</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -24,17 +24,17 @@
           Output Modules
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?action=dashboards">Dashboards</a>
-          <a class="dropdown-item" href="?action=scenarios">Scenarios</a>
+          <a class="dropdown-item" href="?A=dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?A=scenarios">Scenarios</a>
         </div>
       </li>
     </ul>
   </div>
   <ul class="navbar-nav">
       {% if is_admin %}
-      <li class="nav-item"><a href="?action=admin"><span class="oi oi-wrench nav-link"  title="wrench" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="?A=admin"><span class="oi oi-wrench nav-link"  title="wrench" aria-hidden="true"></span></a></li>
       {% endif %}      
-      <li class="nav-item"><a href="?action=profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="?A=profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
       <li class="nav-item"><span class="oi oi-account-logout nav-link" data-toggle="modal" data-target="#askLogoutModal" title="account-logout" aria-hidden="true"></span></li>
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
@@ -74,7 +74,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <a  href="?action=logout"><button type="button" class="btn btn-dark">Yes</button></a>
+        <a  href="?A=logout"><button type="button" class="btn btn-dark">Yes</button></a>
       </div>
     </div>
   </div>

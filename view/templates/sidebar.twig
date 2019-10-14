@@ -1,87 +1,91 @@
 {% macro sidebar(page) %}
 
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
-        <a class="navbar-brand p-4" href="?action=home">Decision Support Toolkit</a>
+        <a class="navbar-brand p-4" href="?A=home">Decision Support Toolkit</a>
        
         <!-- Project Developement -->
     {% if page=="project_dev" %}
         <h4 class="nav-item text-center">- Input -<br>Project Developement</h4>
-        <a class="nav-item nav-link" href="?action=project_design">Project Design</a>
-        <a class="nav-item nav-link" href="?action=project_scoping">Project Scoping</a>
+        <a class="nav-item nav-link" href="?A=project_design">Project Design</a>
+        <a class="nav-item nav-link" href="?A=project_scoping">Project Scoping</a>
     {% elseif page=="project_design" %}
         <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
-        <a class="nav-item nav-link" id="ucm" href="?action=project_design&amp;action2=ucm">1 - Use Cases Menu</a>
-        <a class="nav-item nav-link" id="criteria" href="?action=project_design&amp;action2=criteria">2 - Criteria</a>
-        <a class="nav-item nav-link" id="geography" href="?action=project_design&amp;action2=geography">3 - Geography</a>
-        <a class="nav-item nav-link" id="use_case" href="?action=project_design&amp;action2=use_case">4 - Use Case</a>
-        <a class="nav-item nav-link" id="rating"  href="?action=project_design&amp;action2=rating">5 - Rating</a>
-        <a class="nav-item nav-link" id="scoring"  href="?action=project_design&amp;action2=scoring">6 - Scoring</a>
-        <a class="nav-item nav-link" id="global_score"  href="?action=project_design&amp;action2=global_score">7 - Global Score</a>
+        <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">1 - Use Cases Menu</a>
+        <a class="nav-item nav-link" id="criteria" href="?A=project_design&amp;A2=criteria">2 - Criteria</a>
+        <a class="nav-item nav-link" id="geography" href="?A=project_design&amp;A2=geography">3 - Geography</a>
+        <a class="nav-item nav-link" id="use_case" href="?A=project_design&amp;A2=use_case">4 - Use Case</a>
+        <a class="nav-item nav-link" id="rating"  href="?A=project_design&amp;A2=rating">5 - Rating</a>
+        <a class="nav-item nav-link" id="scoring"  href="?A=project_design&amp;A2=scoring">6 - Scoring</a>
+        <a class="nav-item nav-link" id="global_score"  href="?A=project_design&amp;A2=global_score">7 - Global Score</a>
     {% elseif page=="project_scoping" %}
         <h4 class="nav-item text-center">- Input -<br>Project Scoping</h4>
-        <a class="nav-item nav-link" id="project" href="?action=project_scoping&amp;action2=project">1 - Project</a>
-        <a class="nav-item nav-link" id="scope" href="?action=project_scoping&amp;action2=scope">2 - Scope</a>
-        <a class="nav-item nav-link" id="perimeter" href="?action=project_scoping&amp;action2=perimeter">3 - Perimeter</a>
-        <a class="nav-item nav-link" id="size" href="?action=project_scoping&amp;action2=size">4 - Size</a>
-        <a class="nav-item nav-link" id="volumes" href="?action=project_scoping&amp;action2=volumes">5 - Volumes</a>
-        <a class="nav-item nav-link" id="schedule" href="?action=project_scoping&amp;action2=schedule">6 - Schedule</a>
-        <a class="nav-item nav-link" id="discount_rate" href="?action=project_scoping&amp;action2=discount_rate">7 - Discount Rate</a>
+        <a class="nav-item nav-link" id="project" href="?A=project_scoping&amp;A2=project">1 - Project</a>
+        <a class="nav-item nav-link" id="scope" href="?A=project_scoping&amp;A2=scope">2 - Scope</a>
+        <a class="nav-item nav-link" id="perimeter" href="?A=project_scoping&amp;A2=perimeter">3 - Perimeter</a>
+        <a class="nav-item nav-link" id="size" href="?A=project_scoping&amp;A2=size">4 - Size</a>
+        <a class="nav-item nav-link" id="volumes" href="?A=project_scoping&amp;A2=volumes">5 - Volumes</a>
+        <a class="nav-item nav-link" id="schedule" href="?A=project_scoping&amp;A2=schedule">6 - Schedule</a>
+        <a class="nav-item nav-link" id="discount_rate" href="?A=project_scoping&amp;A2=discount_rate">7 - Discount Rate</a>
         
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
         <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>
-        <a class="nav-item nav-link" id="use_case_cb" href="?action=cost_benefits&amp;action2=use_case_cb">1 - Use Case</a>
-        <a class="nav-item nav-link" id="capex" href="?action=cost_benefits&amp;action2=capex">2 - Capex</a>
-        <a class="nav-item nav-link" id="implem" href="?action=cost_benefits&amp;action2=implem">3 - Implementation</a>
-        <a class="nav-item nav-link" id="opex" href="?action=cost_benefits&amp;action2=opex">4 - Opex</a>
-        <a class="nav-item nav-link" id="revenues" href="?action=cost_benefits&amp;action2=revenues">5 - Revenues</a>
-        <a class="nav-item nav-link" id="cashreleasing" href="?action=cost_benefits&amp;action2=cashreleasing">6 - Cash Releasing Benefits</a>
-        <a class="nav-item nav-link" id="widercash" href="?action=cost_benefits&amp;action2=widercash">7 - Wider Cash Benefits</a>
-        <a class="nav-item nav-link" id="noncash" href="?action=cost_benefits&amp;action2=noncash">8 - Non Cash Benefits</a>
-        <a class="nav-item nav-link" id="risks" href="?action=cost_benefits&amp;action2=risks">9 - Risks</a>
+        <a class="nav-item nav-link" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb">1 - Use Case</a>
+        <a class="nav-item nav-link" id="capex" href="?A=cost_benefits&amp;A2=capex">2 - Capex</a>
+        <a class="nav-item nav-link" id="implem" href="?A=cost_benefits&amp;A2=implem">3 - Implementation</a>
+        <a class="nav-item nav-link" id="opex" href="?A=cost_benefits&amp;A2=opex">4 - Opex</a>
+        <a class="nav-item nav-link" id="revenues" href="?A=cost_benefits&amp;A2=revenues">5 - Revenues</a>
+        <a class="nav-item nav-link" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing">6 - Cash Releasing Benefits</a>
+        <a class="nav-item nav-link" id="widercash" href="?A=cost_benefits&amp;A2=widercash">7 - Wider Cash Benefits</a>
+        <a class="nav-item nav-link" id="noncash" href="?A=cost_benefits&amp;A2=noncash">8 - Non Cash Benefits</a>
+        <a class="nav-item nav-link" id="risks" href="?A=cost_benefits&amp;A2=risks">9 - Risks</a>
         
         <!-- - Input - / Financing -->
     {% elseif page=="financing" %}
         <h4 class="nav-item text-center">- Input -<br>Financing</h4>
-        <a class="nav-item nav-link" href="?action=business_model">Business Model</a>
-        <a class="nav-item nav-link" href="?action=funding">Funding</a>
+        <a class="nav-item nav-link" href="?A=business_model">Business Model</a>
+        <a class="nav-item nav-link" href="?A=funding">Funding</a>
     {% elseif page=="business_model" %}
         <h4 class="nav-item text-center">- Input -<br>Business Model</h4>
         <a class="nav-item nav-link disabled" id="id" href="#">0 - item</a>
     {% elseif page=="funding" %}        
         <h4 class="nav-item text-center">- Input -<br>Funding</h4>
-        <a class="nav-item nav-link" id="scenario" href="?action=funding&amp;action2=scenario">1 - Scenario</a>
-        <a class="nav-item nav-link" id="input" href="?action=funding&amp;action2=input">2 - Input</a>
-        <a class="nav-item nav-link" id="output" href="?action=funding&amp;action2=output">3 - Output</a>
-        <a class="nav-item nav-link" id="benef" href="?action=funding&amp;action2=benef">4 - Beneficiary</a>
-        <a class="nav-item nav-link" id="scen_comp" href="?action=funding&amp;action2=scen_comp">5 - Scenarios Comparison</a>
+        <a class="nav-item nav-link" id="scenario" href="?A=funding&amp;A2=scenario">1 - Scenario</a>
+        <a class="nav-item nav-link" id="input" href="?A=funding&amp;A2=input">2 - Input</a>
+        <a class="nav-item nav-link" id="output" href="?A=funding&amp;A2=output">3 - Output</a>
+        <a class="nav-item nav-link" id="benef" href="?A=funding&amp;A2=benef">4 - Beneficiary</a>
+        <a class="nav-item nav-link" id="scen_comp" href="?A=funding&amp;A2=scen_comp">5 - Scenarios Comparison</a>
         
         <!-- - Output - / Dashboards -->
     {% elseif page=="dashboards" %}
         <h4 class="nav-item text-center">- Output -<br>Dashboards</h4>
-        <a class="nav-item nav-link" id="cost_benefits_out" href="?action=dashboards&amp;action2=cost_benefits_out">Cost Benefits</a>
-        <a class="nav-item nav-link" id="budget" href="?action=dashboards&amp;action2=budget">Budget</a>
-        <a class="nav-item nav-link" id="financing" href="?action=dashboards&amp;action2=financing">Financing</a>
-        <a class="nav-item nav-link" id="bankability" href="?action=dashboards&amp;action2=bankability">Bankability</a>
-        <a class="nav-item nav-link disabled" id="environmental" href="?action=dashboards&amp;action2=environmental">Environmental</a>
+        <a class="nav-item nav-link" id="cost_benefits_out" href="?A=dashboards&amp;A2=cost_benefits_out">Cost Benefits</a>
+        <a class="nav-item nav-link" id="budget" href="?A=dashboards&amp;A2=budget">Budget</a>
+        <a class="nav-item nav-link" id="financing" href="?A=dashboards&amp;A2=financing">Financing</a>
+        <a class="nav-item nav-link" id="bankability" href="?A=dashboards&amp;A2=bankability">Bankability</a>
+        <a class="nav-item nav-link disabled" id="environmental" href="?A=dashboards&amp;A2=environmental">Environmental</a>
         
         <!-- - Output - / Scenarios -->
     {% elseif page=="scenarios" %}
         <h4 class="nav-item text-center">- Output -<br>Scenarios</h4>
-        <a class="nav-item nav-link disabled" id="id" href="?action=scenarios&amp;action2=id">Comparison</a>
-        <a class="nav-item nav-link disabled" id="id" href="?action=scenarios&amp;action2=id">Combination</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=scenarios&amp;A2=id">Comparison</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=scenarios&amp;A2=id">Combination</a>
         
         <!-- Admin -->
     {% elseif page=="admin" %}
         <h4 class="nav-item text-center">Administration</h4>
-        <a class="nav-item nav-link disabled" id="id" href="?action=admin&amp;action2=id"><span class="oi oi-pencil nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="pencil" aria-hidden="true"></span>Modify Database</a>
-        <a class="nav-item nav-link disabled" id="id" href="?action=admin&amp;action2=id">Other</a>
+        <a class="nav-item nav-link" id="manage_db" href="?A=admin&amp;A2=manage_db"><span class="oi oi-pencil nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="pencil" aria-hidden="true"></span>Manage Database</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=admin&amp;A2=id">Other</a>
+    {% elseif page=="manage_db" %}
+        <h4 class="nav-item text-center">Manage Database</h4>
+        <a class="nav-item nav-link" id="manage_users" href="?A=admin&amp;A2=manage_users"><span class="oi oi-people nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="poeple" aria-hidden="true"></span>Manage Users</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=admin&amp;A2=id">Other</a>
         
         <!-- Profile -->
     {% elseif page=="profile" %}
         <h4 class="nav-item text-center">Profile</h4>
-        <a class="nav-item nav-link disabled" id="id" href="?action=profile&amp;action2=id"><span class="oi oi-spreadsheet nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="spreadsheet" aria-hidden="true"></span>Informations</a>
-        <a class="nav-item nav-link disabled" id="id" href="?action=profile&amp;action2=id"><span class="oi oi-people nav-link" id="use_case" href="?action=cost_benefits&amp;action2=use_case" title="people" aria-hidden="true"></span>Groups</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-spreadsheet nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="spreadsheet" aria-hidden="true"></span>Informations</a>
+        <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-people nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="people" aria-hidden="true"></span>Groups</a>
     
     
     {% endif %}

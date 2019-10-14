@@ -3,5 +3,7 @@
 require_once('model/model.php');
 
 function logout($twig){
-    echo $twig->render('/others/login.twig',array('is_connected'=>false)); 
+    setcookie('username',$_SESSION['username']);
+    session_unset();
+    header('Location: ?A=login');
 }

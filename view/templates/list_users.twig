@@ -1,0 +1,56 @@
+{% macro list_users(users) %}
+<div class="row my-5">
+    <a class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new user</a>
+</div>
+<div class="row">
+    <div class="col m-5">
+        <table class='table table-bordered table-hover table-responsive-lg'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col">ID</<th>
+                    <th scope="col">Username</<th>
+                    <th scope="col">Admin</th>
+                </tr>
+            </thead>
+            {% for user in users %}
+                <tr id = "{{ user[0] }}" class="" scope="row">
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[2] ? "Yes" : "No" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="createNewUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Username:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Password:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+              <a  href="?A=admin&A2=manage_users"><button type="button" class="btn btn-dark">Yes</button></a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

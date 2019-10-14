@@ -2,6 +2,38 @@
 
 require_once('model/model.php');
 
-function login($twig){
-    echo $twig->render('/others/login.twig',array('is_connected'=>false)); 
+function login($twig,$username_in=true,$password_in=true){
+    $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : "";
+    echo $twig->render('/others/login.twig',array('username'=>$username,'username_in'=>$username_in,'password_in'=>$password_in)); 
+}
+
+function connexion($twig,$post){
+    if(isset($post['inputLogin']) and isset($post['inputPassword'])){
+        $username = $post['inputLogin'];
+        $password_in = $post['inputPassword'];
+        if(!empty(getUser($username))){
+            $id = getUser($username)[0];
+            $password_db = getUser($username)[2];
+            $isPasswordCorrect = password_verify($password_in, password_hash($password_db,PASSWORD_DEFAULT));
+            if($isPasswordCorrect){
+                session_start();
+                $_SESSION['id'] = $id;
+                $_SESSION['username'] = $username;
+                setcookie('username',$_SESSION['username'],time()+3600*24*365);
+                header('Location: ?A=home');
+            } else {
+                login($twig,true,false);
+            }
+        } else {
+            login($twig,false,true);
+        }
+    }
+}
+
+function isConnected(){
+    session_start();
+    if(isset($_SESSION['id']) and isset($_SESSION['username'])){
+        setcookie('username',$_SESSION['username']);
+    }
+    return isset($_SESSION['id']) and isset($_SESSION['username']);
 }
