@@ -9,10 +9,26 @@ function project_design($twig,$is_connected){
 }
 
 // --- Project Design Steps
-function ucm($twig,$is_connected){
+function ucm($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3])); 
+    $list_ucms = getListUCMS($user[0]);
+    echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken)); 
 }
+
+function create_ucm($twig,$is_connected,$post){
+    $name = $post['name'];
+    $description = isset($post['description']) ? $post['description'] : "";
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $ucmInfos = [$name,$description,$idUser];
+    if(!empty(getUCM($idUser,$name))){
+        ucm($twig,$is_connected,true);
+    } else {
+        insertUCM($ucmInfos);
+        header('Location: ?A=project_design&A2=ucm');
+    }
+}
+
 
 function criteria($twig,$is_connected){
     $user = getUser($_SESSION['username']);
@@ -24,11 +40,16 @@ function geography($twig,$is_connected){
     echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3])); 
 }
 
+
 function use_case($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3])); 
 }
 
+
+
+
+//
 function rating($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3])); 

@@ -73,6 +73,9 @@ try{
                     if($_GET['A2']=="ucm"){
                         ucm($twig,$is_connected);
                     }
+                    elseif($_GET['A2']=="create_ucm"){
+                        create_ucm($twig,$is_connected,$_POST);
+                    }
                     elseif($_GET['A2']=="criteria"){
                         criteria($twig,$is_connected);
                     }

@@ -15,3 +15,9 @@
 #login-form{
     border-radius: 50px;
 }
+
+.list-table{
+    max-height: 50vh;
+    overflow-y: auto;
+}
+  

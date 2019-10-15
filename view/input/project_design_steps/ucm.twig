@@ -2,3 +2,11 @@
 
 {% block title %}Project Design - Use Cases Menu{% endblock %}
 
+{% import "/templates/list_ucm.twig" as list %}
+
+{% block content %}
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUCMModal" role="button">Create a new</button>
+</div>
+{{ list.list_ucms(ucms,isTaken) }}
+{% endblock %}

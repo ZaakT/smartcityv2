@@ -52,12 +52,10 @@ function getUser($username){
 
 function getListUsers(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, username, is_admin,creation_date FROM user');
+    $req = $db->query('SELECT id, username, is_admin,creation_date FROM user ORDER BY username');
     $list_users = [];
-    //var_dump($list_users);
     while ($row = $req->fetch()){
         array_push($list_users,$row);
-        //var_dump($list_users);
     }
     return $list_users;
 }
@@ -82,4 +80,30 @@ function modifyUser($user){
                             password = ?
                         WHERE id = ?');
     return $req->execute(array($user[1],$user[2],$user[3],$user[0]));
+}
+
+//UCM
+function getUCM($idUser,$name){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id, name, description FROM uc_scenario WHERE id_1 = ? and name = ?');
+    $req->execute(array($idUser,$name));
+    $res =  $req->fetch();
+    return $res;
+}
+
+function getListUCMS($idUser){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id, name, description FROM uc_scenario WHERE id_1 = ? ORDER BY id');
+    $req->execute(array($idUser));
+    $list_ucms = [];
+    while ($row = $req->fetch()){
+        array_push($list_ucms,$row);
+    }
+    return $list_ucms;
+}
+
+function insertUCM($ucm){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO uc_scenario (name,description,id_1) VALUES (?,?,?)');
+    return $req->execute(array($ucm[0],$ucm[1],$ucm[2]));
 }

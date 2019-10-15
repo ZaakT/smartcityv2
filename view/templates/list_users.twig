@@ -4,9 +4,9 @@
     <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
 </div>
 <div class="row text-center">
-    <div class="col m-5">
-        <table class='table table-bordered table-hover table-responsive-lg'>
-            <thead class="thead-dark text-center">
+    <div class="col m-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">ID</<th>
                     <th scope="col">Username</<th>
@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             {% for user in users %}
-                <tr id = "{{ user[0] }}" class="" scope="row">
+                <tr id = "user_{{ user[0] }}" class="" scope="row">
                     <td>{{ user[0] }}</td>
                     <td>{{ user[1] }}</td>
                     <td>{{ user[2] ? "Yes" : "No" }}</td>
@@ -29,7 +29,7 @@
 <!-- Modal -->
 <div class="modal fade" id="createNewUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createUser-form" action="?A=admin&amp;A2=create_user" method='post' oninput='passwordConfirmaton.setCustomValidity(passwordConfirmaton.value != password.value ? "Passwords do not match." : "")'>
+        <form id="createUser-form" action="?A=admin&amp;A2=create_user" method='post' oninput='pwConfirm()'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
@@ -51,9 +51,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="passwordConfirmaton" class="col-sm-2 col-form-label">Confirm Password</label>
+                        <label for="passwordConfirmation" class="col-sm-2 col-form-label">Confirm Password</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" name="passwordConfirmaton" id="passwordConfirmaton" placeholder="Confirm password" required>
+                            <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Confirm password" required>                    <small id="pwMatch" class="text-danger" hidden></small>
                         </div>
                     </div>
                     <div class="form-check row">
