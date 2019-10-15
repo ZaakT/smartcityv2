@@ -53,7 +53,17 @@ try{
                 }
             }
             elseif($_GET['A']=='profile'){
-                profile($twig,$is_connected);    
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='modify_infos'){
+                        modify_infos($twig,$is_connected);
+                    } elseif($_GET['A2']=='save_infos'){
+                        save_infos($twig,$is_connected,$_POST);
+                    } else {
+                        header('Location: ?A=profile');
+                    }
+                } else {
+                    profile($twig,$is_connected);
+                }
             }
             elseif($_GET['A']=='project_dev'){
                 project_dev($twig,$is_connected);    

@@ -8,34 +8,18 @@
 
 {% block title %}Profile Page{% endblock %}
 
+
 {% block content %}
 <div class="">
-    <div class="row my-5 align-items-center">
-        <div class="col-lg-6 text-center">
-            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
-        </div>
-        <div class="col-lg-5">
-            <h2 class="text-center">Profile Page</h2>
+    <div class="row my-5 text-center">
+        <div class="col">
+            <h1><span class="font-weight-bold">{{username}}</span> ({{ is_admin ? "admin" : "common" }})</h1>
         </div>
     </div>
-    <div class="row mt-5" >
-        <ul>
-            <li>
-                <span class="font-weight-bold">ID</span> : {{id_user}}
-            </li>
-            <li>
-                <span class="font-weight-bold">Username</span> : {{username}}
-            </li>
-            <li>
-                <span class="font-weight-bold">Password</span> : {{password}}
-            </li>
-            <li>
-                <span class="font-weight-bold">Role</span> : {{ is_admin ? "admin" : "common" }}
-            </li>
-            <li>
-                <span class="font-weight-bold">City</span> : {{ city }}
-            </li>
-        </ul>
+    <div class="row my-5 text-center">
+        <div class="col">
+            <h3>Récap ...</h3>
+        </div>
     </div>
 </div>
 {% endblock %}

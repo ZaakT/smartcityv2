@@ -74,18 +74,19 @@
         <!-- Admin -->
     {% elseif page=="admin" %}
         <h4 class="nav-item text-center">Administration</h4>
-        <a class="nav-item nav-link" id="manage_db" href="?A=admin&amp;A2=manage_db"><span class="oi oi-pencil nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="pencil" aria-hidden="true"></span>Manage Database</a>
+        <a class="nav-item nav-link" id="manage_db" href="?A=admin&amp;A2=manage_db"><span class="oi oi-pencil nav-link" title="pencil" aria-hidden="true"></span>Manage Database</a>
         <a class="nav-item nav-link disabled" id="id" href="?A=admin&amp;A2=id">Other</a>
     {% elseif page=="manage_db" %}
         <h4 class="nav-item text-center">Manage Database</h4>
-        <a class="nav-item nav-link" id="manage_users" href="?A=admin&amp;A2=manage_users"><span class="oi oi-people nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="poeple" aria-hidden="true"></span>Manage Users</a>
+        <a class="nav-item nav-link" id="manage_users" href="?A=admin&amp;A2=manage_users"><span class="oi oi-people nav-link" title="poeple" aria-hidden="true"></span>Manage Users</a>
         <a class="nav-item nav-link disabled" id="id" href="?A=admin&amp;A2=id">Other</a>
         
         <!-- Profile -->
     {% elseif page=="profile" %}
-        <h4 class="nav-item text-center">Profile</h4>
-        <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-spreadsheet nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="spreadsheet" aria-hidden="true"></span>Informations</a>
-        <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-people nav-link" id="use_case" href="?A=cost_benefits&amp;A2=use_case" title="people" aria-hidden="true"></span>Groups</a>
+        <h4 class="nav-item text-center">Profile</h4>        
+        <a class="nav-item nav-link" id="modify_infos" href="?A=profile&amp;A2=modify_infos"><span class="oi oi-pencil nav-link" title="pencil" aria-hidden="true"></span>Modify Informations</a>
+        {# <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Informations</a> #}
+        <a class="nav-item nav-link disabled" id="id" href="?A=profile&amp;A2=id"><span class="oi oi-people nav-link" title="people" aria-hidden="true"></span>Groups</a>
     
     
     {% endif %}

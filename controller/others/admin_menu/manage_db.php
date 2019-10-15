@@ -25,10 +25,11 @@ function create_user($twig,$is_connected,$post){
     $toHashed = $passwordClear.$salt;
     $hashed = password_hash($toHashed,PASSWORD_DEFAULT); //length = 60 ?
     $userInfos = [$username,$salt,$hashed,$isAdmin,1];
-    if(insertUser($userInfos)){
-        header('Location: ?A=admin&A2=manage_users');
-    } else {
+    if(!empty(getUser($username))){
         manage_users($twig,$is_connected,true);
+    } else {
+        insertUser($userInfos);
+        header('Location: ?A=admin&A2=manage_users');
     }
 }
 

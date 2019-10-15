@@ -10,6 +10,7 @@ function dbConnect()
     }
 }
 
+// Users
 function getUserCity($idUser){
     $db = dbConnect();
     $req = $db->prepare('SELECT city.name FROM user, city WHERE user.id = ? ');
@@ -61,8 +62,24 @@ function getListUsers(){
     return $list_users;
 }
 
+function userAlreadyExists($username){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM user WHERE username=?');
+    return $req->execute(array($username));
+}
+
 function insertUser($user){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO user (username,salt,password,is_admin,id_1,creation_date) VALUES (?,?,?,?,?,NOW())');
     return $req->execute(array($user[0],$user[1],$user[2],$user[3],$user[4]));
+}
+
+function modifyUser($user){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE user
+                        SET username = ?,
+                            salt = ?,
+                            password = ?
+                        WHERE id = ?');
+    return $req->execute(array($user[1],$user[2],$user[3],$user[0]));
 }
