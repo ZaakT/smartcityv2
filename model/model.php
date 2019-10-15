@@ -32,21 +32,26 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
+    
     if(!empty($res)){
         $userName = $res['username'];
         $userID = intval($res['id']);
         $isAdmin = $res['is_admin']==1 ? true : false;
         $userPassword = $res['password'];
+        $salt = $res['salt'];
+        $user = [$userID,$userName,$userPassword,$isAdmin,$salt];
+    } else {
+        $user = [];
     }
-    return [$userID,$userName,$userPassword,$isAdmin];
+    return $user;
 }
 
 function getListUsers(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, username, is_admin FROM user');
+    $req = $db->query('SELECT id, username, is_admin,creation_date FROM user');
     $list_users = [];
     //var_dump($list_users);
     while ($row = $req->fetch()){
@@ -54,4 +59,10 @@ function getListUsers(){
         //var_dump($list_users);
     }
     return $list_users;
+}
+
+function insertUser($user){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO user (username,salt,password,is_admin,id_1,creation_date) VALUES (?,?,?,?,?,NOW())');
+    return $req->execute(array($user[0],$user[1],$user[2],$user[3],$user[4]));
 }

@@ -14,7 +14,8 @@ function connexion($twig,$post){
         if(!empty(getUser($username))){
             $id = getUser($username)[0];
             $password_db = getUser($username)[2];
-            $isPasswordCorrect = password_verify($password_in, password_hash($password_db,PASSWORD_DEFAULT));
+            $salt = getUser($username)[4];
+            $isPasswordCorrect = password_verify($password_in.$salt,$password_db);
             if($isPasswordCorrect){
                 session_start();
                 $_SESSION['id'] = $id;

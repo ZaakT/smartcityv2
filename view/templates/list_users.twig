@@ -1,8 +1,12 @@
-{% macro list_users(users) %}
-<div class="row my-5">
+{% macro list_users(users, isTaken = false) %}
+<div class="row mt-5">
     <a class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new user</a>
+    
 </div>
-<div class="row">
+<div class="row text-center">
+    <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
+</div>
+<div class="row text-center">
     <div class="col m-5">
         <table class='table table-bordered table-hover table-responsive-lg'>
             <thead class="thead-dark text-center">
@@ -10,6 +14,7 @@
                     <th scope="col">ID</<th>
                     <th scope="col">Username</<th>
                     <th scope="col">Admin</th>
+                    <th scope="col">Creation Date</th>
                 </tr>
             </thead>
             {% for user in users %}
@@ -17,40 +22,56 @@
                     <td>{{ user[0] }}</td>
                     <td>{{ user[1] }}</td>
                     <td>{{ user[2] ? "Yes" : "No" }}</td>
+                    <td>{{ user[3]|date("d/m/Y") }}</td>
                 </tr>
             {% endfor %}
         </table>
     </div>
 </div>
 
-
 <!-- Modal -->
 <div class="modal fade" id="createNewUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Username:</label>
-                        <input type="text" class="form-control" id="recipient-name">
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Password:</label>
-                        <textarea class="form-control" id="message-text"></textarea>
-                    </div>
-                </form>
-            </div>
+        <form id="createUser-form" action="?A=admin&amp;A2=create_user" method='post' oninput='passwordConfirmaton.setCustomValidity(passwordConfirmaton.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label">Username</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter a username" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="password" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" id="password" placeholder="Enter a password" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="passwordConfirmaton" class="col-sm-2 col-form-label">Confirm</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="passwordConfirmaton" id="passwordConfirmaton" placeholder="Confirm password" required>
+                            </div>
+                        </div>
+                        <div class="form-check row">
+                            <div class="col-sm-10">
+                                <input type="checkbox" class="form-check-input" name="isAdmin" id="isAdmin">
+                                <label class="form-check-label" for="isAdmin">is Admin ?</label>
+                            </div>
+                        </div>
+                </div>
             <div class="modal-footer">
-              <a  href="?A=admin&A2=manage_users"><button type="button" class="btn btn-dark">Yes</button></a>
+              <button type="submit" class="btn btn-dark">Create</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
+    </form>
     </div>
 </div>
 {% endmacro %}

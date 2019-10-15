@@ -42,7 +42,9 @@ try{
                     if($_GET['A2']=='manage_db'){
                         manage_db($twig,$is_connected); 
                     } elseif($_GET['A2']=='manage_users'){
-                        manage_users($twig,$is_connected);
+                        manage_users($twig,$is_connected); 
+                    } elseif($_GET['A2']=='create_user'){
+                        create_user($twig,$is_connected,$_POST);
                     } else {
                         header('Location: ?A=admin');
                     }
