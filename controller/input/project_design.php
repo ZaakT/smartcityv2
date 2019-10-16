@@ -12,6 +12,7 @@ function project_design($twig,$is_connected){
 function ucm($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_ucms = getListUCMS($user[0]);
+    //var_dump($list_ucms);
     echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken)); 
 }
 
@@ -28,6 +29,15 @@ function create_ucm($twig,$is_connected,$post){
         header('Location: ?A=project_design&A2=ucm');
     }
 }
+
+function delete_ucm($twig,$is_connected,$idUCM){
+    // var_dump($idUCM);
+    deleteUCM($idUCM);
+    header('Location: ?A=project_design&A2=ucm');
+}
+
+
+
 
 
 function criteria($twig,$is_connected){

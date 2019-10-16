@@ -76,6 +76,14 @@ try{
                     elseif($_GET['A2']=="create_ucm"){
                         create_ucm($twig,$is_connected,$_POST);
                     }
+                    elseif($_GET['A2']=="delete_ucm"){
+                        if(isset($_GET['id'])){
+                            delete_ucm($twig,$is_connected,$_GET['id']);
+                        }
+                        else {
+                            header('Location: ?A=project_design&A2=ucm');
+                        }
+                    }
                     elseif($_GET['A2']=="criteria"){
                         criteria($twig,$is_connected);
                     }

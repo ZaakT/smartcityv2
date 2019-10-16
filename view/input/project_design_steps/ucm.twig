@@ -3,10 +3,19 @@
 {% block title %}Project Design - Use Cases Menu{% endblock %}
 
 {% import "/templates/list_ucm.twig" as list %}
+{% import "/templates/modals.twig" as modal %}
 
 {% block content %}
 <div class="row mt-5">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUCMModal" role="button">Create a new</button>
 </div>
+
+{% if ucms %}
 {{ list.list_ucms(ucms,isTaken) }}
+{% else %}
+<h2 class="text-center m-5">You have no Use Cases Menu !</h2>
+{% endif %}
+{{ modal.create_ucm(1) }}
+
+
 {% endblock %}

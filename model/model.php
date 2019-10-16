@@ -107,3 +107,9 @@ function insertUCM($ucm){
     $req = $db->prepare('INSERT INTO uc_scenario (name,description,id_1) VALUES (?,?,?)');
     return $req->execute(array($ucm[0],$ucm[1],$ucm[2]));
 }
+
+function deleteUCM($id){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM uc_scenario WHERE id = ?');
+    return $req->execute(array($id));
+}
