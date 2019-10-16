@@ -27,7 +27,6 @@ $twig = new Environment($loader);
 
 $is_connected = isConnected();
 
-//stocker un token (clé aléatoire générée à la connexion) dans la table token et l'username en cookie
 try{
     if(isset($_GET['A'])){
         if($is_connected){
@@ -84,23 +83,112 @@ try{
                             header('Location: ?A=project_design&A2=ucm');
                         }
                     }
+                    elseif($_GET['A2']=="ucm_selected"){
+                        if(isset($_POST['radio_ucm'])){
+                            $ucmID = intval($_POST['radio_ucm']);
+                            $_SESSION['ucmID']=$ucmID;
+                            //var_dump($ucmID);
+                            header('Location: ?A=project_design&A2=measures&ucmID='.$ucmID);
+                        }
+                    }
+                    elseif($_GET['A2']=="measures"){
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                measures($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=measures');
+                            }
+                        }
+                        else {
+                            measures($twig,$is_connected);
+                        }
+                    }
+                    elseif ($_GET['A2']=="measures_selected") {
+                        foreach ($_POST as $key => $value) {
+                            if(isset($key)){
+                                $measureID = intval($key);
+                                var_dump($measureID);
+                            }
+                        }
+                    }
                     elseif($_GET['A2']=="criteria"){
-                        criteria($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                criteria($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=criteria');
+                            }
+                        }
+                        else {
+                            criteria($twig,$is_connected);
+                        }
                     }
                     elseif($_GET['A2']=="geography"){
-                        geography($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                geography($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=geography');
+                            }
+                        }
+                        else {
+                            geography($twig,$is_connected);
+                        }
                     }
                     elseif($_GET['A2']=="use_case"){
-                        use_case($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                use_case($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=use_case');
+                            }
+                        }
+                        else {
+                            use_case($twig,$is_connected);
+                        }
                     }
                     elseif($_GET['A2']=="rating"){
-                        rating($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                rating($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=rating');
+                            }
+                        }
+                        else {
+                            rating($twig,$is_connected);
+                        }
                     }
                     elseif($_GET['A2']=="scoring"){
-                        scoring($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                scoring($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=scoring');
+                            }
+                        }
+                        else {
+                            scoring($twig,$is_connected);
+                        }
                     }
                     elseif($_GET['A2']=="global_score"){
-                        global_score($twig,$is_connected);
+                        if(isset($_GET['ucmID'])){
+                            if($_GET['ucmID']!=0){
+                                global_score($twig,$is_connected,$_GET['ucmID']);
+                            }
+                            else {
+                                header('Location: ?A=project_design&A2=global_score');
+                            }
+                        }
+                        else {
+                            global_score($twig,$is_connected);
+                        }
                     }
                     else {
                         header('Location: ?A='.$_GET['A']);

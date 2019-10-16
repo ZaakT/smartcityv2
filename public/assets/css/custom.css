@@ -20,4 +20,18 @@
     max-height: 50vh;
     overflow-y: auto;
 }
-  
+
+.next-button{
+    color:inherit;
+}
+.next-button:hover{
+    text-decoration: none;
+    color: black;
+}
+
+.infos-bar{
+    height: 7vh;
+    background-color: #6d6d6d;
+    color:white;
+}
+

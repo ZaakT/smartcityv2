@@ -1,0 +1,14 @@
+
+{% macro second_bar(username, part, selected) %}
+<div class="row infos-bar align-content-center">
+    <div class="col-lg text-left">
+        <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&emsp;<strong>{{ selected }}</strong>
+    </div>
+    <div class="col-lg text-center">
+        
+    </div>
+    <div class="col-lg text-right">
+        <span class="text-uppercase"> Username :</span>&emsp;<strong>{{ username }}</strong>
+    </div>
+</div>
+{% endmacro %}

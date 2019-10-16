@@ -1,4 +1,36 @@
 {% extends '/input/project_design.twig' %}
 
+{% import "/templates/choose_redirect.twig" as redirect %}
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
+
 {% block title %}Project Design - Scoring{% endblock %}
+
+{% block content %}
+
+{% if ucmID==0 %}
+{{ second_bar.second_bar(username,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,part,selected) }}
+
+
+<div class="row text-center text-dark">
+    <a href="?A=project_design&amp;A2=global_score&amp;ucmID={{ ucmID }}" class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endif %}
+{% endblock %}
 

@@ -83,6 +83,14 @@ function modifyUser($user){
 }
 
 //UCM
+function getUCMByID($id,$idUser){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM uc_scenario WHERE id = ? and id_1 = ?');
+    $req->execute(array($id,$idUser));
+    $res = $req->fetch();
+    return $res;
+}
+
 function getUCM($idUser,$name){
     $db = dbConnect();
     $req = $db->prepare('SELECT id, name, description FROM uc_scenario WHERE id_1 = ? and name = ?');
@@ -112,4 +120,16 @@ function deleteUCM($id){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM uc_scenario WHERE id = ?');
     return $req->execute(array($id));
+}
+
+//MEASURES
+
+function getListMeasures($ucmID){
+    $db = dbConnect();
+    $req = $db->query('SELECT * FROM measure ORDER BY name');
+    $list_measures = [];
+    while ($row = $req->fetch()){
+        array_push($list_measures,$row);
+    }
+    return $list_measures;
 }

@@ -1,17 +1,25 @@
 {% extends '/input/project_design.twig' %}
 
+{% import "/templates/choose_redirect.twig" as redirect %}
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
 
+{% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
+
+{% block title %}Project Design - Global Score{% endblock %}
 
 {% block content %}
-<div class="">
-    <div class="row m-5 align-items-center">
-        <div class="col-lg-6 text-center">
-            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
-        </div>
-        <div class="col-lg-5">
-            <h2 class="text-center">{% block title %}Project Design - Global Score{% endblock %}</h2>
-        </div>
-    </div>
-</div>
+
+{% if ucmID==0 %}
+{{ second_bar.second_bar(username,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,part,selected) }}
+
+
+
+
+{% endif %}
 {% endblock %}
 

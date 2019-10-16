@@ -1,0 +1,25 @@
+{% macro list_measures(measures) %}
+
+<div class="row text-center">
+    <div class="col m-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for measure in measures %}
+                <tr id = "tr_{{ measure[0] }}" scope="row">
+                    <td><input type="checkbox" id='{{ measure[0] }}' name="{{ measure[0] }}" value="1" ></td>
+                    <td>{{ measure[1] }}</td>
+                    <td>{{ measure[2] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

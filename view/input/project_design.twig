@@ -4,17 +4,26 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
+
 {% block sidebar %}{{ sidebar.sidebar("project_design") }}{% endblock %}
 
+
+
 {% block content %}
-<div class="">
-    <div class="row m-5 align-items-center">
-        <div class="col-lg-6 text-center">
-            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
-        </div>
-        <div class="col-lg-5">
-            <h2 class="text-center">{% block title %}Project Design{% endblock %}</h2>
-        </div>
+<div class="row m-5 align-items-center">
+    <div class="col">
+        <h2 class="text-center text-uppercase">{% block title %}Project Design{% endblock %}</h2>
     </div>
 </div>
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+        <p>You will receive guidance throughout to facilitate your data input.</p>
+        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+    </div>
+</div>
+<div class="row text-center text-dark">
+    <a href="?A=project_design&amp;A2=ucm" class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+</div>
+
 {% endblock %}

@@ -4,17 +4,29 @@
 
 {% import "/templates/list_ucm.twig" as list %}
 {% import "/templates/modals.twig" as modal %}
+{% import "/templates/second_bar.twig" as second_bar %}
 
 {% block content %}
+{{ second_bar.second_bar(username,part,"None") }}
 <div class="row mt-5">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUCMModal" role="button">Create a new</button>
 </div>
+<div class="row text-center">
+    <h6 id="createUCMHelp" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
+</div>
 
+<form action="?A=project_design&amp;A2=ucm_selected" method="post">
 {% if ucms %}
-{{ list.list_ucms(ucms,isTaken) }}
+{{ list.list_ucms(ucms) }}
 {% else %}
 <h2 class="text-center m-5">You have no Use Cases Menu !</h2>
 {% endif %}
+
+<div class="row m-3 text-center text-dark">
+    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+</div>
+</form>
+
 {{ modal.create_ucm(1) }}
 
 

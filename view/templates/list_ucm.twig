@@ -1,9 +1,6 @@
-{% macro list_ucms(ucms, isTaken = false) %}
+{% macro list_ucms(ucms) %}
 {% import "/templates/modals.twig" as modal %}
 
-<div class="row text-center">
-    <h6 id="createUCMHelp" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
-</div>
 <div class="row text-center">
     <div class="col m-5 list-table">
         <table class='table table-bordered table-striped table-responsive-lg'>
@@ -18,19 +15,17 @@
                 </tr>
             </thead>
             <tbody>
-                <form>
-                {% for ucm in ucms %}
-                    <tr id = "ucm_{{ ucm[0] }}" class="" scope="row">
-                        <td><input type="radio" id='radio_{{ ucm[0] }}' name="optradio"></td>
-                        <td>{{ ucm[1] }}</td>
-                        <td>{{ ucm[2] }}</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUCM_{{ ucm[0] }}"></span></a></td>
-                        {{ modal.delete_ucm(ucm[0],ucm[1]) }}
-                    </tr>
-                {% endfor %}
-                </form>
+            {% for ucm in ucms %}
+                <tr id = "tr_{{ ucm[0] }}" scope="row">
+                    <td><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" required></td>
+                    <td>{{ ucm[1] }}</td>
+                    <td>{{ ucm[2] }}</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUCM_{{ ucm[0] }}"></span></a></td>
+                    {{ modal.delete_ucm(ucm[0],ucm[1]) }}
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
