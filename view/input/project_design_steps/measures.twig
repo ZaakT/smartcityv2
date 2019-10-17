@@ -11,20 +11,21 @@
 
 {% block content %}
 
+
 {% if ucmID==0 %}
 {{ second_bar.second_bar(username,part,"None") }}
 {{ redirect.choose_ucm() }}
 
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
-<form action="?A=project_design&amp;A2=measures_selected" method="post">
+<form name="form_meas" onsubmit="return countChecked_meas(form_meas);" action="?A=project_design&amp;A2=measures_selected" method="post">
     {% if measures %}
-    {{ list.list_measures(measures) }}
+    {{ list.list_measures(measures,list_sel) }}
     <div class="row m-3 text-center text-dark">
         <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
     </div>
     {% else %}
-    <h2 class="text-center m-5">There is no measure !</h2>
+    <h2 class="text-center m-5">There is no measure, please contact an administrator.</h2>
 
     {% endif %}
 </form>

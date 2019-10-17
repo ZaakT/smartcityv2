@@ -1,6 +1,7 @@
-{% macro list_measures(measures) %}
+{% macro list_measures(measures,list_sel=[]) %}
 
-<div class="row text-center">
+
+<div class="row text-left">
     <div class="col m-5 list-table">
         <table class='table table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
@@ -13,13 +14,18 @@
             <tbody>
             {% for measure in measures %}
                 <tr id = "tr_{{ measure[0] }}" scope="row">
-                    <td><input type="checkbox" id='{{ measure[0] }}' name="{{ measure[0] }}" value="1" ></td>
+                    {% if list_sel and (measure[0] in list_sel) %}
+                    <td><input type="checkbox" onclick="countChecked_meas(form_meas);" class="check_meas" id='{{ measure[0] }}' name="{{ measure[0] }}" checked></td>
+                    {% else %}
+                    <td><input type="checkbox" onclick="countChecked_meas(form_meas);" class="check_meas"  id='{{ measure[0] }}' name="{{ measure[0] }}"></td>
+                    {% endif %}
                     <td>{{ measure[1] }}</td>
                     <td>{{ measure[2] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        <h6 id="help_meas" class="text-danger font-weight-bold text-center" hidden>Please select at least one measure !</h6>
     </div>
 </div>
 {% endmacro %}

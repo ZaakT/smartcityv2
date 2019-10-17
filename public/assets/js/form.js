@@ -11,3 +11,4 @@ function pwConfirm(){
         $("#pwMatch").addClass("text-success");
     }
 };
+

@@ -1,0 +1,30 @@
+{% macro list_criteria(criteria,list_sel=[]) %}
+{% set color = ['bg-danger','bg-primary','bg-success'] %}
+<div class="row text-left">
+    <div class="col m-5 list-table">       
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for crit in criteria %}
+                <tr id = "tr_{{ crit[0] }}" class="critCat_{{ crit[3] }} {{color[crit[3]-1]}}" scope="row">
+                    {% if list_sel and (crit[0] in list_sel) %}
+                    <td><input type="checkbox" onclick="countChecked_crit(form_crit);" class="check_crit" id='{{ crit[0] }}' name="{{ crit[0] }}" class="critCat_{{ crit[3] }}" checked></td>
+                    {% else %}
+                    <td><input type="checkbox" onclick="countChecked_crit(form_crit);" class="check_crit"  id='{{ crit[0] }}' name="{{ crit[0] }}" class="critCat_{{ crit[3] }}"></td>
+                    {% endif %}
+                    <td >{{ crit[1] }}</td>
+                    <td >{{ crit[2] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+{% endmacro %}

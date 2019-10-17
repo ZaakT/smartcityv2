@@ -1,5 +1,11 @@
 <?php
+/*
+This file acts as a router, that is to say that it will be in charge of the redirection to the "good" controller.
+We use the variable $ _GET to retrieve information (like A, A2, ucmID, projectID, ...).
+Then, we will call functions (defined in the controllers) according to the value of this information.
+*/
 
+// importing files
 require __DIR__ . '/vendor/autoload.php';
 
 foreach (glob("controller/*") as $dir){
@@ -27,15 +33,21 @@ $twig = new Environment($loader);
 
 $is_connected = isConnected();
 
+// *** WE WILL TRY TO DO ***
 try{
+    // ??? IN THE CASE WHERE AN ACTION (A) IS GIVEN ???
     if(isset($_GET['A'])){
+        // ??? IF CONNECTED ???
         if($is_connected){
+            // ---------- HOME ---------- 
             if($_GET['A']=='home'){
                 home($twig,$is_connected);
             }
+            // ---------- LOGOUT ---------- 
             elseif($_GET['A']=='logout'){
                 logout($twig);
             }
+            // ---------- ADMIN ---------- 
             elseif($_GET['A']=='admin'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='manage_db'){
@@ -51,6 +63,7 @@ try{
                     admin($twig,$is_connected);
                 }
             }
+            // ---------- PROFILE ---------- 
             elseif($_GET['A']=='profile'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='modify_infos'){
@@ -64,11 +77,15 @@ try{
                     profile($twig,$is_connected);
                 }
             }
+            // ---------- PROJECT DEVELOPEMENT ---------- 
             elseif($_GET['A']=='project_dev'){
                 project_dev($twig,$is_connected);    
             }
+            // ---------- PROJECT DESIGN ---------- 
             elseif($_GET['A']=='project_design'){
+                // ??? IN THE CASE WHERE AN ACTION2 (A2) IS GIVEN ???
                 if(isset($_GET['A2'])){
+                    // --- USE CASES MENU ---
                     if($_GET['A2']=="ucm"){
                         ucm($twig,$is_connected);
                     }
@@ -83,6 +100,7 @@ try{
                             header('Location: ?A=project_design&A2=ucm');
                         }
                     }
+                    // --- SELECTED USE CASES MENU ---
                     elseif($_GET['A2']=="ucm_selected"){
                         if(isset($_POST['radio_ucm'])){
                             $ucmID = intval($_POST['radio_ucm']);
@@ -91,6 +109,7 @@ try{
                             header('Location: ?A=project_design&A2=measures&ucmID='.$ucmID);
                         }
                     }
+                    // --- MEASURES ---
                     elseif($_GET['A2']=="measures"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -104,14 +123,20 @@ try{
                             measures($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED MEASURES ---
                     elseif ($_GET['A2']=="measures_selected") {
+                        $list_measID = [];
                         foreach ($_POST as $key => $value) {
                             if(isset($key)){
-                                $measureID = intval($key);
-                                var_dump($measureID);
+                                $measID = intval($key);
+                                //var_dump($measID);
+                                array_push($list_measID,$measID);
                             }
                         }
+                        //var_dump($list_measID);
+                        measures_selected($list_measID);
                     }
+                    // --- CRITERIA ---
                     elseif($_GET['A2']=="criteria"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -125,6 +150,21 @@ try{
                             criteria($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED CRITERIA ---
+                    elseif ($_GET['A2']=="criteria_selected") {
+                        $list_critID = [];
+                        foreach ($_POST as $key => $value) {
+                            if(isset($key)){
+                                $critID = intval($key);
+                                //var_dump($list_critID);
+                                array_push($list_critID,$critID);
+                            }
+                        }
+                        var_dump($list_critID);
+                        criteria_selected($list_critID);
+                    }
+                    
+                    // --- GEOGRAPHY ---
                     elseif($_GET['A2']=="geography"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -138,6 +178,9 @@ try{
                             geography($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED GEOGRAPHY ---
+                    
+                    // --- USE CASES ---
                     elseif($_GET['A2']=="use_case"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -151,6 +194,9 @@ try{
                             use_case($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED USE CASES ---
+                    
+                    // --- RATING ---
                     elseif($_GET['A2']=="rating"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -164,6 +210,9 @@ try{
                             rating($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED RATING ---
+                    
+                    // --- SCORING ---
                     elseif($_GET['A2']=="scoring"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -177,6 +226,9 @@ try{
                             scoring($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED SCORING ---
+                    
+                    // --- GLOBAL SCORE ---
                     elseif($_GET['A2']=="global_score"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
@@ -190,13 +242,18 @@ try{
                             global_score($twig,$is_connected);
                         }
                     }
+                    // --- IN OTHER CASES ---
                     else {
-                        header('Location: ?A='.$_GET['A']);
+                        header('Location: ?A=project_design');
                     }
+                // --- IN OTHER CASES ---
                 } else {
                     project_design($twig,$is_connected);
                 } 
-            } elseif($_GET['A']=='project_scoping'){
+             
+            }
+            // ---------- PROJECT SCOPING ----------
+            elseif($_GET['A']=='project_scoping'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         project($twig,$is_connected);
@@ -218,7 +275,10 @@ try{
                 } else {
                     project_scoping($twig,$is_connected);
                 }        
-            } elseif($_GET['A']=='cost_benefits'){
+            
+            }
+            // ---------- COST BENEFITS ----------
+            elseif($_GET['A']=='cost_benefits'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="use_case_cb"){
                         use_case_cb($twig,$is_connected);
@@ -246,11 +306,17 @@ try{
                 } else {  
                     cost_benefits($twig,$is_connected);
                 }        
-            } elseif($_GET['A']=='financing'){     
+            }
+            // ---------- FINANCING ----------
+            elseif($_GET['A']=='financing'){     
                 financing($twig,$is_connected);      
-            } elseif($_GET['A']=='business_model'){
+            }
+            // ---------- BUSINESS MODEL ----------
+            elseif($_GET['A']=='business_model'){
                 business_model($twig,$is_connected);           
-            } elseif($_GET['A']=='funding'){
+            }
+            // ---------- FUNDING ----------
+            elseif($_GET['A']=='funding'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="scenario"){
                         scenario($twig,$is_connected);
@@ -268,7 +334,9 @@ try{
                 } else {  
                     funding($twig,$is_connected); 
                 }            
-            } elseif($_GET['A']=='dashboards'){
+            }
+            // ---------- DASHBOARDS ----------
+            elseif($_GET['A']=='dashboards'){
                  if(isset($_GET['A2'])){
                     if($_GET['A2']=="cost_benefits_out"){
                         cost_benefits_out($twig,$is_connected);
@@ -284,13 +352,19 @@ try{
                 } else { 
                     dashboards($twig,$is_connected);
                 }              
-            } elseif($_GET['A']=='scenarios'){
+            }
+            // ---------- SCENARIOS ----------
+            elseif($_GET['A']=='scenarios'){
                 scenarios($twig,$is_connected);        
-            } else {
+            }
+            // ---------- IN OTHER CASES ----------
+            else {
                 header('Location: ?A=home');
             }                  
 
-        } else {
+        }
+        // ??? IF NOT CONNECTED ???
+        else {
             if($_GET['A']=='login'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='form'){
@@ -305,15 +379,22 @@ try{
                 header('Location: ?A=login');
             }
         }
-    } else {
+    }
+    // ??? IN OTHER CASES
+    else {
+        // ??? IF CONNECTED ???
         if($is_connected){
             header('Location: ?A=home');
-        } else {
+        }
+        // ??? IF NOT CONNECTED ???
+        else {
             header('Location: ?A=login');
         }
     }
 
-} catch(Exception $e) {
+}
+// *** IF THERE IS AN ERROR (EXCEPTION), IT IS CAPTURED TO DISPLAY ON A SPECIAL PAGE ***
+catch(Exception $e) {
     $errorMessage = $e->getMessage();
     echo $twig->render('/others/error.twig',array('error'=>$errorMessage)); 
 }

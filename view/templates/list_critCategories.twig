@@ -1,0 +1,12 @@
+{% macro list_critCategories(categories,ucmID) %}
+{% set color = ['bg-danger','bg-primary','bg-success'] %}
+<div class="col btn-group-lg w-100" role="group" aria-label="Basic example">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+        {% for category in categories %}
+            <button id="cat_{{category[0]}}" onclick="toogleButton({{category[0]}});" type="button" class=" mx-2 col-2 btn active {{color[category[0]-1]}} categ-button">{{category[1]}}</button> 
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endmacro %}
