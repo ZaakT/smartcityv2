@@ -1,31 +1,29 @@
 {% macro list_measures(measures,list_sel=[]) %}
 
-
-<div class="row text-left">
-    <div class="col m-5 list-table">
-        <table class='table table-bordered table-striped table-responsive-lg'>
+<div class="row text-center">
+    <div class="col mt-5 mx-5 list-table">
+        <table class='table table-sm table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col"></th>
+                    <th scope="col" class="check-col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                 </tr>
             </thead>
             <tbody>
-            {% for measure in measures %}
-                <tr id = "tr_{{ measure[0] }}" scope="row">
-                    {% if list_sel and (measure[0] in list_sel) %}
-                    <td><input type="checkbox" onclick="countChecked_meas(form_meas);" class="check_meas" id='{{ measure[0] }}' name="{{ measure[0] }}" checked></td>
+            {% for meas in measures %}
+                <tr id = "tr_{{ meas[0] }}" scope="row">
+                    {% if list_sel and (meas[0] in list_sel) %}
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"  id='{{ meas[0] }}' name="{{ meas[0] }}" checked></td>
                     {% else %}
-                    <td><input type="checkbox" onclick="countChecked_meas(form_meas);" class="check_meas"  id='{{ measure[0] }}' name="{{ measure[0] }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"   id='{{ meas[0] }}' name="{{ meas[0] }}"></td>
                     {% endif %}
-                    <td>{{ measure[1] }}</td>
-                    <td>{{ measure[2] }}</td>
+                    <td class="font-weight-bold">{{ meas[1] }}</td>
+                    <td>{{ meas[2] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-        <h6 id="help_meas" class="text-danger font-weight-bold text-center" hidden>Please select at least one measure !</h6>
     </div>
 </div>
 {% endmacro %}

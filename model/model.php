@@ -178,7 +178,7 @@ function deleteSelMeas($ucmID){
 
 
 
-// ---------------------------------------- MEASURES ----------------------------------------
+// ---------------------------------------- CRITERIA ----------------------------------------
 
 function getListCriteria(){
     $db = dbConnect();
@@ -219,10 +219,11 @@ function getListSelCrit($ucmID){
 
 function getListSelCritCat($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT relevant_criteria_category.id, name, description
+    $req = $db->prepare('SELECT relevant_criteria_category.id, name
                         FROM relevant_criteria_category
                         INNER JOIN uc_sel_relcritcat
-                        WHERE (uc_sel_relcritcat.id = relevant_criteria_category.id) AND (uc_sel_relcritcat.id_1 = ?)');
+                        WHERE (uc_sel_relcritcat.id = relevant_criteria_category.id)
+                            AND (uc_sel_relcritcat.id_1 = ?)');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -266,5 +267,53 @@ function deleteSelCrit($ucmID){
 function deleteSelCritCat($ucmID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM uc_sel_relcritcat WHERE id_1 = ?');
+    return $req->execute(array($ucmID));
+}
+
+
+
+// ---------------------------------------- GEOGRAPH ----------------------------------------
+
+function getListDLTs(){
+    $db = dbConnect();
+    $req = $db->query('SELECT id, name, description FROM district_location_type');
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
+    return $list;
+}
+
+function getListSelDLTs($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT district_location_type.id, name, description
+                        FROM district_location_type
+                        INNER JOIN uc_sel_distloctype
+                        WHERE (uc_sel_distloctype.id_1 = district_location_type.id)
+                                AND (uc_sel_distloctype.id = ?)');
+    $req->execute(array($ucmID));
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
+    return $list;
+}
+
+function insertSelDLTs($ucmID,$list){
+    $db = dbConnect();
+    $ret = false;
+    foreach ($list as $critID) {
+        $req = $db->prepare('INSERT INTO uc_sel_distloctype (id,id_1) VALUES (?,?)');
+        $ret = $req->execute(array($ucmID,$critID));
+    }
+    if(!$ret){
+        throw new Exception("Selected District Location Type not inserted");
+    }
+    return $ret;
+}
+
+function deleteSelDLTs($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM uc_sel_distloctype WHERE id = ?');
     return $req->execute(array($ucmID));
 }

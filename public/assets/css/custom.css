@@ -17,8 +17,13 @@
 }
 
 .list-table{
-    max-height: 50vh;
+    max-height: 45vh;
     overflow-y: auto;
+}
+
+.check-col{
+    width: 35px;
+    text-align: center;
 }
 
 .next-button{

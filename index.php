@@ -160,10 +160,10 @@ try{
                                 array_push($list_critID,$critID);
                             }
                         }
+                        var_dump("list_critID :");
                         var_dump($list_critID);
                         criteria_selected($list_critID);
                     }
-                    
                     // --- GEOGRAPHY ---
                     elseif($_GET['A2']=="geography"){
                         if(isset($_GET['ucmID'])){
@@ -179,7 +179,18 @@ try{
                         }
                     }
                     // --- SELECTED GEOGRAPHY ---
-                    
+                    elseif ($_GET['A2']=="geo_selected") {
+                        $list_idDLT = [];
+                        foreach ($_POST as $key => $value) {
+                            if(isset($key)){
+                                $idDLT = intval($key);
+                                //var_dump($list_idDLT);
+                                array_push($list_idDLT,$idDLT);
+                            }
+                        }
+                        var_dump($list_idDLT);
+                        geo_selected($list_idDLT);
+                    }
                     // --- USE CASES ---
                     elseif($_GET['A2']=="use_case"){
                         if(isset($_GET['ucmID'])){

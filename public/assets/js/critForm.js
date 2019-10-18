@@ -15,6 +15,7 @@ function countChecked_crit(oForm) {
             }
         }
     }
+    $("#countCritSelect").text(n+" selected");
     //console.log(n);
     if (n >= 5) {
         $("#help_crit").attr('hidden', 'hidden');
@@ -25,6 +26,8 @@ function countChecked_crit(oForm) {
         return false;
     }
 }
+
+countChecked_crit(form_crit);
 
 function toogleButton(cat){
     var id='#cat_'+String(cat);

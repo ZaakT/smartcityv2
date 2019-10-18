@@ -1,4 +1,4 @@
-function countChecked_meas(oForm) {
+function countChecked_DLTs(oForm) {
     var i, n = 0;
     var oElement;
     for (i = 0; i < oForm.elements.length; i++) {
@@ -15,16 +15,16 @@ function countChecked_meas(oForm) {
             }
         }
     }    
-    $("#countMeasSelect").text(n+" selected");
+    $("#countDLTSelect").text(n+" selected");
     //console.log(n);
     if (n > 0) {
-        $("#help_meas").attr('hidden', 'hidden');
+        $("#help_DLT").attr('hidden', 'hidden');
         return true;
     }
     else {
-        $("#help_meas").removeAttr('hidden');
+        $("#help_DLT").removeAttr('hidden');
         return false;
     }
 }
 
-countChecked_meas(form_meas);
+countChecked_DLTs(form_DLTs);

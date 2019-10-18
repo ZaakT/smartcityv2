@@ -18,17 +18,20 @@
 
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
-<div class="row text-center mt-5">
+<div class="row text-center my-4">
     {{ list2.list_critCategories(categories,ucmID) }}
 </div>
 <div class ="row">
 {% if criteria %}
-    <form class="col" name="form_crit" onsubmit="return countChecked_crit(form_crit);" action="?A=project_design&amp;A2=criteria_selected" method="post">
+    <form class="col container-fluid" name="form_crit" onsubmit="return countChecked_crit(form_crit);" action="?A=project_design&amp;A2=criteria_selected" method="post">
         {{ list.list_criteria(criteria,list_sel) }} 
-        <div class="row text-center">
+        <div class="row mt-4 mb-0 text-center">
+            <span id="countCritSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+        </div>
+        <div class="row text-center mt-3">
             <h6 id="help_crit" class="col text-danger font-weight-bold" hidden>Please select at least 5 criteria !</h6>
         </div>
-        <div class="row m-3 text-center text-dark">
+        <div class="row my-0 text-center text-dark">
             <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
         </div>
     </form>
@@ -36,9 +39,6 @@
     <h2 class="col text-center m-5">There is no criterion, please contact an administrator.</h2>
 {% endif %}
 </div>
-
-
-
 {% endif %}
 {% endblock %}
 

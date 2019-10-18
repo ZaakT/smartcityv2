@@ -117,21 +117,27 @@ function criteria_selected($list_critID=[]){
         if(isset($_SESSION['ucmID'])){
             $ucmID = $_SESSION['ucmID'];
             $listSelCrit = getListSelCrit($ucmID);
-            //var_dump(empty($listSelCrit));
+            //var_dump("listSelCrit :");
+            //var_dump($listSelCrit);
             if(empty($listSelCrit)){
                 insertSelCrit($ucmID,$list_critID);
             } else {
                 deleteSelCrit($ucmID);
                 insertSelCrit($ucmID,$list_critID);
             }
+            $listSelCrit = getListSelCrit($ucmID);
             $listSelCritCatID = [];
             foreach ($listSelCrit as $selCrit) {
                 if(!in_array($selCrit[3],$listSelCritCatID)){
-                    array_push($listSelCritCatID,$selCrit[3]);
+                    array_push($listSelCritCatID,intval($selCrit[3]));
                 }
             }
+            //var_dump("listSelCritCatID :");
             //var_dump($listSelCritCatID);
-            if(!empty(getListSelCritCat($ucmID))){
+            $listSelCritCat = getListSelCritCat($ucmID);
+            //var_dump("listSelCritCat :");
+            //var_dump($listSelCritCat);
+            if(empty($listSelCritCat)){
                 insertSelCritCat($ucmID,$listSelCritCatID);
             } else {
                 deleteSelCritCat($ucmID);
@@ -142,7 +148,7 @@ function criteria_selected($list_critID=[]){
             throw new Exception("No UCM selected !");
         }
     } else {
-        throw new Exception("No measure selected !");
+        throw new Exception("No Criterion selected !");
     }
 }
 
@@ -154,15 +160,42 @@ function geography($twig,$is_connected,$ucmID=0){
     if($ucmID!=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
-            echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1]));
+            $list_DLTs = getListDLTs();
+            $list_sel = [];
+            foreach (getListSelDLTs($ucm[0]) as $value) {
+                array_push($list_sel,$value[0]);
+            }
+            //var_dump($list_sel);
+            //var_dump($list_DLTs);
+            echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'DLTs'=>$list_DLTs,'list_sel'=>$list_sel));
         } else {
-            header('Location: ?A=project_design&A2=geography');
+            //header('Location: ?A=project_design&A2=geography');
         }
     } else {
         echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
     }
 }
 
+function geo_selected($list_idDLT=[]){
+    if($list_idDLT){
+        if(isset($_SESSION['ucmID'])){
+            $ucmID = $_SESSION['ucmID'];
+            $listSelDLT = getListSelDLTs($ucmID);
+            //var_dump(empty($listSelDLT));
+            if(empty($listSelDLT)){
+                insertSelDLTs($ucmID,$list_idDLT);
+            } else {
+                deleteSelDLTs($ucmID);
+                insertSelDLTs($ucmID,$list_idDLT);
+            }
+            header('Location: ?A=project_design&A2=use_case&ucmID='.$ucmID);
+        } else {
+            throw new Exception("No UCM selected !");
+        }
+    } else {
+        throw new Exception("No District Location Type selected !");
+    }
+}
 
 
 // ---------------------------------------- USE CASES ----------------------------------------
