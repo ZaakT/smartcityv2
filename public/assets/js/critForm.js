@@ -48,7 +48,7 @@ function activeButton(sel,cat){
     var tab = $(sel).classes();
     //console.log(tab);
     var color = ['bg-danger','bg-primary','bg-success']
-    console.log(cat);
+    //console.log(cat);
     if(!tab.includes('active')){
         $(sel).removeClass(color[cat-1]);
         $(sel).addClass('btn-secondary');
