@@ -1,5 +1,5 @@
 {% macro list_criteria(criteria,list_sel=[]) %}
-{% set color = ['bg-danger','bg-primary','bg-success'] %}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 
 <div class="row text-left">
     <div class="col mx-5 list-table">       
@@ -13,7 +13,7 @@
             </thead>
             <tbody>
             {% for crit in criteria %}
-                <tr id = "tr_{{ crit[0] }}" class="critCat_{{ crit[3] }} {{color[crit[3]-1]}}" scope="row">
+                <tr id = "tr_{{ crit[0] }}" class="critCat_{{ crit[3] }}" style="background:{{ color[crit[3]-1]}};" scope="row">
                     {% if list_sel and (crit[0] in list_sel) %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);" id='{{ crit[0] }}' name="{{ crit[0] }}" checked></td>
                     {% else %}

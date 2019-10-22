@@ -12,8 +12,8 @@ function countChecked_uc(oForm) {
         }
     }
     $("#countUCSelect").text(n+" selected");
-    console.log(n);
-    if (n >= 1) {
+    //console.log(n);
+    if (n >= 4) {
         $("#help_uc").attr('hidden', 'hidden');
         return true;
     }
@@ -23,12 +23,10 @@ function countChecked_uc(oForm) {
     }
 }
 
-countChecked_uc(form_uc);
-
 function toogleButton_uc(sel){
     var id='#more'+sel;
     var tab = $(id).classes();
-    console.log(tab);
+    //console.log(tab);
     //console.log(tab);
     //console.log(tab.includes("mx-2"));
     if(tab.includes('active')){
@@ -45,7 +43,7 @@ function toogleButton_uc(sel){
 
 function activeButton_uc(sel){
     var tab = $("#more"+sel).classes();
-    console.log(tab);
+    //console.log(tab);
     //var color = ['bg-danger','bg-primary','bg-success']
     if(!tab.includes('active') && tab.includes('disabled')){
         $("#more"+sel).removeClass('btn-dark');
@@ -62,15 +60,15 @@ function activeButton_uc(sel){
 function colorLine(sum,nb,sel){
     const ref = nb*2;
     if(0<sum && sum<=ref*1/3){
-        //console.log("note pertinent");
+        //console.log("not so pertinent");
         $(sel).css("background","orange");
     }
     else if(ref*1/3<sum && sum<=ref*2/3){
-        //console.log("un peu pertinent");
+        //console.log("pertinent");
         $(sel).css("background","yellow");
     }
     else if(ref*2/3<sum && sum<=ref){
-        //console.log("très pertinent");
+        //console.log("very pertinent");
         $(sel).css("background","yellowgreen");
     }
     else {
@@ -100,7 +98,7 @@ function colorLine(sum,nb,sel){
     };
 })(jQuery);
 
-
+countChecked_uc(form_uc);
 activeButton_uc('Crit');
 activeButton_uc('DLT');
 
@@ -111,19 +109,19 @@ $("#table_uc td").each(function(){
         case "0" :
             $(this).text("");
             //$(this).prepend('<img id="theImg" src="../../../public/img/open-iconic-master/png/people-2x.png"/>');
-            $(this).prepend('<img width=30 height=30 id="theImg" src="../../../public/img/circle_0.png"/>');
+            $(this).prepend('<img width=30 height=30 id="circle_0" src="../../../public/img/circle_0.png"/>');
             //$(this).css("background","yellow");
             break;
         case "1" :
             $(this).text("");
             //$(this).prepend('<img id="theImg" src="../../../public/img/open-iconic-master/png/cog-2x.png"/>');
-            $(this).prepend('<img width=30 height=30 id="theImg" src="../../../public/img/circle_1.png"/>');
+            $(this).prepend('<img width=30 height=30 id="circle_1" src="../../../public/img/circle_1.png"/>');
             //$(this).css("background", "orange");
             break;
         case "2" :
             $(this).text("");
             //$(this).prepend('<img id="theImg" src="../../../public/img/open-iconic-master/png/person-2x.png"/>');
-            $(this).prepend('<img width=30 height=30 id="theImg" src="../../../public/img/circle_2.png"/>');
+            $(this).prepend('<img width=30 height=30 id="circle_2" src="../../../public/img/circle_2.png"/>');
             //$(this).css("background","green");
             break;
         default:
@@ -131,6 +129,13 @@ $("#table_uc td").each(function(){
     }
 });
 
-colorLine(12,10,"#uc_1");
-colorLine(5,10,"#uc_2");
-colorLine(17,10,"#uc_3");
+$(".infos_pert").each(function(){
+    //console.log($(this).text());
+    var infos = $(this).text();
+    infos = infos.split('-');
+    //console.log(infos);
+    var idUC = parseInt(infos[0]);
+    var sum = parseInt(infos[1]);
+    var nb = parseInt(infos[2]);
+    colorLine(sum,nb,"#uc_"+String(idUC));
+});

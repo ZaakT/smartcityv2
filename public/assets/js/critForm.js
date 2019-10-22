@@ -47,19 +47,19 @@ function toogleButton(cat){
 function activeButton(sel,cat){
     var tab = $(sel).classes();
     //console.log(tab);
-    var color = ['bg-danger','bg-primary','bg-success']
+    var color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88']
     //console.log(cat);
     if(!tab.includes('active')){
-        $(sel).removeClass(color[cat-1]);
         $(sel).addClass('btn-secondary');
+        $(sel).css("background","");
         $(".critCat_"+cat).addClass('d-none');
-        $(".critCat_"+cat).removeClass(color[cat-1]);
+        $(".critCat_"+cat).css("background","");
 
     } else {
         $(sel).removeClass('btn-secondary');
-        $(sel).addClass(color[cat-1]);
+        $(sel).css("background",color[cat-1]);
         $(".critCat_"+cat).removeClass('d-none');
-        $(".critCat_"+cat).addClass(color[cat-1]);
+        $(".critCat_"+cat).css("background",color[cat-1]);
     }
 }
 

@@ -22,7 +22,8 @@
 }
 
 .check-col{
-    width: 35px;
+    min-width: 35px;
+    max-width: 35px;
     text-align: center;
 }
 
@@ -41,25 +42,12 @@
 }
 
 .thead2 th {
-    min-width: 200px;
-    max-width: 300px;
+    min-width: 100px;
+    max-width: 200px;
 }
 
 .thead2 th, td{
     vertical-align: middle !important;
-}
-
-.stickyCol {
-     background-color: gainsboro;
-     left: 0;
-     position: sticky !important;
-     width: 40px;
-}
-
-.stickyCol2 {
-    background-color: gainsboro;
-    left: 40px;
-    position: sticky !important;
 }
 
 .ucs-table{
@@ -69,38 +57,9 @@
 .ucs-table th, td{
     vertical-align: middle !important;
     text-align: center;
+    min-width: 200px;
+    max-width: 200px;
 }
 
-#cercle_2 {
-    width: 30px;
-    height: 30px;
-    border-radius: 50px;
-    background: black;
-}
-
-#cercle_1 {
-    width: 30px;
-    height: 30px;
-    border-radius: 50px;
-    border: solid black;
-    background: white;
-}
-
-#cercle_1_bis {
-    position: relative;
-    left:-22px;
-    height: 15px;
-    width: 30px;
-    background: black;
-    border-bottom-left-radius: 100px;
-    border-bottom-right-radius: 100px;
-    transform: rotate(-90deg);
-}
-
-#cercle_0 {
-    width: 30px;
-    height: 30px;
-    border-radius: 50px;
-    border: solid black;
-    background: white;
+#test{
 }

@@ -1,0 +1,54 @@
+{% extends '/input/project_design.twig' %}
+
+{% import "/templates/choose_redirect.twig" as redirect %}
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/list_ucs_confirm.twig" as list %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
+
+{% block title %}Project Design - Confirm UC Selection{% endblock %}
+
+{% block content %}
+
+{% if ucmID==0 %}
+{{ second_bar.second_bar(username,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,part,selected) }}
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+        <p>You will receive guidance throughout to facilitate your data input.</p>
+        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+    </div>
+</div>
+
+
+<div class="row">
+    {{ list.list_ucs(list_selUC) }}
+</div>
+
+<div class="row mt-5 btn-group-lg">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <a href="?A=project_design&amp;A2=rating&amp;ucmID={{ucmID}}" class="mx-2 btn btn-dark">Confirm the selection</a>
+            <a href="?A=project_design&amp;A2=use_case&amp;ucmID={{ucmID}}" class="mx-2 btn btn-dark">Change the selection</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endif %}
+{% endblock %}
+

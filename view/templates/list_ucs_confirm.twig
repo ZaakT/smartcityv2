@@ -1,0 +1,9 @@
+{% macro list_ucs(list_selUC) %}
+<div class="offset-4 col-4">
+    <ul>
+    {% for uc in list_selUC %}
+        <li>{{uc[0]}} - {{uc[1]}} - {{uc[2]}}</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endmacro %}

@@ -205,7 +205,24 @@ function use_case($twig,$is_connected,$ucmID=0){
     if($ucmID!=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
-            echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1]));
+            $list_selMeas = getListSelMeas($ucmID);
+            $list_measID = [];
+            foreach ($list_selMeas as $meas) {
+                array_push($list_measID,$meas[0]);
+            }
+            $list_ucs = getUC($list_measID);
+            $list_selCritCat = getListSelCritCat($ucmID);
+            $list_selCrit = getListSelCrit($ucmID);
+            $list_selDLT = getListSelDLTs($ucmID);
+            $repart_crit = calcRepartCrit($list_selCritCat,$list_selCrit);
+            $pertCrit = getPertCrit($list_ucs,$list_selCrit);
+            $pertDLT = getPertDLT($list_ucs,$list_selDLT);
+            $list_sel = [];
+            foreach (getListSelUC($ucm[0]) as $value) {
+                array_push($list_sel,$value[0]);
+            }
+            //var_dump($pertCrit);
+            echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ucs'=>$list_ucs,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'sel_DLTs'=>$list_selDLT,'repart_crit'=>$repart_crit,'pertCrit'=>$pertCrit,'pertDLT'=>$pertDLT,'list_sel'=>$list_sel));
         } else {
             header('Location: ?A=project_design&A2=use_case');
         }
@@ -214,6 +231,56 @@ function use_case($twig,$is_connected,$ucmID=0){
     }
 }
 
+function uc_selected($list_idDLT=[]){
+    if($list_idDLT){
+        if(isset($_SESSION['ucmID'])){
+            $ucmID = $_SESSION['ucmID'];
+            $listSelUC = getListSelUC($ucmID);
+            //var_dump(empty($listSelUC));
+            if(empty($listSelUC)){
+                insertSelUC($ucmID,$list_idDLT);
+            } else {
+                deleteSelUC($ucmID);
+                insertSelUC($ucmID,$list_idDLT);
+            }
+            header('Location: ?A=project_design&A2=confirm_uc_select&ucmID='.$ucmID);
+        } else {
+            throw new Exception("No UCM selected !");
+        }
+    } else {
+        throw new Exception("No Use Case selected !");
+    }
+}
+
+function confirm_uc_select($twig,$is_connected,$ucmID=0){
+    $user = getUser($_SESSION['username']);
+    if($ucmID!=0){
+        if(getUCMByID($ucmID,$user[0])){
+            $ucm = getUCMByID($ucmID,$user[0]);
+            $list_selUC = getListSelUC($ucmID);
+            echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'list_selUC'=>$list_selUC));
+        } else {
+            header('Location: ?A=project_design&A2=use_case&A3=confirm');
+        }
+    } else {
+        echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+    }
+}
+
+function calcRepartCrit($list_cat,$list_crit){
+    $res = [];
+    foreach ($list_cat as $cat) {
+        $count = 0;
+        foreach ($list_crit as $crit) {
+            if($cat[0]==$crit[3]){
+                $count++;
+            }
+        }
+        $res[$cat[0]] = $count;
+    }
+    //var_dump($res);
+    return $res;
+}
 
 
 // ---------------------------------------- RATING ----------------------------------------

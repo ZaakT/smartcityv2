@@ -185,7 +185,8 @@ function getListCriteria(){
     $req = $db->query('SELECT relevant_criteria.id, relevant_criteria.name, relevant_criteria.description, relevant_criteria_category.id
                     FROM relevant_criteria
                     INNER JOIN relevant_criteria_category
-                    WHERE relevant_criteria.id_1 = relevant_criteria_category.id');
+                    WHERE relevant_criteria.id_1 = relevant_criteria_category.id
+                    ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -195,7 +196,7 @@ function getListCriteria(){
 
 function getListCritCat(){
     $db = dbConnect();
-    $req = $db->query('SELECT id,name FROM relevant_criteria_category');
+    $req = $db->query('SELECT id,name FROM relevant_criteria_category ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -208,7 +209,9 @@ function getListSelCrit($ucmID){
     $req = $db->prepare('SELECT relevant_criteria.id, name, description, relevant_criteria.id_1
                         FROM relevant_criteria
                         INNER JOIN uc_sel_relcrit
-                        WHERE (uc_sel_relcrit.id_1 = relevant_criteria.id) AND (uc_sel_relcrit.id = ?)');
+                        WHERE (uc_sel_relcrit.id_1 = relevant_criteria.id)
+                            AND (uc_sel_relcrit.id = ?)
+                        ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -223,7 +226,8 @@ function getListSelCritCat($ucmID){
                         FROM relevant_criteria_category
                         INNER JOIN uc_sel_relcritcat
                         WHERE (uc_sel_relcritcat.id = relevant_criteria_category.id)
-                            AND (uc_sel_relcritcat.id_1 = ?)');
+                            AND (uc_sel_relcritcat.id_1 = ?)
+                        ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -272,11 +276,11 @@ function deleteSelCritCat($ucmID){
 
 
 
-// ---------------------------------------- GEOGRAPH ----------------------------------------
+// ---------------------------------------- GEOGRAPHY ----------------------------------------
 
 function getListDLTs(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, name, description FROM district_location_type');
+    $req = $db->query('SELECT id, name, description FROM district_location_type ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -290,7 +294,8 @@ function getListSelDLTs($ucmID){
                         FROM district_location_type
                         INNER JOIN uc_sel_distloctype
                         WHERE (uc_sel_distloctype.id_1 = district_location_type.id)
-                                AND (uc_sel_distloctype.id = ?)');
+                                AND (uc_sel_distloctype.id = ?)
+                        ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -316,4 +321,104 @@ function deleteSelDLTs($ucmID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM uc_sel_distloctype WHERE id = ?');
     return $req->execute(array($ucmID));
+}
+
+
+
+// ---------------------------------------- USE CASES ----------------------------------------
+
+function getUC($list_measID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name FROM use_case WHERE id_1 = ? ORDER BY name');
+    $list = [];
+    foreach ($list_measID as $measID) {
+        $req->execute(array($measID));
+        while ($row = $req->fetch()){
+            array_push($list,$row);
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListSelUC($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT use_case.id, name, description
+                        FROM use_case
+                        INNER JOIN uc_sel_usecase
+                        WHERE (uc_sel_usecase.id_1 = use_case.id)
+                                AND (uc_sel_usecase.id = ?)
+                        ORDER BY name');
+    $req->execute(array($ucmID));
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertSelUC($ucmID,$list){
+    $db = dbConnect();
+    $ret = false;
+    foreach ($list as $idUC) {
+        $req = $db->prepare('INSERT INTO uc_sel_usecase (id,id_1) VALUES (?,?)');
+        $ret = $req->execute(array($ucmID,$idUC));
+    }
+    if(!$ret){
+        throw new Exception("Selected Use Cases not inserted");
+    }
+    return $ret;
+}
+
+function deleteSelUC($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM uc_sel_usecase WHERE id = ?');
+    return $req->execute(array($ucmID));
+}
+
+function getPertCrit($ucs,$criteria){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT pertinence
+                        FROM usecase_vs_crit
+                        WHERE (usecase_vs_crit.id_1 = ?)
+                        AND (usecase_vs_crit.id_2 = ?)');
+    $list = [];
+    foreach ($ucs as $uc) {
+        $temp = [];
+        foreach ($criteria as $crit) {
+            $req->execute(array($uc[0],$crit[0]));
+            while ($row = $req->fetch()){
+                $pert = $row['pertinence'];
+                $temp[$crit[0]]=$pert;
+            }
+        }
+        //var_dump($temp);
+        $list[$uc[0]]=$temp;
+    }
+    //var_dump($list);
+    return $list;                    
+}
+
+function getPertDLT($ucs,$DLTs){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT pertinence
+                        FROM usecase_vs_distloctype
+                        WHERE (usecase_vs_distloctype.id_1 = ?)
+                        AND (usecase_vs_distloctype.id_2 = ?)');
+    $list = [];
+    foreach ($ucs as $uc) {
+        $temp = [];
+        foreach ($DLTs as $DLT) {
+            $req->execute(array($uc[0],$DLT[0]));
+            while ($row = $req->fetch()){
+                $pert = $row['pertinence'];
+                $temp[$DLT[0]]=$pert;
+            }
+        }
+        //var_dump($temp);
+        $list[$uc[0]]=$temp;
+    }
+    //var_dump($list);
+    return $list;                    
 }

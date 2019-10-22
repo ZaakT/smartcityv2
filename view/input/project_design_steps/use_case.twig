@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/list_ucs.twig" as list %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
@@ -16,113 +17,71 @@
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
 
-{% set ucms = [1] %}
-
-{% if ucms %} 
-
-
-<div class="row btn-group-lg justify-content-center mt-5" role="group" >
-    <button id="moreCrit" onclick="toogleButton_uc('Crit');" type="button" class="mx-2 offset-3 col-3 btn btn-dark disabled">More details about Criteria</button> 
-    <button id="moreDLT" onclick="toogleButton_uc('DLT');" type="button" class="mx-2 col-3 btn btn-dark disabled">More details about DLT</button> 
+{% if ucs %} 
+<div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
+    <div class="col text-center">
+        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+        <p>You will receive guidance throughout to facilitate your data input.</p>
+        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+    </div>
+</div>
+<div class="row">
+    <div id="test" class="offset-3 col-6 mt-1">
+        <table id="table_uc_legend" class='table table-sm table-bordered table-responsive-sm align-middle text-center'>
+            <thead class="thead-light">
+                <tr>
+                    <th>Not So Pertinent</th>
+                    <th>Pertinent</th>
+                    <th>Very Pertinent</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan=3 class="text-uppercase">Individualy</td>
+                </tr>
+                <tr>
+                    <td><img width=30 height=30 id="circle_0" src="../../../public/img/circle_0.png"/></td>
+                    <td><img width=30 height=30 id="circle_1" src="../../../public/img/circle_1.png"/></td>
+                    <td><img width=30 height=30 id="circle_2" src="../../../public/img/circle_2.png"/></td>
+                </tr>
+                <tr>
+                    <td colspan=3 class="text-uppercase">In Average</td>
+                </tr>
+                <tr>
+                    <td style="background:orange;"></td>
+                    <td style="background:yellow;"></td>
+                    <td style="background:yellowgreen;"></td> 
+                </tr>
+            </tbody> 
+        </table>
+    </div>
 </div>
 
 <div class ="row">
-    <form class="col container-fluid" name="form_uc" onsubmit="return countChecked_uc(form_uc);" action="?A=project_design&amp;A2=uc_selected" method="post">
-        <div class="row">
-            <div class="col mt-5 mx-5 list-table text-center ucs-table">
-                <table id="table_uc" class='table table-lg table-bordered table-responsive-lg align-middle'>
-                    <thead class="thead-dark">
-                        <tr scope="row">
-                            <th rowspan=2 colspan=2>Use Cases</th>
-                            <th rowspan=2 colspan=1>Average</th>
-                            <th rowspan=2 colspan=1>Average on Criteria</th>
-                            <th rowspan=1 colspan=2 class="more_Crit">Planet</th>
-                            <th rowspan=1 colspan=3 class="more_Crit">People</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Properity</th>
-                            <th rowspan=2 colspan=1>Average on District Location Types</th>
-                            <th rowspan=1 colspan=3 class="more_DLT">District Location Types</th>
-                        </tr>
-                        <tr>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 1</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 2</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 3</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 4</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 5</th>
-                            <th rowspan=1 colspan=1 class="more_Crit">Crit. 6</th>
-                            <th rowspan=1 colspan=1 class="more_DLT">DLT. 1</th>
-                            <th rowspan=1 colspan=1 class="more_DLT">DLT. 2</th>
-                            <th rowspan=1 colspan=1 class="more_DLT">DLT. 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr id="uc_1" scope="row">
-                            <td scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></td>
-                            <td scope="col"><label for="check">Public Speakers Alert or Image Info</label></td>
-                            <td scope="col">0</td>
-                            <td scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td scope="col">2</td>
-                            <td class="more_DLT" scope="col">1</td>
-                            <td class="more_DLT" scope="col">1</td>
-                            <td class="more_DLT" scope="col">1</td>
-                        </tr>
-                        <tr id="uc_2" scoe="row">
-                            <td scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></td>
-                            <td scope="col"><label for="check">Hello world</label></td>
-                            <td scope="col">1</td>
-                            <td scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td scope="col">1</td>
-                            <td class="more_DLT" scope="col">2</td>
-                            <td class="more_DLT" scope="col">2</td>
-                            <td class="more_DLT" scope="col">2</td>
-
-                        </tr>
-                        <tr id="uc_3" scoe="row">
-                            <td scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                            <td scope="col"><label for="check">Test</label></td>
-                            <td scope="col">0</td>
-                            <td scope="col">0</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td class="more_Crit" scope="col">1</td>
-                            <td scope="col">1</td>
-                            <td class="more_DLT" scope="col">0</td>
-                            <td class="more_DLT" scope="col">0</td>
-                            <td class="more_DLT" scope="col">0</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <form class="col container-fluid" name="form_uc" onsubmit="return countChecked_uc(form_uc);" action="?A=project_design&amp;A2=use_case&amp;A3=confirm&amp;ucmID={{ucmID}}" method="post">
+        {{ list.list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,pertCrit,pertDLT,list_sel) }}
         
+        <div class="row btn-group-lg justify-content-center mt-3" role="group" >
+            <button id="moreCrit" onclick="toogleButton_uc('Crit');" type="button" class="mx-2 offset-3 col-3 btn btn-dark disabled">More details about Criteria</button> 
+            <button id="moreDLT" onclick="toogleButton_uc('DLT');" type="button" class="mx-2 col-3 btn btn-dark disabled">More details about DLT</button> 
+        </div>
+
         <div class="row mt-4 mb-0 text-center">
             <span id="countUCSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
         </div>
         <div class="row text-center mt-3">
-            <h6 id="help_uc" class="col text-danger font-weight-bold" hidden>Please select at least 1 Use Case !</h6>
+            <h6 id="help_uc" class="col text-danger font-weight-bold" hidden>Please select at least 4 Use Cases !</h6>
         </div>
         <div class="row my-0 text-center text-dark">
             <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
         </div>
     </form>
+    
     {% else %}
         <h2 class="text-center m-5">There is no Use Cases, please contact an administrator.</h2>
     {% endif %}
 </div>
+
 
 
 {% endif %}

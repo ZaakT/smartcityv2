@@ -195,7 +195,17 @@ try{
                     elseif($_GET['A2']=="use_case"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
-                                use_case($twig,$is_connected,$_GET['ucmID']);
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="confirm"){
+                                        confirm_uc_select($twig,$is_connected,$_GET['ucmID']);
+                                    }
+                                    else {
+                                        header('Location: ?A=project_design&A2=use_case&ucmID='+$_GET['ucmID']);
+                                    }
+                                }
+                                else {
+                                    use_case($twig,$is_connected,$_GET['ucmID']);
+                                }
                             }
                             else {
                                 header('Location: ?A=project_design&A2=use_case');
@@ -206,7 +216,18 @@ try{
                         }
                     }
                     // --- SELECTED USE CASES ---
-                    
+                    elseif($_GET['A2']=="uc_selected"){
+                        $list_idUC = [];
+                        foreach ($_POST as $key => $value) {
+                            if(isset($key)){
+                                $idUC = intval($key);
+                                //var_dump($list_idUC);
+                                array_push($list_idUC,$idUC);
+                            }
+                        }
+                        //var_dump($list_idUC);
+                        uc_selected($list_idUC);
+                    }
                     // --- RATING ---
                     elseif($_GET['A2']=="rating"){
                         if(isset($_GET['ucmID'])){
