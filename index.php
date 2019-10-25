@@ -196,8 +196,17 @@ try{
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
                                 if(isset($_GET['A3'])){
-                                    if($_GET['A3']=="confirm"){
-                                        confirm_uc_select($twig,$is_connected,$_GET['ucmID']);
+                                    if($_GET['A3']=="uc_selected"){
+                                        $list_idUC = [];
+                                        foreach ($_POST as $key => $value) {
+                                            if(isset($key)){
+                                                $idUC = intval($key);
+                                                //var_dump($list_idUC);
+                                                array_push($list_idUC,$idUC);
+                                            }
+                                        }
+                                        //var_dump($list_idUC);
+                                        uc_selected($twig,$is_connected,$list_idUC);
                                     }
                                     else {
                                         header('Location: ?A=project_design&A2=use_case&ucmID='+$_GET['ucmID']);
@@ -215,19 +224,6 @@ try{
                             use_case($twig,$is_connected);
                         }
                     }
-                    // --- SELECTED USE CASES ---
-                    elseif($_GET['A2']=="uc_selected"){
-                        $list_idUC = [];
-                        foreach ($_POST as $key => $value) {
-                            if(isset($key)){
-                                $idUC = intval($key);
-                                //var_dump($list_idUC);
-                                array_push($list_idUC,$idUC);
-                            }
-                        }
-                        //var_dump($list_idUC);
-                        uc_selected($list_idUC);
-                    }
                     // --- RATING ---
                     elseif($_GET['A2']=="rating"){
                         if(isset($_GET['ucmID'])){
@@ -243,7 +239,25 @@ try{
                         }
                     }
                     // --- SELECTED RATING ---
-                    
+                    elseif ($_GET['A2']=="rates_inputed") {
+                        $list_rates = [];
+                        //var_dump($_POST);
+                        foreach ($_POST as $key => $value) {
+                            if(isset($key)){
+                                $IDs = explode("_",$key);
+                                $ucID = intval($IDs[0]);
+                                $critID = intval($IDs[1]);
+                                if(array_key_exists($ucID,$list_rates)){
+                                    $list_rates[$ucID]+=[$critID=>intval($value)];
+                                }
+                                else {
+                                    $list_rates[$ucID]=[];
+                                }
+                            }
+                        }
+                        //var_dump($list_rates);
+                        rates_inputed($list_rates);
+                    }
                     // --- SCORING ---
                     elseif($_GET['A2']=="scoring"){
                         if(isset($_GET['ucmID'])){

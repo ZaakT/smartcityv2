@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/rate_table.twig" as table %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
@@ -17,19 +18,32 @@
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
 
-<div class="row text-center text-dark">
-    <a href="?A=project_design&amp;A2=scoring&amp;ucmID={{ ucmID}}" class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+
+{% if sel_ucs %} 
+<div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
+    <div class="col text-center">
+        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+        <p>You will receive guidance throughout to facilitate your data input.</p>
+        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+    </div>
 </div>
+<div class="row m-3 btn-group-sm justify-content-center" role="group">
+    <button class="col-2 btn btn-dark" onclick="fillByAv('table_rate');">Fill with default values</button>
+    <button class="offset-1 col-1 btn btn-danger" onclick="clearTable('table_rate');">Clear all</button>
+</div>
+<div class ="row">
+    <form class="col container-fluid" name="form_rate" action="?A=project_design&amp;A2=rates_inputed" method="post">
+        {{ table.rate_table(sel_ucs,sel_critCat,sel_crit,repart_crit,rates,sel_meas,repart_ucs,guidCrit) }}
 
-
-
-
-
-
-
-
-
-
+        <div class="row my-0 text-center text-dark">
+            <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+        </div>
+    </form>
+    
+    {% else %}
+        <h2 class="text-center m-5">There is no Use Cases selected.</h2>
+    {% endif %}
+</div>
 {% endif %}
 {% endblock %}
 

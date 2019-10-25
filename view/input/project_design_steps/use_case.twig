@@ -17,7 +17,7 @@
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
 
-{% if ucs %} 
+    {% if ucs %} 
 <div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
     <div class="col text-center">
         <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
@@ -58,8 +58,8 @@
 </div>
 
 <div class ="row">
-    <form class="col container-fluid" name="form_uc" onsubmit="return countChecked_uc(form_uc);" action="?A=project_design&amp;A2=use_case&amp;A3=confirm&amp;ucmID={{ucmID}}" method="post">
-        {{ list.list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,pertCrit,pertDLT,list_sel) }}
+    <form class="col container-fluid" name="form_uc" onsubmit="return countChecked_uc(form_uc);" action="?A=project_design&amp;A2=use_case&amp;A3=uc_selected&amp;ucmID={{ucmID}}" method="post">
+        {{ list.list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,guidCrit,pertDLT,list_sel) }}
         
         <div class="row btn-group-lg justify-content-center mt-3" role="group" >
             <button id="moreCrit" onclick="toogleButton_uc('Crit');" type="button" class="mx-2 offset-3 col-3 btn btn-dark disabled">More details about Criteria</button> 

@@ -2,7 +2,7 @@
 {% import "/templates/modals.twig" as modal %}
 
 <div class="row text-center">
-    <div class="col m-5 list-table">
+    <div class="col mx-5 list-table">
         <table class='table table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
@@ -17,7 +17,7 @@
             <tbody>
             {% for ucm in ucms %}
                 <tr id = "tr_{{ ucm[0] }}" scope="row">
-                    <td><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" required></td>
+                    <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" required></td>
                     <td>{{ ucm[1] }}</td>
                     <td>{{ ucm[2] }}</td>
                     <td>...</td>

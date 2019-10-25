@@ -7,7 +7,7 @@
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
-{% block title %}Project Design - Confirm UC Selection{% endblock %}
+{% block title %}Project Design - Confirm Selection{% endblock %}
 
 {% block content %}
 
@@ -26,8 +26,7 @@
     </div>
 </div>
 
-
-<div class="row">
+<div class="row offset-1">
     {{ list.list_ucs(list_selUC) }}
 </div>
 

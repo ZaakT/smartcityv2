@@ -4,7 +4,7 @@
 function dbConnect()
 {
     try{
-    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db;charset=utf8', 'root', ''/*, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)*/);
+    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         return $db;
     } catch(Exception $e){ 
         throw new Exception("access to the database impossible !");
@@ -343,12 +343,14 @@ function getUC($list_measID){
 
 function getListSelUC($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT use_case.id, name, description
-                        FROM use_case
-                        INNER JOIN uc_sel_usecase
-                        WHERE (uc_sel_usecase.id_1 = use_case.id)
-                                AND (uc_sel_usecase.id = ?)
-                        ORDER BY name');
+    $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, measure.name
+                            FROM use_case
+                                INNER JOIN uc_sel_usecase
+                                INNER JOIN measure
+                                    WHERE (uc_sel_usecase.id_1 = use_case.id)
+                                        AND (uc_sel_usecase.id = ?) 
+                                        AND (use_case.id_1 = measure.id)
+                                ORDER BY measure.name, use_case.name');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -377,9 +379,9 @@ function deleteSelUC($ucmID){
     return $req->execute(array($ucmID));
 }
 
-function getPertCrit($ucs,$criteria){
+function getGuidCrit($ucs,$criteria){
     $db = dbConnect();
-    $req = $db->prepare('SELECT pertinence
+    $req = $db->prepare('SELECT pertinence, guidance_min, guidance_max
                         FROM usecase_vs_crit
                         WHERE (usecase_vs_crit.id_1 = ?)
                         AND (usecase_vs_crit.id_2 = ?)');
@@ -390,7 +392,9 @@ function getPertCrit($ucs,$criteria){
             $req->execute(array($uc[0],$crit[0]));
             while ($row = $req->fetch()){
                 $pert = $row['pertinence'];
-                $temp[$crit[0]]=$pert;
+                $min = $row['guidance_min'];
+                $max = $row['guidance_max'];
+                $temp[$crit[0]]=[$pert,$min,$max];
             }
         }
         //var_dump($temp);
@@ -421,4 +425,14 @@ function getPertDLT($ucs,$DLTs){
     }
     //var_dump($list);
     return $list;                    
+}
+
+// ---------------------------------------- RATING ----------------------------------------
+
+function insertRates(){
+
+}
+
+function deleteRates(){
+    
 }

@@ -1,9 +1,22 @@
 {% macro list_ucs(list_selUC) %}
-<div class="offset-4 col-4">
-    <ul>
-    {% for uc in list_selUC %}
-        <li>{{uc[0]}} - {{uc[1]}} - {{uc[2]}}</li>
-    {% endfor %}
-    </ul>
+<div class="col-10 mx-5 list-table">
+    <table class="table table-bordered table-striped table-sm table-responsive-lg text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Measures</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uc in list_selUC %}
+            <tr>
+                <td>{{uc[1]}}</td>
+                <td>{{uc[2]}}</td>
+                <td>{{uc[3]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endmacro %}

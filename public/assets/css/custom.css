@@ -17,7 +17,7 @@
 }
 
 .list-table{
-    max-height: 45vh;
+    max-height: 50vh;
     overflow-y: auto;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .ucs-table{
-    max-height: 60vh;
+    max-height: 65vh;
 }
 
 .ucs-table th, td{
@@ -61,5 +61,22 @@
     max-width: 200px;
 }
 
-#test{
+.rate-table th, td{
+    vertical-align: middle !important;
+    text-align: center;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.rate-table{
+    max-height: 65vh;
+}
+
+.img_guid{
+    max-width: 300px;
+    height: auto;
+}
+
+.popover{
+    max-width: 100%;
 }

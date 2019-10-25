@@ -1,8 +1,8 @@
-{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,pertCrit,pertDLT,list_sel) %}
+{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,guidCrit,pertDLT,list_sel) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 <div class="row">
     <div class="col mt-5 mx-5 list-table text-center ucs-table">
-        <table id="table_uc" class='table table-lg table-bordered table-responsive-lg align-middle'>
+        <table id="table_uc" class='table table-sm table-bordered table-responsive-lg align-middle'>
             <thead class="thead-dark">
                 <tr scope="row">
                     <th rowspan=2 colspan=2>Use Cases</th>
@@ -35,8 +35,8 @@
 
                     {% set sum_crit = 0 %}
                     {% for crit in sel_crit %}
-                    {% set sum_crit = sum_crit + pertCrit[uc[0]][crit[0]] %}
-                    <td id="pertCrit_{{uc[0]}}_{{crit[0]}}" class="more_Crit" scope="col">{{ pertCrit[uc[0]][crit[0]] }}</td>
+                    {% set sum_crit = sum_crit + guidCrit[uc[0]][crit[0]][0] %}
+                    <td id="pertCrit_{{uc[0]}}_{{crit[0]}}" class="more_Crit" scope="col">{{ guidCrit[uc[0]][crit[0]][0] }}</td>
                     {% endfor %}
                     {% set av_crit = (sum_crit/(sel_crit|length))|round %}
                     <td scope="col">{{ av_crit }}</td>
@@ -54,103 +54,6 @@
                     <span class="infos_pert" hidden>{{uc[0]}}-{{sum_tot}}-{{nb_tot}}</span>
                 </tr>
                 {% endfor %}
-                {# <tr id="uc_2" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></td>
-                    <td scope="col"><label for="check">Hello world</label></td>
-                    <td scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">2</td>
-                    <td class="more_DLT" scope="col">2</td>
-                    <td class="more_DLT" scope="col">2</td>
-
-                </tr>
-                <tr id="uc_3" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                    <td scope="col"><label for="check">Test</label></td>
-                    <td scope="col">0</td>
-                    <td scope="col">0</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                </tr>
-                <tr id="uc_4" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                    <td scope="col"><label for="check">Test</label></td>
-                    <td scope="col">0</td>
-                    <td scope="col">0</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                </tr>
-                <tr id="uc_5" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                    <td scope="col"><label for="check">Test</label></td>
-                    <td scope="col">0</td>
-                    <td scope="col">0</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                </tr>
-                <tr id="uc_6" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                    <td scope="col"><label for="check">Test</label></td>
-                    <td scope="col">0</td>
-                    <td scope="col">0</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                </tr>
-                <tr id="uc_7" scoe="row">
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='check' name="check"></input>
-                    <td scope="col"><label for="check">Test</label></td>
-                    <td scope="col">0</td>
-                    <td scope="col">0</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td class="more_Crit" scope="col">1</td>
-                    <td scope="col">1</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                    <td class="more_DLT" scope="col">0</td>
-                </tr> #}
             </tbody>
         </table>
     </div>
