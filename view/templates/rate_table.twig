@@ -1,4 +1,4 @@
-{% macro rate_table(sel_ucs,sel_critCat,sel_crit,repart_crit,rates,sel_meas,repart_ucs,guidCrit) %}
+{% macro rate_table(sel_ucs,sel_critCat,sel_crit,repart_crit,rates,sel_meas,repart_ucs,guidCrit,rates) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 <div class="row">
     <div class="col mt-3 mx-5 list-table text-center rate-table">
@@ -32,7 +32,7 @@
                 <tr>
                     <td scope="col" rowspan=1>{{ uc[1] }}</td>                    
                     {% for crit in sel_crit %}
-                    <td scope="col" rowspan=1><input oninput="colorFilled();" type="number" min=1 max=10 placeholder="{{guidCrit[uc[0]][crit[0]][1]}}-{{guidCrit[uc[0]][crit[0]][2]}}" name="{{uc[0]}}_{{crit[0]}}" required></td>
+                    <td scope="col" rowspan=1><input oninput="colorFilled();" type="number" min=1 max=10 placeholder="{{guidCrit[uc[0]][crit[0]][1]}}-{{guidCrit[uc[0]][crit[0]][2]}}" name="{{uc[0]}}_{{crit[0]}}" required value={{ rates ? rates[uc[0]][crit[0]] : ""}}></td>
                     {% endfor %}
                 </tr>
                 {% endfor %}

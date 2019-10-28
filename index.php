@@ -240,23 +240,7 @@ try{
                     }
                     // --- SELECTED RATING ---
                     elseif ($_GET['A2']=="rates_inputed") {
-                        $list_rates = [];
-                        //var_dump($_POST);
-                        foreach ($_POST as $key => $value) {
-                            if(isset($key)){
-                                $IDs = explode("_",$key);
-                                $ucID = intval($IDs[0]);
-                                $critID = intval($IDs[1]);
-                                if(array_key_exists($ucID,$list_rates)){
-                                    $list_rates[$ucID]+=[$critID=>intval($value)];
-                                }
-                                else {
-                                    $list_rates[$ucID]=[];
-                                }
-                            }
-                        }
-                        //var_dump($list_rates);
-                        rates_inputed($list_rates);
+                        rates_inputed($_POST);
                     }
                     // --- SCORING ---
                     elseif($_GET['A2']=="scoring"){

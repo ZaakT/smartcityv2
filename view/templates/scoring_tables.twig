@@ -1,0 +1,60 @@
+{% macro ranks_table(sel_ucs,sel_critCat,sel_crit,repart_crit,ranks) %}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+<div class="row">
+    <div class="col list-table text-center rate-table">
+        <table id="table_rate" class='table table-lg table-bordered table-striped table-responsive-lg align-middle'>
+            <thead class="thead-dark sticky-top">
+                <tr scope="row">
+                    <th colspan=1 rowspan=3>Use Cases</th>
+                    {% for cat in sel_critCat %}
+                    <th rowspan=1 colspan={{repart_crit[cat[0]]}} style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    {% endfor %}
+                </tr>
+                <tr scope="row">
+                    {% for crit in sel_crit %}
+                    <th rowspan=1 colspan=1 id="crit_{{ crit[0] }}">{{ crit[1] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for uc in sel_ucs %}
+                <tr>
+                    <td scope="col" rowspan=1>{{ uc[1] }}</td>                    
+                    {% for crit in sel_crit %}
+                    <td scope="col" rowspan=1>1</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro scores_table(sel_ucs,sel_critCat,sel_crit,repart_crit,scores) %}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+<div class="row">
+    <div class="col list-table text-center rate-table">
+        <table id="table_rate" class='table table-lg table-bordered table-striped table-responsive-lg align-middle'>
+            <thead class="thead-dark sticky-top">
+                <tr scope="row">
+                    <th colspan=1 rowspan=3>Use Cases</th>
+                    {% for cat in sel_critCat %}
+                    <th rowspan=1 colspan=1 style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for uc in sel_ucs %}
+                <tr>
+                    <td scope="col" rowspan=1>{{ uc[1] }}</td>                    
+                    {% for cat in sel_critCat %}
+                    <td scope="col" rowspan=1>1</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

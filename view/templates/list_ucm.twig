@@ -9,7 +9,7 @@
                     <th scope="col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Last Modified Date</th>
+                    <th scope="col">Modification Date</th>
                     <th scope="col">Creation Date</th>
                     <th scope="col"></th>
                 </tr>
@@ -20,8 +20,8 @@
                     <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" required></td>
                     <td>{{ ucm[1] }}</td>
                     <td>{{ ucm[2] }}</td>
-                    <td>...</td>
-                    <td>...</td>
+                    <td>{{ ucm[4] }}</td>
+                    <td>{{ ucm[3] }}</td>
                     <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUCM_{{ ucm[0] }}"></span></a></td>
                     {{ modal.delete_ucm(ucm[0],ucm[1]) }}
                 </tr>

@@ -1,23 +1,25 @@
 {% macro sidebar(page,selectID=0) %}
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
-        <a class="navbar-brand p-4" href="?A=home">Decision Support Toolkit</a>
+        <a class="navbar-brand text-center p-4" href="?A=home">Decision Support Toolkit</a>
        
         <!-- Project Developement -->
     {% if page=="project_dev" %}
         <h4 class="nav-item text-center">- Input -<br>Project Developement</h4>
         <a class="nav-item nav-link" href="?A=project_design">Project Design</a>
         <a class="nav-item nav-link" href="?A=project_scoping">Project Scoping</a>
+
     {% elseif page=="project_design" %}
         <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
         <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">1 - Use Cases Menu</a>
-        <a class="nav-item nav-link" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">2 - Measures</a>
-        <a class="nav-item nav-link" id="criteria" href="?A=project_design&amp;A2=criteria&amp;ucmID={{ selectID }}">3 - Criteria</a>
-        <a class="nav-item nav-link" id="geography" href="?A=project_design&amp;A2=geography&amp;ucmID={{ selectID }}">4 - Geography</a>
-        <a class="nav-item nav-link" id="use_case" href="?A=project_design&amp;A2=use_case&amp;ucmID={{ selectID }}">5 - Use Case</a>
-        <a class="nav-item nav-link" id="rating"  href="?A=project_design&amp;A2=rating&amp;ucmID={{ selectID }}">6 - Rating</a>
-        <a class="nav-item nav-link" id="scoring"  href="?A=project_design&amp;A2=scoring&amp;ucmID={{ selectID }}">7 - Scoring</a>
-        <a class="nav-item nav-link" id="global_score"  href="?A=project_design&amp;A2=global_score&amp;ucmID={{ selectID }}">8 - Global Score</a>
-    {% elseif page=="project_scoping" %}
+        <a class="nav-item nav-link disabled" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">2 - Measures</a>
+        <a class="nav-item nav-link disabled" id="criteria" href="?A=project_design&amp;A2=criteria&amp;ucmID={{ selectID }}">3 - Criteria</a>
+        <a class="nav-item nav-link disabled" id="geography" href="?A=project_design&amp;A2=geography&amp;ucmID={{ selectID }}">4 - Geography</a>
+        <a class="nav-item nav-link disabled" id="use_case" href="?A=project_design&amp;A2=use_case&amp;ucmID={{ selectID }}">5 - Use Case</a>
+        <a class="nav-item nav-link disabled" id="rating"  href="?A=project_design&amp;A2=rating&amp;ucmID={{ selectID }}">6 - Rating</a>
+        <a class="nav-item nav-link disabled" id="scoring"  href="?A=project_design&amp;A2=scoring&amp;ucmID={{ selectID }}">7 - Scoring</a>
+        <a class="nav-item nav-link disabled" id="global_score"  href="?A=project_design&amp;A2=global_score&amp;ucmID={{ selectID }}">8 - Global Score</a>
+    
+        {% elseif page=="project_scoping" %}
         <h4 class="nav-item text-center">- Input -<br>Project Scoping</h4>
         <a class="nav-item nav-link" id="project" href="?A=project_scoping&amp;A2=project">1 - Project</a>
         <a class="nav-item nav-link" id="scope" href="?A=project_scoping&amp;A2=scope">2 - Scope</a>

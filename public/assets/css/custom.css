@@ -3,9 +3,21 @@
     height:100%;
 }
 
+/* .sidebar{
+    height: 100vh;
+    position: fixed;
+    position: ;
+    display: block;
+    width: 20%;
+} */
+
 .sidebar a, h4{
     color:white;
 }
+/* 
+#page-content-wrapper{
+
+} */
 
 .navbar-brand{
     font-size: 1em;

@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/scoring_tables.twig" as tables %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
@@ -17,20 +18,75 @@
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
 
-
-<div class="row text-center text-dark">
-    <a href="?A=project_design&amp;A2=global_score&amp;ucmID={{ ucmID }}" class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+<div class="row jumbotron text-light mx-5 mt-5 mb-0 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
 </div>
 
+<!-- ___________________________________________ RANK ___________________________________________ -->
+<div class ="row mx-5 mt-3 ">
+    <div class="col container-fluid">
+        <div class="row text-center mt-5 mb-3">
+            <h2 class="col">Use Case Ranking per Criteria</h2>
+        </div>
+        {{ tables.ranks_table(sel_ucs,sel_critCat,sel_crit,repart_crit,ranks) }}
+    </div>
+</div>
 
+<div class="row text-center mt-3">
+    <div class="col dropdown">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Choose the graph to show
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% set sel_cat = [] %}
+            {% for cat in sel_critCat %}
+                {% set sel_cat = sel_cat|merge([cat[1]]) %}
+            {% endfor %}
+            ['{{sel_cat|join("\",\"")}}']
+            {% for uc in sel_ucs %}
+            <span class="dropdown-item" onclick="showRanksChart('ranksChart','{{uc[1]}}',array(['{{sel_cat|join("\",\"")}}']),[1,2,3]);">{{uc[1]}}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
+<div class="row mt-5 text-center">
+    <div class="offset-2 col-8">
+        <canvas id="ranksChart" ></canvas>   
+    </div>
+</div>
 
+<!-- ___________________________________________ SCORE ___________________________________________ -->
+<div class ="row mx-5 mt-3">
+    <div class="col container-fluid">
+        <div class="row text-center mt-5 mb-3">
+            <h2 class="col">Use Case Scoring per Criteria Category</h2>
+        </div>
+        {{ tables.scores_table(sel_ucs,sel_critCat,sel_crit,repart_crit,scores) }}
+    </div>
+</div>
 
+<div class="row text-center mt-3">
+    <div class="col dropdown">
+        <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Choose the graph to show
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for uc in sel_ucs %}
+            <span class="dropdown-item" onclick="showScoresChart('{{uc[1]}}',20);">{{uc[1]}}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-
-
+<div class="row mt-5 text-center">
+    <div class="offset-2 col-8">
+        <canvas id="scoresChart" ></canvas>   
+    </div>
+</div>
 
 
 {% endif %}
 {% endblock %}
-

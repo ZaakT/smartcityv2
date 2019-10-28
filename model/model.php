@@ -4,7 +4,7 @@
 function dbConnect()
 {
     try{
-    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         return $db;
     } catch(Exception $e){ 
         throw new Exception("access to the database impossible !");
@@ -72,8 +72,8 @@ function getListUsers(){
 
 function insertUser($user){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO user (username,salt,password,is_admin,id_1,creation_date) VALUES (?,?,?,?,?,NOW())');
-    return $req->execute(array($user[0],$user[1],$user[2],$user[3],$user[4]));
+    $req = $db->prepare('INSERT INTO user (username,salt,password,is_admin) VALUES (?,?,?,?)');
+    return $req->execute(array($user[0],$user[1],$user[2],$user[3]));
 }
 
 function modifyUser($user){
@@ -92,15 +92,15 @@ function modifyUser($user){
 
 function getUCMByID($id,$idUser){
     $db = dbConnect();
-    $req = $db->prepare('SELECT * FROM uc_scenario WHERE id = ? and id_1 = ?');
+    $req = $db->prepare('SELECT * FROM use_cases_menu WHERE id = ? and id_user = ?');
     $req->execute(array($id,$idUser));
     $res = $req->fetch();
     return $res;
 }
 
-function getUCM($idUser,$name){
+function getUCM($idUser,$name){ //in order to test if the name is already taken or not
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, name, description FROM uc_scenario WHERE id_1 = ? and name = ?');
+    $req = $db->prepare('SELECT * FROM use_cases_menu WHERE id_user = ? and name = ?');
     $req->execute(array($idUser,$name));
     $res =  $req->fetch();
     return $res;
@@ -108,7 +108,7 @@ function getUCM($idUser,$name){
 
 function getListUCMS($idUser){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, name, description FROM uc_scenario WHERE id_1 = ? ORDER BY id');
+    $req = $db->prepare('SELECT * FROM use_cases_menu WHERE id_user = ? ORDER BY id');
     $req->execute(array($idUser));
     $list = [];
     while ($row = $req->fetch()){
@@ -119,13 +119,13 @@ function getListUCMS($idUser){
 
 function insertUCM($ucm){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO uc_scenario (name,description,id_1) VALUES (?,?,?)');
+    $req = $db->prepare('INSERT INTO use_cases_menu (name,description,id_user) VALUES (?,?,?)');
     return $req->execute(array($ucm[0],$ucm[1],$ucm[2]));
 }
 
 function deleteUCM($id){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_scenario WHERE id = ?');
+    $req = $db->prepare('DELETE FROM use_cases_menu WHERE id = ?');
     return $req->execute(array($id));
 }
 
@@ -147,8 +147,8 @@ function getListSelMeas($ucmID){
     $db = dbConnect();
     $req = $db->prepare('SELECT measure.id, name, description
                         FROM measure
-                        INNER JOIN uc_sel_measure
-                        WHERE (uc_sel_measure.id_1 = measure.id) AND (uc_sel_measure.id = ?)');
+                        INNER JOIN ucm_sel_measure
+                        WHERE (ucm_sel_measure.id_meas = measure.id) AND (ucm_sel_measure.id_ucm = ?)');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
@@ -161,7 +161,7 @@ function insertSelMeas($ucmID,$list){
     $db = dbConnect();
     $ret = false;
     foreach ($list as $measID) {
-        $req = $db->prepare('INSERT INTO uc_sel_measure (id,id_1) VALUES (?,?)');
+        $req = $db->prepare('INSERT INTO ucm_sel_measure (id_ucm,id_meas) VALUES (?,?)');
         $ret = $req->execute(array($ucmID,$measID));
     }
     if(!$ret){
@@ -172,7 +172,7 @@ function insertSelMeas($ucmID,$list){
 
 function deleteSelMeas($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_sel_measure WHERE id = ?');
+    $req = $db->prepare('DELETE FROM ucm_sel_measure WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
 
@@ -182,10 +182,10 @@ function deleteSelMeas($ucmID){
 
 function getListCriteria(){
     $db = dbConnect();
-    $req = $db->query('SELECT relevant_criteria.id, relevant_criteria.name, relevant_criteria.description, relevant_criteria_category.id
-                    FROM relevant_criteria
-                    INNER JOIN relevant_criteria_category
-                    WHERE relevant_criteria.id_1 = relevant_criteria_category.id
+    $req = $db->query('SELECT crit.id, crit.name, crit.description, critCat.id
+                    FROM crit
+                    INNER JOIN critCat
+                    WHERE crit.id_cat = critCat.id
                     ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
@@ -196,7 +196,7 @@ function getListCriteria(){
 
 function getListCritCat(){
     $db = dbConnect();
-    $req = $db->query('SELECT id,name FROM relevant_criteria_category ORDER BY name');
+    $req = $db->query('SELECT id,name FROM critCat ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -206,11 +206,11 @@ function getListCritCat(){
 
 function getListSelCrit($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT relevant_criteria.id, name, description, relevant_criteria.id_1
-                        FROM relevant_criteria
-                        INNER JOIN uc_sel_relcrit
-                        WHERE (uc_sel_relcrit.id_1 = relevant_criteria.id)
-                            AND (uc_sel_relcrit.id = ?)
+    $req = $db->prepare('SELECT crit.id, name, description, crit.id_cat
+                        FROM crit
+                        INNER JOIN ucm_sel_crit
+                        WHERE (ucm_sel_crit.id_crit = crit.id)
+                            AND (ucm_sel_crit.id_ucm = ?)
                         ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
@@ -222,11 +222,11 @@ function getListSelCrit($ucmID){
 
 function getListSelCritCat($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT relevant_criteria_category.id, name
-                        FROM relevant_criteria_category
-                        INNER JOIN uc_sel_relcritcat
-                        WHERE (uc_sel_relcritcat.id = relevant_criteria_category.id)
-                            AND (uc_sel_relcritcat.id_1 = ?)
+    $req = $db->prepare('SELECT critCat.id, name
+                        FROM critCat
+                        INNER JOIN ucm_sel_critcat
+                        WHERE (ucm_sel_critcat.id_critCat = critCat.id)
+                            AND (ucm_sel_critcat.id_ucm = ?)
                         ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
@@ -240,7 +240,7 @@ function insertSelCrit($ucmID,$list){
     $db = dbConnect();
     $ret = false;
     foreach ($list as $critID) {
-        $req = $db->prepare('INSERT INTO uc_sel_relcrit (id,id_1) VALUES (?,?)');
+        $req = $db->prepare('INSERT INTO ucm_sel_crit (id_ucm,id_crit) VALUES (?,?)');
         $ret = $req->execute(array($ucmID,$critID));
     }
     if(!$ret){
@@ -253,7 +253,7 @@ function insertSelCritCat($ucmID,$list){
     $db = dbConnect();
     $ret = false;
     foreach ($list as $critCatID) {
-        $req = $db->prepare('INSERT INTO uc_sel_relcritcat (id,id_1) VALUES (?,?)');
+        $req = $db->prepare('INSERT INTO ucm_sel_critcat (id_critCat,id_ucm) VALUES (?,?)');
         $ret = $req->execute(array($critCatID,$ucmID));
     }
     if(!$ret){
@@ -264,13 +264,13 @@ function insertSelCritCat($ucmID,$list){
 
 function deleteSelCrit($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_sel_relcrit WHERE id = ?');
+    $req = $db->prepare('DELETE FROM ucm_sel_crit WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
 
 function deleteSelCritCat($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_sel_relcritcat WHERE id_1 = ?');
+    $req = $db->prepare('DELETE FROM ucm_sel_critcat WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
 
@@ -280,7 +280,7 @@ function deleteSelCritCat($ucmID){
 
 function getListDLTs(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, name, description FROM district_location_type ORDER BY name');
+    $req = $db->query('SELECT id, name, description FROM dlt ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -290,11 +290,11 @@ function getListDLTs(){
 
 function getListSelDLTs($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT district_location_type.id, name, description
-                        FROM district_location_type
-                        INNER JOIN uc_sel_distloctype
-                        WHERE (uc_sel_distloctype.id_1 = district_location_type.id)
-                                AND (uc_sel_distloctype.id = ?)
+    $req = $db->prepare('SELECT dlt.id, name, description
+                        FROM dlt
+                        INNER JOIN ucm_sel_dlt
+                        WHERE (ucm_sel_dlt.id_dlt = dlt.id)
+                                AND (ucm_sel_dlt.id_ucm = ?)
                         ORDER BY name');
     $req->execute(array($ucmID));
     $list = [];
@@ -307,9 +307,9 @@ function getListSelDLTs($ucmID){
 function insertSelDLTs($ucmID,$list){
     $db = dbConnect();
     $ret = false;
-    foreach ($list as $critID) {
-        $req = $db->prepare('INSERT INTO uc_sel_distloctype (id,id_1) VALUES (?,?)');
-        $ret = $req->execute(array($ucmID,$critID));
+    foreach ($list as $idDLT) {
+        $req = $db->prepare('INSERT INTO ucm_sel_dlt (id_ucm,id_dlt) VALUES (?,?)');
+        $ret = $req->execute(array($ucmID,$idDLT));
     }
     if(!$ret){
         throw new Exception("Selected District Location Type not inserted");
@@ -319,7 +319,7 @@ function insertSelDLTs($ucmID,$list){
 
 function deleteSelDLTs($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_sel_distloctype WHERE id = ?');
+    $req = $db->prepare('DELETE FROM ucm_sel_dlt WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
 
@@ -329,7 +329,7 @@ function deleteSelDLTs($ucmID){
 
 function getUC($list_measID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id,name FROM use_case WHERE id_1 = ? ORDER BY name');
+    $req = $db->prepare('SELECT id,name FROM use_case WHERE id_meas = ? ORDER BY name');
     $list = [];
     foreach ($list_measID as $measID) {
         $req->execute(array($measID));
@@ -345,11 +345,11 @@ function getListSelUC($ucmID){
     $db = dbConnect();
     $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, measure.name
                             FROM use_case
-                                INNER JOIN uc_sel_usecase
+                                INNER JOIN ucm_sel_uc
                                 INNER JOIN measure
-                                    WHERE (uc_sel_usecase.id_1 = use_case.id)
-                                        AND (uc_sel_usecase.id = ?) 
-                                        AND (use_case.id_1 = measure.id)
+                                    WHERE (ucm_sel_uc.id_uc = use_case.id)
+                                        AND (ucm_sel_uc.id_ucm = ?) 
+                                        AND (use_case.id_meas = measure.id)
                                 ORDER BY measure.name, use_case.name');
     $req->execute(array($ucmID));
     $list = [];
@@ -364,7 +364,7 @@ function insertSelUC($ucmID,$list){
     $db = dbConnect();
     $ret = false;
     foreach ($list as $idUC) {
-        $req = $db->prepare('INSERT INTO uc_sel_usecase (id,id_1) VALUES (?,?)');
+        $req = $db->prepare('INSERT INTO ucm_sel_uc (id_ucm,id_uc) VALUES (?,?)');
         $ret = $req->execute(array($ucmID,$idUC));
     }
     if(!$ret){
@@ -375,16 +375,16 @@ function insertSelUC($ucmID,$list){
 
 function deleteSelUC($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM uc_sel_usecase WHERE id = ?');
+    $req = $db->prepare('DELETE FROM ucm_sel_uc WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
 
 function getGuidCrit($ucs,$criteria){
     $db = dbConnect();
-    $req = $db->prepare('SELECT pertinence, guidance_min, guidance_max
-                        FROM usecase_vs_crit
-                        WHERE (usecase_vs_crit.id_1 = ?)
-                        AND (usecase_vs_crit.id_2 = ?)');
+    $req = $db->prepare('SELECT pertinence, range_min, range_max
+                        FROM uc_vs_crit
+                        WHERE (uc_vs_crit.id_uc = ?)
+                        AND (uc_vs_crit.id_crit = ?)');
     $list = [];
     foreach ($ucs as $uc) {
         $temp = [];
@@ -392,8 +392,8 @@ function getGuidCrit($ucs,$criteria){
             $req->execute(array($uc[0],$crit[0]));
             while ($row = $req->fetch()){
                 $pert = $row['pertinence'];
-                $min = $row['guidance_min'];
-                $max = $row['guidance_max'];
+                $min = $row['range_min'];
+                $max = $row['range_max'];
                 $temp[$crit[0]]=[$pert,$min,$max];
             }
         }
@@ -407,9 +407,9 @@ function getGuidCrit($ucs,$criteria){
 function getPertDLT($ucs,$DLTs){
     $db = dbConnect();
     $req = $db->prepare('SELECT pertinence
-                        FROM usecase_vs_distloctype
-                        WHERE (usecase_vs_distloctype.id_1 = ?)
-                        AND (usecase_vs_distloctype.id_2 = ?)');
+                        FROM uc_vs_dlt
+                        WHERE (uc_vs_dlt.id_uc = ?)
+                        AND (uc_vs_dlt.id_dlt = ?)');
     $list = [];
     foreach ($ucs as $uc) {
         $temp = [];
@@ -428,11 +428,44 @@ function getPertDLT($ucs,$DLTs){
 }
 
 // ---------------------------------------- RATING ----------------------------------------
-
-function insertRates(){
+function getListInputedRates($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM uc_vs_crit_input WHERE id_ucm = ?');
+    $req->execute(array($ucmID));
+    $list = [];
+    while ($row = $req->fetch()){
+        $idUC = $row['id_uc'];
+        $idCrit = $row['id_crit'];
+        $rate = $row['rate'];
+        if(array_key_exists($idUC,$list)){
+            $list[$idUC]+=[$idCrit=>intval($rate)];
+        }
+        else {
+            $list[$idUC]=[$idCrit=>intval($rate)];
+        }
+    }
+    //var_dump($list);
+    return $list;
 
 }
 
-function deleteRates(){
-    
+function insertRates($ucmID,$list_per_uc){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare('INSERT INTO uc_vs_crit_input (id_ucm,id_uc,id_crit,rate) VALUES (?,?,?,?)');
+    foreach ($list_per_uc as $idUC => $list_per_crit) {
+        foreach($list_per_crit as $idCrit => $rate){
+            $ret = $req->execute(array($ucmID,$idUC,$idCrit,$rate));
+        }
+    }
+    if(!$ret){
+        throw new Exception("All inputed rate not inserted");
+    }
+    return $ret;
+}
+
+function deleteRates($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM uc_vs_crit_input WHERE id_ucm = ?');
+    return $req->execute(array($ucmID));
 }
