@@ -41,7 +41,9 @@
 
 .next-button{
     color:inherit;
+    font-size:50px;
 }
+
 .next-button:hover{
     text-decoration: none;
     color: black;

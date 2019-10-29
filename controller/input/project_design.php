@@ -80,6 +80,7 @@ function measures_selected($list_measID=[]){
                 insertSelMeas($ucmID,$list_measID);
             }
             //var_dump($list_measID);
+            update_ModifDate($ucmID);
             header('Location: ?A=project_design&A2=criteria&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -148,6 +149,7 @@ function criteria_selected($list_critID=[]){
                 deleteSelCritCat($ucmID);
                 insertSelCritCat($ucmID,$listSelCritCatID);
             }
+            update_ModifDate($ucmID);
             header('Location: ?A=project_design&A2=geography&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -195,6 +197,7 @@ function geo_selected($list_idDLT=[]){
                 deleteSelDLTs($ucmID);
                 insertSelDLTs($ucmID,$list_idDLT);
             }
+            update_ModifDate($ucmID);
             header('Location: ?A=project_design&A2=use_case&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -254,6 +257,7 @@ function uc_selected($twig,$is_connected,$list_idDLT=[]){
                 insertSelUC($ucmID,$list_idDLT);
             }
             //var_dump($listSelUC);
+            update_ModifDate($ucmID);
             confirm_uc_select($twig,$is_connected,$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -270,6 +274,7 @@ function confirm_uc_select($twig,$is_connected,$ucmID=0){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_selUC = getListSelUC($ucmID);
             //var_dump($list_selUC);
+            update_ModifDate($ucmID);
             echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'list_selUC'=>$list_selUC));
             prereq_ProjectDesign();
         } else {
@@ -367,6 +372,7 @@ function rates_inputed($post){
                 insertRates($ucmID,$list_rates);
             }
             //var_dump($list_rates);
+            update_ModifDate($ucmID);
             header('Location: ?A=project_design&A2=scoring&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -384,14 +390,20 @@ function scoring($twig,$is_connected,$ucmID=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_selUC = getListSelUC($ucmID);
-            $list_selMeas = getListSelMeas($ucmID);
+            $orderUC = [];
+            foreach ($list_selUC as $uc) {
+                array_push($orderUC,intval($uc[0]));
+            }
+            //var_dump($orderUC);
             $list_selCritCat = getListSelCritCat($ucmID);
             $list_selCrit = getListSelCrit($ucmID);
             $repart_crit = calcRepartCrit($list_selCritCat,$list_selCrit);
-            $rank = [1];
-            $scores = [1];
-            if($rank && $scores){
-                echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$rank,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_crit'=>$repart_crit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
+            $rates = getListInputedRates($ucmID);
+            $ranks = calcRanks($rates);
+            $scores = calcScores($ranks,$repart_crit,count($list_selUC),$orderUC);
+            //var_dump($ranks);
+            if($ranks && $scores){
+                echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_crit'=>$repart_crit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
                 prereq_ProjectDesign();
             } else {
                 throw new Exception("There is a probleme with Ranks or Scores, please contact an administrator.");
@@ -405,7 +417,89 @@ function scoring($twig,$is_connected,$ucmID=0){
     }
 }
 
+function calcRanks($rates){
+    //var_dump($rates);
+    $rates_by_crit = [];
+    foreach ($rates as $idUC => $dicCritRates) {
+        foreach ($dicCritRates as $idCrit => $rate) {
+            //var_dump(strval($idUC."/".$idCrit."/".$rate));
+            if(array_key_exists($idCrit,$rates_by_crit)){
+                $rates_by_crit[$idCrit]=[$idUC=>intval($rate)]+$rates_by_crit[$idCrit];
+            }
+            else {
+                $rates_by_crit[$idCrit]=[$idUC=>intval($rate)];
+            }
+        }
+    }
+    //var_dump($rates_by_crit);
+    //ksort($rates_by_crit);
+    //var_dump($rates_by_crit);
+    $ranks = [];
+    foreach ($rates_by_crit as $idCrit => $dicUCsRates) {
+        arsort($dicUCsRates);
+        //var_dump($dicUCsRates);
+        $rank = 1;
+        $old_rate = 0;
+        $counter = 0;
+        foreach ($dicUCsRates as $idUC => $rate) {
+            $counter++;
+            if($rate != $old_rate){
+                $rank = $counter;
+            }
+            $old_rate = $rate;
 
+            if(array_key_exists($idCrit,$ranks)){
+                $ranks[$idCrit]=[$idUC=>intval($rank)]+$ranks[$idCrit];
+            }
+            else {
+                $ranks[$idCrit]=[$idUC=>intval($rank)];
+            }
+        }
+
+    }
+    //var_dump($ranks);
+    return $ranks;
+}
+
+function calcScores($ranks,$repart_crit,$n,$orderUC){
+    //var_dump($ranks);
+    //var_dump($repart_crit);
+    $scores = [];
+    //var_dump($ranks);
+    foreach ($ranks as $idCrit => $dicUCsRates) {
+        $idCat = getCatByCrit($idCrit);
+        //var_dump($idCat);
+        uksort($dicUCsRates, function($key1, $key2) use ($orderUC) {
+            return (array_search($key1, $orderUC) > array_search($key2, $orderUC));
+        });
+        //var_dump($dicUCsRates);
+        foreach ($dicUCsRates as $idUC => $rank) {
+            if(array_key_exists($idCat,$scores)){
+                if (array_key_exists($idUC,$scores[$idCat])){
+                    //var_dump($scores[$idCat],$idUC);
+                    $scores[$idCat][$idUC] += intval($rank);
+                } else {
+                    $scores[$idCat] += [$idUC=>intval($rank)];
+                }
+            } else {
+                //var_dump($scores);
+                $scores[$idCat]=[$idUC=>intval($rank)];
+            }
+        }
+    }
+    //var_dump($scores);
+    foreach ($repart_crit as $idCat => $nbCrit) {
+        /* $idCat = getCatByCrit($idCrit);
+        $nbCrit = $repart_crit[$idCat]; */
+        foreach ($dicUCsRates as $idUC => $rank) {
+            //var_dump($scores,$idCat,$idUC);
+            $sum = $scores[$idCat][$idUC];
+            $scores[$idCat][$idUC] = number_format(10*(1 - ($sum-$nbCrit)/($n-1)/$nbCrit),2);
+        }
+    }
+    //var_dump($scores);
+    return $scores;
+}
 
 // ---------------------------------------- GLOBAL SCORE ----------------------------------------
 

@@ -12,16 +12,16 @@
                 </tr>
                 <tr scope="row">
                     {% for crit in sel_crit %}
-                    <th rowspan=1 colspan=1 id="crit_{{ crit[0] }}">{{ crit[1] }}</th>
+                    <th rowspan=1 colspan=1 id="crit_{{ crit[0] }}">{{ crit[0] }} : {{ crit[1] }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 {% for uc in sel_ucs %}
                 <tr>
-                    <td scope="col" rowspan=1>{{ uc[1] }}</td>                    
+                    <td scope="col" rowspan=1>{{ uc[0] }} : {{ uc[1] }}</td>                    
                     {% for crit in sel_crit %}
-                    <td scope="col" rowspan=1>1</td>
+                    <td scope="col" rowspan=1>{{ranks[crit[0]][uc[0]]}}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -30,6 +30,10 @@
     </div>
 </div>
 {% endmacro %}
+
+
+
+
 
 {% macro scores_table(sel_ucs,sel_critCat,sel_crit,repart_crit,scores) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
@@ -40,16 +44,16 @@
                 <tr scope="row">
                     <th colspan=1 rowspan=3>Use Cases</th>
                     {% for cat in sel_critCat %}
-                    <th rowspan=1 colspan=1 style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    <th rowspan=1 colspan=1 style="background:{{ color[cat[0]-1] }};">{{ cat[0] }} : {{ cat[1] }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 {% for uc in sel_ucs %}
                 <tr>
-                    <td scope="col" rowspan=1>{{ uc[1] }}</td>                    
+                    <td scope="col" rowspan=1>{{ uc[0] }} : {{ uc[1] }}</td>                    
                     {% for cat in sel_critCat %}
-                    <td scope="col" rowspan=1>1</td>
+                    <td scope="col" rowspan=1>{{scores[cat[0]][uc[0]]|number_format(2)}}</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}

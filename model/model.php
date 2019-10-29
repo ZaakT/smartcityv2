@@ -129,6 +129,11 @@ function deleteUCM($id){
     return $req->execute(array($id));
 }
 
+function update_ModifDate($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE use_cases_menu SET modif_date = CURRENT_TIMESTAMP WHERE id = ?');
+    return $req->execute(array($ucmID));
+}
 
 
 // ---------------------------------------- MEASURES ----------------------------------------
@@ -179,6 +184,13 @@ function deleteSelMeas($ucmID){
 
 
 // ---------------------------------------- CRITERIA ----------------------------------------
+function getCatByCrit($idCrit){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_cat FROM crit WHERE id = ?');
+    $req->execute(array($idCrit));
+    $res = $req->fetch();
+    return intval($res['id_cat']);
+}
 
 function getListCriteria(){
     $db = dbConnect();
@@ -438,12 +450,13 @@ function getListInputedRates($ucmID){
         $idCrit = $row['id_crit'];
         $rate = $row['rate'];
         if(array_key_exists($idUC,$list)){
-            $list[$idUC]+=[$idCrit=>intval($rate)];
+            $list[$idUC]=[$idCrit=>intval($rate)]+$list[$idUC];
         }
         else {
             $list[$idUC]=[$idCrit=>intval($rate)];
         }
     }
+    $list = array_reverse($list,true);
     //var_dump($list);
     return $list;
 

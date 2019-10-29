@@ -34,19 +34,29 @@
     </div>
 </div>
 
+
+
 <div class="row text-center mt-3">
     <div class="col dropdown">
         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Choose the graph to show
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% set sel_cat = [] %}
-            {% for cat in sel_critCat %}
-                {% set sel_cat = sel_cat|merge([cat[1]]) %}
+            {% set criteria = [] %}
+            {% for crit in sel_crit %}
+                {% set criteria = criteria|merge([crit[1]]) %}
             {% endfor %}
-            ['{{sel_cat|join("\",\"")}}']
+            {% set n = sel_ucs|length %}
             {% for uc in sel_ucs %}
-            <span class="dropdown-item" onclick="showRanksChart('ranksChart','{{uc[1]}}',array(['{{sel_cat|join("\",\"")}}']),[1,2,3]);">{{uc[1]}}</span>
+                {% set ranks_to_show = [] %}
+                {% for idCrit,dicUCsRanks in ranks %}
+                    {% for idUC, rank in dicUCsRanks %}
+                        {% if idUC==uc[0] %}
+                            {% set ranks_to_show = ranks_to_show|merge([rank])%}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            <span class="dropdown-item" onclick="showRanksChart('ranksChart','{{uc[1]}}',Array('{{criteria|join("\',\'")}}'),Array('{{ranks_to_show|join("\',\'")}}'),{{n}});">{{uc[1]}}</span>
             {% endfor %}
         </div>
     </div>
@@ -54,7 +64,7 @@
 
 <div class="row mt-5 text-center">
     <div class="offset-2 col-8">
-        <canvas id="ranksChart" ></canvas>   
+        <canvas id="ranksChart" hidden></canvas>   
     </div>
 </div>
 
@@ -74,19 +84,35 @@
             Choose the graph to show
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% set ucs = [] %}
             {% for uc in sel_ucs %}
-            <span class="dropdown-item" onclick="showScoresChart('{{uc[1]}}',20);">{{uc[1]}}</span>
+                {% set ucs = ucs|merge([uc[1]]) %}
+            {% endfor %}
+            
+            {% for critCat in sel_critCat %}
+                {% set scores_to_show = [] %}
+                {% for idCat,dicUCsScores in scores %}
+                    {% for idUC, score in dicUCsScores %}
+                        {% if idCat==critCat[0] %}
+                            {% set scores_to_show = scores_to_show|merge([score])%}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            <span class="dropdown-item" onclick="showScoresChart('scoresChart','{{critCat[1]}}',Array('{{ucs|join("\',\'")}}'),Array('{{scores_to_show|join("\',\'")}}'));">{{critCat[1]}}</span>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<div class="row mt-5 text-center">
+<div class="row my-5 text-center">
     <div class="offset-2 col-8">
-        <canvas id="scoresChart" ></canvas>   
+        <canvas id="scoresChart" hidden></canvas>   
     </div>
 </div>
 
+<div class="row mb-5">
+    <a class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right"  aria-hidden="true" href="?A=project_design&amp;A2=global_score&amp;ucmID={{ucmID}}"></a>
+</div>
 
 {% endif %}
 {% endblock %}
