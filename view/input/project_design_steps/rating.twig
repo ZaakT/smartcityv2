@@ -3,7 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/rate_table.twig" as table %}
+{% import "/templates/rating_table.twig" as table %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
@@ -33,8 +33,7 @@
 </div>
 <div class ="row">
     <form class="col container-fluid" name="form_rate" action="?A=project_design&amp;A2=rates_inputed" method="post">
-        {{ table.rate_table(sel_ucs,sel_critCat,sel_crit,repart_crit,rates,sel_meas,repart_ucs,guidCrit,rates) }}
-
+        {{ table.rating_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,rates,sel_meas,repart_ucs,guidCrit,rates) }}
         <div class="row my-0 text-center text-dark">
             <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
         </div>

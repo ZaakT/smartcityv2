@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/global_scoring_tables.twig" as tables %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
 
@@ -17,8 +18,36 @@
 {% else %}
 {{ second_bar.second_bar(username,part,selected) }}
 
+<div class="row jumbotron text-light mx-5 mt-5 mb-0 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
 
+<div class ="row mx-5 mt-3 ">
+    <form class="col container-fluid" onsubmit="return checkSum();" name="form_GS" action="?A=project_design&amp;A2=global_score&amp;ucmID={{ucmID}}" method="post">
+        {{ tables.critCat_info(sel_critCat,repart_selCrit,repart_crit) }}    
+        {{ tables.critCat_input(sel_critCat,repart_selCrit,repart_crit,weights_table) }}  
+        <div class="row m-5 text-center text-dark">
+            <button type="submit" class="btn btn-dark offset-5 col-2" aria-hidden="true">Update</button>
+        </div>
+        {{ tables.critCat_recap(sel_ucs,globalScores) }}
+    </form>
+</div>
 
+<div class="row my-5 text-center">
+    <div class="offset-2 col-8">
+        <canvas id="globalScoresChart" ></canvas>
+        {% set ucs = [] %}
+        {% set globalScores_to_show = [] %}
+        {% for uc in sel_ucs %}
+            {% set ucs = ucs|merge([uc[1]]) %}
+            {% set globalScores_to_show = globalScores_to_show|merge([globalScores[uc[0]]]) %}
+        {% endfor %}
+        <iframe src=null hidden
+        onload="showGlobalScoresChart(Array('{{ucs|join("\',\'")}}'),Array('{{globalScores_to_show|join("\',\'")}}'));"></iframe>
+    </div>
+</div>
 
 {% endif %}
 {% endblock %}

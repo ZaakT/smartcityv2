@@ -83,6 +83,7 @@ try{
             }
             // ---------- PROJECT DESIGN ---------- 
             elseif($_GET['A']=='project_design'){
+                /* var_dump($_POST); */
                 // ??? IN THE CASE WHERE AN ACTION2 (A2) IS GIVEN ???
                 if(isset($_GET['A2'])){
                     // --- USE CASES MENU ---
@@ -262,7 +263,7 @@ try{
                     elseif($_GET['A2']=="global_score"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
-                                global_score($twig,$is_connected,$_GET['ucmID']);
+                                global_score($twig,$is_connected,$_GET['ucmID'],$_POST);
                             }
                             else {
                                 header('Location: ?A=project_design&A2=global_score');
@@ -280,7 +281,6 @@ try{
                 } else {
                     project_design($twig,$is_connected);
                 } 
-             
             }
             // ---------- PROJECT SCOPING ----------
             elseif($_GET['A']=='project_scoping'){

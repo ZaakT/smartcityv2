@@ -1,4 +1,4 @@
-{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,guidCrit,pertDLT,list_sel) %}
+{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_selCrit,sel_DLTs,guidCrit,pertDLT,list_sel) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 <div class="row">
     <div class="col mt-5 mx-5 list-table text-center ucs-table">
@@ -7,7 +7,7 @@
                 <tr scope="row">
                     <th rowspan=2 colspan=2>Use Cases</th>
                     {% for cat in sel_critCat %}
-                    <th rowspan=1 colspan={{repart_crit[cat[0]]}} class="more_Crit" style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} class="more_Crit" style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
                     {% endfor %}
                     <th rowspan=2 colspan=1>Average on</br>Criteria</th>
                     <th rowspan=1 colspan={{ sel_DLTs|length }} class="more_DLT">District Location Types</th>

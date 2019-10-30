@@ -192,7 +192,7 @@ function getCatByCrit($idCrit){
     return intval($res['id_cat']);
 }
 
-function getListCriteria(){
+function getListCrit(){
     $db = dbConnect();
     $req = $db->query('SELECT crit.id, crit.name, crit.description, critCat.id
                     FROM crit
@@ -481,4 +481,37 @@ function deleteRates($ucmID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM uc_vs_crit_input WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
+}
+
+
+// ---------------------------------------- GLOBAL SCORE ----------------------------------------
+
+function insertCritCatWeights($ucmID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare('UPDATE ucm_sel_critcat
+                            SET weight = ?
+                            WHERE ucm_sel_critcat.id_critCat = ? AND ucm_sel_critcat.id_ucm = ?
+                            ');
+    foreach ($list as $idCritCat => $weight) {
+        $ret = $req->execute(array($weight,$idCritCat,$ucmID));
+    }
+    if(!$ret){
+        throw new Exception("All weights not inserted");
+    }
+    return $ret;
+}
+
+function getListWeights($ucmID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_critCat,weight FROM ucm_sel_critcat WHERE ucm_sel_critcat.id_ucm = ?');
+    $req->execute(array($ucmID));
+    $list = [];
+    while ($row = $req->fetch()){
+        $idCritCat = $row['id_critCat'];
+        $weight = $row['weight'];
+        $list[$idCritCat] = intval($weight);
+        }
+    //var_dump($list);
+    return $list;
 }

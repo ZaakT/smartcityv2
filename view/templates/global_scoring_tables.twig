@@ -1,0 +1,85 @@
+{% macro critCat_input(sel_critCat,repart_selCrit,repart_crit,weights_table) %}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+<div class="row m-3 text-center">
+    <div class="offset-3 col-6 list-table">       
+        <table id="table_GS" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark">
+                <tr scope="row">
+                    <th scope="col">Criteria Category</th>
+                    <th scope="col">Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for critCat in sel_critCat %}
+                <tr scope="row">
+                    <td scope="col" style="background:{{ color[critCat[0]-1] }};">{{critCat[1]}}</td>
+                    <td scope="col"><input class="text-center" name="{{critCat[0]}}" oninput="checkSum();" type="number" min=0 max=100 value={{weights_table[critCat[0]]}}></td>
+                </tr>
+                {% endfor %}
+            </td>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro critCat_info(sel_critCat,repart_selCrit,repart_crit) %}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+<div class="row m-3 text-center">
+    <div class="offset-2 col-8 list-table">       
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light">
+                <tr scope="row">
+                    <th scope="col">Criteria Category</th>
+                    <th scope="col">Ratio of Criteria selected</th>
+                    <th scope="col">Weight of Criteria selected</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set sumSel = 0 %}
+                {% set sumTot = 0 %}
+                {% for critCat in sel_critCat %}
+                    {% set nSel = repart_selCrit[critCat[0]] %}
+                    {% set nTot = repart_crit[critCat[0]] %}
+                    {% set sumSel = sumSel + nSel  %}
+                    {% set sumTot = sumTot + nTot %}
+                <tr scope="row">
+                    <td scope="col" style="background:{{ color[critCat[0]-1] }};">{{critCat[1]}}</td>
+                    <td scope="col">{{repart_selCrit[critCat[0]]}}/{{repart_crit[critCat[0]]}}</td>
+                    <td scope="col">{{100*nSel/nTot}}%</td>
+                </tr>
+                {% endfor %}
+                <tr scope="row">
+                    <td scope="col"></td>
+                    <td scope="col">{{sumSel}}/{{sumTot}}</td>
+                    <td scope="col">{{(100*sumSel/sumTot)|number_format(0)}}%</td>
+                </tr>
+            </td>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro critCat_recap(sel_ucs,globalScores) %}
+<div class="row m-5 text-center">
+    <div class="offset-1 col-10 list-table">       
+        <table class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="bg-dark text-light">
+                <tr scope="row">
+                    <td>Use Cases</td>
+                    {% for uc in sel_ucs %}
+                    <td colspan=1 rowspan=1 scope="col">{{uc[1]}}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr scope="row">
+                    <td scope="col" class="bg-dark text-light">Global Scores</td>
+                    {% for uc in sel_ucs %}
+                    <td colspan=1 rowspan=1 scope="col">{{globalScores[uc[0]]}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>    
+{% endmacro %}

@@ -59,7 +59,7 @@
 
 <div class ="row">
     <form class="col container-fluid" name="form_uc" onsubmit="return countChecked_uc(form_uc);" action="?A=project_design&amp;A2=use_case&amp;A3=uc_selected&amp;ucmID={{ucmID}}" method="post">
-        {{ list.list_ucs(ucs,sel_critCat,sel_crit,repart_crit,sel_DLTs,guidCrit,pertDLT,list_sel) }}
+        {{ list.list_ucs(ucs,sel_critCat,sel_crit,repart_selCrit,sel_DLTs,guidCrit,pertDLT,list_sel) }}
         
         <div class="row btn-group-lg justify-content-center mt-3" role="group" >
             <button id="moreCrit" onclick="toogleButton_uc('Crit');" type="button" class="mx-2 offset-3 col-3 btn btn-dark disabled">More details about Criteria</button> 
