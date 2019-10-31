@@ -256,9 +256,7 @@ try{
                         else {
                             scoring($twig,$is_connected);
                         }
-                    }
-                    // --- SELECTED SCORING ---
-                    
+                    }                    
                     // --- GLOBAL SCORE ---
                     elseif($_GET['A2']=="global_score"){
                         if(isset($_GET['ucmID'])){
@@ -285,10 +283,42 @@ try{
             // ---------- PROJECT SCOPING ----------
             elseif($_GET['A']=='project_scoping'){
                 if(isset($_GET['A2'])){
+                    // --- PROJECT ---
                     if($_GET['A2']=="project"){
                         project($twig,$is_connected);
-                    } elseif($_GET['A2']=="scope"){
-                        scope($twig,$is_connected);
+                    }
+                    elseif($_GET['A2']=="create_proj"){
+                        create_proj($twig,$is_connected,$_POST);
+                    }
+                    elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            delete_proj($_GET['id']);
+                        }
+                        else {
+                            header('Location: ?A=project_scoping&A2=project');
+                        }
+                    }
+                    // --- SELECTED PROJECT ---
+                    elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            var_dump($projID);
+                            header('Location: ?A=project_scoping&A2=scope&projID='.$projID);
+                        }
+                    }
+                    elseif($_GET['A2']=="scope"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                scope($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_scoping&A2=scope');
+                            }
+                        }
+                        else {
+                            scope($twig,$is_connected);
+                        }
                     } elseif($_GET['A2']=="perimeter"){
                         perimeter($twig,$is_connected);
                     } elseif($_GET['A2']=="size"){

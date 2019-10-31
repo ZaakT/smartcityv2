@@ -36,7 +36,7 @@ function create_ucm($twig,$is_connected,$post){
     }
 }
 
-function delete_ucm($twig,$is_connected,$idUCM){
+function delete_ucm($idUCM){
     // var_dump($idUCM);
     deleteUCM($idUCM);
     header('Location: ?A=project_design&A2=ucm');
@@ -80,7 +80,7 @@ function measures_selected($list_measID=[]){
                 insertSelMeas($ucmID,$list_measID);
             }
             //var_dump($list_measID);
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             header('Location: ?A=project_design&A2=criteria&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -149,7 +149,7 @@ function criteria_selected($list_critID=[]){
                 deleteSelCritCat($ucmID);
                 insertSelCritCat($ucmID,$listSelCritCatID);
             }
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             header('Location: ?A=project_design&A2=geography&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -197,7 +197,7 @@ function geo_selected($list_idDLT=[]){
                 deleteSelDLTs($ucmID);
                 insertSelDLTs($ucmID,$list_idDLT);
             }
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             header('Location: ?A=project_design&A2=use_case&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -257,7 +257,7 @@ function uc_selected($twig,$is_connected,$list_idDLT=[]){
                 insertSelUC($ucmID,$list_idDLT);
             }
             //var_dump($listSelUC);
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             confirm_uc_select($twig,$is_connected,$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -274,7 +274,7 @@ function confirm_uc_select($twig,$is_connected,$ucmID=0){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_selUC = getListSelUC($ucmID);
             //var_dump($list_selUC);
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'list_selUC'=>$list_selUC));
             prereq_ProjectDesign();
         } else {
@@ -372,7 +372,7 @@ function rates_inputed($post){
                 insertRates($ucmID,$list_rates);
             }
             //var_dump($list_rates);
-            update_ModifDate($ucmID);
+            update_ModifDate_ucm($ucmID);
             header('Location: ?A=project_design&A2=scoring&ucmID='.$ucmID);
         } else {
             throw new Exception("No UCM selected !");
@@ -399,7 +399,7 @@ function scoring($twig,$is_connected,$ucmID=0){
             $list_selCrit = getListSelCrit($ucmID);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             $rates = getListInputedRates($ucmID);
-            $ranks = calcRanks($rates);
+            $ranks = calcRanks($rates,$orderUC);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
             //var_dump($ranks);
             if($ranks && $scores){
@@ -417,7 +417,7 @@ function scoring($twig,$is_connected,$ucmID=0){
     }
 }
 
-function calcRanks($rates){
+function calcRanks($rates,$orderUC){
     //var_dump($rates);
     $rates_by_crit = [];
     foreach ($rates as $idUC => $dicCritRates) {
@@ -457,8 +457,16 @@ function calcRanks($rates){
         }
 
     }
-    //var_dump($ranks);
-    return $ranks;
+    $ret = [];
+    foreach ($ranks as $idCrit => $dicUCsRates) {
+        uksort($dicUCsRates, function($key1, $key2) use ($orderUC) {
+            return (array_search($key1, $orderUC) > array_search($key2, $orderUC));
+        });
+        $ret[$idCrit] = $dicUCsRates;
+    }
+    $ret = array_reverse($ret,true);
+    //var_dump($ret);
+    return $ret;
 }
 
 function calcScores($ranks,$repart_selCrit,$n,$orderUC){
@@ -517,7 +525,7 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             $list_selCrit = getListSelCrit($ucmID);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             if(!empty($post)){
-                update_ModifDate($ucmID);
+                update_ModifDate_ucm($ucmID);
                 $weights_table = [];
                 foreach ($post as $idCritCat => $weight) {
                     $weights_table[$idCritCat]=intval($weight);
@@ -539,7 +547,7 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             }
 
             $rates = getListInputedRates($ucmID);
-            $ranks = calcRanks($rates);
+            $ranks = calcRanks($rates,$orderUC);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
 
             $globalScores = calcGlobalScores($scores,$weights_table,$list_selUC);
@@ -598,12 +606,30 @@ function prereq_ProjectDesign(){
         $list_selUC = getListSelUC($ucmID);
         $list_selCrit = getListSelCrit($ucmID);
         $list_selCritCat = getListSelCritCat($ucmID);
+        $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
         $list_selDLT = getListSelDLTs($ucmID);
-        //$list_rate = getRates($ucmID);
+        $orderUC = [];
+        foreach ($list_selUC as $uc) {
+            array_push($orderUC,intval($uc[0]));
+        }
+        $rates = getListInputedRates($ucmID);
         if(!empty($list_selMeas) && !empty($list_selCrit) && !empty($list_selCritCat) && !empty($list_selDLT)){
             echo "<script>prereq_ProjectDesign2(true);</script>";
             if (!empty($list_selUC)) {
                 echo "<script>prereq_ProjectDesign3(true);</script>";
+                if(!empty($rates)){
+                    echo "<script>prereq_ProjectDesign4(true);</script>";
+                    try{
+                        $ranks = calcRanks($rates,$orderUC);
+                        $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
+                        if(!empty($scores)){
+                            echo "<script>prereq_ProjectDesign5(true);</script>";
+                        }
+                    }
+                    finally{
+                        //do nothing
+                    }
+                }
             }
         }
     }

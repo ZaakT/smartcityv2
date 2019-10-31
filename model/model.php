@@ -88,6 +88,9 @@ function modifyUser($user){
 
 
 
+
+
+
 //  ---------------------------------------- USE CASES MENU ----------------------------------------
 
 function getUCMByID($id,$idUser){
@@ -129,7 +132,7 @@ function deleteUCM($id){
     return $req->execute(array($id));
 }
 
-function update_ModifDate($ucmID){
+function update_ModifDate_ucm($ucmID){
     $db = dbConnect();
     $req = $db->prepare('UPDATE use_cases_menu SET modif_date = CURRENT_TIMESTAMP WHERE id = ?');
     return $req->execute(array($ucmID));
@@ -513,5 +516,68 @@ function getListWeights($ucmID){
         $list[$idCritCat] = intval($weight);
         }
     //var_dump($list);
+    return $list;
+}
+
+
+
+// ---------------------------------------- PROJECT ----------------------------------------
+
+function getProjByID($id,$idUser){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM project WHERE id = ? and id_user = ?');
+    $req->execute(array($id,$idUser));
+    $res = $req->fetch();
+    return $res;
+}
+
+function getProj($idUser,$name){ //in order to test if the name is already taken or not
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM project WHERE id_user = ? and name = ?');
+    $req->execute(array($idUser,$name));
+    $res =  $req->fetch();
+    return $res;
+}
+
+function getListProjects($idUser){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM project WHERE id_user = ? ORDER BY id');
+    $req->execute(array($idUser));
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
+    return $list;
+}
+
+function insertProj($proj){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO project (name,description,id_user) VALUES (?,?,?)');
+    return $req->execute(array($proj[0],$proj[1],$proj[2]));
+}
+
+function deleteProj($id){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM project WHERE id = ?');
+    return $req->execute(array($id));
+}
+
+function update_ModifDate_proj($projID){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project SET modif_date = CURRENT_TIMESTAMP WHERE id = ?');
+    return $req->execute(array($projID));
+}
+
+function getListUCs(){
+    $db = dbConnect();
+    $req = $db->query('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name
+                        FROM use_case
+                        INNER JOIN measure
+                        WHERE use_case.id_meas = measure.id
+                        ORDER BY measure.name,use_case.name');
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
     return $list;
 }

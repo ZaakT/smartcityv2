@@ -56,7 +56,7 @@
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
-            <span class="dropdown-item" onclick="showRanksChart('ranksChart','{{uc[1]}}',Array('{{criteria|join("\',\'")}}'),Array('{{ranks_to_show|join("\',\'")}}'),{{n}});">{{uc[1]}}</span>
+            <span class="dropdown-item" onclick="showRanksChart('ranksChart','{{uc[1]}}',Array('{{criteria|join("\',\'")}}'),Array('{{ranks_to_show|reverse|join("\',\'")}}'),{{n}});">{{uc[1]}}</span>
             {% endfor %}
         </div>
     </div>

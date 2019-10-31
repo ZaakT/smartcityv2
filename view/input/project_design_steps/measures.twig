@@ -24,8 +24,9 @@
     </div>
 </div>
 <div class ="row">
-{% if measures %} 
-    <form class="col container-fluid" name="form_meas" onsubmit="return countChecked_meas(form_meas);" action="?A=project_design&amp;A2=measures_selected" method="post">
+{% if measures %}
+    {% if ucs %} 
+    <form class="col container-fluid" name="form_scope" onsubmit="return countChecked_meas(form_meas);" action="?A=project_scoping&amp;A2=scope_selected" method="post">
         {{ list.list_measures(measures,list_sel) }}
         
         <div class="row mt-4 mb-0 text-center">
@@ -38,6 +39,8 @@
             <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
         </div>
     </form>
+    {% else %}
+    {% endif %}
 {% else %}
     <h2 class="text-center m-5">There is no measure, please contact an administrator.</h2>
 {% endif %}
