@@ -319,8 +319,23 @@ try{
                         else {
                             scope($twig,$is_connected);
                         }
+                    // --- SELECTED SCOPE ---
+                    } elseif($_GET['A2']=="scope_selected"){
+                        //var_dump($_POST);
+                        scope_selected($_POST);
+                    // --- PERIMETER ---
                     } elseif($_GET['A2']=="perimeter"){
-                        perimeter($twig,$is_connected);
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                perimeter($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_scoping&A2=perimeter');
+                            }
+                        }
+                        else {
+                            perimeter($twig,$is_connected);
+                        }
                     } elseif($_GET['A2']=="size"){
                         size($twig,$is_connected);
                     } elseif($_GET['A2']=="volumes"){

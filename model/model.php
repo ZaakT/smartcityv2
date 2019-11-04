@@ -581,3 +581,79 @@ function getListUCs(){
     }
     return $list;
 }
+
+
+// ---------------------------------------- SCOPE ----------------------------------------
+
+function getListSelScope($projID){
+    $db = dbConnect();
+    $req1 = $db->prepare("SELECT id_meas
+                            FROM proj_sel_measure
+                            WHERE id_proj = ?");
+    $req1->execute(array($projID));
+    $list = [];
+    while ($row = $req1->fetch()){
+        $id_meas = intval($row['id_meas']);
+        $list[$id_meas] = [];
+    }
+    //var_dump($list);
+    $req2 = $db->prepare("SELECT id_uc,use_case.id_meas
+                            FROM proj_sel_usecase
+                            INNER JOIN use_case
+                            WHERE (id_proj = ?) AND (use_case.id = id_uc)");
+    $req2->execute(array($projID));
+    while ($row = $req2->fetch()){
+        $id_uc = intval($row['id_uc']);
+        $id_meas = intval($row['id_meas']);
+        array_push($list[$id_meas],$id_uc);
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertSelScope($projID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req1 = $db->prepare("INSERT INTO proj_sel_measure
+                            (id_proj,id_meas)
+                            VALUES (?,?)");
+    $req2 = $db->prepare("INSERT INTO proj_sel_usecase
+                            (id_proj,id_uc)
+                            VALUES (?,?)");
+    foreach ($list as $id_meas => $listUC) {
+        $ret = $req1->execute(array($projID,$id_meas));
+        foreach ($listUC as $key => $id_uc) {
+            $ret = $req2->execute(array($projID,$id_uc));
+        }
+    }
+    return $ret;
+}
+
+function deleteSelScope($projID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE proj_sel_measure.*,proj_sel_usecase.*
+                            FROM proj_sel_measure
+                            INNER JOIN proj_sel_usecase
+                                WHERE (proj_sel_measure.id_proj = proj_sel_usecase.id_proj)
+                                    AND (proj_sel_measure.id_proj=?)");
+    return $req->execute(array($projID));
+    
+}
+
+// ---------------------------------------- PERIMETER ----------------------------------------
+
+function getListZones(){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT * FROM zone ORDER BY id_zone");
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id_zone = intval($row['id']);
+        $name = $row['name'];
+        $type = $row['type'];
+        $id_parent = intval($row['id_zone']);
+        $list[$id_zone]=["name"=>$name,"type"=>$type,"parent"=>$id_parent];
+    }
+    //var_dump($list);
+    return $list;
+}

@@ -26,7 +26,7 @@
 
 <div class ="row">
     {% if measures and ucs %} 
-        <form class="col container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope(form_scope);" action="?A=project_design&amp;A2=scope_selected" method="post">
+        <form class="col container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action="?A=project_scoping&amp;A2=scope_selected" method="post">
             {{ list.list_meas(measures,list_sel) }}
             
             <div class="row mt-4 mb-0 text-center">

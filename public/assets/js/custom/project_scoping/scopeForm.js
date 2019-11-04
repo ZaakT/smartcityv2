@@ -24,19 +24,33 @@ function countChecked_scope(formName) {
     var n = 0;
     var m = 0;   
     $("#"+formName+" input").each(function(){
-        if(this.type.toLowerCase() =='checkbox' && this.checked==true){
+        if(this.type.toLowerCase() =='checkbox'){
             var tab = $(this).classes();
             if(tab.includes('meas')){
-                n++;
-                /*var measID = $(this).attr('id');
-                console.log(measID);
-                $(".meas_"+measID).attr("hidden","hidden");*/
+                var measID = $(this).attr('id');
+                if(this.checked==true){
+                    n++;
+                    $(".meas_"+measID).removeAttr("hidden");
+                } else {
+                    //console.log(measID);
+                    $(".meas_"+measID).attr("hidden","hidden");
+                    $(".meas_"+measID+" input").each(function(){
+                        if(this.checked==true){
+                            //console.log(this);
+                            this.checked = false;
+                        }
+                    });
+                }
             }
             else if(tab.includes('uc')){
-                m++;
+                if(this.checked==true){
+                    m++;
+                    //console.log(m);
+                }
             }
         }
     });
+
     $("#countMeasSelect").text(n+" selected");
     //console.log(n);
     if (n > 0) {
@@ -46,14 +60,28 @@ function countChecked_scope(formName) {
         $("#help_meas").removeAttr('hidden');
     }
     $("#countUCSelect").text(m+" selected");
-    //console.log(m);
+
+    /*console.log(m);
     if (m > 0) {
         $("#help_uc").attr('hidden', 'hidden');
     }
     else {
         $("#help_uc").removeAttr('hidden');
+    }*/
+    
+    if(n==0){
+        $("#uc_table, #countUCSelect, #help_uc").attr("hidden","hidden");
+    } else {
+        $("#uc_table, #countUCSelect").removeAttr('hidden');
+        if(m<=0){
+            $("#help_uc").removeAttr('hidden');
+        } else {
+            $("#help_uc").attr('hidden', 'hidden');
+        }
     }
-    return n>0&&m>0;
+    
+
+    return n>0 && m>0;
 }
 
 countChecked_scope("form_scope");
