@@ -30,11 +30,12 @@ function countChecked_scope(formName) {
                 var measID = $(this).attr('id');
                 if(this.checked==true){
                     n++;
-                    $(".meas_"+measID).removeAttr("hidden");
+                    console.log(measID);
+                    $("."+measID).removeAttr("hidden");
                 } else {
                     //console.log(measID);
-                    $(".meas_"+measID).attr("hidden","hidden");
-                    $(".meas_"+measID+" input").each(function(){
+                    $("."+measID).attr("hidden","hidden");
+                    $("."+measID+" input").each(function(){
                         if(this.checked==true){
                             //console.log(this);
                             this.checked = false;

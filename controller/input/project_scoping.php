@@ -47,7 +47,9 @@ function scope($twig,$is_connected,$projID=0){
             $proj = getProjByID($projID,$user[0]);
             $list_measures = getListMeasures();
             $list_ucs = getListUCs();
-            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs)); 
+            $listSelScope = getListSelScope($projID);
+            //var_dump($listSelScope);
+            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'list_sel'=>$listSelScope)); 
             //prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=scope');
@@ -65,7 +67,7 @@ function scope_selected($post){
             $list_scope = [];
             foreach ($_POST as $key => $value) {
                 if(isset($key)){
-                    var_dump($list_scope);
+                    //var_dump($list_scope);
                     $temp = explode("_",$key);
                     //var_dump($temp);
                     if($temp[0]=="meas"){
@@ -79,9 +81,9 @@ function scope_selected($post){
                     }
                 }
             }
-            var_dump($list_scope);
+            //var_dump($list_scope);
             $listSelScope = getListSelScope($projID);
-            var_dump(empty($listSelScope));
+            //var_dump(empty($listSelScope));
             if(empty($listSelScope)){
                 insertSelScope($projID,$list_scope);
             } else {
@@ -100,14 +102,20 @@ function scope_selected($post){
     }
 }
 
+
+// ---------------------------------------- PERIMETER ----------------------------------------
+
 function perimeter($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
             $list_zones = getListZones();
+            $repart_zones = sort_zones($list_zones);
             //var_dump($list_zones);
-            echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$list_zones)); 
+            //var_dump($repart_zones);
+            $listSelZones = getListSelZones($projID);
+            echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
         } else {
             header('Location: ?A=project_scoping&A2=perimeter');
         }
@@ -116,6 +124,85 @@ function perimeter($twig,$is_connected,$projID=0){
         //prereq_ProjectScoping();
     }
 }
+
+function sort_zones($list){
+    $res = [[0=>[]]];
+    $copy = [];
+    foreach ($list as $id => $data) {
+        $copy[$id] = $data;
+    }
+    while(!empty($list)){
+        //var_dump($list);
+        $temp = [];
+        foreach ($list as $id => $data) {
+            if(array_key_exists($data['parent'],end($res))){
+                $id_parent = $data['parent'];
+                if(isset(end($res)[$data['parent']]['name'])){
+                    $name_parent = end($res)[$data['parent']]['name'];
+                    $data['parent'] = [$id_parent,$name_parent];
+                    $data = ['id'=>$id]+$data;
+                } else {
+                    $name_parent = "";
+                    $data['parent'] = [$id_parent,$name_parent];
+                }
+                $data = ['id'=>$id]+$data+['hasChildren'=>hasChildren($id,$copy)];
+                $temp[$id] = $data;
+                unset($list[$id]);
+            }
+        }
+        if(!empty($temp)){
+            array_push($res,$temp);
+        }
+    }
+    unset($res[0]);
+    return $res;
+}
+
+function hasChildren($id,$list){
+    foreach ($list as $key => $value) {
+        if($value['parent']==$id){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+function perimeter_selected($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            $list_zones = [];
+            foreach ($_POST as $key => $value) {
+                if(isset($key)){
+                    $temp = explode("_",$key);
+                    if(count($temp)==1){
+                        array_push($list_zones,intval($temp[0]));
+                    }
+                }
+            }
+            //var_dump($list_zones);
+            $listSelZones = getListSelZones($projID);
+            //var_dump(empty($listSelZones));
+            if(empty($listSelZones)){
+                insertSelZones($projID,$list_zones);
+            } else {
+                deleteSelZones($projID);
+                insertSelZones($projID,$list_zones);
+            }
+            //var_dump($listSelZones);
+            update_ModifDate_proj($projID);            
+            header('Location: ?A=project_scoping&A2=size&projID='.$projID);
+
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No Use Case / Measure selected !");
+    }
+}
+
+
 
 function size($twig,$is_connected){
     $user = getUser($_SESSION['username']);

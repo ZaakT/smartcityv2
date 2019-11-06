@@ -621,9 +621,11 @@ function insertSelScope($projID,$list){
                             (id_proj,id_uc)
                             VALUES (?,?)");
     foreach ($list as $id_meas => $listUC) {
-        $ret = $req1->execute(array($projID,$id_meas));
-        foreach ($listUC as $key => $id_uc) {
-            $ret = $req2->execute(array($projID,$id_uc));
+        if(!empty($listUC)){
+            $ret = $req1->execute(array($projID,$id_meas));
+            foreach ($listUC as $key => $id_uc) {
+                $ret = $req2->execute(array($projID,$id_uc));
+            }
         }
     }
     return $ret;
@@ -644,7 +646,7 @@ function deleteSelScope($projID){
 
 function getListZones(){
     $db = dbConnect();
-    $req = $db->prepare("SELECT * FROM zone ORDER BY id_zone");
+    $req = $db->prepare("SELECT * FROM zone ORDER BY name");
     $req->execute();
     $list = [];
     while($row = $req->fetch()){
@@ -656,4 +658,42 @@ function getListZones(){
     }
     //var_dump($list);
     return $list;
+}
+
+function getListSelZones(){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT zone.id, zone.name, zone.type, zone.id_zone
+                            FROM project_perimeter
+                            INNER JOIN zone
+                                WHERE zone.id = project_perimeter.id_zone
+                            ORDER BY zone.name");
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id_zone = intval($row['id']);
+        $name = $row['name'];
+        $type = $row['type'];
+        $id_parent = intval($row['id_zone']);
+        $list[$id_zone]=["name"=>$name,"type"=>$type,"parent"=>$id_parent];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertSelZones($projID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req1 = $db->prepare("INSERT INTO project_perimeter
+                            (id_proj,id_zone)
+                            VALUES (?,?)");
+    foreach ($list as $id_zone) {
+        $ret = $req1->execute(array($projID,$id_zone));
+    }
+    return $ret;
+}
+
+function deleteSelZones($projID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM project_perimeter WHERE id_proj=?");
+    return $req->execute(array($projID));
 }

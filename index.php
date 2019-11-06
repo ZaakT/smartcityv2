@@ -336,6 +336,10 @@ try{
                         else {
                             perimeter($twig,$is_connected);
                         }
+                    // --- SELECTED PERIMETER ---
+                    } elseif($_GET['A2']=="perimeter_selected"){
+                        //var_dump($_POST);
+                        perimeter_selected($_POST);
                     } elseif($_GET['A2']=="size"){
                         size($twig,$is_connected);
                     } elseif($_GET['A2']=="volumes"){

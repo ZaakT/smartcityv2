@@ -13,7 +13,7 @@
             <tbody>
             {% for meas in measures %}
                 <tr id = "tr_{{ meas[0] }}" scope="row">
-                    {% if list_sel and (meas[0] in list_sel) %}
+                    {% if (meas[0] in list_sel|keys ) %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ meas[0] }}' name="meas_{{ meas[0] }}" checked></td>
                     {% else %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ meas[0] }}' name="meas_{{ meas[0] }}"></td>
@@ -44,7 +44,7 @@
             <tbody>
             {% for uc in ucs %}
                 <tr id = "tr_{{ uc[0] }}" scope="row" class="meas_{{uc[3]}}">
-                    {% if list_sel and (uc[0] in list_sel) %}
+                    {% if (uc[0] in list_sel[uc[3]]) %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc[3]}}_{{ uc[0] }}' name="uc_{{uc[3]}}_{{ uc[0] }}" checked></td>
                     {% else %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="uc" id='uc_{{uc[3]}}_{{ uc[0] }}' name="uc_{{uc[3]}}_{{ uc[0] }}"></td>

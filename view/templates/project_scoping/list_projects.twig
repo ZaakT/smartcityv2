@@ -20,8 +20,8 @@
                     <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" required></td>
                     <td>{{ proj[1] }}</td>
                     <td>{{ proj[2] }}</td>
+                    <td>{{ proj[7] }}</td>
                     <td>{{ proj[6] }}</td>
-                    <td>{{ proj[5] }}</td>
                     <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteProj_{{ proj[0] }}"></span></a></td>
                     {{ modal.delete_proj(proj[0],proj[1]) }}
                 </tr>

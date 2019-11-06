@@ -52,6 +52,7 @@ function measures($twig,$is_connected,$ucmID=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_measures = getListMeasures();
+            //var_dump($list_measures);
             $list_sel = [];
             foreach (getListSelMeas($ucm[0]) as $value) {
                 array_push($list_sel,$value[0]);
@@ -464,7 +465,7 @@ function calcRanks($rates,$orderUC){
         });
         $ret[$idCrit] = $dicUCsRates;
     }
-    $ret = array_reverse($ret,true);
+    //$ret = array_reverse($ret,true);
     //var_dump($ret);
     return $ret;
 }
