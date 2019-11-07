@@ -11,15 +11,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% for meas in measures %}
-                <tr id = "tr_{{ meas[0] }}" scope="row">
-                    {% if list_sel and (meas[0] in list_sel) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"  id='{{ meas[0] }}' name="{{ meas[0] }}" checked></td>
+            {% for id_meas,meas in measures %}
+                <tr id = "tr_{{ id_meas }}" scope="row">
+                    {% if list_sel and (id_meas in list_sel) %}
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"  id='{{ id_meas }}' name="{{ id_meas }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"   id='{{ meas[0] }}' name="{{ meas[0] }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_meas(form_meas);"   id='{{ id_meas }}' name="{{ id_meas }}"></td>
                     {% endif %}
-                    <td class="font-weight-bold">{{ meas[1] }}</td>
-                    <td>{{ meas[2] }}</td>
+                    <td class="font-weight-bold">{{ meas['name'] }}</td>
+                    <td>{{ meas['description'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -1,0 +1,80 @@
+{% macro list_mags(mags) %}
+{% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
+<div class="offset-2 row text-center">
+    <div class="col-8 m-5 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th scope="col">Magnitude</th>
+                    <th scope="col">Range Min</th>
+                    <th scope="col">Range Max</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_mag,mag in mags %}
+                <tr id = "tr_{{ id_mag }}" scope="row">
+                    <td style={{color[id_mag-1]}}>{{ mag['name'] }}</td>
+                    <td>{{ mag['range_min'] }}%</td>
+                    <td>{{ mag['range_max'] }}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_size(perimeter,scope,measures,mags,ucs,list_sel=[]) %}
+{% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
+<div class="row text-center">
+    <div class="col mx-5 list-table">
+        <table id="size_table" class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th colspan=1 rowspan= 2 scope="col">Zone</th>
+                    {% for meas,list_ucs in scope %}
+                        <th colspan={{list_ucs|length}} scope="col">{{measures[meas]['name']}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for meas,list_ucs in scope %}
+                        {% for uc in list_ucs %}
+                        <th scope="col">{{ucs[uc]['name']}}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in perimeter %}
+                {% for id,zone in item %}
+                    {% if zone['hasChildren'] == false %}
+                    <tr id = "tr_{{ id }}" scope="row">
+                        <td>{{ zone['name'] }}</td>
+                        {% for meas,list_ucs in scope %}
+                            {% for uc in list_ucs %}
+                                <td scope="col">
+                                    <div class="form-group">
+                                        <select class="form-control" style={{color[list_sel[id][uc]-1]}} name="sel_{{uc}}_{{id}}" id="sel_{{uc}}_{{id}}" onchange="changeColorSelect('sel_{{uc}}_{{id}}');">
+                                            {% for id_mag,mag in mags %}
+                                                {% if id_mag == list_sel[id][uc] %}
+                                                    <option style={{color[id_mag-1]}} name="opt_{{uc}}_{{id}}_{{id_mag}}" id="opt_{{uc}}_{{id}}_{{id_mag}}" value="{{id_mag}}" selected="selected">{{mag['name']}}</option>
+                                                {% else %}
+                                                    <option style={{color[id_mag-1]}} name="opt_{{uc}}_{{id}}_{{id_mag}}" id="opt_{{uc}}_{{id}}_{{id_mag}}" value="{{id_mag}}">{{mag['name']}}</option>
+                                                {% endif %}
+                                                
+
+                                            {% endfor %}
+                                        </select>
+                                    </div> 
+                                </td>
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                    {% endif %}                 
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

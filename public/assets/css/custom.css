@@ -95,6 +95,12 @@
     max-width: 100%;
 }
 
-.hasChildren{
-    
+#size_table th, #size_table select {
+    vertical-align: middle !important;
+    text-align: center;
+}
+
+.volumes_table th, .ratio_table th,.volumes_table input, .ratio_table input {
+    vertical-align: middle !important;
+    text-align: center;
 }

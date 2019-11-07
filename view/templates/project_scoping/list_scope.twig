@@ -11,15 +11,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% for meas in measures %}
-                <tr id = "tr_{{ meas[0] }}" scope="row">
-                    {% if (meas[0] in list_sel|keys ) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ meas[0] }}' name="meas_{{ meas[0] }}" checked></td>
+            {% for id_meas,meas in measures %}
+                <tr id = "tr_{{ id_meas }}" scope="row">
+                    {% if (id_meas in list_sel|keys ) %}
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ meas[0] }}' name="meas_{{ meas[0] }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}"></td>
                     {% endif %}
-                    <td class="font-weight-bold">{{ meas[1] }}</td>
-                    <td>{{ meas[2] }}</td>
+                    <td class="font-weight-bold">{{ meas['name'] }}</td>
+                    <td>{{ meas['description'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -42,16 +42,16 @@
                 </tr>
             </thead>
             <tbody>
-            {% for uc in ucs %}
-                <tr id = "tr_{{ uc[0] }}" scope="row" class="meas_{{uc[3]}}">
-                    {% if (uc[0] in list_sel[uc[3]]) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc[3]}}_{{ uc[0] }}' name="uc_{{uc[3]}}_{{ uc[0] }}" checked></td>
+            {% for id_uc,uc in ucs %}
+                <tr id = "tr_{{ id_uc }}" scope="row" class="meas_{{uc['id_meas']}}">
+                    {% if (id_uc in list_sel[uc['id_meas']]) %}
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="uc" id='uc_{{uc[3]}}_{{ uc[0] }}' name="uc_{{uc[3]}}_{{ uc[0] }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}"></td>
                     {% endif %}
-                    <td class="font-weight-bold">{{ uc[1] }}</td>
-                    <td>{{ uc[2] }}</td>
-                    <td>{{ uc[4] }}</td>
+                    <td class="font-weight-bold">{{ uc['name'] }}</td>
+                    <td>{{ uc['description'] }}</td>
+                    <td>{{ uc['name_meas'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

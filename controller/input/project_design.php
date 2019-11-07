@@ -53,11 +53,8 @@ function measures($twig,$is_connected,$ucmID=0){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_measures = getListMeasures();
             //var_dump($list_measures);
-            $list_sel = [];
-            foreach (getListSelMeas($ucm[0]) as $value) {
-                array_push($list_sel,$value[0]);
-            }
-            //var_dump($list_sel);
+            $list_sel = getListSelMeas($ucm[0]);
+            var_dump($list_sel);
             echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'measures'=>$list_measures,'list_sel'=>$list_sel));
             prereq_ProjectDesign();
         } else {
@@ -309,9 +306,10 @@ function rating($twig,$is_connected,$ucmID=0){
     if($ucmID!=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
+            $measures=getListMeasures();
             $list_selUC = getListSelUC($ucmID);
             $list_selMeas = getListSelMeas($ucmID);
-            $repart_ucs = calcRepartUC($list_selMeas,$list_selUC);
+            $repart_ucs = calcRepartUC($list_selMeas,$list_selUC,$measures);
             $list_selCritCat = getListSelCritCat($ucmID);
             $list_selCrit = getListSelCrit($ucmID);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
@@ -329,12 +327,12 @@ function rating($twig,$is_connected,$ucmID=0){
     }
 }
 
-function calcRepartUC($list_meas,$list_ucs){
+function calcRepartUC($list_meas,$list_ucs,$measures){
     $res = [];
     foreach ($list_meas as $meas) {
         $count = 0;
         foreach ($list_ucs as $uc) {
-            if($meas[1]==$uc[3]){
+            if($measures[$meas]['name']==$uc[3]){
                 $count++;
             }
         }
@@ -465,7 +463,7 @@ function calcRanks($rates,$orderUC){
         });
         $ret[$idCrit] = $dicUCsRates;
     }
-    //$ret = array_reverse($ret,true);
+    $ret = array_reverse($ret,true);
     //var_dump($ret);
     return $ret;
 }

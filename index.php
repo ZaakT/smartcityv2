@@ -340,10 +340,39 @@ try{
                     } elseif($_GET['A2']=="perimeter_selected"){
                         //var_dump($_POST);
                         perimeter_selected($_POST);
+                    // --- SIZE ---
                     } elseif($_GET['A2']=="size"){
-                        size($twig,$is_connected);
-                    } elseif($_GET['A2']=="volumes"){
-                        volumes($twig,$is_connected);
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                size($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_scoping&A2=size');
+                            }
+                        }
+                        else {
+                            size($twig,$is_connected);
+                        }
+                    // --- SELECTED SIZE ---
+                    } elseif($_GET['A2']=="size_selected"){
+                        //var_dump($_POST);
+                        size_selected($_POST);
+                    // --- VOLUMES ---
+                        } elseif($_GET['A2']=="volumes"){
+                            if(isset($_GET['projID'])){
+                                if($_GET['projID']!=0){
+                                    volumes($twig,$is_connected,$_GET['projID']);
+                                }
+                                else {
+                                    header('Location: ?A=project_scoping&A2=volumes');
+                                }
+                            }
+                            else {
+                                volumes($twig,$is_connected);
+                            }
+                    // --- SELECTED volumes ---
+                    } elseif($_GET['A2']=="volumes_selected"){
+                        volumes_selected($twig,$is_connected);
                     } elseif($_GET['A2']=="schedule"){
                         schedule($twig,$is_connected);
                     } elseif($_GET['A2']=="discount_rate"){

@@ -143,24 +143,26 @@ function update_ModifDate_ucm($ucmID){
 
 function getListMeasures(){
     $db = dbConnect();
-    $req = $db->query('SELECT * FROM measure ORDER BY name');
+    $req = $db->query('SELECT id,name,description FROM measure ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
-        array_push($list,$row);
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
     }
     return $list;
 }
 
 function getListSelMeas($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT measure.id, name, description
-                        FROM measure
-                        INNER JOIN ucm_sel_measure
-                        WHERE (ucm_sel_measure.id_meas = measure.id) AND (ucm_sel_measure.id_ucm = ?)');
+    $req = $db->prepare('SELECT id_meas
+                        FROM ucm_sel_measure
+                        WHERE ucm_sel_measure.id_ucm = ?');
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
-        array_push($list,$row);
+        array_push($list,$row['id_meas']);
     }
     return $list;
 }
@@ -577,7 +579,12 @@ function getListUCs(){
                         ORDER BY measure.name,use_case.name');
     $list = [];
     while ($row = $req->fetch()){
-        array_push($list,$row);
+        $id_uc = $row[0];
+        $name = $row[1];
+        $description = $row[2];
+        $id_meas = $row[3];
+        $name_meas = $row[4];
+        $list[$id_uc] = ["name"=>$name,"description"=>$description,"id_meas"=>$id_meas,"name_meas"=>$name_meas];
     }
     return $list;
 }
@@ -605,7 +612,7 @@ function getListSelScope($projID){
     while ($row = $req2->fetch()){
         $id_uc = intval($row['id_uc']);
         $id_meas = intval($row['id_meas']);
-        array_push($list[$id_meas],$id_uc);
+        array_unshift($list[$id_meas],$id_uc);
     }
     //var_dump($list);
     return $list;
@@ -660,14 +667,15 @@ function getListZones(){
     return $list;
 }
 
-function getListSelZones(){
+function getListSelZones($projID){
     $db = dbConnect();
     $req = $db->prepare("SELECT zone.id, zone.name, zone.type, zone.id_zone
                             FROM project_perimeter
                             INNER JOIN zone
                                 WHERE zone.id = project_perimeter.id_zone
+                                    AND project_perimeter.id_proj = ?
                             ORDER BY zone.name");
-    $req->execute();
+    $req->execute(array($projID));
     $list = [];
     while($row = $req->fetch()){
         $id_zone = intval($row['id']);
@@ -695,5 +703,66 @@ function insertSelZones($projID,$list){
 function deleteSelZones($projID){
     $db = dbConnect();
     $req = $db->prepare("DELETE FROM project_perimeter WHERE id_proj=?");
+    return $req->execute(array($projID));
+}
+
+
+// ---------------------------------------- SIZE ----------------------------------------
+
+function getListMag(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM magnitude ORDER BY range_min');
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        $list[$id]=["name"=>$name,"range_min"=>$range_min,"range_max"=>$range_max];
+    }
+    //var_dump($list);
+    return $list;   
+}
+
+
+function getListSelSizes($projID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_zone,id_uc,id_mag
+                            FROM project_size
+                            WHERE id_proj = ?");
+    $req->execute(array($projID));
+    $list = [];
+    while($row = $req->fetch()){
+        $id_zone = intval($row['id_zone']);
+        $id_uc = intval($row['id_uc']);
+        $id_mag = intval($row['id_mag']);
+        if(array_key_exists($id_zone,$list)){
+            $list[$id_zone] += [$id_uc=>$id_mag];
+        } else {
+            $list[$id_zone] = [$id_uc=>$id_mag];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertSelSizes($projID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO project_size
+                            (id_proj,id_zone,id_uc,id_mag)
+                            VALUES (?,?,?,?)");
+    foreach ($list as $id_zone => $list_ucs) {
+        foreach ($list_ucs as $id_uc => $id_mag) {
+            $ret = $req->execute(array($projID,$id_zone,$id_uc,$id_mag));
+        }
+    }
+    return $ret;
+}
+
+function deleteSelSizes($projID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM project_size WHERE id_proj=?");
     return $req->execute(array($projID));
 }

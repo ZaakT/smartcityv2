@@ -1,0 +1,75 @@
+{% macro list_indic(meas,list_ucs,ucs,measures,ratio) %}
+<div class="offset-2 row text-center">
+    <div class="col-8 mx-5 mt-4 mb-5 list-table">
+        <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th colspan=1 rowspan= 2 scope="col">Component</th>
+                    <th colspan={{list_ucs|length}} scope="col">{{measures[meas]['name']}}</th>
+                </tr>
+                <tr>
+                    {% for uc in list_ucs %}
+                    <th scope="col">{{ucs[uc]['name']}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="col">TO DO</td>
+                    {% for uc in list_ucs %}
+                    <td scope="col">TO DO</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,list_sel=[])  %}
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table id="volumes_table_{{meas}}" class='volumes_table table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th colspan=1 rowspan= 2 scope="col">Zone</th>
+                    <th colspan=1 rowspan= 2 scope="col">Nb total of "TO DO"</th>
+                    {% for uc in list_ucs %}
+                            <th colspan=4 scope="col">{{ucs[uc]['name']}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for uc in list_ucs %}
+                        <th scope="col">Project Size</th>
+                        <th scope="col">Nb of TO DO</th>
+                        <th scope="col">Nb of TO DO / UC</th>
+                        <th scope="col">Nb of TO DO</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in perimeter %}
+                {% for id,zone in item %}
+                    {% if zone['hasChildren'] == false %}
+                    <tr id = "tr_{{ id }}" scope="row">
+                        <td>{{ zone['name'] }}</td>
+                        <td scope="col">1234</td>
+                        {% for uc in list_ucs %}
+                            <td scope="col">
+                                {{mags[sizes[id][uc]]['name']}}
+                                </br>
+                                ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
+                            </td>
+                            <td scope="col"><input type="number" min=0 placeholder="1234"></td>
+                            <td scope="col"><input type="number" min=0 placeholder="1234"></td>
+                            <td scope="col">1234</td>
+                        {% endfor %}
+                    </tr>
+                    {% endif %}                 
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
