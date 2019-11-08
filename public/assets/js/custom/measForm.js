@@ -16,7 +16,7 @@ function countChecked_meas(oForm) {
         }
     }    
     $("#countMeasSelect").text(n+" selected");
-    //console.log(n);
+    console.log(n);
     if (n > 0) {
         $("#help_meas").attr('hidden', 'hidden');
         return true;

@@ -54,7 +54,7 @@ function measures($twig,$is_connected,$ucmID=0){
             $list_measures = getListMeasures();
             //var_dump($list_measures);
             $list_sel = getListSelMeas($ucm[0]);
-            var_dump($list_sel);
+            //var_dump($list_sel);
             echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'measures'=>$list_measures,'list_sel'=>$list_sel));
             prereq_ProjectDesign();
         } else {

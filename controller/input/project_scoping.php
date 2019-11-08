@@ -50,13 +50,13 @@ function scope($twig,$is_connected,$projID=0){
             $listSelScope = getListSelScope($projID);
             //var_dump($listSelScope);
             echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'list_sel'=>$listSelScope)); 
-            //prereq_ProjectScoping();
+            prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=scope');
         }
     } else {
         echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
-        //prereq_ProjectScoping();
+        prereq_ProjectScoping();
     }
 }
 
@@ -118,12 +118,13 @@ function perimeter($twig,$is_connected,$projID=0){
             $listSelZones = getListSelZones($projID);
             //var_dump($listSelZones);
             echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
+            prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=perimeter');
         }
     } else {
         echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
-        //prereq_ProjectScoping();
+        prereq_ProjectScoping();
     }
 }
 
@@ -222,12 +223,13 @@ function size($twig,$is_connected,$projID=0){
             //var_dump($selScope);
             //var_dump($listMag);
             echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"perimeter"=>$repart_perimeter,'scope'=>$selScope,'ucs'=>$list_ucs,'mags'=>$listMag,'list_sel'=>$listSelSizes,'measures'=>$measures)); 
+            prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=size');
         }
     } else {
         echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
-        //prereq_ProjectScoping();
+        prereq_ProjectScoping();
     }
 }
 
@@ -286,14 +288,89 @@ function volumes($twig,$is_connected,$projID=0){
             //var_dump($list_measures);
             $listMag = getListMag();
             $selSizes = getListSelSizes($projID);
-            echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag)); 
+            $components = getComponents();
+            $nbCompoPerZone = getNbCompoPerZone();
+            $ratio=getRatio();
+            //var_dump($nbUCs);
+            echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag,"components"=>$components,'compo_per_zone'=>$nbCompoPerZone,'ratio'=>$ratio)); 
+            prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=volumes');
         }
     } else {
         echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
-        //prereq_ProjectScoping();
+        prereq_ProjectScoping();
     }
+}
+
+
+function volumes_selected($post=[]){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            $list_volumes = getVolumesFromPost($post);
+            //var_dump($post);
+            var_dump($list_volumes);
+            $listSelVolumes = getListSelVolumes($projID);
+            //var_dump(empty($listSelVolumes));
+            if(empty($listSelVolumes)){
+                insertSelVolumes($projID,$list_volumes);
+            } else {
+                deleteSelVolumes($projID);
+                insertSelVolumes($projID,$list_volumes);
+            }
+            //var_dump($listSelVolumes);
+            update_ModifDate_proj($projID);            
+            header('Location: ?A=project_scoping&A2=schedule&projID='.$projID);
+
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No Volume selected !");
+    }
+}
+
+function getVolumesFromPost($post){
+    $list_volumes = [];
+    foreach ($post as $key => $value) {
+        if(isset($key)){
+            $temp = explode('_',$key);
+            $type = $temp[1];
+            //$id_comp = intval($temp[2]);
+            $id_uc = intval($temp[3]);
+            $id_zone = intval($temp[4]);
+            //var_dump($temp);
+            if(array_key_exists($id_zone,$list_volumes)){
+                if(array_key_exists($id_uc,$list_volumes[$id_zone])){
+                    if($type=='nb'){
+                        $list_volumes[$id_zone][$id_uc] += ['nb_compo'=>intval($value)];
+                    } else if ($type=='nbuc') {                            
+                        $list_volumes[$id_zone][$id_uc] += ['nb_per_uc'=>intval($value)];
+                    } else {
+                        throw new Exception("There is an error with inputs names");
+                    }
+                } else {
+                    if($type=='nb'){
+                        $list_volumes[$id_zone] += [$id_uc=>['nb_compo'=>intval($value)]];
+                    } else if ($type=='nbuc') {                            
+                        $list_volumes[$id_zone] += [$id_uc=>['nb_per_uc'=>intval($value)]];
+                    } else {
+                        throw new Exception("There is an error with inputs names");
+                    }
+                }
+            } else {
+                if($type=='nb'){
+                    $list_volumes[$id_zone] = [$id_uc=>['nb_compo'=>intval($value)]];
+                } else if ($type=='nbuc') {                            
+                    $list_volumes[$id_zone] = [$id_uc=>['nb_per_uc'=>intval($value)]];
+                } else {
+                    throw new Exception("There is an error with inputs names");
+                }
+            }
+        }
+    }
+    return $list_volumes;
 }
 
 // ---------------------------------------- SCHEDULE ----------------------------------------
@@ -301,6 +378,7 @@ function volumes($twig,$is_connected,$projID=0){
 function schedule($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2])); 
+    
 }
 
 
@@ -313,40 +391,23 @@ function discount_rate($twig,$is_connected){
 
 
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
-/*function prereq_ProjectScoping(){
-    if(isset($_SESSION['ucmID'])){
-        echo "<script>prereq_ProjectDesign1(true);</script>";
-        $ucmID = $_SESSION['ucmID'];
-        $list_selMeas = getListSelMeas($ucmID);
-        $list_selUC = getListSelUC($ucmID);
-        $list_selCrit = getListSelCrit($ucmID);
-        $list_selCritCat = getListSelCritCat($ucmID);
-        $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
-        $list_selDLT = getListSelDLTs($ucmID);
-        $orderUC = [];
-        foreach ($list_selUC as $uc) {
-            array_push($orderUC,intval($uc[0]));
-        }
-        $rates = getListInputedRates($ucmID);
-        if(!empty($list_selMeas) && !empty($list_selCrit) && !empty($list_selCritCat) && !empty($list_selDLT)){
-            echo "<script>prereq_ProjectDesign2(true);</script>";
-            if (!empty($list_selUC)) {
-                echo "<script>prereq_ProjectDesign3(true);</script>";
-                if(!empty($rates)){
-                    echo "<script>prereq_ProjectDesign4(true);</script>";
-                    try{
-                        $ranks = calcRanks($rates,$orderUC);
-                        $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
-                        if(!empty($scores)){
-                            echo "<script>prereq_ProjectDesign5(true);</script>";
-                        }
-                    }
-                    finally{
-                        //do nothing
-                    }
+function prereq_ProjectScoping(){
+    if(isset($_SESSION['projID'])){
+        echo "<script>prereq_ProjectScoping1(true);</script>";
+        $projID = $_SESSION['projID'];
+        $selScope = getListSelScope($projID);
+        $selPerimeter = getListSelZones($projID);
+        $selSizes = getListSelSizes($projID);
+
+        if(!empty($selScope)){
+            echo "<script>prereq_ProjectScoping2(true);</script>";
+            if (!empty($selPerimeter)) {
+                echo "<script>prereq_ProjectScoping3(true);</script>";
+                if(!empty($selSizes)){
+                    echo "<script>prereq_ProjectScoping4(true);</script>";
                 }
             }
         }
     }
 
-}*/
+}

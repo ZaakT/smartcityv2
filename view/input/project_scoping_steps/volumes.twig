@@ -24,13 +24,13 @@
 
 <div class ="row">
     {% if scope and sizes and perimeter %} 
-        <form class="col container-fluid" name="form_size" id="form_size" action="?A=project_scoping&amp;A2=size_selected" method="post">
+        <form class="col container-fluid" name="form_volumes" id="form_volumes" action="?A=project_scoping&amp;A2=volumes_selected" method="post" onsubmit="return colorFilledVolumes();">
             {% for meas,list_ucs in scope %}
             <div class="row text-center mt-5 mb-0">
                 <h3 class="col">Input volumes for {{measures[meas]['name']}}</h3>
             </div>
-            {{ list.list_indic(meas,list_ucs,ucs,measures,ratio) }}
-            {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,list_sel) }}
+            {{ list.list_indic(meas,list_ucs,ucs,measures,ratio,components) }}
+            {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,list_sel) }}
             {% endfor %}
             
             <div class="row mt-4 mb-0 text-center">

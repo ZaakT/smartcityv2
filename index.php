@@ -370,9 +370,11 @@ try{
                             else {
                                 volumes($twig,$is_connected);
                             }
-                    // --- SELECTED volumes ---
+                    // --- SELECTED VOLUMES ---
                     } elseif($_GET['A2']=="volumes_selected"){
-                        volumes_selected($twig,$is_connected);
+                        //var_dump($_POST);
+                        volumes_selected($_POST);
+                    // --- SCHEDULE ---
                     } elseif($_GET['A2']=="schedule"){
                         schedule($twig,$is_connected);
                     } elseif($_GET['A2']=="discount_rate"){

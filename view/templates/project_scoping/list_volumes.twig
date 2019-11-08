@@ -1,4 +1,4 @@
-{% macro list_indic(meas,list_ucs,ucs,measures,ratio) %}
+{% macro list_indic(meas,list_ucs,ucs,measures,ratio,components) %}
 <div class="offset-2 row text-center">
     <div class="col-8 mx-5 mt-4 mb-5 list-table">
         <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg'>
@@ -14,36 +14,45 @@
                 </tr>
             </thead>
             <tbody>
+                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
                 <tr>
-                    <td scope="col">TO DO</td>
+                    <td scope="col" class="font-weight-bold">{{compo['name']}}</td>
                     {% for uc in list_ucs %}
-                    <td scope="col">TO DO</td>
+                    <td scope="col">{{ratio[id_compo][uc] ? ratio[id_compo][uc] : "-"}}</td>
                     {% endfor %}
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 {% endmacro %}
 
-{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,list_sel=[])  %}
+{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,list_sel=[])  %}
+
+{% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
-        <table id="volumes_table_{{meas}}" class='volumes_table table table-bordered table-striped table-responsive-lg'>
+        <table id="volumes_table_{{meas}}" class='volumes_table table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center">
                 <tr>
                     <th colspan=1 rowspan= 2 scope="col">Zone</th>
-                    <th colspan=1 rowspan= 2 scope="col">Nb total of "TO DO"</th>
+                    {% set nbCompo = components|filter(compo => compo['id_meas']==meas)|length %}
+                    {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                        <th colspan=1 rowspan= 2 scope="col">Nb of {{compo['name']}}</br>for the selected zone</th>
+                    {% endfor %}
                     {% for uc in list_ucs %}
-                            <th colspan=4 scope="col">{{ucs[uc]['name']}}</th>
+                        <th colspan={{2+2*nbCompo}} scope="col">{{ucs[uc]['name']}}</th>
                     {% endfor %}
                 </tr>
                 <tr>
                     {% for uc in list_ucs %}
                         <th scope="col">Project Size</th>
-                        <th scope="col">Nb of TO DO</th>
-                        <th scope="col">Nb of TO DO / UC</th>
-                        <th scope="col">Nb of TO DO</th>
+                        {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                            <th scope="col">Nb of {{compo['name']}}</br>for the selected size</th>
+                            <th scope="col">Nb of {{compo['name']}} / UC</th>
+                        {% endfor %}
+                        <th scope="col">Nb of {{ucs[uc]['name']}}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -52,22 +61,46 @@
                 {% for id,zone in item %}
                     {% if zone['hasChildren'] == false %}
                     <tr id = "tr_{{ id }}" scope="row">
-                        <td>{{ zone['name'] }}</td>
-                        <td scope="col">1234</td>
+                        <td class="font-weight-bold">{{ zone['name'] }}</td>
+                        {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                            <td class="val_zones" id="val_zones_{{id_compo}}_{{id}}" scope="col">{{compo_per_zone[id_compo][id]}}</td>
+                        {% endfor %}
                         {% for uc in list_ucs %}
-                            <td scope="col">
-                                {{mags[sizes[id][uc]]['name']}}
-                                </br>
-                                ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
-                            </td>
-                            <td scope="col"><input type="number" min=0 placeholder="1234"></td>
-                            <td scope="col"><input type="number" min=0 placeholder="1234"></td>
-                            <td scope="col">1234</td>
+                            {% if sizes[id][uc] %}
+                                <td scope="col" style={{color[sizes[id][uc]-1]}}>
+                                    {{mags[sizes[id][uc]]['name']}}
+                                    </br>
+                                    ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
+                                </td>
+                                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=1 oninput='fillTot("form_volumes");' required></td>
+                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=1 oninput='fillTot("form_volumes");' required></td>
+                                {% endfor %}
+                                <td id="totUC_{{uc}}_{{id}}" scope="col">to calculate</td>
+                            {% else %}
+                                <td colspan={{2+2*nbCompo}} class="text-danger font-weight-bold" scope="col">
+                                    Please return in "Size" and validate the selection
+                                </td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                     {% endif %}                 
                 {% endfor %}
             {% endfor %}
+            <tr class="text-primary font-weight-bolder thead-light">
+                <th class="text-uppercase">Total</th>
+                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                    <td id="tot_zones_{{id_compo}}" scope="col">-</td>
+                {% endfor %}
+                {% for uc in list_ucs %}
+                    <td scope="col"></td>
+                    {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                    <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>
+                    <td id="tot_nbuc_{{id_compo}}_{{uc}}" scope="col">-</td>
+                    {% endfor %}
+                    <td id="tot_totUC_{{uc}}" scope="col">-</td>
+                {% endfor %}
+            </tr>
             </tbody>
         </table>
     </div>

@@ -55,10 +55,10 @@ function countChecked_scope(formName) {
     $("#countMeasSelect").text(n+" selected");
     //console.log(n);
     if (n > 0) {
-        $("#help_meas").attr('hidden', 'hidden');
+        $("#help_meas_scope").attr('hidden', 'hidden');
     }
     else {
-        $("#help_meas").removeAttr('hidden');
+        $("#help_meas_scope").removeAttr('hidden');
     }
     $("#countUCSelect").text(m+" selected");
 

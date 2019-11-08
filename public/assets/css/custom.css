@@ -104,3 +104,6 @@
     vertical-align: middle !important;
     text-align: center;
 }
+.volumes_table th{
+    min-width: 200px;
+}

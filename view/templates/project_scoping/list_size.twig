@@ -54,7 +54,8 @@
                             {% for uc in list_ucs %}
                                 <td scope="col">
                                     <div class="form-group">
-                                        <select class="form-control" style={{color[list_sel[id][uc]-1]}} name="sel_{{uc}}_{{id}}" id="sel_{{uc}}_{{id}}" onchange="changeColorSelect('sel_{{uc}}_{{id}}');">
+                                        {% set style = list_sel[id][uc] ? color[list_sel[id][uc]-1] : color[0] %}
+                                        <select class="form-control" style={{style}} name="sel_{{uc}}_{{id}}" id="sel_{{uc}}_{{id}}" onchange="changeColorSelect('sel_{{uc}}_{{id}}');">
                                             {% for id_mag,mag in mags %}
                                                 {% if id_mag == list_sel[id][uc] %}
                                                     <option style={{color[id_mag-1]}} name="opt_{{uc}}_{{id}}_{{id_mag}}" id="opt_{{uc}}_{{id}}_{{id_mag}}" value="{{id_mag}}" selected="selected">{{mag['name']}}</option>

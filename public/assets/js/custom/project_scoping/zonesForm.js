@@ -84,7 +84,7 @@ function countChecked_zones(formName){
             nb_selectedZones += nb_checked-nb_hasChildren_checked;
         }
     });
-    console.log(nb_selectedZones);
+    //console.log(nb_selectedZones);
     $("#countZonesSelect").text(nb_selectedZones+" selected")
     if (nb_selectedZones > 0) {
         $("#help_zones").attr('hidden', 'hidden');

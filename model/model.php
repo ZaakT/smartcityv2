@@ -766,3 +766,59 @@ function deleteSelSizes($projID){
     $req = $db->prepare("DELETE FROM project_size WHERE id_proj=?");
     return $req->execute(array($projID));
 }
+
+
+// ---------------------------------------- SIZE ----------------------------------------
+
+function getComponents(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM component ORDER BY name');
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $id_meas = intval($row['id_meas']);
+        $list[$id]=["name"=>$name,"id_meas"=>$id_meas];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getNbCompoPerZone(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_compo,id_zone,number FROM comp_per_zone');
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id_compo = intval($row['id_compo']);
+        $val = number_format(round($row['number']),0,'.',' ');
+        $id_zone = intval($row['id_zone']);
+        if(array_key_exists($id_compo,$list)){
+            $list[$id_compo]+=[$id_zone=>$val];
+        } else {
+            $list[$id_compo]=[$id_zone=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getRatio(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_compo,id_uc,val FROM ratio_comp_per_uc');
+    $req->execute();
+    $list = [];
+    while($row = $req->fetch()){
+        $id_compo = intval($row['id_compo']);
+        $val = number_format(round($row['val']),0,'.',' ');
+        $id_uc = intval($row['id_uc']);
+        if(array_key_exists($id_compo,$list)){
+            $list[$id_compo]+=[$id_uc=>$val];
+        } else {
+            $list[$id_compo]=[$id_uc=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
