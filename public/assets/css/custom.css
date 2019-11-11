@@ -107,3 +107,17 @@
 .volumes_table th{
     min-width: 200px;
 }
+
+#schedules_implem {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.date_input{
+    text-align: center;
+    color:black;
+}
+
+.copy-dates{
+    font-size:30px;
+}

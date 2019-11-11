@@ -29,7 +29,9 @@ function calcTot(compo,zones,item,uc=""){
     zones.forEach((zone) => {
         //console.log("#val_"+item+compo+uc+"_"+zone);
         val = $("#val_"+item+compo+uc+"_"+zone).text().replace(/\s/g,'');
-        val += $("#val_"+item+compo+uc+"_"+zone).val().replace(/\s/g,'');
+        if($("#val_"+item+compo+uc+"_"+zone).val()){
+            val += $("#val_"+item+compo+uc+"_"+zone).val().replace(/\s/g,'');
+        }
         if(val!=""){
             sum += parseInt(val);
         }
@@ -39,22 +41,25 @@ function calcTot(compo,zones,item,uc=""){
     $("#tot_"+item+compo+uc).text(sum);
 }
 
-function calcTotUC(uc,zone){
-    var val_1 = $("#val_nb_1_"+uc+"_"+zone).val();
-    var val_2 = $("#val_nbuc_1_"+uc+"_"+zone).val();
-    val_1 = val_1==0 ? 0 : parseInt(val_1);
-    val_2 = val_2==0 ? 0 : parseInt(val_2);
-    if(val_1>0 && val_2>0){
-        if(val_1 >= val_2){
-            res = parseInt(val_1/val_2);
+function calcTotUC(uc,zone,compo){
+    var val_1 = $("#val_nb_"+compo+"_"+uc+"_"+zone).val();
+    var val_2 = $("#val_nbuc_"+compo+"_"+uc+"_"+zone).val();
+    if(val_1 && val_2){
+        val_1 = val_1==0 ? 0 : parseInt(val_1);
+        val_2 = val_2==0 ? 0 : parseInt(val_2);
+        if(val_1>0 && val_2>0){
+            if(val_1 >= val_2){
+                res = parseInt(val_1/val_2);
+            } else {
+                res = 0;
+            }
         } else {
-            res = 0;
+            res = "-";
         }
-    } else {
-        res = "-";
+        $("#totUC_"+uc+"_"+zone).text(res);
+        return res;
     }
-    $("#totUC_"+uc+"_"+zone).text(res);
-    return res;
+    return 0;
 }
 
 function fillTot(formName){
@@ -74,13 +79,16 @@ function fillTot(formName){
     list_ucs.forEach((uc) => {
         var sum = 0;
         var val = 0;
-        list_zones.forEach((zone) => {
-            val = calcTotUC(uc,zone);
-            console.log(val);
-            if(val!="-"){
-                sum += val;
-            }
-            $("#tot_totUC_"+uc).text(sum);
+        list_compo.forEach((compo) => {
+            sum = 0;
+            list_zones.forEach((zone) => {
+                val = calcTotUC(uc,zone,compo);
+                console.log(val);
+                if(val!="-"){
+                    sum += val;
+                }
+                $("#tot_totUC_"+uc).text(sum);
+            })
         })
     })
 }

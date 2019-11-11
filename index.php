@@ -358,27 +358,47 @@ try{
                         //var_dump($_POST);
                         size_selected($_POST);
                     // --- VOLUMES ---
-                        } elseif($_GET['A2']=="volumes"){
-                            if(isset($_GET['projID'])){
-                                if($_GET['projID']!=0){
-                                    volumes($twig,$is_connected,$_GET['projID']);
-                                }
-                                else {
-                                    header('Location: ?A=project_scoping&A2=volumes');
-                                }
+                    } elseif($_GET['A2']=="volumes"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                volumes($twig,$is_connected,$_GET['projID']);
                             }
                             else {
-                                volumes($twig,$is_connected);
+                                header('Location: ?A=project_scoping&A2=volumes');
                             }
+                        }
+                        else {
+                            volumes($twig,$is_connected);
+                        }
                     // --- SELECTED VOLUMES ---
                     } elseif($_GET['A2']=="volumes_selected"){
                         //var_dump($_POST);
                         volumes_selected($_POST);
                     // --- SCHEDULE ---
                     } elseif($_GET['A2']=="schedule"){
-                        schedule($twig,$is_connected);
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                schedule($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_scoping&A2=schedule');
+                            }
+                        }
+                        else {
+                            schedule($twig,$is_connected);
+                        }
                     } elseif($_GET['A2']=="discount_rate"){
-                        discount_rate($twig,$is_connected);
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                discount_rate($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_scoping&A2=discount_rate');
+                            }
+                        }
+                        else {
+                            discount_rate($twig,$is_connected);
+                        }
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

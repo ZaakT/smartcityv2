@@ -292,7 +292,8 @@ function volumes($twig,$is_connected,$projID=0){
             $nbCompoPerZone = getNbCompoPerZone();
             $ratio=getRatio();
             //var_dump($nbUCs);
-            echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag,"components"=>$components,'compo_per_zone'=>$nbCompoPerZone,'ratio'=>$ratio)); 
+            $listSelVolumes = getListSelVolumes($projID);
+            echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag,"components"=>$components,'compo_per_zone'=>$nbCompoPerZone,'ratio'=>$ratio,'list_sel'=>$listSelVolumes)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=volumes');
@@ -375,12 +376,26 @@ function getVolumesFromPost($post){
 
 // ---------------------------------------- SCHEDULE ----------------------------------------
 
-function schedule($twig,$is_connected){
+function schedule($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2])); 
-    
-}
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            
+            $list_ucs = getListUCs();
+            $list_measures = getListMeasures();
+            $selScope = getListSelScope($projID);
 
+            echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures)); 
+            prereq_ProjectScoping();
+        } else {
+            header('Location: ?A=project_scoping&A2=schedule');
+        }
+    } else {
+        echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        prereq_ProjectScoping();
+    }
+}
 
 // ---------------------------------------- DISCOUNT RATE ----------------------------------------
 

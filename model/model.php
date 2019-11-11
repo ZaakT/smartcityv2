@@ -822,3 +822,53 @@ function getRatio(){
     //var_dump($list);
     return $list;
 }
+
+
+// ---------------------------------------- VOLUMES ----------------------------------------
+
+function getListSelVolumes($projID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_zone,id_uc,nb_compo,nb_per_uc
+                            FROM volumes_input
+                            WHERE id_proj = ?");
+    $req->execute(array($projID));
+    $list = [];
+    while($row = $req->fetch()){
+        $id_zone = intval($row['id_zone']);
+        $id_uc = intval($row['id_uc']);
+        $nb_compo = intval($row['nb_compo']);
+        $nb_per_uc = intval($row['nb_per_uc']);
+        if(array_key_exists($id_zone,$list)){
+            if(array_key_exists($id_uc,$list[$id_zone])){
+                $list[$id_zone][$id_uc] += ['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc];
+            } else {
+                $list[$id_zone] += [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc]];
+            }
+        } else {
+            $list[$id_zone] = [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc]];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+
+function insertSelVolumes($projID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO volumes_input
+                            (id_proj,id_zone,id_uc,nb_compo,nb_per_uc)
+                            VALUES (?,?,?,?,?)");
+    foreach ($list as $id_zone => $list_ucs) {
+        foreach ($list_ucs as $id_uc => $data) {
+            $ret = $req->execute(array($projID,$id_zone,$id_uc,$data['nb_compo'],$data['nb_per_uc']));
+        }
+    }
+    return $ret;
+}
+
+function deleteSelVolumes($projID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM volumes_input WHERE id_proj=?");
+    return $req->execute(array($projID));
+}

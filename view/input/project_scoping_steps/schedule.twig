@@ -1,3 +1,45 @@
 {% extends '/input/project_scoping.twig' %}
 
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/project_scoping/list_schedules.twig" as schedules %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_scoping",projID) }}{% endblock %}
+
 {% block title %}Project Scoping - Schedule{% endblock %}
+
+{% block content %}
+
+{% if projID==0 %}
+{{ second_bar.second_bar(username,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,part,selected) }}
+<div class="row jumbotron text-light mx-5 m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col container-fluid" name="form_schedule" id="form_schedule" action="?A=project_scoping&amp;A2=schedules_selected" method="post" onsubmit="return fullCheckValidity();">
+            {{ schedules.schedule_implem(scope,meas,ucs) }}
+            {{ schedules.schedule_opex(scope,meas,ucs) }}
+            {{ schedules.schedule_revenues(scope,meas,ucs) }}
+            
+            <div class="row mt-4 mb-0 text-center">
+                <span id="countUCSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+            </div>
+            <div class="row text-center mt-3">
+                <h6 id="help_uc" class="col text-danger font-weight-bold text-center" hidden>Please select at least one Use Case !</h6>
+            </div>
+
+            <div class="row my-0 text-center text-dark">
+                <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+            </div>
+        </form>
+</div>
+
+{% endif %}
+{% endblock %}

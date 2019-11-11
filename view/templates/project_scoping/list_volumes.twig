@@ -73,10 +73,10 @@
                                     ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
                                 </td>
                                 {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=1 oninput='fillTot("form_volumes");' required></td>
-                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=1 oninput='fillTot("form_volumes");' required></td>
+                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=1 oninput='fillTot("form_volumes");' required value={{list_sel[id][uc]['nb_compo']}}></td>
+                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=1 oninput='fillTot("form_volumes");' required value={{list_sel[id][uc]['nb_per_uc']}}></td>
                                 {% endfor %}
-                                <td id="totUC_{{uc}}_{{id}}" scope="col">to calculate</td>
+                                <td id="totUC_{{uc}}_{{id}}" scope="col">-</td>
                             {% else %}
                                 <td colspan={{2+2*nbCompo}} class="text-danger font-weight-bold" scope="col">
                                     Please return in "Size" and validate the selection
