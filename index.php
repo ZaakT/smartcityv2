@@ -387,6 +387,10 @@ try{
                         else {
                             schedule($twig,$is_connected);
                         }
+                    // --- SELECTED SCHEDULES ---
+                    } elseif($_GET['A2']=="schedules_selected"){
+                        //var_dump($_POST);
+                        schedules_selected($_POST);
                     } elseif($_GET['A2']=="discount_rate"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){

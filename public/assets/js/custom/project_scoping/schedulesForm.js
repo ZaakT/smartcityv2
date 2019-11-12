@@ -58,33 +58,38 @@ function checkValidity(part,uc,list_dates,dates_saved){
                     $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                     ret = false;
                 }
+                prec_date = dates_saved[part][uc][date];
             } else {
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                 ret = false;
             }
-            prec_date = dates_saved[part][uc][date];
         } else {
             if(current_date!=""){
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","palegreen");
+                prec_date = dates_saved[part][uc][date];
             } else {
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                 ret = false;
             }
+        }
+        if(part=="implem" && date=="enddate"){
+            ret = true;
         }
     });
     return ret;
 }
 
 function fullCheckValidity(){
-    var ret = true
-    list_parts.forEach((part) => {
-        list_ucs.forEach((uc) => {
+    for(i in list_parts) {
+        var part = list_parts[i];
+        for(j in list_ucs) {
+            var uc = list_ucs[j];
             if(checkValidity(part,uc,list_dates,dates_saved)==false){
-                ret = false;
+                return true;
             }
-        });   
-    });
-    return ret;
+        }   
+    }
+    return true;
 }
 
 function initColor(formName){
@@ -114,18 +119,29 @@ $.date = function(dateObject) {
 
 function copy_dates(part,id_prec,id_next){
     var list_to_copy = dates_saved[part][id_prec];
-    console.log(list_to_copy);
+    //console.log(list_to_copy);
     for (date_label in list_to_copy) {
         date = list_to_copy[date_label];
         if(date != "" > 0){
+            dates_saved[part][id_next][date_label] = date;
             var formattedDate = $.date(date);
             $("#"+part+"_"+date_label+"_"+id_next+" input").val(formattedDate);
-            //$("#"+part+"_"+date_label+"_"+id_next).datepicker("setDate", "01/02/2012");
-            $("#"+part+"_"+date_label+"_"+id_next).data('update',date);
-            //$("#"+part+"_"+date_label+"_"+id_next).datepicker().trigger('changeDate');
+            //$("#"+part+"_"+date_label+"_"+id_next).data('update',date);
         }
     }
     checkValidity(part,id_next,list_dates,dates_saved);
+}
+
+function erase_dates(part,uc){
+    console.log("ddddd");
+    for(i in list_dates){
+        var date = list_dates[i];
+        console.log(date);
+        $("#"+part+"_"+date+"_"+uc+" input").val(" ");
+        dates_saved[part][uc][date] = "";
+
+    }
+    checkValidity(part,uc,list_dates,dates_saved);
 }
 
 dates_saved = {};

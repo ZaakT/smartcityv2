@@ -397,6 +397,59 @@ function schedule($twig,$is_connected,$projID=0){
     }
 }
 
+function schedules_selected($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            $list_dates = getDatesFromPost($post);
+            //var_dump($post);
+            //var_dump($list_dates);
+            $listSelDates = getListSelDates($projID);
+            if(empty($listSelDates)){
+                insertSelDates($projID,$list_dates);
+            } else {
+                deleteSelDates($projID);
+                insertSelDates($projID,$list_dates);
+            }
+            //var_dump($listSelDates);
+            update_ModifDate_proj($projID);            
+            header('Location: ?A=project_scoping&A2=discount_rate&projID='.$projID);
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No Date selected !");
+    }
+}
+
+function getDatesFromPost($post){
+    $list_dates = [];
+    foreach ($post as $key => $value) {
+        if(isset($key) and $value){
+            $temp = explode('_',$key);
+            //var_dump($temp);
+            //var_dump($value);
+            $part = $temp[1];
+            $date_label = $temp[2];
+            $id_uc = intval($temp[3]);
+            $date_input = explode('/',$value);
+            $date = date_create($date_input[1]."-".$date_input[0]."-01")->format('Y-m-d H:i:s');
+            //var_dump($date->format('m/Y'));
+            if(array_key_exists($part,$list_dates)){
+                if(array_key_exists($id_uc,$list_dates[$part])){
+                    $list_dates[$part][$id_uc] += [$date_label=>$date];
+                } else {
+                    $list_dates[$part][$id_uc] = [$date_label=>$date];
+                }
+            } else {
+                $list_dates[$part] = [$id_uc => [$date_label=>$date]];
+            }
+        }
+        //var_dump($list_dates['implem'][7]);
+    }
+    return $list_dates;
+}
+
 // ---------------------------------------- DISCOUNT RATE ----------------------------------------
 
 function discount_rate($twig,$is_connected){

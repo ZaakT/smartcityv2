@@ -120,4 +120,10 @@
 
 .copy-dates{
     font-size:30px;
+    vertical-align: middle !important;
+}
+
+.erase-dates{
+    font-size: 20px;
+    vertical-align: middle !important;
 }

@@ -872,3 +872,135 @@ function deleteSelVolumes($projID){
     $req = $db->prepare("DELETE FROM volumes_input WHERE id_proj=?");
     return $req->execute(array($projID));
 }
+
+
+// ---------------------------------------- SCHEDULE ----------------------------------------
+
+function getListSelDates($projID){
+    $db = dbConnect();
+    $req_implem = $db->prepare("SELECT * FROM implem_schedule WHERE id_proj = ?");
+    $req_implem->execute(array($projID));
+    $req_opex = $db->prepare("SELECT * FROM opex_schedule WHERE id_proj = ?");
+    $req_opex->execute(array($projID));
+    $req_revenue = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ?");
+    $req_revenue->execute(array($projID));
+
+    $list = [];
+
+    while($row = $req_implem->fetch()){
+        $id_uc = intval($row['id_uc']);
+        $startdate = date_create($row['start_date'])->format('m/Y');
+        $date25 = date_create($row['25_completion'])->format('m/Y');
+        $date50 = date_create($row['50_completion'])->format('m/Y');
+        $date75 = date_create($row['75_completion'])->format('m/Y');
+        $date100 = date_create($row['100_completion'])->format('m/Y');
+        if(array_key_exists('implem',$list)){
+            $list['implem'][$id_uc] = [
+                'startdate'=>$startdate,
+                '25date'=>$date25,
+                '50date'=>$date50,
+                '75date'=>$date75,
+                '100date'=>$date100,
+                ];
+        } else {
+            $list['implem'] = [ $id_uc => [
+                                'startdate'=>$startdate,
+                                '25date'=>$date25,
+                                '50date'=>$date50,
+                                '75date'=>$date75,
+                                '100date'=>$date100,
+            ]];
+        }
+    }
+    while($row = $req_opex->fetch()){
+        $id_uc = intval($row['id_uc']);
+        $startdate = date_create($row['start_date'])->format('m/Y');
+        $date25 = date_create($row['25_rampup'])->format('m/Y');
+        $date50 = date_create($row['50_rampup'])->format('m/Y');
+        $date75 = date_create($row['75_rampup'])->format('m/Y');
+        $date100 = date_create($row['100_rampup'])->format('m/Y');
+        $enddate = date_create($row['end_date'])->format('m/Y');
+        if(array_key_exists('opex',$list)){
+            $list['opex'][$id_uc] = [
+                                'startdate'=>$startdate,
+                                '25date'=>$date25,
+                                '50date'=>$date50,
+                                '75date'=>$date75,
+                                '100date'=>$date100,
+                                'enddate'=>$enddate,
+            ];
+        } else {
+                $list['opex'] = [$id_uc => [
+                'startdate'=>$startdate,
+                '25date'=>$date25,
+                '50date'=>$date50,
+                '75date'=>$date75,
+                '100date'=>$date100,
+                'enddate'=>$enddate,
+            ]];
+        }
+    }
+    while($row = $req_revenue->fetch()){
+        $id_uc = intval($row['id_uc']);
+        $startdate = date_create($row['start_date'])->format('m/Y');
+        $date25 = date_create($row['25_rampup'])->format('m/Y');
+        $date50 = date_create($row['50_rampup'])->format('m/Y');
+        $date75 = date_create($row['75_rampup'])->format('m/Y');
+        $date100 = date_create($row['100_rampup'])->format('m/Y');
+        $enddate = date_create($row['end_date'])->format('m/Y');
+        if(array_key_exists('revenues',$list)){
+            $list['revenues'][$id_uc] = [
+                                'startdate'=>$startdate,
+                                '25date'=>$date25,
+                                '50date'=>$date50,
+                                '75date'=>$date75,
+                                '100date'=>$date100,
+                                'enddate'=>$enddate,
+            ];
+        } else {
+            $list['revenues'] = [$id_uc => [
+                                'startdate'=>$startdate,
+                                '25date'=>$date25,
+                                '50date'=>$date50,
+                                '75date'=>$date75,
+                                '100date'=>$date100,
+                                'enddate'=>$enddate,
+            ]];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertSelDates($projID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req_implem = $db->prepare("INSERT INTO implem_schedule
+                            (id_proj,id_uc,start_date,25_completion,50_completion,75_completion,100_completion)
+                            VALUES (?,?,?,?,?,?,?)");
+    $req_opex = $db->prepare("INSERT INTO opex_schedule
+                            (id_proj,id_uc,start_date,25_rampup,50_rampup,75_rampup,100_rampup,end_date)
+                            VALUES (?,?,?,?,?,?,?,?)");
+    $req_revenue = $db->prepare("INSERT INTO revenue_schedule
+                            (id_proj,id_uc,start_date,25_rampup,50_rampup,75_rampup,100_rampup,end_date)
+                            VALUES (?,?,?,?,?,?,?,?)");
+    foreach ($list['implem'] as $id_uc => $data) {
+        $ret = $req_implem->execute(array($projID,$id_uc,$data['startdate'],$data['25date'],$data['50date'],$data['75date'],$data['100date']));
+    }
+    foreach ($list['opex'] as $id_uc => $data) {
+        $ret = $req_opex->execute(array($projID,$id_uc,$data['startdate'],$data['25date'],$data['50date'],$data['75date'],$data['100date'],$data['enddate']));
+    }
+    foreach ($list['revenues'] as $id_uc => $data) {
+        $ret = $req_revenue->execute(array($projID,$id_uc,$data['startdate'],$data['25date'],$data['50date'],$data['75date'],$data['100date'],$data['enddate']));
+    }
+    return $ret;
+}
+
+
+function deleteSelDates($projID){
+    $db = dbConnect();
+    $req_implem = $db->prepare("DELETE FROM implem_schedule WHERE id_proj=?");
+    $req_opex = $db->prepare("DELETE FROM opex_schedule WHERE id_proj=?");
+    $req_revenue = $db->prepare("DELETE FROM revenue_schedule WHERE id_proj=?");
+    return $req_implem->execute(array($projID))&&$req_opex->execute(array($projID))&&$req_revenue->execute(array($projID));
+}
