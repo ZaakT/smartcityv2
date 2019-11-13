@@ -311,7 +311,7 @@ function volumes_selected($post=[]){
             $projID = $_SESSION['projID'];
             $list_volumes = getVolumesFromPost($post);
             //var_dump($post);
-            var_dump($list_volumes);
+            //var_dump($list_volumes);
             $listSelVolumes = getListSelVolumes($projID);
             //var_dump(empty($listSelVolumes));
             if(empty($listSelVolumes)){
@@ -385,8 +385,8 @@ function schedule($twig,$is_connected,$projID=0){
             $list_ucs = getListUCs();
             $list_measures = getListMeasures();
             $selScope = getListSelScope($projID);
-
-            echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures)); 
+            $listSelDates = getListSelDates($projID);
+            echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures,'list_sel'=>$listSelDates)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=schedule');
@@ -452,12 +452,39 @@ function getDatesFromPost($post){
 
 // ---------------------------------------- DISCOUNT RATE ----------------------------------------
 
-function discount_rate($twig,$is_connected){
+function discount_rate($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/project_scoping_steps/discount_rate.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2])); 
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $selDiscountRate = getListSelDiscountRate($projID);
+            echo $twig->render('/input/project_scoping_steps/discount_rate.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'discount_rate_sel'=>$selDiscountRate)); 
+            prereq_ProjectScoping();
+        } else {
+            header('Location: ?A=project_scoping&A2=discount_rate');
+        }
+    } else {
+        echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        prereq_ProjectScoping();
+    }
 }
 
-
+function discount_rate_selected($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            $discount_rate = floatval($post['discount_rate_input']);
+            //var_dump($discount_rate);
+            insertSelDiscountRate($projID,$discount_rate);
+            update_ModifDate_proj($projID);            
+            header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$projID);
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No Discount Rate selected !");
+    }
+}
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectScoping(){
     if(isset($_SESSION['projID'])){

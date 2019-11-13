@@ -52,7 +52,7 @@ function countChecked_scope(formName) {
         }
     });
 
-    $("#countMeasSelect").text(n+" selected");
+    $("#countMeasSelectScope").text(n+" selected");
     //console.log(n);
     if (n > 0) {
         $("#help_meas_scope").attr('hidden', 'hidden');
@@ -60,7 +60,7 @@ function countChecked_scope(formName) {
     else {
         $("#help_meas_scope").removeAttr('hidden');
     }
-    $("#countUCSelect").text(m+" selected");
+    $("#countUCSelectScope").text(m+" selected");
 
     /*console.log(m);
     if (m > 0) {

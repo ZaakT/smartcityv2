@@ -37,8 +37,8 @@ function create_ucm($twig,$is_connected,$post){
 }
 
 function delete_ucm($idUCM){
-    // var_dump($idUCM);
-    deleteUCM($idUCM);
+    var_dump(intval($idUCM));
+    deleteUCM(intval($idUCM));
     header('Location: ?A=project_design&A2=ucm');
 }
 

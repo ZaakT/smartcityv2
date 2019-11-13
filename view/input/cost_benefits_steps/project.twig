@@ -1,10 +1,11 @@
-{% extends '/input/project_design.twig' %}
+{% extends '/input/cost_benefits_in.twig' %}
 
-{% block title %}Project Design - Use Cases Menu{% endblock %}
-
-{% import "/templates/project_design/macro_ucm.twig" as list %}
-{% import "/templates/project_design/modals_ucm.twig" as modal %}
 {% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/cost_benefits_in/macro_projects.twig" as list %}
+
+
+{% block title %}Project Scoping - Project{% endblock %}
+
 
 {% block content %}
 {{ second_bar.second_bar(username,part,"None") }}
@@ -13,18 +14,12 @@
         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
 </div>
-<div class="row m-3">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUCMModal" role="button">Create a new</button>
-</div>
-<div class="row mt-3 text-center">
-    <h6 id="createUCMHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
-</div>
 
-<form action="?A=project_design&amp;A2=ucm_selected" method="post">
-{% if ucms %}
-{{ list.list_ucms(ucms) }}
+<form action="?A=cost_benefits&amp;A2=proj_selected" method="post">
+{% if projects %}
+{{ list.list_projects(projects) }}
 {% else %}
-<h2 class="text-center m-5">You have no Use Cases Menu !</h2>
+<h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}
 
 <div class="row m-3 text-center text-dark">
@@ -32,7 +27,6 @@
 </div>
 </form>
 
-{{ modal.create_ucm(1) }}
-
-
 {% endblock %}
+
+

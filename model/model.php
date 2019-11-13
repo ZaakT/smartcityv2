@@ -358,6 +358,13 @@ function getUC($list_measID){
     return $list;
 }
 
+function getUCByID($ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM use_case WHERE id = ?');
+    $req->execute(array($ucID));
+    return $req->fetch();
+}
+
 function getListSelUC($ucmID){
     $db = dbConnect();
     $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, measure.name
@@ -520,6 +527,10 @@ function getListWeights($ucmID){
     //var_dump($list);
     return $list;
 }
+
+
+
+
 
 
 
@@ -1004,3 +1015,33 @@ function deleteSelDates($projID){
     $req_revenue = $db->prepare("DELETE FROM revenue_schedule WHERE id_proj=?");
     return $req_implem->execute(array($projID))&&$req_opex->execute(array($projID))&&$req_revenue->execute(array($projID));
 }
+
+
+// ---------------------------------------- DISCOUNT RATE ----------------------------------------
+
+function getListSelDiscountRate($projID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT discount_rate FROM project WHERE id = ?");
+    $req->execute(array($projID));
+    $res = $req->fetch();
+    return floatval($res['discount_rate']);
+}
+
+function insertSelDiscountRate($projID,$val){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE project
+                            SET discount_rate = ?
+                            WHERE id = ?");
+    $ret = $req->execute(array($val,$projID));
+    return $ret;
+}
+
+
+
+
+
+
+
+
+// ---------------------------------------- CAPEX----------------------------------------

@@ -85,7 +85,7 @@ function fullCheckValidity(){
         for(j in list_ucs) {
             var uc = list_ucs[j];
             if(checkValidity(part,uc,list_dates,dates_saved)==false){
-                return true;
+                return false;
             }
         }   
     }
@@ -97,6 +97,24 @@ function initColor(formName){
         var val = $(this).val();
         if(val.length <= 0){
             $(this).css("background","salmon");
+        }
+    });
+}
+
+function initSelDates(formName){
+    $("#"+formName+" input").each(function(){
+        var placeholder = $(this).attr('placeholder');
+        var id = $(this).attr('id');
+        var tab = id.split("_");
+        var part = tab[1];
+        var date = tab[2];
+        var id_uc = tab[3];
+        //console.log(part,date,id_uc);
+        if(placeholder != undefined){
+            //console.log(placeholder);
+            $(this).val(placeholder);
+            dates_saved[part][id_uc][date] = placeholder;
+            checkValidity(part,id_uc,list_dates,dates_saved)
         }
     });
 }
@@ -124,7 +142,9 @@ function copy_dates(part,id_prec,id_next){
         date = list_to_copy[date_label];
         if(date != "" > 0){
             dates_saved[part][id_next][date_label] = date;
-            var formattedDate = $.date(date);
+            var temp = date.split("/");
+            //console.log(temp);
+            var formattedDate = $.date(temp[0]+"/01/"+temp[1]);
             $("#"+part+"_"+date_label+"_"+id_next+" input").val(formattedDate);
             //$("#"+part+"_"+date_label+"_"+id_next).data('update',date);
         }
@@ -133,10 +153,9 @@ function copy_dates(part,id_prec,id_next){
 }
 
 function erase_dates(part,uc){
-    console.log("ddddd");
     for(i in list_dates){
         var date = list_dates[i];
-        console.log(date);
+        //console.log(date);
         $("#"+part+"_"+date+"_"+uc+" input").val(" ");
         dates_saved[part][uc][date] = "";
 
@@ -148,5 +167,6 @@ dates_saved = {};
 list_ucs = searchUCids();
 list_dates = ["startdate","25date","50date","75date","100date","enddate"];
 list_parts = ["implem","opex","revenues"];
-initColor("form_schedule");
 initDatepickers();
+initColor("form_schedule");
+initSelDates("form_schedule");

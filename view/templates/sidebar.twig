@@ -31,16 +31,17 @@
         
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
-        <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>
-        <a class="nav-item nav-link" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb">1 - Use Case</a>
-        <a class="nav-item nav-link" id="capex" href="?A=cost_benefits&amp;A2=capex">2 - Capex</a>
-        <a class="nav-item nav-link" id="implem" href="?A=cost_benefits&amp;A2=implem">3 - Implementation</a>
-        <a class="nav-item nav-link" id="opex" href="?A=cost_benefits&amp;A2=opex">4 - Opex</a>
-        <a class="nav-item nav-link" id="revenues" href="?A=cost_benefits&amp;A2=revenues">5 - Revenues</a>
-        <a class="nav-item nav-link" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing">6 - Cash Releasing Benefits</a>
-        <a class="nav-item nav-link" id="widercash" href="?A=cost_benefits&amp;A2=widercash">7 - Wider Cash Benefits</a>
-        <a class="nav-item nav-link" id="noncash" href="?A=cost_benefits&amp;A2=noncash">8 - Non Cash Benefits</a>
-        <a class="nav-item nav-link" id="risks" href="?A=cost_benefits&amp;A2=risks">9 - Risks</a>
+        <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>        
+        <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb">1 - Project</a>
+        <a class="nav-item nav-link" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}">2 - Use Cases</a>
+        <a class="nav-item nav-link" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}">3 - Capex</a>
+        <a class="nav-item nav-link" id="implem" href="?A=cost_benefits&amp;A2=implem&amp;projID={{ selectID }}">4 - Implementation</a>
+        <a class="nav-item nav-link" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}">5 - Opex</a>
+        <a class="nav-item nav-link" id="revenues" href="?A=cost_benefits&amp;A2=revenues&amp;projID={{ selectID }}">6 - Revenues</a>
+        <a class="nav-item nav-link" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{ selectID }}">7 - Cash Releasing Benefits</a>
+        <a class="nav-item nav-link" id="widercash" href="?A=cost_benefits&amp;A2=widercash&amp;projID={{ selectID }}">8 - Wider Cash Benefits</a>
+        <a class="nav-item nav-link" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}">9 - Non Cash Benefits</a>
+        <a class="nav-item nav-link" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}">10 - Risks</a>
         
         <!-- - Input - / Financing -->
     {% elseif page=="financing" %}

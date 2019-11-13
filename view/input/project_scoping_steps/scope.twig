@@ -2,7 +2,7 @@
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/project_scoping/list_scope.twig" as list %}
+{% import "/templates/project_scoping/macro_scope.twig" as list %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_scoping",projID) }}{% endblock %}
 
@@ -28,7 +28,7 @@
             {{ list.list_meas(measures,list_sel) }}
             
             <div class="row mt-4 mb-0 text-center">
-                <span id="countMeasSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+                <span id="countMeasSelectScope" class="offset-5 col-2 text-white btn btn-info disabled"></span>
             </div>
             <div class="row text-center mt-3">
                 <h6 id="help_meas_scope" class="col text-danger font-weight-bold text-center" hidden>Please select at least one measure !</h6>
@@ -38,7 +38,7 @@
             {{ list.list_ucs(ucs,list_sel) }}
             
             <div class="row mt-4 mb-0 text-center">
-                <span id="countUCSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+                <span id="countUCSelectScope" class="offset-5 col-2 text-white btn btn-info disabled"></span>
             </div>
             <div class="row text-center mt-3">
                 <h6 id="help_uc" class="col text-danger font-weight-bold text-center" hidden>Please select at least one Use Case !</h6>

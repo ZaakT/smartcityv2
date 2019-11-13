@@ -1,0 +1,26 @@
+{% macro list_capex(capex) %}
+
+<div class="row text-center">
+    <div class="col mx-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in capex %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="" id='{{ id }}' name="{{ id }}"></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

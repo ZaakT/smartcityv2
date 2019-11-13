@@ -1,4 +1,4 @@
-{% macro schedule_implem(scope,meas,ucs) %}
+{% macro schedule_implem(scope,meas,ucs,list_sel=[]) %}
 <div class="offset-1 row text-center">
     <h3 class="col m-4">Input Implementation Schedule</h3>
     <div class="col-10 mx-5 mb-5 list-table">
@@ -41,7 +41,7 @@
                         {% for id_uc in list_ucs %}
                             <td colspan=1 scope="col">
                                 <div class="input-append date" id="implem_startdate_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_implem_startdate_{{id_uc}}" name="input_implem_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_implem_startdate_{{id_uc}}" name="input_implem_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['startdate']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -53,7 +53,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="implem_25date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_implem_25date_{{id_uc}}" name="input_implem_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_implem_25date_{{id_uc}}" name="input_implem_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['25date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>                                
                             </td>
                         {% endfor %}
@@ -65,7 +65,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="implem_50date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_implem_50date_{{id_uc}}" name="input_implem_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_implem_50date_{{id_uc}}" name="input_implem_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['50date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>                                
                             </td>
                         {% endfor %}
@@ -77,7 +77,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="implem_75date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_implem_75date_{{id_uc}}" name="input_implem_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_implem_75date_{{id_uc}}" name="input_implem_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['75date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>                                
                             </td>
                         {% endfor %}
@@ -89,7 +89,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="implem_100date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_implem_100date_{{id_uc}}" name="input_implem_100date_{{id_uc}}" class="date_input" size="10px" readonly type="text" onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_implem_100date_{{id_uc}}" name="input_implem_100date_{{id_uc}}" class="date_input" size="10px" readonly type="text" onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['100date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>                                
                             </td>
                         {% endfor %}
@@ -101,7 +101,7 @@
 </div>    
 {% endmacro %}
 
-{% macro schedule_opex(scope,meas,ucs) %}
+{% macro schedule_opex(scope,meas,ucs,list_sel=[]) %}
 <div class="offset-1 row text-center">
     <h3 class="col m-4">Input Opex Schedule</h3>
     <div class="col-10 mx-5 mb-5 list-table">
@@ -144,7 +144,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_startdate_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_startdate_{{id_uc}}" name="input_opex_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_startdate_{{id_uc}}" name="input_opex_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['startdate']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -156,7 +156,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_25date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_25date_{{id_uc}}" name="input_opex_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_25date_{{id_uc}}" name="input_opex_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['25date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -168,7 +168,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_50date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_50date_{{id_uc}}" name="input_opex_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_50date_{{id_uc}}" name="input_opex_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['50date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -180,7 +180,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_75date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_75date_{{id_uc}}" name="input_opex_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_75date_{{id_uc}}" name="input_opex_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['75date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -192,7 +192,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_100date_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_100date_{{id_uc}}" name="input_opex_100date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_100date_{{id_uc}}" name="input_opex_100date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['100date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -204,7 +204,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="opex_enddate_{{id_uc}}" data-date="02/2012" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_opex_enddate_{{id_uc}}" name="input_opex_enddate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_opex_enddate_{{id_uc}}" name="input_opex_enddate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['enddate']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -217,7 +217,7 @@
 {% endmacro %}
 
 
-{% macro schedule_revenues(scope,meas,ucs) %}
+{% macro schedule_revenues(scope,meas,ucs,list_sel=[]) %}
 <div class="offset-1 row text-center">
     <h3 class="col m-4">Input Revenues Ramp-up Schedule</h3>
     <div class="col-10 mx-5 mb-5 list-table">
@@ -260,7 +260,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_startdate_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_startdate_{{id_uc}}" name="input_revenues_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_startdate_{{id_uc}}" name="input_revenues_startdate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['startdate']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -272,7 +272,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_25date_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_25date_{{id_uc}}" name="input_revenues_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_25date_{{id_uc}}" name="input_revenues_25date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['25date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -284,7 +284,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_50date_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_50date_{{id_uc}}" name="input_revenues_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_50date_{{id_uc}}" name="input_revenues_50date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['50date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -296,7 +296,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_75date_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_75date_{{id_uc}}" name="input_revenues_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_75date_{{id_uc}}" name="input_revenues_75date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['75date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -308,7 +308,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_100date_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_100date_{{id_uc}}" name="input_revenues_100date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_100date_{{id_uc}}" name="input_revenues_100date_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['100date']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
@@ -320,7 +320,7 @@
                         {% for id_uc in list_ucs %}
                             <td scope="col">
                                 <div class="input-append date" id="revenues_enddate_{{id_uc}}" data-date-format="mm/yyyy" data-date="02/2012" data-date-viewmode="years" data-date-minviewmode="months">
-                                    <input id="input_revenues_enddate_{{id_uc}}" name="input_revenues_enddate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    <input id="input_revenues_enddate_{{id_uc}}" name="input_revenues_enddate_{{id_uc}}" class="date_input" size="10px" type="text" readonly onchange="colorFilledDates('form_schedule');" placeholder={{list_sel[id_uc]['enddate']}}><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div>
                             </td>
                         {% endfor %}
