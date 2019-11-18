@@ -1,4 +1,4 @@
-{% macro sidebar(page,selectID=0) %}
+{% macro sidebar(page,selectID=0,selectID2=0) %}
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
         <a class="navbar-brand px-5 py-3" href="?A=home"><h3 class="text-center">Urbatis AI</h3></a>
        
@@ -7,7 +7,7 @@
         <h4 class="nav-item text-center">- Input -<br>Project Developement</h4>
         <a class="nav-item nav-link" href="?A=project_design">Project Design</a>
         <a class="nav-item nav-link" href="?A=project_scoping">Project Scoping</a>
-
+    
     {% elseif page=="project_design" %}
         <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
         <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">1 - Use Cases Menu</a>
@@ -29,20 +29,26 @@
         <a class="nav-item nav-link disabled" id="schedule" href="?A=project_scoping&amp;A2=schedule&amp;projID={{ selectID }}">6 - Schedule</a>
         <a class="nav-item nav-link disabled" id="discount_rate" href="?A=project_scoping&amp;A2=discount_rate&amp;projID={{ selectID }}">7 - Discount Rate</a>
         
+
+
+
+
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
         <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>        
         <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb">1 - Project</a>
         <a class="nav-item nav-link" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}">2 - Use Cases</a>
-        <a class="nav-item nav-link" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}">3 - Capex</a>
-        <a class="nav-item nav-link" id="implem" href="?A=cost_benefits&amp;A2=implem&amp;projID={{ selectID }}">4 - Implementation</a>
-        <a class="nav-item nav-link" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}">5 - Opex</a>
-        <a class="nav-item nav-link" id="revenues" href="?A=cost_benefits&amp;A2=revenues&amp;projID={{ selectID }}">6 - Revenues</a>
-        <a class="nav-item nav-link" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{ selectID }}">7 - Cash Releasing Benefits</a>
-        <a class="nav-item nav-link" id="widercash" href="?A=cost_benefits&amp;A2=widercash&amp;projID={{ selectID }}">8 - Wider Cash Benefits</a>
-        <a class="nav-item nav-link" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}">9 - Non Cash Benefits</a>
-        <a class="nav-item nav-link" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}">10 - Risks</a>
+        <a class="nav-item nav-link" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">3 - Capex</a>
+        <a class="nav-item nav-link" id="implem" href="?A=cost_benefits&amp;A2=implem&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">4 - Implementation</a>
+        <a class="nav-item nav-link" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">5 - Opex</a>
+        <a class="nav-item nav-link" id="revenues" href="?A=cost_benefits&amp;A2=revenues&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">6 - Revenues</a>
+        <a class="nav-item nav-link" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">7 - Cash Releasing Benefits</a>
+        <a class="nav-item nav-link" id="widercash" href="?A=cost_benefits&amp;A2=widercash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">8 - Wider Cash Benefits</a>
+        <a class="nav-item nav-link" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">9 - Non Cash Benefits</a>
+        <a class="nav-item nav-link" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">10 - Risks</a>
         
+
+
         <!-- - Input - / Financing -->
     {% elseif page=="financing" %}
         <h4 class="nav-item text-center">- Input -<br>Financing</h4>

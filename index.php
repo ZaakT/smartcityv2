@@ -478,7 +478,17 @@ try{
                             if($_GET['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        capex($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                        if(isset($_GET['A3'])){
+                                            if($_GET['A3']=="capex_selected"){
+                                                capex_selected($twig,$is_connected,$_POST);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=capex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            capex($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                        }
                                     }
                                     else {                                    
                                         header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
@@ -488,11 +498,59 @@ try{
                                 }
                             }
                             else { 
-                                header('Location: ?A=cost_benefits&A2=use_case_cb');
+                                header('Location: ?A=cost_benefits&A2=project');
                             }
                         }
                         else {
                             capex($twig,$is_connected);
+                        }
+                    
+                    } elseif($_GET['A2']=="create_capex"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        create_capex($twig,$is_connected,$_POST);
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    }
+                    elseif($_GET['A2']=="delete_capex"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['id'])){
+                                            if($_GET['id']!=0){
+                                                delete_capex_user($_GET['id']);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=capex&projID='.$projID.'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            header('Location: ?A=cost_benefits&A2=capex&projID='.$projID.'&ucID='.$ucID);
+                                        }
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="implem"){
                         implem($twig,$is_connected);

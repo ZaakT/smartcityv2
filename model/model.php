@@ -1043,7 +1043,191 @@ function insertSelDiscountRate($projID,$val){
 
 
 
-
-
-
 // ---------------------------------------- CAPEX----------------------------------------
+function getCapexUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM capex_item_user
+                            INNER JOIN capex_uc
+                                INNER JOIN capex_item
+                                    WHERE capex_item_user.id_proj = ?
+                                        and capex_item.id = capex_item_user.id
+                                        and capex_uc.id_uc = ?
+                                        and capex_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListCapexAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM capex_item_advice
+                            INNER JOIN capex_uc
+                                INNER JOIN capex_item
+                                    WHERE capex_uc.id_uc = ?
+                                        and capex_item.id = capex_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListCapexUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT capex_item.id,name,description
+                            FROM capex_item_user
+                            INNER JOIN capex_uc
+                                INNER JOIN capex_item
+                                    WHERE capex_uc.id_uc = ?
+                                        and capex_item_user.id_proj = ?
+                                        and capex_item_user.id = capex_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelCapex($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_cost,volume
+                            FROM input_capex
+                            INNER JOIN capex_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = capex_item.id
+                            ORDER BY capex_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = floatval($row['unit_cost']);
+        $volume = intval($row['volume']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        } else {
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertCapexUser($projID,$ucID,$capex_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
+    $db->exec(' CREATE PROCEDURE `add_capex`(
+                            IN capex_name VARCHAR(255),
+                            IN capex_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO capex_item (name,description)
+                                    VALUES (capex_name,capex_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO capex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO capex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_capex(?,?,?,?);');
+    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteCapexUser($idCapex){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM capex_item WHERE id = ?');
+    return $req->execute(array($idCapex));
+}
+
+function insertSelCapex($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_capex
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelCapex($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_capex WHERE id_proj = ? and id_uc = ?");
+    return $req->execute(array($projID,$ucID));
+}
+
+function getCompoByUC($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT component.id,component.name
+                            FROM component
+                            INNER JOIN use_case
+                                WHERE component.id_meas = use_case.id_meas
+                                    and component.id = use_case.id");
+    $req->execute(array($ucID));
+    $res = $req->fetch();
+    if($res){
+        $id_compo = intval($res['id']);
+        $name = $res['name'];
+        return ["id"=>$id_compo,"name"=>$name];
+    } else {
+        return [];
+    }
+}
+
+function getRatioCompo($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_per_comp WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}

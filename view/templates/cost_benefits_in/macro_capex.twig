@@ -1,8 +1,9 @@
 {% macro list_capex(capex) %}
 
+<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Capex Items</h3>
 <div class="row text-center">
-    <div class="col mx-5 list-table">
-        <table class='table table-bordered table-striped table-responsive-lg'>
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col"></th>
@@ -19,6 +20,140 @@
                     <td scope="col">{{ item['description'] }}</td>
                 </tr>         
             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+{% macro list_capex_user(capex_user,projID=0,ucID=0) %}
+{% import "/templates/cost_benefits_in/modal_capex.twig" as modal %}
+
+<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Capex Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in capex_user %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="" id='{{ id }}' name="{{ id }}"></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                    <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCapex_{{ id }}"></span></a></td>
+                    {{ modal.delete_capex(id,item['name'],projID,ucID) }}
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) %}
+<div class="m-5 row text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Ratio per {{compo['name']}}</th>
+                    <th scope="col">Cost per Unit Range (in £)</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_capex,data in selCapex %}
+                {% if id_capex in capex_advice|keys %}
+                <tr id = "tr_{{ id_capex }}" scope="row">
+                    <td scope="col">{{ capex_advice[id_capex]['name'] }}</td>
+                    <td scope="col">{{ capex_advice[id_capex]['unit'] != "" ? capex_advice[id_capex]['unit'] : "-" }}</td>
+                    <td scope="col">{{ ratio[id_capex]['val'] >= 0 ? ratio[id_capex]['val'] : "-"  }}</td>
+                    {% if capex_advice[id_capex]['range_max'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ capex_advice[id_capex]['range_min'] }} - {{ capex_advice[id_capex]['range_max'] }}</td>
+                    {% endif %}
+                </tr>   
+                {% endif %}      
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro list_capex_input(capex_advice,capex_user,selCapex) %}
+<div class="row m-5 text-center">
+    <div class="col mt-5 list-table">
+        <table class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">Capex Components</th>
+                    <th scope="col">Volumes</th>
+                    <th scope="col">Unit Cost</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_capex,data in selCapex %}
+                <tr id = "tr_{{ id_capex }}" scope="row">
+                    {% if id_capex in capex_advice|keys %}
+                    <td scope="col">{{ capex_advice[id_capex]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ capex_user[id_capex]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col"><input type="number" min=0 required></td> 
+                    <td scope="col"><input type="number" min=0 required></td> 
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+{% macro list_capex_total(capex_advice,capex_user,selCapex) %}
+<div class="row m-5 text-center">
+    <div class="col mt-5 list-table">
+        <table class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Capex Components</th>
+                    <th scope="col">Total Capex (in £)</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_capex,data in selCapex %}
+                <tr id = "tr_{{ id_capex }}" scope="row">
+                    {% if id_capex in capex_advice|keys %}
+                    <td scope="col">{{ capex_advice[id_capex]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ capex_user[id_capex]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col">to calculate</td>
+                </tr> 
+            {% endfor %}
+                <tr>
+                    <th class="bg-light text-dark">Total</th>
+                    <td class="font-weight-bold" scope="col">to calculate</td>
+                </tr>
             </tbody>
         </table>
     </div>
