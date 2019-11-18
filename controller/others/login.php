@@ -32,7 +32,6 @@ function connexion($twig,$post){
 }
 
 function isConnected(){
-    session_start();
     if(isset($_SESSION['id']) and isset($_SESSION['username'])){
         setcookie('username',$_SESSION['username']);
     }

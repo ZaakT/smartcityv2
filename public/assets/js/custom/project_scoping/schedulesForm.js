@@ -142,7 +142,8 @@ function copy_dates(part,id_prec,id_next){
         date = list_to_copy[date_label];
         if(date != "" > 0){
             dates_saved[part][id_next][date_label] = date;
-            var temp = date.split("/");
+            //console.log($.date(date));
+            var temp = $.date(date).split("/");
             //console.log(temp);
             var formattedDate = $.date(temp[0]+"/01/"+temp[1]);
             $("#"+part+"_"+date_label+"_"+id_next+" input").val(formattedDate);

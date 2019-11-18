@@ -7,7 +7,7 @@ function dbConnect()
     $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         return $db;
     } catch(Exception $e){ 
-        throw new Exception("access to the database impossible !");
+        throw new Exception("Access to the database impossible !");
     }
 }
 
@@ -468,7 +468,8 @@ function getListInputedRates($ucmID){
             $list[$idUC]=[$idCrit=>intval($rate)];
         }
     }
-    $list = array_reverse($list,true);
+    //var_dump($orderUC,$orderCrit);
+    //$list = array_reverse($list,true);
     //var_dump($list);
     return $list;
 
@@ -479,7 +480,8 @@ function insertRates($ucmID,$list_per_uc){
     $ret = false;
     $req = $db->prepare('INSERT INTO uc_vs_crit_input (id_ucm,id_uc,id_crit,rate) VALUES (?,?,?,?)');
     foreach ($list_per_uc as $idUC => $list_per_crit) {
-        foreach($list_per_crit as $idCrit => $rate){
+        //var_dump($list_per_crit);
+        foreach ($list_per_crit as $idCrit => $rate) {
             $ret = $req->execute(array($ucmID,$idUC,$idCrit,$rate));
         }
     }

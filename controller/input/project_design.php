@@ -314,6 +314,10 @@ function rating($twig,$is_connected,$ucmID=0){
             $list_selCrit = getListSelCrit($ucmID);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             $guidCrit = getGuidCrit($list_selUC,$list_selCrit);
+            $orderUC = [];
+            foreach ($list_selUC as $uc) {
+                array_push($orderUC,intval($uc[0]));
+            }
             $listInputedRates = getListInputedRates($ucmID);
             //var_dump($guidCrit);
             echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_ucs'=>$list_selUC,'sel_meas'=>$list_selMeas,'repart_ucs'=>$repart_ucs,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'guidCrit'=>$guidCrit,'rates'=>$listInputedRates));
@@ -346,6 +350,13 @@ function rates_inputed($post){
     if($post){
         if(isset($_SESSION['ucmID'])){
             $ucmID = $_SESSION['ucmID'];
+            $list_selUC = getListSelUC($ucmID);
+            $orderUC = [];
+            foreach ($list_selUC as $uc) {
+                array_push($orderUC,intval($uc[0]));
+            }
+            $list_selCrit = getListSelCrit($ucmID);
+            //var_dump($list_selCrit);
             $listInputedRates = getListInputedRates($ucmID);
             //var_dump(empty($listSelUC));
             $list_rates = [];
@@ -370,7 +381,6 @@ function rates_inputed($post){
                 deleteRates($ucmID);
                 insertRates($ucmID,$list_rates);
             }
-            //var_dump($list_rates);
             update_ModifDate_ucm($ucmID);
             header('Location: ?A=project_design&A2=scoring&ucmID='.$ucmID);
         } else {
@@ -396,11 +406,18 @@ function scoring($twig,$is_connected,$ucmID=0){
             //var_dump($orderUC);
             $list_selCritCat = getListSelCritCat($ucmID);
             $list_selCrit = getListSelCrit($ucmID);
+            $orderCrit = [];
+            foreach ($list_selCrit as $crit) {
+                array_push($orderCrit,intval($crit[0]));
+            }
+            //var_dump($orderCrit);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             $rates = getListInputedRates($ucmID);
-            $ranks = calcRanks($rates,$orderUC);
+            $ranks = calcRanks($rates,$orderUC,$orderCrit);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
-            //var_dump($ranks);
+            /* var_dump($rates);
+            var_dump($list_selCrit);
+            var_dump($ranks); */
             if($ranks && $scores){
                 echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
                 prereq_ProjectDesign();
@@ -416,7 +433,7 @@ function scoring($twig,$is_connected,$ucmID=0){
     }
 }
 
-function calcRanks($rates,$orderUC){
+function calcRanks($rates,$orderUC,$orderCrit){
     //var_dump($rates);
     $rates_by_crit = [];
     foreach ($rates as $idUC => $dicCritRates) {
@@ -463,7 +480,10 @@ function calcRanks($rates,$orderUC){
         });
         $ret[$idCrit] = $dicUCsRates;
     }
-    $ret = array_reverse($ret,true);
+    //$ret = array_reverse($ret,true);
+    uksort($ret, function($key1, $key2) use ($orderCrit) {
+        return (array_search($key1, $orderCrit) > array_search($key2, $orderCrit));
+    });
     //var_dump($ret);
     return $ret;
 }
@@ -522,6 +542,10 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             $repart_crit = calcRepartCrit($list_critCat,$list_crit);
             $list_selCritCat = getListSelCritCat($ucmID);
             $list_selCrit = getListSelCrit($ucmID);
+            $orderCrit = [];
+            foreach ($list_selCrit as $crit) {
+                array_push($orderCrit,intval($crit[0]));
+            }
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             if(!empty($post)){
                 update_ModifDate_ucm($ucmID);
@@ -546,7 +570,7 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             }
 
             $rates = getListInputedRates($ucmID);
-            $ranks = calcRanks($rates,$orderUC);
+            $ranks = calcRanks($rates,$orderUC,$orderCrit);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
 
             $globalScores = calcGlobalScores($scores,$weights_table,$list_selUC);
@@ -611,6 +635,10 @@ function prereq_ProjectDesign(){
         foreach ($list_selUC as $uc) {
             array_push($orderUC,intval($uc[0]));
         }
+        $orderCrit = [];
+        foreach ($list_selCrit as $crit) {
+            array_push($orderCrit,intval($crit[0]));
+        }
         $rates = getListInputedRates($ucmID);
         if(!empty($list_selMeas) && !empty($list_selCrit) && !empty($list_selCritCat) && !empty($list_selDLT)){
             echo "<script>prereq_ProjectDesign2(true);</script>";
@@ -619,7 +647,7 @@ function prereq_ProjectDesign(){
                 if(!empty($rates)){
                     echo "<script>prereq_ProjectDesign4(true);</script>";
                     try{
-                        $ranks = calcRanks($rates,$orderUC);
+                        $ranks = calcRanks($rates,$orderUC,$orderCrit);
                         $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
                         if(!empty($scores)){
                             echo "<script>prereq_ProjectDesign5(true);</script>";

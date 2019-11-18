@@ -1,4 +1,5 @@
 <?php
+session_start();
 /*
 This file acts as a router, that is to say that it will be in charge of the redirection to the "good" controller.
 We use the variable $ _GET to retrieve information (like A, A2, ucmID, projectID, ...).
