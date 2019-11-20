@@ -23,7 +23,7 @@ function submitForm(formName){
     $("#"+formName).submit();
 }
 
-function countSelectedCapex(oForm) {
+function countSelectedImplem(oForm) {
     var i, n = 0;
     var oElement;
     for (i = 0; i < oForm.elements.length; i++) {
@@ -36,35 +36,35 @@ function countSelectedCapex(oForm) {
             }
         }
     }
-    $("#countCapexSelect").text(n+" selected");
+    $("#countImplemSelect").text(n+" selected");
     //console.log(n);
     if (n >= 1) {
-        $("#help_capex").attr('hidden', 'hidden');
+        $("#help_implem").attr('hidden', 'hidden');
         return true;
     }
     else {
-        $("#help_capex").removeAttr('hidden');
+        $("#help_implem").removeAttr('hidden');
         return false;
     }
 }
 
-function checkCapexPeriod(){
-    var val = $("#capex_period_input").val();
+function checkImplemPeriod(){
+    var val = $("#implem_period_input").val();
     val = val=="" ? 0 : parseInt(val);
     if(val <= 0){
-        $("#capex_period_input").css("background","salmon");
-        $("#capex_period_input").val("");
+        $("#implem_period_input").css("background","salmon");
+        $("#implem_period_input").val("");
         return false;
     } else {
-        $("#capex_period_input").val(val);
-        $("#capex_period_input").css("background","palegreen");
+        $("#implem_period_input").val(val);
+        $("#implem_period_input").css("background","palegreen");
         return true;
     }
 }
 
-function checkCapexInput(){
+function checkImplemInput(){
     var ret = true;
-    $("#capex_input input").each(function(){
+    $("#implem_input input").each(function(){
         var val = $(this).val();
         if($(this).classes().includes("volume")){
             val = val ? parseInt(val) : -1 ;
@@ -93,11 +93,11 @@ function checkCapexInput(){
             }
         }
     });
-    calcTotCapex();
+    calcTotImplem();
     return ret;
 }
 
-function calcTotCapex(){
+function calcTotImplem(){
     var sum = 0;
     $("#tot_table td").each(function(){
         var id = $(this).attr('id');
@@ -117,11 +117,11 @@ function calcTotCapex(){
 }
 
 try{
-    countSelectedCapex(form_capex);
+    countSelectedImplem(form_implem);
 } catch {
     //do nothing
 } finally {
-    checkCapexInput();
-    checkCapexPeriod();
-    calcTotCapex();
+    checkImplemInput();
+    checkImplemPeriod();
+    calcTotImplem();
 }

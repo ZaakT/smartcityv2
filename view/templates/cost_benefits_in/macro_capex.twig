@@ -1,4 +1,4 @@
-{% macro list_capex(capex) %}
+{% macro list_capex(capex,selCapex=[]) %}
 
 <h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Capex Items</h3>
 <div class="row text-center">
@@ -15,7 +15,7 @@
             <tbody>
             {% for id,item in capex %}
                 <tr id = "tr_{{ id }}" scope="row">
-                    <td class="check-col align-middle"><input type="checkbox" onclick="" id='{{ id }}' name="{{ id }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedCapex(form_capex);" id='{{ id }}' name="{{ id }}" {{id in selCapex|keys ? "checked" : ""}}></td>
                     <td scope="col">{{ item['name'] }}</td>
                     <td scope="col">{{ item['description'] }}</td>
                 </tr>         
@@ -28,7 +28,7 @@
 
 
 
-{% macro list_capex_user(capex_user,projID=0,ucID=0) %}
+{% macro list_capex_user(capex_user,projID=0,ucID=0,selCapex=[]) %}
 {% import "/templates/cost_benefits_in/modal_capex.twig" as modal %}
 
 <h3 class="text-center mt-5 mb-3 text-uppercase">Custom Capex Items</h3>
@@ -47,7 +47,7 @@
             <tbody>
             {% for id,item in capex_user %}
                 <tr id = "tr_{{ id }}" scope="row">
-                    <td class="check-col align-middle"><input type="checkbox" onclick="" id='{{ id }}' name="{{ id }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedCapex(form_capex);" id='{{ id }}' name="{{ id }}" {{id in selCapex|keys ? "checked" : ""}}></td>
                     <td scope="col">{{ item['name'] }}</td>
                     <td scope="col">{{ item['description'] }}</td>
                     <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCapex_{{ id }}"></span></a></td>
@@ -60,6 +60,26 @@
 </div>
 {% endmacro %}
 
+{% macro compo_guid(uc_name,compo,nb_compo=0,nb_uc=0) %}
+<div class="m-5 row text-center">
+    <div class="offset-2 col-8 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Nb total of {{compo['name']}}</th>
+                    <th scope="col">Nb total of {{uc_name}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="col">{{nb_compo}}</td>
+                    <td scope="col">{{nb_uc}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
 
 {% macro list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) %}
 <div class="m-5 row text-center">
@@ -99,12 +119,12 @@
 {% macro list_capex_input(capex_advice,capex_user,selCapex) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
-        <table class='table table-lg table-bordered table-responsive-lg'>
+        <table id="capex_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Capex Components</th>
                     <th scope="col">Volumes</th>
-                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Unit Cost (in £)</th>
                 </tr>
                 
             </thead>
@@ -116,8 +136,8 @@
                     {% else %}
                     <td scope="col">{{ capex_user[id_capex]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input type="number" min=0 required></td> 
-                    <td scope="col"><input type="number" min=0 required></td> 
+                    <td scope="col"><input id="vol_{{id_capex}}" name="vol_{{id_capex}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['volume']}}"></td> 
+                    <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost" type="number" min=0 step=0.001 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['unit_cost']}}"></td> 
                 </tr> 
             {% endfor %}
             </tbody>
@@ -131,7 +151,7 @@
 {% macro list_capex_total(capex_advice,capex_user,selCapex) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
-        <table class='table table-lg table-bordered table-responsive-lg'>
+        <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Capex Components</th>
@@ -147,12 +167,12 @@
                     {% else %}
                     <td scope="col">{{ capex_user[id_capex]['name'] }}</td>
                     {% endif %}
-                    <td scope="col">to calculate</td>
+                    <td scope="col" id="tot_{{id_capex}}">-</td>
                 </tr> 
             {% endfor %}
                 <tr>
                     <th class="bg-light text-dark">Total</th>
-                    <td class="font-weight-bold" scope="col">to calculate</td>
+                    <td class="font-weight-bold" scope="col" id="tot">-</td>
                 </tr>
             </tbody>
         </table>

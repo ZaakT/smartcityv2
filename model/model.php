@@ -640,11 +640,15 @@ function insertSelScope($projID,$list){
     $req2 = $db->prepare("INSERT INTO proj_sel_usecase
                             (id_proj,id_uc)
                             VALUES (?,?)");
+    $req3 = $db->prepare('INSERT INTO capex_amortization
+                            (id_proj,id_uc)
+                            VALUES (?,?)');
     foreach ($list as $id_meas => $listUC) {
         if(!empty($listUC)){
             $ret = $req1->execute(array($projID,$id_meas));
             foreach ($listUC as $key => $id_uc) {
                 $ret = $req2->execute(array($projID,$id_uc));
+                $ret = $req3->execute(array($projID,$id_uc));
             }
         }
     }
@@ -652,13 +656,18 @@ function insertSelScope($projID,$list){
 }
 
 function deleteSelScope($projID){
+    $ret = false;
     $db = dbConnect();
     $req = $db->prepare("DELETE proj_sel_measure.*,proj_sel_usecase.*
                             FROM proj_sel_measure
                             INNER JOIN proj_sel_usecase
                                 WHERE (proj_sel_measure.id_proj = proj_sel_usecase.id_proj)
                                     AND (proj_sel_measure.id_proj=?)");
-    return $req->execute(array($projID));
+                                    
+    $req2 = $db->prepare("DELETE FROM capex_amortization WHERE id_proj = ?");
+    $ret = $req->execute(array($projID));
+    $ret = $req2->execute(array($projID));
+    return $ret;
     
 }
 
@@ -1044,6 +1053,7 @@ function insertSelDiscountRate($projID,$val){
 
 
 // ---------------------------------------- CAPEX----------------------------------------
+
 function getCapexUserItem($projID,$ucID,$name){
     $db = dbConnect();
     $req = $db->prepare("SELECT *
@@ -1066,6 +1076,7 @@ function getListCapexAdvice($ucID){
                             INNER JOIN capex_uc
                                 INNER JOIN capex_item
                                     WHERE capex_uc.id_uc = ?
+                                        and capex_item.id = capex_uc.id_item
                                         and capex_item.id = capex_item_advice.id
                             ORDER BY name
                             ");
@@ -1097,6 +1108,7 @@ function getListCapexUser($projID,$ucID){
                             INNER JOIN capex_uc
                                 INNER JOIN capex_item
                                     WHERE capex_uc.id_uc = ?
+                                        and capex_item.id = capex_uc.id_item
                                         and capex_item_user.id_proj = ?
                                         and capex_item_user.id = capex_item.id
                             ORDER BY name
@@ -1188,10 +1200,14 @@ function insertSelCapex($projID,$ucID,$list){
     return $ret;
 }
 
-function deleteSelCapex($projID,$ucID){
+function deleteSelCapex($projID,$ucID,$list){
+    $ret = false;
     $db = dbConnect();
-    $req = $db->prepare("DELETE FROM input_capex WHERE id_proj = ? and id_uc = ?");
-    return $req->execute(array($projID,$ucID));
+    $req = $db->prepare("DELETE FROM input_capex WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
 }
 
 function getCompoByUC($ucID){
@@ -1212,7 +1228,7 @@ function getCompoByUC($ucID){
     }
 }
 
-function getRatioCompo($list_item,$compoID){
+function getRatioCompoCapex($list_item,$compoID){
     $db = dbConnect();
     $req = $db->prepare("SELECT val FROM ratio_per_comp WHERE id_compo = ? and id_item = ?");
     
@@ -1229,5 +1245,247 @@ function getRatioCompo($list_item,$compoID){
     }
     //var_dump($list);
     return $list;
+}
+
+function getPeriodInputed($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val
+                            FROM capex_amortization
+                            WHERE id_proj = ? and id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    return $req->fetch()['val'];
+}
+
+function insertCapexInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_capex
+                            SET volume = ?,
+                                unit_cost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function insertPeriodInputed($projID,$ucID,$period){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare('UPDATE capex_amortization
+                            SET val = ?
+                            WHERE id_proj = ? and id_uc = ?');
+    $ret = $req->execute(array($period,$projID,$ucID));
+    return $ret;
+}
+
+function getNbTotalCompo($compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT SUM(number) FROM comp_per_zone WHERE id_compo = ?");
+    $req->execute(array($compoID));
+    $res = intval($req->fetch()[0]);
+    return number_format($res, 0, ',', ' ');
+}
+
+function getNbTotalUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT SUM(nb_compo DIV nb_per_uc)
+                            FROM volumes_input
+                            WHERE id_proj = ?
+                                and id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    $res = intval($req->fetch()[0]);
+    return number_format($res, 0, ',', ' ');
+}
+
+// ---------------------------------------- IMPLEM----------------------------------------
+
+function getImplemUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM implem_item_user
+                            INNER JOIN implem_uc
+                                INNER JOIN implem_item
+                                    WHERE implem_item_user.id_proj = ?
+                                        and implem_item.id = implem_item_user.id
+                                        and implem_uc.id_uc = ?
+                                        and implem_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListImplemAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM implem_item_advice
+                            INNER JOIN implem_uc
+                                INNER JOIN implem_item
+                                    WHERE implem_uc.id_uc = ?
+                                        and implem_item.id = implem_uc.id_item
+                                        and implem_item.id = implem_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListImplemUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT implem_item.id,name,description
+                            FROM implem_item_user
+                            INNER JOIN implem_uc
+                                INNER JOIN implem_item
+                                    WHERE implem_uc.id_uc = ?
+                                        and implem_item.id = implem_uc.id_item
+                                        and implem_item_user.id_proj = ?
+                                        and implem_item_user.id = implem_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
 
 }
+
+function getListSelImplem($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_cost,volume
+                            FROM input_implem
+                            INNER JOIN implem_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = implem_item.id
+                            ORDER BY implem_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = floatval($row['unit_cost']);
+        $volume = intval($row['volume']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        } else {
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertImplemUser($projID,$ucID,$implem_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_implem`;');
+    $db->exec(' CREATE PROCEDURE `add_implem`(
+                            IN implem_name VARCHAR(255),
+                            IN implem_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO implem_item (name,description)
+                                    VALUES (implem_name,implem_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO implem_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO implem_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_implem(?,?,?,?);');
+    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteImplemUser($idImplem){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM implem_item WHERE id = ?');
+    return $req->execute(array($idImplem));
+}
+
+function insertSelImplem($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_implem
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelImplem($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_implem WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function getRatioCompoImplem($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_per_comp_1 WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertImplemInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_implem
+                            SET volume = ?,
+                                unit_cost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+

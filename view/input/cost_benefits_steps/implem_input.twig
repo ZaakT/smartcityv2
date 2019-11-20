@@ -5,7 +5,7 @@
 {% import "/templates/cost_benefits_in/macro_implem.twig" as list %}
 {% import "/templates/cost_benefits_in/modal_implem.twig" as modal %}
 
-{% block title %}Project Scoping - Implementation{% endblock %}
+{% block title %}Project Scoping - Implementation INPUT{% endblock %}
 
 {% block sidebar %}{{ sidebar.sidebar("cost_benefits",projID,ucID) }}{% endblock %}
 
@@ -19,38 +19,29 @@
     </div>
 </div>
 
-{% if implem_advice %}
-<form id="form_implem" name="form_implem" action="?A=cost_benefits&amp;A2=implem&amp;A3=implem_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="">
-    
-{{ list.list_implem(implem_advice,selImplem) }}
+{% if selImplem %}
+<form id="form_implem_input" name="form_implem_input" action="?A=cost_benefits&amp;A2=implem_inputed" method="post" onsubmit="return checkImplemPeriod() && checkImplemInput();">
+{% set test = false %}
+{% for id_implem,data in selImplem if test == false %}
+    {% if id_implem in implem_advice|keys %}
+        {% set test = true %}
+    {% endif %}
+{% endfor %}
 
-{% if implem_user %}
-    {{ list.list_implem_user(implem_user,projID,ucID,selImplem) }}
+{% if test %}
+{{ list.list_implem_guid(implem_advice,implem_user,selImplem,compo,ratio) }}
 {% endif %}
+{{ list.list_implem_input(implem_advice,implem_user,selImplem) }}
+{{ list.list_implem_total(implem_advice,implem_user,selImplem) }}
 
-</form>
-
-<div class="row my-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewImplemModal" role="button">Create a custom item</button>
-</div>
-<div class="row mt-3 text-center">
-    <h6 id="createImplemHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
-</div>
-<div class="row mt-4 mb-0 text-center">
-    <span id="countImplemSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
-</div>
-<div class="row text-center mt-3">
-    <h6 id="help_implem" class="col text-danger font-weight-bold text-center" hidden>Please select at least one item !</h6>
-</div>
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_implem');"></button>
 </div>
+
+</form>
 {% else %}
-<h2 class="text-center">There is no implementation, please contact an administrator</h2>
+<h2 class="text-center">There is no implementation item, please contact an administrator</h2>
 {% endif %}
-
-
-{{ modal.create_implem(projID,ucID) }}
 
 {% endblock %}
 
