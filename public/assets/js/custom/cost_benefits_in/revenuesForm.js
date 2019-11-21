@@ -23,7 +23,7 @@ function submitForm(formName){
     $("#"+formName).submit();
 }
 
-function countSelectedImplem(oForm) {
+function countSelectedRevenues(oForm) {
     var i, n = 0;
     var oElement;
     for (i = 0; i < oForm.elements.length; i++) {
@@ -36,23 +36,24 @@ function countSelectedImplem(oForm) {
             }
         }
     }
-    $("#countImplemSelect").text(n+" selected");
+    $("#countRevenuesSelect").text(n+" selected");
     //console.log(n);
     if (n >= 1) {
-        $("#help_implem").attr('hidden', 'hidden');
+        $("#help_revenues").attr('hidden', 'hidden');
         return true;
     }
     else {
-        $("#help_implem").removeAttr('hidden');
+        $("#help_revenues").removeAttr('hidden');
         return false;
     }
 }
 
-function checkImplemInput(){
+function checkRevenuesInput(){
     var ret = true;
-    $("#implem_input input").each(function(){
+    $("#revenues_input input").each(function(){
         var val = $(this).val();
-        if($(this).classes().includes("volume")){
+        var tab = $(this).classes()
+        if(tab.includes("volume")){
             val = val ? parseInt(val) : -1 ;
             //console.log(val);
             if(val < 0){
@@ -63,7 +64,7 @@ function checkImplemInput(){
                 $(this).val(val);
                 $(this).css("background","palegreen");
             }
-        } else if ($(this).classes().includes("unit_cost")){
+        } else if (tab.includes("unit_rev") || tab.includes("anVarVol") || tab.includes("anVarRev")){
             val = val ? parseFloat(val) : -1 ;
             var temp = String(val).split(".");
             if(val < 0.){
@@ -79,34 +80,52 @@ function checkImplemInput(){
             }
         }
     });
-    calcTotImplem();
+    calcTotRevenues();
     return ret;
 }
 
-function calcTotImplem(){
+function calcTotRevenues(){
     var sum = 0;
     $("#tot_table td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
-            if (temp.length==2){
-                var val1 = parseInt($("#vol_"+temp[1]).val());
-                var val2 = parseFloat($("#cost_"+temp[1]).val());
-                var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString({maximumFractionDigits:3}));
-                sum += tot;
-            } else if (temp.length==1) {
-                $(this).text(sum.toLocaleString({maximumFractionDigits:3}));
+            if (temp.length==3){
+                if(temp[1]=="rev"){
+                    var val1 = parseInt($("#vol_"+temp[2]).val());
+                    var val2 = parseFloat($("#rev_"+temp[2]).val());
+                    var tot = val1 && val2 ? 12*val1*val2 : 0;
+                    $(this).text(tot.toLocaleString(undefined,{maximumFractionDigits:3}));
+                    sum += tot;
+                } else if(temp[1]=="varvol"){
+                    var val = parseFloat($("#anVarVol_"+temp[2]).val());
+                    var tot = val ? val/12/100 : 0;
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                } else if(temp[1]=="varrev"){
+                    var val = parseFloat($("#anVarRev_"+temp[2]).val());
+                    var tot = val ? val/12/100 : 0;
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                } else if(temp[1]=="combvar"){
+                    var varvol = parseFloat($("#anVarVol_"+temp[2]).val());
+                    varvol = varvol ? varvol/12/100 : 0;
+                    var varrev = parseFloat($("#anVarRev_"+temp[2]).val());
+                    varrev = varrev ? varrev/12/100 : 0;
+
+                    var tot = varvol && varrev ? varvol+varrev : 0;
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                }
+            } else if (temp.length==2) {
+                $(this).text(sum.toLocaleString(undefined,{maximumFractionDigits:3}));
             }
         }
     });
 }
 
 try{
-    countSelectedImplem(form_implem);
+    countSelectedRevenues(form_revenues);
 } catch {
     //do nothing
 } finally {
-    checkImplemInput();
-    calcTotImplem();
+    checkRevenuesInput();
+    calcTotRevenues();
 }

@@ -1230,7 +1230,7 @@ function getCompoByUC($ucID){
 
 function getRatioCompoCapex($list_item,$compoID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT val FROM ratio_per_comp WHERE id_compo = ? and id_item = ?");
+    $req = $db->prepare("SELECT val FROM ratio_comp_capex WHERE id_compo = ? and id_item = ?");
     
     $list = [];
     foreach ($list_item as $id_item) {
@@ -1458,7 +1458,7 @@ function deleteSelImplem($projID,$ucID,$list){
 
 function getRatioCompoImplem($list_item,$compoID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT val FROM ratio_per_comp_1 WHERE id_compo = ? and id_item = ?");
+    $req = $db->prepare("SELECT val FROM ratio_comp_implem WHERE id_compo = ? and id_item = ?");
     
     $list = [];
     foreach ($list_item as $id_item) {
@@ -1488,4 +1488,600 @@ function insertImplemInputed($projID,$ucID,$list){
     return $ret;
 }
 
+
+
+// ---------------------------------------- OPEX----------------------------------------
+
+function getOpexUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM opex_item_user
+                            INNER JOIN opex_uc
+                                INNER JOIN opex_item
+                                    WHERE opex_item_user.id_proj = ?
+                                        and opex_item.id = opex_item_user.id
+                                        and opex_uc.id_uc = ?
+                                        and opex_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListOpexAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM opex_item_advice
+                            INNER JOIN opex_uc
+                                INNER JOIN opex_item
+                                    WHERE opex_uc.id_uc = ?
+                                        and opex_item.id = opex_uc.id_item
+                                        and opex_item.id = opex_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListOpexUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT opex_item.id,name,description
+                            FROM opex_item_user
+                            INNER JOIN opex_uc
+                                INNER JOIN opex_item
+                                    WHERE opex_uc.id_uc = ?
+                                        and opex_item.id = opex_uc.id_item
+                                        and opex_item_user.id_proj = ?
+                                        and opex_item_user.id = opex_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelOpex($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost
+                            FROM input_opex
+                            INNER JOIN opex_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = opex_item.id
+                            ORDER BY opex_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = floatval($row['unit_cost']);
+        $volume = intval($row['volume']);
+        $anVarVol = floatval($row['annual_variation_volume']);
+        $anVarCost = floatval($row['annual_variation_unitcost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+        } else {
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertOpexUser($projID,$ucID,$opex_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_opex`;');
+    $db->exec(' CREATE PROCEDURE `add_opex`(
+                            IN opex_name VARCHAR(255),
+                            IN opex_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO opex_item (name,description)
+                                    VALUES (opex_name,opex_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO opex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO opex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_opex(?,?,?,?);');
+    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteOpexUser($idOpex){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM opex_item WHERE id = ?');
+    return $req->execute(array($idOpex));
+}
+
+function insertSelOpex($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_opex
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelOpex($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_opex WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function getRatioCompoOpex($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_comp_opex WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertOpexInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_opex
+                            SET volume = ?,
+                                unit_cost = ?,
+                                annual_variation_volume = ?,
+                                annual_variation_unitcost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+
+// ---------------------------------------- REVENUES----------------------------------------
+
+function getRevenuesUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM revenues_item_user
+                            INNER JOIN revenues_uc
+                                INNER JOIN revenues_item
+                                    WHERE revenues_item_user.id_proj = ?
+                                        and revenues_item.id = revenues_item_user.id
+                                        and revenues_uc.id_uc = ?
+                                        and revenues_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListRevenuesAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM revenues_item_advice
+                            INNER JOIN revenues_uc
+                                INNER JOIN revenues_item
+                                    WHERE revenues_uc.id_uc = ?
+                                        and revenues_item.id = revenues_uc.id_item
+                                        and revenues_item.id = revenues_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListRevenuesUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT revenues_item.id,name,description
+                            FROM revenues_item_user
+                            INNER JOIN revenues_uc
+                                INNER JOIN revenues_item
+                                    WHERE revenues_uc.id_uc = ?
+                                        and revenues_item.id = revenues_uc.id_item
+                                        and revenues_item_user.id_proj = ?
+                                        and revenues_item_user.id = revenues_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelRevenues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost
+                            FROM input_revenues
+                            INNER JOIN revenues_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = revenues_item.id
+                            ORDER BY revenues_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_rev = floatval($row['revenues_per_unit']);
+        $volume = intval($row['volume']);
+        $anVarVol = floatval($row['annual_variation_volume']);
+        $anVarRev = floatval($row['annual_variation_unitcost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev];
+        } else {
+            $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertRevenuesUser($projID,$ucID,$revenues_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_revenues`;');
+    $db->exec(' CREATE PROCEDURE `add_revenues`(
+                            IN revenues_name VARCHAR(255),
+                            IN revenues_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO revenues_item (name,description)
+                                    VALUES (revenues_name,revenues_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO revenues_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO revenues_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_revenues(?,?,?,?);');
+    $ret = $req->execute(array($revenues_data['name'],$revenues_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteRevenuesUser($idRevenues){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM revenues_item WHERE id = ?');
+    return $req->execute(array($idRevenues));
+}
+
+function insertSelRevenues($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_revenues
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelRevenues($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_revenues WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function getRatioCompoRevenues($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_comp_revenues WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertRevenuesInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_revenues
+                            SET volume = ?,
+                                revenues_per_unit = ?,
+                                annual_variation_volume = ?,
+                                annual_variation_unitcost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['volume'],$data['unit_rev'],$data['anVarVol'],$data['anVarRev'],$projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+
+
+// ---------------------------------------- CASHRELEASING----------------------------------------
+
+function getCashReleasingUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM cashreleasing_item_user
+                            INNER JOIN cashreleasing_uc
+                                INNER JOIN cashreleasing_item
+                                    WHERE cashreleasing_item_user.id_proj = ?
+                                        and cashreleasing_item.id = cashreleasing_item_user.id
+                                        and cashreleasing_uc.id_uc = ?
+                                        and cashreleasing_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListCashReleasingAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM cashreleasing_item_advice
+                            INNER JOIN cashreleasing_uc
+                                INNER JOIN cashreleasing_item
+                                    WHERE cashreleasing_uc.id_uc = ?
+                                        and cashreleasing_item.id = cashreleasing_uc.id_item
+                                        and cashreleasing_item.id = cashreleasing_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $range_min_red_cost = floatval($row['range_min_red_cost']);
+        $range_max_red_cost = floatval($row['range_max_red_cost']);
+        $unit_cost = floatval($row['unit_cost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListCashReleasingUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT cashreleasing_item.id,name,description
+                            FROM cashreleasing_item_user
+                            INNER JOIN cashreleasing_uc
+                                INNER JOIN cashreleasing_item
+                                    WHERE cashreleasing_uc.id_uc = ?
+                                        and cashreleasing_item.id = cashreleasing_uc.id_item
+                                        and cashreleasing_item_user.id_proj = ?
+                                        and cashreleasing_item_user.id = cashreleasing_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelCashReleasing($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
+                            FROM input_cashreleasing
+                            INNER JOIN cashreleasing_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = cashreleasing_item.id
+                            ORDER BY cashreleasing_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = floatval($row['unit_cost']);
+        $unit_indic = $row['unit_indicator'];
+        $volume = intval($row['volume']);
+        $vol_red = floatval($row['volume_reduc']);
+        $unit_cost_red = floatval($row['unit_cost_reduc']);
+        $anVarVol = floatval($row['annual_var_volume']);
+        $anVarCost = floatval($row['annual_var_unit_cost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+        } else {
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertCashReleasingUser($projID,$ucID,$cashreleasing_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_cashreleasing`;');
+    $db->exec(' CREATE PROCEDURE `add_cashreleasing`(
+                            IN cashreleasing_name VARCHAR(255),
+                            IN cashreleasing_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO cashreleasing_item (name,description)
+                                    VALUES (cashreleasing_name,cashreleasing_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO cashreleasing_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO cashreleasing_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_cashreleasing(?,?,?,?);');
+    $ret = $req->execute(array($cashreleasing_data['name'],$cashreleasing_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteCashReleasingUser($idCashReleasing){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM cashreleasing_item WHERE id = ?');
+    return $req->execute(array($idCashReleasing));
+}
+
+function insertSelCashReleasing($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_cashreleasing
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelCashReleasing($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_cashreleasing WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function getRatioCompoCashReleasing($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_comp_cashreleasing WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertCashReleasingInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_cashreleasing
+                            SET unit_indicator = ?,
+                            volume = ?,
+                            unit_cost = ?,
+                            volume_reduc = ?,
+                            unit_cost_reduc = ?,
+                            annual_var_volume = ?,
+                            annual_var_unit_cost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['vol_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+
+    }
+    return $ret;
+}
 

@@ -3,6 +3,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/cost_benefits_in/macro_implem.twig" as list %}
+{% import "/templates/cost_benefits_in/macro_compo_guid.twig" as guid %}
 {% import "/templates/cost_benefits_in/modal_implem.twig" as modal %}
 
 {% block title %}Project Scoping - Implementation INPUT{% endblock %}
@@ -20,13 +21,15 @@
 </div>
 
 {% if selImplem %}
-<form id="form_implem_input" name="form_implem_input" action="?A=cost_benefits&amp;A2=implem_inputed" method="post" onsubmit="return checkImplemPeriod() && checkImplemInput();">
+<form id="form_implem_input" name="form_implem_input" action="?A=cost_benefits&amp;A2=implem_inputed" method="post" onsubmit="checkImplemInput();">
 {% set test = false %}
 {% for id_implem,data in selImplem if test == false %}
     {% if id_implem in implem_advice|keys %}
         {% set test = true %}
     {% endif %}
 {% endfor %}
+
+{{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
 {% if test %}
 {{ list.list_implem_guid(implem_advice,implem_user,selImplem,compo,ratio) }}

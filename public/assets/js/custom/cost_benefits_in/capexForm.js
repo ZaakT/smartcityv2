@@ -69,7 +69,7 @@ function checkCapexInput(){
         if($(this).classes().includes("volume")){
             val = val ? parseInt(val) : -1 ;
             //console.log(val);
-            if(val <= 0){
+            if(val < 0){
                 $(this).css("background","salmon");
                 $(this).val("");
                 ret = false;
@@ -80,7 +80,7 @@ function checkCapexInput(){
         } else if ($(this).classes().includes("unit_cost")){
             val = val ? parseFloat(val) : -1 ;
             var temp = String(val).split(".");
-            if(val <= 0.){
+            if(val < 0.){
                 $(this).css("background","salmon");
                 $(this).val("");
                 ret = false;

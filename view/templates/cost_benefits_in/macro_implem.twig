@@ -1,5 +1,4 @@
 {% macro list_implem(implem,selImplem=[]) %}
-
 <h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Implementation Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
@@ -26,11 +25,8 @@
 </div>
 {% endmacro %}
 
-
-
 {% macro list_implem_user(implem_user,projID=0,ucID=0,selImplem=[]) %}
 {% import "/templates/cost_benefits_in/modal_implem.twig" as modal %}
-
 <h3 class="text-center mt-5 mb-3 text-uppercase">Custom Implementation Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
@@ -60,17 +56,16 @@
 </div>
 {% endmacro %}
 
-
 {% macro list_implem_guid(implem_advice,implem_user,selImplem,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Item</th>
+                    <th scope="col">Implementation Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Cost per Unit Range (in £)</th>
+                    <th scope="col">Range of the Unit Cost (in £)</th>
                 </tr>
                 
             </thead>
@@ -102,8 +97,8 @@
         <table id="implem_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">Implem Components</th>
-                    <th scope="col">Volumes</th>
+                    <th scope="col">Implementation Component</th>
+                    <th scope="col">Volume</th>
                     <th scope="col">Unit Cost (in £)</th>
                 </tr>
                 
@@ -134,10 +129,9 @@
         <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Implem Components</th>
-                    <th scope="col">Total Implem (in £)</th>
+                    <th scope="col">Implementation Component</th>
+                    <th scope="col">Total Implementation (in £)</th>
                 </tr>
-                
             </thead>
             <tbody>
             {% for id_implem,data in selImplem %}

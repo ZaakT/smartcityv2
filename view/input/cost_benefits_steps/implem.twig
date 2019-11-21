@@ -20,7 +20,7 @@
 </div>
 
 {% if implem_advice %}
-<form id="form_implem" name="form_implem" action="?A=cost_benefits&amp;A2=implem&amp;A3=implem_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="">
+<form id="form_implem" name="form_implem" action="?A=cost_benefits&amp;A2=implem&amp;A3=implem_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedImplem(form_implem);">
     
 {{ list.list_implem(implem_advice,selImplem) }}
 

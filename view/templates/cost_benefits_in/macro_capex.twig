@@ -60,37 +60,17 @@
 </div>
 {% endmacro %}
 
-{% macro compo_guid(uc_name,compo,nb_compo=0,nb_uc=0) %}
-<div class="m-5 row text-center">
-    <div class="offset-2 col-8 list-table">
-        <table class='table table-sm table-bordered table-responsive-lg'>
-            <thead class="thead-light text-center sticky-top">
-                <tr>
-                    <th scope="col">Nb total of {{compo['name']}}</th>
-                    <th scope="col">Nb total of {{uc_name}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td scope="col">{{nb_compo}}</td>
-                    <td scope="col">{{nb_uc}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-{% endmacro %}
 
 {% macro list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
-            <thead class="thead-light text-center sticky-top">
+            <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col">Item</th>
+                    <th scope="col">Capex Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Cost per Unit Range (in £)</th>
+                    <th scope="col">Range of the Unit Cost (in £)</th>
                 </tr>
                 
             </thead>
@@ -122,8 +102,8 @@
         <table id="capex_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">Capex Components</th>
-                    <th scope="col">Volumes</th>
+                    <th scope="col">Capex Component</th>
+                    <th scope="col">Volume</th>
                     <th scope="col">Unit Cost (in £)</th>
                 </tr>
                 
@@ -154,7 +134,7 @@
         <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Capex Components</th>
+                    <th scope="col">Capex Component</th>
                     <th scope="col">Total Capex (in £)</th>
                 </tr>
                 

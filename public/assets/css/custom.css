@@ -33,6 +33,10 @@
     overflow-y: auto;
 }
 
+th
+    vertical-align: middle !important;
+}
+
 .check-col{
     min-width: 35px;
     max-width: 35px;
@@ -60,7 +64,7 @@
     max-width: 200px;
 }
 
-.thead2 th, td{
+th, td{
     vertical-align: middle !important;
 }
 
@@ -69,7 +73,6 @@
 }
 
 .ucs-table th, td{
-    vertical-align: middle !important;
     text-align: center;
     min-width: 200px;
     max-width: 200px;

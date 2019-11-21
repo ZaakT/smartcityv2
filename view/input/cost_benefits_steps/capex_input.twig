@@ -3,6 +3,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/cost_benefits_in/macro_capex.twig" as list %}
+{% import "/templates/cost_benefits_in/macro_compo_guid.twig" as guid %}
 {% import "/templates/cost_benefits_in/modal_capex.twig" as modal %}
 
 {% block title %}Project Scoping - CAPEX INPUT{% endblock %}
@@ -28,7 +29,7 @@
     {% endif %}
 {% endfor %}
 
-{{ list.compo_guid(selected2,compo,nb_compo,nb_uc) }}
+{{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
 {% if test %}
 {{ list.list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) }}

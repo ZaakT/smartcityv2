@@ -1,0 +1,226 @@
+{% macro list_cashreleasing(cashreleasing,selCashReleasing=[]) %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Cash Releasing Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in cashreleasing %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedCashReleasing(form_cashreleasing);" id='{{ id }}' name="{{ id }}" {{id in selCashReleasing|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_cashreleasing_user(cashreleasing_user,projID=0,ucID=0,selCashReleasing=[]) %}
+{% import "/templates/cost_benefits_in/modal_cashreleasing.twig" as modal %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Cash Releasing Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in cashreleasing_user %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedCashReleasing(form_cashreleasing);" id='{{ id }}' name="{{ id }}" {{id in selCashReleasing|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                    <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCashReleasing_{{ id }}"></span></a></td>
+                    {{ modal.delete_cashreleasing(id,item['name'],projID,ucID) }}
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_cashreleasing_guid(cashreleasing_advice,cashreleasing_user,selCashReleasing,compo,ratio) %}
+<div class="m-5 row text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Cash Releasing Component</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Ratio per {{compo['name']}}</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Quantity Reduction (in %)</th>
+                    <th scope="col">Unit Cost Reduction Range (in %)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_cashreleasing,data in selCashReleasing %}
+                {% if id_cashreleasing in cashreleasing_advice|keys %}
+                <tr id = "tr_{{ id_cashreleasing }}" scope="row">
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['unit'] != "" ? cashreleasing_advice[id_cashreleasing]['unit'] : "-" }}</td>
+                    <td scope="col">{{ ratio[id_cashreleasing]['val'] >= 0 ? ratio[id_cashreleasing]['val'] : "-"  }}</td>
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['unit_cost'] != "" ? cashreleasing_advice[id_cashreleasing]['unit_cost'] : "-" }}</td>
+                    
+                    {% if cashreleasing_advice[id_cashreleasing]['range_max_red_nb'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_nb'] }} - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_nb'] }}</td>
+                    {% endif %}
+                    
+                    {% if cashreleasing_advice[id_cashreleasing]['range_max_red_cost'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_cost'] }} - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_cost'] }}</td>
+                    {% endif %}
+                </tr>   
+                {% endif %}      
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_cashreleasing_input(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+<div class="row m-5 text-center">
+    <div class="col mt-5 list-table">
+        <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" rowspan=2>Cash Releasing Component</th>
+                    <th scope="col"></th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline Cost</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
+
+                </tr>
+                <tr>
+                    <th scope="col">Unit Indicator</th>
+                    <th scope="col">Volume</th>
+                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Volume Reduction<br>(in % per month)</th>
+                    <th scope="col">Unit Cost Reduction<br>(in % per month)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_cashreleasing,data in selCashReleasing %}
+                <tr id = "tr_{{ id_cashreleasing }}" scope="row">
+                    {% if id_cashreleasing in cashreleasing_advice|keys %}
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
+                    {% endif %}
+
+                    {% if id_cashreleasing in cashreleasing_advice|keys %}
+                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{cashreleasing_advice[id_cashreleasing]['unit']}}" disabled></td>
+                    {% else %}
+                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{selCashReleasing[id_cashreleasing]['unit_indic']}}"></td>
+                    {% endif %}
+
+                    <td scope="col"><input id="vol_{{id_cashreleasing}}" name="vol_{{id_cashreleasing}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['volume']}}"></td>
+
+                    <td scope="col"><input id="unitCost_{{id_cashreleasing}}" name="unitCost_{{id_cashreleasing}}" class="text-center unitCost" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost']}}"></td> 
+
+                    <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}"></td> 
+
+                    <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}"></td> 
+
+                    
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+<div class="row m-5 text-center">
+    <div class="col mt-5 list-table">
+        <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">Cash Releasing Component</th>
+                    <th scope="col">Volume Variation<br>(in % per year)</th>
+                    <th scope="col">Unit Cost Variation<br>(in % per year)</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_cashreleasing,data in selCashReleasing %}
+                <tr id = "tr_{{ id_cashreleasing }}" scope="row">
+                    {% if id_cashreleasing in cashreleasing_advice|keys %}
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col"><input id="anVarVol_{{id_cashreleasing}}" name="anVarVol_{{id_cashreleasing}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarVol']}}"></td> 
+                    <td scope="col"><input id="anVarCost_{{id_cashreleasing}}" name="anVarCost_{{id_cashreleasing}}" class="text-center anVarCost" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarCost']}}"></td> 
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro list_cashreleasing_total(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+<div class="row m-5 text-center">
+    <div class="col mt-5 list-table">
+        <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Cash Releasing Component</th>
+                    <th scope="col">Baseline Cost <br>(in £ per month)</th>
+                    <th scope="col">Cash Releasing Target<br>(in £ per month)</th>
+                    <th scope="col">Cash Releasing Benefits<br>(in £ per month)</th>
+                    <th scope="col">Variation of Volumes<br>(per month)</th>
+                    <th scope="col">Variation of Unit Cost<br>(per month)</th>
+                    <th scope="col">Combined Variation<br>(per month)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_cashreleasing,data in selCashReleasing %}
+                <tr id = "tr_{{ id_cashreleasing }}" scope="row">
+                    {% if id_cashreleasing in cashreleasing_advice|keys %}
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col" id="tot_bc_{{id_cashreleasing}}">-</td>
+                    <td scope="col" id="tot_crt_{{id_cashreleasing}}">-</td>
+                    <td scope="col" id="tot_crb_{{id_cashreleasing}}">-</td>
+                    <td scope="col" id="tot_varvol_{{id_cashreleasing}}">-</td>
+                    <td scope="col" id="tot_varcost_{{id_cashreleasing}}">-</td>
+                    <td scope="col" id="tot_combvar_{{id_cashreleasing}}">-</td>
+                </tr> 
+            {% endfor %}
+                <tr>
+                    <th class="bg-light text-dark">Total</th>
+                    <td class="font-weight-bold" scope="col" id="tot_bc">-</td>
+                    <td class="font-weight-bold" scope="col" id="tot_crt">-</td>
+                    <td class="font-weight-bold" scope="col" id="tot_crb">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
