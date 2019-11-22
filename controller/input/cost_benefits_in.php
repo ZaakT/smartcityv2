@@ -899,36 +899,7 @@ function cashreleasing_inputed($post){
             $projID = $_SESSION['projID'];
             if(isset($_SESSION['ucID'])){
                 $ucID = $_SESSION['ucID'];
-                $list = [];
-                foreach ($post as $key => $value) {
-                    $temp = explode('_',$key);
-                    //var_dump($temp);
-                    if($temp[0]=="vol"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['volume'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['volume'=>$value];
-                        }
-                    } else if($temp[0]=="rev"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['unit_rev'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['unit_rev'=>$value];
-                        }
-                    } else if($temp[0]=="anVarVol"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarVol'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['anVarVol'=>$value];
-                        }
-                    } else if($temp[0]=="anVarRev"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarRev'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['anVarRev'=>$value];
-                        }
-                    }
-                }
+                $list = getListCashRelFromPost($post);
                 insertCashReleasingInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
                 //header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
@@ -943,7 +914,57 @@ function cashreleasing_inputed($post){
     }
 }
 
-
+function getListCashRelFromPost($post){
+    $list = [];
+    foreach ($post as $key => $value) {
+        $temp = explode('_',$key);
+        var_dump($temp);
+        if($temp[0]=="vol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['volume'=>$value];
+            } else {
+                $list[$temp[1]] = ['volume'=>$value];
+            }
+        } else if($temp[0]=="unitIndic"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_indic'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_indic'=>$value];
+            }
+        } else if($temp[0]=="anVarVol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarVol'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarVol'=>$value];
+            }
+        } else if($temp[0]=="anVarCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarCost'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarCost'=>$value];
+            }
+        } else if($temp[0]=="volRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['vol_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['vol_red'=>$value];
+            }
+        } else if($temp[0]=="unitCostRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost_red'=>$value];
+            }
+        } else if($temp[0]=="unitCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost'=>$value];
+            }
+        }
+    }
+    return $list;
+}
 
 
 // ---------------------------------------- WIDER CASH ----------------------------------------

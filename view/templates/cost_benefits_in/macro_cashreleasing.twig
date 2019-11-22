@@ -129,7 +129,7 @@
                     {% endif %}
 
                     {% if id_cashreleasing in cashreleasing_advice|keys %}
-                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{cashreleasing_advice[id_cashreleasing]['unit']}}" disabled></td>
+                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{cashreleasing_advice[id_cashreleasing]['unit']}}" readonly></td>
                     {% else %}
                     <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{selCashReleasing[id_cashreleasing]['unit_indic']}}"></td>
                     {% endif %}

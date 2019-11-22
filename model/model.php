@@ -2079,7 +2079,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             annual_var_unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['vol_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
 
     }
     return $ret;
