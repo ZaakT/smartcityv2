@@ -902,7 +902,7 @@ function cashreleasing_inputed($post){
                 $list = getListCashRelFromPost($post);
                 insertCashReleasingInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                //header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -918,7 +918,7 @@ function getListCashRelFromPost($post){
     $list = [];
     foreach ($post as $key => $value) {
         $temp = explode('_',$key);
-        var_dump($temp);
+        //var_dump($temp);
         if($temp[0]=="vol"){
             if(array_key_exists($temp[1],$list)){
                 $list[$temp[1]] += ['volume'=>$value];
@@ -967,12 +967,210 @@ function getListCashRelFromPost($post){
 }
 
 
+
 // ---------------------------------------- WIDER CASH ----------------------------------------
 
-function widercash($twig,$is_connected){
+function widercash($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/cost_benefits_steps/widercash.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            if($ucID!=0){
+                if(getUCByID($ucID)){
+                    $proj = getProjByID($projID,$user[0]);
+                    $uc = getUCByID($ucID);
+                    $list_widercash_advice = getListWiderCashAdvice($ucID);   
+                    $list_widercash_user = getListWiderCashUser($projID,$ucID);    
+                    $list_selWiderCash = getListSelWiderCash($projID,$ucID);          
+                    //var_dump($list_selWiderCash);
+                    echo $twig->render('/input/cost_benefits_steps/widercash.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"widercash_advice"=>$list_widercash_advice,"widercash_user"=>$list_widercash_user,'isTaken'=>$isTaken,'selWiderCash'=>$list_selWiderCash));
+                } else {
+                    throw new Exception("This Use Case doesn't exist !");
+                }
+            } else {
+                header('Location: ?A=cost_benefits&A2=use_case_cb');
+            }
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=cost_benefits&A2=use_case_cb');
+    }
 }
+
+function create_widercash($twig,$is_connected,$post){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            $name = $post['name'];
+            $description = isset($post['description']) ? $post['description'] : "";
+            $widercash_infos = ["name"=>$name,"description"=>$description];
+            //var_dump(getWiderCashUserItem($projID,$ucID,$name));
+            if(!empty(getWiderCashUserItem($projID,$ucID,$name))){
+                widercash($twig,$is_connected,$projID,$ucID,true);
+            } else {
+                insertWiderCashUser($projID,$ucID,$widercash_infos);
+                header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+            }
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function delete_widercash_user($idWiderCash){
+    //var_dump(intval($idWiderCash));
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            deleteWiderCashUser(intval($idWiderCash));
+            header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function widercash_selected($twig,$is_connected,$post=[]){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $selWiderCash = [];
+                foreach ($post as $id => $value) {
+                    array_push($selWiderCash,$id);
+                }
+                $selWiderCash_old = getListSelWiderCash($projID,$ucID);
+                $selWiderCash_old_id = getKeys($selWiderCash_old);
+                $selWiderCash_diff_rm = array_diff($selWiderCash_old_id,$selWiderCash);
+                $selWiderCash_diff_add = array_diff($selWiderCash,$selWiderCash_old_id);
+                //var_dump($selWiderCash_diff_rm);
+                //var_dump($selWiderCash_diff_add);
+                if(empty($selWiderCash_old)){
+                    insertSelWiderCash($projID,$ucID,$selWiderCash);
+                } else if (!empty($selWiderCash_old)) {
+                    deleteSelWiderCash($projID,$ucID,$selWiderCash_diff_rm);
+                    insertSelWiderCash($projID,$ucID,$selWiderCash_diff_add);
+                }
+                update_ModifDate_proj($projID);
+                widercash_input($twig,$is_connected,$projID,$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("No WiderCash item selected !");
+    }
+}
+
+function widercash_input($twig,$is_connected,$projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            $proj = getProjByID($projID,$user[0]);
+            $uc = getUCByID($ucID);
+            $list_selWiderCash = getListSelWiderCash($projID,$ucID);
+            //var_dump($list_selWiderCash);
+            $list_widercash_advice = getListWiderCashAdvice($ucID); 
+            $list_sel_widercash_advice = getListSelByType($list_selWiderCash,$list_widercash_advice);
+            //var_dump($list_sel_widercash_advice);
+            $list_widercash_user = getListWiderCashUser($projID,$ucID);
+            $compo = getCompoByUC($ucID);
+            $nb_compo = getNbTotalCompo($compo['id']);
+            $nb_uc = getNbTotalUC($projID,$ucID);
+            $list_ratio = getRatioCompoWiderCash($list_sel_widercash_advice,$compo['id']);
+            //var_dump($list_ratio);
+            echo $twig->render('/input/cost_benefits_steps/widercash_input.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"widercash_advice"=>$list_widercash_advice,"widercash_user"=>$list_widercash_user,"selWiderCash"=>$list_selWiderCash,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
+function widercash_inputed($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $list = getListWiderCashFromPost($post);
+                insertWiderCashInputed($projID,$ucID,$list);
+                update_ModifDate_proj($projID);
+                //header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("There is no data inputed !");
+    }
+}
+
+function getListWiderCashFromPost($post){
+    $list = [];
+    foreach ($post as $key => $value) {
+        $temp = explode('_',$key);
+        //var_dump($temp);
+        if($temp[0]=="vol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['volume'=>$value];
+            } else {
+                $list[$temp[1]] = ['volume'=>$value];
+            }
+        } else if($temp[0]=="unitIndic"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_indic'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_indic'=>$value];
+            }
+        } else if($temp[0]=="anVarVol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarVol'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarVol'=>$value];
+            }
+        } else if($temp[0]=="anVarCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarCost'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarCost'=>$value];
+            }
+        } else if($temp[0]=="volRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['vol_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['vol_red'=>$value];
+            }
+        } else if($temp[0]=="unitCostRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost_red'=>$value];
+            }
+        } else if($temp[0]=="unitCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost'=>$value];
+            }
+        }
+    }
+    return $list;
+}
+
+
 
 
 // ---------------------------------------- NON CASH ----------------------------------------

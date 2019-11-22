@@ -895,8 +895,91 @@ try{
                     } elseif($_GET['A2']=="cashreleasing_inputed"){
                         //var_dump($_POST);
                         cashreleasing_inputed($_POST);
-
-
+                    
+                    // --- WIDER CASH ---
+                    } elseif($_GET['A2']=="widercash"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['A3'])){
+                                            // --- WIDER CASH SELECTED ---
+                                            if($_GET['A3']=="widercash_selected"){
+                                                widercash_selected($twig,$is_connected,$_POST);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=widercash&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            widercash($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                        }
+                                    }
+                                    else {                                    
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {                                        
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=cost_benefits&A2=project');
+                            }
+                        }
+                        else {
+                            widercash($twig,$is_connected);
+                        }
+                    } elseif($_GET['A2']=="create_widercash"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        create_widercash($twig,$is_connected,$_POST);
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    } elseif($_GET['A2']=="delete_widercash"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['id'])){
+                                            if($_GET['id']!=0){
+                                                delete_widercash_user($_GET['id']);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+                                        }
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    // --- INPUTED WIDER CASH ---
+                    } elseif($_GET['A2']=="widercash_inputed"){
+                        //var_dump($_POST);
+                        widercash_inputed($_POST);
+                    
                         
                     } else {
                         header('Location: ?A='.$_GET['A']);

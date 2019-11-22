@@ -2085,3 +2085,209 @@ function insertCashReleasingInputed($projID,$ucID,$list){
     return $ret;
 }
 
+
+
+
+// ---------------------------------------- WIDER CASH----------------------------------------
+
+function getWiderCashUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM widercash_item_user
+                            INNER JOIN widercash_uc
+                                INNER JOIN widercash_item
+                                    WHERE widercash_item_user.id_proj = ?
+                                        and widercash_item.id = widercash_item_user.id
+                                        and widercash_uc.id_uc = ?
+                                        and widercash_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListWiderCashAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM widercash_item_advice
+                            INNER JOIN widercash_uc
+                                INNER JOIN widercash_item
+                                    WHERE widercash_uc.id_uc = ?
+                                        and widercash_item.id = widercash_uc.id_item
+                                        and widercash_item.id = widercash_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $range_min_red_cost = floatval($row['range_min_red_cost']);
+        $range_max_red_cost = floatval($row['range_max_red_cost']);
+        $unit_cost = floatval($row['unit_cost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListWiderCashUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT widercash_item.id,name,description
+                            FROM widercash_item_user
+                            INNER JOIN widercash_uc
+                                INNER JOIN widercash_item
+                                    WHERE widercash_uc.id_uc = ?
+                                        and widercash_item.id = widercash_uc.id_item
+                                        and widercash_item_user.id_proj = ?
+                                        and widercash_item_user.id = widercash_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelWiderCash($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
+                            FROM input_widercash
+                            INNER JOIN widercash_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = widercash_item.id
+                            ORDER BY widercash_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = floatval($row['unit_cost']);
+        $unit_indic = $row['unit_indicator'];
+        $volume = intval($row['volume']);
+        $vol_red = floatval($row['volume_reduc']);
+        $unit_cost_red = floatval($row['unit_cost_reduc']);
+        $anVarVol = floatval($row['annual_var_volume']);
+        $anVarCost = floatval($row['annual_var_unit_cost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+        } else {
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertWiderCashUser($projID,$ucID,$widercash_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_widercash`;');
+    $db->exec(' CREATE PROCEDURE `add_widercash`(
+                            IN widercash_name VARCHAR(255),
+                            IN widercash_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO widercash_item (name,description)
+                                    VALUES (widercash_name,widercash_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO widercash_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO widercash_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_widercash(?,?,?,?);');
+    $ret = $req->execute(array($widercash_data['name'],$widercash_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteWiderCashUser($idWiderCash){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM widercash_item WHERE id = ?');
+    return $req->execute(array($idWiderCash));
+}
+
+function insertSelWiderCash($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_widercash
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelWiderCash($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_widercash WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function getRatioCompoWiderCash($list_item,$compoID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT val FROM ratio_comp_widercash WHERE id_compo = ? and id_item = ?");
+    
+    $list = [];
+    foreach ($list_item as $id_item) {
+        $req->execute(array($compoID,$id_item));
+        $res = $req->fetch();
+        $val = $res ? intval($res['val']) : -1;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['val'=>$val];
+        } else {
+            $list[$id_item] = ['val'=>$val];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertWiderCashInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_widercash
+                            SET unit_indicator = ?,
+                            volume = ?,
+                            unit_cost = ?,
+                            volume_reduc = ?,
+                            unit_cost_reduc = ?,
+                            annual_var_volume = ?,
+                            annual_var_unit_cost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+
+    }
+    return $ret;
+}
