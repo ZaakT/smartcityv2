@@ -62,12 +62,17 @@
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Cash Releasing Component</th>
-                    <th scope="col">Unit</th>
+                    <th scope="col" rowspan=2 >Cash Releasing Component</th>
+                    <th scope="col"></th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
+                </tr>
+                <tr>
+                    <th scope="col">Unit Indicator</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Unit Cost</th>
-                    <th scope="col">Quantity Reduction (in %)</th>
-                    <th scope="col">Unit Cost Reduction Range (in %)</th>
+                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Range of<br>Volume Reduction</th>
+                    <th scope="col">Range of<br>Unit Cost Reduction</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,13 +87,13 @@
                     {% if cashreleasing_advice[id_cashreleasing]['range_max_red_nb'] == 0 %}
                     <td scope="col">-</td>
                     {% else %}
-                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_nb'] }} - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_nb'] }}</td>
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_nb'] }}% - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_nb'] }}%</td>
                     {% endif %}
                     
                     {% if cashreleasing_advice[id_cashreleasing]['range_max_red_cost'] == 0 %}
                     <td scope="col">-</td>
                     {% else %}
-                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_cost'] }} - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_cost'] }}</td>
+                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['range_min_red_cost'] }}% - {{ cashreleasing_advice[id_cashreleasing]['range_max_red_cost'] }}%</td>
                     {% endif %}
                 </tr>   
                 {% endif %}      
@@ -107,7 +112,7 @@
                 <tr>
                     <th scope="col" rowspan=2>Cash Releasing Component</th>
                     <th scope="col"></th>
-                    <th scope="col" colspan=2 class="text-uppercase">Baseline Cost</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
                     <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
 
                 </tr>
@@ -115,8 +120,8 @@
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost<br>(in £ per month)</th>
-                    <th scope="col">Volume Reduction<br>(in % per month)</th>
-                    <th scope="col">Unit Cost Reduction<br>(in % per month)</th>
+                    <th scope="col">Volume Reduction</th>
+                    <th scope="col">Unit Cost Reduction</th>
                 </tr>
             </thead>
             <tbody>
@@ -129,7 +134,7 @@
                     {% endif %}
 
                     {% if id_cashreleasing in cashreleasing_advice|keys %}
-                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{cashreleasing_advice[id_cashreleasing]['unit']}}" readonly></td>
+                    <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic text-secondary" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{cashreleasing_advice[id_cashreleasing]['unit']}}" readonly></td>
                     {% else %}
                     <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{selCashReleasing[id_cashreleasing]['unit_indic']}}"></td>
                     {% endif %}
@@ -138,9 +143,9 @@
 
                     <td scope="col"><input id="unitCost_{{id_cashreleasing}}" name="unitCost_{{id_cashreleasing}}" class="text-center unitCost" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost']}}"></td> 
 
-                    <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}"></td> 
+                    <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}" style="max-width:80%;"><span> %</span></td> 
 
-                    <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}"></td> 
+                    <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}" style="max-width:80%;"><span> %</span></td> 
 
                     
                 </tr> 
@@ -157,7 +162,10 @@
         <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">Cash Releasing Component</th>
+                    <th rowspan=2 scope="col">Cash Releasing Component</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Project Impact</th>
+                </tr>
+                <tr>
                     <th scope="col">Volume Variation<br>(in % per year)</th>
                     <th scope="col">Unit Cost Variation<br>(in % per year)</th>
                 </tr>
@@ -171,8 +179,8 @@
                     {% else %}
                     <td scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="anVarVol_{{id_cashreleasing}}" name="anVarVol_{{id_cashreleasing}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarVol']}}"></td> 
-                    <td scope="col"><input id="anVarCost_{{id_cashreleasing}}" name="anVarCost_{{id_cashreleasing}}" class="text-center anVarCost" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarCost']}}"></td> 
+                    <td scope="col"><input id="anVarVol_{{id_cashreleasing}}" name="anVarVol_{{id_cashreleasing}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarVol']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarCost_{{id_cashreleasing}}" name="anVarCost_{{id_cashreleasing}}" class="text-center anVarCost" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarCost']}}"><span> %</span></td> 
                 </tr> 
             {% endfor %}
             </tbody>

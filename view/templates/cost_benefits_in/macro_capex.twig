@@ -105,6 +105,7 @@
                     <th scope="col">Capex Component</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost (in £)</th>
+                    <th scope="col">Amortization Period (in years)</th>
                 </tr>
                 
             </thead>
@@ -118,6 +119,7 @@
                     {% endif %}
                     <td scope="col"><input id="vol_{{id_capex}}" name="vol_{{id_capex}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['volume']}}"></td> 
                     <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost" type="number" min=0 step=0.001 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['unit_cost']}}"></td> 
+                    <td scope="col"><input class="text-center period" id="period_{{id_capex}}" name="period_{{id_capex}}" min=0 step=1 type="number" oninput="checkCapexInput();" required value="{{selCapex[id_capex]['period']}}"></td>
                 </tr> 
             {% endfor %}
             </tbody>
@@ -131,7 +133,7 @@
 {% macro list_capex_total(capex_advice,capex_user,selCapex) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
-        <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
+        <table id="tot_table_capex" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Capex Component</th>

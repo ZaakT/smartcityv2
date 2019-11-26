@@ -35,24 +35,6 @@
 {{ list.list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) }}
 {% endif %}
 {{ list.list_capex_input(capex_advice,capex_user,selCapex) }}
-
-<div class="row text-center mt-2 mb-5">
-    <div class="offset-4 col-4">
-        <table class='table table-lg table-bordered table-responsive-lg'>
-            <thead class="thead thead-dark">
-                <tr>
-                    <th scope="col">Capex Amortization Period (in years)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td scope="col"><input class="text-center" id="capex_period_input" name="capex_period_input" min=0 step=1 type="number" oninput="checkCapexPeriod();" required value="{{period_inputed != 0 ? period_inputed : 0}}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
 {{ list.list_capex_total(capex_advice,capex_user,selCapex) }}
 
 <div class="row m-3 text-center text-dark">

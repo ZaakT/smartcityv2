@@ -85,7 +85,7 @@ function checkImplemInput(){
 
 function calcTotImplem(){
     var sum = 0;
-    $("#tot_table td").each(function(){
+    $("#tot_table_implem td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -93,10 +93,10 @@ function calcTotImplem(){
                 var val1 = parseInt($("#vol_"+temp[1]).val());
                 var val2 = parseFloat($("#cost_"+temp[1]).val());
                 var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString({maximumFractionDigits:3}));
+                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
                 sum += tot;
             } else if (temp.length==1) {
-                $(this).text(sum.toLocaleString({maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
             }
         }
     });

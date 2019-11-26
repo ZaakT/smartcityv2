@@ -48,25 +48,12 @@ function countSelectedCapex(oForm) {
     }
 }
 
-function checkCapexPeriod(){
-    var val = $("#capex_period_input").val();
-    val = val=="" ? 0 : parseInt(val);
-    if(val <= 0){
-        $("#capex_period_input").css("background","salmon");
-        $("#capex_period_input").val("");
-        return false;
-    } else {
-        $("#capex_period_input").val(val);
-        $("#capex_period_input").css("background","palegreen");
-        return true;
-    }
-}
-
 function checkCapexInput(){
     var ret = true;
     $("#capex_input input").each(function(){
         var val = $(this).val();
-        if($(this).classes().includes("volume")){
+        var tab = $(this).classes();
+        if(tab.includes("volume") || tab.includes("period")){
             val = val ? parseInt(val) : -1 ;
             //console.log(val);
             if(val < 0){
@@ -77,7 +64,7 @@ function checkCapexInput(){
                 $(this).val(val);
                 $(this).css("background","palegreen");
             }
-        } else if ($(this).classes().includes("unit_cost")){
+        } else if (tab.includes("unit_cost")){
             val = val ? parseFloat(val) : -1 ;
             var temp = String(val).split(".");
             if(val < 0.){
@@ -99,7 +86,7 @@ function checkCapexInput(){
 
 function calcTotCapex(){
     var sum = 0;
-    $("#tot_table td").each(function(){
+    $("#tot_table_capex td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -107,10 +94,10 @@ function calcTotCapex(){
                 var val1 = parseInt($("#vol_"+temp[1]).val());
                 var val2 = parseFloat($("#cost_"+temp[1]).val());
                 var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString({maximumFractionDigits:3}));
+                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
                 sum += tot;
             } else if (temp.length==1) {
-                $(this).text(sum.toLocaleString({maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
             }
         }
     });

@@ -65,7 +65,9 @@ function checkOpexInput(){
                 $(this).css("background","palegreen");
             }
         } else if (tab.includes("unit_cost") || tab.includes("anVarVol") || tab.includes("anVarCost")){
+            //console.log(val);
             val = val ? parseFloat(val) : -1 ;
+            //console.log(val);
             var temp = String(val).split(".");
             if(val < 0.){
                 $(this).css("background","salmon");
@@ -77,6 +79,7 @@ function checkOpexInput(){
             } else {
                 //$(this).val(val);
                 $(this).css("background","palegreen");
+                //$(this).val(val.toLocaleString(undefined));
             }
         }
     });
@@ -86,7 +89,7 @@ function checkOpexInput(){
 
 function calcTotOpex(){
     var sum = 0;
-    $("#tot_table td").each(function(){
+    $("#tot_table_opex td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -95,27 +98,26 @@ function calcTotOpex(){
                     var val1 = parseInt($("#vol_"+temp[2]).val());
                     var val2 = parseFloat($("#cost_"+temp[2]).val());
                     var tot = val1 && val2 ? 12*val1*val2 : 0;
-                    $(this).text(tot.toLocaleString(undefined,{maximumFractionDigits:3}));
+                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
                     sum += tot;
                 } else if(temp[1]=="varvol"){
                     var val = parseFloat($("#anVarVol_"+temp[2]).val());
-                    var tot = val ? val/12/100 : 0;
-                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                    var tot = val ? val/100 : 0;
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:3}));
                 } else if(temp[1]=="varcost"){
                     var val = parseFloat($("#anVarCost_"+temp[2]).val());
-                    var tot = val ? val/12/100 : 0;
-                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                    var tot = val ? val/100 : 0;
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:3}));
                 } else if(temp[1]=="combvar"){
                     var varvol = parseFloat($("#anVarVol_"+temp[2]).val());
-                    varvol = varvol ? varvol/12/100 : 0;
+                    varvol = varvol ? varvol/100 : 0;
                     var varcost = parseFloat($("#anVarCost_"+temp[2]).val());
-                    varcost = varcost ? varcost/12/100 : 0;
-
+                    varcost = varcost ? varcost/100 : 0;
                     var tot = varvol && varcost ? varvol+varcost : 0;
-                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:2}));
+                    $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:3}));
                 }
             } else if (temp.length==2) {
-                $(this).text(sum.toLocaleString(undefined,{maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
             }
         }
     });

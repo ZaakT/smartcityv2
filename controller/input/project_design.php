@@ -37,7 +37,7 @@ function create_ucm($twig,$is_connected,$post){
 }
 
 function delete_ucm($idUCM){
-    var_dump(intval($idUCM));
+    //var_dump(intval($idUCM));
     deleteUCM(intval($idUCM));
     header('Location: ?A=project_design&A2=ucm');
 }
@@ -620,6 +620,7 @@ function calcGlobalScores($scores,$weights_table){
     return $globalScores;
 }
 
+
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectDesign(){
     if(isset($_SESSION['ucmID'])){
@@ -660,5 +661,4 @@ function prereq_ProjectDesign(){
             }
         }
     }
-
 }

@@ -126,7 +126,11 @@
         <table id="revenues_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">Revenues Component</th>
+                    <th rowspan=2 scope="col">Revenues Component</th>
+                    <th colspan=2 scope="col">PROJECT IMPACT</th>
+
+                </tr>
+                <tr>
                     <th scope="col">Volume Variation<br>(in % per year)</th>
                     <th scope="col">Unit Revenues Variation<br>(in % per year)</th>
                 </tr>
@@ -140,8 +144,8 @@
                     {% else %}
                     <td scope="col">{{ revenues_user[id_revenues]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="anVarVol_{{id_revenues}}" name="anVarVol_{{id_revenues}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['anVarVol']}}"></td> 
-                    <td scope="col"><input id="anVarRev_{{id_revenues}}" name="anVarRev_{{id_revenues}}" class="text-center anVarRev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['anVarRev']}}"></td> 
+                    <td scope="col"><input id="anVarVol_{{id_revenues}}" name="anVarVol_{{id_revenues}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['anVarVol']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarRev_{{id_revenues}}" name="anVarRev_{{id_revenues}}" class="text-center anVarRev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['anVarRev']}}"><span> %</span></td> 
                 </tr> 
             {% endfor %}
             </tbody>
@@ -154,14 +158,18 @@
 {% macro list_revenues_total(revenues_advice,revenues_user,selRevenues) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
-        <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
+        <table id="tot_table_rev" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Revenues Component</th>
+                    <th rowspan=2 scope="col">Revenues Component</th>
+                    <th colspan=1 scope="col">INITIAL VALUE</th>
+                    <th colspan=3 scope="col">EVOLUTION</th>
+                </tr>
+                <tr>
                     <th scope="col">Total Revenues<br>(in £ per year)</th>
-                    <th scope="col">Variation of Volumes<br>(per month)</th>
-                    <th scope="col">Variation of Unit Revenues<br>(per month)</th>
-                    <th scope="col">Combined Variation<br>(per month)</th>
+                    <th scope="col">Variation of Volumes<br>(per year)</th>
+                    <th scope="col">Variation of Unit Revenues<br>(per year)</th>
+                    <th scope="col">Combined Variation<br>(per year)</th>
                 </tr>
             </thead>
             <tbody>

@@ -640,15 +640,11 @@ function insertSelScope($projID,$list){
     $req2 = $db->prepare("INSERT INTO proj_sel_usecase
                             (id_proj,id_uc)
                             VALUES (?,?)");
-    $req3 = $db->prepare('INSERT INTO capex_amortization
-                            (id_proj,id_uc)
-                            VALUES (?,?)');
     foreach ($list as $id_meas => $listUC) {
         if(!empty($listUC)){
             $ret = $req1->execute(array($projID,$id_meas));
             foreach ($listUC as $key => $id_uc) {
                 $ret = $req2->execute(array($projID,$id_uc));
-                $ret = $req3->execute(array($projID,$id_uc));
             }
         }
     }
@@ -663,10 +659,7 @@ function deleteSelScope($projID){
                             INNER JOIN proj_sel_usecase
                                 WHERE (proj_sel_measure.id_proj = proj_sel_usecase.id_proj)
                                     AND (proj_sel_measure.id_proj=?)");
-                                    
-    $req2 = $db->prepare("DELETE FROM capex_amortization WHERE id_proj = ?");
     $ret = $req->execute(array($projID));
-    $ret = $req2->execute(array($projID));
     return $ret;
     
 }
@@ -1133,7 +1126,7 @@ function getListCapexUser($projID,$ucID){
 
 function getListSelCapex($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,period
                             FROM input_capex
                             INNER JOIN capex_item
                                 WHERE  id_uc = ? and id_proj = ? and id_item = capex_item.id
@@ -1146,10 +1139,11 @@ function getListSelCapex($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = floatval($row['unit_cost']);
         $volume = intval($row['volume']);
+        $period = intval($row['period']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
         }
     }
     //var_dump($list);
@@ -1247,35 +1241,17 @@ function getRatioCompoCapex($list_item,$compoID){
     return $list;
 }
 
-function getPeriodInputed($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare("SELECT val
-                            FROM capex_amortization
-                            WHERE id_proj = ? and id_uc = ?");
-    $req->execute(array($projID,$ucID));
-    return $req->fetch()['val'];
-}
-
 function insertCapexInputed($projID,$ucID,$list){
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("UPDATE input_capex
                             SET volume = ?,
-                                unit_cost = ?
+                                unit_cost = ?,
+                                period = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$data['period'],$projID,$ucID,$id_item));
     }
-    return $ret;
-}
-
-function insertPeriodInputed($projID,$ucID,$period){
-    $db = dbConnect();
-    $ret = false;
-    $req = $db->prepare('UPDATE capex_amortization
-                            SET val = ?
-                            WHERE id_proj = ? and id_uc = ?');
-    $ret = $req->execute(array($period,$projID,$ucID));
     return $ret;
 }
 
