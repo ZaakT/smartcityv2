@@ -1118,7 +1118,7 @@ function widercash_inputed($post){
                 $list = getListWiderCashFromPost($post);
                 insertWiderCashInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                //header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -1181,8 +1181,6 @@ function getListWiderCashFromPost($post){
     }
     return $list;
 }
-
-
 
 
 
@@ -1305,9 +1303,8 @@ function noncash_input($twig,$is_connected,$projID=0,$ucID=0){
             $compo = getCompoByUC($ucID);
             $nb_compo = getNbTotalCompo($compo['id']);
             $nb_uc = getNbTotalUC($projID,$ucID);
-            $list_ratio = getRatioCompoNonCash($list_sel_noncash_advice,$compo['id']);
             //var_dump($list_ratio);
-            echo $twig->render('/input/cost_benefits_steps/noncash_input.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"noncash_advice"=>$list_noncash_advice,"noncash_user"=>$list_noncash_user,"selNonCash"=>$list_selNonCash,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+            echo $twig->render('/input/cost_benefits_steps/noncash_input.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"noncash_advice"=>$list_noncash_advice,"noncash_user"=>$list_noncash_user,"selNonCash"=>$list_selNonCash,'compo'=>$compo,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
             prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=project');
@@ -1338,13 +1335,203 @@ function noncash_inputed($post){
     }
 }
 
-
-// ---------------------------------------- RISKS----------------------------------------
-
-function risks($twig,$is_connected){
-    $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/cost_benefits_steps/risks.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+function getListNonCashFromPost($post){
+    $list = [];
+    foreach ($post as $key => $value) {
+        $temp = explode('_',$key);
+        //var_dump($temp);
+        if($temp[0]=="impact"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['exp_impact'=>$value];
+            } else {
+                $list[$temp[1]] = ['exp_impact'=>$value];
+            }
+        } else if($temp[0]=="prob"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['prob'=>$value];
+            } else {
+                $list[$temp[1]] = ['prob'=>$value];
+            }
+        } 
+    }
+    return $list;
 }
+
+
+
+// ---------------------------------------- RISKS ----------------------------------------
+
+function risks($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            if($ucID!=0){
+                if(getUCByID($ucID)){
+                    $proj = getProjByID($projID,$user[0]);
+                    $uc = getUCByID($ucID);
+                    $list_risks_advice = getListRiskAdvice($ucID);   
+                    $list_risks_user = getListRiskUser($projID,$ucID);    
+                    $list_selRisks = getListSelRisk($projID,$ucID);          
+                    //var_dump($list_selRisks);
+                    echo $twig->render('/input/cost_benefits_steps/risks.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"risks_advice"=>$list_risks_advice,"risks_user"=>$list_risks_user,'isTaken'=>$isTaken,'selRisks'=>$list_selRisks));
+                    prereq_CostBenefits();
+                } else {
+                    throw new Exception("This Use Case doesn't exist !");
+                }
+            } else {
+                header('Location: ?A=cost_benefits&A2=use_case_cb');
+            }
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=cost_benefits&A2=use_case_cb');
+    }
+}
+
+function create_risk($twig,$is_connected,$post){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            $name = $post['name'];
+            $description = isset($post['description']) ? $post['description'] : "";
+            $risks_infos = ["name"=>$name,"description"=>$description];
+            //var_dump(getRiskUserItem($projID,$ucID,$name));
+            if(!empty(getRiskUserItem($projID,$ucID,$name))){
+                risks($twig,$is_connected,$projID,$ucID,true);
+            } else {
+                insertRiskUser($projID,$ucID,$risks_infos);
+                header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+            }
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function delete_risk_user($idRisk){
+    //var_dump(intval($idRisk));
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            deleteRiskUser(intval($idRisk));
+            header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function risks_selected($twig,$is_connected,$post=[]){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $selRisks = [];
+                foreach ($post as $id => $value) {
+                    array_push($selRisks,$id);
+                }
+                $selRisks_old = getListSelRisk($projID,$ucID);
+                $selRisks_old_id = getKeys($selRisks_old);
+                $selRisks_diff_rm = array_diff($selRisks_old_id,$selRisks);
+                $selRisks_diff_add = array_diff($selRisks,$selRisks_old_id);
+                //var_dump($selRisks_diff_rm);
+                //var_dump($selRisks_diff_add);
+                if(empty($selRisks_old)){
+                    insertSelRisk($projID,$ucID,$selRisks);
+                } else if (!empty($selRisks_old)) {
+                    deleteSelRisk($projID,$ucID,$selRisks_diff_rm);
+                    insertSelRisk($projID,$ucID,$selRisks_diff_add);
+                }
+                update_ModifDate_proj($projID);
+                risks_input($twig,$is_connected,$projID,$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("No Risk item selected !");
+    }
+}
+
+function risks_input($twig,$is_connected,$projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            $proj = getProjByID($projID,$user[0]);
+            $uc = getUCByID($ucID);
+            $list_selRisks = getListSelRisk($projID,$ucID);
+            //var_dump($list_selRisks);
+            $list_risks_advice = getListRiskAdvice($ucID); 
+            $list_sel_risks_advice = getListSelByType($list_selRisks,$list_risks_advice);
+            //var_dump($list_sel_risks_advice);
+            $list_risks_user = getListRiskUser($projID,$ucID);
+            $compo = getCompoByUC($ucID);
+            $nb_compo = getNbTotalCompo($compo['id']);
+            $nb_uc = getNbTotalUC($projID,$ucID);
+            //var_dump($list_ratio);
+            echo $twig->render('/input/cost_benefits_steps/risks_input.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"risks_advice"=>$list_risks_advice,"risks_user"=>$list_risks_user,"selRisks"=>$list_selRisks,'compo'=>$compo,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+            prereq_CostBenefits();
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
+function risks_inputed($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $list = getListRiskFromPost($post);
+                insertRiskInputed($projID,$ucID,$list);
+                update_ModifDate_proj($projID);
+                //header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("There is no data inputed !");
+    }
+}
+
+function getListRiskFromPost($post){
+    $list = [];
+    foreach ($post as $key => $value) {
+        $temp = explode('_',$key);
+        //var_dump($temp);
+        if($temp[0]=="impact"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['exp_impact'=>$value];
+            } else {
+                $list[$temp[1]] = ['exp_impact'=>$value];
+            }
+        } else if($temp[0]=="prob"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['prob'=>$value];
+            } else {
+                $list[$temp[1]] = ['prob'=>$value];
+            }
+        } 
+    }
+    return $list;
+}
+
 
 
 

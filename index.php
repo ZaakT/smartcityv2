@@ -1064,6 +1064,90 @@ try{
                         //var_dump($_POST);
                         noncash_inputed($_POST);
                     
+                    // --- RISKS ---
+                    } elseif($_GET['A2']=="risks"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['A3'])){
+                                            // --- RISKS SELECTED ---
+                                            if($_GET['A3']=="risks_selected"){
+                                                risks_selected($twig,$is_connected,$_POST);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=risks&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            risks($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                        }
+                                    }
+                                    else {                                    
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {                                        
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=cost_benefits&A2=project');
+                            }
+                        }
+                        else {
+                            risks($twig,$is_connected);
+                        }
+                    } elseif($_GET['A2']=="create_risk"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        create_risk($twig,$is_connected,$_POST);
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    } elseif($_GET['A2']=="delete_risk"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['id'])){
+                                            if($_GET['id']!=0){
+                                                delete_risk_user($_GET['id']);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+                                        }
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    // --- INPUTED RISKS ---
+                    } elseif($_GET['A2']=="risks_inputed"){
+                        //var_dump($_POST);
+                        risks_inputed($_POST);
+                    
                         
                     } else {
                         header('Location: ?A='.$_GET['A']);

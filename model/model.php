@@ -2267,3 +2267,345 @@ function insertWiderCashInputed($projID,$ucID,$list){
     }
     return $ret;
 }
+
+
+
+// ---------------------------------------- NON CASH----------------------------------------
+
+function getNonCashUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM noncash_item_user
+                            INNER JOIN noncash_uc
+                                INNER JOIN noncash_item
+                                    WHERE noncash_item_user.id_proj = ?
+                                        and noncash_item.id = noncash_item_user.id
+                                        and noncash_uc.id_uc = ?
+                                        and noncash_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListNonCashAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM noncash_item_advice
+                            INNER JOIN noncash_uc
+                                INNER JOIN noncash_item
+                                    WHERE noncash_uc.id_uc = ?
+                                        and noncash_item.id = noncash_uc.id_item
+                                        and noncash_item.id = noncash_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $sources = $row['sources'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListNonCashUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT noncash_item.id,name,description
+                            FROM noncash_item_user
+                            INNER JOIN noncash_uc
+                                INNER JOIN noncash_item
+                                    WHERE noncash_uc.id_uc = ?
+                                        and noncash_item.id = noncash_uc.id_item
+                                        and noncash_item_user.id_proj = ?
+                                        and noncash_item_user.id = noncash_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelNonCash($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,expected_impact,probability
+                            FROM input_noncash
+                            INNER JOIN noncash_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = noncash_item.id
+                            ORDER BY noncash_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $exp_impact = intval($row['expected_impact']);
+        $prob = floatval($row['probability']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob];
+        } else {
+            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertNonCashUser($projID,$ucID,$noncash_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_noncash`;');
+    $db->exec(' CREATE PROCEDURE `add_noncash`(
+                            IN noncash_name VARCHAR(255),
+                            IN noncash_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO noncash_item (name,description)
+                                    VALUES (noncash_name,noncash_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO noncash_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO noncash_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_noncash(?,?,?,?);');
+    $ret = $req->execute(array($noncash_data['name'],$noncash_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteNonCashUser($idNonCash){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM noncash_item WHERE id = ?');
+    return $req->execute(array($idNonCash));
+}
+
+function insertSelNonCash($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_noncash
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelNonCash($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_noncash WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function insertNonCashInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_noncash
+                            SET expected_impact = ?,
+                            probability = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['exp_impact'],$data['prob'],$projID,$ucID,$id_item));
+
+    }
+    return $ret;
+}
+
+
+
+// ---------------------------------------- RISKS----------------------------------------
+
+function getRiskUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM risk_item_user
+                            INNER JOIN risk_uc
+                                INNER JOIN risk_item
+                                    WHERE risk_item_user.id_proj = ?
+                                        and risk_item.id = risk_item_user.id
+                                        and risk_uc.id_uc = ?
+                                        and risk_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListRiskAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM risk_item_advice
+                            INNER JOIN risk_uc
+                                INNER JOIN risk_item
+                                    WHERE risk_uc.id_uc = ?
+                                        and risk_item.id = risk_uc.id_item
+                                        and risk_item.id = risk_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $sources = $row['sources'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListRiskUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT risk_item.id,name,description
+                            FROM risk_item_user
+                            INNER JOIN risk_uc
+                                INNER JOIN risk_item
+                                    WHERE risk_uc.id_uc = ?
+                                        and risk_item.id = risk_uc.id_item
+                                        and risk_item_user.id_proj = ?
+                                        and risk_item_user.id = risk_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelRisk($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,expected_impact,probability
+                            FROM input_risk
+                            INNER JOIN risk_item
+                                WHERE  id_uc = ? and id_proj = ? and id_item = risk_item.id
+                            ORDER BY risk_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $exp_impact = intval($row['expected_impact']);
+        $prob = floatval($row['probability']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob];
+        } else {
+            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertRiskUser($projID,$ucID,$risk_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_risk`;');
+    $db->exec(' CREATE PROCEDURE `add_risk`(
+                            IN risk_name VARCHAR(255),
+                            IN risk_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO risk_item (name,description)
+                                    VALUES (risk_name,risk_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO risk_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO risk_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_risk(?,?,?,?);');
+    $ret = $req->execute(array($risk_data['name'],$risk_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteRiskUser($idRisk){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM risk_item WHERE id = ?');
+    return $req->execute(array($idRisk));
+}
+
+function insertSelRisk($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_risk
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelRisk($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_risk WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function insertRiskInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_risk
+                            SET expected_impact = ?,
+                            probability = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['exp_impact'],$data['prob'],$projID,$ucID,$id_item));
+
+    }
+    return $ret;
+}

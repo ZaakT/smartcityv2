@@ -33,7 +33,7 @@
     overflow-y: auto;
 }
 
-th
+th{
     vertical-align: middle !important;
 }
 

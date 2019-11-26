@@ -23,7 +23,7 @@ function submitForm(formName){
     $("#"+formName).submit();
 }
 
-function countSelectedNonCash(oForm) {
+function countSelectedRisks(oForm) {
     var i, n = 0;
     var oElement;
     for (i = 0; i < oForm.elements.length; i++) {
@@ -36,21 +36,21 @@ function countSelectedNonCash(oForm) {
             }
         }
     }
-    $("#countNonCashSelect").text(n+" selected");
+    $("#countRisksSelect").text(n+" selected");
     //console.log(n);
     if (n >= 1) {
-        $("#help_noncash").attr('hidden', 'hidden');
+        $("#help_risks").attr('hidden', 'hidden');
         return true;
     }
     else {
-        $("#help_noncash").removeAttr('hidden');
+        $("#help_risks").removeAttr('hidden');
         return false;
     }
 }
 
-function checkNonCashInput(){
+function checkRisksInput(){
     var ret = true;
-    $("#noncash_input input").each(function(){
+    $("#risks_input input").each(function(){
         var val = $(this).val();
         var tab = $(this).classes()
         if(tab.includes("impact")){
@@ -86,14 +86,14 @@ function checkNonCashInput(){
             }
         }
     });
-    calcTotNonCash();
+    calcTotRisks();
     return ret;
 }
 
-function calcTotNonCash(){
+function calcTotRisks(){
     var sum = 0;
     var nb = 0;
-    $("#tot_table_noncash td").each(function(){
+    $("#tot_table_risks td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -116,10 +116,10 @@ function calcTotNonCash(){
 }
 
 try{
-    countSelectedNonCash(form_noncash);
+    countSelectedRisks(form_risks);
 } catch {
     //do nothing
 } finally {
-    checkNonCashInput();
-    calcTotNonCash();
+    checkRisksInput();
+    calcTotRisks();
 }

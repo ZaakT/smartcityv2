@@ -109,6 +109,5 @@ try{
     //do nothing
 } finally {
     checkCapexInput();
-    checkCapexPeriod();
     calcTotCapex();
 }

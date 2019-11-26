@@ -9,7 +9,7 @@ function prereq_CostBenefits1(check){
 }
 
 function prereq_CostBenefits2(check){
-    var parts_cond = ["capex","implem","opex","revenues","cashreleasing","widercash"];
+    var parts_cond = ["capex","implem","opex","revenues","cashreleasing","widercash","noncash","risks"];
     if(check){
         parts_cond.forEach(part => {
             $("#"+part).removeClass("disabled");
