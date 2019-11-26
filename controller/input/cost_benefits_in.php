@@ -16,6 +16,9 @@ function cost_benefits($twig,$is_connected){
 function project_cb($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
+    if(isset($_SESSION['projID'])){
+        unset($_SESSION['projID']);
+    }
     //var_dump($list_projects);
     echo $twig->render('/input/cost_benefits_steps/project.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
 }
@@ -26,6 +29,9 @@ function project_cb($twig,$is_connected,$projID=0){
 function use_case_cb($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
+        if(isset($_SESSION['ucID'])){
+            unset($_SESSION['ucID']);
+        }
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
             $list_measures = getListMeasures();
@@ -33,6 +39,7 @@ function use_case_cb($twig,$is_connected,$projID=0){
             $selScope = getListSelScope($projID);
             //var_dump($list_ucs);
             echo $twig->render('/input/cost_benefits_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'selScope'=>$selScope,'ucs'=>$list_ucs,'measures'=>$list_measures));
+            prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=use_case_cb');
         }
@@ -1297,7 +1304,7 @@ function noncash_input($twig,$is_connected,$projID=0,$ucID=0){
             $list_selNonCash = getListSelNonCash($projID,$ucID);
             //var_dump($list_selNonCash);
             $list_noncash_advice = getListNonCashAdvice($ucID); 
-            $list_sel_noncash_advice = getListSelByType($list_selNonCash,$list_noncash_advice);
+            //$list_sel_noncash_advice = getListSelByType($list_selNonCash,$list_noncash_advice);
             //var_dump($list_sel_noncash_advice);
             $list_noncash_user = getListNonCashUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
@@ -1323,7 +1330,7 @@ function noncash_inputed($post){
                 $list = getListNonCashFromPost($post);
                 insertNonCashInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                //header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -1357,6 +1364,19 @@ function getListNonCashFromPost($post){
     return $list;
 }
 
+function delete_selection_noncash($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelNonCash($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
 
 
 // ---------------------------------------- RISKS ----------------------------------------
@@ -1371,7 +1391,7 @@ function risks($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     $uc = getUCByID($ucID);
                     $list_risks_advice = getListRiskAdvice($ucID);   
                     $list_risks_user = getListRiskUser($projID,$ucID);    
-                    $list_selRisks = getListSelRisk($projID,$ucID);          
+                    $list_selRisks = getListSelRisks($projID,$ucID);          
                     //var_dump($list_selRisks);
                     echo $twig->render('/input/cost_benefits_steps/risks.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"risks_advice"=>$list_risks_advice,"risks_user"=>$list_risks_user,'isTaken'=>$isTaken,'selRisks'=>$list_selRisks));
                     prereq_CostBenefits();
@@ -1438,7 +1458,7 @@ function risks_selected($twig,$is_connected,$post=[]){
                 foreach ($post as $id => $value) {
                     array_push($selRisks,$id);
                 }
-                $selRisks_old = getListSelRisk($projID,$ucID);
+                $selRisks_old = getListSelRisks($projID,$ucID);
                 $selRisks_old_id = getKeys($selRisks_old);
                 $selRisks_diff_rm = array_diff($selRisks_old_id,$selRisks);
                 $selRisks_diff_add = array_diff($selRisks,$selRisks_old_id);
@@ -1469,7 +1489,7 @@ function risks_input($twig,$is_connected,$projID=0,$ucID=0){
         if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
             $proj = getProjByID($projID,$user[0]);
             $uc = getUCByID($ucID);
-            $list_selRisks = getListSelRisk($projID,$ucID);
+            $list_selRisks = getListSelRisks($projID,$ucID);
             //var_dump($list_selRisks);
             $list_risks_advice = getListRiskAdvice($ucID); 
             $list_sel_risks_advice = getListSelByType($list_selRisks,$list_risks_advice);
@@ -1498,7 +1518,7 @@ function risks_inputed($post){
                 $list = getListRiskFromPost($post);
                 insertRiskInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                //header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A=financing');
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -1532,8 +1552,152 @@ function getListRiskFromPost($post){
     return $list;
 }
 
+function delete_selection_risks($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelRisks($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=summary&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
 
 
+
+// ---------------------------------------- SUMMARY ----------------------------------------
+
+function summary($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            if(isset($_SESSION['ucID'])){
+                unset($_SESSION['ucID']);
+            }
+            $proj = getProjByID($projID,$user[0]);
+            $list_measures = getListMeasures();
+            $list_ucs = getListUCs();
+            $selScope = getListSelScope($projID);
+            $check = checkCBInputs($projID,$selScope);
+            $list_checks = $check[0];
+            $isValid = $check[1];
+            echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid));
+            prereq_CostBenefits();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=cost_benefits&A2=use_case_cb');
+    }
+}
+
+function checkCBInputs($projID,$scope){
+    $list = [];
+    $ret = true;
+    foreach ($scope as $id_meas => $list_ucs) {
+        foreach ($list_ucs as $ucID) {
+            $capex = checkCapex($projID,$ucID);
+            $implem = checkImplem($projID,$ucID);
+            $opex = checkOpex($projID,$ucID);
+            $revenues = checkRevenues($projID,$ucID);
+            $cashreleasing = checkCashReleasing($projID,$ucID);
+            $widercash = checkWiderCash($projID,$ucID);
+            $noncash = checkNonCash($projID,$ucID);
+            $risks = checkRisks($projID,$ucID);
+            $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,'widercash'=>$widercash,'noncash'=>$noncash,'risks'=>$risks];
+            $ret = !in_array(0,$list[$ucID]);
+        }
+    }
+    //var_dump($list);
+    return [$list,$ret];
+}
+
+
+// ---------------------------------------- FILLING CHECKS ----------------------------------------
+function checkCapex($projID,$ucID){
+    $listSel = getListSelCapex($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkImplem($projID,$ucID){
+    $listSel = getListSelImplem($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkOpex($projID,$ucID){
+    $listSel = getListSelOpex($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkRevenues($projID,$ucID){
+    $listSel = getListSelRevenues($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkCashReleasing($projID,$ucID){
+    $listSel = getListSelCashReleasing($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkWiderCash($projID,$ucID){
+    $listSel = getListSelWiderCash($projID,$ucID);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function checkNonCash($projID,$ucID){
+    $listSel = getListSelNonCash($projID,$ucID);
+    if(empty($listSel)){
+        return 2;
+    } else {
+        foreach ($listSel as $key => $value) {
+            if($value['exp_impact']==0){
+                return 0;
+            }
+        }
+        return 1;
+    }
+}
+
+function checkRisks($projID,$ucID){
+    $listSel = getListSelRisks($projID,$ucID);
+    if(empty($listSel)){
+        return 2;
+    } else {
+        foreach ($listSel as $key => $value) {
+            if($value['exp_impact']==0){
+                return 0;
+            }
+        }
+        return 1;
+    }
+}
 
 
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
@@ -1544,6 +1708,15 @@ function prereq_CostBenefits(){
         if(isset($_SESSION['ucID'])){
             echo "<script>prereq_CostBenefits2(true);</script>";
             $ucID = $_SESSION['ucID'];
+            $capex = checkCapex($projID,$ucID);
+            $implem = checkImplem($projID,$ucID);
+            $opex = checkOpex($projID,$ucID);
+            $revenues = checkRevenues($projID,$ucID);
+            $cashreleasing = checkCashReleasing($projID,$ucID);
+            $widercash = checkWiderCash($projID,$ucID);
+            $noncash = checkNonCash($projID,$ucID);
+            $risks = checkRisks($projID,$ucID);
         }
     }
 }
+

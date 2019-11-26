@@ -33,6 +33,9 @@
 <div class="row my-5">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewRiskModal" role="button">Create a custom item</button>
 </div>
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-sm btn-danger text-light" data-toggle="modal" data-target="#deleteSelectionModal" role="button">Delete the selection<br>&amp; Choose none</button>
+</div>
 <div class="row mt-3 text-center">
     <h6 id="createRiskHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
 </div>
@@ -48,10 +51,12 @@
 
 {{ modal.create_risk(projID,ucID) }}
 {{ modal.ask_fill(projID,ucID) }}
-
-<script type="text/javascript">
-    $('#askFillRisks').modal('show')
-</script>
+{{ modal.delete_selection(projID,ucID) }}
+    {% if selRisks|length == 0 and risks_user|length == 0  %}
+    <script type="text/javascript">
+        $('#askFillRisks').modal('show')
+    </script>
+    {% endif %}
 {% else %}
 <h2 class="text-center">There is no Risk item, please contact an administrator</h2>
 {% endif %}

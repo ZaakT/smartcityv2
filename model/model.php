@@ -2425,6 +2425,14 @@ function deleteSelNonCash($projID,$ucID,$list){
     return $ret;
 }
 
+function deleteAllSelNonCash($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_noncash WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
 function insertNonCashInputed($projID,$ucID,$list){
     $db = dbConnect();
     $ret = false;
@@ -2517,7 +2525,7 @@ function getListRiskUser($projID,$ucID){
 
 }
 
-function getListSelRisk($projID,$ucID){
+function getListSelRisks($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item,expected_impact,probability
                             FROM input_risk
@@ -2593,6 +2601,14 @@ function deleteSelRisk($projID,$ucID,$list){
     foreach ($list as $id_item) {
         $ret = $req->execute(array($projID,$ucID,$id_item));
     }
+    return $ret;
+}
+
+function deleteAllSelRisks($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_risk WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
     return $ret;
 }
 
