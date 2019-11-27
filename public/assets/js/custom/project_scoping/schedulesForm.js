@@ -85,7 +85,9 @@ function fullCheckValidity(){
         for(j in list_ucs) {
             var uc = list_ucs[j];
             if(checkValidity(part,uc,list_dates,dates_saved)==false){
-                return false;
+                if(part!="revenues"){
+                    return false;
+                }
             }
         }   
     }
@@ -137,15 +139,16 @@ $.date = function(dateObject) {
 
 function copy_dates(part,id_prec,id_next){
     var list_to_copy = dates_saved[part][id_prec];
-    //console.log(list_to_copy);
+    console.log(list_to_copy);
     for (date_label in list_to_copy) {
         date = list_to_copy[date_label];
+        console.log(date);
         if(date != "" > 0){
             dates_saved[part][id_next][date_label] = date;
-            //console.log($.date(date));
-            var temp = $.date(date).split("/");
-            //console.log(temp);
+            var temp = date.split("/");
+            console.log(temp);
             var formattedDate = $.date(temp[0]+"/01/"+temp[1]);
+            console.log(formattedDate);
             $("#"+part+"_"+date_label+"_"+id_next+" input").val(formattedDate);
             //$("#"+part+"_"+date_label+"_"+id_next).data('update',date);
         }

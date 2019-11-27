@@ -957,12 +957,12 @@ function getListSelDates($projID){
     }
     while($row = $req_revenue->fetch()){
         $id_uc = intval($row['id_uc']);
-        $startdate = date_create($row['start_date'])->format('m/Y');
-        $date25 = date_create($row['25_rampup'])->format('m/Y');
-        $date50 = date_create($row['50_rampup'])->format('m/Y');
-        $date75 = date_create($row['75_rampup'])->format('m/Y');
-        $date100 = date_create($row['100_rampup'])->format('m/Y');
-        $enddate = date_create($row['end_date'])->format('m/Y');
+        $startdate = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
+        $date25 = $row['25_rampup'] ? date_create($row['25_rampup'])->format('m/Y') : null;
+        $date50 = $row['50_rampup'] ? date_create($row['50_rampup'])->format('m/Y') : null;
+        $date75 = $row['75_rampup'] ? date_create($row['75_rampup'])->format('m/Y') : null;
+        $date100 = $row['100_rampup'] ? date_create($row['100_rampup'])->format('m/Y') : null;
+        $enddate = $row['end_date'] ? date_create($row['end_date'])->format('m/Y') : null;
         if(array_key_exists('revenues',$list)){
             $list['revenues'][$id_uc] = [
                                 'startdate'=>$startdate,
@@ -1040,6 +1040,9 @@ function insertSelDiscountRate($projID,$val){
     $ret = $req->execute(array($val,$projID));
     return $ret;
 }
+
+
+
 
 
 
@@ -1274,6 +1277,17 @@ function getNbTotalUC($projID,$ucID){
     return number_format($res, 0, ',', ' ');
 }
 
+function deleteAllSelCapex($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_capex WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
+
+
+
 // ---------------------------------------- IMPLEM----------------------------------------
 
 function getImplemUserItem($projID,$ucID,$name){
@@ -1464,6 +1478,13 @@ function insertImplemInputed($projID,$ucID,$list){
     return $ret;
 }
 
+function deleteAllSelImplem($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_implem WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
 
 
 // ---------------------------------------- OPEX----------------------------------------
@@ -1660,6 +1681,14 @@ function insertOpexInputed($projID,$ucID,$list){
     return $ret;
 }
 
+function deleteAllSelOpex($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_opex WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
 
 // ---------------------------------------- REVENUES----------------------------------------
 
@@ -1852,6 +1881,22 @@ function insertRevenuesInputed($projID,$ucID,$list){
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],$data['unit_rev'],$data['anVarVol'],$data['anVarRev'],$projID,$ucID,$id_item));
     }
+    return $ret;
+}
+
+function getRevenuesSchedule($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch();
+    return $res;
+}
+
+function deleteAllSelRevenues($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_revenues WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
     return $ret;
 }
 
@@ -2061,6 +2106,14 @@ function insertCashReleasingInputed($projID,$ucID,$list){
     return $ret;
 }
 
+function deleteAllSelCashReleasing($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_cashreleasing WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
 
 
 
@@ -2265,6 +2318,14 @@ function insertWiderCashInputed($projID,$ucID,$list){
         $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
 
     }
+    return $ret;
+}
+
+function deleteAllSelWiderCash($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_widercash WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
     return $ret;
 }
 
@@ -2624,4 +2685,94 @@ function insertRiskInputed($projID,$ucID,$list){
 
     }
     return $ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// ---------------------------------------- SCENARIO----------------------------------------
+
+function getListScenarios($userID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT financing_scenario.id,financing_scenario.name,financing_scenario.description,input_invest,input_capex,input_implem,input_opex,financing_scenario.creation_date,financing_scenario.modif_date,id_proj
+                            FROM financing_scenario
+                            INNER JOIN project
+                                WHERE financing_scenario.id_proj = project.id and project.id_user = ?
+                            ORDER BY financing_scenario.name');
+    $req->execute(array($userID));
+    $list = [];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $input_invest = floatval($row['input_invest']);
+        $input_capex = floatval($row['input_capex']);
+        $input_implem = floatval($row['input_implem']);
+        $input_opex = floatval($row['input_opex']);
+        $creation_date = $row['creation_date'];
+        $modif_date = $row['modif_date'];
+        $id_proj = intval($row['id_proj']);
+        $list[$id] = ['name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_capex'=>$input_capex,'input_implem'=>$input_implem,'input_opex'=>$input_opex,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListProjects2($idUser){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM project WHERE id_user = ? ORDER BY id');
+    $req->execute(array($idUser));
+    $list = [];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $discount_rate = floatval($row['discount_rate']);
+        $weight_bank = floatval($row['weight_bank']);
+        $weight_bank_soc = floatval($row['weight_bank_soc']);
+        $creation_date = $row['creation_date'];
+        $modif_date = $row['modif_date'];
+        $id_user = intval($row['id_user']);
+        $list[$id] = ['name'=>$name,'description'=>$description,'discount_rate'=>$discount_rate,'weight_bank'=>$weight_bank,'weight_bank_soc'=>$weight_bank_soc,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_user'=>$id_user];
+    }
+    return $list;
+}
+
+function insertScen($scen){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO financing_scenario (name,description,id_proj) VALUES (?,?,?)');
+    return $req->execute(array($scen[0],$scen[1],$scen[2]));
+}
+
+function deleteScen($id){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM financing_scenario WHERE id = ?');
+    return $req->execute(array($id));
+}
+
+function update_ModifDate_scen($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE financing_scenario SET modif_date = CURRENT_TIMESTAMP WHERE id = ?');
+    return $req->execute(array($scenID));
+}
+
+function getScen($userID,$name){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT *
+                            FROM financing_scenario
+                            INNER JOIN project
+                                WHERE project.id = financing_scenario.id_proj
+                                    and project.id_user = ? and financing_scenario.name = ? ');
+    $req->execute(array($userID,$name));
+    $res = $req->fetch();
+    //var_dump($res);
+    return $res;
 }

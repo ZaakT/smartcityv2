@@ -13,7 +13,7 @@ function cost_benefits($twig,$is_connected){
 
 // ---------------------------------------- PROJECT ----------------------------------------
 
-function project_cb($twig,$is_connected,$projID=0){
+function project_cb($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
     if(isset($_SESSION['projID'])){
@@ -89,7 +89,7 @@ function create_capex($twig,$is_connected,$post){
             $capex_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getCapexUserItem($projID,$ucID,$name));
             if(!empty(getCapexUserItem($projID,$ucID,$name))){
-                capex($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertCapexUser($projID,$ucID,$capex_infos);
                 header('Location: ?A=cost_benefits&A2=capex&projID='.$projID.'&ucID='.$ucID);
@@ -242,7 +242,19 @@ function getListSelByType($list_sel,$list_all){
     return $list;
 }
 
-
+function delete_selection_capex($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelCapex($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=implem&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
 
 // ---------------------------------------- IMPLEM ----------------------------------------
 
@@ -284,7 +296,7 @@ function create_implem($twig,$is_connected,$post){
             $implem_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getImplemUserItem($projID,$ucID,$name));
             if(!empty(getImplemUserItem($projID,$ucID,$name))){
-                implem($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=implem&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertImplemUser($projID,$ucID,$implem_infos);
                 header('Location: ?A=cost_benefits&A2=implem&projID='.$projID.'&ucID='.$ucID);
@@ -412,6 +424,20 @@ function implem_inputed($post){
     }
 }
 
+function delete_selection_implem($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelImplem($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=opex&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
 
 // ---------------------------------------- OPEX ----------------------------------------
 
@@ -453,7 +479,7 @@ function create_opex($twig,$is_connected,$post){
             $opex_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getOpexUserItem($projID,$ucID,$name));
             if(!empty(getOpexUserItem($projID,$ucID,$name))){
-                opex($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=opex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertOpexUser($projID,$ucID,$opex_infos);
                 header('Location: ?A=cost_benefits&A2=opex&projID='.$projID.'&ucID='.$ucID);
@@ -582,7 +608,11 @@ function opex_inputed($post){
                 }
                 insertOpexInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                header('Location: ?A=cost_benefits&A2=revenues&projID='.$projID.'&ucID='.$ucID);
+                
+                $revSchedule = getRevenuesSchedule($projID,$ucID);
+                $hasSchedule = !$revSchedule ? $revSchedule : true;
+                $next_page = $hasSchedule ? "revenues" : "cashreleasing";
+                header('Location: ?A=cost_benefits&A2='.$next_page.'&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -591,6 +621,23 @@ function opex_inputed($post){
         }
     } else {
         throw new Exception("There is no data inputed !");
+    }
+}
+
+function delete_selection_opex($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelOpex($projID,$ucID);
+            $revSchedule = getRevenuesSchedule($projID,$ucID);
+            $hasSchedule = !$revSchedule ? $revSchedule : true;
+            $next_page = $hasSchedule ? "revenues" : "cashreleasing";
+            header('Location: ?A=cost_benefits&A2='.$next_page.'&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
     }
 }
 
@@ -605,12 +652,18 @@ function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                 if(getUCByID($ucID)){
                     $proj = getProjByID($projID,$user[0]);
                     $uc = getUCByID($ucID);
-                    $list_revenues_advice = getListRevenuesAdvice($ucID);   
-                    $list_revenues_user = getListRevenuesUser($projID,$ucID);    
-                    $list_selRevenues = getListSelRevenues($projID,$ucID);          
-                    //var_dump($list_selRevenues);
-                    echo $twig->render('/input/cost_benefits_steps/revenues.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,'isTaken'=>$isTaken,'selRevenues'=>$list_selRevenues));
-                    prereq_CostBenefits();
+                    $revSchedule = getRevenuesSchedule($projID,$ucID);
+                    $hasSchedule = !$revSchedule ? $revSchedule : true;
+                    if($hasSchedule){
+                        $list_revenues_advice = getListRevenuesAdvice($ucID);   
+                        $list_revenues_user = getListRevenuesUser($projID,$ucID);    
+                        $list_selRevenues = getListSelRevenues($projID,$ucID);          
+                        //var_dump($list_selRevenues);
+                        echo $twig->render('/input/cost_benefits_steps/revenues.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,'isTaken'=>$isTaken,'selRevenues'=>$list_selRevenues));
+                        prereq_CostBenefits();
+                    } else {
+                        header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
+                    }
                 } else {
                     throw new Exception("This Use Case doesn't exist !");
                 }
@@ -635,7 +688,7 @@ function create_revenues($twig,$is_connected,$post){
             $revenues_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getRevenuesUserItem($projID,$ucID,$name));
             if(!empty(getRevenuesUserItem($projID,$ucID,$name))){
-                revenues($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=revenues&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertRevenuesUser($projID,$ucID,$revenues_infos);
                 header('Location: ?A=cost_benefits&A2=revenues&projID='.$projID.'&ucID='.$ucID);
@@ -776,6 +829,20 @@ function revenues_inputed($post){
     }
 }
 
+function delete_selection_revenues($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelRevenues($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
 
 
 
@@ -819,7 +886,7 @@ function create_cashreleasing($twig,$is_connected,$post){
             $cashreleasing_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getCashReleasingUserItem($projID,$ucID,$name));
             if(!empty(getCashReleasingUserItem($projID,$ucID,$name))){
-                cashreleasing($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertCashReleasingUser($projID,$ucID,$cashreleasing_infos);
                 header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
@@ -983,6 +1050,20 @@ function getListCashRelFromPost($post){
     return $list;
 }
 
+function delete_selection_cashreleasing($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelCashReleasing($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
 
 
 // ---------------------------------------- WIDER CASH ----------------------------------------
@@ -1025,7 +1106,7 @@ function create_widercash($twig,$is_connected,$post){
             $widercash_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getWiderCashUserItem($projID,$ucID,$name));
             if(!empty(getWiderCashUserItem($projID,$ucID,$name))){
-                widercash($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertWiderCashUser($projID,$ucID,$widercash_infos);
                 header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
@@ -1189,6 +1270,20 @@ function getListWiderCashFromPost($post){
     return $list;
 }
 
+function delete_selection_widercash($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelWiderCash($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
 
 
 // ---------------------------------------- NON CASH ----------------------------------------
@@ -1231,7 +1326,7 @@ function create_noncash($twig,$is_connected,$post){
             $noncash_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getNonCashUserItem($projID,$ucID,$name));
             if(!empty(getNonCashUserItem($projID,$ucID,$name))){
-                noncash($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertNonCashUser($projID,$ucID,$noncash_infos);
                 header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
@@ -1419,7 +1514,7 @@ function create_risk($twig,$is_connected,$post){
             $risks_infos = ["name"=>$name,"description"=>$description];
             //var_dump(getRiskUserItem($projID,$ucID,$name));
             if(!empty(getRiskUserItem($projID,$ucID,$name))){
-                risks($twig,$is_connected,$projID,$ucID,true);
+                header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 insertRiskUser($projID,$ucID,$risks_infos);
                 header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
@@ -1518,7 +1613,7 @@ function risks_inputed($post){
                 $list = getListRiskFromPost($post);
                 insertRiskInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
-                header('Location: ?A=financing');
+                header('Location: ?A=cost_benefits&A2=summary&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -1608,10 +1703,11 @@ function checkCBInputs($projID,$scope){
             $noncash = checkNonCash($projID,$ucID);
             $risks = checkRisks($projID,$ucID);
             $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,'widercash'=>$widercash,'noncash'=>$noncash,'risks'=>$risks];
-            $ret = !in_array(0,$list[$ucID]);
+            if(in_array(0,$list[$ucID])){
+                $ret = false;
+            }
         }
     }
-    //var_dump($list);
     return [$list,$ret];
 }
 
@@ -1622,7 +1718,7 @@ function checkCapex($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1631,7 +1727,7 @@ function checkImplem($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1640,7 +1736,7 @@ function checkOpex($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1649,7 +1745,7 @@ function checkRevenues($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1658,7 +1754,7 @@ function checkCashReleasing($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1667,7 +1763,7 @@ function checkWiderCash($projID,$ucID){
     if(!empty($listSel)){
         return 1;
     } else {
-        return 0;
+        return 2;
     }
 }
 
@@ -1703,20 +1799,15 @@ function checkRisks($projID,$ucID){
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_CostBenefits(){
     if(isset($_SESSION['projID'])){
-        echo "<script>prereq_CostBenefits1(true);</script>";
         $projID = $_SESSION['projID'];
+        echo "<script>prereq_CostBenefits1(true);</script>";
         if(isset($_SESSION['ucID'])){
-            echo "<script>prereq_CostBenefits2(true);</script>";
             $ucID = $_SESSION['ucID'];
-            $capex = checkCapex($projID,$ucID);
-            $implem = checkImplem($projID,$ucID);
-            $opex = checkOpex($projID,$ucID);
-            $revenues = checkRevenues($projID,$ucID);
-            $cashreleasing = checkCashReleasing($projID,$ucID);
-            $widercash = checkWiderCash($projID,$ucID);
-            $noncash = checkNonCash($projID,$ucID);
-            $risks = checkRisks($projID,$ucID);
+            $revSchedule = getRevenuesSchedule($projID,$ucID);
+            $hasSchedule = !$revSchedule ? $revSchedule : true;
+            echo "<script>prereq_CostBenefits2(true,".$hasSchedule.");</script>";
         }
     }
 }
+
 

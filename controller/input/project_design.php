@@ -22,14 +22,14 @@ function ucm($twig,$is_connected,$isTaken=false){
     echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken,'part'=>'Use Cases Menu','username'=>$user[1])); 
 }
 
-function create_ucm($twig,$is_connected,$post){
+function create_ucm($post){
     $name = $post['name'];
     $description = isset($post['description']) ? $post['description'] : "";
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
     $ucmInfos = [$name,$description,$idUser];
     if(!empty(getUCM($idUser,$name))){
-        ucm($twig,$is_connected,true);
+        header('Location: ?A=project_design&A2=ucm&isTaken=true');
     } else {
         insertUCM($ucmInfos);
         header('Location: ?A=project_design&A2=ucm');

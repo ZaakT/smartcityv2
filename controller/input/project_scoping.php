@@ -11,21 +11,21 @@ function project_scoping($twig,$is_connected){
 // --- Project Scoping Steps
 
 // ---------------------------------------- PROJECT ----------------------------------------
-function project($twig,$is_connected){
+function project($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
     //var_dump($list_projects);
-    echo $twig->render('/input/project_scoping_steps/project.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
+    echo $twig->render('/input/project_scoping_steps/project.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects,'isTaken'=>$isTaken)); 
 }
 
-function create_proj($twig,$is_connected,$post){
+function create_proj($post){
     $name = $post['name'];
     $description = isset($post['description']) ? $post['description'] : "";
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
     $projInfos = [$name,$description,$idUser];
     if(!empty(getProj($idUser,$name))){
-        project($twig,$is_connected,true);
+        header('Location: ?A=project_scoping&A2=project&isTaken=true');
     } else {
         insertProj($projInfos);
         header('Location: ?A=project_scoping&A2=project');
@@ -386,6 +386,7 @@ function schedule($twig,$is_connected,$projID=0){
             $list_measures = getListMeasures();
             $selScope = getListSelScope($projID);
             $listSelDates = getListSelDates($projID);
+            //var_dump($listSelDates["revenues"]);
             echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures,'list_sel'=>$listSelDates)); 
             prereq_ProjectScoping();
         } else {
@@ -433,7 +434,7 @@ function getDatesFromPost($post){
             $date_label = $temp[2];
             $id_uc = intval($temp[3]);
             $date_input = explode('/',$value);
-            $date = date_create($date_input[1]."-".$date_input[0]."-01")->format('Y-m-d H:i:s');
+            $date = sizeof($date_input)>1 ? date_create($date_input[1]."-".$date_input[0]."-01")->format('Y-m-d H:i:s') : null;
             //var_dump($date->format('m/Y'));
             if(array_key_exists($part,$list_dates)){
                 if(array_key_exists($id_uc,$list_dates[$part])){

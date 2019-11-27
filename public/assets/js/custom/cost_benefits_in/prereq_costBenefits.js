@@ -9,8 +9,12 @@ function prereq_CostBenefits1(check){
     }
 }
 
-function prereq_CostBenefits2(check){
-    var parts_cond = ["capex","implem","opex","revenues","cashreleasing","widercash","noncash","risks"];
+function prereq_CostBenefits2(check,hasRevSchedule){
+    if(hasRevSchedule){
+        var parts_cond = ["capex","implem","opex","revenues","cashreleasing","widercash","noncash","risks"];
+    } else {
+        var parts_cond = ["capex","implem","opex","cashreleasing","widercash","noncash","risks"];
+    }
     if(check){
         parts_cond.forEach(part => {
             $("#"+part).removeClass("disabled");

@@ -56,3 +56,47 @@
 </div> 
 {% endmacro %}
 
+
+{% macro ask_fill(projID=0,ucID=0) %}
+<div class="modal fade" id="askFillRevenues" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Access to Revenues Selection Page</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to fill this part ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Yes</button>
+                <a href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-secondary">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro delete_selection(projID=0,ucID=0) %}
+<div class="modal fade" id="deleteSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selection Deleting Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete the selection and skip this part ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=cost_benefits&amp;A2=delete_selection_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
