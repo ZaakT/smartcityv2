@@ -2776,3 +2776,51 @@ function getScen($userID,$name){
     //var_dump($res);
     return $res;
 }
+
+function getScenByID($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT *
+                            FROM financing_scenario
+                            WHERE id = ? ');
+    $req->execute(array($scenID));
+    $res = $req->fetch();
+    $id = intval($res['id']);
+    $name = $res['name'];
+    $description = $res['description'];
+    $input_invest = floatval($res['input_invest']);
+    $input_capex = floatval($res['input_capex']);
+    $input_implem = floatval($res['input_implem']);
+    $input_opex = floatval($res['input_opex']);
+    $creation_date = $res['creation_date'];
+    $modif_date = $res['modif_date'];
+    $id_proj = intval($res['id_proj']);
+    $scen = ['id'=>$id,'name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_capex'=>$input_capex,'input_implem'=>$input_implem,'input_opex'=>$input_opex,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
+    
+    //var_dump($scen);
+    return $scen;
+}
+
+
+// ---------------------------------------- WORK. CAP. REQ. ----------------------------------------
+
+function getTotCapexFromProj($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_capex
+                            WHERE id_proj = ?');
+    $req->execute(array($projID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}
+
+function getTotImplemFromProj($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_implem
+                            WHERE id_proj = ?');
+    $req->execute(array($projID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}

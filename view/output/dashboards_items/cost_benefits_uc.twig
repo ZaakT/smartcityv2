@@ -1,26 +1,27 @@
-{% extends '/input/funding.twig' %}
+{% extends '/output/dashboards.twig' %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
-{% import "/templates/funding/macro_work_cap_req.twig" as table %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{# {% import "/templates/dashboards_items/macro_cb_uc.twig" as list %} #}
 
+{% block title %}Dashboards - Cost Benefits Per Use Case{% endblock %}
 
-{% block title %}Funding - Working Capital Req.{% endblock %}
-
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
 
 {% block content %}
-{{ second_bar.second_bar(username,part,sel_scen,part2,parent) }}
+
+{{ second_bar.second_bar(username,part,selected) }}
+
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
 </div>
 
-<form action="?A=funding&amp;A2=scen_selected" method="post">
-{{table.workcapreq_table(values)}}
 <div class="row m-3 text-center text-dark">
-    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_capex');"></button>
 </div>
-</form>
 
 {% endblock %}
+
 

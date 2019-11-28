@@ -1,0 +1,46 @@
+{% macro workcapreq_table(values) %}
+
+<div class="row offset-2 text-center">
+    <div class="col-8 mx-5 list-table">
+        <table id="workcapreq_table" class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Recommandation</th>
+                    <th scope="col">User Entry</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr scope="row">
+                    <td class="bg-dark text-light"><strong>Capex</strong> (A)</td>
+                    <td hidden>{{values['capex']}}</td>
+                    <td>{{values['capex']}}</td>
+                    <td></td>
+                </tr>
+                <tr scope="row">
+                    <td class="bg-dark text-light"><strong>Implementation</strong> (B)</td>
+                    <td hidden>{{values['capex']}}</td>
+                    <td>{{values['implem']}}</td>
+                    <td></td>
+                </tr>
+                <tr scope="row">
+                    <td class="bg-dark text-light"><strong>Investment</strong> (C = A + B)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr scope="row">
+                    <td class="bg-dark text-light"><strong>Operations</strong> (D)</td>
+                    <td hidden>{{values['capex']}}</td>
+                    <td>{{values['op']}}</td>
+                    <td></td>
+                </tr>
+                <tr scope="row">
+                    <td class="bg-dark text-light"><strong>Total Financing</strong> (E = C + D)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

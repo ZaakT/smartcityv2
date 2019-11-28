@@ -41,18 +41,28 @@ function delete_scen($idScen){
     header('Location: ?A=funding&A2=scenario');
 }
 
-
-
-
-
-
-
-
-
-
-function work_cap_req($twig,$is_connected){
+function work_cap_req($twig,$is_connected,$scenID=1){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/funding_steps/work_cap_req.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+    if($scenID!=0){
+        if(getScenByID($scenID)){
+            $list_scenarios = getListScenarios($user[0]);
+            $list_projects = getListProjects2($user[0]);
+            $scen = getScenByID($scenID);
+            $parentID = $scen['id_proj'];
+            $parent = array_merge(['id'=>$parentID],$list_projects[$parentID]);
+            //var_dump($parent);
+            $tot_capex = getTotCapexFromProj($parentID);
+            $tot_implem = getTotImplemFromProj($parentID);
+            $tot_op = 0;
+            $values = ['capex'=>$tot_capex,'implem'=>$tot_implem,'op'=>$tot_op];
+            var_dump($values);
+            echo $twig->render('/input/funding_steps/work_cap_req.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'values'=>$values)); 
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=funding&A2=scenario');
+    }
 }
 
 function funding_sources($twig,$is_connected){

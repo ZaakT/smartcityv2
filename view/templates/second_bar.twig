@@ -1,18 +1,10 @@
-{% macro second_bar(username, part, selected, part2="", selected2="",parent="") %}
+{% macro second_bar(username, part, selected, part2="", selected2="") %}
 <div class="row infos-bar align-content-center">
     <div class="col-lg text-left">
-        {% if part %} 
-            {% if parent %}  
-            <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&emsp;<strong>{{ selected }}</strong> ( {{parent}} )
-            {% else %}
-            <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&emsp;<strong>{{ selected }}</strong>
-            {% endif %}
-        {% endif %}
-        {% if part2 and selected2 %}        
+        <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&emsp;<strong>{{ selected }}</strong>
+        {% if part2 and selected2 %}
         <span class="ml-5 text-uppercase">{{ part2 }} :</span>&emsp;<strong>{{ selected2 }}</strong>
         {% endif %}
-    </div>
-    <div class="col-lg text-center">
     </div>
     <div class="col-lg text-right">
         <span class="text-uppercase"> Username :</span>&emsp;<strong>{{ username }}</strong>

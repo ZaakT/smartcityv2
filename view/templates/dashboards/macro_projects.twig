@@ -1,0 +1,29 @@
+{% macro list_projects(projects) %}
+
+<div class="row text-center">
+    <div class="col mx-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Modification Date</th>
+                    <th scope="col">Creation Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for proj in projects %}
+                <tr id = "tr_{{ proj[0] }}" scope="row">
+                    <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" required></td>
+                    <td>{{ proj[1] }}</td>
+                    <td>{{ proj[2] }}</td>
+                    <td>{{ proj[7] }}</td>
+                    <td>{{ proj[6] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
