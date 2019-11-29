@@ -183,7 +183,7 @@ function perimeter_selected($post){
                     }
                 }
             }
-            //var_dump($list_zones);
+            var_dump($list_zones);
             $listSelZones = getListSelZones($projID);
             //var_dump(empty($listSelZones));
             if(empty($listSelZones)){
@@ -192,9 +192,8 @@ function perimeter_selected($post){
                 deleteSelZones($projID);
                 insertSelZones($projID,$list_zones);
             }
-            //var_dump($listSelZones);
             update_ModifDate_proj($projID);            
-            header('Location: ?A=project_scoping&A2=size&projID='.$projID);
+            //header('Location: ?A=project_scoping&A2=size&projID='.$projID);
 
         } else {
             throw new Exception("No Project selected !");

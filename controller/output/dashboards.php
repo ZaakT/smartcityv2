@@ -26,8 +26,16 @@ function cost_benefits_uc($twig,$is_connected,$projID=0){
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
+            $list_zones = getListZones();
+            $repart_zones = sort_zones($list_zones);
+            //var_dump($list_zones);
+            //var_dump($repart_zones);
+            $listSelZones = getListSelZones($projID);
             //var_dump($list_ucs);
-            echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1]));
+            echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'zones'=>$repart_zones,'list_sel'=>$listSelZones));
             //prereq_CostBenefits();
         } else {
             throw new Exception("This Project doesn't exist !");

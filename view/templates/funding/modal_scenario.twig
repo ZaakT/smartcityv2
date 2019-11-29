@@ -25,11 +25,11 @@
                     <div class="form-group row">
                         <label for="description" class="col-sm-4 col-form-label">Related Project</label>
                         <div class="col-sm-8">
-                                <select class="form-control" name="related_project" id="related_project">
-                                    {% for id,project in projects %}
-                                        <option  name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>
-                                    {% endfor %}
-                                </select>
+                            <select class="form-control" name="related_project" id="related_project">
+                                {% for id,project in projects %}
+                                    <option  name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>
