@@ -2814,12 +2814,71 @@ function getTotCapexFromProj($projID){
     return $tot;
 }
 
+function getTotCapexByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_capex
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}
+
 function getTotImplemFromProj($projID){
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_implem
                             WHERE id_proj = ?');
     $req->execute(array($projID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}
+
+function getTotImplemByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_implem
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}
+
+function getNbUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT nb_compo/nb_per_uc as nb_uc, id_zone
+                            FROM volumes_input
+                            WHERE id_proj = ? and id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($row=$req->fetch()){
+        $id_zone = intval($row['id_zone']);
+        $nb_uc = intval($row['nb_uc']);
+        $list[$id_zone] = $nb_uc;
+    }
+    return $list;
+}
+
+function getTotOpexByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_opex
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}
+
+function getTotRevenuesByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*revenues_per_unit) AS tot
+                            FROM input_revenues
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return $tot;

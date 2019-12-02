@@ -1418,7 +1418,15 @@ try{
                     } elseif($_GET['A2']=="cost_benefits_uc"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                cost_benefits_uc($twig,$is_connected,$_GET['projID']);
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="output"){
+                                        cbuc_output($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else {
+                                        header('Location: ?A=dashboards&A2=cost_benefits_uc&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    cost_benefits_uc($twig,$is_connected,$_GET['projID']);
+                                }
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');

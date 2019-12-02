@@ -32,7 +32,7 @@ function initDatepickers(){
                         var newDate = $("#"+part+"_"+date+"_"+uc).data('datepicker').date;
                         //console.log(newDate);
                         dates_saved[part][uc][date] = newDate;
-                        checkValidity(part,uc,list_dates,dates_saved);
+                        checkValidity(part,uc);
                     });  
                 }      
             });  
@@ -40,13 +40,13 @@ function initDatepickers(){
     });
 }
 
-function checkValidity(part,uc,list_dates,dates_saved){
-    var prec_date = new Date();
-    var current_date = new Date();
-    prec_date = dates_saved[part][uc]["startdate"];
-    current_date = dates_saved[part][uc]["startdate"];
+function checkValidity(part,uc){
+    var prec_date = dates_saved[part][uc]["startdate"];
+    var current_date =dates_saved[part][uc]["startdate"];
     var ret = true;
 
+    //console.log(part+" - "+uc);
+    //console.log(dates_saved[part][uc]);
     list_dates.forEach((date) => {
         //console.log(dates_saved[part][uc][date]);
         if(date!="startdate"){
@@ -84,7 +84,7 @@ function fullCheckValidity(){
         var part = list_parts[i];
         for(j in list_ucs) {
             var uc = list_ucs[j];
-            if(checkValidity(part,uc,list_dates,dates_saved)==false){
+            if(checkValidity(part,uc)==false){
                 if(part!="revenues"){
                     return false;
                 }
@@ -115,8 +115,18 @@ function initSelDates(formName){
         if(placeholder != undefined){
             //console.log(placeholder);
             $(this).val(placeholder);
-            dates_saved[part][id_uc][date] = placeholder;
-            checkValidity(part,id_uc,list_dates,dates_saved)
+            if(placeholder!=""){
+                var tab2 = placeholder.split('/');
+                //console.log(tab2);
+                var newdate = new Date(parseInt(tab2[1]),parseInt(tab2[0])-1);
+                //console.log(newdate);
+                dates_saved[part][id_uc][date] = newdate;
+                //console.log(dates_saved[part][id_uc][date]);
+            } else {
+                dates_saved[part][id_uc][date] = "";
+                //console.log(dates_saved[part][id_uc][date]);
+            }
+            checkValidity(part,id_uc);
         }
     });
 }
@@ -139,21 +149,22 @@ $.date = function(dateObject) {
 
 function copy_dates(part,id_prec,id_next){
     var list_to_copy = dates_saved[part][id_prec];
-    console.log(list_to_copy);
+    //console.log(list_to_copy);
     for (date_label in list_to_copy) {
         date = list_to_copy[date_label];
-        console.log(date);
+        //console.log(date);
         if(date != "" > 0){
             dates_saved[part][id_next][date_label] = date;
+            date = $.date(date);
             var temp = date.split("/");
-            console.log(temp);
+            //console.log(temp);
             var formattedDate = $.date(temp[0]+"/01/"+temp[1]);
-            console.log(formattedDate);
+            //console.log(formattedDate);
             $("#"+part+"_"+date_label+"_"+id_next+" input").val(formattedDate);
             //$("#"+part+"_"+date_label+"_"+id_next).data('update',date);
         }
     }
-    checkValidity(part,id_next,list_dates,dates_saved);
+    checkValidity(part,id_next);
 }
 
 function erase_dates(part,uc){
@@ -164,7 +175,7 @@ function erase_dates(part,uc){
         dates_saved[part][uc][date] = "";
 
     }
-    checkValidity(part,uc,list_dates,dates_saved);
+    checkValidity(part,uc);
 }
 
 dates_saved = {};

@@ -172,28 +172,37 @@ function hasChildren($id,$list){
 
 function perimeter_selected($post){
     if($post){
+        //var_dump($post);
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
-            $list_zones = [];
+            $selZones = [];
             foreach ($post as $key => $value) {
                 if(isset($key)){
                     $temp = explode("_",$key);
                     if(count($temp)==1){
-                        array_push($list_zones,intval($temp[0]));
+                        array_push($selZones,intval($temp[0]));
                     }
                 }
             }
-            var_dump($list_zones);
+
+            //var_dump($selZones);
+            $list_zones = getListZones();
+            $sortedZones = sort_zones($list_zones);
+
+            $selZonesInfos = getInfosZones($selZones,$list_zones);
+            $sortedSelZones = sort_zones($selZonesInfos);
+            $selZones = checkIntegrity($selZones,$sortedSelZones,$sortedZones);
+
+            //var_dump($selZones);
             $listSelZones = getListSelZones($projID);
-            //var_dump(empty($listSelZones));
             if(empty($listSelZones)){
-                insertSelZones($projID,$list_zones);
+                insertSelZones($projID,$selZones);
             } else {
                 deleteSelZones($projID);
-                insertSelZones($projID,$list_zones);
+                insertSelZones($projID,$selZones);
             }
             update_ModifDate_proj($projID);            
-            //header('Location: ?A=project_scoping&A2=size&projID='.$projID);
+            header('Location: ?A=project_scoping&A2=size&projID='.$projID);
 
         } else {
             throw new Exception("No Project selected !");
@@ -203,6 +212,30 @@ function perimeter_selected($post){
     }
 }
 
+function checkIntegrity($sel,$selInfos,$allInfos){
+    //var_dump($sel);
+    $res = array_values($sel);
+    foreach ($selInfos as $level => $array) {
+        foreach ($array as $id => $infos) {
+            $test = $infos['hasChildren'] == $allInfos[$level][$id]['hasChildren'];
+            //var_dump($test);
+            if(!$test){
+                //var_dump("coucou");
+                $res = array_values(array_diff($sel,[$id]));
+            }
+        }
+    }
+    //var_dump($res);
+    return $res;
+}
+
+function getInfosZones($selZones,$list_zones){
+    $list = [];
+    foreach ($selZones as $id) {
+        $list[$id] = $list_zones[$id];
+    }
+    return $list;
+}
 
 // ---------------------------------------- SIZE ----------------------------------------
 

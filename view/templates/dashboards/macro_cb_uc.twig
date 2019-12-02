@@ -1,11 +1,11 @@
 {% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
 <div class="row mt-2 mb-5 mx-5 text-center">
     <div class="offset-4 col-4">
-        <select class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select a use case" required>
+        <select name="use_case" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select a use case" required>
             {% for id_meas,list_ucs in scope %}
                 <optgroup label="{{measures[id_meas]['name']}}">
                     {% for id_uc in list_ucs %}
-                        <option>{{ucs[id_uc]['name']}}</option>
+                        <option value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
                     {% endfor %}
                 </optgroup>
             {% endfor %}
@@ -14,8 +14,8 @@
 </div>
 {% endmacro %}
 
-{% macro list_zones(zones,level,list_sel=[]) %}
 
+{% macro list_zones(zones,level,list_sel=[]) %}
 <div class="row text-center level_{{level}} offset-2 ">
     <div class="col-8 mt-2 mx-5 list-table">
         <table id="zones_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
@@ -47,8 +47,84 @@
         </table>
     </div>
 </div>
+{% endmacro %}
 
-<script type="text/javascript">
-
-</script>
+{% macro output(years,ratio_zones,capex,implem,opex,revenues) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table cbuc_table">
+        <table id="cbuc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr class="text-uppercase">
+                    <th scope="col" colspan=2>Financials Summary Table</th>
+                    <th scope="col" colspan={{years|length}}>Use Case Projet Schedule</th>
+                </tr>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item"><strong>Capex</strong> (A)</td>
+                    <td>{{(capex['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% for year in years %}
+                        <td>{{(capex[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Implementation</strong> (B)</td>
+                    <td>{{(implem['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% for year in years %}
+                        <td>{{(implem[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Opex</strong> (C)</td>
+                    <td>{{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% for year in years %}
+                        <td>{{(opex[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Revenues</strong> (D)</td>
+                    <td>{{(revenues['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% for year in years %}
+                        <td>{{(revenues[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
+                    <td>1000</td>
+                    {% for year in years %}
+                        <td>to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
+                    <td>1000</td>
+                    {% for year in years %}
+                        <td>to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Cash exc.<br>Wider Cost Benefits</strong><br>(E + D - A - B - C)</td>
+                    <td>1000</td>
+                    {% for year in years %}
+                        <td>to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
+                    <td>1000</td>
+                    {% for year in years %}
+                        <td>to calculate</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endmacro %}
