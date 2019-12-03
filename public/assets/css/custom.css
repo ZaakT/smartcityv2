@@ -158,3 +158,17 @@ th, td{
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
+
+.keydates_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.keyratios_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}

@@ -533,6 +533,7 @@ function prereq_ProjectScoping(){
                 echo "<script>prereq_ProjectScoping3(true);</script>";
                 if(!empty($selSizes)){
                     echo "<script>prereq_ProjectScoping4(true);</script>";
+                    updateScoping($projID);
                 }
             }
         }

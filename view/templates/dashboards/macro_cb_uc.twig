@@ -49,7 +49,7 @@
 </div>
 {% endmacro %}
 
-{% macro output(years,ratio_zones,capex,implem,opex,revenues) %}
+{% macro output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table cbuc_table">
         <table id="cbuc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -69,58 +69,58 @@
             <tbody>
                 <tr>
                     <td class="item"><strong>Capex</strong> (A)</td>
-                    <td>{{(capex['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    <td>£{{(capex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{(capex[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                        <td>£{{(capex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Implementation</strong> (B)</td>
-                    <td>{{(implem['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    <td>£{{(implem['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{(implem[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                        <td>£{{(implem[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
-                    <td>{{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    <td>£{{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{(opex[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                        <td>£{{(opex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Revenues</strong> (D)</td>
-                    <td>{{(revenues['tot']*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                    <td>£{{(revenues['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{(revenues[year]*ratio_zones)|number_format(2, '.', ',') }}£</td>
+                        <td>£{{(revenues[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
-                    <td>1000</td>
+                    <td>£{{(cashreleasing['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>to calculate</td>
+                        <td>£{{(cashreleasing[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
-                    <td>1000</td>
+                    <td>£{{(widercash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>to calculate</td>
+                        <td>£{{(widercash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Cash exc.<br>Wider Cost Benefits</strong><br>(E + D - A - B - C)</td>
-                    <td>1000</td>
+                    <td>£{{(netcash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>to calculate</td>
+                        <td>£{{(netcash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
-                    <td>1000</td>
+                    <td>£{{(netsoccash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>to calculate</td>
+                        <td>£{{(netsoccash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
             </tbody>

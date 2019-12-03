@@ -1326,7 +1326,11 @@ try{
                     } elseif($_GET['A2']=="summary"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                summary($twig,$is_connected,$_GET['projID']);
+                                if(isset($_GET['confirm'])){
+                                    summary($twig,$is_connected,$_GET['projID'],$_GET['confirm']);
+                                } else {
+                                    summary($twig,$is_connected,$_GET['projID']);
+                                }
                             }
                             else { 
                                 header('Location: ?A=cost_benefits&A2=project_cb');

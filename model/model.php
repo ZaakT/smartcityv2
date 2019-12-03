@@ -602,6 +602,17 @@ function getListUCs(){
     return $list;
 }
 
+function updateScoping($projID){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project SET scoping=1 WHERE id = ?');
+    return $req->execute(array($projID));
+}
+
+function updateCB($projID,$val){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project SET cb = ? WHERE id = ?');
+    return $req->execute(array($val,$projID));
+}
 
 // ---------------------------------------- SCOPE ----------------------------------------
 
@@ -2861,7 +2872,7 @@ function getNbUC($projID,$ucID){
     }
     return $list;
 }
-
+/*
 function getTotOpexByUC($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
@@ -2871,8 +2882,32 @@ function getTotOpexByUC($projID,$ucID){
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return $tot;
-}
+}*/
 
+function getOpexValues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
+                            FROM input_opex
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+
+        $an_var_vol = floatval($res['an_var_vol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+
+        $an_var_unitcost = floatval($res['an_var_unitcost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+
+        $cost = floatval($res['cost']);
+
+        $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    //var_dump($list);
+    return $list;
+}
+/*
 function getTotRevenuesByUC($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*revenues_per_unit) AS tot
@@ -2882,4 +2917,144 @@ function getTotRevenuesByUC($projID,$ucID){
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return $tot;
+}*/
+
+
+
+function getRevenuesValues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT volume*revenues_per_unit AS revenues,
+                            annual_variation_volume as an_var_vol,                        
+                            annual_variation_unitcost as an_var_unitcost,
+                            id_item
+                            FROM input_revenues
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+
+        $an_var_vol = floatval($res['an_var_vol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+
+        $an_var_unitcost = floatval($res['an_var_unitcost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+
+        $revenues = floatval($res['revenues']);
+
+        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    //var_dump($list);
+    return $list;
+}
+/* 
+function getTotCashReleasingByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost)-SUM((volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100))) as tot
+                            FROM input_cashreleasing
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+} */
+
+function getCashReleasingValues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT volume*unit_cost AS baseline,
+                            (volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100)) as target,
+                            annual_var_volume as an_var_vol,                        
+                            annual_var_unit_cost as an_var_unitcost,
+                            id_item
+                            FROM input_cashreleasing
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+
+        $an_var_vol = floatval($res['an_var_vol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+
+        $an_var_unitcost = floatval($res['an_var_unitcost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+
+        $baseline = floatval($res['baseline']);
+        $target = floatval($res['target']);
+
+        $list[$id_item] = ['baseline'=>$baseline,'target'=>$target,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    //var_dump($list);
+    return $list;
+}
+/*
+function getTotWiderCashByUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost)-SUM((volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100))) as tot
+                            FROM input_widercash
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return $tot;
+}*/
+
+function getWiderCashValues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT volume*unit_cost AS baseline,
+                            (volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100)) as target,
+                            annual_var_volume as an_var_vol,                        
+                            annual_var_unit_cost as an_var_unitcost,
+                            id_item
+                            FROM input_widercash
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+
+        $an_var_vol = floatval($res['an_var_vol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+
+        $an_var_unitcost = floatval($res['an_var_unitcost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+
+        $baseline = floatval($res['baseline']);
+        $target = floatval($res['target']);
+
+        $list[$id_item] = ['baseline'=>$baseline,'target'=>$target,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getNonCashRating($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(expected_impact*probability/100) as tot,
+                            COUNT(id_item) as nb
+                            FROM input_noncash
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch();
+    //var_dump($res);
+    $tot = floatval($res['tot']);
+    $nb = intval($res['nb']);
+    $rating = $nb!=0 ? $tot/$nb : "NA";
+    //var_dump($rating);
+    return number_format($rating,1,",",".");
+}
+
+function getRisksRating($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(expected_impact*probability/100) as tot,
+                            COUNT(id_item) as nb
+                            FROM input_risk
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $res = $req->fetch();
+    //var_dump($res);
+    $tot = floatval($res['tot']);
+    $nb = intval($res['nb']);
+    $rating = $nb!=0 ? $tot/$nb : "NA";
+    return number_format($rating,1,",",".");
 }

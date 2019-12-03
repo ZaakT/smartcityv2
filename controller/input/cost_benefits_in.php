@@ -142,6 +142,7 @@ function capex_selected($twig,$is_connected,$post=[]){
                 }
                 update_ModifDate_proj($projID);
                 capex_input($twig,$is_connected,$projID,$ucID);
+                updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -212,6 +213,7 @@ function capex_inputed($post){
                 }
                 insertCapexInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=implem&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -349,6 +351,7 @@ function implem_selected($twig,$is_connected,$post=[]){
                 }
                 update_ModifDate_proj($projID);
                 implem_input($twig,$is_connected,$projID,$ucID);
+                updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -412,6 +415,7 @@ function implem_inputed($post){
                 }
                 insertImplemInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=opex&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -532,6 +536,7 @@ function opex_selected($twig,$is_connected,$post=[]){
                 }
                 update_ModifDate_proj($projID);
                 opex_input($twig,$is_connected,$projID,$ucID);
+                updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -608,6 +613,7 @@ function opex_inputed($post){
                 }
                 insertOpexInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 
                 $revSchedule = getRevenuesSchedule($projID,$ucID);
                 $hasSchedule = !$revSchedule ? $revSchedule : true;
@@ -741,6 +747,7 @@ function revenues_selected($twig,$is_connected,$post=[]){
                 }
                 update_ModifDate_proj($projID);
                 revenues_input($twig,$is_connected,$projID,$ucID);
+                updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -817,6 +824,7 @@ function revenues_inputed($post){
                 }
                 insertRevenuesInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -939,6 +947,7 @@ function cashreleasing_selected($twig,$is_connected,$post=[]){
                 }
                 update_ModifDate_proj($projID);
                 cashreleasing_input($twig,$is_connected,$projID,$ucID);
+                updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -986,6 +995,7 @@ function cashreleasing_inputed($post){
                 $list = getListCashRelFromPost($post);
                 insertCashReleasingInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=widercash&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1158,6 +1168,7 @@ function widercash_selected($twig,$is_connected,$post=[]){
                     insertSelWiderCash($projID,$ucID,$selWiderCash_diff_add);
                 }
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 widercash_input($twig,$is_connected,$projID,$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1206,6 +1217,7 @@ function widercash_inputed($post){
                 $list = getListWiderCashFromPost($post);
                 insertWiderCashInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1378,6 +1390,7 @@ function noncash_selected($twig,$is_connected,$post=[]){
                     insertSelNonCash($projID,$ucID,$selNonCash_diff_add);
                 }
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 noncash_input($twig,$is_connected,$projID,$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1425,6 +1438,7 @@ function noncash_inputed($post){
                 $list = getListNonCashFromPost($post);
                 insertNonCashInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=risks&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1566,6 +1580,7 @@ function risks_selected($twig,$is_connected,$post=[]){
                     insertSelRisk($projID,$ucID,$selRisks_diff_add);
                 }
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 risks_input($twig,$is_connected,$projID,$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1613,6 +1628,7 @@ function risks_inputed($post){
                 $list = getListRiskFromPost($post);
                 insertRiskInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
+                updateCB($projID,0);
                 header('Location: ?A=cost_benefits&A2=summary&projID='.$projID.'&ucID='.$ucID);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -1665,7 +1681,7 @@ function delete_selection_risks($projID=0,$ucID=0){
 
 // ---------------------------------------- SUMMARY ----------------------------------------
 
-function summary($twig,$is_connected,$projID=0){
+function summary($twig,$is_connected,$projID=0,$confirm=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -1679,7 +1695,10 @@ function summary($twig,$is_connected,$projID=0){
             $check = checkCBInputs($projID,$selScope);
             $list_checks = $check[0];
             $isValid = $check[1];
-            echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid));
+            if($confirm==1){
+                updateCB($projID,1);
+            }
+            echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid,'confirm'=>$confirm));
             prereq_CostBenefits();
         } else {
             throw new Exception("This Project doesn't exist !");

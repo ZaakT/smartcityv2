@@ -26,11 +26,17 @@
 </div>
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">
-    <button class="col-2 btn btn-dark"  {{isValid ? "" : "disabled"}} {#}onclick="window.location.assign('?A=financing');"#}data-toggle="modal" data-target="#askRedir" >Confirm</button>
+    <button class="col-2 btn btn-dark"  {{isValid ? "" : "disabled"}} onclick="window.location.assign('?A=cost_benefits&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');" >Confirm</button>
     <button class="offset-1 col-2 btn btn-danger" onclick="window.location.assign('?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{projID}}');">Change</button>
 </div>
 {{ modal.ask_redir(projID,ucID) }}
+
+    {% if confirm == 1 %}
+        <script type="text/javascript">$('#askRedir').modal('show');</script>
+    {% endif %}
 {% endblock %}
+
+
 
 
 

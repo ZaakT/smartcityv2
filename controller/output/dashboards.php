@@ -68,7 +68,7 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $sortedSelZones = sort_zones($selZonesInfos);
                 $selZones = checkIntegrity($selZones,$sortedSelZones,$sortedZones);
                 $selZonesInfos = getInfosZones($selZones,$list_zones);
-
+                //var_dump($selZones);
                 $schedules = getListSelDates($projID);
                 $implemSchedule = $schedules['implem'][$ucID];
                 $opexSchedule = $schedules['opex'][$ucID];
@@ -92,13 +92,48 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
                 $implemTot = calcImplemTot($implemPerMonth,$projectYears);
                 
-                $opex = getTotOpexByUC($projID,$ucID);
-                $opexPerMonth = calcOpexPerMonth($opexRepart,$opex);
-                $opexTot = calcOpexTot($opexPerMonth,$projectYears);
+                //$opex = getTotOpexByUC($projID,$ucID);
+                //$opexPerMonth = calcOpexPerMonth($opexRepart,$opex);
+                //$opexTot = calcOpexTot($opexPerMonth,$projectYears);
+                $opexValues = getOpexValues($projID,$ucID);
+                $opexValuesMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+                $opexTot2 = calcOpexTot($opexValuesMonth,$projectYears);
                 
-                $revenues = getTotRevenuesByUC($projID,$ucID);
+                /* $revenues = getTotRevenuesByUC($projID,$ucID);
                 $revenuesPerMonth = calcRevenuesPerMonth($revenuesRepart,$revenues);
-                $revenuesTot = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                $revenuesTot = calcRevenuesTot($revenuesPerMonth,$projectYears); */
+                $revenuesValues = getRevenuesValues($projID,$ucID);
+                $revenuesValuesMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                $revenuesTot2 = calcRevenuesTot($revenuesValuesMonth,$projectYears);
+                
+                /* $cashreleasing = getTotCashReleasingByUC($projID,$ucID);
+                $cashreleasingPerMonth = calcCashReleasingPerMonth($opexRepart,$cashreleasing);
+                $cashreleasingTot = calcCashReleasingTot($cashreleasingPerMonth,$projectYears); */
+                $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                $cashreleasingTot2 = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears);
+                
+                /*$widercash = getTotWiderCashByUC($projID,$ucID);
+                $widercashPerMonth = calcWiderCashPerMonth($opexRepart,$widercash);
+                $widercashTot = calcWiderCashTot($widercashPerMonth,$projectYears);*/
+                $widercashValues = getWiderCashValues($projID,$ucID);
+                $widercashValuesMonth = calcWiderCashPerMonth2($opexRepart,$widercashValues);
+                $widercashTot2 = calcWiderCashTot($widercashValuesMonth,$projectYears);
+
+                $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexValuesMonth,$revenuesValuesMonth,$cashreleasingValuesMonth);
+                $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
+
+                $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexValuesMonth,$revenuesValuesMonth,$cashreleasingValuesMonth,$widercashValuesMonth);
+                $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
+
+                $ratingNonCash = getNonCashRating($projID,$ucID);
+                $ratingRisks = getRisksRating($projID,$ucID);
+
+                $dr_year = getListSelDiscountRate($projID);
+                $dr_month = pow(1+($dr_year/100),1/12)-1;
+                $npv = calcNPV($dr_month,$netcashPerMonth[0]);
+                $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+
 
                 $list_nbUC = getNbUC($projID,$ucID);
                 $ratioByVolume = getRatioByVolume($list_nbUC,$selZones);
@@ -106,7 +141,7 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 var_dump($list_nbUC);
                 var_dump($ratioByVolume); */
                 
-                echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot,'revenues'=>$revenuesTot,'ratio_zones'=>$ratioByVolume));
+                echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates'=>$keydates,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
             } else {
                 throw new Exception("This project doesn't exist !");
             }
@@ -118,10 +153,21 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
     }
 }
 
+function calcNPV($dr,$netcash){
+    $i = 0;
+    $NPV = 0;
+    foreach ($netcash as $date => $value) {
+        $i++;
+        $NPV += $value/pow((1+$dr),$i);
+    }
+    return $NPV;
+}
+
 function getRatioByVolume($list_nbUC,$selZones){
     $nbSel = 0;
     foreach ($list_nbUC as $id_zone => $nbUC) {
         if(in_array($id_zone,$selZones)){
+            //var_dump($id_zone);
             $nbSel+= $nbUC;
         }
     }
@@ -172,13 +218,13 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $date100 = explode('/',$compo_dates['100date']);
     $date100 = date_create_from_format('m/Y',$date100[0].'/'.$date100[1]);
     
-    $nb25 = intval($date25->diff($startdate)->format('%m'))+1;
+    $nb25 = intval($date25->diff($startdate)->y*12 + $date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
-    $nb50 = intval($date50->diff($date25)->format('%m'));
+    $nb50 = intval($date50->diff($date25)->y*12 + $date50->diff($date25)->m);
     $ratio50 = 25/$nb50;
-    $nb75 = intval($date75->diff($date50)->format('%m'));
+    $nb75 = intval($date75->diff($date50)->y*12 + $date75->diff($date50)->m);
     $ratio75 = 25/$nb75;
-    $nb100 = intval($date100->diff($date75)->format('%m'));
+    $nb100 = intval($date100->diff($date75)->y*12 + $date100->diff($date75)->m);
     $ratio100 = 25/$nb100;
     
     $list[$proj_dates[0]] = $ratio25;
@@ -251,6 +297,10 @@ function calcImplemTot($implemPerMonth,$projectYears){
 function getRepartPercOpex($compo_dates,$proj_dates){
     $list = [];
 
+    //var_dump($compo_dates);
+    $startdate_proj = explode('/',$proj_dates[0]);
+    $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
+
     $startdate = explode('/',$compo_dates['startdate']);
     $startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
 
@@ -268,41 +318,66 @@ function getRepartPercOpex($compo_dates,$proj_dates){
     
     $enddate = explode('/',$compo_dates['enddate']);
     $enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
-    
-    $nb25 = intval($date25->diff($startdate)->format('%m'))+1;
+
+    $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
+    $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
-    $nb50 = intval($date50->diff($date25)->format('%m'));
+    $nb50 = intval($date50->diff($date25)->y*12+$date50->diff($date25)->m);
     $ratio50 = 25/$nb50;
-    $nb75 = intval($date75->diff($date50)->format('%m'));
+    $nb75 = intval($date75->diff($date50)->y*12+$date75->diff($date50)->m);
     $ratio75 = 25/$nb75;
-    $nb100 = intval($date100->diff($date75)->format('%m'));
+    $nb100 = intval($date100->diff($date75)->y*12+$date100->diff($date75)->m);
     $ratio100 = 25/$nb100;
     
-    $list[$proj_dates[0]] = $ratio25;
-    for ($i=1; $i < $nb25 ; $i++) { 
+    for ($i=0; $i < $nb0 ; $i++) { 
+        $list[$proj_dates[$i]] = 0;
+    }
+    for ($i=$nb0; $i < $nb0+$nb25 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
-    for ($i=$nb25; $i < $nb25+$nb50 ; $i++) { 
+    for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb25+$nb50; $i < $nb25+$nb50+$nb75 ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50; $i < $nb0+$nb25+$nb50+$nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
-    for ($i=$nb25+$nb50+$nb75; $i < $nb25+$nb50+$nb75+$nb100 ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50+$nb75; $i < $nb0+$nb25+$nb50+$nb75+$nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
         $list[$proj_dates[$i]] = 100;
     }
-    /* var_dump($list);
-    var_dump($compo_dates); */
+    //var_dump($list);
     return $list;
 }
-
+/*
 function calcOpexPerMonth($opexRepart,$opexTot){
     $list = [];
     foreach ($opexRepart as $date => $percent) {
         $list[$date] = $opexTot*$percent/100;
+    }
+    return $list;
+}*/
+
+function calcOpexPerMonth2($opexRepart,$opexValues){
+    $list = [];
+    $i = 0;
+    $prec_percent = 0;
+    $prec_date = "";
+    //var_dump($opexRepart);
+    foreach ($opexRepart as $date => $percent) {
+        $opexTot = 0;
+        $i++;
+        if($percent==100 and $prec_percent==100){
+            $list[$date] = $list[$prec_date];
+        } else {
+            foreach ($opexValues as $id_item => $values) {
+                $opexTot += $values['cost']*pow($values['an_var_vol'],$i-1)*pow($values['an_var_unitcost'],$i-1);
+            }
+            $list[$date] = $opexTot*$percent/100;
+        }
+        $prec_percent = $percent;
+        $prec_date = $date;
     }
     //var_dump($list);
     return $list;
@@ -327,6 +402,10 @@ function calcOpexTot($opexPerMonth,$projectYears){
 function getRepartPercRevenues($compo_dates,$proj_dates){
     $list = [];
 
+    //var_dump($compo_dates);
+    $startdate_proj = explode('/',$proj_dates[0]);
+    $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
+
     $startdate = explode('/',$compo_dates['startdate']);
     $startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
 
@@ -344,42 +423,68 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
     
     $enddate = explode('/',$compo_dates['enddate']);
     $enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
-    
-    $nb25 = intval($date25->diff($startdate)->format('%m'))+1;
+
+    $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
+    $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
-    $nb50 = intval($date50->diff($date25)->format('%m'));
+    $nb50 = intval($date50->diff($date25)->y*12+$date50->diff($date25)->m);
     $ratio50 = 25/$nb50;
-    $nb75 = intval($date75->diff($date50)->format('%m'));
+    $nb75 = intval($date75->diff($date50)->y*12+$date75->diff($date50)->m);
     $ratio75 = 25/$nb75;
-    $nb100 = intval($date100->diff($date75)->format('%m'));
+    $nb100 = intval($date100->diff($date75)->y*12+$date100->diff($date75)->m);
     $ratio100 = 25/$nb100;
     
-    $list[$proj_dates[0]] = $ratio25;
-    for ($i=1; $i < $nb25 ; $i++) { 
+    for ($i=0; $i < $nb0 ; $i++) { 
+        $list[$proj_dates[$i]] = 0;
+    }
+    for ($i=$nb0; $i < $nb0+$nb25 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
-    for ($i=$nb25; $i < $nb25+$nb50 ; $i++) { 
+    for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb25+$nb50; $i < $nb25+$nb50+$nb75 ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50; $i < $nb0+$nb25+$nb50+$nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
-    for ($i=$nb25+$nb50+$nb75; $i < $nb25+$nb50+$nb75+$nb100 ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50+$nb75; $i < $nb0+$nb25+$nb50+$nb75+$nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
+    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
         $list[$proj_dates[$i]] = 100;
     }
-    /* var_dump($list);
-    var_dump($compo_dates); */
+    //var_dump($list);
     return $list;
 }
-
+/*
 function calcRevenuesPerMonth($revenuesRepart,$revenuesTot){
     $list = [];
     foreach ($revenuesRepart as $date => $percent) {
         $list[$date] = $revenuesTot*$percent/100;
     }
+    return $list;
+}*/
+
+function calcRevenuesPerMonth2($revenuesRepart,$revenuesValues){
+    $list = [];
+    $i = 0;
+    $prec_percent = 0;
+    $prec_date = "";
+    //var_dump($revenuesRepart);
+    foreach ($revenuesRepart as $date => $percent) {
+        $revenuesTot = 0;
+        $i++;
+        if($percent==100 and $prec_percent==100){
+            $list[$date] = $list[$prec_date];
+        } else {
+            foreach ($revenuesValues as $id_item => $values) {
+                $revenuesTot += $values['revenues']*pow($values['an_var_vol'],$i-1)*pow($values['an_var_unitcost'],$i-1);
+            }
+            $list[$date] = $revenuesTot*$percent/100;
+        }
+        $prec_percent = $percent;
+        $prec_date = $date;
+    }
+    //var_dump($list);
     return $list;
 }
 
@@ -398,14 +503,163 @@ function calcRevenuesTot($revenuesPerMonth,$projectYears){
     return $list;
 }
 
+/*
+function calcCashReleasingPerMonth($cashreleasingRepart,$cashreleasingTot){
+    $list = [];
+    foreach ($cashreleasingRepart as $date => $percent) {
+        $list[$date] = $cashreleasingTot*$percent/100;
+    }
+    return $list;
+}*/
 
+function calcCashReleasingPerMonth2($cashreleasingRepart,$cashreleasingValues){
+    $list = [];
+    $i = 0;
+    $prec_percent = 0;
+    $prec_date = "";
+    //var_dump($cashreleasingRepart);
+    foreach ($cashreleasingRepart as $date => $percent) {
+        $cashreleasingTot = 0;
+        $i++;
+        if($percent==100 and $prec_percent==100){
+            $list[$date] = $list[$prec_date];
+        } else {
+            foreach ($cashreleasingValues as $id_item => $values) {
+                $cashreleasingTot += $values['baseline']*pow($values['an_var_vol'],$i-1)*pow($values['an_var_unitcost'],$i-1)-$values['target'];
+            }
+            $list[$date] = $cashreleasingTot*$percent/100;
+        }
+        $prec_percent = $percent;
+        $prec_date = $date;
+    }
+    //var_dump($list);
+    return $list;
+}
 
+function calcCashReleasingTot($cashreleasingPerMonth,$projectYears){
+    $list = ['tot'=>0];
+    foreach ($projectYears as $year) {
+        $list[$year]=0;
+    }
+    foreach ($cashreleasingPerMonth as $date => $value) {
+        $temp = explode('/',$date);
+        $year = $temp[1];
+        $list[$year] += $value;
+    }
+    $list['tot']=array_sum($list);
+    //var_dump($list);
+    return $list;
+}
 
+/*
+function calcWiderCashPerMonth($widercashRepart,$widercashTot){
+    $list = [];
+    foreach ($widercashRepart as $date => $percent) {
+        $list[$date] = $widercashTot*$percent/100;
+    }
+    return $list;
+}*/
 
+function calcWiderCashPerMonth2($widercashRepart,$widercashValues){
+    $list = [];
+    $i = 0;
+    $prec_percent = 0;
+    $prec_date = "";
+    //var_dump($widercashRepart);
+    foreach ($widercashRepart as $date => $percent) {
+        $widercashTot = 0;
+        $i++;
+        if($percent==100 and $prec_percent==100){
+            $list[$date] = $list[$prec_date];
+        } else {
+            foreach ($widercashValues as $id_item => $values) {
+                $widercashTot += $values['baseline']*pow($values['an_var_vol'],$i-1)*pow($values['an_var_unitcost'],$i-1)-$values['target'];
+            }
+            $list[$date] = $widercashTot*$percent/100;
+        }
+        $prec_percent = $percent;
+        $prec_date = $date;
+    }
+    //var_dump($list);
+    return $list;
+}
 
+function calcWiderCashTot($widercashPerMonth,$projectYears){
+    $list = ['tot'=>0];
+    foreach ($projectYears as $year) {
+        $list[$year]=0;
+    }
+    foreach ($widercashPerMonth as $date => $value) {
+        $temp = explode('/',$date);
+        $year = $temp[1];
+        $list[$year] += $value;
+    }
+    $list['tot']=array_sum($list);
+    //var_dump($list);
+    return $list;
+}
 
+function calcNetCashPerMonth($dates,$A,$B,$C,$D,$E){
+    // E + D - A - B - C
+    // A = capex, B = implem, C = opex, D = revenues, E = cash releasing
+    foreach ($dates as $date) {
+        $list[$date] = $E[$date] + $D[$date] - $A[$date] - $B[$date] - $C[$date];
+    }
+    $breakeven = "";
+    foreach ($list as $date => $val) {
+        if($val>=0){
+            $breakeven = $date;
+            break;
+        }
+    }
+    return [$list,$breakeven];
+}
 
+function calcNetCashTot($netcashPerMonth,$projectYears){
+    $list = ['tot'=>0];
+    foreach ($projectYears as $year) {
+        $list[$year]=0;
+    }
+    foreach ($netcashPerMonth as $date => $value) {
+        $temp = explode('/',$date);
+        $year = $temp[1];
+        $list[$year] += $value;
+    }
+    $list['tot']=array_sum($list);
+    //var_dump($list);
+    return $list;
+}
 
+function calcNetSocCashPerMonth($dates,$A,$B,$C,$D,$E,$F){
+    // E + D - A - B - C
+    // A = capex, B = implem, C = opex, D = revenues, E = cash releasing
+    foreach ($dates as $date) {
+        $list[$date] = $F[$date] + $E[$date] + $D[$date] - $A[$date] - $B[$date] - $C[$date];
+    }
+    $breakeven = "";
+    foreach ($list as $date => $val) {
+        if($val>=0){
+            $breakeven = $date;
+            break;
+        }
+    }
+    return [$list,$breakeven];
+}
+
+function calcNetSocCashTot($netsoccashPerMonth,$projectYears){
+    $list = ['tot'=>0];
+    foreach ($projectYears as $year) {
+        $list[$year]=0;
+    }
+    foreach ($netsoccashPerMonth as $date => $value) {
+        $temp = explode('/',$date);
+        $year = $temp[1];
+        $list[$year] += $value;
+    }
+    $list['tot']=array_sum($list);
+    //var_dump($list);
+    return $list;
+}
 
 
 function cost_benefits_all($twig,$is_connected,$projID=0){
