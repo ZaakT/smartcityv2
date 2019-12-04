@@ -3041,7 +3041,7 @@ function getNonCashRating($projID,$ucID){
     $nb = intval($res['nb']);
     $rating = $nb!=0 ? $tot/$nb : "NA";
     //var_dump($rating);
-    return number_format($rating,1,",",".");
+    return $rating!="NA" ? number_format($rating,1,",",".") : "NA";
 }
 
 function getRisksRating($projID,$ucID){
@@ -3056,5 +3056,5 @@ function getRisksRating($projID,$ucID){
     $tot = floatval($res['tot']);
     $nb = intval($res['nb']);
     $rating = $nb!=0 ? $tot/$nb : "NA";
-    return number_format($rating,1,",",".");
+    return $rating!="NA" ? number_format($rating,1,",",".") : "NA";
 }

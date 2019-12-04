@@ -1451,10 +1451,58 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }
-                        
-                    
-                    
-                    
+                    } elseif($_GET['A2']=="budget_uc"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="output"){
+                                        budget_uc_output($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else {
+                                        header('Location: ?A=dashboards&A2=budget_uc&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    budget_uc($twig,$is_connected,$_GET['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }
+                    } elseif($_GET['A2']=="budget_all"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                budget_all($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }                    
+                    } elseif($_GET['A2']=="bankability"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="output"){
+                                        bankability_output($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else {
+                                        header('Location: ?A=dashboards&A2=bankability&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    bankability($twig,$is_connected,$_GET['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

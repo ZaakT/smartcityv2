@@ -2,7 +2,7 @@
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{# {% import "/templates/dashboards_items/macro_cb_all.twig" as list %} #}
+{% import "/templates/dashboards/macro_cb_all.twig" as macros %}
 
 {% block title %}Dashboards - Cost Benefits All Use Cases{% endblock %}
 
@@ -10,7 +10,7 @@
 
 {% block content %}
 
-{{ second_bar.second_bar(username,part,selected) }}
+{{ second_bar.second_bar(username,part,selected,part2,selected2) }}
 
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
@@ -18,10 +18,77 @@
     </div>
 </div>
 
-<div class="row m-3 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_capex');"></button>
+{{ macros.output(projectDates,years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) }}
+
+<div class="row text-center offset-2">
+    <div class=" col-8 mt-5 mx-5 list-table keydates_table">
+        <table id="keydates_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="text-uppercase" scope="col" colspan=2> Key Dates</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item" scope="row">Start Date</td>
+                    <td>{{keydates[0]}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Implementation<br>End Date</td>
+                    <td>{{keydates[1]}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Project End Date</td>
+                    <td>{{keydates[2]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<div class="row text-center offset-2">
+    <div class=" col-8 mt-5 mx-5 list-table keyratios_table">
+        <table id="keyratios_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="text-uppercase" scope="col" colspan=2> Key Ratios</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item" scope="row">Net Present Value (NPV)</td>
+                    <td>£{{npv|number_format(2, '.', ',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Societal NPV</td>
+                    <td>£{{socnpv|number_format(2, '.', ',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Breakeven</td>
+                    <td>{{breakeven ? breakeven : "NA"}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Societal Breakeven</td>
+                    <td>{{soc_breakeven ? soc_breakeven : "NA"}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Non Cash Benefits Rating</td>
+                    <td>{{noncash_rating}}</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Risks Rating</td>
+                    <td>{{risks_rating}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row m-3 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=cost_benefits_all&amp;projID={{projID}}');"></button>
+</div>
 {% endblock %}
 
-
+{% block scripts %}
+<script type="text/javascript" src="../../public/assets/js/custom/dashboards/cbucForm.js"></script>
+{% endblock %}

@@ -21,6 +21,9 @@ function project_out($twig,$is_connected){
     echo $twig->render('/output/dashboards_items/project_out.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
 }
 
+
+// ------------------------------- COST BENEFITS PER USE CASE -------------------------------
+
 function cost_benefits_uc($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
@@ -662,18 +665,129 @@ function calcNetSocCashTot($netsoccashPerMonth,$projectYears){
 }
 
 
-function cost_benefits_all($twig,$is_connected,$projID=0){
+// ------------------------------- COST BENEFITS ALL USE CASES -------------------------------
+
+function cost_benefits_all($twig,$is_connected,$projID){
+    if($projID!=0){
+        $user = getUser($_SESSION['username']);
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $selScope = getListSelScope($projID);
+            $projectDates = ["01/2010","02/2010","03/2010","01/2011","02/2011","03/2011","01/2012","02/2012","03/2012"];
+            $years = ['2010',"2011","2012"];
+            
+            echo $twig->render('/output/dashboards_items/cost_benefits_all.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projectDates'=>$projectDates,'years'=>$years));
+        } else {
+            throw new Exception("This project doesn't exist !");
+        }
+    } else {
+        throw new Exception("No Project selected !");
+    }
+}
+
+
+
+// ------------------------------- BUDGET PER USE CASE -------------------------------
+
+function budget_uc($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
             //var_dump($list_ucs);
-            echo $twig->render('/output/dashboards_items/cost_benefits_all.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1]));
+            echo $twig->render('/output/dashboards_items/budget_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
             //prereq_CostBenefits();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
     } else {
         header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+function budget_uc_output($twig,$is_connected,$projID,$post=[]){
+    if($post and isset($post['use_case'])){
+        if($projID!=0){
+            $user = getUser($_SESSION['username']);
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                $ucID = intval($post['use_case']);
+                $uc = getUCByID($ucID);
+                $selScope = getListSelScope($projID);
+                $years = ['2010',"2011","2012"];
+                echo $twig->render('/output/dashboards_items/budget_uc_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc['name'],'years'=>$years));
+            } else {
+                throw new Exception("This project doesn't exist !");
+            }
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No UC selected !");
+    }
+}
+
+
+// ------------------------------- BUDGET ALL USE CASES -------------------------------
+
+function budget_all($twig,$is_connected,$projID){
+    if($projID!=0){
+        $user = getUser($_SESSION['username']);
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $selScope = getListSelScope($projID);
+            $projectDates = ["01/2010","02/2010","03/2010","01/2011","02/2011","03/2011","01/2012","02/2012","03/2012"];
+            $years = ['2010',"2011","2012"];
+            
+            echo $twig->render('/output/dashboards_items/budget_all.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projectDates'=>$projectDates,'years'=>$years));
+        } else {
+            throw new Exception("This project doesn't exist !");
+        }
+    } else {
+        throw new Exception("No Project selected !");
+    }
+}
+
+
+// ------------------------------- BANKABILITY -------------------------------
+
+function bankability($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
+            //var_dump($list_ucs);
+            echo $twig->render('/output/dashboards_items/bankability.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            //prereq_CostBenefits();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+function bankability_output($twig,$is_connected,$projID,$post=[]){
+    if($post and isset($post['use_case'])){
+        if($projID!=0){
+            $user = getUser($_SESSION['username']);
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                
+                echo $twig->render('/output/dashboards_items/bankability_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1]));
+            } else {
+                throw new Exception("This project doesn't exist !");
+            }
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No UC selected !");
     }
 }

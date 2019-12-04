@@ -1,0 +1,211 @@
+{% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
+<div class="row mt-2 mb-5 mx-5 text-center">
+    <div class="offset-4 col-4">
+        <select name="use_case" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select a use case" required>
+            {% for id_meas,list_ucs in scope %}
+                <optgroup label="{{measures[id_meas]['name']}}">
+                    {% for id_uc in list_ucs %}
+                        <option value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro output(years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table budget_uc_table">
+        <table id="budget_uc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="text-uppercase" scope="col">Budget Impact</th>
+                    <th scope="col">Current</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>a. Implementation</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>b. Opex</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>c. Revenue</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>d. Capex Amortization</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>Project Impact On Budget</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>Operating Budget<br>Yearly Impact</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>Operating Budget<br>Cumulated Impact</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>Capex Residual Value</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro output_all(years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table budget_all_table">
+        <table id="budget_all_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="text-uppercase" scope="col">Budget Impact</th>
+                    <th scope="col">Current</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>a. Implementation</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>b. Opex</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>c. Revenue</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>d. Capex Amortization</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>Project Impact On Budget</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>Operating Budget<br>Yearly Impact</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="item text-right"><strong>Operating Budget<br>Cumulated Impact</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>Capex Residual Value</strong></td>
+                    <td>£ to calculate</td>
+                    {% for year in years %}
+                        <td>£ to calculate</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

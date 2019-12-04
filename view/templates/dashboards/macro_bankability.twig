@@ -1,0 +1,15 @@
+{% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
+<div class="row mt-2 mb-5 mx-5 text-center">
+    <div class="offset-4 col-4">
+        <select name="use_case" class="selectpicker" multiple data-style="btn-dark" dropupAuto="false" title="Select a use case" data-selected-text-format="count>2". required>
+            {% for id_meas,list_ucs in scope %}
+                <optgroup label="{{measures[id_meas]['name']}}">
+                    {% for id_uc in list_ucs %}
+                        <option value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% endmacro %}

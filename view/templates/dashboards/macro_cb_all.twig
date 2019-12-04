@@ -1,0 +1,128 @@
+
+{% macro output(dates,years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash,cumnetcash,cumnetsoccash) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table cbuc_table">
+        <table id="cbuc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                {# <tr class="text-uppercase">
+                    <th scope="col" colspan=2>Financials Summary Table</th>
+                    <th scope="col" colspan={{years|length + dates|length}}>Use Case Projet Schedule</th>
+                </tr> #}
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <th scope="col">{{date}}</th>
+                    {% endfor %}
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item"><strong>Capex</strong> (A)</td>
+                    <td>£{{(capex['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(capex[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(capex[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Implementation</strong> (B)</td>
+                    <td>£{{(implem['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(implem[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(implem[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Opex</strong> (C)</td>
+                    <td>£{{(opex['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(opex[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(opex[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Revenues</strong> (D)</td>
+                    <td>£{{(revenues['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(revenues[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(revenues[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
+                    <td>£{{(cashreleasing['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(cashreleasing[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(cashreleasing[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
+                    <td>£{{(widercash['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(widercash[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(widercash[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
+                    <td>£{{(netcash['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(netcash[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(netcash[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cumulated<br>Net Cash exc. WCB</strong></td>
+                    <td>£{{(cumnetcash['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(cumnetcash[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(cumnetcash[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
+                    <td>£{{(netsoccash['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(netsoccash[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(netsoccash[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cumulated<br>Net Societal Cash</strong></td>
+                    <td>£{{(cumnetsoccash['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>£{{(cumnetsoccash[year])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td>£{{(cumnetsoccash[date])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
