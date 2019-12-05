@@ -1,5 +1,5 @@
 
-{% macro output(dates,years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash,cumnetcash,cumnetsoccash) %}
+{% macro output(dates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table cbuc_table">
         <table id="cbuc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -23,72 +23,72 @@
             <tbody>
                 <tr>
                     <td class="item"><strong>Capex</strong> (A)</td>
-                    <td>£{{(capex['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(capexTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(capex[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(capexTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(capex[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(capexMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Implementation</strong> (B)</td>
-                    <td>£{{(implem['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(implemTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(implem[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(implemTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(implem[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(implemMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
-                    <td>£{{(opex['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(opexTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(opex[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(opexTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(opex[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(opexMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Revenues</strong> (D)</td>
-                    <td>£{{(revenues['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(revenuesTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(revenues[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(revenuesTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(revenues[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(revenuesMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
-                    <td>£{{(cashreleasing['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(cashreleasingTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(cashreleasing[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(cashreleasingTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(cashreleasing[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(cashreleasingMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
-                    <td>£{{(widercash['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(widercashTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(widercash[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(widercashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(widercash[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(widercashMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
-                    <td>£{{(netcash['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>£{{(netcashTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(netcash[year])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(netcashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(netcash[date])|number_format(2, '.', ',') }}</td>
+                        <td>£{{(netcashMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
