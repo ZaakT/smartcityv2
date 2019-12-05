@@ -31,26 +31,36 @@
 </div>
 {{ macros.output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) }}
 
-<div class="row text-center offset-2">
-    <div class=" col-8 mt-5 mx-5 list-table keydates_table">
+<div class="row text-center offset-1">
+    <div class=" col-10 mt-5 mx-5 list-table keydates_table">
         <table id="keydates_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th class="text-uppercase" scope="col" colspan=2> Key Dates</th>
+                    <th class="text-uppercase" scope="col" colspan=4> Key Dates</th>
+                </tr>
+                <tr>
+                    <th class="text-uppercase" scope="col" colspan=2>Project</th>
+                    <th class="text-uppercase" scope="col" colspan=2>Selected Use Case</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="item" scope="row">Start Date</td>
-                    <td>{{keydates[0]}}</td>
+                    <td>{{keydates_proj[0]}}</td>
+                    <td class="item" scope="row">Start Date</td>
+                    <td>{{keydates_uc[0]}}</td>
                 </tr>
                 <tr>
-                    <td class="item" scope="row">Implementation<br>End Date</td>
-                    <td>{{keydates[1]}}</td>
+                    <td class="item" scope="row">Implem. End Date</td>
+                    <td>{{keydates_proj[1]}}</td>
+                    <td class="item" scope="row">Implem. End Date</td>
+                    <td>{{keydates_uc[1]}}</td>
                 </tr>
                 <tr>
-                    <td class="item" scope="row">Project End Date</td>
-                    <td>{{keydates[2]}}</td>
+                    <td class="item" scope="row">End Date</td>
+                    <td>{{keydates_proj[2]}}</td>
+                    <td class="item" scope="row">End Date</td>
+                    <td>{{keydates_uc[2]}}</td>
                 </tr>
             </tbody>
         </table>
@@ -68,11 +78,11 @@
             <tbody>
                 <tr>
                     <td class="item" scope="row">Net Present Value (NPV)</td>
-                    <td>£{{npv|number_format(2, '.', ',')}}</td>
+                    <td>£{{(npv*ratio_zones)|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Societal NPV</td>
-                    <td>£{{socnpv|number_format(2, '.', ',')}}</td>
+                    <td>£{{(socnpv*ratio_zones)|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Breakeven</td>
@@ -84,11 +94,11 @@
                 </tr>
                 <tr>
                     <td class="item" scope="row">Non Cash Benefits Rating</td>
-                    <td>{{noncash_rating}}</td>
+                    <td>{{noncash_rating!=-1 ? (noncash_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Risks Rating</td>
-                    <td>{{risks_rating}}</td>
+                    <td>{{risks_rating!=-1 ? (risks_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
             </tbody>
         </table>

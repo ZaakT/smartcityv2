@@ -2812,7 +2812,7 @@ function getScenByID($scenID){
 }
 
 
-// ---------------------------------------- WORK. CAP. REQ. ----------------------------------------
+// ---------------------------------------- DASHBOARDS ----------------------------------------
 
 function getTotCapexFromProj($projID){
     $db = dbConnect();
@@ -3039,9 +3039,9 @@ function getNonCashRating($projID,$ucID){
     //var_dump($res);
     $tot = floatval($res['tot']);
     $nb = intval($res['nb']);
-    $rating = $nb!=0 ? $tot/$nb : "NA";
+    $rating = $nb!=0 ? $tot/$nb : -1;
     //var_dump($rating);
-    return $rating!="NA" ? number_format($rating,1,",",".") : "NA";
+    return $rating;
 }
 
 function getRisksRating($projID,$ucID){
@@ -3055,6 +3055,6 @@ function getRisksRating($projID,$ucID){
     //var_dump($res);
     $tot = floatval($res['tot']);
     $nb = intval($res['nb']);
-    $rating = $nb!=0 ? $tot/$nb : "NA";
-    return $rating!="NA" ? number_format($rating,1,",",".") : "NA";
+    $rating = $nb!=0 ? $tot/$nb : -1;
+    return $rating;
 }

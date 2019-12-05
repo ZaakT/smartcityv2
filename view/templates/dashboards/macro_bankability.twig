@@ -5,11 +5,90 @@
             {% for id_meas,list_ucs in scope %}
                 <optgroup label="{{measures[id_meas]['name']}}">
                     {% for id_uc in list_ucs %}
-                        <option value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
+                        <option name={{id_uc}} value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
                     {% endfor %}
                 </optgroup>
             {% endfor %}
         </select>
     </div>
 </div>
+{% endmacro %}
+
+{% macro financial(scope,meas,ucs) %}
+<table id="financial_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
+    <thead class="thead-light text-center">
+        {% set nb = 1 %}
+        {% for measID,list_ucs in scope %}
+        {% set nb = 1+2*list_ucs|length %}
+        {% endfor %}
+        <tr>
+            <th class="text-uppercase" scope="col" colspan={{nb}}>Financial Bankability</th>
+        </tr>
+        <tr>
+            <th class="" scope="col" rowspan=3></th>
+            {% for measID,list_ucs in scope %}
+                <th class="" scope="col" colspan={{2 * list_ucs|length}}>{{meas[measID]['name']}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    <th class="" scope="col" colspan=2>{{ucs[ucID]['name']}}</th>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    <th class="" scope="col" colspan=1></th>
+                    <th class="" scope="col" colspan=1>Score / 10</th>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="item" scope="row">Return per £ invested</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    <td class="" scope="col" colspan=1>£ 666</td>
+                    <td class="" scope="col" colspan=1>666 / 10</td>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="item" scope="row">Payback / Project Duration</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    <td class="" scope="col" colspan=1>666 %</th>
+                    <td class="" scope="col" colspan=1>666 / 10</td>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr class="text-primary font-weight-bold">
+            <td class="item text-primary" scope="row">Financial</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                <td class="" scope="col" colspan=1></td>
+                <td class="" scope="col" colspan=1>666 / 10</td>
+                {% endfor %}
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
+{% endmacro %}
+
+{% macro societal() %}
+{% endmacro %}
+
+{% macro define() %}
+{% endmacro %}
+
+{% macro define_graph() %}
+{% endmacro %}
+
+{% macro overall() %}
+{% endmacro %}
+
+{% macro overall_graph() %}
 {% endmacro %}

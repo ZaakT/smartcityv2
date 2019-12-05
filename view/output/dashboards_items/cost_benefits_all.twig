@@ -31,15 +31,15 @@
             <tbody>
                 <tr>
                     <td class="item" scope="row">Start Date</td>
-                    <td>{{keydates[0]}}</td>
+                    <td>{{keydates_proj[0]}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Implementation<br>End Date</td>
-                    <td>{{keydates[1]}}</td>
+                    <td>{{keydates_proj[1]}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Project End Date</td>
-                    <td>{{keydates[2]}}</td>
+                    <td>{{keydates_proj[2]}}</td>
                 </tr>
             </tbody>
         </table>
@@ -73,11 +73,11 @@
                 </tr>
                 <tr>
                     <td class="item" scope="row">Non Cash Benefits Rating</td>
-                    <td>{{noncash_rating}}</td>
+                    <td>{{noncash_rating != -1 ? (noncash_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Risks Rating</td>
-                    <td>{{risks_rating}}</td>
+                    <td>{{risks_rating!=-1 ? (risks_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
             </tbody>
         </table>
