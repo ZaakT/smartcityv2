@@ -15,7 +15,7 @@
 {% endmacro %}
 
 
-{% macro output(years,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) %}
+{% macro output(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table budget_uc_table">
         <table id="budget_uc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -31,79 +31,76 @@
             <tbody>
                 <tr>
                     <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
-                    <td>£ to calculate</td>
+                    <td>£{{budgetCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{budgetCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
-                    <td>£ to calculate</td>
+                    <td>£{{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>a. Implementation</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{implem[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>b. Opex</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{opex[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>c. Revenue</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{revenues[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>d. Capex Amortization</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{capexAmort[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>Project Impact On Budget</strong></td>
-                    <td>£ to calculate</td>
-                    {% for year in years %}
-                        <td>£ to calculate</td>
-                    {% endfor %}
+                    <td colspan={{1+years|length}}></td>
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>Operating Budget<br>Yearly Impact</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{OBYI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>Operating Budget<br>Cumulated Impact</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{OBCI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>Capex Residual Value</strong></td>
-                    <td>£ to calculate</td>
+                    <td></td>
                     {% for year in years %}
-                        <td>£ to calculate</td>
+                        <td>£{{CRV[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
             </tbody>

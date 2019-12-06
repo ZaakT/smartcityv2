@@ -934,8 +934,65 @@ function budget_uc_output($twig,$is_connected,$projID,$post=[]){
                 $ucID = intval($post['use_case']);
                 $uc = getUCByID($ucID);
                 $selScope = getListSelScope($projID);
-                $years = ['2010',"2011","2012"];
-                echo $twig->render('/output/dashboards_items/budget_uc_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc['name'],'years'=>$years));
+
+                $schedules = getListSelDates($projID);
+                $keydates_proj = getKeyDatesProj($schedules,$selScope);
+                $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+                $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+                
+                $implemSchedule = $schedules['implem'][$ucID];
+                $opexSchedule = $schedules['opex'][$ucID];
+                $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                $uc_stardate = $implemSchedule['startdate'];
+                $uc_implem_enddate = $implemSchedule['100date'];
+                $uc_enddate = $opexSchedule['enddate'];
+                $keydates_uc = [$uc_stardate,$uc_implem_enddate,$uc_enddate];
+
+                $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+                //var_dump($implemRepart);
+                $capex = getTotCapexByUC($projID,$ucID);
+                $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+                //var_dump($capexPerMonth);
+                $capexTot = calcCapexTot($capexPerMonth,$projectYears);
+                $implem = getTotImplemByUC($projID,$ucID);
+                $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                $implemTot = calcImplemTot($implemPerMonth,$projectYears);
+                
+                $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                $opexValues = getOpexValues($projID,$ucID);
+                $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+                $opexTot2 = calcOpexTot($opexPerMonth,$projectYears);
+
+                if(!empty($revenuesSchedule)){
+                    $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                    //var_dump($revenuesRepart);
+                    $revenuesValues = getRevenuesValues($projID,$ucID);
+                    $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                    $revenuesTot2 = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                } else {
+                    $revenuesPerMonth = array_fill_keys($projectDates,0);
+                    $revenuesTot2 = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                }
+
+                $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                $cashreleasingTot2 = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears);
+                
+                $capexAmortization = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears);
+                
+                $baseline_crb = getBaselineCRB($projID,$ucID);
+                $netProjectCost = calcNetProjectCost($projectYears,$implemTot,$opexTot2,$revenuesTot2,$capexAmortization);
+                $baselineOpCost = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot2);
+                $budgetCost = add_arrays($netProjectCost,$baselineOpCost);
+
+                $OB = calcOB($projectYears,$budgetCost);
+                $OBYI = $OB[0];
+                $OBCI = $OB[1];
+
+                $CRV = getCRV($projectYears,$capexTot,$capexAmortization);
+
+                echo $twig->render('/output/dashboards_items/budget_uc_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc['name'],'years'=>$projectYears,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'capexAmort'=>$capexAmortization,'OBYI'=>$OBYI,'OBCI'=>$OBCI,'CRV'=>$CRV));
             } else {
                 throw new Exception("This project doesn't exist !");
             }
@@ -945,6 +1002,87 @@ function budget_uc_output($twig,$is_connected,$projID,$post=[]){
     } else {
         throw new Exception("No UC selected !");
     }
+}
+
+function calcCapexAmort($capex,$periods,$projectDates,$projectYears){
+    //var_dump($capex);
+    $list = array_fill_keys($projectDates,0);
+    foreach ($periods as $id_item => $period){
+        $list2 = array_fill_keys($projectDates,0);
+        $period *= 12;
+        foreach ($capex as $date => $value){
+            $list3 = array_fill_keys($projectDates,0);
+            if($value!=0){
+                $temp = $period != 0 ? $value/$period : 0;
+                $start = array_search($date,$projectDates);
+                $end = $start+$period;
+                $end = $end < sizeof($projectDates) ? $end : sizeof($projectDates)-1;
+                for ($i=$start; $i < $end; $i++) { 
+                    $list3[$projectDates[$i]] += $temp;
+                }
+                //var_dump($list3);
+            }
+            $list2 = add_arrays($list2,$list3);
+        }
+        $list = add_arrays($list,$list2);
+    }
+    $list_tot = [];
+    foreach ($projectYears as $year) {
+        $list_tot[$year]=0;
+    }
+    foreach ($list as $date => $value) {
+        $temp = explode('/',$date);
+        $year = $temp[1];
+        $list_tot[$year] += $value;
+    }
+    //var_dump($list_tot);
+    return $list_tot;
+}
+
+function getCRV($years,$capexTot,$capexAmort){
+    $list = [];
+    $cumul1 = 0;
+    $cumul2 = 0;
+    foreach ($years as $year){
+        $cumul1 += $capexTot[$year];
+        $cumul2 += $capexAmort[$year];
+        $list[$year] = $cumul1 - $cumul2;
+    }
+    return $list;
+}
+
+function calcOB($years,$budgetCost){
+    $OBYI = [];
+    $OBCI = [];
+    $cumul = 0;
+    foreach ($years as $year) {
+        $value = $budgetCost[$year] - $budgetCost['current'];
+        $cumul += $value;
+        $OBYI[$year] = $value;
+        $OBCI[$year] = $cumul;
+    }
+    return [$OBYI,$OBCI];
+}
+
+function calcNetProjectCost($years,$a,$b,$c,$d){
+    // a + b - c + d
+    // a : implem, b : opex, c : revenues, d : capex_amortization
+    $list = [];
+    $list['current'] = 0;
+    foreach ($years as $year) {
+        $list[$year] = $a[$year] + $b[$year] - $c[$year] + $d[$year];
+    }
+    return $list;
+}
+
+function calcBaselineOpCost($years,$baseline_crb,$crb){
+    // current = baseline CRB * 12
+    $list = [];
+    $list['current'] = $baseline_crb*12;
+    foreach ($years as $year) {
+        $list[$year] = $list['current']-$crb[$year];
+    }
+    return $list;
 }
 
 

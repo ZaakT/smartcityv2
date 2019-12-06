@@ -2836,6 +2836,21 @@ function getTotCapexByUC($projID,$ucID){
     return $tot;
 }
 
+function getCapexAmort($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_item,period
+                            FROM input_capex
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+        $period = intval($res['period']);
+        $list[$id_item] = $period;
+    }
+    return $list;
+}
+
 function getTotImplemFromProj($projID){
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
@@ -2987,6 +3002,16 @@ function getCashReleasingValues($projID,$ucID){
     //var_dump($list);
     return $list;
 }
+
+function getBaselineCRB($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) as baseline
+                            FROM input_cashreleasing
+                            WHERE id_proj = ? and id_uc = ?');
+    $req->execute(array($projID,$ucID));
+    return intval($req->fetch()['baseline']);
+}
+
 /*
 function getTotWiderCashByUC($projID,$ucID){
     $db = dbConnect();

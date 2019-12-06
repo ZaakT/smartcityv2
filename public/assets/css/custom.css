@@ -200,3 +200,7 @@ th, td{
     min-width: 100px;
     max-width: 100px;
 }
+
+.budget_uc_table{
+    max-height: 100vh;
+}
