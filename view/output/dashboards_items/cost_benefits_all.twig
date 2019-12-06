@@ -18,7 +18,7 @@
     </div>
 </div>
 
-{{ macros.output(projectDates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot) }}
+{{ macros.output(projectDates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot) }}
 
 <div class="row text-center offset-2">
     <div class=" col-8 mt-5 mx-5 list-table keydates_table">
@@ -73,11 +73,11 @@
                 </tr>
                 <tr>
                     <td class="item" scope="row">Non Cash Benefits Rating</td>
-                    <td>{{noncash_rating != -1 ? (noncash_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
+                    <td>{{ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Risks Rating</td>
-                    <td>{{risks_rating!=-1 ? (risks_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
+                    <td>{{ratingRisks!=-1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}}</td>
                 </tr>
             </tbody>
         </table>
