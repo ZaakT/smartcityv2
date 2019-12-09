@@ -204,3 +204,7 @@ th, td{
 .budget_uc_table{
     max-height: 100vh;
 }
+
+.budget_all_table{
+    max-height: 100vh;
+}

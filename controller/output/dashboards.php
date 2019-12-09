@@ -944,10 +944,10 @@ function budget_uc_output($twig,$is_connected,$projID,$post=[]){
                 $opexSchedule = $schedules['opex'][$ucID];
                 $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
 
-                $uc_stardate = $implemSchedule['startdate'];
+                /* $uc_stardate = $implemSchedule['startdate'];
                 $uc_implem_enddate = $implemSchedule['100date'];
                 $uc_enddate = $opexSchedule['enddate'];
-                $keydates_uc = [$uc_stardate,$uc_implem_enddate,$uc_enddate];
+                $keydates_uc = [$uc_stardate,$uc_implem_enddate,$uc_enddate]; */
 
                 $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
                 //var_dump($implemRepart);
@@ -1093,11 +1093,86 @@ function budget_all($twig,$is_connected,$projID){
         $user = getUser($_SESSION['username']);
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
-            $selScope = getListSelScope($projID);
-            $projectDates = ["01/2010","02/2010","03/2010","01/2011","02/2011","03/2011","01/2012","02/2012","03/2012"];
-            $years = ['2010',"2011","2012"];
+            $scope = getListSelScope($projID);
             
-            echo $twig->render('/output/dashboards_items/budget_all.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projectDates'=>$projectDates,'years'=>$years));
+            $schedules = getListSelDates($projID);
+            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+            $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+            
+            // For each UC
+            // -> get schedules
+            // -> calc repartitions (% / month)
+            // -> calc values PER MONTH & TOT
+            // -> calc Budget Values
+            // -> increment Values
+
+            $implemTot_all = [];
+            $opexTot_all = [];
+            $revenuesTot_all = [];
+            $capexAmortTot_all = [];
+            $netProjectCost = [];
+            $baselineOpCost = [];
+            $CRV = [];
+            $capexAmort_all = [];
+
+            foreach ($scope as $measID => $list_ucs) {
+                foreach ($list_ucs as $ucID) {
+                    $implemSchedule = $schedules['implem'][$ucID];
+                    $opexSchedule = $schedules['opex'][$ucID];
+                    $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+                    $capexTot = calcCapexTot($capexPerMonth,$projectYears);
+                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                    $implemTot = calcImplemTot($implemPerMonth,$projectYears);
+                    $implemTot_all = add_arrays($implemTot_all,$implemTot);
+                    
+                    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                    $opexValues = getOpexValues($projID,$ucID);
+                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+                    $opexTot2 = calcOpexTot($opexPerMonth,$projectYears);
+                    $opexTot_all = add_arrays($opexTot_all,$opexTot2);
+
+                    if(!empty($revenuesSchedule)){
+                        $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                        $revenuesValues = getRevenuesValues($projID,$ucID);
+                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                        $revenuesTot2 = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                        $revenuesTot_all = add_arrays($revenuesTot_all,$revenuesTot2);
+                    } else {
+                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                        $revenuesTot2 = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                        $revenuesTot_all = add_arrays($revenuesTot_all,$revenuesTot2);
+                    }
+
+                    $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                    $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    $cashreleasingTot2 = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears);
+                    
+                    $capexAmortization = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears);
+                    $capexAmort_all = add_arrays($capexAmort_all,$capexAmortization);
+                    
+                    $baseline_crb = getBaselineCRB($projID,$ucID);
+                    $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot2,$revenuesTot2,$capexAmortization);
+                    $netProjectCost = add_arrays($netProjectCost,$netProjectCost_old);
+                    $baselineOpCost_old = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot2);
+                    $baselineOpCost = add_arrays($baselineOpCost,$baselineOpCost_old);
+                    
+
+                    $CRV_old = getCRV($projectYears,$capexTot,$capexAmortization);
+                    $CRV = add_arrays($CRV,$CRV_old);
+                }
+            }
+            $budgetCost = add_arrays($netProjectCost,$baselineOpCost);
+            $OB = calcOB($projectYears,$budgetCost);
+            $OBYI = $OB[0];
+            $OBCI = $OB[1];
+            
+            echo $twig->render('/output/dashboards_items/budget_all.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projectDates'=>$projectDates,'years'=>$projectYears,'implem'=>$implemTot_all,'opex'=>$opexTot_all,'revenues'=>$revenuesTot_all,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'capexAmort'=>$capexAmort_all,'OBYI'=>$OBYI,'OBCI'=>$OBCI,'CRV'=>$CRV));
         } else {
             throw new Exception("This project doesn't exist !");
         }
