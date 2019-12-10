@@ -1488,6 +1488,7 @@ try{
                             if($_GET['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
+                                        //var_dump($_POST);
                                         bankability_output($twig,$is_connected,$_GET['projID'],$_POST);
                                     } else {
                                         header('Location: ?A=dashboards&A2=bankability&projID='.$_GET['projID']);
@@ -1503,6 +1504,30 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }
+                    } elseif($_GET['A2']=="project_dashboard"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                project_dashboard($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }   
+                    } elseif($_GET['A2']=="financing"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                financing_out($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }     
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

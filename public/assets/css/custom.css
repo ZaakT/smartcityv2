@@ -72,13 +72,13 @@ th, td{
     max-height: 65vh;
 }
 
-.ucs-table th, td{
+.ucs-table th, .ucs-table td{
     text-align: center;
     min-width: 200px;
     max-width: 200px;
 }
 
-.rate-table th, td{
+.rate-table th, .rate-table td{
     vertical-align: middle !important;
     text-align: center;
     min-width: 200px;
@@ -190,15 +190,38 @@ th, td{
     border-color: #dee2e6;
     font-weight: bold;
     min-width: 10vw;
+    max-width: 10vw;
 }
 
 .financial_bank {
+    text-align: center !important;
+    vertical-align: middle !important;
     max-height: 100vh;
 }
 
-.financial_bank td{
-    min-width: 100px;
-    max-width: 100px;
+.financial_bank th{
+    min-width: 8vw;
+    max-width: 8vw;
+}
+
+.societal_bank .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+    min-width: 10vw;
+    max-width: 10vw;
+}
+
+.societal_bank {
+    text-align: center !important;
+    vertical-align: middle !important;
+    max-height: 100vh;
+}
+
+.societal_bank th{
+    min-width: 8vw;
+    max-width: 8vw;
 }
 
 .budget_uc_table{

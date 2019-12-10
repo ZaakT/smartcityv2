@@ -1,47 +1,79 @@
-{% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
+{# {% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
 <div class="row mt-2 mb-5 mx-5 text-center">
     <div class="offset-4 col-4">
-        <select name="use_case" class="selectpicker" multiple data-style="btn-dark" dropupAuto="false" title="Select a use case" data-selected-text-format="count>2". required>
+        <select id ="use_cases" name="use_cases" class="selectpicker" multiple="multiple" data-style="btn-dark" dropupAuto="false" title="Select a use case" data-count-selected-text="{0} selected from {1}" data-selected-text-format="count>2" required>
             {% for id_meas,list_ucs in scope %}
                 <optgroup label="{{measures[id_meas]['name']}}">
-                    {% for id_uc in list_ucs %}
-                        <option name={{id_uc}} value={{id_uc}}>{{ucs[id_uc]['name']}}</option>
+                    {% forucIDin list_ucs %}
+                        <option id="{{id_uc}}" name="{{id_uc}}" value="{{id_uc}}">{{ucs[id_uc]['name']}}</option>
                     {% endfor %}
                 </optgroup>
             {% endfor %}
         </select>
     </div>
 </div>
+{% endmacro %} #}
+
+{% macro sel_buttons(scope,ucs,measures) %}
+<div class="row text-center">
+    <div class="col mt-5 mx-5 list-table">
+        <table id="uc_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" class="check-col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Measure</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for measID,list_ucs in scope %}
+                    {% for ucID in list_ucs %}
+                        <tr id = "tr_{{ucID}}" scope="row" class="meas_{{ucs[ucID]['id_meas']}}">
+                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_bankUC('form_bankUC');" class="uc" id='{{ucID}}' name="{{ucID}}"></td>
+                            <td class="font-weight-bold">{{ ucs[ucID]['name'] }}</td>
+                            <td>{{ ucs[ucID]['description'] }}</td>
+                            <td>{{ ucs[ucID]['name_meas'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endmacro %}
 
-{% macro financial(scope,meas,ucs) %}
+{% macro financial(scope,meas,ucs,selUCS,ROI,payback,score) %}
 <table id="financial_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
     <thead class="thead-light text-center">
-        {% set nb = 1 %}
-        {% for measID,list_ucs in scope %}
-        {% set nb = 1+2*list_ucs|length %}
-        {% endfor %}
         <tr>
-            <th class="text-uppercase" scope="col" colspan={{nb}}>Financial Bankability</th>
-        </tr>
-        <tr>
-            <th class="" scope="col" rowspan=3></th>
+            <th class="bank_values" scope="col" rowspan=3></th>
             {% for measID,list_ucs in scope %}
-                <th class="" scope="col" colspan={{2 * list_ucs|length}}>{{meas[measID]['name']}}</th>
+                {% set nb2 = 0 %}
+                {% for ucID in list_ucs %}
+                    {% if ucID in selUCS %}  
+                        {% set nb2 = nb2 + 2 %}
+                    {% endif %}
+                {% endfor %}
+                <th class="" scope="col" colspan={{nb2}}>{{meas[measID]['name']}}</th>
             {% endfor %}
         </tr>
         <tr>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
-                    <th class="" scope="col" colspan=2>{{ucs[ucID]['name']}}</th>
+                    {% if ucID in selUCS %}                    
+                    <th class="bank_score" scope="col" colspan=2>{{ucs[ucID]['name']}}</th>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </tr>
         <tr>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
+                    {% if ucID in selUCS %} 
                     <th class="" scope="col" colspan=1></th>
                     <th class="" scope="col" colspan=1>Score / 10</th>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </tr>
@@ -51,8 +83,10 @@
             <td class="item" scope="row">Return per £ invested</td>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
-                    <td class="" scope="col" colspan=1>£ 666</td>
-                    <td class="" scope="col" colspan=1>666 / 10</td>
+                {% if ucID in selUCS %} 
+                    <td class="" scope="col" colspan=1>£ {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(2, '.', ',')}}</td>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </tr>
@@ -60,17 +94,21 @@
             <td class="item" scope="row">Payback / Project Duration</td>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
-                    <td class="" scope="col" colspan=1>666 %</th>
-                    <td class="" scope="col" colspan=1>666 / 10</td>
+                {% if ucID in selUCS %} 
+                    <td class="" scope="col" colspan=1>{{payback[ucID]['value']|number_format(2, '.', ',')}}%</th>
+                    <td class="" scope="col" colspan=1>{{payback[ucID]['score']|number_format(2, '.', ',')}}</td>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </tr>
         <tr class="text-primary font-weight-bold">
-            <td class="item text-primary" scope="row">Financial</td>
+            <td class="item text-primary" scope="row">Financial Bankability Score</td>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
                 <td class="" scope="col" colspan=1></td>
-                <td class="" scope="col" colspan=1>666 / 10</td>
+                <td class="" scope="col" colspan=1>{{score[ucID]|number_format(2, '.', ',')}}</td>
+                {% endif %}
                 {% endfor %}
             {% endfor %}
         </tr>
@@ -78,7 +116,110 @@
 </table>
 {% endmacro %}
 
-{% macro societal() %}
+
+{% macro societal(scope,meas,ucs,selUCS,ROI,payback,risk,noncash,score) %}
+<table id="societal_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
+    <thead class="thead-light text-center">
+        <tr>
+            <th class="" scope="col" rowspan=3></th>
+            {% for measID,list_ucs in scope %}
+                {% set nb2 = 0 %}
+                {% for ucID in list_ucs %}
+                    {% if ucID in selUCS %}  
+                        {% set nb2 = nb2 + 2 %}
+                    {% endif %}
+                {% endfor %}
+                <th class="" scope="col" colspan={{nb2}}>{{meas[measID]['name']}}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    {% if ucID in selUCS %}                    
+                    <th class="" scope="col" colspan=2>{{ucs[ucID]['name']}}</th>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                    {% if ucID in selUCS %} 
+                    <th class="" scope="col" colspan=1></th>
+                    <th class="" scope="col" colspan=1>Score / 10</th>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="item" scope="row">Return per £ invested</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
+                    <td class="" scope="col" colspan=1>£ {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(2, '.', ',')}}</td>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="item" scope="row">Payback / Project Duration</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
+                    <td class="" scope="col" colspan=1>{{payback[ucID]['value']|number_format(2, '.', ',')}} %</th>
+                    <td class="" scope="col" colspan=1>{{payback[ucID]['score']|number_format(2, '.', ',')}}</td>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="item" scope="row">Risks</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
+                    {% if risk[ucID]['value'] != -1%}
+                        <td class="" scope="col" colspan=1>{{risk[ucID]['value']|number_format(2, '.', ',')}}</td>
+                        <td class="" scope="col" colspan=1>{{risk[ucID]['score']|number_format(2, '.', ',')}}</td>
+                    {% else %}
+                        <td class="" scope="col" colspan=1>NA</td>
+                        <td class="" scope="col" colspan=1>NA</td>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="item" scope="row">Non Cash Benefits Rating</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
+                    {% if noncash[ucID]['value'] != -1%}
+                        <td class="" scope="col" colspan=1>{{noncash[ucID]['value']|number_format(2, '.', ',')}}</td>
+                        <td class="" scope="col" colspan=1>{{noncash[ucID]['score']|number_format(2, '.', ',')}}</td>
+                        {% else %}
+                        <td class="" scope="col" colspan=1>NA</td>
+                        <td class="" scope="col" colspan=1>NA</td>
+                    {% endif %}
+                {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+        <tr class="text-primary font-weight-bold">
+            <td class="item text-primary" scope="row">Societal Bankability Score</td>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if ucID in selUCS %} 
+                    <td class="" scope="col" colspan=1></td>
+                    <td class="" scope="col" colspan=1>{{score[ucID]|number_format(2, '.', ',')}}</td>
+                {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </tr>
+    </tbody>
+</table>
 {% endmacro %}
 
 {% macro define() %}

@@ -2743,6 +2743,7 @@ function getListProjects2($idUser){
     $req->execute(array($idUser));
     $list = [];
     while ($row = $req->fetch()){
+        //var_dump($row);
         $id = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
@@ -2752,7 +2753,9 @@ function getListProjects2($idUser){
         $creation_date = $row['creation_date'];
         $modif_date = $row['modif_date'];
         $id_user = intval($row['id_user']);
-        $list[$id] = ['name'=>$name,'description'=>$description,'discount_rate'=>$discount_rate,'weight_bank'=>$weight_bank,'weight_bank_soc'=>$weight_bank_soc,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_user'=>$id_user];
+        $scoping = intval($row['scoping']);
+        $cb = intval($row['cb']);
+        $list[$id] = ['name'=>$name,'description'=>$description,'discount_rate'=>$discount_rate,'weight_bank'=>$weight_bank,'weight_bank_soc'=>$weight_bank_soc,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_user'=>$id_user,'scoping'=>$scoping,'cb'=>$cb];
     }
     return $list;
 }

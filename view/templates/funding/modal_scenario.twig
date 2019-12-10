@@ -27,7 +27,11 @@
                         <div class="col-sm-8">
                             <select class="form-control" name="related_project" id="related_project">
                                 {% for id,project in projects %}
-                                    <option  name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>
+                                    {% if project['scoping'] and project['cb'] %}
+                                    <option name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>
+                                    {% else %}
+                                    <option class="text-danger font-italic bg-light" disabled name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>
+                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </div>

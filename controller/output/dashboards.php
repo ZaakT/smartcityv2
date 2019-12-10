@@ -818,7 +818,8 @@ function cost_benefits_all($twig,$is_connected,$projID){
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     } else {
                         $revenuesPerMonth = array_fill_keys($projectDates,0);
-                        $revenuesTot2 = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                        $revenuesTot_new = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                        $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     }
 
                     $cashreleasingValues = getCashReleasingValues($projID,$ucID);
@@ -853,6 +854,7 @@ function cost_benefits_all($twig,$is_connected,$projID){
             }
 
             $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth);
+            //var_dump($netcashPerMonth);
             $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
             $breakeven = $netcashPerMonth[1];
             $cumulnetcashPerMonth = $netcashPerMonth[2];
@@ -1204,7 +1206,7 @@ function bankability($twig,$is_connected,$projID=0){
 }
 
 function bankability_output($twig,$is_connected,$projID,$post=[]){
-    if($post and isset($post['use_case'])){
+    if($post){
         if($projID!=0){
             $user = getUser($_SESSION['username']);
             if(getProjByID($projID,$user[0])){
@@ -1212,8 +1214,97 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
                 $meas = getListMeasures();
                 $ucs = getListUCs();
                 $scope = getListSelScope($projID);
-                var_dump($post);
-                echo $twig->render('/output/dashboards_items/bankability_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'meas'=>$meas,'ucs'=>$ucs,'scope'=>$scope));
+                $selUCS = [];
+                foreach ($post as $ucID => $value) {
+                    array_push($selUCS,$ucID);
+                }
+            
+                $schedules = getListSelDates($projID);
+                $keydates_proj = getKeyDatesProj($schedules,$scope);
+                //$projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+                $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+
+                $fin_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_score = array_fill_keys($selUCS,0);
+
+                $soc_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $noncash = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $risk = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_score = array_fill_keys($selUCS,0);
+
+                foreach ($selUCS as $ucID) {
+
+                    $implemSchedule = $schedules['implem'][$ucID];
+                    $opexSchedule = $schedules['opex'][$ucID];
+                    $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+
+                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+
+                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                    
+                    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                    $opex = getOpexValues($projID,$ucID);
+                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opex);
+
+                    if(!empty($revenuesSchedule)){
+                        $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                        $revenuesValues = getRevenuesValues($projID,$ucID);
+                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                    } else {
+                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                    }
+
+                    $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                    $cashreleasingPerMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    
+                    $widercashValues = getWiderCashValues($projID,$ucID);
+                    $widercashPerMonth= calcWiderCashPerMonth2($opexRepart,$widercashValues);
+
+                    $dr_year = getListSelDiscountRate($projID);
+                    $dr_month = pow(1+($dr_year/100),1/12)-1;
+
+                    $sum_capex_implem = add_arrays($capexPerMonth,$implemPerMonth);
+
+                    $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth);
+                    $NPV1 = calcNPV($dr_month,$netcashPerMonth[0]);
+                    $NPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+                    $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth,$widercashPerMonth);
+                    $SOCNPV1 = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                    $SOCNPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+
+                    $fin_ROI[$ucID]["value"] = calcROI($NPV1,$NPV2);
+                    $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]);
+                    $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth);
+                    $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100);
+                    $fin_score[$ucID] = calcMoyFinBankability($fin_ROI[$ucID]["score"],$fin_payback[$ucID]["score"]);
+
+                    $soc_ROI[$ucID]["value"] = calcROI($SOCNPV1,$SOCNPV2);
+                    $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]);
+                    $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth);
+                    $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100);
+                    $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
+                    $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]);
+                    $risk[$ucID]["value"] = getRisksRating($projID,$ucID);
+                    $risk[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]);
+                    $soc_score[$ucID] = calcMoySocBankability($soc_ROI[$ucID]["score"],$soc_payback[$ucID]["score"],$noncash[$ucID]["score"],$risk[$ucID]["score"]);
+                }
+
+                $fin_data = setFinData($selUCS,$fin_ROI,$fin_payback,$fin_score);
+                $fin_data = transformForChart($fin_data);
+
+                $soc_data = setSocData($selUCS,$soc_ROI,$soc_payback,$noncash,$risk,$soc_score);
+                $soc_data = transformForChart($soc_data);
+                //var_dump($soc_data);
+
+                echo $twig->render('/output/dashboards_items/bankability_output.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'meas'=>$meas,'ucs'=>$ucs,'scope'=>$scope,'selUCS'=>$selUCS,'fin_ROI'=>$fin_ROI,'fin_payback'=>$fin_payback,'fin_score'=>$fin_score,'soc_ROI'=>$soc_ROI,'soc_payback'=>$soc_payback,'noncash'=>$noncash,'risk'=>$risk,'soc_score'=>$soc_score,'fin_data'=>$fin_data,'soc_data'=>$soc_data));
             } else {
                 throw new Exception("This project doesn't exist !");
             }
@@ -1222,5 +1313,231 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
         }
     } else {
         throw new Exception("No UC selected !");
+    }
+}
+
+function transformForChart($list_data){
+    //var data = {"Return per £ invested":1,"Payback / Project Duration":2,"Financial Bankability Score":5};
+    $list = [];
+    foreach ($list_data as $ucID => $data) {
+        $ret = "{";
+        $nbData = sizeof($data);
+        $i = 0;
+        foreach ($data as $key => $value) {
+            $i++;
+            $ret .= "'".$key."'";
+            $ret .= ':';
+            $ret .= number_format($value,2,'.',',');
+            if($i < $nbData){
+                $ret .= ',';
+            }
+        }
+        $ret .= "}";
+        $list[$ucID] = $ret;
+    }
+    return $list;
+}
+
+function setFinData($selUCS,$ROI,$payback,$fin_score){
+    $list = [];
+    foreach ($selUCS as $ucID) {
+        $list[$ucID] = ["Return per £ invested"=>$ROI[$ucID]['score'],"Payback / Project Duration"=>$payback[$ucID]['score'],"Financial Bankability Score"=>$fin_score[$ucID]];
+    }
+    return $list;
+}
+
+function setSocData($selUCS,$ROI,$payback,$noncash,$risk,$soc_score){
+    $list = [];
+    foreach ($selUCS as $ucID) {
+        /* $noncash_score = $noncash[$ucID]['score'] != -1 ? $noncash[$ucID]['score'] : 0;
+        $risk_score = $risk[$ucID]['score'] != -1 ? $risk[$ucID]['score'] : 0; */
+        $list[$ucID] = ['Return per £ invested'=>$ROI[$ucID]['score'],"Payback / Project Duration"=>$payback[$ucID]['score'],"Risks"=>$risk[$ucID]['score'],"Non Cash Benefits Rating"=>$noncash[$ucID]['score'] ,"Societal Bankability Score"=>$soc_score[$ucID]];
+    }
+    return $list;
+}
+
+function calcROI($NPV1,$NPV2){
+    $ROI = $NPV2 != 0 ? $NPV1/$NPV2 - 1 : 0;
+    return $ROI;
+}
+
+function calcROI_score($ROI){
+    if($ROI>2)
+        $ROI_score = 10;
+    elseif($ROI<=2&&$ROI>1.9)
+        $ROI_score = 9;
+    elseif($ROI<=1.9&&$ROI>1.8)
+        $ROI_score = 8;
+    elseif($ROI<=1.8&&$ROI>1.7)
+        $ROI_score = 7;
+    elseif($ROI<=1.7&&$ROI>1.6)
+        $ROI_score = 6;
+    elseif($ROI<=1.6&&$ROI>1.4)
+        $ROI_score = 5;
+    elseif($ROI<=1.4&&$ROI>1.3)
+        $ROI_score = 4;
+    elseif($ROI<=1.3&&$ROI>1.2)
+        $ROI_score = 3;
+    elseif($ROI<=1.2&&$ROI>1.1)
+        $ROI_score = 2;
+    elseif($ROI<=1.1&&$ROI>1)
+        $ROI_score = 1;
+    elseif($ROI<=1)
+        $ROI_score = 0;
+    return $ROI_score;
+}
+
+function calcPayback($netcash){
+    $period = 0;
+    $netcash_cumul = $netcash[2];
+    //var_dump($netcash_cumul);
+    $period_tot = sizeof($netcash_cumul);
+    foreach ($netcash_cumul as $date => $value) {
+        if($value <= 0){
+            $period++;
+        } else {
+            break;
+        }
+    }
+    $payback = $period_tot!=0 ? $period/$period_tot : 0;
+    return $payback;
+}
+
+function calcPayback_score($payback){
+    if($payback>1||$payback==0)
+        $payback_score = 0;
+    elseif($payback<=1&&$payback>0.92)
+        $payback_score = 1;
+    elseif($payback<=0.92&&$payback>0.88)
+        $payback_score = 2;
+    elseif($payback<=0.88&&$payback>0.8)
+        $payback_score = 3;
+    elseif($payback<=0.8&&$payback>0.71)
+        $payback_score = 4;
+    elseif($payback<=0.71&&$payback>0.59)
+        $payback_score = 5;
+    elseif($payback<=0.59&&$payback>0.49)
+        $payback_score = 6;
+    elseif($payback<=0.49&&$payback>0.41)
+        $payback_score = 7;
+    elseif($payback<=0.41&&$payback>0.33)
+        $payback_score = 8;
+    elseif($payback<=0.33&&$payback>0.25)
+        $payback_score = 9;
+    elseif($payback<=0.25)
+        $payback_score = 10;
+    return $payback_score;
+}
+
+function calcRisk_score($risk){
+    if($risk>7)
+        $risk_score = 0;
+    elseif($risk<=7&&$risk>6.6)
+        $risk_score = 1;
+    elseif($risk<=6.6&&$risk>6.1)
+        $risk_score = 2;
+    elseif($risk<=6.1&&$risk>5.6)
+        $risk_score = 3;
+    elseif($risk<=5.6&&$risk>5.1)
+        $risk_score = 4;
+    elseif($risk<=5.1&&$risk>4.6)
+        $risk_score = 5;
+    elseif($risk<=4.6&&$risk>4.2)
+        $risk_score = 6;
+    elseif($risk<=4.2&&$risk>3.8)
+        $risk_score = 7;
+    elseif($risk<=3.8&&$risk>3.4)
+        $risk_score = 8;
+    elseif($risk<=3.4&&$risk>3)
+        $risk_score = 9;
+    elseif($risk<=3&&$risk>0)
+        $risk_score = 10;
+    else
+        $risk_score = -1;
+    return $risk_score;
+}
+
+function calcNoncash_score($noncash){
+    if($noncash>7)
+        $noncash_score = 10;
+    elseif($noncash<=7&&$noncash>6.6)
+        $noncash_score = 9;
+    elseif($noncash<=6.6&&$noncash>6.1)
+        $noncash_score = 8;
+    elseif($noncash<=6.1&&$noncash>5.6)
+        $noncash_score = 7;
+    elseif($noncash<=5.6&&$noncash>5.1)
+        $noncash_score = 6;
+    elseif($noncash<=5.1&&$noncash>4.6)
+        $noncash_score = 5;
+    elseif($noncash<=4.6&&$noncash>4.2)
+        $noncash_score = 4;
+    elseif($noncash<=4.2&&$noncash>3.8)
+        $noncash_score = 3;
+    elseif($noncash<=3.8&&$noncash>3.4)
+        $noncash_score = 2;
+    elseif($noncash<=3.4&&$noncash>3)
+        $noncash_score = 1;
+    elseif($noncash<=3&&$noncash>0)
+        $noncash_score = 0;
+    else
+        $noncash_score = -1;
+    return $noncash_score;
+}
+
+function calcMoyFinBankability($ROI,$payback){
+    $coef_ROI = 1;
+    $coef_payback = 1;
+    return ($coef_ROI*$ROI + $coef_payback*$payback) / ($coef_ROI + $coef_payback);
+}
+
+function calcMoySocBankability($ROI,$payback,$noncash,$risk){
+    $coef_ROI = 1;
+    $coef_payback = 1;
+    $coef_noncash = $noncash!=-1 ? 1 : 0;
+    $coef_risk = $risk!=-1 ? 1 : 0;
+    return ($coef_ROI*$ROI + $coef_payback*$payback + $coef_noncash*$noncash + $coef_risk*$risk) / ($coef_ROI + $coef_payback + $coef_noncash + $coef_risk);
+}
+
+
+// ----------------------------------- FINANCING -----------------------------------
+
+function financing_out($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
+            //var_dump($list_ucs);
+            echo $twig->render('/output/dashboards_items/financing_out.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            //prereq_CostBenefits();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+// ------------------------------- PROJECT DASHBOARD -------------------------------
+
+function project_dashboard($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
+            //var_dump($list_ucs);
+            echo $twig->render('/output/dashboards_items/project_dashboard.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            //prereq_CostBenefits();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=dashboards&A2=project_out');
     }
 }
