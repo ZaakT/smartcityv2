@@ -37,12 +37,6 @@ th{
     vertical-align: middle !important;
 }
 
-.check-col{
-    min-width: 35px;
-    max-width: 35px;
-    text-align: center;
-}
-
 .next-button{
     color:inherit;
     font-size:50px;
@@ -230,4 +224,49 @@ th, td{
 
 .budget_all_table{
     max-height: 100vh;
+}
+
+.project_scope_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.budget_impact_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.cost_benefits_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.bankability_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.bank_define_table .item {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+    width: 60%;
+}
+
+
+
+
+.check-col{
+    min-width: 25px;
+    max-width: 25px;
+    text-align: center;
 }

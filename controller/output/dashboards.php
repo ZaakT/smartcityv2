@@ -1500,6 +1500,26 @@ function calcMoySocBankability($ROI,$payback,$noncash,$risk){
 }
 
 
+function bankability_output2($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $measures = getListMeasures();
+            $ucs = getListUCs();
+            $scope = getListSelScope($projID);
+            
+            echo $twig->render('/output/dashboards_items/bankability_output2.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            //prereq_CostBenefits();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+
 // ----------------------------------- FINANCING -----------------------------------
 
 function financing_out($twig,$is_connected,$projID=0){

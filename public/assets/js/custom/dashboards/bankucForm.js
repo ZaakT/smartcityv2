@@ -41,6 +41,13 @@ function countChecked_bankUC(formName) {
     return n>0;
 }
 
+countChecked_bankUC("form_bankUC");
+
+
+
+
+
+// ------------------------------------ CHARTS ------------------------------------
 
 var myFinBankScoresChart = null;
 function showFinBankChart(ucName,data){
@@ -171,4 +178,126 @@ function showSocBankChart(ucName,data){
         }
     });
 }
-countChecked_bankUC("form_bankUC");
+
+var myBankDefineChart = null;
+function showBankDefineChart(data){
+
+    $('#BankDefineChart').removeAttr("hidden");
+    if(myBankDefineChart!=null){
+        myBankDefineChart.destroy();
+    }
+
+    var ctx = $('#BankDefineChart').get(0).getContext('2d');
+    myBankDefineChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+            labels: ['Financial Bankability','Societal Bankabiltiy','Project Bankability'],
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title : {
+                display: false,
+                text : "Title",
+                fontSize : 20,
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Score',
+                        fontSize : 18,
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 10,
+                        stepSize: 1,
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        fontSize : 15,
+                    }
+                }]
+            },
+            legend: {
+                display : false
+            }
+        }
+    });
+}
+
+
+var myBankOverallChart = null;
+function showBankOverallChart(data){
+
+    $('#BankOverallChart').removeAttr("hidden");
+    if(myBankOverallChart!=null){
+        myBankOverallChart.destroy();
+    }
+
+    var ctx = $('#BankOverallChart').get(0).getContext('2d');
+    myBankOverallChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+            labels: ['Financial Bankability','Societal Bankabiltiy','Weighted Bankability'],
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title : {
+                display: false,
+                text : "Title",
+                fontSize : 20,
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Score',
+                        fontSize : 18,
+                    },
+                    ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 10,
+                        stepSize: 1,
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        fontSize : 15,
+                    }
+                }]
+            },
+            legend: {
+                display : false
+            }
+        }
+    });
+}

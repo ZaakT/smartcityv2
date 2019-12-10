@@ -2,9 +2,9 @@
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/dashboards/macro_projdash.twig" as macros %}
+{% import "/templates/dashboards/macro_bankability.twig" as macros %}
 
-{% block title %}Dashboards - Project Dashboard{% endblock %}
+{% block title %}Dashboards - Bankability{% endblock %}
 
 {% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
 
@@ -17,25 +17,12 @@
         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
 </div>
+{{ macros.selUCS2(scope,ucs,measures) }}
+{{ macros.define() }}
+{{ macros.overall() }}
 
-<div class="row mt-5 mb-0 text-center text-uppercase">
-    <h4 class="text-dark col">Project Scope</h4>
+<div class="row m-5 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=financing&amp;projID={{projID}}');" disabled></button>
 </div>
-{{ macros.project_scope(measures,ucs,scope,volumes,keydates) }}
-
-<div class="row mt-5 mb-0 text-center text-uppercase">
-    <h4 class="text-dark col">Budget Impact</h4>
-</div>
-{{ macros.budget_impact() }}
-
-<div class="row mt-5 mb-0 text-center text-uppercase">
-    <h4 class="text-dark col">Cost Benefits</h4>
-</div>
-{{ macros.cost_benefits() }}
-
-<div class="row mt-5 mb-0 text-center text-uppercase">
-    <h4 class="text-dark col">Bankability</h4>
-</div>
-{{ macros.bankability() }}
 
 {% endblock %}

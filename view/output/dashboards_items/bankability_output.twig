@@ -19,6 +19,9 @@
 </div>
 
 
+
+
+
 <div class="row mt-4 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Financial Bankability</h4>
 </div>
@@ -27,7 +30,6 @@
         {{ macros.financial(scope,meas,ucs,selUCS,fin_ROI,fin_payback,fin_score) }}
     </div>
 </div>
-
 <div class="row text-center mt-3">
     <div class="col dropdown">
         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,6 +50,9 @@
     </div>
 </div>
 
+
+
+
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Societal Bankability</h4>
 </div>
@@ -56,7 +61,6 @@
         {{ macros.societal(scope,meas,ucs,selUCS,soc_ROI,soc_payback,risk,noncash,soc_score) }}
     </div>
 </div>
-
 <div class="row text-center mt-3">
     <div class="col dropdown">
         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,7 +73,6 @@
         </div>
     </div>
 </div>
-
 <div class="row my-5 text-center">
     <div class="offset-3 col-6">
         <canvas id="SocBankChart" ></canvas>
@@ -78,8 +81,11 @@
     </div>
 </div>
 
+
+
+
 <div class="row m-5 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=financing&amp;projID={{projID}}');" disabled></button>
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=bankability&amp;A3=output2&amp;projID={{projID}}');"></button>
 </div>
 
 {% endblock %}

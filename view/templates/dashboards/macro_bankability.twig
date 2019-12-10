@@ -1,20 +1,5 @@
-{# {% macro sel_buttons(scope,ucs,measures,zones,selZones,repartZones) %}
-<div class="row mt-2 mb-5 mx-5 text-center">
-    <div class="offset-4 col-4">
-        <select id ="use_cases" name="use_cases" class="selectpicker" multiple="multiple" data-style="btn-dark" dropupAuto="false" title="Select a use case" data-count-selected-text="{0} selected from {1}" data-selected-text-format="count>2" required>
-            {% for id_meas,list_ucs in scope %}
-                <optgroup label="{{measures[id_meas]['name']}}">
-                    {% forucIDin list_ucs %}
-                        <option id="{{id_uc}}" name="{{id_uc}}" value="{{id_uc}}">{{ucs[id_uc]['name']}}</option>
-                    {% endfor %}
-                </optgroup>
-            {% endfor %}
-        </select>
-    </div>
-</div>
-{% endmacro %} #}
 
-{% macro sel_buttons(scope,ucs,measures) %}
+{% macro selUCS(scope,ucs,measures) %}
 <div class="row text-center">
     <div class="col mt-5 mx-5 list-table">
         <table id="uc_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
@@ -222,14 +207,100 @@
 </table>
 {% endmacro %}
 
-{% macro define() %}
+
+{% macro selUCS2(scope,ucs,measures) %}
+<div class="row text-center offset-2">
+    <div class="col-8 mt-5 mx-5 list-table bank_uc_table">
+        <table id="bank_uc_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" class="check-col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Measure</th>
+                    <th scope="col">Capex</th>
+                    <th scope="col">% Capex</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for measID,list_ucs in scope %}
+                    {% for ucID in list_ucs %}
+                        <tr id = "tr_{{ucID}}" scope="row" class="meas_{{ucs[ucID]['id_meas']}}">
+                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_bankUC('form_bankUC');" class="uc" id='{{ucID}}' name="{{ucID}}"></td>
+                            <td class="font-weight-bold">{{ ucs[ucID]['name'] }}</td>
+                            <td>{{ ucs[ucID]['name_meas'] }}</td>
+                            <td>{{ capex[ucID]['value'] }}</td>
+                            <td>{{ capex[ucID]['weight'] }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endmacro %}
 
-{% macro define_graph() %}
+{% macro define(score) %}
+<div class="row mt-5 text-center align-items-center">
+    <div class="offset-1 col-4 list-table bank_define_table">
+        <table id="bank_define_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th scope="col" colspan=2 class="text-uppercase">Scores</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item" scope="row">Financial Bankability</td>
+                    <td id="finbank">to calculate</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Societal Bankability</td>
+                    <td id="socbank">to calculate</td>
+                </tr>
+                <tr>
+                    <td class="item" scope="row">Project Bankability</td>
+                    <td id="projbank">to calculate</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="offset-1 col-5">
+        <canvas id="BankDefineChart"></canvas>
+        <iframe src=null hidden
+        onload="showBankDefineChart([0,0,0]);"></iframe>
+    </div>
+</div>
 {% endmacro %}
 
 {% macro overall() %}
-{% endmacro %}
-
-{% macro overall_graph() %}
+<div class="row mt-5 text-center align-items-center">
+    <div class="offset-1 col-4 list-table bank_overall_table">
+        <table id="bank_overall_table" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col" colspan=2 class="text-uppercase">Overall</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bg-dark font-weight-bold text-light" scope="row">Project Bankability</td>
+                    <td>to calculate</td>
+                </tr>
+                <tr>
+                    <td class="bg-dark font-weight-bold text-light" scope="row">Financial Bankability</td>
+                    <td><input type='number' min=0 max=100></td>
+                </tr>
+                <tr>
+                    <td class="bg-dark font-weight-bold text-light" scope="row">Societal Bankability</td>
+                    <td><input type='number' min=0 max=100></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="offset-1 col-5">
+        <canvas id="BankOverallChart"></canvas>
+        <iframe src=null hidden
+        onload="showBankOverallChart([0,0,0]);"></iframe>
+    </div>
+</div>
 {% endmacro %}

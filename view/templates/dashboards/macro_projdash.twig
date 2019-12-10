@@ -1,0 +1,96 @@
+{% macro project_scope(measures,ucs,scope,volumes,keydates) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table project_scope_table">
+        <table id="project_scope_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="" scope="col" rowspan=2>Use Cases List</th>
+                    {% for measID,list_ucs in scope %}
+                        <th class="" scope="col" colspan={{list_ucs|length}}>{{measures[measID]['name']}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <th class="" scope="col" colspan=1>{{ucs[ucID]['name']}}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item" scope="col" colspan=1># service items</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{volumes[ucID]['name']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Start Date</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates[ucID]['startdate']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Implementation<br>End Date</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates[ucID]['implem_enddate']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Project Duration</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates[ucID]['project_duration']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro budget_impact() %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table budget_impact_table">
+        <table id="budget_impact_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro cost_benefits() %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table cost_benefits_table">
+        <table id="cost_benefits_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro bankability() %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table bankability_table">
+        <table id="bankability_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
