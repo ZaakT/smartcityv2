@@ -386,5 +386,11 @@ function calcOverallScores(){
     showBankOverallChart([fin_score,soc_score,weighted_score]);
 }
 
-showBankDefineChart([0,0,0]);
-checkInputOverall();
+try{
+    showBankDefineChart([0,0,0]);
+    checkInputOverall();
+} catch {
+    //do nothing
+} finally {
+    //do nothing
+}

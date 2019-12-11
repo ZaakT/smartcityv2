@@ -39,7 +39,7 @@ function cost_benefits_uc($twig,$is_connected,$projID=0){
             $listSelZones = getListSelZones($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'zones'=>$repart_zones,'list_sel'=>$listSelZones));
-            //prereq_CostBenefits();
+            prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -918,7 +918,7 @@ function budget_uc($twig,$is_connected,$projID=0){
             $scope = getListSelScope($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/budget_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
-            //prereq_CostBenefits();
+            prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -1196,7 +1196,7 @@ function bankability($twig,$is_connected,$projID=0){
             $scope = getListSelScope($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/bankability.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
-            //prereq_CostBenefits();
+            prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -1599,7 +1599,7 @@ function bankability_output2($twig,$is_connected,$projID=0,$post=[]){
                 }
                 foreach ($capexList as $key => $value) {
                     if($key != 'tot'){
-                        $capexList[$key]['weight'] = 100*$value['value']/$capexList['tot'];
+                        $capexList[$key]['weight'] = $capexList['tot']!=0 ? 100*$value['value']/$capexList['tot'] : 0;
                     }
                 }
                 $weighted_scores = getWeightedScores($fin_score,$soc_score,$capexList);
@@ -1607,7 +1607,7 @@ function bankability_output2($twig,$is_connected,$projID=0,$post=[]){
 
 
                 echo $twig->render('/output/dashboards_items/bankability_output2.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'selUCS'=>$selUCS,'capex'=>$capexList,'weighted_scores'=>$weighted_scores));
-                //prereq_CostBenefits();
+                prereq_Dashboards();
             } else {
                 throw new Exception("This Project doesn't exist !");
             }
@@ -1657,7 +1657,7 @@ function financing_out($twig,$is_connected,$projID=0){
             $scope = getListSelScope($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/financing_out.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
-            //prereq_CostBenefits();
+            prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -1678,11 +1678,19 @@ function project_dashboard($twig,$is_connected,$projID=0){
             $scope = getListSelScope($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/project_dashboard.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
-            //prereq_CostBenefits();
+            prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
     } else {
         header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+// ---------------------------------------- CHECK PRE-REQ ----------------------------------------
+function prereq_Dashboards(){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        echo "<script>prereq_dashboards(true);</script>";
     }
 }
