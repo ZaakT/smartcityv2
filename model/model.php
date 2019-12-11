@@ -3086,3 +3086,15 @@ function getRisksRating($projID,$ucID){
     $rating = $nb!=0 ? $tot/$nb : -1;
     return $rating;
 }
+
+
+function getListVolumesPerUC($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT SUM(nb_compo/nb_per_uc) as volume
+                            FROM volumes_input
+                            WHERE id_proj = ? and id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    $list = [];
+    $res = $req->fetch()['volume'];
+    return intval($res);
+}
