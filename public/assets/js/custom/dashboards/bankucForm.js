@@ -181,8 +181,8 @@ function showSocBankChart(ucName,data){
 
 var myBankDefineChart = null;
 function showBankDefineChart(data){
-
-    $('#BankDefineChart').removeAttr("hidden");
+    //console.log(data);
+    //$('#BankDefineChart').removeAttr("hidden");
     if(myBankDefineChart!=null){
         myBankDefineChart.destroy();
     }
@@ -244,7 +244,7 @@ function showBankDefineChart(data){
 var myBankOverallChart = null;
 function showBankOverallChart(data){
 
-    $('#BankOverallChart').removeAttr("hidden");
+    //$('#BankOverallChart').removeAttr("hidden");
     if(myBankOverallChart!=null){
         myBankOverallChart.destroy();
     }
@@ -301,3 +301,90 @@ function showBankOverallChart(data){
         }
     });
 }
+
+function calcDefineScores(weighted_scores){
+    //var weighted_scores = {1:{'fin':1,'soc':2},2:{'fin':1,'soc':2},3:{'fin':1,'soc':2}};
+    var fin_score = 0.;
+    var soc_score = 0.;
+    $('#bank_uc_table :checkbox').each(function(){
+        var ucID = this.id;
+        if(this.checked){
+            fin_score += weighted_scores[ucID]['fin'];
+            soc_score += weighted_scores[ucID]['soc'];
+        }
+    });
+    var proj_score = (fin_score+soc_score)/2;
+    
+    var fin_score = fin_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
+    var soc_score = soc_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
+    var proj_score = proj_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
+
+
+    fillScores(fin_score,soc_score,proj_score);
+    showBankDefineChart([parseFloat(fin_score),parseFloat(soc_score),parseFloat(proj_score)]);
+    calcOverallScores();
+}
+
+function fillScores(fin_score,soc_score,proj_score){
+    $("#bank_define_table #finbank").text(fin_score);
+    $("#bank_define_table #socbank").text(soc_score);
+    $("#bank_define_table #projbank").text(proj_score);
+    $("#bank_overall_table #projbank").text(proj_score);
+}
+
+function colorFilled(test){
+    $("#bank_overall_table input").each(function(){
+        var element = $(this);
+        if(test){
+            element.css("background","palegreen");
+        } else {
+            element.css("background","salmon");
+        }
+    });
+}
+
+function checkSum(){
+    //console.log("--------------------");
+    var sum = 0;
+    $("#bank_overall_table input").each(function(){
+        //console.log(this);
+        var element = $(this);
+        var value = element.val();
+        value = value!="" ? parseInt(value) : 0;
+        if(value!=""){
+            if(value>100){
+                //element.val(parseInt(100));
+                //pass
+            } else {
+                element.val(parseInt(value));
+                sum += parseInt(value);
+            }
+        } else {
+            element.val(parseInt(0));
+        }
+    });
+    colorFilled(sum==100);
+    //console.log(sum==100);
+    return sum==100;
+}
+
+function checkInputOverall(){
+    if(checkSum()){;
+        calcOverallScores();
+    } else {
+        showBankOverallChart([0,0,0]);
+    }
+}
+
+function calcOverallScores(){
+    var fin_score = parseFloat($("#bank_define_table #finbank").text());
+    var soc_score = parseFloat($("#bank_define_table #socbank").text());
+    var weight_fin = $("#bank_overall_table #finbank_weight").val()/100;
+    var weight_soc = $("#bank_overall_table #socbank_weight").val()/100;
+    var weighted_score = weight_fin*fin_score + weight_soc*soc_score;
+    //console.log([fin_score,soc_score,weighted_score]);
+    showBankOverallChart([fin_score,soc_score,weighted_score]);
+}
+
+showBankDefineChart([0,0,0]);
+checkInputOverall();

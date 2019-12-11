@@ -1500,25 +1500,150 @@ function calcMoySocBankability($ROI,$payback,$noncash,$risk){
 }
 
 
-function bankability_output2($twig,$is_connected,$projID=0){
-    $user = getUser($_SESSION['username']);
-    if($projID!=0){
-        if(getProjByID($projID,$user[0])){
-            $proj = getProjByID($projID,$user[0]);
-            $measures = getListMeasures();
-            $ucs = getListUCs();
-            $scope = getListSelScope($projID);
-            
-            echo $twig->render('/output/dashboards_items/bankability_output2.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
-            //prereq_CostBenefits();
+function bankability_output2($twig,$is_connected,$projID=0,$post=[]){
+    if($post){
+        $user = getUser($_SESSION['username']);
+        if($projID!=0){
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                $measures = getListMeasures();
+                $ucs = getListUCs();
+                $scope = getListSelScope($projID);
+                $selUCS = [];
+                foreach ($post as $key => $value) {
+                    array_push($selUCS,intval($value));
+                }
+                
+                $schedules = getListSelDates($projID);
+                $keydates_proj = getKeyDatesProj($schedules,$scope);
+                $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+                $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+                
+                $capexList = ['tot'=>0];
+                //var_dump($capexList);
+
+                $fin_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_score = array_fill_keys($selUCS,0);
+
+                $soc_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $noncash = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $risk = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_score = array_fill_keys($selUCS,0);
+
+                foreach ($selUCS as $ucID) {
+
+                    $implemSchedule = $schedules['implem'][$ucID];
+                    $opexSchedule = $schedules['opex'][$ucID];
+                    $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+
+                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+                    $capexTot = calcCapexTot($capexPerMonth,$projectYears);
+                    $capexList['tot'] += $capexTot['tot'];
+                    $capexList[$ucID]['value'] = $capexTot['tot'];
+
+                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                    
+                    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                    $opex = getOpexValues($projID,$ucID);
+                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opex);
+
+                    if(!empty($revenuesSchedule)){
+                        $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                        $revenuesValues = getRevenuesValues($projID,$ucID);
+                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                    } else {
+                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                    }
+
+                    $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                    $cashreleasingPerMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    
+                    $widercashValues = getWiderCashValues($projID,$ucID);
+                    $widercashPerMonth= calcWiderCashPerMonth2($opexRepart,$widercashValues);
+
+                    $dr_year = getListSelDiscountRate($projID);
+                    $dr_month = pow(1+($dr_year/100),1/12)-1;
+
+                    $sum_capex_implem = add_arrays($capexPerMonth,$implemPerMonth);
+
+                    $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth);
+                    $NPV1 = calcNPV($dr_month,$netcashPerMonth[0]);
+                    $NPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+                    $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth,$widercashPerMonth);
+                    $SOCNPV1 = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                    $SOCNPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+
+                    $fin_ROI[$ucID]["value"] = calcROI($NPV1,$NPV2);
+                    $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]);
+                    $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth);
+                    $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100);
+                    $fin_score[$ucID] = calcMoyFinBankability($fin_ROI[$ucID]["score"],$fin_payback[$ucID]["score"]);
+
+                    $soc_ROI[$ucID]["value"] = calcROI($SOCNPV1,$SOCNPV2);
+                    $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]);
+                    $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth);
+                    $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100);
+                    $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
+                    $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]);
+                    $risk[$ucID]["value"] = getRisksRating($projID,$ucID);
+                    $risk[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]);
+                    $soc_score[$ucID] = calcMoySocBankability($soc_ROI[$ucID]["score"],$soc_payback[$ucID]["score"],$noncash[$ucID]["score"],$risk[$ucID]["score"]);
+                }
+                foreach ($capexList as $key => $value) {
+                    if($key != 'tot'){
+                        $capexList[$key]['weight'] = 100*$value['value']/$capexList['tot'];
+                    }
+                }
+                $weighted_scores = getWeightedScores($fin_score,$soc_score,$capexList);
+                //var_dump($weighted_scores);
+
+
+                echo $twig->render('/output/dashboards_items/bankability_output2.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'selUCS'=>$selUCS,'capex'=>$capexList,'weighted_scores'=>$weighted_scores));
+                //prereq_CostBenefits();
+            } else {
+                throw new Exception("This Project doesn't exist !");
+            }
         } else {
-            throw new Exception("This Project doesn't exist !");
+            header('Location: ?A=dashboards&A2=project_out');
         }
     } else {
-        header('Location: ?A=dashboards&A2=project_out');
+        throw new Exception("There is no UC selected !");
     }
 }
 
+function getWeightedScores($fin_score,$soc_score,$capexList){
+    /* $list = []; */
+    //weighted_scores = {1:{'fin':1,'soc':2},2:{'fin':1,'soc':2},3:{'fin':1,'soc':2}};
+    $ret = "{";
+    $i = 0;
+    foreach ($capexList as $key => $tab) {
+        $i++;
+        if($key != 'tot'){
+            $ucID = $key;
+            $weight = $tab['weight'];
+            $fin_value = $weight*$fin_score[$ucID]/100;
+            $soc_value = $weight*$soc_score[$ucID]/100;
+            /* $list[$ucID]['fin'] = $weight*$fin_value/100;
+            $list[$ucID]['soc'] = $weight*$soc_value/100; */
+            
+            $ret .= $key.":{'fin':".$fin_value.",'soc':".$soc_value."}";
+            
+            if($i < sizeof($capexList)){
+                $ret .= ",";
+            }
+        }
+    }
+    $ret .= "}";
+    return $ret;
+}
 
 // ----------------------------------- FINANCING -----------------------------------
 

@@ -18,7 +18,7 @@
     </div>
 </div>
 <form name="form_bankUC" id="form_bankUC" action="?A=dashboards&amp;A2=bankability&amp;A3=output&amp;projID={{projID}}" method="post" onsubmit="return countChecked_bankUC('form_bankUC');">
-    {{ macros.sel_buttons(scope,ucs,measures) }}
+    {{ macros.selUCS(scope,ucs,measures) }}
     
     <div class="row mt-4 mb-0 text-center">
         <span id="countUCSelectBankUC" class="offset-5 col-2 text-white btn btn-info disabled"></span>

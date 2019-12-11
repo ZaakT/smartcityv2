@@ -1493,7 +1493,7 @@ try{
                                     } 
                                     else if($_GET['A3']=="output2"){
                                         //var_dump($_POST);
-                                        bankability_output2($twig,$is_connected,$_GET['projID']);
+                                        bankability_output2($twig,$is_connected,$_GET['projID'],$_POST);
                                     }else {
                                         header('Location: ?A=dashboards&A2=bankability&projID='.$_GET['projID']);
                                     }

@@ -82,10 +82,12 @@
 </div>
 
 
-
-
-<div class="row m-5 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=bankability&amp;A3=output2&amp;projID={{projID}}');"></button>
-</div>
-
+<form name="form_bankUC2" id="form_bankUC2" action="?A=dashboards&amp;A2=bankability&amp;A3=output2&amp;projID={{projID}}');" method="post">
+    {% for uc in selUCS %}
+        <input type="number" id='uc_{{uc}}' name='uc_{{uc}}' value='{{uc}}' hidden>
+    {% endfor %}
+    <div class="row m-5 text-center text-dark">
+        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
+    </div>
+</form>
 {% endblock %}
