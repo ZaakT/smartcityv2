@@ -1395,8 +1395,36 @@ try{
                         else {
                             header('Location: ?A=funding&A2=scenario');
                         }
+                    } elseif($_GET['A2']=="wcr_input"){
+                        wcr_input($_POST);
                     } elseif($_GET['A2']=="funding_sources"){
-                        funding_sources($twig,$is_connected);
+                        if(isset($_GET['scenID'])){
+                            if($_GET['scenID']!=0){
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']!="input_entities"){
+                                        input_entities($twig,$is_connected,$_GET['scenID']);
+                                    } else {
+                                        header('Location: ?A=funding&A2=funding_sources');
+                                    }
+                                } else {
+                                    funding_sources($twig,$is_connected,$_GET['scenID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=funding&A2=scenario');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=funding&A2=scenario');
+                        }
+                    } elseif($_GET['A2']=="create_entity"){
+                        create_entity($_POST);
+                    } elseif($_GET['A2']=="delete_entity"){
+                        delete_entity($_POST);
+                    } elseif($_GET['A2']=="fs_selected"){
+                        fs_selected($_POST);
+
+
                     } elseif($_GET['A2']=="benef"){
                         benef($twig,$is_connected);
                     } else {

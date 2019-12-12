@@ -3,6 +3,8 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/funding/macro_work_cap_req.twig" as table %}
 
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("funding",scenID) }}{% endblock %}
 
 {% block title %}Funding - Working Capital Req.{% endblock %}
 
@@ -15,8 +17,8 @@
     </div>
 </div>
 
-<form action="?A=funding&amp;A2=scen_selected" method="post">
-{{table.workcapreq_table(values)}}
+<form action="?A=funding&amp;A2=wcr_input" method="post" onsubmit="return checkInputWCR();">
+{{table.workcapreq_table(values,selInvest,selOp)}}
 <div class="row m-3 text-center text-dark">
     <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
 </div>

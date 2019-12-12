@@ -280,9 +280,25 @@ th, td{
     width: 25%;
 }
 
+.funding_sources_table{
+    max-height: 150vh;    
+}
 
+.funding_sources_table .check-col{
+    width: 5%; 
+}
 
+.funding_sources_table a{
+    color : black;
+}
 
+.funding_sources_table a:hover{
+    color : gray;
+}
+
+.funding_sources_table a:active{
+    color : darkgray;
+}
 
 .check-col{
     min-width: 25px;

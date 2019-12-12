@@ -1,0 +1,46 @@
+{% macro funding_sources_table(FS_cat,FS,entities,scenID,listSel) %}
+{% import "/templates/funding/modals_entities.twig" as modal %}
+<div class="row text-center">
+    <div class=" offset-1 col-10 list-table funding_sources_table">
+        <table id="funding_sources_table" class='table table-bordered table-responsive-lg text-center'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" colspan=2 style="width:35%;">Funding Sources</th>
+                    <th scope="col" style="width:20%;">Share of total funding (in %)</th>
+                    <th scope="col" colspan=3 style="width:45%;">Entities</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id_cat,cat in FS_cat %}
+                    <tr>
+                        <td colspan=6 class="text-left font-weight-bold">{{cat['name']}}</td>
+                    </tr>
+                    {% for id_source,source in FS %}
+                        <tr>
+                            {% if source['id_cat']==id_cat %}
+                                <td class="check-col align-middle"><input type="checkbox" onclick="checkSelFS();" class="" id='{{id_source}}' name="{{id_source}}" {{listSel[id_source] ? "checked" : ""}}></td>
+                                <td class="text-left" colspan=1>{{source['name']}}</td>
+                                <td colspan=1><input class="text-center" id="share_{{id_source}}" name="share_{{id_source}}" type="number" min=0 max=100 step=0.1 oninput="checkInputFS();" style="width:80%;" value={{listSel[id_source] ? listSel[id_source] : ""}}><span> %</span></td>
+                                {% if source['hasEntities'] %}
+                                    <td class="align-text-top text-left entities_{{id_source}}">
+                                        {% for id_entity,entity in entities[id_source]|slice(start,last-1) %}
+                                            {{entity['name']}} /
+                                        {% endfor %}
+                                        {{entities[id_source]|last['name']}}
+                                    </td>
+                                    <td style="width:5%;" class="entities_{{id_source}}"><a href="#"><span style="font-size:12px;" class="oi oi-plus" title="plus" aria-hidden="true" data-toggle="modal" data-target="#askCreateEntity_{{id_source}}"></span></a></td>
+                                    <td style="width:5%;" class="entities_{{id_source}}"><a href="#"><span style="font-size:12px;" class="oi oi-minus" title="minus" aria-hidden="true" data-toggle="modal" data-target="#askDeleteEntity_{{id_source}}"></span></a></td>
+                                {% else %}
+                                    <td colspan=3 class="font-italic">No entity can be added for City Category</td>    
+                                {% endif %}
+                            {% endif %}
+                            {{ modal.create_entity(scenID,id_source) }}
+                            {{ modal.delete_entity(scenID,id_source,entities[id_source]) }}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

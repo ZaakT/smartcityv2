@@ -54,9 +54,9 @@
     {% elseif page=="funding" %}        
         <h4 class="nav-item text-center">- Input -<br>Funding</h4>
         <a class="nav-item nav-link " id="scenario" href="?A=funding&amp;A2=scenario">1 - Scenario</a>
-        <a class="nav-item nav-link " id="work_cap_req" href="?A=funding&amp;A2=work_cap_req">2 - Working Capital Req.</a>
-        <a class="nav-item nav-link " id="funding_sources" href="?A=funding&amp;A2=funding_sources">3 - Funding Sources</a>
-        <a class="nav-item nav-link " id="benef" href="?A=funding&amp;A2=benef">4 - Beneficiary</a>
+        <a class="nav-item nav-link " id="work_cap_req" href="?A=funding&amp;A2=work_cap_req&amp;scenID={{selectID}}">2 - Working Capital Req.</a>
+        <a class="nav-item nav-link " id="funding_sources" href="?A=funding&amp;A2=funding_sources&amp;scenID={{selectID}}">3 - Funding Sources</a>
+        <a class="nav-item nav-link " id="benef" href="?A=funding&amp;A2=benef&amp;scenID={{selectID}}">4 - Beneficiary</a>
 
         <!-- Business Model -->
     {% elseif page=="business_model" %}

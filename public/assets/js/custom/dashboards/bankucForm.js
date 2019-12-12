@@ -315,9 +315,9 @@ function calcDefineScores(weighted_scores){
     });
     var proj_score = (fin_score+soc_score)/2;
     
-    var fin_score = fin_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
-    var soc_score = soc_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
-    var proj_score = proj_score.toLocaleString("en-EN", {minimumFractionDigits: 1, maximumFractionDigits: 1})
+    var fin_score = fin_score.toLocaleString("en-EN", {minimumFractionDigits: 0, maximumFractionDigits: 1})
+    var soc_score = soc_score.toLocaleString("en-EN", {minimumFractionDigits: 0, maximumFractionDigits: 1})
+    var proj_score = proj_score.toLocaleString("en-EN", {minimumFractionDigits: 0, maximumFractionDigits: 1})
 
 
     fillScores(fin_score,soc_score,proj_score);

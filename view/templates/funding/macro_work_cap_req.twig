@@ -1,8 +1,8 @@
-{% macro workcapreq_table(values) %}
+{% macro workcapreq_table(values,selInvest,selOp) %}
 
 <div class="row offset-2 text-center">
     <div class="col-8 mx-5 list-table">
-        <table id="workcapreq_table" class='table table-bordered table-striped table-responsive-lg'>
+        <table id="workcapreq_table" class='table table-bordered table-striped table-responsive-lg text-center'>
             <thead class="thead-dark text-center">
                 <tr>
                     <th scope="col"></th>
@@ -13,31 +13,28 @@
             <tbody>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Capex</strong> (A)</td>
-                    <td hidden>{{values['capex']}}</td>
-                    <td>{{values['capex']}}</td>
+                    <td>£ {{values['capex']|number_format(2,'.',',')}}</td>
                     <td></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Implementation</strong> (B)</td>
-                    <td hidden>{{values['capex']}}</td>
-                    <td>{{values['implem']}}</td>
+                    <td>£ {{values['implem']|number_format(2,'.',',')}}</td>
                     <td></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Investment</strong> (C = A + B)</td>
-                    <td></td>
-                    <td></td>
+                    <td>£ {{values['invest']|number_format(2,'.',',')}}</td>
+                    <td><span>£  </span><input class="text-center" type='number' name='wcr_input_invest' id='wcr_input_invest' oninput="checkInputWCR();" step="0.01" value={{selInvest != -1 ? selInvest|number_format(2,'.','') : values['invest']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Operations</strong> (D)</td>
-                    <td hidden>{{values['capex']}}</td>
-                    <td>{{values['op']}}</td>
-                    <td></td>
+                    <td>£ {{values['op']|number_format(2,'.',',')}}</td>
+                    <td><span>£  </span><input class="text-center" type='number' name='wcr_input_op' id='wcr_input_op' oninput="checkInputWCR();" step="0.01" value={{selOp != -1 ? selOp|number_format(2,'.','') : values['op']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Total Financing</strong> (E = C + D)</td>
-                    <td></td>
-                    <td></td>
+                    <td>£ {{values['total']|number_format(2,'.',',')}}</td>
+                    <td id="wcr_input_tot"></td>
                 </tr>
             </tbody>
         </table>

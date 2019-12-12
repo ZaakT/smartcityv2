@@ -2709,11 +2709,11 @@ function insertRiskInputed($projID,$ucID,$list){
 
 
 
-// ---------------------------------------- SCENARIO----------------------------------------
+// ---------------------------------------- FINANCING SCENARIO----------------------------------------
 
 function getListScenarios($userID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT financing_scenario.id,financing_scenario.name,financing_scenario.description,input_invest,input_capex,input_implem,input_opex,financing_scenario.creation_date,financing_scenario.modif_date,id_proj
+    $req = $db->prepare('SELECT financing_scenario.id,financing_scenario.name,financing_scenario.description,input_invest,input_op,financing_scenario.creation_date,financing_scenario.modif_date,id_proj
                             FROM financing_scenario
                             INNER JOIN project
                                 WHERE financing_scenario.id_proj = project.id and project.id_user = ?
@@ -2725,13 +2725,11 @@ function getListScenarios($userID){
         $name = $row['name'];
         $description = $row['description'];
         $input_invest = floatval($row['input_invest']);
-        $input_capex = floatval($row['input_capex']);
-        $input_implem = floatval($row['input_implem']);
-        $input_opex = floatval($row['input_opex']);
+        $input_op = floatval($row['input_op']);
         $creation_date = $row['creation_date'];
         $modif_date = $row['modif_date'];
         $id_proj = intval($row['id_proj']);
-        $list[$id] = ['name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_capex'=>$input_capex,'input_implem'=>$input_implem,'input_opex'=>$input_opex,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
+        $list[$id] = ['name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_op'=>$input_op,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
     }
     //var_dump($list);
     return $list;
@@ -2802,17 +2800,32 @@ function getScenByID($scenID){
     $name = $res['name'];
     $description = $res['description'];
     $input_invest = floatval($res['input_invest']);
-    $input_capex = floatval($res['input_capex']);
-    $input_implem = floatval($res['input_implem']);
-    $input_opex = floatval($res['input_opex']);
+    $input_op = floatval($res['input_op']);
     $creation_date = $res['creation_date'];
     $modif_date = $res['modif_date'];
     $id_proj = intval($res['id_proj']);
-    $scen = ['id'=>$id,'name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_capex'=>$input_capex,'input_implem'=>$input_implem,'input_opex'=>$input_opex,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
+    $scen = ['id'=>$id,'name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_op'=>$input_op,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
     
     //var_dump($scen);
     return $scen;
 }
+
+function insertInputScenario($op,$invest,$scenID){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE financing_scenario SET input_op = ?, input_invest = ? WHERE id = ?');
+    return $req->execute(array($op,$invest,$scenID));
+}
+
+function getFundingTarget($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT input_op+input_invest as funding_target
+                            FROM financing_scenario
+                            WHERE id = ?');
+    $req->execute(array($scenID));
+    return floatval($req->fetch()['funding_target']);
+}
+
+
 
 
 // ---------------------------------------- DASHBOARDS ----------------------------------------
@@ -3094,7 +3107,205 @@ function getListVolumesPerUC($projID,$ucID){
                             FROM volumes_input
                             WHERE id_proj = ? and id_uc = ?");
     $req->execute(array($projID,$ucID));
-    $list = [];
     $res = $req->fetch()['volume'];
     return intval($res);
+}
+
+
+// ---------------------------------------- FUNDING SOURCES ----------------------------------------
+
+function getListFundingSourcesCat(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name
+                            FROM funding_sources_category');
+    $req->execute();
+    $list = [];
+    while($res = $req->fetch()){
+        $id = intval($res['id']);
+        $name = $res['name'];
+        $list[$id] = ['name'=>$name];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListFundingSources(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,id_cat,hasEntities,id_type
+                            FROM funding_source');
+    $req->execute();
+    $list = [];
+    while($res = $req->fetch()){
+        $id = intval($res['id']);
+        $name = $res['name'];
+        $id_cat = intval($res['id_cat']);
+        $hasEntities = intval($res['hasEntities']);
+        $id_type = intval($res['id_type']); // 1 = others - 2 = loans and bonds
+        $list[$id] = ['name'=>$name,'id_cat'=>$id_cat,'hasEntities'=>$hasEntities,'id_type'=>$id_type];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getFundingSourceByID($sourceID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,id_cat,hasEntities,id_type
+                            FROM funding_source
+                            WHERE id=?');
+    $req->execute(array($sourceID));
+    $res = $req->fetch();
+    $id = intval($res['id']);
+    $name = $res['name'];
+    $id_cat = intval($res['id_cat']);
+    $hasEntities = intval($res['hasEntities']);
+    $id_type = intval($res['id_type']); // 1 = others - 2 = loans and bonds
+    $FS = ['id'=>$id,'name'=>$name,'id_cat'=>$id_cat,'hasEntities'=>$hasEntities,'id_type'=>$id_type];
+    return $FS;
+}
+
+function getListSelFS($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_source,share
+                            FROM sel_funding_source
+                            WHERE id_finScen = ?');
+    $req->execute(array($scenID));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_source = intval($res['id_source']);
+        $share = floatval($res['share']);
+        $list[$id_source] = $share;
+    }
+    return $list;
+}
+
+function insertSelFS($scenID,$selFS){
+    $db = dbConnect();
+    $ret = true;
+    $req = $db->prepare('INSERT INTO sel_funding_source (id_finScen,id_source,share) VALUES (?,?,?)');
+    foreach($selFS as $sourceID => $share){
+        $ret = $req->execute(array($scenID,$sourceID,$share));
+    }
+    return $ret;
+}
+
+function deleteSelFS($selFS){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM sel_funding_source WHERE id_source = ?');
+    $ret = true;
+    foreach($selFS as $sourceID => $share){
+        $ret = $req->execute(array($sourceID));
+    }
+    return $ret;
+}
+
+// ---------------------------------------- ENTITY ----------------------------------------
+
+function getListLoansAndBonds($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT entity.id,entity.id_source,name,description,start_date,share,maturity_date,interest
+                            FROM entity
+                                INNER JOIN loans_and_bonds
+                                    WHERE loans_and_bonds.id = entity.id
+                                        AND entity.id_finScen = ?
+                                ');
+    $req->execute(array($scenID));
+    $list = [];
+    while($row = $req->fetch()){
+        $id = intval($row['id']);
+        $id_source = intval($row['id_source']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $start_date = $row['start_date'];
+        $share = floatval($row['share']);
+        $interest = floatval($row['interest']);
+        $maturity_date = $row['maturity_date'];
+        if(array_key_exists($id_source,$list)){
+            $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share,'interest'=>$interest,'maturity_date'=>$maturity_date];
+        } else {
+            $list[$id_source] = [$id=>['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share,'interest'=>$interest,'maturity_date'=>$maturity_date]];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListOthers($scenID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT entity.id,entity.id_source,name,description,start_date,share
+                            FROM entity
+                                    INNER JOIN others
+                                        WHERE others.id = entity.id
+                                            AND entity.id_finScen = ?
+                                ');
+    $req->execute(array($scenID));
+    $list = [];
+    while($row = $req->fetch()){
+        $id = intval($row['id']);
+        $id_source = intval($row['id_source']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $start_date = $row['start_date'];
+        $share = floatval($row['share']);
+        if(array_key_exists($id_source,$list)){
+            $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share];
+        } else {
+            $list[$id_source] = [$id=>['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share]];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertLoansAndBonds($scenID,$sourceID,$name,$desc){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_entity`;');
+    $db->exec(' CREATE PROCEDURE `add_entity`(
+                            IN entity_name VARCHAR(255),
+                            IN entity_desc VARCHAR(255),
+                            IN idScen INT,
+                            IN idSource INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO entity (name,description,id_finScen,id_source)
+                                    VALUES (entity_name,entity_desc,idSource,idScen);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO loans_and_bonds (id)
+                                    VALUES (itemID);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_entity(?,?,?,?);');
+    $ret = $req->execute(array($name,$desc,$scenID,$sourceID));
+    return $ret;
+}
+
+function insertOthers($scenID,$sourceID,$name,$desc){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_entity`;');
+    $db->exec(' CREATE PROCEDURE `add_entity`(
+                            IN entity_name VARCHAR(255),
+                            IN entity_desc VARCHAR(255),
+                            IN idScen INT,
+                            IN idSource INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO entity (name,description,id_source,id_finScen)
+                                    VALUES (entity_name,entity_desc,idSource,idScen);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO others (id)
+                                    VALUES (itemID);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_entity(?,?,?,?);');
+    $ret = $req->execute(array($name,$desc,$scenID,$sourceID));
+    return $ret;
+}
+
+function deleteEntity($entityID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM entity WHERE id = ?'); //not need to delete from children table because of "ON DELETE CASCADE"
+    return $req->execute(array($entityID));
 }
