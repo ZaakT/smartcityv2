@@ -222,7 +222,7 @@ function funding_sources($twig,$is_connected,$scenID=0){
             $parent = array_merge(['id'=>$projID],$list_projects[$projID]);
 
             $listSel = getListSelFS($scenID);
-            var_dump($listSel);
+            //var_dump($listSel);
 
             $list_FS_cat = getListFundingSourcesCat();
             $list_FS = getListFundingSources(); 
@@ -265,9 +265,11 @@ function create_entity($post){
             var_dump('LOANS AND BONDS !!');
             insertLoansAndBonds($scenID,$sourceID,$name,$description);
             update_ModifDate_scen($scenID);
+            header('Location: ?A=funding&A2=funding_sources&scenID='.$scenID);
         } else if($source['id_type']==1){
             insertOthers($scenID,$sourceID,$name,$description);
             update_ModifDate_scen($scenID);
+            header('Location: ?A=funding&A2=funding_sources&scenID='.$scenID);
         } else {
             throw new Exception("There is a problem the funding sources");
         }
@@ -284,6 +286,7 @@ function delete_entity($post){
         //var_dump($entity,$scenID,$sourceID);
         deleteEntity($entityID);
         update_ModifDate_scen($scenID);
+        header('Location: ?A=funding&A2=funding_sources&scenID='.$scenID);
     } else {
         throw new Exception("There is no entity selected !");
     }
@@ -308,7 +311,7 @@ function fs_selected($post){
             deleteSelFS($toRemove);
             insertSelFS($scenID,$toAdd);
             update_ModifDate_scen($scenID);
-            //header('Location: ?A=funding&A2=funding_sources&A3=input_entities&scenID='.$scenID);
+            header('Location: ?A=funding&A2=funding_sources&A3=input_entities&scenID='.$scenID);
         } else {
             throw new Exception("There is no data inputed !");
         }
@@ -342,10 +345,38 @@ function getAddAndRemoveFS($selFS,$listSel){
     return [$toAdd,$toRemove];
 }
 
-
 function input_entities($twig,$is_connected,$scenID){
+    $user = getUser($_SESSION['username']);
+    if($scenID!=0){
+        if(getScenByID($scenID)){
+            $list_scenarios = getListScenarios($user[0]);
+            $list_projects = getListProjects2($user[0]);
+            $scen = getScenByID($scenID);
+            $projID = $scen['id_proj'];
+            $parent = array_merge(['id'=>$projID],$list_projects[$projID]);
 
+            $listSel = getListSelFS($scenID);
+
+            $list_FS_cat = getListFundingSourcesCat();
+            $list_FS = getListFundingSources();
+            $selLoansAndBonds = getListLoansAndBonds($scenID);
+            $selOthers = getListOthers($scenID);
+            $selEntities = getEntities($selLoansAndBonds,$selOthers);
+            $funding_target = getFundingTarget($scenID);
+
+            echo $twig->render('/input/funding_steps/input_entities.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
+        } else {
+            throw new Exception("This Scenario doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=funding&A2=scenario');
+    }
 }
+
+
+
+
+
 function benef($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     echo $twig->render('/input/funding_steps/benef.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));

@@ -1401,10 +1401,10 @@ try{
                         if(isset($_GET['scenID'])){
                             if($_GET['scenID']!=0){
                                 if(isset($_GET['A3'])){
-                                    if($_GET['A3']!="input_entities"){
+                                    if($_GET['A3']=="input_entities"){
                                         input_entities($twig,$is_connected,$_GET['scenID']);
                                     } else {
-                                        header('Location: ?A=funding&A2=funding_sources');
+                                        header('Location: ?A=funding&A2=funding_sources&scenID='.$_GET['scenID']);
                                     }
                                 } else {
                                     funding_sources($twig,$is_connected,$_GET['scenID']);
