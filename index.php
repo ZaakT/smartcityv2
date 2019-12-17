@@ -1423,6 +1423,9 @@ try{
                         delete_entity($_POST);
                     } elseif($_GET['A2']=="fs_selected"){
                         fs_selected($_POST);
+                    } elseif($_GET['A2']=="entities_inputed"){
+                        entities_inputed($_POST);
+
 
 
                     } elseif($_GET['A2']=="benef"){

@@ -3165,7 +3165,7 @@ function getFundingSourceByID($sourceID){
 
 function getListSelFS($scenID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id_source,share
+    $req = $db->prepare('SELECT id_source,share,start_date,maturity_date,interest
                             FROM sel_funding_source
                             WHERE id_finScen = ?');
     $req->execute(array($scenID));
@@ -3173,7 +3173,10 @@ function getListSelFS($scenID){
     while($res = $req->fetch()){
         $id_source = intval($res['id_source']);
         $share = floatval($res['share']);
-        $list[$id_source] = $share;
+        $interest = floatval($res['interest']);
+        $start_date = $res['start_date'] ? date_create($res['start_date'])->format('m/Y') : null;
+        $maturity_date = $res['maturity_date'] ? date_create($res['maturity_date'])->format('m/Y') : null;
+        $list[$id_source] = ['share'=>$share,'interest'=>$interest,'start_date'=>$start_date,'maturity_date'=>$maturity_date];
     }
     return $list;
 }
@@ -3207,6 +3210,7 @@ function getListLoansAndBonds($scenID){
                                 INNER JOIN loans_and_bonds
                                     WHERE loans_and_bonds.id = entity.id
                                         AND entity.id_finScen = ?
+                            ORDER BY name
                                 ');
     $req->execute(array($scenID));
     $list = [];
@@ -3215,10 +3219,10 @@ function getListLoansAndBonds($scenID){
         $id_source = intval($row['id_source']);
         $name = $row['name'];
         $description = $row['description'];
-        $start_date = $row['start_date'];
+        $start_date = date_create($row['start_date'])->format('m/Y');
         $share = floatval($row['share']);
         $interest = floatval($row['interest']);
-        $maturity_date = $row['maturity_date'];
+        $maturity_date = date_create($row['maturity_date'])->format('m/Y');
         if(array_key_exists($id_source,$list)){
             $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share,'interest'=>$interest,'maturity_date'=>$maturity_date];
         } else {
@@ -3236,6 +3240,7 @@ function getListOthers($scenID){
                                     INNER JOIN others
                                         WHERE others.id = entity.id
                                             AND entity.id_finScen = ?
+                            ORDER BY name
                                 ');
     $req->execute(array($scenID));
     $list = [];
@@ -3244,7 +3249,7 @@ function getListOthers($scenID){
         $id_source = intval($row['id_source']);
         $name = $row['name'];
         $description = $row['description'];
-        $start_date = $row['start_date'];
+        $start_date = date_create($row['start_date'])->format('m/Y');
         $share = floatval($row['share']);
         if(array_key_exists($id_source,$list)){
             $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share];
@@ -3263,12 +3268,12 @@ function insertLoansAndBonds($scenID,$sourceID,$name,$desc){
     $db->exec(' CREATE PROCEDURE `add_entity`(
                             IN entity_name VARCHAR(255),
                             IN entity_desc VARCHAR(255),
-                            IN idScen INT,
-                            IN idSource INT
+                            IN idSource INT,
+                            IN idScen INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO entity (name,description,id_finScen,id_source)
+                                INSERT INTO entity (name,description,id_source,id_finScen)
                                     VALUES (entity_name,entity_desc,idSource,idScen);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO loans_and_bonds (id)
@@ -3276,7 +3281,7 @@ function insertLoansAndBonds($scenID,$sourceID,$name,$desc){
                             END
                                 ');
     $req = $db->prepare('CALL add_entity(?,?,?,?);');
-    $ret = $req->execute(array($name,$desc,$scenID,$sourceID));
+    $ret = $req->execute(array($name,$desc,$sourceID,$scenID));
     return $ret;
 }
 
@@ -3287,8 +3292,8 @@ function insertOthers($scenID,$sourceID,$name,$desc){
     $db->exec(' CREATE PROCEDURE `add_entity`(
                             IN entity_name VARCHAR(255),
                             IN entity_desc VARCHAR(255),
-                            IN idScen INT,
-                            IN idSource INT
+                            IN idSource INT,
+                            IN idScen INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
@@ -3300,7 +3305,7 @@ function insertOthers($scenID,$sourceID,$name,$desc){
                             END
                                 ');
     $req = $db->prepare('CALL add_entity(?,?,?,?);');
-    $ret = $req->execute(array($name,$desc,$scenID,$sourceID));
+    $ret = $req->execute(array($name,$desc,$sourceID,$scenID));
     return $ret;
 }
 
@@ -3308,4 +3313,50 @@ function deleteEntity($entityID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM entity WHERE id = ?'); //not need to delete from children table because of "ON DELETE CASCADE"
     return $req->execute(array($entityID));
+}
+
+
+function updateEntityOthers($entityID,$infos){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE entity
+                            SET start_date = ?,
+                                share = ?
+                            WHERE id = ?');
+    return $req->execute(Array($infos['date'],$infos['share'],$entityID));
+}
+
+function updateEntityLB($entityID,$infos){
+    $db = dbConnect();
+
+    $req1 = $db->prepare('UPDATE entity
+                            SET start_date = ?,
+                                share = ?
+                            WHERE id = ?');
+    $ret1 = $req1->execute(Array($infos['startdate'],$infos['share'],$entityID));
+
+    $req2 = $db->prepare('UPDATE loans_and_bonds
+                            SET maturity_date = ?,
+                                interest = ?
+                            WHERE id = ?');
+    $ret2 = $req2->execute(Array($infos['maturitydate'],$infos['interest'],$entityID));
+    
+    return $ret1 && $ret2;
+}
+
+function updateFundingSourceOthers($scenID,$sourceID,$infos){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE sel_funding_source
+                            SET start_date = ?
+                            WHERE id_source = ? and id_finScen = ?');
+    return $req->execute(Array($infos['date'],$sourceID,$scenID));
+}
+
+function updateFundingSourceLB($scenID,$sourceID,$infos){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE sel_funding_source
+                            SET start_date = ?,
+                                maturity_date = ?,
+                                interest = ?
+                            WHERE id_source = ? and id_finScen = ?');
+    return $req->execute(Array($infos['startdate'],$infos['maturitydate'],$infos['interest'],$sourceID,$scenID));
 }

@@ -231,21 +231,19 @@ function checkTotEntities(){
     return ret;
 }
 
-dates = {};
-initDatepickers();
-checkInputEntities()
-
 function initDatepickers2(){
     var temp = {};
+    var temp2 = {};
     $("#entities_table_2 .date").each(function(){
         var id = $(this).attr('id').split('_');
         var id_source = parseInt(id[1]);
         var id_entity = parseInt(id[2]) ? parseInt(id[2]) : 0;
+        temp2[id[0]] = "";
         if(id_entity != 0){
-            temp[id_entity] = "";
-            dates2[id_source] = temp;
+            temp[id_entity] = temp2;
+            dates[id_source] = temp;
         } else {
-            dates2[id_source] = "";
+            dates[id_source] = temp2;
         }
 
         $(this).datepicker( {
@@ -254,24 +252,19 @@ function initDatepickers2(){
             minViewMode: "months",
         })
         .on('changeDate', function(ev){
-            //var newDate = new Date(ev.date);
-            var newDate = $(this).data('datepicker').date;
-            //console.log(id_source,id_entity,newDate);
-            var id = $(this).attr('id').split('_');
+            var newDate = ev.date;
+            $(this).data('datepicker').date = newDate;
+            var id = ev.target.id.split('_');
             var id_source = parseInt(id[1]);
             var id_entity = parseInt(id[2]) ? parseInt(id[2]) : 0;
             if(id_entity != 0){
-                temp[id_entity] = newDate;
-                dates2[id_source] = temp;
+                dates[id_source][id_entity][id[0]] = newDate;
             } else {
-                dates2[id_source] = newDate;
+                dates[id_source][id[0]] = newDate;
             }
-            //console.log(dates);
             checkInputEntities2();
         });
-
     });
-    //console.log(dates);
 }
 
 function checkInputEntities2(){
@@ -307,8 +300,12 @@ function checkInputEntities2(){
         }
     });
     $("#entities_table_2 .date input").each(function(){
+        var id = $(this).attr('id').split('_');
+        var dateType = id[1];
+        var id_source = parseInt(id[2]);
+        var id_entity = parseInt(id[3]) ? parseInt(id[3]) : 0;
         var val = $(this).val();
-        if(val == "") {
+        if(val == "" || !diffDate(dateType,id_source,id_entity)) {
             $(this).css("background","salmon");
             ret = false;
         } else {
@@ -317,6 +314,37 @@ function checkInputEntities2(){
     });
     calcOutputEntities2();
     return checkTotEntities2() && ret;
+}
+
+function diffDate(dateType,id_source,id_entity){
+    var id_entity2 = id_entity != 0 ? "_"+id_entity : "";
+    var startDate = $("#startdate_"+id_source+id_entity2).data('datepicker').date ;
+    var startDate_empty = $("#input_startdate_"+id_source+id_entity2).val() == "";
+    var matDate = $("#maturitydate_"+id_source+id_entity2).data('datepicker').date ;
+    var matDate_empty = $("#input_matdate_"+id_source+id_entity2).val() == "";
+    if(typeof(startDate)=="string"){
+        var temp = startDate.split('/');
+        startDate = new Date(parseInt(temp[1]),parseInt(temp[0]));
+    }
+    if(typeof(matDate)=="string"){
+        var temp = matDate.split('/');
+        matDate = new Date(parseInt(temp[1]),parseInt(temp[0]));
+    }
+    if(dateType=="startdate"){
+        if(matDate_empty || startDate < matDate){
+            return true;
+        } else {
+            return false;
+        }
+    } else if(dateType=="maturitydate"){
+        if(startDate_empty || startDate < matDate){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 }
 
 function calcOutputEntities2(){
@@ -390,6 +418,29 @@ function checkTotEntities2(){
     return ret;
 }
 
-dates2 = {};
+function initSelDates(){
+    $(".date input").each(function(){
+        var placeholder = $(this).attr('placeholder');
+        $(this).parent().data('datepicker').date = placeholder;
+        if(placeholder != undefined){
+            $(this).val(placeholder);
+            var id = $(this).attr('id').split('_');
+            var id_source = parseInt(id[2]);
+            var id_entity = parseInt(id[3]) ? parseInt(id[3]) : 0;
+            var tab = placeholder.split('/');
+            var newDate = new Date(parseInt(tab[1]),parseInt(tab[0]));
+            if(id_entity != 0){
+                dates[id_source][id_entity][id[0]] = newDate;
+            } else {
+                dates[id_source][id[0]] = newDate;
+            }
+        }
+    });
+}
+
+dates = {};
+initDatepickers();
 initDatepickers2();
-checkInputEntities2()
+initSelDates();
+checkInputEntities();
+checkInputEntities2();

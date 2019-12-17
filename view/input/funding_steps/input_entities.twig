@@ -19,9 +19,13 @@
     <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> £ {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
 
-<form action="?A=funding&amp;A2=fs_selected" method="post" onsubmit="return checkInputWCR();">
+<form action="?A=funding&amp;A2=entities_inputed" method="post" onsubmit="return checkInputEntities() && checkInputEntities2();">
+{% if entities1 %}
 {{table.input_entities(FS_cat,FS,entities,listSel,funding_target)}}
+{% endif %}
+{% if entities2 %}
 {{table.input_entities2(FS_cat,FS,entities,listSel,funding_target)}}
+{% endif %}
 <div class="row m-3 text-center text-dark">
     <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
 </div>
