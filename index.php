@@ -1426,10 +1426,24 @@ try{
                     } elseif($_GET['A2']=="entities_inputed"){
                         entities_inputed($_POST);
 
-
-
                     } elseif($_GET['A2']=="benef"){
-                        benef($twig,$is_connected);
+                        if(isset($_GET['scenID'])){
+                            if($_GET['scenID']!=0){
+                                benef($twig,$is_connected,$_GET['scenID']);
+                            }
+                            else { 
+                                header('Location: ?A=funding&A2=scenario');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=funding&A2=scenario');
+                        }
+                    } elseif($_GET['A2']=="create_benef"){
+                        create_benef($_POST);
+                    } elseif($_GET['A2']=="delete_benef"){
+                        delete_benef($_POST);
+                    } elseif($_GET['A2']=="benef_selected"){
+                        benef_selected($_POST);
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }
@@ -1554,7 +1568,15 @@ try{
                     } elseif($_GET['A2']=="financing"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                financing_out($twig,$is_connected,$_GET['projID']);
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="output"){
+                                        financing_out_2($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else {
+                                        header('Location: ?A=dashboards&A2=financing&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    financing_out($twig,$is_connected,$_GET['projID']);
+                                }
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -1562,7 +1584,7 @@ try{
                         }
                         else {
                             header('Location: ?A=dashboards&A2=project');
-                        }     
+                        }
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

@@ -1,9 +1,9 @@
 
 {% macro output(dates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonthPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot) %}
 <div class="row text-center ">
-    <div class="col mt-2 mx-5 list-table cbuc_table">
-        <table id="cbuc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
-            <thead class="thead-light text-center">
+    <div class="col mt-2 mx-5 list-table cball_table">
+        <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
                 {# <tr class="text-uppercase">
                     <th scope="col" colspan=2>Financials Summary Table</th>
                     <th scope="col" colspan={{years|length + dates|length}}>Use Case Projet Schedule</th>
@@ -14,6 +14,7 @@
                     {% for year in years %}
                         <th scope="col">{{year}}</th>
                     {% endfor %}
+                    <th rowspan=1></th>
                     {% for date in dates %}
                         <th scope="col">{{date}}</th>
                     {% endfor %}
@@ -27,6 +28,7 @@
                     {% for year in years %}
                         <td>£{{(capexTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
+                    <td  style="min-width:5vw;" rowspan=10></td>
                     {% for date in dates %}
                         <td>£{{(capexMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}

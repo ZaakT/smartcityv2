@@ -2735,6 +2735,30 @@ function getListScenarios($userID){
     return $list;
 }
 
+function getListScenariosByProj($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT financing_scenario.id,financing_scenario.name,financing_scenario.description,input_invest,input_op,financing_scenario.creation_date,financing_scenario.modif_date,id_proj
+                            FROM financing_scenario
+                            WHERE financing_scenario.id_proj = ?
+                            ORDER BY financing_scenario.name');
+    $req->execute(array($projID));
+    $list = [];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $input_invest = floatval($row['input_invest']);
+        $input_op = floatval($row['input_op']);
+        $creation_date = $row['creation_date'];
+        $modif_date = $row['modif_date'];
+        $id_proj = intval($row['id_proj']);
+        $list[$id] = ['name'=>$name,'description'=>$description,'input_invest'=>$input_invest,'input_op'=>$input_op,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_proj'=>$id_proj];
+    }
+    //var_dump($list);
+    return $list;
+}
+
+
 function getListProjects2($idUser){
     $db = dbConnect();
     $req = $db->prepare('SELECT * FROM project WHERE id_user = ? ORDER BY id');
@@ -3201,6 +3225,24 @@ function deleteSelFS($selFS){
     return $ret;
 }
 
+function updateFundingSourceOthers($scenID,$sourceID,$infos){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE sel_funding_source
+                            SET start_date = ?
+                            WHERE id_source = ? and id_finScen = ?');
+    return $req->execute(Array($infos['date'],$sourceID,$scenID));
+}
+
+function updateFundingSourceLB($scenID,$sourceID,$infos){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE sel_funding_source
+                            SET start_date = ?,
+                                maturity_date = ?,
+                                interest = ?
+                            WHERE id_source = ? and id_finScen = ?');
+    return $req->execute(Array($infos['startdate'],$infos['maturitydate'],$infos['interest'],$sourceID,$scenID));
+}
+
 // ---------------------------------------- ENTITY ----------------------------------------
 
 function getListLoansAndBonds($scenID){
@@ -3219,10 +3261,10 @@ function getListLoansAndBonds($scenID){
         $id_source = intval($row['id_source']);
         $name = $row['name'];
         $description = $row['description'];
-        $start_date = date_create($row['start_date'])->format('m/Y');
+        $start_date = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
         $share = floatval($row['share']);
         $interest = floatval($row['interest']);
-        $maturity_date = date_create($row['maturity_date'])->format('m/Y');
+        $maturity_date = $row['maturity_date'] ? date_create($row['maturity_date'])->format('m/Y') : null;
         if(array_key_exists($id_source,$list)){
             $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share,'interest'=>$interest,'maturity_date'=>$maturity_date];
         } else {
@@ -3249,7 +3291,7 @@ function getListOthers($scenID){
         $id_source = intval($row['id_source']);
         $name = $row['name'];
         $description = $row['description'];
-        $start_date = date_create($row['start_date'])->format('m/Y');
+        $start_date = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
         $share = floatval($row['share']);
         if(array_key_exists($id_source,$list)){
             $list[$id_source][$id] = ['name'=>$name,'description'=>$description,'start_date'=>$start_date,'share'=>$share];
@@ -3343,20 +3385,45 @@ function updateEntityLB($entityID,$infos){
     return $ret1 && $ret2;
 }
 
-function updateFundingSourceOthers($scenID,$sourceID,$infos){
+
+// ---------------------------------------- BENEF. ----------------------------------------
+
+function getListBenef($scenID){
     $db = dbConnect();
-    $req = $db->prepare('UPDATE sel_funding_source
-                            SET start_date = ?
-                            WHERE id_source = ? and id_finScen = ?');
-    return $req->execute(Array($infos['date'],$sourceID,$scenID));
+    $req = $db->prepare('SELECT id,name, share
+                            FROM beneficiary
+                            WHERE id_finScen = ?');
+    $req->execute(array($scenID));
+    $list =[];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $share = floatval($row['share']);
+        $list[$id] = ['name'=>$name,'share'=>$share];
+    }
+    return $list;
 }
 
-function updateFundingSourceLB($scenID,$sourceID,$infos){
+function insertBenef($scenID,$infos){ //only insert name
     $db = dbConnect();
-    $req = $db->prepare('UPDATE sel_funding_source
-                            SET start_date = ?,
-                                maturity_date = ?,
-                                interest = ?
-                            WHERE id_source = ? and id_finScen = ?');
-    return $req->execute(Array($infos['startdate'],$infos['maturitydate'],$infos['interest'],$sourceID,$scenID));
+    $req = $db->prepare('INSERT INTO beneficiary
+                            (id_finScen,name) VALUES (?,?)
+                            ');
+    return $req->execute(array($scenID,$infos['name']));
+}
+
+function updateBenef($benefID,$infos){ //only update share
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE beneficiary
+                            SET share = ?
+                            WHERE id = ?');
+    return $req->execute(array($infos['share'],$benefID));
+}
+
+function deleteBenef($benefID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM beneficiary
+                            WHERE id = ?
+                            ');
+    return $req->execute(array($benefID));
 }

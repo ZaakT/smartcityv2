@@ -178,6 +178,16 @@ th, td{
     font-size: smaller;
 }
 
+.cball_table {
+    max-height: 80vh;
+}
+
+.cball_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
 .financial_bank .item{
     color: #495057;
     background-color: #e9ecef;
@@ -320,6 +330,52 @@ th, td{
 
 .entities_table_2{
     max-height: 150vh;    
+}
+
+.benef_table{
+    max-height: 150vh;    
+}
+
+.benef_table .check-col{
+    width: 5%; 
+}
+
+.benef_table a{
+    color : white;
+}
+
+.benef_table a:hover{
+    color : darkgray;
+}
+
+.benef_table a:active{
+    color : gray;
+}
+
+
+.financing_table .years, .financing_table .dates{
+    min-width: 7vw;
+}
+
+.financing_table .separation_dates{
+    min-width: 4vw;
+    max-width: 4vw;
+}
+
+.financing_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.financing_table .sub_item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-size: smaller;
+    font-weight: bold;
+    text-align: right;
 }
 
 .check-col{

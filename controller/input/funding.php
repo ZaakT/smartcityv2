@@ -10,7 +10,7 @@ function funding($twig,$is_connected){
 
 // ---- Financing / Funding Steps
 
-// ------------------------------------------------------- SCENARIOS -------------------------------------------------------  
+// --------------------------------------------- SCENARIOS ---------------------------------------------  
 function scenario($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_scenarios = getListScenarios($user[0]);
@@ -41,6 +41,7 @@ function delete_scen($idScen){
     header('Location: ?A=funding&A2=scenario');
 }
 
+// ------------------------------------------- WORK CAP. REQ. --------------------------------------------
 function work_cap_req($twig,$is_connected,$scenID=0){
     $user = getUser($_SESSION['username']);
     if($scenID!=0){
@@ -171,6 +172,7 @@ function work_cap_req($twig,$is_connected,$scenID=0){
             $values = ['capex'=>$tot_capex,'implem'=>$tot_implem,'invest'=>$tot_invest,'op'=>$tot_op,'total'=>$tot_invest+$tot_op];
             //var_dump($values);
             echo $twig->render('/input/funding_steps/work_cap_req.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'values'=>$values,'selInvest'=>$selInvest,'selOp'=>$selOp,'scenID'=>$scenID)); 
+            prereq_Funding();
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -211,6 +213,9 @@ function wcr_input($post=[]){
     }
 }
 
+
+// -------------------------------------------- FUNDING SOURCES -------------------------------------------
+
 function funding_sources($twig,$is_connected,$scenID=0){
     $user = getUser($_SESSION['username']);
     if($scenID!=0){
@@ -233,6 +238,7 @@ function funding_sources($twig,$is_connected,$scenID=0){
             $funding_target = getFundingTarget($scenID);
 
             echo $twig->render('/input/funding_steps/funding_sources.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
+            prereq_Funding();
         } else {
             throw new Exception("This Scenario doesn't exist !");
         }
@@ -308,12 +314,28 @@ function fs_selected($post){
             $AddAndRemoveFS = getAddAndRemoveFS($selFS,$listSel);
             $toAdd = $AddAndRemoveFS[0];
             $toRemove = $AddAndRemoveFS[1];
+            //var_dump($listSel,$selFS,$toAdd,$toRemove);
+            deleteSelFS($toRemove);
+            insertSelFS($scenID,$toAdd);
             
+            $listFS = getListFundingSources();
+            //var_dump($listFS);
             $selLoansAndBonds = getListLoansAndBonds($scenID);
             $selOthers = getListOthers($scenID);
             $selEntities = getEntities($selLoansAndBonds,$selOthers);
             foreach ($selEntities as $sourceID => $list_entities){
+                //var_dump($sourceID ,$list_entities);
+                if(!empty($list_entities)){
+                    if($listFS[$sourceID]['id_type']==1){ // others
+                        $infos = ['date'=>null];
+                        updateFundingSourceOthers($scenID,$sourceID,$infos);
+                    } else if($listFS[$sourceID]['id_type']==2){ // L&B
+                        $infos = ['startdate'=>null,'maturitydate'=>null,'interest'=>0];
+                        updateFundingSourceLB($scenID,$sourceID,$infos);
+                    }
+                }
                 if(!array_key_exists($sourceID,$selFS)){
+                    //updateFundingSourceOthers($scenID,$sourceID,$infos); //& update
                     foreach ($list_entities as $entityID => $entity){
                         //var_dump($entity['name']);
                         deleteEntity($entityID);
@@ -321,8 +343,6 @@ function fs_selected($post){
                 }
             }
 
-            deleteSelFS($toRemove);
-            insertSelFS($scenID,$toAdd);
             update_ModifDate_scen($scenID);
             header('Location: ?A=funding&A2=funding_sources&A3=input_entities&scenID='.$scenID);
         } else {
@@ -338,10 +358,10 @@ function getAddAndRemoveFS($selFS,$listSel){
     $toRemove = [];
     foreach($selFS as $key => $value){
         if(array_key_exists($key,$listSel)){
-            if($value == $listSel[$key]){
+            if($value == $listSel[$key]['share']){
                 // do nothing
             } else {
-                $toRemove[$key] = $listSel[$key];
+                $toRemove[$key] = $listSel[$key]['share'];
                 $toAdd[$key] = $value;
             }
         } else {
@@ -352,7 +372,7 @@ function getAddAndRemoveFS($selFS,$listSel){
         if(array_key_exists($key,$selFS)){
             // do nothing
         } else {
-            $toRemove[$key] = $value;
+            $toRemove[$key] = $value['share'];
         }
     }
     return [$toAdd,$toRemove];
@@ -375,10 +395,11 @@ function input_entities($twig,$is_connected,$scenID){
             $selLoansAndBonds = getListLoansAndBonds($scenID);
             $selOthers = getListOthers($scenID);
             $selEntities = getEntities($selLoansAndBonds,$selOthers);
-            //var_dump($listSel);
+            //var_dump($selEntities);
             $funding_target = getFundingTarget($scenID);
 
-            echo $twig->render('/input/funding_steps/input_entities.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities2'=>$selLoansAndBonds,'entities1'=>$selOthers,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
+            echo $twig->render('/input/funding_steps/input_entities.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities2'=>$selLoansAndBonds,'entities1'=>$selOthers,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel));
+            prereq_Funding(); 
         } else {
             throw new Exception("This Scenario doesn't exist !");
         }
@@ -386,7 +407,6 @@ function input_entities($twig,$is_connected,$scenID){
         header('Location: ?A=funding&A2=scenario');
     }
 }
-
 
 function entities_inputed($post){
     if(isset($_SESSION['scenID'])){
@@ -428,13 +448,13 @@ function entities_inputed($post){
                 foreach ($list_entities as $entityID => $infos){
                     if($list_FS[$sourceID]['id_type']==1){ // others
                         if($entityID == 0){
-                            updateFundingSourceOthers($scenID,$sourceID,$infos); //& update
+                            updateFundingSourceOthers($scenID,$sourceID,$infos);
                         } else {
                             updateEntityOthers($entityID,$infos);
                         }
                     } else if($list_FS[$sourceID]['id_type']==2){ // Loans & Bonds
                         if($entityID == 0){
-                            updateFundingSourceLB($scenID,$sourceID,$infos); //& update
+                            updateFundingSourceLB($scenID,$sourceID,$infos);
                         } else {
                             updateEntityLB($entityID,$infos);
                         }
@@ -442,7 +462,7 @@ function entities_inputed($post){
                 } 
             }
             update_ModifDate_scen($scenID);
-            //header('Location: ?A=funding&A2=funding_sources&A3=input_entities&scenID='.$scenID);
+            header('Location: ?A=funding&A2=benef&scenID='.$scenID);
         } else {
             throw new Exception("There is no data inputed !");
         }
@@ -452,8 +472,91 @@ function entities_inputed($post){
 }
 
 
+// --------------------------------------------- BENEF. ---------------------------------------------
 
-function benef($twig,$is_connected){
+
+function benef($twig,$is_connected,$scenID=0){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/funding_steps/benef.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+    if($scenID!=0){
+        if(getScenByID($scenID)){
+            $list_scenarios = getListScenarios($user[0]);
+            $list_projects = getListProjects2($user[0]);
+            $scen = getScenByID($scenID);
+            $projID = $scen['id_proj'];
+            $parent = array_merge(['id'=>$projID],$list_projects[$projID]);
+
+            $listBenef = getListBenef($scenID);
+            $funding_target = getFundingTarget($scenID);
+            //var_dump($listBenef);
+
+            echo $twig->render('/input/funding_steps/benef.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'scenID'=>$scenID,'funding_target'=>$funding_target,'listBenef'=>$listBenef));
+            prereq_Funding();
+        } else {
+            throw new Exception("This Scenario doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=funding&A2=scenario');
+    }
+}
+
+function create_benef($post){
+    if($post){
+        $scenID = intval($post['scenID']);
+        $name = $post['name'];
+        //$description = $post['description'];
+        $infos['name'] = $name;
+        insertBenef($scenID,$infos);
+        update_ModifDate_scen($scenID);
+        header('Location: ?A=funding&A2=benef&scenID='.$scenID);
+    } else {
+        throw new Exception("There is no data inputed !");
+    }
+}
+
+function delete_benef($post){
+    if($post){
+        $scenID = intval($post['scenID']);
+        $benefID = intval($post['benef_to_delete']);
+        //var_dump($benef,$scenID,$sourceID);
+        deleteBenef($benefID);
+        update_ModifDate_scen($scenID);
+        header('Location: ?A=funding&A2=benef&scenID='.$scenID);
+    } else {
+        throw new Exception("There is no benef selected !");
+    }
+}
+
+
+function benef_selected($post){
+    if(isset($_SESSION['scenID'])){
+        $scenID = $_SESSION['scenID'];
+        $scen = getScenByID($scenID);
+        $projID = $scen['id_proj'];
+        if($post){
+            var_dump($post);
+            foreach($post as $key => $value){
+                $infos = [];
+                $temp = explode('_',$key);
+                $benefID = intval($temp[1]);
+                $share = floatval($value);
+                $infos['share'] = $share;
+                updateBenef($benefID,$infos);
+            }
+
+            update_ModifDate_scen($scenID);
+            header('Location: ?A=dashboards&A2=financing&projID='.$projID);
+        } else {
+            throw new Exception("There is no data inputed !");
+        }
+    } else {
+        throw new Exception("There is no scenario selected !");
+    }
+}
+
+// ---------------------------------------- CHECK PRE-REQ ----------------------------------------
+function prereq_Funding(){
+    if(isset($_SESSION['scenID'])){
+        $scenID = $_SESSION['scenID'];
+        echo "<script>prereq_funding(true);</script>";
+    }
 }

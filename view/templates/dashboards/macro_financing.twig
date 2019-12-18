@@ -1,0 +1,168 @@
+{% macro sel_buttons(listScen) %}
+<div class="row mt-2 mb-5 mx-5 text-center">
+    <div class="offset-4 col-4">
+        <select name="scenario" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select a scenario" required>
+            {% for scenID,scen in listScen %}
+                <option value={{scenID}}>{{scen['name']}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+
+
+{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table financing_table">
+        <table id="financing_table" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    {% for year in years %}
+                        <th class="years" scope="col">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1></th>
+                    {% for date in dates %}
+                        <th class="dates" scope="col">{{date}}</th class="years">
+                    {% endfor %}
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for entityID,entity in list_selLB[sourceRef] %}
+                    <tr>
+                        <td class="item text-left" colspan={{years|length + 1}}>{{entity['name']}}</td>
+                        <td class="item" rowspan=5></td>
+                        <td class="item" colspan={{dates|length}}></td>
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Cash Inflow</td class="item">
+                        {% for year in years %}
+                            <td>£ {{cashInflow[sourceRef][entityID][year] != 0 ? cashInflow[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{cashInflow[sourceRef][entityID][date] != 0 ?cashInflow[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Reimbursements</td class="sub_item">
+                        {% for year in years %}
+                            <td>£ {{reimb[sourceRef][entityID][year] != 0 ? reimb[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{reimb[sourceRef][entityID][date] != 0 ? reimb[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Net Debt</td class="sub_item">
+                        {% for year in years %}
+                            <td></td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td></td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Interest</td class="sub_item">
+                        {% for year in years %}
+                            <td></td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td></td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                {% for sourceID,source in list_FS_noentity_LB %}
+                    {% if sourceID == sourceRef %}
+                        <tr>
+                            <td class="item text-left" colspan={{years|length + 1}}>{{FS[sourceID]['name']}} (no entity)</td>
+                            <td class="item separation_dates" rowspan=5></td>
+                            <td class="item" colspan={{dates|length}}></td>
+                        </tr>
+                        <tr>
+                            <td class="sub_item">Cash Inflow</td class="item">
+                            {% for year in years %}
+                                <td>£ {{cashInflow[sourceRef][year] != 0 ? cashInflow[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td>£ {{cashInflow[sourceRef][date] != 0 ? cashInflow[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td class="sub_item">Reimbursements</td class="sub_item">
+                            {% for year in years %}
+                                <td>£ {{reimb[sourceRef][year] != 0 ? reimb[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td>£ {{reimb[sourceRef][date] != 0 ? reimb[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td class="sub_item">Net Debt</td class="sub_item">
+                            {% for year in years %}
+                                <td></td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td></td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td class="sub_item">Interest</td class="sub_item">
+                            {% for year in years %}
+                                <td></td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td></td>
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td class="item text-left text-uppercase" colspan={{years|length + 1}}>Total</td>
+                    <td class="item" rowspan=5></td>
+                    <td class="item" colspan={{dates|length}}></td>
+                </tr>
+                <tr>
+                    <td class="sub_item">Cash Inflow</td class="item">
+                    {% for year in years %}
+                        <td></td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Reimbursements</td class="sub_item">
+                    {% for year in years %}
+                        <td></td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Net Debt</td class="sub_item">
+                    {% for year in years %}
+                        <td></td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Interest</td class="sub_item">
+                    {% for year in years %}
+                        <td></td>
+                    {% endfor %}
+                    {% for date in dates %}
+                        <td></td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

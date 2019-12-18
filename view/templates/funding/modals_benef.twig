@@ -1,0 +1,66 @@
+{% macro create_benef(scenID) %}
+</form>{# it is to close the main form (to input sharing values) #}
+<div class="modal fade" id="askCreateBenef" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createBenef-form" action="?A=funding&amp;A2=create_benef" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Beneficiary informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
+                        </div>
+                    </div> -->
+                    <input type="number" name="scenID" id="scenID" hidden value={{scenID}}>
+                </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-dark">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>    
+{% endmacro %}
+
+{% macro delete_benef(scenID,listBenef) %}
+</form> {# it is to close the main form (to input sharing values) #}
+<div class="modal fade" id="askDeleteBenef" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="deleteBenef-form" action="?A=funding&amp;A2=delete_benef" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Please select the Beneficiary to delete !</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        <select class="form-control" name="benef_to_delete" id="benef_to_delete">
+                            {% for idBenef,benef in listBenef %}
+                                <option name="{{idBenef}}" id="{{idBenef}}" value="{{idBenef}}">{{benef['name']}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="number" name="scenID" id="scenID" hidden value={{scenID}}>
+                    </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> 
+{% endmacro %}

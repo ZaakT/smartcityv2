@@ -1,0 +1,40 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_financing.twig" as macros %}
+
+{% block title %}Dashboards - Financing{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,part,selected,part2,selected2) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+{% for sourceID,source in FS %}
+    {% if source['id_type'] == 2 and (list_selLB[sourceID] or list_FS_noentity_LB[sourceID]) %}
+        <div class="row text-center mt-5"><h3 class="col text-dark">{{source['name']}}</h3></div>
+        {% if sourceID in termSources %}
+            {% set reimb = reimbTerm %}
+        {% else %}
+            {% if sourceID in revSources %}
+                {% set reimb = reimbRev %}
+            {% else %}
+                {% set reimb = [] %}    
+            {% endif %}
+        {% endif %}
+        
+        {{ macros.output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb) }}
+    {% endif %}
+{% endfor %}
+
+<div class="row m-3 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=budget_all&amp;projID={{projID}}');"></button>
+</div>
+{% endblock %}

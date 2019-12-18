@@ -1,0 +1,45 @@
+{% macro benef_table(scenID,funding_target,listBenef) %}
+{% import "/templates/funding/modals_benef.twig" as modal %}
+<div class="row mt-3 text-center">
+    <div class=" offset-2 col-8 list-table benef_table">
+        <input type="number" value="{{funding_target}}" hidden id="funding_target">
+        <table id="benef_table" class='table table-sm table-bordered table-responsive-lg text-center'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col" colspan=2 style="width:50%;">Beneficiaries</th>
+                    <th scope="col" rowspan=2 colspan=1 style="width:25%;">Share of funding<br>(in %)</th>
+                    <th scope="col" rowspan=2 colspan=1 style="width:25%;">Output</th>
+                </tr>
+                <tr>
+                    <th>
+                        <a href="#"><span style="font-size:13px;" class="oi oi-plus" title="plus" aria-hidden="true" data-toggle="modal" data-target="#askCreateBenef"></span></a>
+                    </th>
+                    {% if listBenef %}
+                    <th>
+                        <a href="#"><span style="font-size:13px;" class="oi oi-minus" title="minus" aria-hidden="true" data-toggle="modal" data-target="#askDeleteBenef"></span></a>
+                    </th>
+                    {% endif %}
+                    {{ modal.create_benef(scenID) }}
+                    {{ modal.delete_benef(scenID,listBenef) }}
+                </tr>
+            </thead>
+            <tbody>
+                {% if listBenef %}
+                    {% for benefID,benef in listBenef %}
+                        <tr>
+                            <td colspan=2>{{benef['name']}}</td>
+                            <td colspan=1><input class="text-center" id="share_{{benefID}}" name="share_{{benefID}}" type="number" min=0 max=100 step=0.1 oninput="checkTotBenef();" style="width:80%;" value={{benef['share']}}><span> %</span></td>
+                            <td colspan=1 id="output_{{benefID}}">to calculate</td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan=4 class="font-italic">There is no Beneficiary, please create one.</td>
+                </tr>
+                {% endif %}
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

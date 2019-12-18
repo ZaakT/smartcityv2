@@ -423,6 +423,7 @@ function initSelDates(){
         var placeholder = $(this).attr('placeholder');
         $(this).parent().data('datepicker').date = placeholder;
         if(placeholder != undefined){
+            //console.log(placeholder);
             $(this).val(placeholder);
             var id = $(this).attr('id').split('_');
             var id_source = parseInt(id[2]);

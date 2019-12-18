@@ -1657,11 +1657,9 @@ function financing_out($twig,$is_connected,$projID=0){
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
-            $measures = getListMeasures();
-            $ucs = getListUCs();
-            $scope = getListSelScope($projID);
-            //var_dump($list_ucs);
-            echo $twig->render('/output/dashboards_items/financing_out.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            $listScen = getListScenariosByProj($projID);
+
+            echo $twig->render('/output/dashboards_items/financing_out.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'listScen'=>$listScen));
             prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -1670,7 +1668,396 @@ function financing_out($twig,$is_connected,$projID=0){
         header('Location: ?A=dashboards&A2=project_out');
     }
 }
+function financing_out_2($twig,$is_connected,$projID,$post=[]){
+    if($post and isset($post['scenario'])){
+        if($projID!=0){
+            $user = getUser($_SESSION['username']);
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                $scenID = intval($post['scenario']);
+                $scen = getScenByID($scenID);
+                $list_FS = getListFundingSources();
+                $list_selFS = getListSelFS($scenID);
 
+                $list_selLB = getListLoansAndBonds($scenID);
+                $list_selOthers = getListOthers($scenID);
+                $list_selEntities = getEntities($list_selLB,$list_selOthers);
+
+                $list_FS_noentity = getFStoInclude($list_selEntities,$list_selFS,$list_FS);
+                $list_FS_noentity_LB = $list_FS_noentity[0];
+                $list_FS_noentity_others = $list_FS_noentity[1];
+                
+                $datesLB = getDatesLB($list_selLB,$list_FS_noentity_LB);
+                $years_LB = array_merge(['All Years'],$datesLB[3]);
+                $funding_target = getFundingTarget($scenID);
+                $cashInflow = calcCashInflow($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB);
+                $termSources = [5,7]; // here are the IDs of "Term Sources" (Loans & Bonds -> Term) --> it must correspond to the DB
+                $revSources = [6,8]; // here are the IDs of "Revolving Sources" (Loans & Bonds -> Revolving) --> it must correspond to the DB
+                $reimbTerm = calcReimbTerm($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB,$termSources);
+                $reimbRev = calcReimbRev($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB,$revSources);
+                $netDebtTerm = calcNetDebt($datesLB,$years_LB,$cashInflow,$reimbTerm,$list_selLB,$list_FS_noentity_LB,$termSources);
+                $netDebtTerm = calcNetDebt($datesLB,$years_LB,$cashInflow,$reimbRev,$list_selLB,$list_FS_noentity_LB,$revSources);
+
+
+                echo $twig->render('/output/dashboards_items/financing_out_2.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'list_selLB'=>$list_selLB,'years'=>$years_LB,'dates'=>$datesLB[0],'list_FS_noentity_LB'=>$list_FS_noentity_LB,'FS'=>$list_FS,'cashInflow'=>$cashInflow,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'termSources'=>$termSources,'revSources'=>$revSources));
+                prereq_Dashboards();
+            } else {
+                throw new Exception("This project doesn't exist !");
+            }
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No UC selected !");
+    }
+}
+
+function calcNetDebt($dates,$years,$cashInflow,$reimb,$selLB,$FS_noentity_LB,$termSources){
+    $list_dates_LB = $dates[0];
+    $keydates_LB = $dates[1];
+    $keydates_FS_LB = $dates[2];
+    $list = [];
+    foreach($selLB as $sourceID => $list_entities){
+        if(in_array($sourceID,$termSources)){
+            foreach($list_entities as $entityID => $entity){
+                $list[$sourceID][$entityID] = array_fill_keys($list_dates_LB,0);
+                foreach($years as $key => $year){
+                    $list[$sourceID][$entityID][$year] = 0;
+                }
+                
+                $interest = floatval($entity['interest']);
+                $interest_month = pow((1+$interest/100),1/12)-1;
+
+                $startdate = $keydates_LB[$entityID]['startdate'];
+                $maturitydate = $keydates_LB[$entityID]['maturitydate'];
+                $duration = $keydates_LB[$entityID]['duration'];
+
+
+                $startdate2 = explode('/',$startdate);
+                $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+                $maturitydate2 = explode('/',$maturitydate);
+                $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+                $interval = new DateInterval('P1M');
+                $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+                foreach ($period as $date) {
+                    $date2 = $date->format("m/Y");
+                    /* $list[$sourceID][$entityID][$date2] = $reimb;
+                    $temp = explode('/',$date2);
+                    $list[$sourceID][$entityID][$temp[1]] += $reimb;
+                    $list[$sourceID][$entityID]['All Years'] += $reimb; */
+                }
+            }
+        }
+    }
+    foreach($FS_noentity_LB as $sourceID => $source){
+        if(in_array($sourceID,$termSources)){
+            $list[$sourceID] = array_fill_keys($list_dates_LB,0);
+            foreach($years as $key => $year){
+                $list[$sourceID][$year] = 0;
+            }
+            $share = floatval($source['share']);
+            $toReimb = $funding_target*$share/100;
+            
+            $startdate = $keydates_FS_LB[$sourceID]['startdate'];
+            $maturitydate = $keydates_FS_LB[$sourceID]['maturitydate'];
+            $duration = $keydates_FS_LB[$sourceID]['duration'];
+
+            $reimb = $duration != 0 ? $toReimb/$duration : -1;
+            if($reimb == -1){
+                throw new Exception("There is an error with duration (L&B) !");
+            }
+
+            $startdate2 = explode('/',$startdate);
+            $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+            $maturitydate2 = explode('/',$maturitydate);
+            $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+            $interval = new DateInterval('P1M');
+            $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+            foreach ($period as $date) {
+                $date2 = $date->format("m/Y");
+                $list[$sourceID][$date2] = $reimb;
+                $temp = explode('/',$date2);
+                $list[$sourceID][$temp[1]] += $reimb;
+                $list[$sourceID]['All Years'] += $reimb;
+            }
+        }
+    }
+    return $list;
+}
+
+function calcReimbRev($dates,$years,$funding_target,$selLB,$FS_noentity_LB,$revSources){
+    $list_dates_LB = $dates[0];
+    $keydates_LB = $dates[1];
+    $keydates_FS_LB = $dates[2];
+    $list = [];
+    foreach($selLB as $sourceID => $list_entities){
+        if(in_array($sourceID,$revSources)){
+            foreach($list_entities as $entityID => $entity){
+                $list[$sourceID][$entityID] = array_fill_keys($list_dates_LB,0);
+                foreach($years as $key => $year){
+                    $list[$sourceID][$entityID][$year] = 0;
+                }
+                $share = floatval($entity['share']);
+                $toReimb = $funding_target*$share/100;
+
+                $startdate = $keydates_LB[$entityID]['startdate'];
+                $maturitydate = $keydates_LB[$entityID]['maturitydate'];
+                $duration = $keydates_LB[$entityID]['duration'];
+
+                $reimb = $toReimb;
+
+                $list[$sourceID][$entityID][$maturitydate] = $reimb;
+                $temp = explode('/',$maturitydate);
+                $list[$sourceID][$entityID][$temp[1]] += $reimb;
+                $list[$sourceID][$entityID]['All Years'] += $reimb;
+            }
+        }
+    }
+    foreach($FS_noentity_LB as $sourceID => $source){
+        if(in_array($sourceID,$revSources)){
+            $list[$sourceID] = array_fill_keys($list_dates_LB,0);
+            foreach($years as $key => $year){
+                $list[$sourceID][$year] = 0;
+            }
+            $share = floatval($source['share']);
+            $toReimb = $funding_target*$share/100;
+            
+            $startdate = $keydates_FS_LB[$sourceID]['startdate'];
+            $maturitydate = $keydates_FS_LB[$sourceID]['maturitydate'];
+            $duration = $keydates_FS_LB[$sourceID]['duration'];
+
+            $reimb = $toReimb;
+
+            $list[$sourceID][$maturitydate] = $reimb;
+            $temp = explode('/',$maturitydate);
+            $list[$sourceID][$temp[1]] += $reimb;
+            $list[$sourceID]['All Years'] += $reimb;
+        }
+    }
+    return $list;
+}
+
+function calcReimbTerm($dates,$years,$funding_target,$selLB,$FS_noentity_LB,$termSources){
+    $list_dates_LB = $dates[0];
+    $keydates_LB = $dates[1];
+    $keydates_FS_LB = $dates[2];
+    $list = [];
+    foreach($selLB as $sourceID => $list_entities){
+        if(in_array($sourceID,$termSources)){
+            foreach($list_entities as $entityID => $entity){
+                $list[$sourceID][$entityID] = array_fill_keys($list_dates_LB,0);
+                foreach($years as $key => $year){
+                    $list[$sourceID][$entityID][$year] = 0;
+                }
+                $share = floatval($entity['share']);
+                $toReimb = $funding_target*$share/100;
+                
+                /* $interest = floatval($entity['interest']);
+                $interest_month = pow((1+$interest/100),1/12)-1; */
+
+                $startdate = $keydates_LB[$entityID]['startdate'];
+                $maturitydate = $keydates_LB[$entityID]['maturitydate'];
+                $duration = $keydates_LB[$entityID]['duration'];
+
+                $reimb = $duration != 0 ? $toReimb/$duration : -1;
+                if($reimb == -1){
+                    throw new Exception("There is an error with duration (L&B) !");
+                }
+
+                $startdate2 = explode('/',$startdate);
+                $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+                $maturitydate2 = explode('/',$maturitydate);
+                $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+                $interval = new DateInterval('P1M');
+                $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+                foreach ($period as $date) {
+                    $date2 = $date->format("m/Y");
+                    $list[$sourceID][$entityID][$date2] = $reimb;
+                    $temp = explode('/',$date2);
+                    $list[$sourceID][$entityID][$temp[1]] += $reimb;
+                    $list[$sourceID][$entityID]['All Years'] += $reimb;
+                }
+            }
+        }
+    }
+    foreach($FS_noentity_LB as $sourceID => $source){
+        if(in_array($sourceID,$termSources)){
+            $list[$sourceID] = array_fill_keys($list_dates_LB,0);
+            foreach($years as $key => $year){
+                $list[$sourceID][$year] = 0;
+            }
+            $share = floatval($source['share']);
+            $toReimb = $funding_target*$share/100;
+            
+            $startdate = $keydates_FS_LB[$sourceID]['startdate'];
+            $maturitydate = $keydates_FS_LB[$sourceID]['maturitydate'];
+            $duration = $keydates_FS_LB[$sourceID]['duration'];
+
+            $reimb = $duration != 0 ? $toReimb/$duration : -1;
+            if($reimb == -1){
+                throw new Exception("There is an error with duration (L&B) !");
+            }
+
+            $startdate2 = explode('/',$startdate);
+            $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+            $maturitydate2 = explode('/',$maturitydate);
+            $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+            $interval = new DateInterval('P1M');
+            $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+            foreach ($period as $date) {
+                $date2 = $date->format("m/Y");
+                $list[$sourceID][$date2] = $reimb;
+                $temp = explode('/',$date2);
+                $list[$sourceID][$temp[1]] += $reimb;
+                $list[$sourceID]['All Years'] += $reimb;
+            }
+        }
+    }
+    return $list;
+}
+
+function calcCashInflow($dates,$years,$funding_target,$selLB,$FS_noentity_LB){
+    $list_dates_LB = $dates[0];
+    $keydates_LB = $dates[1];
+    $keydates_FS_LB = $dates[2];
+    $list = [];
+    foreach($selLB as $sourceID => $list_entities){
+        foreach($list_entities as $entityID => $entity){
+            $list[$sourceID][$entityID] = array_fill_keys($list_dates_LB,0);
+            foreach($years as $key => $year){
+                $list[$sourceID][$entityID][$year] = 0;
+            }
+            $share = floatval($entity['share']);
+            $startdate = $keydates_LB[$entityID]['startdate'];
+            $list[$sourceID][$entityID][$startdate] = $funding_target*$share/100;
+            $temp = explode('/',$startdate);
+            $list[$sourceID][$entityID][$temp[1]] += $funding_target*$share/100;
+            $list[$sourceID][$entityID]['All Years'] += $funding_target*$share/100;
+
+        }
+    }
+    foreach($FS_noentity_LB as $sourceID => $source){
+        $list[$sourceID] = array_fill_keys($list_dates_LB,0);
+        foreach($years as $key => $year){
+            $list[$sourceID][$year] = 0;
+        }
+        $share = floatval($source['share']);
+        $startdate = $keydates_FS_LB[$sourceID]['startdate'];
+        $list[$sourceID][$startdate] = $funding_target*$share/100;
+        $temp = explode('/',$startdate);
+        $list[$sourceID][$temp[1]] += $funding_target*$share/100;
+        $list[$sourceID]['All Years'] += $funding_target*$share/100;
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getFStoInclude($selEntities,$selFS,$FS){
+    $list_LB = [];
+    $list_others = [];
+    foreach ($selFS as $sourceID => $source){
+        if(!array_key_exists($sourceID,$selEntities)){
+            if($FS[$sourceID]['id_type']==1){ // Others
+                $list_others[$sourceID] = $source;
+            } else if ($FS[$sourceID]['id_type']==2){ // L&B
+                $list_LB[$sourceID] = $source;
+            }
+        }
+    }
+    return [$list_LB,$list_others];
+}
+
+function getDatesLB($list_LB,$list_LB_noentity){
+    $list_dates_LB = [];
+    $keydatesLB = [];
+    $keydates_FS_LB = [];
+    $years_LB = [];
+    foreach ($list_LB as $sourceID => $list_entities){
+        foreach ($list_entities as $entityID => $entity){
+            $startdate = $entity['start_date'];
+            $maturitydate = $entity['maturity_date'];
+            
+            $startdate2 = explode('/',$startdate);
+            $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+        
+            $maturitydate2 = explode('/',$maturitydate);
+            $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+        
+            $duration = intval($maturitydate2->diff($startdate2)->y*12 + $maturitydate2->diff($startdate2)->m) + 1;
+
+            $interval = new DateInterval('P1M');
+            $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+            foreach ($period as $date) {
+                //$temp = $date->format("m/Y");
+                if(!in_array($date,$list_dates_LB)){
+                    array_push($list_dates_LB,$date);
+                }
+            }
+            $keydatesLB[$entityID] = ['startdate'=>$startdate,'maturitydate'=>$maturitydate,'duration'=>$duration];
+
+            $interval2 = new DateInterval('P1Y');
+            $period2 = new DatePeriod($startdate2, $interval2, $maturitydate2->add($interval2));
+            foreach ($period2 as $date) {
+                //$temp = $date->format("Y");
+                if(!in_array($date,$years_LB)){
+                    array_push($years_LB,$date);
+                }
+            }
+        }
+    }
+    foreach ($list_LB_noentity as $sourceID => $source){
+        $startdate = $source['start_date'];
+        $maturitydate = $source['maturity_date'];
+        
+        $startdate2 = explode('/',$startdate);
+        $startdate2 = new DateTime($startdate2[1]."-".$startdate2[0]."-01");
+    
+        $maturitydate2 = explode('/',$maturitydate);
+        $maturitydate2 = new DateTime($maturitydate2[1]."-".$maturitydate2[0]."-01");
+    
+        $duration = intval($maturitydate2->diff($startdate2)->y*12 + $maturitydate2->diff($startdate2)->m) + 1;
+
+        $interval = new DateInterval('P1M');
+        $period = new DatePeriod($startdate2, $interval, $maturitydate2->add($interval));
+        foreach ($period as $date) {
+            //$temp = $date->format("m/Y");
+            if(!in_array($date,$list_dates_LB)){
+                array_push($list_dates_LB,$date);
+            }
+        }
+        $keydates_FS_LB[$sourceID] = ['startdate'=>$startdate,'maturitydate'=>$maturitydate,'duration'=>$duration];
+
+        $interval2 = new DateInterval('P1Y');
+        $period2 = new DatePeriod($startdate2, $interval2, $maturitydate2->add($interval2));
+        foreach ($period2 as $date) {
+            //$temp = $date->format("Y");
+            if(!in_array($date,$years_LB)){
+                array_push($years_LB,$date);
+            }
+        }
+    }
+    usort($list_dates_LB, 'cmpDates');
+    usort($years_LB, 'cmpDates');
+    foreach ($list_dates_LB as $key => $date){
+        $list_dates_LB[$key] = $date->format("m/Y");
+    }
+    foreach ($years_LB as $key => $date){
+        if(!in_array($date->format("Y"),$years_LB)){
+            $years_LB[$key] = $date->format("Y");
+        } else {
+            unset($years_LB[$key]);
+        }
+    }
+    //var_dump($years_LB);
+    return [$list_dates_LB,$keydatesLB,$keydates_FS_LB,$years_LB];
+}
+    
+function cmpDates($a, $b) {
+    if ($a == $b) {
+        return 0;
+    }
+    return ($a < $b) ? -1 : 1;
+}
 // ------------------------------- PROJECT DASHBOARD -------------------------------
 
 function project_dashboard($twig,$is_connected,$projID=0){
@@ -1940,6 +2327,8 @@ function getWeightedScores2($fin_score,$soc_score,$capexList){
     $ret .= "]";
     return $ret;
 }
+
+
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_Dashboards(){
     if(isset($_SESSION['projID'])){
