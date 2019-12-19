@@ -1351,7 +1351,36 @@ try{
 
             // ---------- BUSINESS MODEL ----------
             elseif($_GET['A']=='business_model'){
-                business_model($twig,$is_connected);           
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="project"){
+                        project_bm($twig,$is_connected);
+                    // --- SELECTED PROJECT ---
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=business_model&A2=pref&projID='.$projID);
+                        }
+                    } elseif($_GET['A2']=="pref"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                pref($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=business_model&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=business_model&A2=project');
+                        }
+                    } elseif($_GET['A2']=="pref_selected"){
+                        pref_selected($_POST);
+                    } else {
+                        header('Location: ?A='.$_GET['A']);
+                    }
+                } else {  
+                    business_model($twig,$is_connected);  
+                }         
             }
 
 
@@ -1453,7 +1482,7 @@ try{
             }
             // ---------- DASHBOARDS ----------
             elseif($_GET['A']=='dashboards'){
-                 if(isset($_GET['A2'])){
+                if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         project_out($twig,$is_connected);
                     // --- SELECTED PROJECT ---
@@ -1571,6 +1600,10 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
                                         financing_out_2($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else if($_GET['A3']=="output2"){
+                                        financing_out_3($twig,$is_connected,$_GET['projID'],$_POST);
+                                    } else if($_GET['A3']=="output3"){
+                                        financing_out_4($twig,$is_connected,$_GET['projID'],$_POST);
                                     } else {
                                         header('Location: ?A=dashboards&A2=financing&projID='.$_GET['projID']);
                                     }

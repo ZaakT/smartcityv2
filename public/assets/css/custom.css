@@ -378,6 +378,25 @@ th, td{
     text-align: right;
 }
 
+.financing_table_2 .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.financing_table_2 .sub_item{
+    font-size: smaller;
+}
+
+.financing_table_2 .sub_item .item{
+    background-color: #f5f5f5;
+}
+
+.financing_table_2{
+    max-height: 80vh;    
+}
+
 .check-col{
     min-width: 25px;
     max-width: 25px;

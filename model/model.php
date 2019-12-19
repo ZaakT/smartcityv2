@@ -3427,3 +3427,46 @@ function deleteBenef($benefID){
                             ');
     return $req->execute(array($benefID));
 }
+
+
+// ------------------------------------- BUSINESS MODEL -------------------------------------
+
+function getListInvestCap(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,description FROM invest_capacity ORDER BY id');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
+    }
+    return $list;
+}
+function getListPaybackConst(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,description FROM payback_constraints ORDER BY id');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
+    }
+    return $list;
+}
+function getListBusinessModelPref(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,description FROM business_model_pref ORDER BY id');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
+    }
+    return $list;
+}

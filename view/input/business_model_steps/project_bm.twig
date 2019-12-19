@@ -1,13 +1,14 @@
-{% extends '/output/dashboards.twig' %}
+{% extends '/input/business_model.twig' %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
-{% import "/templates/dashboards/macro_projects.twig" as list %}
+{% import "/templates/business_model/macro_projects.twig" as list %}
 {% import "/templates/sidebar.twig" as sidebar %}
 
-{% block sidebar %}{{ sidebar.sidebar("dashboards") }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("business_model") }}{% endblock %}
 
 
-{% block title %}Dashboards - Project{% endblock %}
+
+{% block title %}Business Model - Project{% endblock %}
 
 
 {% block content %}
@@ -18,7 +19,7 @@
     </div>
 </div>
 
-<form action="?A=dashboards&amp;A2=proj_selected" method="post">
+<form action="?A=business_model&amp;A2=proj_selected" method="post">
 {% if projects %}
 {{ list.list_projects(projects) }}
 {% else %}

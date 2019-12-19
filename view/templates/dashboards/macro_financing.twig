@@ -14,7 +14,7 @@
 
 
 
-{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb) %}
+{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table financing_table">
         <table id="financing_table" class='table table-lg table-bordered table-responsive-lg'>
@@ -58,24 +58,24 @@
                     </tr>
                     <tr>
                         <td class="sub_item">Net Debt</td class="sub_item">
-                        {% for year in years %}
-                            <td></td>
-                        {% endfor %}
-                        {% for date in dates %}
-                            <td></td>
-                        {% endfor %}
+                            {% for year in years %}
+                                <td>-</td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td>£ {{netDebt[sourceRef][entityID][date] != 0 ? netDebt[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
                     </tr>
                     <tr>
                         <td class="sub_item">Interest</td class="sub_item">
-                        {% for year in years %}
-                            <td></td>
-                        {% endfor %}
-                        {% for date in dates %}
-                            <td></td>
-                        {% endfor %}
+                            {% for year in years %}
+                                <td>£ {{interest[sourceRef][entityID][year] != 0 ? interest[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                            {% for date in dates %}
+                                <td>£ {{interest[sourceRef][entityID][date] != 0 ? interest[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
                     </tr>
                 {% endfor %}
-                {% for sourceID,source in list_FS_noentity_LB %}
+                {# {% for sourceID,source in list_FS_noentity_LB %}
                     {% if sourceID == sourceRef %}
                         <tr>
                             <td class="item text-left" colspan={{years|length + 1}}>{{FS[sourceID]['name']}} (no entity)</td>
@@ -102,24 +102,24 @@
                         </tr>
                         <tr>
                             <td class="sub_item">Net Debt</td class="sub_item">
-                            {% for year in years %}
-                                <td></td>
-                            {% endfor %}
-                            {% for date in dates %}
-                                <td></td>
-                            {% endfor %}
+                                {% for year in years %}
+                                    <td>-</td>
+                                {% endfor %}
+                                {% for date in dates %}
+                                    <td>£ {{netDebt[sourceRef][date] != 0 ? netDebt[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                {% endfor %}
                         </tr>
                         <tr>
                             <td class="sub_item">Interest</td class="sub_item">
-                            {% for year in years %}
-                                <td></td>
-                            {% endfor %}
-                            {% for date in dates %}
-                                <td></td>
-                            {% endfor %}
+                                {% for year in years %}
+                                    <td>£ {{interest[sourceRef][year] != 0 ? interest[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                                {% endfor %}
+                                {% for date in dates %}
+                                    <td>£ {{interest[sourceRef][date] != 0 ? interest[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                {% endfor %}
                         </tr>
                     {% endif %}
-                {% endfor %}
+                {% endfor %} #}
                 <tr>
                     <td class="item text-left text-uppercase" colspan={{years|length + 1}}>Total</td>
                     <td class="item" rowspan=5></td>
@@ -127,42 +127,160 @@
                 </tr>
                 <tr>
                     <td class="sub_item">Cash Inflow</td class="item">
-                    {% for year in years %}
-                        <td></td>
-                    {% endfor %}
-                    {% for date in dates %}
-                        <td></td>
-                    {% endfor %}
+                        {% for year in years %}
+                            <td>£ {{total[sourceRef][year]['cashInflow'] != 0 ? total[sourceRef][year]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{total[sourceRef][date]['cashInflow'] != 0 ? total[sourceRef][date]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <td class="sub_item">Reimbursements</td class="sub_item">
-                    {% for year in years %}
-                        <td></td>
-                    {% endfor %}
-                    {% for date in dates %}
-                        <td></td>
-                    {% endfor %}
+                        {% for year in years %}
+                            <td>£ {{total[sourceRef][year]['reimb'] != 0 ? total[sourceRef][year]['reimb']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{total[sourceRef][date]['reimb'] != 0 ? total[sourceRef][date]['reimb']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <td class="sub_item">Net Debt</td class="sub_item">
-                    {% for year in years %}
-                        <td></td>
-                    {% endfor %}
-                    {% for date in dates %}
-                        <td></td>
-                    {% endfor %}
+                        {% for year in years %}
+                            <td>-</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{total[sourceRef][date]['netDebt'] != 0 ? total[sourceRef][date]['netDebt']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
                 </tr>
                 <tr>
                     <td class="sub_item">Interest</td class="sub_item">
-                    {% for year in years %}
-                        <td></td>
-                    {% endfor %}
-                    {% for date in dates %}
-                        <td></td>
-                    {% endfor %}
+                        {% for year in years %}
+                            <td>£ {{total[sourceRef][year]['interest'] != 0 ? total[sourceRef][year]['interest']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        {% for date in dates %}
+                            <td>£ {{total[sourceRef][date]['interest'] != 0 ? total[sourceRef][date]['interest']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
 {% endmacro %}
+
+
+
+
+{% macro output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels) %}
+<div class="mt-3 row text-center">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingOptChart"></canvas>
+        <iframe src=null hidden
+        onload="showFinancingOptChart({{labels}});"></iframe>
+    </div>
+</div>
+<div class="mt-5 row text-center">
+    <div class="offset-2 col-8 list-table financing_table_2">
+        <table id="financing_table_2" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Funding Sources</th>
+                    <th scope="col">£</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan=5></td></tr>
+                {% for id_cat,cat in FS_cat if cat != FS_cat|last %}
+                <tr class="font-weight-bold">
+                    <td class="item sourceCat" id="cat_{{id_cat}}">{{cat['name']}}</td>
+                    <td id="val_{{id_cat}}"></td>
+                    <td id="share_{{id_cat}}"></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                    {% for sourceID,source in selFS if FS[sourceID]['id_cat']==id_cat%}
+                        <tr>
+                            <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                            <td>£ {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td hidden class="sourceValues" id="val_{{id_cat}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
+                            <td>{{source['share']|number_format(2,'.',',')}} %</td>
+                            <td hidden class="sourceValues" id="share_{{id_cat}}_{{sourceID}}">{{source['share']}}</td>
+                            <td>{{keydates[sourceID]['startdate'] ? keydates[sourceID]['startdate'] : "-"}}</td>
+                            <td>{{keydates[sourceID]['maturitydate'] ? keydates[sourceID]['maturitydate'] : "-"}}</td>
+                        </tr>
+                        {% for entityID,entity in entities[sourceID] %}
+                        <tr class="sub_item">
+                            <td class="text-right" style="background-color: #f5f5f5;">{{entity['name']}}</td>
+                            <td>£ {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{entity['share']|number_format(2,'.',',')}} %</td>
+                            <td>{{keydates[sourceID][entityID]['startdate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
+                            <td>{{keydates[sourceID][entityID]['maturitydate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <tr><td colspan=5></td></tr>
+                {% endfor %}
+                <tr class="font-weight-bold">
+                    <td class="item sourceCat" id="cat_{{FS_cat|keys|last}}">{{FS_cat|last['name']}}</td>
+                    <td id="val_{{FS_cat|keys|last}}"></td>
+                    <td id="share_{{FS_cat|keys|last}}"></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                    {% for sourceID,source in selFS if FS[sourceID]['id_cat']==FS_cat|keys|last%}
+                        <tr>
+                            <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                            <td>£ {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td hidden class="sourceValues" id="val_{{FS_cat|keys|last}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
+                            <td>{{source['share']|number_format(2,'.',',')}} %</td>
+                            <td hidden class="sourceValues" id="share_{{FS_cat|keys|last}}_{{sourceID}}">{{source['share']}}</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        {% for entityID,entity in entities[sourceID] %}
+                        <tr class="sub_item">
+                            <td class="text-right" style="background-color: #f5f5f5;">{{entity['name']}}</td>
+                            <td>£ {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{entity['share']|number_format(2,'.',',')}} %</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro output_benef(benefs,funding_target,benefNames,benefShare) %}
+<div class="mt-3 row text-center">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingBenefChart"></canvas>
+        <iframe src=null hidden
+        onload="showFinancingBenefChart({{benefNames}},{{benefShare}});"></iframe>
+    </div>
+</div>
+<div class="mt-5 row text-center">
+    <div class="offset-2 col-8 list-table financing_table_2">
+        <table id="financing_table_2" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Beneficiary</th>
+                    <th scope="col">Share of Funding in £</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for benefID,benef in benefs %}
+                    <tr>
+                        <td>{{benef['name']}}</td>
+                        <td>£ {{(funding_target*benef['share']/100)|number_format(2,'.',',')}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %} #}
