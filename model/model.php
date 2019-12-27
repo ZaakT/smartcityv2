@@ -3470,3 +3470,122 @@ function getListBusinessModelPref(){
     }
     return $list;
 }
+
+function getListBMReco(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name FROM business_model_reco');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $list[$id] = ['name'=>$name];
+    }
+    return $list;
+}
+
+function getBMReco($id_investcap,$id_payconst,$id_bmpref){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT in_house,PPP,outsourced
+                            FROM matrix_bm_1
+                            WHERE id_investcap = ?
+                                AND id_payconst = ?
+                                AND id_bmpref = ?');
+    
+    $req->execute(array($id_investcap,$id_payconst,$id_bmpref));
+    $res = $req->fetch();
+    $in_house = intval($res['in_house']);
+    $PPP = intval($res['PPP']);
+    $outsourced = intval($res['outsourced']);
+    $list = [$in_house =>1,$PPP =>2,$outsourced =>3]; //please check the id of BMReco in the DB
+    ksort($list);
+    return $list;
+}
+
+function getSelBM($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id_investcap,id_payconst,id_bmpref
+                            FROM business_model
+                            WHERE id_proj = ?');
+    
+    $req->execute(array($projID));
+    $res = $req->fetch();
+    $id_investcap = intval($res['id_investcap']);
+    $id_payconst = intval($res['id_payconst']);
+    $id_bmpref = intval($res['id_bmpref']);
+    $list = ["id_investcap" => $id_investcap,"id_payconst" => $id_payconst,"id_bmpref" => $id_bmpref];
+    return $list;
+    
+}
+
+function insertSelBM($projID,$id_investcap,$id_payconst,$id_bmpref){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO business_model
+                            (id_proj,id_investcap,id_payconst,id_bmpref)
+                            VALUES (?,?,?,?)
+                            ');
+    return $req->execute(array($projID,$id_investcap,$id_payconst,$id_bmpref));
+}
+
+function deleteSelBM($projID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM business_model
+                            WHERE id_proj = ?
+                            ');
+    return $req->execute(array($projID));
+}
+
+function getListBMBank(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,description FROM bm_bankability');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
+    }
+    return $list;
+}
+
+function getListBMSocBank(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name,description FROM bm_soc_bankability');
+    $list = [];
+    $req->execute();
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ['name'=>$name,'description'=>$description];
+    }
+    return $list;
+}
+
+function getFundingOpt($id_bm,$id_investcap,$id_bank,$id_socbank){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT city,grants,eq_investors,impact_investors,bank_debt,green_debt,suppliers,alternative
+                            FROM matrix_bm_2
+                            WHERE id_bm = ?
+                                AND id_investcap = ?
+                                AND id_bank = ?
+                                AND id_socbank = ?');
+    
+    $req->execute(array($id_bm,$id_investcap,$id_bank,$id_socbank));
+    $res = $req->fetch();
+
+    $city = intval($res['city']);
+    $grants = intval($res['grants']);
+    $eq_investors = intval($res['eq_investors']);
+    $impact_investors = intval($res['impact_investors']);
+    $bank_debt = intval($res['bank_debt']);
+    $green_debt = intval($res['green_debt']);
+    $suppliers = intval($res['suppliers']);
+    $alternative = intval($res['alternative']);
+
+    $list = ['City'=>$city,'Grants'=>$grants,'Equity investors'=>$eq_investors,'Impact Investors'=>$impact_investors,'Bank Debt'=>$bank_debt,'Green Debt'=>$green_debt,'Suppliers'=>$suppliers,'Alternative'=>$alternative];
+    arsort($list);
+    return $list;
+
+}

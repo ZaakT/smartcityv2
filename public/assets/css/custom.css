@@ -397,6 +397,55 @@ th, td{
     max-height: 80vh;    
 }
 
+.reco_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.reco_table .res {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.infos_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.infos_table .res {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.proj_qualif_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.proj_qualif_table .res {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.funding_opt_table .item{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.funding_opt_table{
+    max-height: 80vh;    
+}
 .check-col{
     min-width: 25px;
     max-width: 25px;

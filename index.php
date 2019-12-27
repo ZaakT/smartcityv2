@@ -1375,6 +1375,18 @@ try{
                         }
                     } elseif($_GET['A2']=="pref_selected"){
                         pref_selected($_POST);
+                    } elseif($_GET['A2']=="reco"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                reco($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=business_model&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=business_model&A2=project');
+                        }
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }
