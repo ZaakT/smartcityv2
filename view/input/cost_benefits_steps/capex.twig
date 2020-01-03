@@ -19,15 +19,15 @@
     </div>
 </div>
 
-{% if capex_advice %}
+{% if 1 %}
 <form id="form_capex" name="form_capex" action="?A=cost_benefits&amp;A2=capex&amp;A3=capex_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedCapex(form_capex);">
-    
-{{ list.list_capex(capex_advice,selCapex) }}
+    {% if capex_advice %}
+    {{ list.list_capex(capex_advice,selCapex) }}
+    {% endif %}
 
-{% if capex_user %}
+    {% if capex_user %}
     {{ list.list_capex_user(capex_user,projID,ucID,selCapex) }}
-{% endif %}
-
+    {% endif %}
 </form>
 
 <div class="row my-5">

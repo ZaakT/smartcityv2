@@ -46,10 +46,11 @@ function scope($twig,$is_connected,$projID=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
             $list_measures = getListMeasures();
+            $list_cat = getListUCsCat();
             $list_ucs = getListUCs();
             $listSelScope = getListSelScope($projID);
-            //var_dump($listSelScope);
-            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'list_sel'=>$listSelScope)); 
+            //var_dump($list_ucs);
+            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=scope');

@@ -16,38 +16,45 @@
 
 
 {% macro list_zones(zones,level,list_sel=[]) %}
-<div class="row text-center level_{{level}} offset-2 ">
-    <div class="col-8 mt-2 mx-5 list-table">
-        <table id="zones_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
-            <thead class="thead-dark text-center">
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Type</th>
-                    {{ level > 1 ? '<th scope="col">Parent</th>' : ''}}
-                </tr>
-            </thead>
-            <tbody>
-            {% for zone in zones %}
-            {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
-            {% set inputID = zone['hasChildren'] ? "" : ""%}
-                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
-                    {% if zone['id'] in list_sel|keys %}
-                        <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_cbuc')"></td>
-                        {# <td>{{ zone['id'] }}</td> #}
-                        <td>{{ zone['name'] }}</td>
-                        <td>{{ zone['type'] }}</td>
-                        {% if level > 1  %}
-                        <td>{{zone['parent'][1]}}</td>
+{% set test = false %}
+{% for zone in zones if zone['id'] in list_sel|keys and test == false%}
+    {% set test = true %}
+{% endfor %}
+{% if test %}
+    <div class="row text-center level_{{level}} offset-2 ">
+        <div class="col-8 mt-2 mx-5 list-table">
+            <table id="zones_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
+                <thead class="thead-dark text-center">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Type</th>
+                        {{ level > 1 ? '<th scope="col">Parent</th>' : ''}}
+                    </tr>
+                </thead>
+                <tbody>
+                {% for zone in zones %}
+                {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
+                {% set inputID = zone['hasChildren'] ? "" : ""%}
+                    <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
+                        {% if zone['id'] in list_sel|keys %}
+                            <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_cbuc')"></td>
+                            {# <td>{{ zone['id'] }}</td> #}
+                            <td>{{ zone['name'] }}</td>
+                            <td>{{ zone['type'] }}</td>
+                            {% if level > 1  %}
+                            <td>{{zone['parent'][1]}}</td>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+{% endif %}
 {% endmacro %}
+
 
 {% macro output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) %}
 <div class="row text-center ">

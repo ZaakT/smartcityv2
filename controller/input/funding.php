@@ -167,7 +167,7 @@ function work_cap_req($twig,$is_connected,$scenID=0){
             $tot_capex = $capexTot['tot'];
             $tot_implem = $implemTot['tot'];
             $tot_invest = $tot_capex + $tot_implem;
-            $tot_op = calcOperating($netcashPerMonth[2],$tot_invest,);
+            $tot_op = calcOperating($netcashPerMonth[2],$tot_invest);
 
             $values = ['capex'=>$tot_capex,'implem'=>$tot_implem,'invest'=>$tot_invest,'op'=>$tot_op,'total'=>$tot_invest+$tot_op];
             //var_dump($values);
@@ -268,7 +268,7 @@ function create_entity($post){
         $listOthers = getListOthers($scenID); */
         $source = getFundingSourceByID($sourceID);
         if($source['id_type']==2){
-            var_dump('LOANS AND BONDS !!');
+            //var_dump('LOANS AND BONDS !!');
             insertLoansAndBonds($scenID,$sourceID,$name,$description);
             update_ModifDate_scen($scenID);
             header('Location: ?A=funding&A2=funding_sources&scenID='.$scenID);
@@ -533,7 +533,7 @@ function benef_selected($post){
         $scen = getScenByID($scenID);
         $projID = $scen['id_proj'];
         if($post){
-            var_dump($post);
+            //var_dump($post);
             foreach($post as $key => $value){
                 $infos = [];
                 $temp = explode('_',$key);

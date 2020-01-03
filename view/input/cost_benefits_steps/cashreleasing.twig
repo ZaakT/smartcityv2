@@ -19,14 +19,15 @@
     </div>
 </div>
 
-{% if cashreleasing_advice %}
+{% if 1 %}
 <form id="form_cashreleasing" name="form_cashreleasing" action="?A=cost_benefits&amp;A2=cashreleasing&amp;A3=cashreleasing_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedCashReleasing(form_cashreleasing);">
-    
-{{ list.list_cashreleasing(cashreleasing_advice,selCashReleasing) }}
+    {% if cashreleasing_advice %}
+    {{ list.list_cashreleasing(cashreleasing_advice,selCashReleasing) }}
+    {% endif %}
 
-{% if cashreleasing_user %}
+    {% if cashreleasing_user %}
     {{ list.list_cashreleasing_user(cashreleasing_user,projID,ucID,selCashReleasing) }}
-{% endif %}
+    {% endif %}
 
 </form>
 

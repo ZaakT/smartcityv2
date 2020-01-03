@@ -1,11 +1,10 @@
-{% macro rating_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,rates,sel_meas,repart_ucs,guidCrit,rates) %}
+{% macro rating_table(sel_ucs=[],sel_critCat=[],sel_crit=[],repart_selCrit=[],rates=[],repart_ucs=[],guidCrit=[],ucs_all=[],meas=[],cat=[],id_meas=0) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 <div class="row">
     <div class="col mt-3 mx-5 list-table text-center rate-table">
         <table id="table_rate" class='table table-lg table-bordered table-striped table-responsive-lg align-middle'>
             <thead class="thead-dark sticky-top">
                 <tr scope="row">
-                    {# <th colspan=1 rowspan=3>Measures</th> #}
                     <th colspan=1 rowspan=3>Use Cases</th>
                     {% for cat in sel_critCat %}
                     <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
@@ -23,18 +22,29 @@
                     data-placement="right" title="{{crit[1]}}"
                     data-trigger="click"
                     data-html=true
-                    data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria1.png'/>">Rating Guidance</th>
+                    data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit[0]}}.png'/>">Rating Guidance</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                {% for uc in sel_ucs %}
-                <tr>
-                    <td scope="col" rowspan=1>{{ uc[1] }}</td>  
-                    {% for crit in sel_crit %}
-                    <td scope="col" rowspan=1><input class="text-center" oninput="colorFilledRating();" type="number" min=1 max=10 placeholder="{{guidCrit[uc[0]][crit[0]][1]}}-{{guidCrit[uc[0]][crit[0]][2]}}" name="{{uc[0]}}_{{crit[0]}}" required min=1 max=10 value={{ rates ? rates[uc[0]][crit[0]] : ""}}></td>
+                {% for id_cat,cat_item in cat %}
+                    {% set test = false %}
+                    {% for uc in sel_ucs if ucs_all[uc['id']]['id_cat'] == id_cat and ucs_all[uc['id']]['id_meas'] == id_meas and test == false %}
+                        {% set test = true %}
                     {% endfor %}
-                </tr>
+                    {% if test %}
+                    {# <tr class="UC_cat">
+                        <th colspan={{1+sel_crit|length}}>{{cat_item['name']}}</th>
+                    </tr> #}
+                    {% endif %}
+                    {% for uc in sel_ucs if ucs_all[uc[0]]['id_meas'] == id_meas and ucs_all[uc[0]]['id_cat'] == id_cat%}
+                        <tr>
+                            <td scope="col" rowspan=1>{{ uc[1] }}</td>  
+                            {% for crit in sel_crit %}
+                            <td scope="col" rowspan=1><input class="text-center" oninput="colorFilledRating();" type="number" min=1 max=10 placeholder="{{guidCrit[uc[0]][crit[0]][1]}}-{{guidCrit[uc[0]][crit[0]][2]}}" name="{{uc[0]}}_{{crit[0]}}" required min=1 max=10 value={{ rates ? rates[uc[0]][crit[0]] : ""}}></td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

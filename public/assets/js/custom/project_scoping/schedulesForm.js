@@ -44,7 +44,6 @@ function checkValidity(part,uc){
     var prec_date = dates_saved[part][uc]["startdate"];
     var current_date =dates_saved[part][uc]["startdate"];
     var ret = true;
-
     //console.log(part+" - "+uc);
     //console.log(dates_saved[part][uc]);
     list_dates.forEach((date) => {
@@ -74,6 +73,32 @@ function checkValidity(part,uc){
         }
         if(part=="implem" && date=="enddate"){
             ret = true;
+        }
+        if(part=="opex" && date=="enddate"){
+            var date_opex = dates_saved[part][uc][date];
+            var date_implem = dates_saved["implem"][uc]["100date"];
+            if(date_opex < date_implem){
+                $("#opex_enddate_"+uc+" input").css("background","salmon");
+                $("#implem_100date_"+uc+" input").css("background","salmon");
+                ret = false;
+            } else {
+                $("#opex_enddate_"+uc+" input").css("background","palegreen");
+                $("#implem_100date_"+uc+" input").css("background","palegreen");
+                ret = true;
+            }
+        }
+        if(part=="revenues" && date=="enddate"){
+            var date_revenues = dates_saved[part][uc][date];
+            var date_implem = dates_saved["implem"][uc]["100date"];
+            if(date_revenues < date_implem){
+                $("#revenues_enddate_"+uc+" input").css("background","salmon");
+                $("#implem_100date_"+uc+" input").css("background","salmon");
+                ret = false;
+            } else {
+                $("#revenues_enddate_"+uc+" input").css("background","palegreen");
+                $("#implem_100date_"+uc+" input").css("background","palegreen");
+                ret = true;
+            }
         }
     });
     return ret;

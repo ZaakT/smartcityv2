@@ -59,7 +59,7 @@ function activeButton_uc(sel){
 
 function colorLine(sum,nb,sel){
     const ref = nb*2;
-    if(0<sum && sum<=ref*1/3){
+    if(0<=sum && sum<=ref*1/3){
         //console.log("not so pertinent");
         $(sel).css("background","orange");
     }
@@ -72,7 +72,7 @@ function colorLine(sum,nb,sel){
         $(sel).css("background","yellowgreen");
     }
     else {
-        //console.log("out of limit");
+        console.log("out of limit");
     }
 }
 

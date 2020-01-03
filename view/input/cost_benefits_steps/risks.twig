@@ -18,16 +18,15 @@
         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
 </div>
-
-{% if risks_advice %}
+{% if 1 %}
 <form id="form_risks" name="form_risks" action="?A=cost_benefits&amp;A2=risks&amp;A3=risks_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedRisks(form_risks);">
-    
-{{ list.list_risks(risks_advice,selRisks) }}
+    {% if risks_advice %}
+    {{ list.list_risks(risks_advice,selRisks) }}
+    {% endif %}
 
-{% if risks_user %}
+    {% if risks_user %}
     {{ list.list_risks_user(risks_user,projID,ucID,selRisks) }}
-{% endif %}
-
+    {% endif %}
 </form>
 
 <div class="row my-5">

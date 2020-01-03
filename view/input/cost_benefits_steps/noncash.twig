@@ -19,15 +19,15 @@
     </div>
 </div>
 
-{% if noncash_advice %}
+{% if 1 %}
 <form id="form_noncash" name="form_noncash" action="?A=cost_benefits&amp;A2=noncash&amp;A3=noncash_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedNonCash(form_noncash);">
-    
-{{ list.list_noncash(noncash_advice,selNonCash) }}
+    {% if noncash_advice %}
+    {{ list.list_noncash(noncash_advice,selNonCash) }}
+    {% endif %}
 
-{% if noncash_user %}
+    {% if noncash_user %}
     {{ list.list_noncash_user(noncash_user,projID,ucID,selNonCash) }}
-{% endif %}
-
+    {% endif %}
 </form>
 
 <div class="row my-5">

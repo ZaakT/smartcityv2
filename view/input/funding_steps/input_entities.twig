@@ -20,10 +20,8 @@
 </div>
 
 <form action="?A=funding&amp;A2=entities_inputed" method="post" onsubmit="return checkInputEntities() && checkInputEntities2();">
-{% if entities1 %}
+{% if listSel %}
 {{table.input_entities(FS_cat,FS,entities,listSel,funding_target)}}
-{% endif %}
-{% if entities2 %}
 {{table.input_entities2(FS_cat,FS,entities,listSel,funding_target)}}
 {% endif %}
 <div class="row m-3 text-center text-dark">

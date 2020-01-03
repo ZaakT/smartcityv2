@@ -12,7 +12,6 @@ function dbConnect()
 }
 
 
-
 // ---------------------------------------- USERS ----------------------------------------
 
 function getUserCity($idUser){
@@ -162,7 +161,7 @@ function getListSelMeas($ucmID){
     $req->execute(array($ucmID));
     $list = [];
     while ($row = $req->fetch()){
-        array_push($list,$row['id_meas']);
+        array_push($list,intval($row['id_meas']));
     }
     return $list;
 }
@@ -351,10 +350,10 @@ function getUC($list_measID){
     foreach ($list_measID as $measID) {
         $req->execute(array($measID));
         while ($row = $req->fetch()){
-            array_push($list,$row);
+            $uc = [intval($row['id']),$row['name'],'id'=>intval($row['id']),'name'=>$row['name']];
+            array_push($list,$uc);
         }
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -585,19 +584,37 @@ function update_ModifDate_proj($projID){
 
 function getListUCs(){
     $db = dbConnect();
-    $req = $db->query('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name
+    $req = $db->query('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name, id_cat, use_case_cat.name
                         FROM use_case
                         INNER JOIN measure
-                        WHERE use_case.id_meas = measure.id
-                        ORDER BY measure.name,use_case.name');
+                            INNER JOIN use_case_cat
+                                WHERE use_case.id_meas = measure.id
+                                and use_case.id_cat = use_case_cat.id
+                        ORDER BY measure.name,use_case_cat.name,use_case.name');
     $list = [];
     while ($row = $req->fetch()){
-        $id_uc = $row[0];
+        $id_uc = intval($row[0]);
         $name = $row[1];
         $description = $row[2];
-        $id_meas = $row[3];
+        $id_meas = intval($row[3]);
         $name_meas = $row[4];
-        $list[$id_uc] = ["name"=>$name,"description"=>$description,"id_meas"=>$id_meas,"name_meas"=>$name_meas];
+        $id_cat = intval($row[5]);
+        $name_cat = $row[6];
+        $list[$id_uc] = ["name"=>$name,"description"=>$description,"id_meas"=>$id_meas,"name_meas"=>$name_meas,"id_cat"=>$id_cat,"name_cat"=>$name_cat];
+    }
+    return $list;
+}
+function getListUCsCat(){
+    $db = dbConnect();
+    $req = $db->query('SELECT id, name, description
+                        FROM use_case_cat
+                        ORDER BY name');
+    $list = [];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $list[$id] = ["name"=>$name,"description"=>$description];
     }
     return $list;
 }
@@ -628,10 +645,10 @@ function getListSelScope($projID){
         $list[$id_meas] = [];
     }
     //var_dump($list);
-    $req2 = $db->prepare("SELECT id_uc,use_case.id_meas
+    $req2 = $db->prepare("SELECT proj_sel_usecase.id_uc,use_case.id_meas
                             FROM proj_sel_usecase
                             INNER JOIN use_case
-                            WHERE (id_proj = ?) AND (use_case.id = id_uc)");
+                            WHERE (id_proj = ?) AND (use_case.id = proj_sel_usecase.id_uc)");
     $req2->execute(array($projID));
     while ($row = $req2->fetch()){
         $id_uc = intval($row['id_uc']);
@@ -1135,7 +1152,6 @@ function getListCapexUser($projID,$ucID){
     }
     //var_dump($list);
     return $list;
-
 }
 
 function getListSelCapex($projID,$ucID){
@@ -1143,7 +1159,7 @@ function getListSelCapex($projID,$ucID){
     $req = $db->prepare("SELECT id_item,unit_cost,volume,period
                             FROM input_capex
                             INNER JOIN capex_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = capex_item.id
+                                WHERE  input_capex.id_uc = ? and id_proj = ? and id_item = capex_item.id
                             ORDER BY capex_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1244,7 +1260,7 @@ function getRatioCompoCapex($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -1383,7 +1399,7 @@ function getListSelImplem($projID,$ucID){
     $req = $db->prepare("SELECT id_item,unit_cost,volume
                             FROM input_implem
                             INNER JOIN implem_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = implem_item.id
+                                WHERE  input_implem.id_uc = ? and id_proj = ? and id_item = implem_item.id
                             ORDER BY implem_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1465,7 +1481,7 @@ function getRatioCompoImplem($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -1582,7 +1598,7 @@ function getListSelOpex($projID,$ucID){
     $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost
                             FROM input_opex
                             INNER JOIN opex_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = opex_item.id
+                                WHERE  input_opex.id_uc = ? and id_proj = ? and id_item = opex_item.id
                             ORDER BY opex_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1625,6 +1641,7 @@ function insertOpexUser($projID,$ucID,$opex_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
+    var_dump($projID,$ucID,$opex_data);
     $req = $db->prepare('CALL add_opex(?,?,?,?);');
     $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID));
     return $ret;
@@ -1666,7 +1683,7 @@ function getRatioCompoOpex($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -1785,7 +1802,7 @@ function getListSelRevenues($projID,$ucID){
     $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost
                             FROM input_revenues
                             INNER JOIN revenues_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = revenues_item.id
+                                WHERE  input_revenues.id_uc = ? and id_proj = ? and id_item = revenues_item.id
                             ORDER BY revenues_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1869,7 +1886,7 @@ function getRatioCompoRevenues($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -2000,7 +2017,7 @@ function getListSelCashReleasing($projID,$ucID){
     $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
                             FROM input_cashreleasing
                             INNER JOIN cashreleasing_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = cashreleasing_item.id
+                                WHERE  input_cashreleasing.id_uc = ? and id_proj = ? and id_item = cashreleasing_item.id
                             ORDER BY cashreleasing_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -2087,7 +2104,7 @@ function getRatioCompoCashReleasing($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -2215,7 +2232,7 @@ function getListSelWiderCash($projID,$ucID){
     $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
                             FROM input_widercash
                             INNER JOIN widercash_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = widercash_item.id
+                                WHERE  input_widercash.id_uc = ? and id_proj = ? and id_item = widercash_item.id
                             ORDER BY widercash_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -2302,7 +2319,7 @@ function getRatioCompoWiderCash($list_item,$compoID){
     foreach ($list_item as $id_item) {
         $req->execute(array($compoID,$id_item));
         $res = $req->fetch();
-        $val = $res ? intval($res['val']) : -1;
+        $val = $res ? floatval($res['val']) : -1;
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['val'=>$val];
         } else {
@@ -2423,7 +2440,7 @@ function getListSelNonCash($projID,$ucID){
     $req = $db->prepare("SELECT id_item,expected_impact,probability
                             FROM input_noncash
                             INNER JOIN noncash_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = noncash_item.id
+                                WHERE  input_noncash.id_uc = ? and id_proj = ? and id_item = noncash_item.id
                             ORDER BY noncash_item.name
                             ");
     $req->execute(array($ucID,$projID));
@@ -2602,7 +2619,7 @@ function getListSelRisks($projID,$ucID){
     $req = $db->prepare("SELECT id_item,expected_impact,probability
                             FROM input_risk
                             INNER JOIN risk_item
-                                WHERE  id_uc = ? and id_proj = ? and id_item = risk_item.id
+                                WHERE  input_risk.id_uc = ? and id_proj = ? and id_item = risk_item.id
                             ORDER BY risk_item.name
                             ");
     $req->execute(array($ucID,$projID));

@@ -166,8 +166,8 @@ try{
                                 array_push($list_critID,$critID);
                             }
                         }
-                        var_dump("list_critID :");
-                        var_dump($list_critID);
+                        //var_dump("list_critID :");
+                        //var_dump($list_critID);
                         criteria_selected($list_critID);
                     }
                     // --- GEOGRAPHY ---
@@ -194,7 +194,7 @@ try{
                                 array_push($list_idDLT,$idDLT);
                             }
                         }
-                        var_dump($list_idDLT);
+                        //var_dump($list_idDLT);
                         geo_selected($list_idDLT);
                     }
                     // --- USE CASES ---
@@ -312,7 +312,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            var_dump($projID);
+                            //var_dump($projID);
                             header('Location: ?A=project_scoping&A2=scope&projID='.$projID);
                         }
                     }
@@ -435,7 +435,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            var_dump($projID);
+                            //var_dump($projID);
                             header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$projID);
                         }
                     // --- USE CASES ---
@@ -1410,7 +1410,7 @@ try{
                         if(isset($_POST['radio_scen'])){
                             $scenID = intval($_POST['radio_scen']);
                             $_SESSION['scenID']=$scenID;
-                            var_dump($scenID);
+                            //var_dump($scenID);
                             header('Location: ?A=funding&A2=work_cap_req&scenID='.$scenID);
                         }
                     } elseif($_GET['A2']=="create_scen"){
@@ -1502,7 +1502,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            var_dump($projID);
+                            //var_dump($projID);
                             header('Location: ?A=dashboards&A2=cost_benefits_uc&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="cost_benefits_uc"){

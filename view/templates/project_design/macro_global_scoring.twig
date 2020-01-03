@@ -45,13 +45,13 @@
                 <tr scope="row">
                     <td scope="col" style="background:{{ color[critCat[0]-1] }};">{{critCat[1]}}</td>
                     <td scope="col">{{repart_selCrit[critCat[0]]}}/{{repart_crit[critCat[0]]}}</td>
-                    <td scope="col">{{100*nSel/nTot}}%</td>
+                    <td scope="col">{{(100*nSel/nTot)|number_format(2,'.',',')}}%</td>
                 </tr>
                 {% endfor %}
                 <tr scope="row">
                     <td scope="col"></td>
                     <td scope="col">{{sumSel}}/{{sumTot}}</td>
-                    <td scope="col">{{(100*sumSel/sumTot)|number_format(0)}}%</td>
+                    <td scope="col">{{(100*sumSel/sumTot)|number_format(2,'.',',')}}%</td>
                 </tr>
             </td>
         </table>
@@ -75,7 +75,7 @@
                 <tr scope="row">
                     <td scope="col" class="bg-dark text-light">Global Scores</td>
                     {% for uc in sel_ucs %}
-                    <td colspan=1 rowspan=1 scope="col">{{globalScores[uc[0]]}}</td>
+                    <td colspan=1 rowspan=1 scope="col">{{globalScores[uc[0]]|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
             </tbody>

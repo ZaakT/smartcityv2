@@ -34,8 +34,6 @@ function cost_benefits_uc($twig,$is_connected,$projID=0){
             $scope = getListSelScope($projID);
             $list_zones = getListZones();
             $repart_zones = sort_zones($list_zones);
-            //var_dump($list_zones);
-            //var_dump($repart_zones);
             $listSelZones = getListSelZones($projID);
             //var_dump($list_ucs);
             echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'zones'=>$repart_zones,'list_sel'=>$listSelZones));
@@ -264,7 +262,7 @@ function createProjectDates($startdate,$enddate){
 
 function getRepartPercImplem($compo_dates,$proj_dates){
     $list = [];
-
+    //var_dump($proj_dates);
     $startdate_proj = explode('/',$proj_dates[0]);
     $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
 
@@ -1679,7 +1677,6 @@ function financing_out_2($twig,$is_connected,$projID,$post=[]){
                 $scen = getScenByID($scenID);
                 $list_FS = getListFundingSources();
                 $list_selFS = getListSelFS($scenID);
-
                 $list_selLB = getListLoansAndBonds($scenID);
                 $list_selOthers = getListOthers($scenID);
                 $list_selEntities = getEntities($list_selLB,$list_selOthers);
@@ -1687,7 +1684,7 @@ function financing_out_2($twig,$is_connected,$projID,$post=[]){
                 $list_FS_noentity = getFStoInclude($list_selEntities,$list_selFS,$list_FS);
                 $list_FS_noentity_LB = $list_FS_noentity[0];
                 $list_FS_noentity_others = $list_FS_noentity[1];
-                
+                //var_dump($list_selLB,$list_FS_noentity_LB);
                 $datesLB = getDatesLB($list_selLB,$list_FS_noentity_LB);
                 $years_LB = array_merge(['All Years'],$datesLB[3]);
                 $funding_target = getFundingTarget($scenID);
@@ -2447,7 +2444,8 @@ function project_dashboard($twig,$is_connected,$projID=0){
                         $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     } else {
-                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth_new = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot_new = calcRevenuesTot($revenuesPerMonth,$projectYears);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     }

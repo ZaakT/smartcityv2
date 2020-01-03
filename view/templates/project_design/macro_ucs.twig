@@ -1,7 +1,8 @@
-{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_selCrit,sel_DLTs,guidCrit,pertDLT,list_sel) %}
+{% macro list_ucs(ucs,sel_critCat,sel_crit,repart_selCrit,sel_DLTs,guidCrit,pertDLT,list_sel,ucs_all,id_meas,meas,cat) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
 <div class="row">
     <div class="col mt-5 mx-5 list-table text-center ucs-table">
+        <h3>{{meas[id_meas]['name']}}</h3>
         <table id="table_uc" class='table table-sm table-bordered table-responsive-lg align-middle'>
             <thead class="thead-dark">
                 <tr scope="row">
@@ -24,35 +25,46 @@
                 </tr>
             </thead>
             <tbody>
-                {% for uc in ucs %}
-                <tr id="uc_{{ uc[0] }}" scope="row" >
-                    {% if list_sel and (uc[0] in list_sel) %}
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='{{ uc[0] }}' name="{{ uc[0] }}" checked></td>
-                    {% else %}
-                    <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='{{ uc[0] }}' name="{{ uc[0] }}"></td>
+                {% for id_cat,cat_item in cat %}
+                    {% set test = false %}
+                    {% for uc in ucs if ucs_all[uc['id']]['id_cat'] == id_cat and ucs_all[uc['id']]['id_meas'] == id_meas and test == false %}
+                        {% set test = true %}
+                    {% endfor %}
+                    {% if test %}
+                    <tr class="UC_cat">
+                        <th colspan=5>{{cat_item['name']}}</th>
+                    </tr>
                     {% endif %}
-                    <td scope="col"><label for="check">{{ uc[1] }}</label></td>
+                    {% for uc in ucs if ucs_all[uc[0]]['id_meas'] == id_meas and ucs_all[uc[0]]['id_cat'] == id_cat%}
+                        <tr id="uc_{{ uc[0] }}" scope="row" >
+                            {% if list_sel and (uc[0] in list_sel) %}
+                            <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='{{ uc[0] }}' name="{{ uc[0] }}" checked></td>
+                            {% else %}
+                            <td class="check-col" scope="col"><input onclick="countChecked_uc(form_uc);" type="checkbox" id='{{ uc[0] }}' name="{{ uc[0] }}"></td>
+                            {% endif %}
+                            <td scope="col"><label for="check">{{ uc[1] }}</label></td>
 
-                    {% set sum_crit = 0 %}
-                    {% for crit in sel_crit %}
-                    {% set sum_crit = sum_crit + guidCrit[uc[0]][crit[0]][0] %}
-                    <td id="pertCrit_{{uc[0]}}_{{crit[0]}}" class="more_Crit" scope="col">{{ guidCrit[uc[0]][crit[0]][0] }}</td>
-                    {% endfor %}
-                    {% set av_crit = (sum_crit/(sel_crit|length))|round %}
-                    <td scope="col">{{ av_crit }}</td>
+                            {% set sum_crit = 0 %}
+                            {% for crit in sel_crit %}
+                            {% set sum_crit = sum_crit + guidCrit[uc[0]][crit[0]][0] %}
+                            <td id="pertCrit_{{uc[0]}}_{{crit[0]}}" class="more_Crit" scope="col">{{ guidCrit[uc[0]][crit[0]][0] }}</td>
+                            {% endfor %}
+                            {% set av_crit = (sum_crit/(sel_crit|length))|round %}
+                            <td scope="col">{{ av_crit }}</td>
 
-                    {% set sum_DLT = 0 %}
-                    {% for DLT in sel_DLTs %}
-                    {% set sum_DLT = sum_DLT + pertDLT[uc[0]][DLT[0]] %}
-                    <td id="pertDLT_{{uc[0]}}_{{DLT[0]}}" class="more_DLT" scope="col">{{ pertDLT[uc[0]][DLT[0]] }}</td>
+                            {% set sum_DLT = 0 %}
+                            {% for DLT in sel_DLTs %}
+                            {% set sum_DLT = sum_DLT + pertDLT[uc[0]][DLT[0]] %}
+                            <td id="pertDLT_{{uc[0]}}_{{DLT[0]}}" class="more_DLT" scope="col">{{ pertDLT[uc[0]][DLT[0]] }}</td>
+                            {% endfor %}
+                            {% set av_DLT = (sum_DLT/(sel_DLTs|length))|round %}
+                            <td scope="col">{{ av_DLT }}</td>
+                            {% set sum_tot = (sum_crit + sum_DLT) %}
+                            {% set nb_tot = ((sel_crit|length)+(sel_DLTs|length)) %}
+                            <td scope="col">{{ (sum_tot/nb_tot)|round }}</td>
+                            <span class="infos_pert" hidden>{{uc[0]}}-{{sum_tot}}-{{nb_tot}}</span>
+                        </tr>
                     {% endfor %}
-                    {% set av_DLT = (sum_DLT/(sel_DLTs|length))|round %}
-                    <td scope="col">{{ av_DLT }}</td>
-                    {% set sum_tot = (sum_crit + sum_DLT) %}
-                    {% set nb_tot = ((sel_crit|length)+(sel_DLTs|length)) %}
-                    <td scope="col">{{ (sum_tot/nb_tot)|round }}</td>
-                    <span class="infos_pert" hidden>{{uc[0]}}-{{sum_tot}}-{{nb_tot}}</span>
-                </tr>
                 {% endfor %}
             </tbody>
         </table>
