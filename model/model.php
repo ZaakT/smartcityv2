@@ -85,6 +85,11 @@ function modifyUser($user){
     return $req->execute(array($user[1],$user[2],$user[3],$user[0]));
 }
 
+function deleteUser($userID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM user WHERE id = ?');
+    return $req->execute(array($userID));
+}
 
 
 
@@ -153,6 +158,39 @@ function getListMeasures(){
     return $list;
 }
 
+function getMeasure($measName){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id, name, description
+                            FROM measure
+                            WHERE name = ?');
+    $req->execute(array($measName));
+    $res =  $req->fetch();
+    
+    if(!empty($res)){
+        $name = $res['name'];
+        $description = $res['description'];
+        $measID = intval($res['id']);
+        
+        $measure = [$measID,$name,$description];
+    } else {
+        $measure = [];
+    }
+    return $measure;
+}
+
+
+function insertMeasure($measure){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO measure (name,description) VALUES (?,?)');
+    return $req->execute(array($measure[0],$measure[1]));
+}
+
+function deleteMeasure($measID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM measure WHERE id = ?');
+    return $req->execute(array($measID));
+}
+
 function getListSelMeas($ucmID){
     $db = dbConnect();
     $req = $db->prepare('SELECT id_meas
@@ -183,6 +221,18 @@ function deleteSelMeas($ucmID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM ucm_sel_measure WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
+}
+
+function getNbUCs($listMeas){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT count(id) as nbUC FROM use_case WHERE id_meas = ?');
+    $list = [];
+    foreach ($listMeas as $measID => $meas){
+        $req->execute(array($measID));
+        $res = $req->fetch();
+        $list[$measID] = intval($res['nbUC']);
+    }
+    return $list;
 }
 
 

@@ -52,12 +52,48 @@ try{
             elseif($_GET['A']=='admin'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='manage_db'){
-                        manage_db($twig,$is_connected); 
-                    } elseif($_GET['A2']=='manage_users'){
-                        manage_users($twig,$is_connected); 
-                    } elseif($_GET['A2']=='create_user'){
-                        create_user($twig,$is_connected,$_POST);
-                    } else {
+                        if(isset($_GET['A3'])){
+                            if($_GET['A3']=='manage_users'){
+                                manage_users($twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_users'){
+                                manage_users($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_user'){
+                                create_user($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_user"){
+                                if(isset($_GET['id'])){
+                                    delete_user($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_users');
+                                }
+
+                            } else if($_GET['A3']=='manage_measures'){
+                                manage_measures($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_measure'){
+                                create_measure($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_measure"){
+                                if(isset($_GET['id'])){
+                                    delete_measure($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_measures');
+                                }
+
+                            } else if($_GET['A3']=='manage_usecases'){
+                                manage_usecases($twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_criteria'){
+                                manage_criteria($twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_dlt'){
+                                manage_dlt($twig,$is_connected); 
+
+
+
+
+                            } else {
+                                header('Location: ?A=admin&A2=manage_db');
+                            }
+                        } else {
+                            manage_db($twig,$is_connected); 
+                        }
+                    }else {
                         header('Location: ?A=admin');
                     }
                 } else {

@@ -1,0 +1,15 @@
+{% extends '/others/admin_menu/manage_db.twig' %}
+
+{% block title %}Manage Measures{% endblock %}
+
+{% import "/templates/admin/macro_measures.twig" as list %}
+{% import "/templates/admin/modal_measures.twig" as modal %}
+
+
+{% block content %}
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewMeasureModal" role="button">Create a new measure</button>
+</div>
+{{ list.list_measures(measures,isTaken,listNbUCs) }}
+{{ modal.create_measure() }}
+{% endblock %}

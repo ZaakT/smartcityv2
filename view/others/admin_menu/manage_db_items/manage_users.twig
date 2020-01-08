@@ -2,7 +2,8 @@
 
 {% block title %}Manage Users{% endblock %}
 
-{% import "/templates/admin/list_users.twig" as list %}
+{% import "/templates/admin/macro_users.twig" as list %}
+{% import "/templates/admin/modal_users.twig" as modal %}
 
 
 {% block content %}
@@ -12,4 +13,5 @@
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new user</button>
 </div>
 {{ list.list_users(users,isTaken) }}
+{{ modal.create_user() }}
 {% endblock %}
