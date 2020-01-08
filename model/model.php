@@ -223,7 +223,7 @@ function deleteSelMeas($ucmID){
     return $req->execute(array($ucmID));
 }
 
-function getNbUCs($listMeas){
+function getNbUCsMeas($listMeas){
     $db = dbConnect();
     $req = $db->prepare('SELECT count(id) as nbUC FROM use_case WHERE id_meas = ?');
     $list = [];
@@ -688,6 +688,39 @@ function getListUCsCat(){
         $list[$id] = ["name"=>$name,"description"=>$description];
     }
     return $list;
+}
+
+function getUCsCat($nameCat){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT *
+                        FROM use_case_cat
+                        WHERE name = ?');
+    $req->execute(array($nameCat));
+    return $req->fetch();
+}
+
+function getNbUCsCat($listCat){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT count(id) as nbUC FROM use_case WHERE id_cat = ?');
+    $list = [];
+    foreach ($listCat as $catID => $cat){
+        $req->execute(array($catID));
+        $res = $req->fetch();
+        $list[$catID] = intval($res['nbUC']);
+    }
+    return $list;
+}
+
+function insertUCCat($category){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO use_case_cat (name,description) VALUES (?,?)');
+    return $req->execute(array($category[0],$category[1]));
+}
+
+function deleteUCCat($measID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM use_case_cat WHERE id = ?');
+    return $req->execute(array($measID));
 }
 
 function updateScoping($projID){

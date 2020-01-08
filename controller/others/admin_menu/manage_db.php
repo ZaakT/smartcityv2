@@ -45,7 +45,7 @@ function delete_user($userID){
 function manage_measures($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_measures = getListMeasures();
-    $listNbUCs = getNbUCs($list_measures);
+    $listNbUCs = getNbUCsMeas($list_measures);
     //var_dump($listNbUCs);
     echo $twig->render('/others/admin_menu/manage_db_items/manage_measures.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'measures'=>$list_measures, 'isTaken'=>$isTaken,'listNbUCs'=>$listNbUCs)); 
 }
@@ -74,7 +74,26 @@ function delete_measure($measureID){
 function manage_uc_cat($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_cat = getListUCsCat();
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_uc_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'cat'=>$list_cat)); 
+    $listNbUCs = getNbUCsCat($list_cat);
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_uc_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'cat'=>$list_cat,'listNbUCs'=>$listNbUCs)); 
+}
+
+function create_category($twig,$is_connected,$post){
+    $name = $post['name'];
+    $description = $post['description'];
+
+    $categoryInfos = [$name,$description];
+    if(!empty(getUCsCat($name))){
+        manage_uc_cat($twig,$is_connected,true);
+    } else {
+        insertUCCat($categoryInfos);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
+    }
+}
+
+function delete_category($categoryID){
+    deleteUCCat(intval($categoryID));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
 }
 
 

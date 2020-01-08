@@ -79,6 +79,14 @@ try{
 
                             } else if($_GET['A3']=='manage_uc_cat'){
                                 manage_uc_cat($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_category'){
+                                create_category($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_category"){
+                                if(isset($_GET['id'])){
+                                    delete_category($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
+                                }
 
                             } else if($_GET['A3']=='manage_usecases'){
                                 manage_usecases($twig,$is_connected);
