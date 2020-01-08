@@ -69,20 +69,64 @@ function delete_measure($measureID){
 }
 
 
-//------------------------------------- USE CASES -------------------------------------
+//---------------------------------- USE CASES CAT. ----------------------------------
 
+function manage_uc_cat($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_cat = getListUCsCat();
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_uc_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'cat'=>$list_cat)); 
+}
+
+
+//------------------------------------ USE CASES ------------------------------------
 
 function manage_usecases($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_usecases = getListUCs();
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_usecases.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'usecases'=>$list_usecases, 'isTaken'=>$isTaken)); 
+    $list_measures = getListMeasures();
+    $list_cat = getListUCsCat();
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_usecases.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'usecases'=>$list_usecases,'isTaken'=>$isTaken,'measures'=>$list_measures,'cat'=>$list_cat)); 
 }
+
+function create_usecase($twig,$is_connected,$post){
+    $name = $post['name'];
+    $description = $post['description'];
+    $measID = intval($post['related_measure']);
+    $catID = intval($post['related_category']);
+    $usecaseInfos = [$name,$description,$measID,$catID];
+    var_dump($usecaseInfos);
+    if(!empty(getUCByName($name))){
+        manage_usecases($twig,$is_connected,true);
+    } else {
+        insertUseCase($usecaseInfos);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_usecases');
+    }
+}
+
+function delete_usecase($usecaseID){
+    deleteUseCase(intval($usecaseID));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_usecases');
+}
+
+//----------------------------------- CRITERIA CAT. -----------------------------------
+
+function manage_crit_cat($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_critCat = getListCritCat();
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_crit_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'critCat'=>$list_critCat)); 
+}
+
+
+//------------------------------------- CRITERIA -------------------------------------
 
 function manage_criteria($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_criteria = getListCrit();
     echo $twig->render('/others/admin_menu/manage_db_items/manage_criteria.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'criteria'=>$list_criteria, 'isTaken'=>$isTaken)); 
 }
+
+
+//---------------------------------------- DLT ----------------------------------------
 
 function manage_DLT($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);

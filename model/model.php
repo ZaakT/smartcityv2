@@ -414,6 +414,27 @@ function getUCByID($ucID){
     return $req->fetch();
 }
 
+function getUCByName($ucName){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM use_case WHERE name = ?');
+    $req->execute(array($ucName));
+    return $req->fetch();
+}
+
+function insertUseCase($usecase){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO use_case
+                            (name,description,id_meas,id_cat)
+                            VALUES (?,?,?,?)');
+    return $req->execute(array($usecase[0],$usecase[1],$usecase[2],$usecase[3]));
+}
+
+function deleteUseCase($ucID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM use_case WHERE id = ?');
+    return $req->execute(array($ucID));
+}
+
 function getListSelUC($ucmID){
     $db = dbConnect();
     $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, measure.name
