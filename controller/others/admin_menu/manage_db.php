@@ -188,5 +188,23 @@ function delete_crit($critID){
 function manage_DLT($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_DLT = getListDLTs();
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_dlt.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'DLT'=>$list_DLT, 'isTaken'=>$isTaken)); 
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_dlt.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'dlt'=>$list_DLT, 'isTaken'=>$isTaken)); 
+}
+
+function create_dlt($twig,$is_connected,$post){
+    $name = $post['name'];
+    $description = $post['description'];
+    $infosDLT = [$name,$description];
+    //var_dump($infosDLT);
+    if(!empty(getDLTByName($name))){
+        manage_dlt($twig,$is_connected,true);
+    } else {
+        insertDLT($infosDLT);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
+    }
+}
+
+function delete_dlt($idDLT){
+    deleteDLT(intval($idDLT));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
 }

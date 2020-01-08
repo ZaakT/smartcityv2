@@ -124,6 +124,14 @@ try{
 
                             } else if($_GET['A3']=='manage_dlt'){
                                 manage_dlt($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_dlt'){
+                                create_dlt($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_dlt"){
+                                if(isset($_GET['id'])){
+                                    delete_dlt($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
+                                }
 
 
 

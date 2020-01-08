@@ -447,6 +447,25 @@ function deleteSelDLTs($ucmID){
     return $req->execute(array($ucmID));
 }
 
+function getDLTByName($nameDLT){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM dlt WHERE name = ?');
+    $req->execute(array($nameDLT));
+    return $req->fetch();
+}
+
+function insertDLT($infosDLT){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO dlt (name,description) VALUES (?,?)');
+    return $req->execute(array($infosDLT[0],$infosDLT[1]));
+}
+
+function deleteDLT($idDLT){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM dlt WHERE id = ?');
+    return $req->execute(array($idDLT));
+}
+
 
 
 // ---------------------------------------- USE CASES ----------------------------------------
