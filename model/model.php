@@ -248,14 +248,18 @@ function getCatByCrit($idCrit){
 
 function getListCrit(){
     $db = dbConnect();
-    $req = $db->query('SELECT crit.id, crit.name, crit.description, critCat.id
+    $req = $db->query('SELECT crit.id, crit.name, crit.description, critCat.id as id_cat
                     FROM crit
                     INNER JOIN critCat
                     WHERE crit.id_cat = critCat.id
                     ORDER BY name');
     $list = [];
     while ($row = $req->fetch()){
-        array_push($list,$row);
+        $id = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $id_cat = intval($row['id_cat']);
+        array_push($list,['id'=>$id,'description'=>$description,'name'=>$name,'id_cat'=>$id_cat]);
     }
     return $list;
 }
@@ -340,6 +344,60 @@ function deleteSelCritCat($ucmID){
     return $req->execute(array($ucmID));
 }
 
+function getNbsCritCat($listCat){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT count(id) as nbCrit FROM crit WHERE id_cat = ?');
+    $list = [];
+    foreach ($listCat as $cat){
+        $req->execute(array($cat['id']));
+        $res = $req->fetch();
+        $list[$cat['id']] = intval($res['nbCrit']);
+    }
+    return $list;
+}
+
+function getCritCat($nameCat){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT *
+                        FROM critCat
+                        WHERE name = ?');
+    $req->execute(array($nameCat));
+    return $req->fetch();
+}
+
+function insertCritCat($category){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO critCat (name) VALUES (?)');
+    return $req->execute(array($category[0]));
+}
+
+function deleteCritCat($catID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM critCat WHERE id = ?');
+    return $req->execute(array($catID));
+}
+
+function getCritByNameAndCat($critName,$catID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM crit WHERE name = ? and id_cat = ?');
+    $req->execute(array($critName,$catID));
+    return $req->fetch();
+}
+
+function insertCrit($crit){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO crit
+                            (name,description,id_cat)
+                            VALUES (?,?,?)');
+    return $req->execute(array($crit[0],$crit[1],$crit[2]));
+}
+
+function deleteCrit($critID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM crit WHERE id = ?');
+    return $req->execute(array($critID));
+}
+
 
 
 // ---------------------------------------- GEOGRAPHY ----------------------------------------
@@ -414,10 +472,10 @@ function getUCByID($ucID){
     return $req->fetch();
 }
 
-function getUCByName($ucName){
+function getUCByNameAndMeasAndCat($ucName,$measID,$catID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT * FROM use_case WHERE name = ?');
-    $req->execute(array($ucName));
+    $req = $db->prepare('SELECT * FROM use_case WHERE name = ? and id_meas = ? and id_cat = ?');
+    $req->execute(array($ucName,$measID,$catID));
     return $req->fetch();
 }
 
@@ -717,10 +775,10 @@ function insertUCCat($category){
     return $req->execute(array($category[0],$category[1]));
 }
 
-function deleteUCCat($measID){
+function deleteUCCat($catID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM use_case_cat WHERE id = ?');
-    return $req->execute(array($measID));
+    return $req->execute(array($catID));
 }
 
 function updateScoping($projID){

@@ -66,24 +66,24 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_users');
                                 }
 
-                            } else if($_GET['A3']=='manage_usecases'){
-                                manage_usecases($twig,$is_connected); 
-                            } elseif($_GET['A3']=='create_usecase'){
-                                create_usecase($twig,$is_connected,$_POST);
-                            } elseif($_GET['A3']=="delete_usecase"){
+                            } else if($_GET['A3']=='manage_measures'){
+                                manage_measures($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_measure'){
+                                create_measure($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_measure"){
                                 if(isset($_GET['id'])){
-                                    delete_usecase($_GET['id']);
+                                    delete_measure($_GET['id']);
                                 } else {
-                                    header('Location: ?A=admin&A2=manage_db&A3=manage_usecases');
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_measures');
                                 }
 
                             } else if($_GET['A3']=='manage_uc_cat'){
                                 manage_uc_cat($twig,$is_connected); 
-                            } elseif($_GET['A3']=='create_category'){
-                                create_category($twig,$is_connected,$_POST);
-                            } elseif($_GET['A3']=="delete_category"){
+                            } elseif($_GET['A3']=='create_uc_category'){
+                                create_uc_category($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_uc_category"){
                                 if(isset($_GET['id'])){
-                                    delete_category($_GET['id']);
+                                    delete_uc_category($_GET['id']);
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
                                 }
@@ -102,9 +102,25 @@ try{
 
                             } else if($_GET['A3']=='manage_crit_cat'){
                                 manage_crit_cat($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_crit_category'){
+                                create_crit_category($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_crit_category"){
+                                if(isset($_GET['id'])){
+                                    delete_crit_category($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_crit_cat');
+                                }
 
                             } else if($_GET['A3']=='manage_criteria'){
                                 manage_criteria($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_crit'){
+                                create_crit($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=="delete_crit"){
+                                if(isset($_GET['id'])){
+                                    delete_crit($_GET['id']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_criteria');
+                                }
 
                             } else if($_GET['A3']=='manage_dlt'){
                                 manage_dlt($twig,$is_connected); 
@@ -173,25 +189,25 @@ try{
                             $ucmID = intval($_POST['radio_ucm']);
                             $_SESSION['ucmID']=$ucmID;
                             //var_dump($ucmID);
-                            header('Location: ?A=project_design&A2=usecases&ucmID='.$ucmID);
+                            header('Location: ?A=project_design&A2=measures&ucmID='.$ucmID);
                         }
                     }
-                    // --- USECASES ---
-                    elseif($_GET['A2']=="usecases"){
+                    // --- MEASURES ---
+                    elseif($_GET['A2']=="measures"){
                         if(isset($_GET['ucmID'])){
                             if($_GET['ucmID']!=0){
-                                usecases($twig,$is_connected,$_GET['ucmID']);
+                                measures($twig,$is_connected,$_GET['ucmID']);
                             }
                             else {
-                                header('Location: ?A=project_design&A2=usecases');
+                                header('Location: ?A=project_design&A2=measures');
                             }
                         }
                         else {
-                            usecases($twig,$is_connected);
+                            measures($twig,$is_connected);
                         }
                     }
-                    // --- SELECTED USECASES ---
-                    elseif ($_GET['A2']=="usecases_selected") {
+                    // --- SELECTED MEASURE ---
+                    elseif ($_GET['A2']=="measures_selected") {
                         $list_measID = [];
                         foreach ($_POST as $key => $value) {
                             if(isset($key)){
@@ -201,7 +217,7 @@ try{
                             }
                         }
                         //var_dump($list_measID);
-                        usecases_selected($list_measID);
+                        measures_selected($list_measID);
                     }
                     // --- CRITERIA ---
                     elseif($_GET['A2']=="criteria"){
@@ -227,8 +243,8 @@ try{
                                 array_push($list_critID,$critID);
                             }
                         }
-                        //var_dump("list_critID :");
-                        //var_dump($list_critID);
+                        var_dump("list_critID :");
+                        var_dump($list_critID);
                         criteria_selected($list_critID);
                     }
                     // --- GEOGRAPHY ---

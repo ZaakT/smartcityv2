@@ -34,10 +34,12 @@
 <div class ="row">
     <form class="col container-fluid" name="form_rate" action="?A=project_design&amp;A2=rates_inputed" method="post">
         {% for id_meas in sel_meas %}
-            <div class="row mt-5 text-center" >
-                <h3 class="col">{{meas[id_meas]['name']}}</h3>
-            </div>
-            {{ table.rating_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,rates,repart_ucs,guidCrit,ucs_all,meas,cat,id_meas) }}
+            {% if repart_ucs[id_meas] != 0 %}
+                <div class="row mt-5 text-center" >
+                    <h3 class="col">{{meas[id_meas]['name']}}</h3>
+                </div>
+                {{ table.rating_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,rates,repart_ucs,guidCrit,ucs_all,meas,cat,id_meas) }}
+            {% endif %}
         {% endfor %}
         <div class="row my-0 text-center text-dark">
             <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>

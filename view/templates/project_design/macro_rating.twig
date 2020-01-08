@@ -17,12 +17,14 @@
                 </tr>
                 <tr scope="row">
                     {% for crit in sel_crit %}
-                    <th class="myPopover text-info font-italic"
+                    <th><a class="myPopover text-info font-italic"
                     data-toggle="popover"
+                    tabindex="0" 
                     data-placement="right" title="{{crit[1]}}"
-                    data-trigger="click"
+                    data-trigger="focus"
+                    role = "button"
                     data-html=true
-                    data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit[0]}}.png'/>">Rating Guidance</th>
+                    data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit[0]}}.png'/>">Rating Guidance</a></th>
                     {% endfor %}
                 </tr>
             </thead>

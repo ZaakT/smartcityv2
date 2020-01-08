@@ -6,7 +6,7 @@ CREATE TABLE critCat (
 
 CREATE TABLE crit(
    id INT NOT NULL AUTO_INCREMENT,
-   name VARCHAR(255) NOT NULL UNIQUE,
+   name VARCHAR(255) NOT NULL,
    description TEXT DEFAULT NULL,
    scoring_guidance TEXT,
    id_cat INT NOT NULL,
@@ -129,7 +129,7 @@ CREATE TABLE project(
 
 CREATE TABLE use_case(
    id INT NOT NULL AUTO_INCREMENT,
-   name VARCHAR(255) NOT NULL UNIQUE,
+   name VARCHAR(255) NOT NULL,
    description TEXT DEFAULT NULL,
    id_meas INT NOT NULL,
    id_cat INT NOT NULL,

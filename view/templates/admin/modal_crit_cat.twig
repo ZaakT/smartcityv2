@@ -1,7 +1,7 @@
 {% macro create_category() %}
 <div class="modal fade" id="createNewCategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createCategory-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_uc_category" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+        <form id="createCategory-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_crit_category" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new category informations</h5>
@@ -14,14 +14,6 @@
                         <label for="name" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group row">
-                        <label for="description" class="col-sm-3 col-form-label">Description</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
                         </div>
                     </div>
                 </div>
@@ -51,7 +43,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=admin&amp;A2=manage_db&amp;A3=delete_uc_category&amp;id={{ idCategory }}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A=admin&amp;A2=manage_db&amp;A3=delete_crit_category&amp;id={{ idCategory }}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>

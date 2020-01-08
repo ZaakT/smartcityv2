@@ -25,8 +25,10 @@ function clearTable(id){
 }
 
 
-$('.myPopover').popover();
-
+$('.myPopover').popover({
+    trigger: 'focus'
+  });
+/* 
 $('.myPopover').on('click', function (e) {
     $('.myPopover').not(this).popover('hide');
-});
+}); */

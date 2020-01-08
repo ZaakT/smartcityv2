@@ -10,7 +10,7 @@
 {# <h1>List of users</h1> #}
 {#{% set users = [[1,"Toto","5454545","Yes"],[2,"Tata","fdfd2424","No"]] %}#}
 <div class="row mt-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new user</button>
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new User</button>
 </div>
 {{ list.list_users(users,isTaken) }}
 {{ modal.create_user() }}

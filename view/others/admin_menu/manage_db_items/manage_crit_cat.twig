@@ -1,0 +1,15 @@
+{% extends '/others/admin_menu/manage_db.twig' %}
+
+{% block title %}Manage Criteria Categories{% endblock %}
+
+{% import "/templates/admin/macro_crit_cat.twig" as list %}
+{% import "/templates/admin/modal_crit_cat.twig" as modal %}
+
+
+{% block content %}
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewCategoryModal" role="button">Create a new<br>Criteria Category</button>
+</div>
+{{ list.list_crit_cat(critCat,isTaken,listNbCrit) }}
+{{ modal.create_category() }}
+{% endblock %}

@@ -78,7 +78,7 @@ function manage_uc_cat($twig,$is_connected,$isTaken=false){
     echo $twig->render('/others/admin_menu/manage_db_items/manage_uc_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'cat'=>$list_cat,'listNbUCs'=>$listNbUCs)); 
 }
 
-function create_category($twig,$is_connected,$post){
+function create_uc_category($twig,$is_connected,$post){
     $name = $post['name'];
     $description = $post['description'];
 
@@ -91,7 +91,7 @@ function create_category($twig,$is_connected,$post){
     }
 }
 
-function delete_category($categoryID){
+function delete_uc_category($categoryID){
     deleteUCCat(intval($categoryID));
     header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
 }
@@ -113,8 +113,8 @@ function create_usecase($twig,$is_connected,$post){
     $measID = intval($post['related_measure']);
     $catID = intval($post['related_category']);
     $usecaseInfos = [$name,$description,$measID,$catID];
-    var_dump($usecaseInfos);
-    if(!empty(getUCByName($name))){
+    //var_dump($usecaseInfos);
+    if(!empty(getUCByNameAndMeasAndCat($name,$measID,$catID))){
         manage_usecases($twig,$is_connected,true);
     } else {
         insertUseCase($usecaseInfos);
@@ -132,7 +132,25 @@ function delete_usecase($usecaseID){
 function manage_crit_cat($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_critCat = getListCritCat();
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_crit_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'critCat'=>$list_critCat)); 
+    $listNbCritCat = getNbsCritCat($list_critCat);
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_crit_cat.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'critCat'=>$list_critCat,'listNbCrit'=>$listNbCritCat)); 
+}
+
+function create_crit_category($twig,$is_connected,$post){
+    $name = $post['name'];
+
+    $categoryInfos = [$name];
+    if(!empty(getCritCat($name))){
+        manage_crit_cat($twig,$is_connected,true);
+    } else {
+        insertCritCat($categoryInfos);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_crit_cat');
+    }
+}
+
+function delete_crit_category($categoryID){
+    deleteCritCat(intval($categoryID));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_crit_cat');
 }
 
 
@@ -141,7 +159,27 @@ function manage_crit_cat($twig,$is_connected,$isTaken=false){
 function manage_criteria($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_criteria = getListCrit();
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_criteria.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'criteria'=>$list_criteria, 'isTaken'=>$isTaken)); 
+    $list_cat = getListCritCat();
+    //var_dump($list_cat);
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_criteria.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'username'=>$user[1],'criteria'=>$list_criteria, 'isTaken'=>$isTaken,'cat'=>$list_cat)); 
+}
+
+function create_crit($twig,$is_connected,$post){
+    $name = $post['name'];
+    $description = $post['description'];
+    $catID = intval($post['related_category']);
+    $critInfos = [$name,$description,$catID];
+    if(!empty(getCritByNameAndCat($name,$catID))){
+        manage_criteria($twig,$is_connected,true);
+    } else {
+        insertCrit($critInfos);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_criteria');
+    }
+}
+
+function delete_crit($critID){
+    deleteCrit(intval($critID));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_criteria');
 }
 
 

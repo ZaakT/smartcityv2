@@ -13,14 +13,14 @@
             </thead>
             <tbody>
             {% for crit in criteria %}
-                <tr id = "tr_{{ crit[0] }}" class="critCat_{{ crit[3] }}" style="background:{{ color[crit[3]-1]}};" scope="row">
-                    {% if list_sel and (crit[0] in list_sel) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);" id='{{ crit[0] }}' name="{{ crit[0] }}" checked></td>
+                <tr id = "tr_{{ crit['id'] }}" class="critCat_{{ crit['id_cat'] }}" style="background:{{ color[crit['id_cat']-1]}};" scope="row">
+                    {% if list_sel and (crit['id'] in list_sel) %}
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);" id='{{ crit['id'] }}' name="{{ crit['id'] }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);"   id='{{ crit[0] }}' name="{{ crit[0] }}"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);"   id='{{ crit['id'] }}' name="{{ crit['id'] }}"></td>
                     {% endif %}
-                    <td class="font-weight-bold">{{ crit[1] }}</td>
-                    <td >{{ crit[2] }}</td>
+                    <td class="font-weight-bold">{{ crit['name'] }}</td>
+                    <td >{{ crit['description'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>

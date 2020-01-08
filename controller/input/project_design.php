@@ -327,6 +327,7 @@ function rating($twig,$is_connected,$ucmID=0){
             }
             
             $listInputedRates = getListInputedRates($ucmID);
+
             echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_ucs'=>$list_selUC,'sel_meas'=>$list_selMeas,'repart_ucs'=>$repart_ucs,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'guidCrit'=>$guidCrit,'rates'=>$listInputedRates,'meas'=>$measures,'ucs_all'=>$ucs,'cat'=>$list_cat));
             prereq_ProjectDesign();
         } else {
@@ -347,7 +348,7 @@ function calcRepartUC($list_meas,$list_ucs,$measures){
                 $count++;
             }
         }
-        $res[$meas[0]] = $count;
+        $res[$meas] = $count;
     }
     //var_dump($res);
     return $res;
