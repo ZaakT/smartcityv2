@@ -32,11 +32,11 @@
 {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
 {% if test %}
-{{ list.list_opex_guid(opex_advice,opex_user,selOpex,compo,ratio) }}
+{{ list.list_opex_guid(selDevSym,opex_advice,opex_user,selOpex,compo,ratio) }}
 {% endif %}
-{{ list.list_opex_input(opex_advice,opex_user,selOpex) }}
+{{ list.list_opex_input(selDevSym,opex_advice,opex_user,selOpex) }}
 {{ list.list_opex_input_2(opex_advice,opex_user,selOpex) }}
-{{ list.list_opex_total(opex_advice,opex_user,selOpex) }}
+{{ list.list_opex_total(selDevSym,opex_advice,opex_user,selOpex) }}
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_opex');"></button>
@@ -48,5 +48,11 @@
 {% endif %}
 
 {% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript">setNewDeviseOpex("{{selDevName}}");</script>
+{% endblock %}
+
 
 

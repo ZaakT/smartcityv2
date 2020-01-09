@@ -55,7 +55,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_implem_guid(implem_advice,implem_user,selImplem,compo,ratio) %}
+{% macro list_implem_guid(selDevSym,implem_advice,implem_user,selImplem,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
@@ -64,7 +64,7 @@
                     <th scope="col">Implementation Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Range of the Unit Cost (in £)</th>
+                    <th scope="col">Range of the Unit Cost ( in {{selDevSym}} )</th>
                 </tr>
                 
             </thead>
@@ -90,7 +90,7 @@
 {% endmacro %}
 
 
-{% macro list_implem_input(implem_advice,implem_user,selImplem) %}
+{% macro list_implem_input(selDevSym,implem_advice,implem_user,selImplem) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="implem_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -98,7 +98,7 @@
                 <tr>
                     <th scope="col">Implementation Component</th>
                     <th scope="col">Volume</th>
-                    <th scope="col">Unit Cost (in £)</th>
+                    <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
                 </tr>
                 
             </thead>
@@ -122,14 +122,14 @@
 
 
 
-{% macro list_implem_total(implem_advice,implem_user,selImplem) %}
+{% macro list_implem_total(selDevSym,implem_advice,implem_user,selImplem) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="tot_table_implem" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Implementation Component</th>
-                    <th scope="col">Total Implementation (in £)</th>
+                    <th scope="col">Total Implementation ( in {{selDevSym}} )</th>
                 </tr>
             </thead>
             <tbody>

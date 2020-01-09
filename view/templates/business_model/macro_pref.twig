@@ -1,9 +1,9 @@
-{% macro sel_cap(list) %}
+{% macro sel_cap(list,selDevSym) %}
 <div class="row mt-3 mb-5 text-center">
     <div class="col">
         <select name="invest_cap" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required>
         {% for id,item in list %}
-            <option value={{id}}>£ {{item['name']}}</option>
+            <option value={{id}}>{{selDevSym}}  {{item['name']}}</option>
         {% endfor %}
         </select>
     </div>

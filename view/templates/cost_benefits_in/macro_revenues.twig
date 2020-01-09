@@ -56,7 +56,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_revenues_guid(revenues_advice,revenues_user,selRevenues,compo,ratio) %}
+{% macro list_revenues_guid(selDevSym,revenues_advice,revenues_user,selRevenues,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
@@ -65,7 +65,7 @@
                     <th scope="col">Revenues Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Range of the Unit Revenue (in £)</th>
+                    <th scope="col">Range of the Unit Revenue ( in {{selDevSym}} )</th>
                 </tr>
                 
             </thead>
@@ -90,7 +90,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_revenues_input(revenues_advice,revenues_user,selRevenues) %}
+{% macro list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="revenues_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -98,7 +98,7 @@
                 <tr>
                     <th scope="col">Revenues Component</th>
                     <th scope="col">Volume</th>
-                    <th scope="col">Unit Revenues<br>(in £ per month)</th>
+                    <th scope="col">Unit Revenues<br>( in {{selDevSym}}  per month)</th>
                 </tr>
                 
             </thead>
@@ -131,8 +131,8 @@
 
                 </tr>
                 <tr>
-                    <th scope="col">Volume Variation<br>(in % per year)</th>
-                    <th scope="col">Unit Revenues Variation<br>(in % per year)</th>
+                    <th scope="col">Volume Variation<br>( in % per year)</th>
+                    <th scope="col">Unit Revenues Variation<br>( in % per year)</th>
                 </tr>
                 
             </thead>
@@ -155,7 +155,7 @@
 {% endmacro %}
 
 
-{% macro list_revenues_total(revenues_advice,revenues_user,selRevenues) %}
+{% macro list_revenues_total(selDevSym,revenues_advice,revenues_user,selRevenues) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="tot_table_rev" class='table table-lg table-bordered table-responsive-lg'>
@@ -166,7 +166,7 @@
                     <th colspan=3 scope="col">EVOLUTION</th>
                 </tr>
                 <tr>
-                    <th scope="col">Total Revenues<br>(in £ per year)</th>
+                    <th scope="col">Total Revenues<br>( in {{selDevSym}}  per year)</th>
                     <th scope="col">Variation of Volumes<br>(per year)</th>
                     <th scope="col">Variation of Unit Revenues<br>(per year)</th>
                     <th scope="col">Combined Variation<br>(per year)</th>

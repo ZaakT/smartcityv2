@@ -1,4 +1,4 @@
-{% macro project_scope(measures,ucs,scope,volumes,keydates_uc) %}
+{% macro project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table project_scope_table">
         <table id="project_scope_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -72,37 +72,37 @@
             <tbody>
                 <tr>
                     <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
-                    <td>£{{budgetCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{budgetCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{budgetCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{budgetCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
-                    <td>£{{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{netProjectCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="">
                     <td class="item text-left"><strong>Operating Budget<br>Yearly Impact</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{OBYI[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{OBYI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>Capex Residual Value</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{CRV[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{CRV[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
             </tbody>
@@ -120,7 +120,7 @@
             <tbody>
                 <tr>
                     <td class="item">Capex</td>
-                    <td>£ {{capex|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{capex|number_format(2,'.',',')}}</td>
                 </tr>
                 <tr>
                     <td class="item">Non Cash Benefits</td>
@@ -142,21 +142,21 @@
             <tbody>
                 <tr>
                     <td class="item">Net Cash</td>
-                    <td>£ {{netcash|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{netcash|number_format(2,'.',',')}}</td>
                     <td class="item">Net Societal Cash</td>
-                    <td>£ {{netsoccash|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{netsoccash|number_format(2,'.',',')}}</td>
                 </tr>
                 <tr>
                     <td class="item">NPV</td>
-                    <td>£ {{npv|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{npv|number_format(2,'.',',')}}</td>
                     <td class="item">Societal NPV</td>
-                    <td>£ {{socnpv|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{socnpv|number_format(2,'.',',')}}</td>
                 </tr>
                 <tr>
                     <td class="item">ROI</td>
-                    <td>£ {{ROI|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{ROI|number_format(2,'.',',')}}</td>
                     <td class="item">Societal ROI</td>
-                    <td>£ {{SOCROI|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}  {{SOCROI|number_format(2,'.',',')}}</td>
                 </tr>
                 <tr>
                     <td class="item">Payback</td>

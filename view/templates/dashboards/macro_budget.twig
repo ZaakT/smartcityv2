@@ -15,7 +15,7 @@
 {% endmacro %}
 
 
-{% macro output(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV) %}
+{% macro output(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table budget_uc_table">
         <table id="budget_uc_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -31,51 +31,51 @@
             <tbody>
                 <tr>
                     <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
-                    <td>£{{budgetCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{budgetCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{budgetCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{budgetCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
-                    <td>£{{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{netProjectCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>a. Implementation</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{implem[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{implem[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>b. Opex</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{opex[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{opex[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>c. Revenue</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{revenues[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{revenues[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>d. Capex Amortization</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{capexAmort[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{capexAmort[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
@@ -86,21 +86,21 @@
                     <td class="item text-right"><strong>Operating Budget<br>Yearly Impact</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{OBYI[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{OBYI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>Operating Budget<br>Cumulated Impact</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{OBCI[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{OBCI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>Capex Residual Value</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{CRV[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{CRV[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
             </tbody>
@@ -110,7 +110,7 @@
 {% endmacro %}
 
 
-{% macro output_all(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV) %}
+{% macro output_all(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table budget_all_table">
         <table id="budget_all_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -126,51 +126,51 @@
             <tbody>
                 <tr>
                     <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
-                    <td>£{{budgetCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{budgetCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{budgetCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{budgetCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
-                    <td>£{{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
                     {% for year in years %}
-                        <td>£{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{netProjectCost[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>a. Implementation</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{implem[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{implem[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>b. Opex</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{opex[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{opex[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>c. Revenue</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{revenues[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{revenues[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>d. Capex Amortization</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{capexAmort[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{capexAmort[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
@@ -181,21 +181,21 @@
                     <td class="item text-right"><strong>Operating Budget<br>Yearly Impact</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{OBYI[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{OBYI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="item text-right"><strong>Operating Budget<br>Cumulated Impact</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{OBCI[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{OBCI[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item text-left"><strong>Capex Residual Value</strong></td>
                     <td></td>
                     {% for year in years %}
-                        <td>£{{CRV[year]|number_format(2, '.', ',')}}</td>
+                        <td>{{selDevSym}} {{CRV[year]|number_format(2, '.', ',')}}</td>
                     {% endfor %}
                 </tr>
             </tbody>

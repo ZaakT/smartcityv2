@@ -2,7 +2,7 @@ function calcTotWCR(){
     var invest = $('#wcr_input_invest').val() ? parseFloat($('#wcr_input_invest').val()) : 0;
     var op = $('#wcr_input_op').val() ? parseFloat($('#wcr_input_op').val()) : 0;
     //console.log(invest,op);
-    $("#wcr_input_tot").text((invest+op).toLocaleString('en-EN',{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+    $("#wcr_input_tot").text((invest+op).toLocaleString('en-EN',{style:"currency",currency:deviseName,minimumFractionDigits: 0, maximumFractionDigits: 2}));
 }
 
 
@@ -26,4 +26,10 @@ function checkInputWCR(){
     calcTotWCR();
     return ret;
 }
-checkInputWCR();
+
+function setNewDeviseWCR(name){
+    deviseName = name;
+    checkInputWCR();
+}
+
+setNewDeviseWCR('GBP');

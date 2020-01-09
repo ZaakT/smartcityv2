@@ -1,5 +1,5 @@
 
-{% macro output(dates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonthPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot) %}
+{% macro output(dates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonthPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table cball_table">
         <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -24,103 +24,103 @@
             <tbody>
                 <tr>
                     <td class="item"><strong>Capex</strong> (A)</td>
-                    <td>£{{(capexTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(capexTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(capexTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(capexTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     <td  style="min-width:5vw;" rowspan=10></td>
                     {% for date in dates %}
-                        <td>£{{(capexMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(capexMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Implementation</strong> (B)</td>
-                    <td>£{{(implemTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(implemTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(implemTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(implemTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(implemMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(implemMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
-                    <td>£{{(opexTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(opexTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(opexTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(opexTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(opexMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(opexMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Revenues</strong> (D)</td>
-                    <td>£{{(revenuesTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(revenuesTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(revenuesTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(revenuesTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(revenuesMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(revenuesMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
-                    <td>£{{(cashreleasingTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(cashreleasingTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(cashreleasingTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cashreleasingTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(cashreleasingMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cashreleasingMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
-                    <td>£{{(widercashTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(widercashTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(widercashTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(widercashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(widercashMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(widercashMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
-                    <td>£{{(netcashTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(netcashTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(netcashTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(netcashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(netcashPerMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(netcashPerMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cumulated<br>Net Cash exc. WCB</strong></td>
                     <td>-</td>
                     {% for year in years %}
-                        <td>£{{(cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(cumulnetcashPerMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cumulnetcashPerMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
-                    <td>£{{(netsoccashTot['tot'])|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}} {{(netsoccashTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>£{{(netsoccashTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(netsoccashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(netsoccashPerMonth[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(netsoccashPerMonth[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cumulated<br>Net Societal Cash</strong></td>
                     <td>-</td>
                     {% for year in years %}
-                        <td>£{{(cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                     {% for date in dates %}
-                        <td>£{{(cumulnetsoccash[date])|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}} {{(cumulnetsoccash[date])|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
             </tbody>

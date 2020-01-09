@@ -18,7 +18,7 @@
     </div>
 </div>
 
-{{ macros.output(projectDates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot) }}
+{{ macros.output(projectDates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot,selDevSym) }}
 
 <div class="row text-center offset-2">
     <div class=" col-8 mt-5 mx-5 list-table keydates_table">
@@ -57,11 +57,11 @@
             <tbody>
                 <tr>
                     <td class="item" scope="row">Net Present Value (NPV)</td>
-                    <td>£{{npv|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{npv|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Societal NPV</td>
-                    <td>£{{socnpv|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{socnpv|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Breakeven</td>

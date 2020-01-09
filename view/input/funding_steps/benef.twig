@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="row m-2">
-    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> £ {{funding_target|number_format(2,'.',',')}}</h5>
+    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}  {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
 
 <form action="?A=funding&amp;A2=benef_selected" method="post" onsubmit="return {{listBenef|length == 0 ? 'false' : 'true'}} && checkTotBenef();">

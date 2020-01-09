@@ -28,7 +28,7 @@
 </div>
 {% endmacro %}
 
-{% macro financial(scope,meas,ucs,selUCS,ROI,payback,score) %}
+{% macro financial(scope,meas,ucs,selUCS,ROI,payback,score,selDevSym) %}
 <table id="financial_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
     <thead class="thead-light text-center">
         <tr>
@@ -65,11 +65,11 @@
     </thead>
     <tbody>
         <tr>
-            <td class="item" scope="row">Return per £ invested</td>
+            <td class="item" scope="row">Return per {{selDevSym}}  invested</td>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>£ {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{selDevSym}}  {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
                     <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td>
                     {% endif %}
                 {% endfor %}
@@ -102,7 +102,7 @@
 {% endmacro %}
 
 
-{% macro societal(scope,meas,ucs,selUCS,ROI,payback,risk,noncash,score) %}
+{% macro societal(scope,meas,ucs,selUCS,ROI,payback,risk,noncash,score,selDevSym) %}
 <table id="societal_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
     <thead class="thead-light text-center">
         <tr>
@@ -139,11 +139,11 @@
     </thead>
     <tbody>
         <tr>
-            <td class="item" scope="row">Return per £ invested</td>
+            <td class="item" scope="row">Return per {{selDevSym}}  invested</td>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>£ {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{selDevSym}}  {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
                     <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td>
                     {% endif %}
                 {% endfor %}
@@ -208,7 +208,7 @@
 {% endmacro %}
 
 
-{% macro selUCS2(selUCS,ucs,measures,capex,weighted_scores) %}
+{% macro selUCS2(selUCS,ucs,measures,capex,weighted_scores,selDevSym) %}
 <div class="row text-center offset-2">
     <div class="col-8 mt-5 mx-5 list-table bank_uc_table">
         <table id="bank_uc_table" class='table table-sm table-bordered table-striped table-responsive-lg'>
@@ -227,7 +227,7 @@
                         <td class="check-col align-middle"><input type="checkbox" onclick="calcDefineScores({{weighted_scores}});" class="uc" id='{{ucID}}' name="{{ucID}}"></td>
                         <td class="font-weight-bold">{{ ucs[ucID]['name'] }}</td>
                         <td>{{ ucs[ucID]['name_meas'] }}</td>
-                        <td>£{{ capex[ucID]['value']|number_format(2,'.',',') }}</td>
+                        <td>{{selDevSym}} {{ capex[ucID]['value']|number_format(2,'.',',') }}</td>
                         <td>{{ capex[ucID]['weight']|number_format(1,'.',',') }} %</td>
                     </tr>
                 {% endfor %}
@@ -237,7 +237,7 @@
 </div>
 {% endmacro %}
 
-{% macro define() %}
+{% macro define(selDevSym) %}
 <div class="row mt-5 text-center align-items-center">
     <div class="offset-1 col-4 list-table bank_define_table">
         <table id="bank_define_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -270,7 +270,7 @@
 </div>
 {% endmacro %}
 
-{% macro overall() %}
+{% macro overall(selDevSym) %}
 <div class="row mt-5 text-center align-items-center">
     <div class="offset-1 col-4 list-table bank_overall_table">
         <table id="bank_overall_table" class='table table-lg table-bordered table-responsive-lg'>

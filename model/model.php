@@ -11,6 +11,59 @@ function dbConnect()
     }
 }
 
+// ---------------------------------------- DEVISES ----------------------------------------
+
+function getListDevises(){
+    $db = dbConnect();
+    $req = $db->query('SELECT id, name, symbol, rateToGBP FROM devise ORDER BY id');
+    $list = [];
+    while ($row = $req->fetch()){
+        $id = intval($row['id']);
+        $rateToGBP = floatval($row['rateToGBP']);
+        $name = $row['name'];
+        $symbol = $row['symbol'];
+        $list[$id] = ['name'=>$name,'symbol'=>$symbol,'rateToGBP'=>$rateToGBP];
+    }
+    return $list;
+}
+
+function convertDevToGBP($val){
+    $listDev = getListDevises();
+    $devName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $listDev[1]['name'];
+    if(!empty($devName)){
+        if($devName == "GBP" || !isset($_SESSION['devise_id'])){
+            return $val;
+        } else {
+            $idDev = $_SESSION['devise_id'];
+            $rateToGBP = $listDev[$idDev]['rateToGBP'];
+            $newVal = $rateToGBP != 0 ? $val * $rateToGBP : 0;
+            $res = number_format($newVal,2,'.','');
+            //var_dump($res);
+            return $res;
+        }
+    } else {
+        throw new Exception("There is no devise selected");
+    }
+}
+
+function convertGBPToDev($val){
+    $listDev = getListDevises();
+    $devName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $listDev[1]['name'];
+    if(!empty($devName)){
+        if($devName == "GBP" || !isset($_SESSION['devise_id'])){
+            return $val;
+        } else {
+            $idDev = $_SESSION['devise_id'];
+            $rateToGBP = $listDev[$idDev]['rateToGBP'];
+            $newVal = $rateToGBP != 0 ? $val / $rateToGBP : 0;
+            $res = number_format($newVal,2,'.','');
+            //var_dump($res);
+            return $res;
+        }
+    } else {
+        throw new Exception("There is no devise selected");
+    }
+}
 
 // ---------------------------------------- USERS ----------------------------------------
 
@@ -1348,7 +1401,7 @@ function getListSelCapex($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         $period = intval($row['period']);
         if(array_key_exists($id_item,$list)){
@@ -1461,7 +1514,7 @@ function insertCapexInputed($projID,$ucID,$list){
                                 period = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$data['period'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['period'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -1588,7 +1641,7 @@ function getListSelImplem($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
@@ -1681,7 +1734,7 @@ function insertImplemInputed($projID,$ucID,$list){
                                 unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -1787,7 +1840,7 @@ function getListSelOpex($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarCost = floatval($row['annual_variation_unitcost']);
@@ -1885,7 +1938,7 @@ function insertOpexInputed($projID,$ucID,$list){
                                 annual_variation_unitcost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['unit_cost'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -1991,7 +2044,7 @@ function getListSelRevenues($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_rev = floatval($row['revenues_per_unit']);
+        $unit_rev = convertGBPToDev(floatval($row['revenues_per_unit']));
         $volume = intval($row['volume']);
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarRev = floatval($row['annual_variation_unitcost']);
@@ -2088,7 +2141,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
                                 annual_variation_unitcost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['unit_rev'],$data['anVarVol'],$data['anVarRev'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -2152,7 +2205,7 @@ function getListCashReleasingAdvice($ucID){
         $range_max_red_nb = floatval($row['range_max_red_nb']);
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
         } else {
@@ -2206,7 +2259,7 @@ function getListSelCashReleasing($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $unit_indic = $row['unit_indicator'];
         $volume = intval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
@@ -2309,7 +2362,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             annual_var_unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -2367,7 +2420,7 @@ function getListWiderCashAdvice($ucID){
         $range_max_red_nb = floatval($row['range_max_red_nb']);
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
         } else {
@@ -2421,7 +2474,7 @@ function getListSelWiderCash($projID,$ucID){
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
-        $unit_cost = floatval($row['unit_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $unit_indic = $row['unit_indicator'];
         $volume = intval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
@@ -2524,7 +2577,7 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             annual_var_unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['unit_cost'],$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -2922,8 +2975,8 @@ function getListScenarios($userID){
         $id = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
-        $input_invest = floatval($row['input_invest']);
-        $input_op = floatval($row['input_op']);
+        $input_invest = convertGBPToDev(floatval($row['input_invest']));
+        $input_op = convertGBPToDev(floatval($row['input_op']));
         $creation_date = $row['creation_date'];
         $modif_date = $row['modif_date'];
         $id_proj = intval($row['id_proj']);
@@ -2945,8 +2998,8 @@ function getListScenariosByProj($projID){
         $id = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
-        $input_invest = floatval($row['input_invest']);
-        $input_op = floatval($row['input_op']);
+        $input_invest = convertGBPToDev(floatval($row['input_invest']));
+        $input_op = convertGBPToDev(floatval($row['input_op']));
         $creation_date = $row['creation_date'];
         $modif_date = $row['modif_date'];
         $id_proj = intval($row['id_proj']);
@@ -3021,8 +3074,8 @@ function getScenByID($scenID){
     $id = intval($res['id']);
     $name = $res['name'];
     $description = $res['description'];
-    $input_invest = floatval($res['input_invest']);
-    $input_op = floatval($res['input_op']);
+    $input_invest = convertGBPToDev(floatval($res['input_invest']));
+    $input_op = convertGBPToDev(floatval($res['input_op']));
     $creation_date = $res['creation_date'];
     $modif_date = $res['modif_date'];
     $id_proj = intval($res['id_proj']);
@@ -3035,7 +3088,7 @@ function getScenByID($scenID){
 function insertInputScenario($op,$invest,$scenID){
     $db = dbConnect();
     $req = $db->prepare('UPDATE financing_scenario SET input_op = ?, input_invest = ? WHERE id = ?');
-    return $req->execute(array($op,$invest,$scenID));
+    return $req->execute(array(convertDevToGBP($op),convertDevToGBP($invest),$scenID));
 }
 
 function getFundingTarget($scenID){
@@ -3044,7 +3097,7 @@ function getFundingTarget($scenID){
                             FROM financing_scenario
                             WHERE id = ?');
     $req->execute(array($scenID));
-    return floatval($req->fetch()['funding_target']);
+    return convertGBPToDev(floatval($req->fetch()['funding_target']));
 }
 
 
@@ -3060,7 +3113,7 @@ function getTotCapexFromProj($projID){
     $req->execute(array($projID));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
-    return $tot;
+    return convertGBPToDev($tot);
 }
 
 function getTotCapexByUC($projID,$ucID){
@@ -3071,7 +3124,7 @@ function getTotCapexByUC($projID,$ucID){
     $req->execute(array($projID,$ucID));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
-    return $tot;
+    return convertGBPToDev($tot);
 }
 
 function getCapexAmort($projID,$ucID){
@@ -3097,7 +3150,7 @@ function getTotImplemFromProj($projID){
     $req->execute(array($projID));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
-    return $tot;
+    return convertGBPToDev($tot);
 }
 
 function getTotImplemByUC($projID,$ucID){
@@ -3108,7 +3161,7 @@ function getTotImplemByUC($projID,$ucID){
     $req->execute(array($projID,$ucID));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
-    return $tot;
+    return convertGBPToDev($tot);
 }
 
 function getNbUC($projID,$ucID){
@@ -3125,17 +3178,6 @@ function getNbUC($projID,$ucID){
     }
     return $list;
 }
-/*
-function getTotOpexByUC($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
-                            FROM input_opex
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
-    $res = $req->fetch()['tot'];
-    $tot = floatval($res);
-    return $tot;
-}*/
 
 function getOpexValues($projID,$ucID){
     $db = dbConnect();
@@ -3153,26 +3195,13 @@ function getOpexValues($projID,$ucID){
         $an_var_unitcost = floatval($res['an_var_unitcost']);
         $rate2 = pow(1+($an_var_unitcost/100),1/12);
 
-        $cost = floatval($res['cost']);
+        $cost = convertGBPToDev(floatval($res['cost']));
 
         $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
     }
     //var_dump($list);
     return $list;
 }
-/*
-function getTotRevenuesByUC($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare('SELECT SUM(volume*revenues_per_unit) AS tot
-                            FROM input_revenues
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
-    $res = $req->fetch()['tot'];
-    $tot = floatval($res);
-    return $tot;
-}*/
-
-
 
 function getRevenuesValues($projID,$ucID){
     $db = dbConnect();
@@ -3193,24 +3222,13 @@ function getRevenuesValues($projID,$ucID){
         $an_var_unitcost = floatval($res['an_var_unitcost']);
         $rate2 = pow(1+($an_var_unitcost/100),1/12);
 
-        $revenues = floatval($res['revenues']);
+        $revenues = convertGBPToDev(floatval($res['revenues']));
 
         $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
     }
     //var_dump($list);
     return $list;
 }
-/* 
-function getTotCashReleasingByUC($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare('SELECT SUM(volume*unit_cost)-SUM((volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100))) as tot
-                            FROM input_cashreleasing
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
-    $res = $req->fetch()['tot'];
-    $tot = floatval($res);
-    return $tot;
-} */
 
 function getCashReleasingValues($projID,$ucID){
     $db = dbConnect();
@@ -3232,8 +3250,8 @@ function getCashReleasingValues($projID,$ucID){
         $an_var_unitcost = floatval($res['an_var_unitcost']);
         $rate2 = pow(1+($an_var_unitcost/100),1/12);
 
-        $baseline = floatval($res['baseline']);
-        $target = floatval($res['target']);
+        $baseline = convertGBPToDev(floatval($res['baseline']));
+        $target = convertGBPToDev(floatval($res['target']));
 
         $list[$id_item] = ['baseline'=>$baseline,'target'=>$target,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
     }
@@ -3247,20 +3265,8 @@ function getBaselineCRB($projID,$ucID){
                             FROM input_cashreleasing
                             WHERE id_proj = ? and id_uc = ?');
     $req->execute(array($projID,$ucID));
-    return intval($req->fetch()['baseline']);
+    return convertGBPToDev(floatval($req->fetch()['baseline']));
 }
-
-/*
-function getTotWiderCashByUC($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare('SELECT SUM(volume*unit_cost)-SUM((volume*(1-volume_reduc/100))*(unit_cost*(1-unit_cost_reduc/100))) as tot
-                            FROM input_widercash
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
-    $res = $req->fetch()['tot'];
-    $tot = floatval($res);
-    return $tot;
-}*/
 
 function getWiderCashValues($projID,$ucID){
     $db = dbConnect();
@@ -3282,12 +3288,11 @@ function getWiderCashValues($projID,$ucID){
         $an_var_unitcost = floatval($res['an_var_unitcost']);
         $rate2 = pow(1+($an_var_unitcost/100),1/12);
 
-        $baseline = floatval($res['baseline']);
-        $target = floatval($res['target']);
+        $baseline = convertGBPToDev(floatval($res['baseline']));
+        $target = convertGBPToDev(floatval($res['target']));
 
         $list[$id_item] = ['baseline'=>$baseline,'target'=>$target,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
     }
-    //var_dump($list);
     return $list;
 }
 

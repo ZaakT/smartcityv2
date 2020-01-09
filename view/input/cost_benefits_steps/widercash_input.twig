@@ -32,11 +32,11 @@
 {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
 {% if test %}
-{{ list.list_widercash_guid(widercash_advice,widercash_user,selWiderCash,compo,ratio) }}
+{{ list.list_widercash_guid(selDevSym,widercash_advice,widercash_user,selWiderCash,compo,ratio) }}
 {% endif %}
-{{ list.list_widercash_input(widercash_advice,widercash_user,selWiderCash) }}
+{{ list.list_widercash_input(selDevSym,widercash_advice,widercash_user,selWiderCash) }}
 {{ list.list_widercash_input_2(widercash_advice,widercash_user,selWiderCash) }}
-{# {{ list.list_widercash_total(widercash_advice,widercash_user,selWiderCash) }} #}
+{# {{ list.list_widercash_total(selDevSym,widercash_advice,widercash_user,selWiderCash) }} #}
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_widercash');"></button>

@@ -21,21 +21,21 @@
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Project Scope</h4>
 </div>
-{{ macros.project_scope(measures,ucs,scope,volumes,keydates_uc) }}
+{{ macros.project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) }}
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Budget Impact</h4>
 </div>
-{{ macros.budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV) }}
+{{ macros.budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV,selDevSym) }}
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Cost Benefits</h4>
 </div>
-{{ macros.cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback) }}
+{{ macros.cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback,selDevSym) }}
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Bankability</h4>
 </div>
-{{ macros.bankability(scores) }}
+{{ macros.bankability(scores,selDevSym) }}
 
 {% endblock %}

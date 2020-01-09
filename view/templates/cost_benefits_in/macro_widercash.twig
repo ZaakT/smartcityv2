@@ -56,7 +56,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_widercash_guid(widercash_advice,widercash_user,selWiderCash,compo,ratio) %}
+{% macro list_widercash_guid(selDevSym,widercash_advice,widercash_user,selWiderCash,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
@@ -65,7 +65,7 @@
                     <th scope="col">Wider Cash Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Range of<br>Volume Reduction</th>
                     <th scope="col">Range of<br>Unit Cost Reduction</th>
                 </tr>
@@ -99,7 +99,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_widercash_input(widercash_advice,widercash_user,selWiderCash) %}
+{% macro list_widercash_input(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="widercash_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -114,7 +114,7 @@
                 <tr>
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume</th>
-                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Volume Reduction</th>
                     <th scope="col">Unit Cost Reduction</th>
                 </tr>
@@ -158,8 +158,8 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Wider Cash Component</th>
-                    <th scope="col">Volume Variation<br>(in % per year)</th>
-                    <th scope="col">Unit Cost Variation<br>(in % per year)</th>
+                    <th scope="col">Volume Variation<br>( in % per year)</th>
+                    <th scope="col">Unit Cost Variation<br>( in % per year)</th>
                 </tr>
                 
             </thead>
@@ -182,16 +182,16 @@
 {% endmacro %}
 
 
-{% macro list_widercash_total(widercash_advice,widercash_user,selWiderCash) %}
+{% macro list_widercash_total(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Wider Cash Component</th>
-                    <th scope="col">Baseline Cost <br>(in £ per month)</th>
-                    <th scope="col">Wider Cash Target<br>(in £ per month)</th>
-                    <th scope="col">Wider Cash Benefits<br>(in £ per month)</th>
+                    <th scope="col">Baseline Cost <br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Wider Cash Target<br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Wider Cash Benefits<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Variation of Volumes<br>(per month)</th>
                     <th scope="col">Variation of Unit Cost<br>(per month)</th>
                     <th scope="col">Combined Variation<br>(per month)</th>

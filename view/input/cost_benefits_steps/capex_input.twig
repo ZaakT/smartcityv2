@@ -32,10 +32,10 @@
 {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
 {% if test %}
-{{ list.list_capex_guid(capex_advice,capex_user,selCapex,compo,ratio) }}
+{{ list.list_capex_guid(selDevSym,capex_advice,capex_user,selCapex,compo,ratio) }}
 {% endif %}
-{{ list.list_capex_input(capex_advice,capex_user,selCapex) }}
-{{ list.list_capex_total(capex_advice,capex_user,selCapex) }}
+{{ list.list_capex_input(selDevSym,capex_advice,capex_user,selCapex) }}
+{{ list.list_capex_total(selDevSym,capex_advice,capex_user,selCapex) }}
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_capex');"></button>
@@ -46,6 +46,11 @@
 <h2 class="text-center">There is no capex, please contact an administrator</h2>
 {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript">setNewDeviseCapex("{{selDevName}}");</script>
 {% endblock %}
 
 

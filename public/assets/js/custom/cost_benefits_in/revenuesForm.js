@@ -95,7 +95,7 @@ function calcTotRevenues(){
                     var val1 = parseInt($("#vol_"+temp[2]).val());
                     var val2 = parseFloat($("#rev_"+temp[2]).val());
                     var tot = val1 && val2 ? 12*val1*val2 : 0;
-                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
                     sum += tot;
                 } else if(temp[1]=="varvol"){
                     var val = parseFloat($("#anVarVol_"+temp[2]).val());
@@ -115,17 +115,23 @@ function calcTotRevenues(){
                     $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:3}));
                 }
             } else if (temp.length==2) {
-                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             }
         }
     });
 }
 
-try{
-    countSelectedRevenues(form_revenues);
-} catch {
-    //do nothing
-} finally {
-    checkRevenuesInput();
-    calcTotRevenues();
+
+function setNewDeviseRevenues(name){
+    deviseName = name;
+    try{
+        countSelectedRevenues(form_revenues);
+    } catch {
+        //do nothing
+    } finally {
+        checkRevenuesInput();
+        calcTotRevenues();
+    }
 }
+
+setNewDeviseRevenues("GBP");

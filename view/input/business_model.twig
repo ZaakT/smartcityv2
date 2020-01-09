@@ -1,7 +1,7 @@
 {% extends '/templates/common_page.twig' %}
 
 {% import "/templates/navbar.twig" as navbar %}
-{% block navbar %}{{ navbar.navbar(is_connected,is_admin) }}{% endblock %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("business_model") }}{% endblock %}

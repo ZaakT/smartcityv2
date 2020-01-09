@@ -56,7 +56,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_cashreleasing_guid(cashreleasing_advice,cashreleasing_user,selCashReleasing,compo,ratio) %}
+{% macro list_cashreleasing_guid(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing,compo,ratio) %}
 <div class="m-5 row text-center">
     <div class="offset-1 col-10 list-table">
         <table class='table table-sm table-bordered table-responsive-lg'>
@@ -70,7 +70,7 @@
                 <tr>
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
-                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Range of<br>Volume Reduction</th>
                     <th scope="col">Range of<br>Unit Cost Reduction</th>
                 </tr>
@@ -104,7 +104,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_cashreleasing_input(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+{% macro list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -119,7 +119,7 @@
                 <tr>
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume</th>
-                    <th scope="col">Unit Cost<br>(in £ per month)</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Volume Reduction</th>
                     <th scope="col">Unit Cost Reduction</th>
                 </tr>
@@ -166,8 +166,8 @@
                     <th scope="col" colspan=2 class="text-uppercase">Project Impact</th>
                 </tr>
                 <tr>
-                    <th scope="col">Volume Variation<br>(in % per year)</th>
-                    <th scope="col">Unit Cost Variation<br>(in % per year)</th>
+                    <th scope="col">Volume Variation<br>( in % per year)</th>
+                    <th scope="col">Unit Cost Variation<br>( in % per year)</th>
                 </tr>
                 
             </thead>
@@ -190,16 +190,16 @@
 {% endmacro %}
 
 
-{% macro list_cashreleasing_total(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+{% macro list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
 <div class="row m-5 text-center">
     <div class="col mt-5 list-table">
         <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Cash Releasing Component</th>
-                    <th scope="col">Baseline Cost <br>(in £ per month)</th>
-                    <th scope="col">Cash Releasing Target<br>(in £ per month)</th>
-                    <th scope="col">Cash Releasing Benefits<br>(in £ per month)</th>
+                    <th scope="col">Baseline Cost <br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Cash Releasing Target<br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Cash Releasing Benefits<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Variation of Volumes<br>(per month)</th>
                     <th scope="col">Variation of Unit Cost<br>(per month)</th>
                     <th scope="col">Combined Variation<br>(per month)</th>

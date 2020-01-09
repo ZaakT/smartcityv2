@@ -5,7 +5,11 @@ require_once('model/model.php');
 // --- Business Model
 function business_model($twig,$is_connected){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/business_model.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/business_model.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3]));
 }
 
 // ---------------------------------------- PROJECT ----------------------------------------
@@ -17,7 +21,11 @@ function project_bm($twig,$is_connected){
         unset($_SESSION['projID']);
     }
     //var_dump($list_projects);
-    echo $twig->render('/input/business_model_steps/project_bm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/business_model_steps/project_bm.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
 }
 
 // ---------------------------------------- PREFERENCES ----------------------------------------
@@ -33,7 +41,11 @@ function pref($twig,$is_connected,$projID=0){
             $listPaybackConst = getListPaybackConst();
             $listBusinessModelPref = getListBusinessModelPref();
 
-            echo $twig->render('/input/business_model_steps/pref.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'investCap'=>$listInvestCap,'paybackConst'=>$listPaybackConst,'businessModelPref'=>$listBusinessModelPref));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/business_model_steps/pref.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'investCap'=>$listInvestCap,'paybackConst'=>$listPaybackConst,'businessModelPref'=>$listBusinessModelPref));
             prereq_BusinessModel();
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -105,7 +117,11 @@ function reco($twig,$is_connected,$projID=0){
             /* $funding_opt = ['City'=>0,'Grants'=>0,'Equity investors'=>0,'Impact Investors'=>0,'Bank Debt'=>0,'Green Debt'=>0,'Suppliers'=>0,'Alternative'=>0]; */
             //var_dump($proj_qualif);
 
-            echo $twig->render('/input/business_model_steps/reco.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'BM_infos'=>$BM_infos,'reco'=>$reco,'proj_qualif'=>$proj_qualif,'listBMReco'=>$listBMReco,'funding_opt'=>$funding_opt));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/business_model_steps/reco.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'BM_infos'=>$BM_infos,'reco'=>$reco,'proj_qualif'=>$proj_qualif,'listBMReco'=>$listBMReco,'funding_opt'=>$funding_opt));
             prereq_BusinessModel();
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -382,6 +398,6 @@ function getWeightedScores3($fin_score,$soc_score,$capexList){
 function prereq_BusinessModel(){
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
-        echo "<script>prereq_businessModel(true);</script>";
+            echo "<script>prereq_businessModel(true);</script>";
     }
 }

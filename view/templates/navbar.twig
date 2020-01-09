@@ -1,4 +1,4 @@
-{% macro navbar(is_connected=false,is_admin=false) %}
+{% macro navbar(is_connected=false,is_admin=false,devises=[]) %}
   {% if is_connected %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,10 +40,19 @@
       <li class="nav-item"><a href="?A=profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
       <li class="nav-item"><a href="#"><span class="oi oi-account-logout nav-link" data-toggle="modal" data-target="#askLogoutModal" title="account-logout" aria-hidden="true"></span></a></li>
       <li class="nav-item dropleft">
-          <span class="nav-link oi oi-cog disabled" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+          <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="">Language</a>
-            <a class="dropdown-item" href="">Devise</a>
+            <a class="dropdown-item" href="#">Language</a>
+            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Devise</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              {% if devises %}
+                {% for id_devise,devise in devises %}
+                  <a class="dropdown-item" href="?A=setDevise&amp;id={{id_devise}}">{{devise['name']}} ({{devise['symbol']}})</a>
+                {% endfor %}
+              {% else %}                  
+              <span class="dropdown-item text-danger font-italic">There is no devise, please contact an administrator</>
+              {% endif %}
+            </div>
           </div>
       </li>
   </ul>
@@ -54,8 +63,7 @@
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog disabled" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="">Language</a>
-            <a class="dropdown-item" href="">Devise</a>
+            <a class="dropdown-item" href="#">Language</a>
           </div>
       </li>
   </ul>

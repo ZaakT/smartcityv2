@@ -14,7 +14,7 @@
 
 
 
-{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total) %}
+{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table financing_table">
         <table id="financing_table" class='table table-lg table-bordered table-responsive-lg'>
@@ -41,19 +41,19 @@
                     <tr>
                         <td class="sub_item">Cash Inflow</td class="item">
                         {% for year in years %}
-                            <td>£ {{cashInflow[sourceRef][entityID][year] != 0 ? cashInflow[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{cashInflow[sourceRef][entityID][year] != 0 ? cashInflow[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{cashInflow[sourceRef][entityID][date] != 0 ?cashInflow[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{cashInflow[sourceRef][entityID][date] != 0 ?cashInflow[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                     </tr>
                     <tr>
                         <td class="sub_item">Reimbursements</td class="sub_item">
                         {% for year in years %}
-                            <td>£ {{reimb[sourceRef][entityID][year] != 0 ? reimb[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{reimb[sourceRef][entityID][year] != 0 ? reimb[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{reimb[sourceRef][entityID][date] != 0 ? reimb[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{reimb[sourceRef][entityID][date] != 0 ? reimb[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                     </tr>
                     <tr>
@@ -62,16 +62,16 @@
                                 <td>-</td>
                             {% endfor %}
                             {% for date in dates %}
-                                <td>£ {{netDebt[sourceRef][entityID][date] != 0 ? netDebt[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{netDebt[sourceRef][entityID][date] != 0 ? netDebt[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                     </tr>
                     <tr>
                         <td class="sub_item">Interest</td class="sub_item">
                             {% for year in years %}
-                                <td>£ {{interest[sourceRef][entityID][year] != 0 ? interest[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{interest[sourceRef][entityID][year] != 0 ? interest[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                             {% for date in dates %}
-                                <td>£ {{interest[sourceRef][entityID][date] != 0 ? interest[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{interest[sourceRef][entityID][date] != 0 ? interest[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                     </tr>
                 {% endfor %}
@@ -85,19 +85,19 @@
                         <tr>
                             <td class="sub_item">Cash Inflow</td class="item">
                             {% for year in years %}
-                                <td>£ {{cashInflow[sourceRef][year] != 0 ? cashInflow[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{cashInflow[sourceRef][year] != 0 ? cashInflow[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                             {% for date in dates %}
-                                <td>£ {{cashInflow[sourceRef][date] != 0 ? cashInflow[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{cashInflow[sourceRef][date] != 0 ? cashInflow[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                         </tr>
                         <tr>
                             <td class="sub_item">Reimbursements</td class="sub_item">
                             {% for year in years %}
-                                <td>£ {{reimb[sourceRef][year] != 0 ? reimb[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{reimb[sourceRef][year] != 0 ? reimb[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                             {% for date in dates %}
-                                <td>£ {{reimb[sourceRef][date] != 0 ? reimb[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                <td>{{selDevSym}}  {{reimb[sourceRef][date] != 0 ? reimb[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                         </tr>
                         <tr>
@@ -106,16 +106,16 @@
                                     <td>-</td>
                                 {% endfor %}
                                 {% for date in dates %}
-                                    <td>£ {{netDebt[sourceRef][date] != 0 ? netDebt[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                    <td>{{selDevSym}}  {{netDebt[sourceRef][date] != 0 ? netDebt[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
                                 {% endfor %}
                         </tr>
                         <tr>
                             <td class="sub_item">Interest</td class="sub_item">
                                 {% for year in years %}
-                                    <td>£ {{interest[sourceRef][year] != 0 ? interest[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
+                                    <td>{{selDevSym}}  {{interest[sourceRef][year] != 0 ? interest[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
                                 {% endfor %}
                                 {% for date in dates %}
-                                    <td>£ {{interest[sourceRef][date] != 0 ? interest[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
+                                    <td>{{selDevSym}}  {{interest[sourceRef][date] != 0 ? interest[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
                                 {% endfor %}
                         </tr>
                     {% endif %}
@@ -128,19 +128,19 @@
                 <tr>
                     <td class="sub_item">Cash Inflow</td class="item">
                         {% for year in years %}
-                            <td>£ {{total[sourceRef][year]['cashInflow'] != 0 ? total[sourceRef][year]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][year]['cashInflow'] != 0 ? total[sourceRef][year]['cashInflow']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{total[sourceRef][date]['cashInflow'] != 0 ? total[sourceRef][date]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][date]['cashInflow'] != 0 ? total[sourceRef][date]['cashInflow']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                 </tr>
                 <tr>
                     <td class="sub_item">Reimbursements</td class="sub_item">
                         {% for year in years %}
-                            <td>£ {{total[sourceRef][year]['reimb'] != 0 ? total[sourceRef][year]['reimb']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][year]['reimb'] != 0 ? total[sourceRef][year]['reimb']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{total[sourceRef][date]['reimb'] != 0 ? total[sourceRef][date]['reimb']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][date]['reimb'] != 0 ? total[sourceRef][date]['reimb']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                 </tr>
                 <tr>
@@ -149,16 +149,16 @@
                             <td>-</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{total[sourceRef][date]['netDebt'] != 0 ? total[sourceRef][date]['netDebt']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][date]['netDebt'] != 0 ? total[sourceRef][date]['netDebt']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                 </tr>
                 <tr>
                     <td class="sub_item">Interest</td class="sub_item">
                         {% for year in years %}
-                            <td>£ {{total[sourceRef][year]['interest'] != 0 ? total[sourceRef][year]['interest']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][year]['interest'] != 0 ? total[sourceRef][year]['interest']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                         {% for date in dates %}
-                            <td>£ {{total[sourceRef][date]['interest'] != 0 ? total[sourceRef][date]['interest']|number_format(2,'.',',') : 0}}</td>
+                            <td>{{selDevSym}}  {{total[sourceRef][date]['interest'] != 0 ? total[sourceRef][date]['interest']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
                 </tr>
             </tbody>
@@ -170,7 +170,7 @@
 
 
 
-{% macro output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels) %}
+{% macro output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) %}
 <div class="mt-3 row text-center">
     <div class="offset-2 col-8">
         <canvas id="FinancingOptChart"></canvas>
@@ -184,7 +184,7 @@
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Funding Sources</th>
-                    <th scope="col">£</th>
+                    <th scope="col">{{selDevSym}} </th>
                     <th scope="col">%</th>
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
@@ -203,7 +203,7 @@
                     {% for sourceID,source in selFS if FS[sourceID]['id_cat']==id_cat%}
                         <tr>
                             <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
-                            <td>£ {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{selDevSym}}  {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
                             <td hidden class="sourceValues" id="val_{{id_cat}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
                             <td>{{source['share']|number_format(2,'.',',')}} %</td>
                             <td hidden class="sourceValues" id="share_{{id_cat}}_{{sourceID}}">{{source['share']}}</td>
@@ -213,7 +213,7 @@
                         {% for entityID,entity in entities[sourceID] %}
                         <tr class="sub_item">
                             <td class="text-right" style="background-color: #f5f5f5;">{{entity['name']}}</td>
-                            <td>£ {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{selDevSym}}  {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
                             <td>{{entity['share']|number_format(2,'.',',')}} %</td>
                             <td>{{keydates[sourceID][entityID]['startdate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
                             <td>{{keydates[sourceID][entityID]['maturitydate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
@@ -232,7 +232,7 @@
                     {% for sourceID,source in selFS if FS[sourceID]['id_cat']==FS_cat|keys|last%}
                         <tr>
                             <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
-                            <td>£ {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{selDevSym}}  {{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
                             <td hidden class="sourceValues" id="val_{{FS_cat|keys|last}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
                             <td>{{source['share']|number_format(2,'.',',')}} %</td>
                             <td hidden class="sourceValues" id="share_{{FS_cat|keys|last}}_{{sourceID}}">{{source['share']}}</td>
@@ -242,7 +242,7 @@
                         {% for entityID,entity in entities[sourceID] %}
                         <tr class="sub_item">
                             <td class="text-right" style="background-color: #f5f5f5;">{{entity['name']}}</td>
-                            <td>£ {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{selDevSym}}  {{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
                             <td>{{entity['share']|number_format(2,'.',',')}} %</td>
                             <td>-</td>
                             <td>-</td>
@@ -255,7 +255,7 @@
 </div>
 {% endmacro %}
 
-{% macro output_benef(benefs,funding_target,benefNames,benefShare) %}
+{% macro output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) %}
 <div class="mt-3 row text-center">
     <div class="offset-2 col-8">
         <canvas id="FinancingBenefChart"></canvas>
@@ -269,14 +269,14 @@
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Beneficiary</th>
-                    <th scope="col">Share of Funding in £</th>
+                    <th scope="col">Share of Funding in {{selDevSym}} </th>
                 </tr>
             </thead>
             <tbody>
                 {% for benefID,benef in benefs %}
                     <tr>
                         <td>{{benef['name']}}</td>
-                        <td>£ {{(funding_target*benef['share']/100)|number_format(2,'.',',')}}</td>
+                        <td>{{selDevSym}}  {{(funding_target*benef['share']/100)|number_format(2,'.',',')}}</td>
                     </tr>
                 {% endfor %}
             </tbody>

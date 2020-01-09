@@ -5,7 +5,11 @@ require_once('model/model.php');
 // -- Project Scoping
 function project_scoping($twig,$is_connected){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/project_scoping.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2])); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2])); 
 }
 
 // --- Project Scoping Steps
@@ -15,7 +19,11 @@ function project($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
     //var_dump($list_projects);
-    echo $twig->render('/input/project_scoping_steps/project.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects,'isTaken'=>$isTaken)); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects,'isTaken'=>$isTaken)); 
 }
 
 function create_proj($post){
@@ -50,13 +58,21 @@ function scope($twig,$is_connected,$projID=0){
             $list_ucs = getListUCs();
             $listSelScope = getListSelScope($projID);
             //var_dump($list_ucs);
-            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=scope');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -118,13 +134,21 @@ function perimeter($twig,$is_connected,$projID=0){
             //var_dump($repart_zones);
             $listSelZones = getListSelZones($projID);
             //var_dump($listSelZones);
-            echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=perimeter');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/perimeter.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -255,13 +279,21 @@ function size($twig,$is_connected,$projID=0){
             //var_dump($listSelSizes);
             //var_dump($selScope);
             //var_dump($listMag);
-            echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"perimeter"=>$repart_perimeter,'scope'=>$selScope,'ucs'=>$list_ucs,'mags'=>$listMag,'list_sel'=>$listSelSizes,'measures'=>$measures)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"perimeter"=>$repart_perimeter,'scope'=>$selScope,'ucs'=>$list_ucs,'mags'=>$listMag,'list_sel'=>$listSelSizes,'measures'=>$measures)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=size');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/size.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -326,13 +358,21 @@ function volumes($twig,$is_connected,$projID=0){
             $ratio=getRatio();
             //var_dump($nbUCs);
             $listSelVolumes = getListSelVolumes($projID);
-            echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag,"components"=>$components,'compo_per_zone'=>$nbCompoPerZone,'ratio'=>$ratio,'list_sel'=>$listSelVolumes)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'sizes'=>$selSizes,'scope'=>$selScope,'perimeter'=>$repart_perimeter,'ucs'=>$list_ucs,'measures'=>$list_measures,'mags'=>$listMag,"components"=>$components,'compo_per_zone'=>$nbCompoPerZone,'ratio'=>$ratio,'list_sel'=>$listSelVolumes)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=volumes');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/volumes.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -420,13 +460,21 @@ function schedule($twig,$is_connected,$projID=0){
             $selScope = getListSelScope($projID);
             $listSelDates = getListSelDates($projID);
             //var_dump($listSelDates["revenues"]);
-            echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures,'list_sel'=>$listSelDates)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$selScope,'ucs'=>$list_ucs,'meas'=>$list_measures,'list_sel'=>$listSelDates)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=schedule');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -492,13 +540,21 @@ function discount_rate($twig,$is_connected,$projID=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
             $selDiscountRate = getListSelDiscountRate($projID);
-            echo $twig->render('/input/project_scoping_steps/discount_rate.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'discount_rate_sel'=>$selDiscountRate)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/discount_rate.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'discount_rate_sel'=>$selDiscountRate)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=discount_rate');
         }
     } else {
-        echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_scoping_steps/schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
 }
@@ -522,18 +578,18 @@ function discount_rate_selected($post){
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectScoping(){
     if(isset($_SESSION['projID'])){
-        echo "<script>prereq_ProjectScoping1(true);</script>";
+            echo "<script>prereq_ProjectScoping1(true);</script>";
         $projID = $_SESSION['projID'];
         $selScope = getListSelScope($projID);
         $selPerimeter = getListSelZones($projID);
         $selSizes = getListSelSizes($projID);
 
         if(!empty($selScope)){
-            echo "<script>prereq_ProjectScoping2(true);</script>";
+                echo "<script>prereq_ProjectScoping2(true);</script>";
             if (!empty($selPerimeter)) {
-                echo "<script>prereq_ProjectScoping3(true);</script>";
+                    echo "<script>prereq_ProjectScoping3(true);</script>";
                 if(!empty($selSizes)){
-                    echo "<script>prereq_ProjectScoping4(true);</script>";
+                        echo "<script>prereq_ProjectScoping4(true);</script>";
                     updateScoping($projID);
                 }
             }

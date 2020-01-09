@@ -98,7 +98,7 @@ function calcTotOpex(){
                     var val1 = parseInt($("#vol_"+temp[2]).val());
                     var val2 = parseFloat($("#cost_"+temp[2]).val());
                     var tot = val1 && val2 ? 12*val1*val2 : 0;
-                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
                     sum += tot;
                 } else if(temp[1]=="varvol"){
                     var val = parseFloat($("#anVarVol_"+temp[2]).val());
@@ -117,17 +117,23 @@ function calcTotOpex(){
                     $(this).text(tot.toLocaleString(undefined,{style:"percent",maximumFractionDigits:3}));
                 }
             } else if (temp.length==2) {
-                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             }
         }
     });
 }
 
-try{
-    countSelectedOpex(form_opex);
-} catch {
-    //do nothing
-} finally {
-    checkOpexInput();
-    calcTotOpex();
+
+function setNewDeviseOpex(name){
+    deviseName = name;
+    try{
+        countSelectedOpex(form_opex);
+    } catch {
+        //do nothing
+    } finally {
+        checkOpexInput();
+        calcTotOpex();
+    }
 }
+
+setNewDeviseOpex("GBP");

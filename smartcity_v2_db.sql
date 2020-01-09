@@ -996,3 +996,11 @@ CREATE TABLE matrix_bm_2(
    FOREIGN KEY(id_bank) REFERENCES bm_bankability(id) ON DELETE CASCADE,
    FOREIGN KEY(id_socbank) REFERENCES bm_soc_bankability(id) ON DELETE CASCADE
 );
+
+CREATE TABLE devise(
+   id INT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(255),
+   symbol VARCHAR(255),
+   rateToGBP DOUBLE DEFAULT 1,
+   PRIMARY KEY (id)
+)

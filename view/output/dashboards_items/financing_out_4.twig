@@ -19,9 +19,9 @@
 </div>
 
 <div class="row mt-2">
-    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> £ {{funding_target|number_format(2,'.',',')}}</h5>
+    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}  {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
-{{ macros.output_benef(benefs,funding_target,benefNames,benefShare) }}
+{{ macros.output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) }}
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=project_dashboard&amp;projID={{projID}}');"></button>

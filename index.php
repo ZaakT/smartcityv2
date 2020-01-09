@@ -1726,6 +1726,14 @@ try{
             elseif($_GET['A']=='scenarios'){
                 scenarios($twig,$is_connected);        
             }
+            // ---------- DEVISES ----------
+            elseif($_GET['A']=='setDevise'){
+                if(isset($_GET['id'])){
+                    setDevise(intval($_GET['id']));
+                } else {
+                    header('Location: ?A=home');
+                }
+            }
             // ---------- IN OTHER CASES ----------
             else {
                 header('Location: ?A=home');
@@ -1765,5 +1773,9 @@ try{
 // *** IF THERE IS AN ERROR (EXCEPTION), IT IS CAPTURED TO DISPLAY ON A SPECIAL PAGE ***
 catch(Exception $e) {
     $errorMessage = $e->getMessage();
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
     echo $twig->render('/others/error.twig',array('error'=>$errorMessage)); 
 }

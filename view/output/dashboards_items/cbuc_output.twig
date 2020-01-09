@@ -29,7 +29,7 @@
         {% endfor %}    
     {% endfor %}
 </div>
-{{ macros.output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash) }}
+{{ macros.output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash,selDevSym) }}
 
 <div class="row text-center offset-1">
     <div class=" col-10 mt-5 mx-5 list-table keydates_table">
@@ -78,11 +78,11 @@
             <tbody>
                 <tr>
                     <td class="item" scope="row">Net Present Value (NPV)</td>
-                    <td>£{{(npv*ratio_zones)|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{(npv*ratio_zones)|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Societal NPV</td>
-                    <td>£{{(socnpv*ratio_zones)|number_format(2, '.', ',')}}</td>
+                    <td>{{selDevSym}} {{(socnpv*ratio_zones)|number_format(2, '.', ',')}}</td>
                 </tr>
                 <tr>
                     <td class="item" scope="row">Breakeven</td>

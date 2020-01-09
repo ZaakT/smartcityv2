@@ -94,20 +94,25 @@ function calcTotCapex(){
                 var val1 = parseInt($("#vol_"+temp[1]).val());
                 var val2 = parseFloat($("#cost_"+temp[1]).val());
                 var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
                 sum += tot;
             } else if (temp.length==1) {
-                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:"GBP",maximumFractionDigits:3}));
+                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             }
         }
     });
 }
 
-try{
-    countSelectedCapex(form_capex);
-} catch {
-    //do nothing
-} finally {
-    checkCapexInput();
-    calcTotCapex();
+function setNewDeviseCapex(name){
+    deviseName = name;
+    try{
+        countSelectedCapex(form_capex);
+    } catch {
+        //do nothing
+    } finally {
+        checkCapexInput();
+        calcTotCapex();
+    }
 }
+
+setNewDeviseCapex("GBP");

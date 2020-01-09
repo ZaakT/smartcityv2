@@ -5,7 +5,11 @@ require_once('model/model.php');
 // --- Funding
 function funding($twig,$is_connected){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/funding.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3]));
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/funding.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3]));
 }
 
 // ---- Financing / Funding Steps
@@ -17,7 +21,11 @@ function scenario($twig,$is_connected,$isTaken=false){
     //var_dump($list_scenarios);
     $list_projects = getListProjects2($user[0]);
     //var_dump($list_projects);
-    echo $twig->render('/input/funding_steps/scenario.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'scenarios'=>$list_scenarios,'projects'=>$list_projects,'isTaken'=>$isTaken)); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/funding_steps/scenario.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'scenarios'=>$list_scenarios,'projects'=>$list_projects,'isTaken'=>$isTaken)); 
 }
 
 function create_scen($twig,$is_connected,$post){
@@ -172,7 +180,11 @@ function work_cap_req($twig,$is_connected,$scenID=0){
 
             $values = ['capex'=>$tot_capex,'implem'=>$tot_implem,'invest'=>$tot_invest,'op'=>$tot_op,'total'=>$tot_invest+$tot_op];
             //var_dump($values);
-            echo $twig->render('/input/funding_steps/work_cap_req.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'values'=>$values,'selInvest'=>$selInvest,'selOp'=>$selOp,'scenID'=>$scenID)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/input/funding_steps/work_cap_req.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'values'=>$values,'selInvest'=>$selInvest,'selOp'=>$selOp,'scenID'=>$scenID)); 
             prereq_Funding();
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -238,7 +250,11 @@ function funding_sources($twig,$is_connected,$scenID=0){
             //var_dump($selEntities);
             $funding_target = getFundingTarget($scenID);
 
-            echo $twig->render('/input/funding_steps/funding_sources.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/input/funding_steps/funding_sources.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
             prereq_Funding();
         } else {
             throw new Exception("This Scenario doesn't exist !");
@@ -399,7 +415,11 @@ function input_entities($twig,$is_connected,$scenID){
             //var_dump($selEntities);
             $funding_target = getFundingTarget($scenID);
 
-            echo $twig->render('/input/funding_steps/input_entities.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities2'=>$selLoansAndBonds,'entities1'=>$selOthers,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/funding_steps/input_entities.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities2'=>$selLoansAndBonds,'entities1'=>$selOthers,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel));
             prereq_Funding(); 
         } else {
             throw new Exception("This Scenario doesn't exist !");
@@ -490,7 +510,11 @@ function benef($twig,$is_connected,$scenID=0){
             $funding_target = getFundingTarget($scenID);
             //var_dump($listBenef);
 
-            echo $twig->render('/input/funding_steps/benef.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'scenID'=>$scenID,'funding_target'=>$funding_target,'listBenef'=>$listBenef));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/funding_steps/benef.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'scenID'=>$scenID,'funding_target'=>$funding_target,'listBenef'=>$listBenef));
             prereq_Funding();
         } else {
             throw new Exception("This Scenario doesn't exist !");
@@ -558,6 +582,6 @@ function benef_selected($post){
 function prereq_Funding(){
     if(isset($_SESSION['scenID'])){
         $scenID = $_SESSION['scenID'];
-        echo "<script>prereq_funding(true);</script>";
+            echo "<script>prereq_funding(true);</script>";
     }
 }

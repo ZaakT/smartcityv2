@@ -8,7 +8,11 @@ require_once('model/model.php');
 
 function project_design($twig,$is_connected){
     $user = getUser($_SESSION['username']);
-    echo $twig->render('/input/project_design.twig',array('is_connected'=>$is_connected,'username'=>$user[1],'is_admin'=>$user[3])); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'username'=>$user[1],'is_admin'=>$user[3])); 
 }
 
 
@@ -19,7 +23,11 @@ function ucm($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_ucms = getListUCMS($user[0]);
     //var_dump($list_ucms);
-    echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken,'part'=>'Use Cases Menu','username'=>$user[1])); 
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken,'part'=>'Use Cases Menu','username'=>$user[1])); 
 }
 
 function create_ucm($post){
@@ -55,13 +63,21 @@ function measures($twig,$is_connected,$ucmID=0){
             //var_dump($list_measures);
             $list_sel = getListSelMeas($ucm[0]);
             //var_dump($list_sel);
-            echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'measures'=>$list_measures,'list_sel'=>$list_sel));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'measures'=>$list_measures,'list_sel'=>$list_sel));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=measures');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/measures.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -105,13 +121,21 @@ function criteria($twig,$is_connected,$ucmID=0){
             }
             //var_dump($list_sel);
             //var_dump($list_criteria);
-            echo $twig->render('/input/project_design_steps/criteria.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'criteria'=>$list_criteria,'list_sel'=>$list_sel,'categories'=>$list_critCategories));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/criteria.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'criteria'=>$list_criteria,'list_sel'=>$list_sel,'categories'=>$list_critCategories));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=criteria');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/criteria.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/criteria.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -172,13 +196,21 @@ function geography($twig,$is_connected,$ucmID=0){
             }
             //var_dump($list_sel);
             //var_dump($list_DLTs);
-            echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'DLTs'=>$list_DLTs,'list_sel'=>$list_sel));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'DLTs'=>$list_DLTs,'list_sel'=>$list_sel));
             prereq_ProjectDesign();
         } else {
             //header('Location: ?A=project_design&A2=geography');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/geography.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -236,13 +268,21 @@ function use_case($twig,$is_connected,$ucmID=0){
             var_dump($ucs);
             var_dump($list_cat); */
 
-            echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ucs'=>$list_ucs,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'sel_DLTs'=>$list_selDLT,'repart_selCrit'=>$repart_selCrit,'guidCrit'=>$guidCrit,'pertDLT'=>$pertDLT,'list_sel'=>$list_sel,'cat'=>$list_cat,'ucs_all'=>$ucs,'sel_meas'=>$list_selMeas,'meas'=>$list_meas));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ucs'=>$list_ucs,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'sel_DLTs'=>$list_selDLT,'repart_selCrit'=>$repart_selCrit,'guidCrit'=>$guidCrit,'pertDLT'=>$pertDLT,'list_sel'=>$list_sel,'cat'=>$list_cat,'ucs_all'=>$ucs,'sel_meas'=>$list_selMeas,'meas'=>$list_meas));
             prereq_ProjectDesign();
         } else {
             //header('Location: ?A=project_design&A2=use_case');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -278,13 +318,21 @@ function confirm_uc_select($twig,$is_connected,$ucmID=0){
             $list_selUC = getListSelUC($ucmID);
             //var_dump($list_selUC);
             update_ModifDate_ucm($ucmID);
-            echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'list_selUC'=>$list_selUC));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'list_selUC'=>$list_selUC));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=use_case');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/confirm_uc_select.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
     }
 }
 
@@ -328,13 +376,21 @@ function rating($twig,$is_connected,$ucmID=0){
             
             $listInputedRates = getListInputedRates($ucmID);
 
-            echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_ucs'=>$list_selUC,'sel_meas'=>$list_selMeas,'repart_ucs'=>$repart_ucs,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'guidCrit'=>$guidCrit,'rates'=>$listInputedRates,'meas'=>$measures,'ucs_all'=>$ucs,'cat'=>$list_cat));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_ucs'=>$list_selUC,'sel_meas'=>$list_selMeas,'repart_ucs'=>$repart_ucs,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'guidCrit'=>$guidCrit,'rates'=>$listInputedRates,'meas'=>$measures,'ucs_all'=>$ucs,'cat'=>$list_cat));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=rating');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/rating.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -427,7 +483,11 @@ function scoring($twig,$is_connected,$ucmID=0){
             var_dump($list_selCrit);
             var_dump($ranks); */
             if($ranks && $scores){
-                echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
+                $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
                 prereq_ProjectDesign();
             } else {
                 throw new Exception("There is a probleme with Ranks or Scores, please contact an administrator.");
@@ -436,7 +496,11 @@ function scoring($twig,$is_connected,$ucmID=0){
             header('Location: ?A=project_design&A2=scoring');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -583,13 +647,21 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
 
             $globalScores = calcGlobalScores($scores,$weights_table,$list_selUC);
 
-            echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_critCat'=>$list_selCritCat,'repart_selCrit'=>$repart_selCrit,'repart_crit'=>$repart_crit,'globalScores'=>$globalScores,'sel_ucs'=>$list_selUC,'weights_table'=>$weights_table));
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_critCat'=>$list_selCritCat,'repart_selCrit'=>$repart_selCrit,'repart_crit'=>$repart_crit,'globalScores'=>$globalScores,'sel_ucs'=>$list_selUC,'weights_table'=>$weights_table));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=global_score');
         }
     } else {
-        echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
@@ -632,7 +704,7 @@ function calcGlobalScores($scores,$weights_table){
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectDesign(){
     if(isset($_SESSION['ucmID'])){
-        echo "<script>prereq_ProjectDesign1(true);</script>";
+            echo "<script>prereq_ProjectDesign1(true);</script>";
         $ucmID = $_SESSION['ucmID'];
         $list_selMeas = getListSelMeas($ucmID);
         $list_selUC = getListSelUC($ucmID);
@@ -650,16 +722,16 @@ function prereq_ProjectDesign(){
         }
         $rates = getListInputedRates($ucmID);
         if(!empty($list_selMeas) && !empty($list_selCrit) && !empty($list_selCritCat) && !empty($list_selDLT)){
-            echo "<script>prereq_ProjectDesign2(true);</script>";
+                echo "<script>prereq_ProjectDesign2(true);</script>";
             if (!empty($list_selUC)) {
-                echo "<script>prereq_ProjectDesign3(true);</script>";
+                    echo "<script>prereq_ProjectDesign3(true);</script>";
                 if(!empty($rates)){
-                    echo "<script>prereq_ProjectDesign4(true);</script>";
+                        echo "<script>prereq_ProjectDesign4(true);</script>";
                     try{
                         $ranks = calcRanks($rates,$orderUC,$orderCrit);
                         $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
                         if(!empty($scores)){
-                            echo "<script>prereq_ProjectDesign5(true);</script>";
+                                echo "<script>prereq_ProjectDesign5(true);</script>";
                         }
                     }
                     finally{

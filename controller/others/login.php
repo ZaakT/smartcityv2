@@ -4,6 +4,10 @@ require_once('model/model.php');
 
 function login($twig,$username_in=true,$password_in=true){
     $username = isset($_COOKIE['username']) ? $_COOKIE['username'] : "";
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
     echo $twig->render('/others/login.twig',array('username'=>$username,'username_in'=>$username_in,'password_in'=>$password_in)); 
 }
 

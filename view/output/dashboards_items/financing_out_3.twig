@@ -19,9 +19,9 @@
 </div>
 
 <div class="row mt-2">
-    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> £ {{funding_target|number_format(2,'.',',')}}</h5>
+    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}  {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
-{{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels) }}
+{{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) }}
 
 <form name="form_finout" id="form_finout" action="?A=dashboards&amp;A2=financing&amp;A3=output3&amp;projID={{projID}}" method="post" onsubmit="">
     <input type="number" name="scenario" id="scenario" hidden value={{scenID}}>
