@@ -134,7 +134,7 @@ function work_cap_req($twig,$is_connected,$scenID=0){
                     $opexPerMonth = add_arrays($opexPerMonth,$opexPerMonth_new);
                     $opexTot = add_arrays($opexTot,$opexTot_new);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth_new = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
@@ -142,7 +142,8 @@ function work_cap_req($twig,$is_connected,$scenID=0){
                         $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     } else {
-                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth_new = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot_new = calcRevenuesTot($revenuesPerMonth,$projectYears);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     }

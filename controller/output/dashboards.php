@@ -46,6 +46,15 @@ function cost_benefits_uc($twig,$is_connected,$projID=0){
     }
 }
 
+function scheduleFilled($schedule){
+    foreach($schedule as $label => $date){
+        if($date == NULL){
+            return false;
+        }
+    }
+    return true;
+}
+
 function cbuc_output($twig,$is_connected,$projID,$post=[]){
     if($post){
         if($projID!=0){
@@ -99,7 +108,7 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
                 $opexTot2 = calcOpexTot($opexPerMonth,$projectYears);
 
-                if(!empty($revenuesSchedule)){
+                if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                     $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                     //var_dump($revenuesRepart);
                     $revenuesValues = getRevenuesValues($projID,$ucID);
@@ -493,7 +502,6 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
     
     $enddate = explode('/',$compo_dates['enddate']);
     $enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
-
     $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
     $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
@@ -508,7 +516,8 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
     for ($i=0; $i < $nb0 ; $i++) { 
         $list[$proj_dates[$i]] = 0;
     }
-    for ($i=$nb0; $i < $nb0+$nb25 ; $i++) { 
+    $list[$proj_dates[$nb0]] = $ratio25;
+    for ($i=$nb0+1; $i < $nb0+$nb25 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
     for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
@@ -808,7 +817,7 @@ function cost_benefits_all($twig,$is_connected,$projID){
                     $opexPerMonth = add_arrays($opexPerMonth,$opexPerMonth_new);
                     $opexTot = add_arrays($opexTot,$opexTot_new);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth_new = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
@@ -816,7 +825,8 @@ function cost_benefits_all($twig,$is_connected,$projID){
                         $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     } else {
-                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth_new = array_fill_keys($projectDates,0);
+                        $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
                         $revenuesTot_new = calcRevenuesTot($revenuesPerMonth,$projectYears);
                         $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
                     }
@@ -966,7 +976,7 @@ function budget_uc_output($twig,$is_connected,$projID,$post=[]){
                 $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
                 $opexTot2 = calcOpexTot($opexPerMonth,$projectYears);
 
-                if(!empty($revenuesSchedule)){
+                if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                     $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                     //var_dump($revenuesRepart);
                     $revenuesValues = getRevenuesValues($projID,$ucID);
@@ -1140,7 +1150,7 @@ function budget_all($twig,$is_connected,$projID){
                     $opexTot2 = calcOpexTot($opexPerMonth,$projectYears);
                     $opexTot_all = add_arrays($opexTot_all,$opexTot2);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
@@ -1254,7 +1264,7 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
                     $opex = getOpexValues($projID,$ucID);
                     $opexPerMonth = calcOpexPerMonth2($opexRepart,$opex);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
@@ -1556,7 +1566,7 @@ function bankability_output2($twig,$is_connected,$projID=0,$post=[]){
                     $opex = getOpexValues($projID,$ucID);
                     $opexPerMonth = calcOpexPerMonth2($opexRepart,$opex);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
@@ -2436,7 +2446,7 @@ function project_dashboard($twig,$is_connected,$projID=0){
                     $opexPerMonth = add_arrays($opexPerMonth,$opexPerMonth_new);
                     $opexTot = add_arrays($opexTot,$opexTot_new);
 
-                    if(!empty($revenuesSchedule)){
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
                         $revenuesPerMonth_new = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
