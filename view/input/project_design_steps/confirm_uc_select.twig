@@ -12,11 +12,11 @@
 {% block content %}
 
 {% if ucmID==0 %}
-{{ second_bar.second_bar(username,part,"None") }}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
 {{ redirect.choose_ucm() }}
 
 {% else %}
-{{ second_bar.second_bar(username,part,selected) }}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">

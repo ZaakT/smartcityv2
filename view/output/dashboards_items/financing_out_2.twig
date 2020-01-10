@@ -10,7 +10,7 @@
 
 {% block content %}
 {% if not list_selLB and not list_FS_noentity_LB %}
-    {{ second_bar.second_bar(username,part,selected,part2,selected2) }}
+    {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
     <div class="row jumbotron text-light m-5 bg-dark p-3">
         <div class="col text-center">
@@ -29,7 +29,7 @@
     </div>
 {% else %}
 
-    {{ second_bar.second_bar(username,part,selected,part2,selected2) }}
+    {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
     <div class="row jumbotron text-light m-5 bg-dark p-3">
         <div class="col text-center">

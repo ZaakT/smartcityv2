@@ -1729,7 +1729,8 @@ try{
             // ---------- DEVISES ----------
             elseif($_GET['A']=='setDevise'){
                 if(isset($_GET['id'])){
-                    setDevise(intval($_GET['id']));
+                    $lastURL = isset($_GET['lastURL']) ? $_GET['lastURL'] : "?A,home";
+                    setDevise(intval($_GET['id']),$lastURL);
                 } else {
                     header('Location: ?A=home');
                 }

@@ -1,13 +1,18 @@
-{% macro second_bar(username, part, selected, part2="", selected2="") %}
+{% macro second_bar(username,is_admin,devise_name="GBP",devise_sym="£", part, selected, part2="", selected2="") %}
 <div class="row infos-bar align-content-center">
     <div class="col-lg text-left">
-        <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&emsp;<strong>{{ selected }}</strong>
+        <span class="text-uppercase">{{ part }}{{ selected ? " :" : "" }}</span>&ensp;<strong>{{ selected }}</strong>
         {% if part2 and selected2 %}
-        <span class="ml-5 text-uppercase">{{ part2 }} :</span>&emsp;<strong>{{ selected2 }}</strong>
+        <span class="mx-2">|</span>
+        <span class="text-uppercase">{{ part2 }} :</span>&ensp;<strong>{{ selected2 }}</strong>
         {% endif %}
     </div>
     <div class="col-lg text-right">
-        <span class="text-uppercase"> Username :</span>&emsp;<strong>{{ username }}</strong>
+        <span class="text-uppercase">Username : </span>&ensp;<strong>{{ username }}</strong>
+        <span class="mx-2">|</span>
+        <span class="text-uppercase">Role : </span>&ensp;<strong>{{is_admin ? "Admin" : "Common"}}</strong>
+        <span class="mx-2">|</span>
+        <span class="text-uppercase">Devise :</span>&ensp;<strong>{{ devise_name }} ({{ devise_sym }})</strong>
     </div>
 </div>
 {% endmacro %}
