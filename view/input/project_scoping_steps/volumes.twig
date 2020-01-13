@@ -30,7 +30,11 @@
                 <h3 class="col">Input volumes for {{measures[meas]['name']}}</h3>
             </div>
             {{ list.list_indic(meas,list_ucs,ucs,measures,ratio,components) }}
-            {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,list_sel) }}
+            <div class="row m-3 btn-group-sm justify-content-center" role="group">
+                <button class="col-2 btn btn-dark" type="button" onclick="fillByAv('volumes_table_{{meas}}'); return false;">Fill with default values</button>
+                <button class="offset-1 col-1 btn btn-danger" type="button" onclick="clearTable('volumes_table_{{meas}}'); return false;">Clear all</button>
+            </div>
+            {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel) }}
             {% endfor %}
             
             <div class="row mt-4 mb-0 text-center">

@@ -251,8 +251,8 @@ try{
                                 array_push($list_critID,$critID);
                             }
                         }
-                        var_dump("list_critID :");
-                        var_dump($list_critID);
+                        //var_dump("list_critID :");
+                        //var_dump($list_critID);
                         criteria_selected($list_critID);
                     }
                     // --- GEOGRAPHY ---

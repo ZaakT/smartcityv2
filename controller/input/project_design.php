@@ -156,8 +156,9 @@ function criteria_selected($list_critID=[]){
             $listSelCrit = getListSelCrit($ucmID);
             $listSelCritCatID = [];
             foreach ($listSelCrit as $selCrit) {
-                if(!in_array($selCrit[3],$listSelCritCatID)){
-                    array_push($listSelCritCatID,intval($selCrit[3]));
+                //var_dump($selCrit);
+                if(!in_array($selCrit['id_cat'],$listSelCritCatID)){
+                    array_push($listSelCritCatID,intval($selCrit['id_cat']));
                 }
             }
             //var_dump("listSelCritCatID :");
@@ -341,11 +342,11 @@ function calcRepartCrit($list_cat,$list_crit){
     foreach ($list_cat as $cat) {
         $count = 0;
         foreach ($list_crit as $crit) {
-            if($cat[0]==$crit[3]){
+            if($cat['id']==$crit['id_cat']){
                 $count++;
             }
         }
-        $res[$cat[0]] = $count;
+        $res[$cat['id']] = $count;
     }
     //var_dump($res);
     return $res;
@@ -472,7 +473,7 @@ function scoring($twig,$is_connected,$ucmID=0){
             $list_selCrit = getListSelCrit($ucmID);
             $orderCrit = [];
             foreach ($list_selCrit as $crit) {
-                array_push($orderCrit,intval($crit[0]));
+                array_push($orderCrit,intval($crit['id']));
             }
             //var_dump($orderCrit);
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
@@ -484,10 +485,10 @@ function scoring($twig,$is_connected,$ucmID=0){
             var_dump($ranks); */
             if($ranks && $scores){
                 $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                
+                echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ranks'=>$ranks,'scores'=>$scores,'sel_ucs'=>$list_selUC,'repart_selCrit'=>$repart_selCrit,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit));
                 prereq_ProjectDesign();
             } else {
                 throw new Exception("There is a probleme with Ranks or Scores, please contact an administrator.");
@@ -497,16 +498,15 @@ function scoring($twig,$is_connected,$ucmID=0){
         }
     } else {
         $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+        $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+        $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
+        echo $twig->render('/input/project_design_steps/scoring.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu','username'=>$user[1]));
         prereq_ProjectDesign();
     }
 }
 
 function calcRanks($rates,$orderUC,$orderCrit){
-    //var_dump($rates);
     $rates_by_crit = [];
     foreach ($rates as $idUC => $dicCritRates) {
         foreach ($dicCritRates as $idCrit => $rate) {
@@ -525,7 +525,6 @@ function calcRanks($rates,$orderUC,$orderCrit){
     $ranks = [];
     foreach ($rates_by_crit as $idCrit => $dicUCsRates) {
         arsort($dicUCsRates);
-        //var_dump($dicUCsRates);
         $rank = 1;
         $old_rate = 0;
         $counter = 0;
@@ -561,17 +560,15 @@ function calcRanks($rates,$orderUC,$orderCrit){
 }
 
 function calcScores($ranks,$repart_selCrit,$n,$orderUC){
-    //var_dump($ranks);
+    //var_dump($orderUC);
     //var_dump($repart_selCrit);
     $scores = [];
     //var_dump($ranks);
     foreach ($ranks as $idCrit => $dicUCsRates) {
         $idCat = getCatByCrit($idCrit);
-        //var_dump($idCat);
         uksort($dicUCsRates, function($key1, $key2) use ($orderUC) {
             return (array_search($key1, $orderUC) > array_search($key2, $orderUC));
         });
-        //var_dump($dicUCsRates);
         foreach ($dicUCsRates as $idUC => $rank) {
             if(array_key_exists($idCat,$scores)){
                 if (array_key_exists($idUC,$scores[$idCat])){
@@ -586,13 +583,12 @@ function calcScores($ranks,$repart_selCrit,$n,$orderUC){
             }
         }
     }
-    //var_dump($scores);
+    //var_dump($orderUC);
     foreach ($repart_selCrit as $idCat => $nbCrit) {
-        /* $idCat = getCatByCrit($idCrit);
-        $nbCrit = $repart_selCrit[$idCat]; */
-        foreach ($dicUCsRates as $idUC => $rank) {
-            //var_dump($scores,$idCat,$idUC);
-            $sum = $scores[$idCat][$idUC];
+        //var_dump($dicUCsRates);
+        foreach ($orderUC as $idUC) {
+            $sum = isset($scores[$idCat][$idUC]) ? $scores[$idCat][$idUC] : 0;
+            //var_dump($sum);
             $scores[$idCat][$idUC] = number_format(10*(1 - ($sum-$nbCrit)/($n-1)/$nbCrit),2);
         }
     }
@@ -616,7 +612,7 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             $list_selCrit = getListSelCrit($ucmID);
             $orderCrit = [];
             foreach ($list_selCrit as $crit) {
-                array_push($orderCrit,intval($crit[0]));
+                array_push($orderCrit,intval($crit['id']));
             }
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             if(!empty($post)){
@@ -646,12 +642,11 @@ function global_score($twig,$is_connected,$ucmID=0,$post=[]){
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
 
             $globalScores = calcGlobalScores($scores,$weights_table,$list_selUC);
-
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_critCat'=>$list_selCritCat,'repart_selCrit'=>$repart_selCrit,'repart_crit'=>$repart_crit,'globalScores'=>$globalScores,'sel_ucs'=>$list_selUC,'weights_table'=>$weights_table));
+            echo $twig->render('/input/project_design_steps/global_score.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'sel_critCat'=>$list_selCritCat,'repart_selCrit'=>$repart_selCrit,'repart_crit'=>$repart_crit,'globalScores'=>$globalScores,'sel_ucs'=>$list_selUC,'weights_table'=>$weights_table));
             prereq_ProjectDesign();
         } else {
             header('Location: ?A=project_design&A2=global_score');
@@ -683,7 +678,6 @@ function calcDefaultWeights($sel_critCat){
 }
 
 function calcGlobalScores($scores,$weights_table){
-    //var_dump($scores);
     $globalScores = [];
     foreach ($scores as $idCritCat => $dic_UC_Score) {
         foreach ($dic_UC_Score as $idUC => $score){
@@ -695,7 +689,6 @@ function calcGlobalScores($scores,$weights_table){
             }
         }
     }
-
     //var_dump($globalScores);
     return $globalScores;
 }
@@ -718,7 +711,7 @@ function prereq_ProjectDesign(){
         }
         $orderCrit = [];
         foreach ($list_selCrit as $crit) {
-            array_push($orderCrit,intval($crit[0]));
+            array_push($orderCrit,intval($crit['id']));
         }
         $rates = getListInputedRates($ucmID);
         if(!empty($list_selMeas) && !empty($list_selCrit) && !empty($list_selCritCat) && !empty($list_selDLT)){

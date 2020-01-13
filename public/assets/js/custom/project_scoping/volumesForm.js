@@ -83,7 +83,7 @@ function fillTot(formName){
             sum = 0;
             list_zones.forEach((zone) => {
                 val = calcTotUC(uc,zone,compo);
-                console.log(val);
+                //console.log(val);
                 if(val!="-"){
                     sum += val;
                 }
@@ -101,7 +101,7 @@ function colorFilledVolumes(){
         var element = $(this);
         var value = element.val();
         value = value=="" ? 0 : parseInt(value);
-        if(value<1){
+        if(value<0){
             element.css("background","salmon");
             element.val("");
             ret = false;
@@ -116,3 +116,33 @@ function colorFilledVolumes(){
 colorFilledVolumes();
 
 fillTot("form_volumes");
+
+
+function fillByAv(){
+    $("#"+id+" input").each(function(){
+        var element = $(this);
+        console.log(element);
+        if(element.attr("placeholder")){
+            var tab = element.attr("placeholder").split("-");
+            if(tab.length > 1){
+                var min = tab[0] != "" ? parseInt(tab[0].replace(",","")) : 0;
+                var max = tab[1] != "" ? parseInt(tab[1].replace(",","")) : 0;
+                console.log((min+max)/2);
+                element.val(parseInt((min+max)/2));
+                console.log(element.val());
+            } else {
+                var val = parseInt(tab[0]);
+                element.val(parseInt(val));
+            }
+            element.trigger("input");
+        }
+    });
+}
+
+function clearTable(){
+    $("#"+id+" input").each(function(){
+        var element = $(this);
+            element.val("");
+            element.trigger("input");
+    });
+}

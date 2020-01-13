@@ -1069,7 +1069,7 @@ function getNbCompoPerZone(){
     $list = [];
     while($row = $req->fetch()){
         $id_compo = intval($row['id_compo']);
-        $val = number_format(round($row['number']),0,'.',' ');
+        $val = intval($row['number']);//number_format(round($row['number']),0,'.',' ');
         $id_zone = intval($row['id_zone']);
         if(array_key_exists($id_compo,$list)){
             $list[$id_compo]+=[$id_zone=>$val];

@@ -28,7 +28,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,list_sel=[])  %}
+{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel=[])  %}
 
 {% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
 <div class="row text-center">
@@ -63,7 +63,7 @@
                     <tr id = "tr_{{ id }}" scope="row">
                         <td class="font-weight-bold">{{ zone['name'] }}</td>
                         {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                            <td class="val_zones" id="val_zones_{{id_compo}}_{{id}}" scope="col">{{compo_per_zone[id_compo][id]}}</td>
+                            <td class="val_zones" id="val_zones_{{id_compo}}_{{id}}" scope="col">{{compo_per_zone[id_compo][id]|number_format(0,'.',',')}}</td>
                         {% endfor %}
                         {% for uc in list_ucs %}
                             {% if sizes[id][uc] %}
@@ -73,8 +73,8 @@
                                     ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
                                 </td>
                                 {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=1 oninput='fillTot("form_volumes");' required value={{list_sel[id][uc]['nb_compo']}}></td>
-                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=1 oninput='fillTot("form_volumes");' required value={{list_sel[id][uc]['nb_per_uc']}}></td>
+                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td>
+                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_per_uc']}}" placeholder="{{ratio[id_compo][uc]}}"></td>
                                 {% endfor %}
                                 <td id="totUC_{{uc}}_{{id}}" scope="col">-</td>
                             {% else %}
