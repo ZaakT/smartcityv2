@@ -17,7 +17,7 @@
 {% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total,selDevSym) %}
 <div class="row text-center ">
     <div class="col mt-2 mx-5 list-table financing_table">
-        <table id="financing_table" class='table table-lg table-bordered table-responsive-lg'>
+        <table id="financing_table_{{sourceRef}}" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col"></th>
@@ -35,7 +35,7 @@
                 {% for entityID,entity in list_selLB[sourceRef] %}
                     <tr>
                         <td class="item text-left" colspan={{years|length + 1}}>{{entity['name']}}</td>
-                        <td class="item" rowspan=5></td>
+                        <td class="item" rowspan=1></td>
                         <td class="item" colspan={{dates|length}}></td>
                     </tr>
                     <tr>
@@ -43,6 +43,7 @@
                         {% for year in years %}
                             <td>{{selDevSym}}  {{cashInflow[sourceRef][entityID][year] != 0 ? cashInflow[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{cashInflow[sourceRef][entityID][date] != 0 ?cashInflow[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -52,6 +53,7 @@
                         {% for year in years %}
                             <td>{{selDevSym}}  {{reimb[sourceRef][entityID][year] != 0 ? reimb[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{reimb[sourceRef][entityID][date] != 0 ? reimb[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -61,6 +63,7 @@
                             {% for year in years %}
                                 <td>-</td>
                             {% endfor %}
+                            <td class="item" rowspan=1></td>
                             {% for date in dates %}
                                 <td>{{selDevSym}}  {{netDebt[sourceRef][entityID][date] != 0 ? netDebt[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
@@ -70,59 +73,15 @@
                             {% for year in years %}
                                 <td>{{selDevSym}}  {{interest[sourceRef][entityID][year] != 0 ? interest[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
+                            <td class="item" rowspan=1></td>
                             {% for date in dates %}
                                 <td>{{selDevSym}}  {{interest[sourceRef][entityID][date] != 0 ? interest[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
                             {% endfor %}
                     </tr>
                 {% endfor %}
-                {# {% for sourceID,source in list_FS_noentity_LB %}
-                    {% if sourceID == sourceRef %}
-                        <tr>
-                            <td class="item text-left" colspan={{years|length + 1}}>{{FS[sourceID]['name']}} (no entity)</td>
-                            <td class="item separation_dates" rowspan=5></td>
-                            <td class="item" colspan={{dates|length}}></td>
-                        </tr>
-                        <tr>
-                            <td class="sub_item">Cash Inflow</td class="item">
-                            {% for year in years %}
-                                <td>{{selDevSym}}  {{cashInflow[sourceRef][year] != 0 ? cashInflow[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
-                            {% endfor %}
-                            {% for date in dates %}
-                                <td>{{selDevSym}}  {{cashInflow[sourceRef][date] != 0 ? cashInflow[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
-                            {% endfor %}
-                        </tr>
-                        <tr>
-                            <td class="sub_item">Reimbursements</td class="sub_item">
-                            {% for year in years %}
-                                <td>{{selDevSym}}  {{reimb[sourceRef][year] != 0 ? reimb[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
-                            {% endfor %}
-                            {% for date in dates %}
-                                <td>{{selDevSym}}  {{reimb[sourceRef][date] != 0 ? reimb[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
-                            {% endfor %}
-                        </tr>
-                        <tr>
-                            <td class="sub_item">Net Debt</td class="sub_item">
-                                {% for year in years %}
-                                    <td>-</td>
-                                {% endfor %}
-                                {% for date in dates %}
-                                    <td>{{selDevSym}}  {{netDebt[sourceRef][date] != 0 ? netDebt[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
-                                {% endfor %}
-                        </tr>
-                        <tr>
-                            <td class="sub_item">Interest</td class="sub_item">
-                                {% for year in years %}
-                                    <td>{{selDevSym}}  {{interest[sourceRef][year] != 0 ? interest[sourceRef][year]|number_format(2,'.',',') : 0}}</td>
-                                {% endfor %}
-                                {% for date in dates %}
-                                    <td>{{selDevSym}}  {{interest[sourceRef][date] != 0 ? interest[sourceRef][date]|number_format(2,'.',',') : 0}}</td>
-                                {% endfor %}
-                        </tr>
-                    {% endif %}
-                {% endfor %} #}
                 <tr>
                     <td class="item text-left text-uppercase" colspan={{years|length + 1}}>Total</td>
-                    <td class="item" rowspan=5></td>
+                    <td class="item" rowspan=1></td>
                     <td class="item" colspan={{dates|length}}></td>
                 </tr>
                 <tr>
@@ -130,6 +89,7 @@
                         {% for year in years %}
                             <td>{{selDevSym}}  {{total[sourceRef][year]['cashInflow'] != 0 ? total[sourceRef][year]['cashInflow']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{total[sourceRef][date]['cashInflow'] != 0 ? total[sourceRef][date]['cashInflow']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -139,6 +99,7 @@
                         {% for year in years %}
                             <td>{{selDevSym}}  {{total[sourceRef][year]['reimb'] != 0 ? total[sourceRef][year]['reimb']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{total[sourceRef][date]['reimb'] != 0 ? total[sourceRef][date]['reimb']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -148,6 +109,7 @@
                         {% for year in years %}
                             <td>-</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{total[sourceRef][date]['netDebt'] != 0 ? total[sourceRef][date]['netDebt']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -157,6 +119,7 @@
                         {% for year in years %}
                             <td>{{selDevSym}}  {{total[sourceRef][year]['interest'] != 0 ? total[sourceRef][year]['interest']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
+                        <td class="item" rowspan=1></td>
                         {% for date in dates %}
                             <td>{{selDevSym}}  {{total[sourceRef][date]['interest'] != 0 ? total[sourceRef][date]['interest']|number_format(2,'.',',') : 0}}</td>
                         {% endfor %}
@@ -264,8 +227,8 @@
     </div>
 </div>
 <div class="mt-5 row text-center">
-    <div class="offset-2 col-8 list-table financing_table_2">
-        <table id="financing_table_2" class='table table-lg table-bordered table-responsive-lg'>
+    <div class="offset-2 col-8 list-table financing_table_3">
+        <table id="financing_table_3" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col">Beneficiary</th>

@@ -18,6 +18,11 @@
     </div>
 </div>
 {{ macros.selUCS2(selUCS,ucs,measures,capex,weighted_scores,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="bank2csv('bank_uc_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 {{ macros.define(selDevSym) }}
 {{ macros.overall(selDevSym) }}
 

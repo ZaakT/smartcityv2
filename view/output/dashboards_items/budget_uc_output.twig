@@ -19,6 +19,11 @@
 </div>
 
 {{ macros.output(years,implem,opex,revenues,capexAmort,baselineOpCost,netProjectCost,budgetCost,OBYI,OBCI,CRV,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="budgetperuc2csv('budget_uc_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=budget_all&amp;projID={{projID}}');"></button>

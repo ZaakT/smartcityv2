@@ -24,9 +24,6 @@ function getPart(idDev){
             }
         }
     }
-
-    console.log(temp3);
-    console.log(temp4);
     var href = $("#link_setDevise_"+idDev).attr('href');
     $("#link_setDevise_"+idDev).attr('href',href+"&lastURL="+temp4+"");
     //console.log($("#link_setDevise_"+idDev).attr('href'));

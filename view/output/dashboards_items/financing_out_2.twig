@@ -60,6 +60,11 @@
             {% endif %}
             
             {{ macros.output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb,netDebt,interest,total,selDevSym) }}
+            <div class="row mt-3 mb-5 text-center">
+                <div class="col">
+                    <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table','{{selected}}','{{selected2}}','{{source['name']}}','{{sourceID}}','{{selDevSym}}');">Export to CSV</button>
+                </div>
+            </div>
         {% endif %}
     {% endfor %}
 

@@ -394,3 +394,107 @@ try{
 } finally {
     //do nothing
 }
+
+function bank2csv(idTable,projName,selDevSym="£"){
+    var text = "";
+    var labels = [];
+    var data = [];
+    var name = "output_"+projName+"_bankability";
+    labels.push("Project");
+
+    if(idTable == "financial_bank"){
+        name += "_financial";
+        var i = 0;
+        labels.push("");
+        $("#"+idTable+" thead tr").each(function(){
+            if(i!=0){
+                $(this).children('th').each(function(){
+                    text = $(this).text();
+                    text = text.replace(selDevSym+" ",'');
+                    labels.push(text);
+                });
+            }
+            i++;
+        });
+        i = 0;
+        $("#"+idTable+" tbody tr").each(function(){
+            if(i == 0){
+                data.push([projName]);
+            } else {
+                data.push([""]);
+            }
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                text = text.replace(/\n/g,'');
+                text = text.replace(/\s{2,}/g, "");
+                data[i].push(text);
+            });
+            i++;
+        });
+    } else if(idTable == "societal_bank"){
+        name += "_societal";
+        var i = 0;
+        labels.push("");
+        $("#"+idTable+" thead tr").each(function(){
+            if(i!=0){
+                $(this).children('th').each(function(){
+                    text = $(this).text();
+                    text = text.replace(selDevSym+" ",'');
+                    labels.push(text);
+                });
+            }
+            i++;
+        });
+        i = 0;
+        $("#"+idTable+" tbody tr").each(function(){
+            if(i == 0){
+                data.push([projName]);
+            } else {
+                data.push([""]);
+            }
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                text = text.replace(/\n/g,'');
+                data[i].push(text);
+            });
+            i++;
+        });
+    } else if(idTable == "bank_uc_table"){
+        name += "_weigthedUCs";
+        $("#"+idTable+" thead tr").each(function(){
+            var j = 0;
+            $(this).children('th').each(function(){
+                if(j!=0){
+                    text = $(this).text();
+                    text = text.replace(selDevSym+" ",'');
+                    labels.push(text);
+                }
+                j++;
+            });
+        });
+        var i = 0;
+        $("#"+idTable+" tbody tr").each(function(){
+            if(i == 0){
+                data.push([projName]);
+            } else {
+                data.push([""]);
+            }
+            j = 0;
+            $(this).children('td').each(function(){
+                if(j!=0){
+                    text = $(this).text();
+                    text = text.replace(selDevSym+" ",'');
+                    text = text.replace(/\n/g,'');
+                    data[i].push(text);
+                }
+                j++;
+            });
+            i++;
+        });
+    }
+    //console.log(labels);
+    //console.log(data);
+    download_csv(name,labels,data)
+}

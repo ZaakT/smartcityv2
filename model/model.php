@@ -853,10 +853,10 @@ function deleteUCCat($catID){
     return $req->execute(array($catID));
 }
 
-function updateScoping($projID){
+function updateScoping($projID,$val){
     $db = dbConnect();
-    $req = $db->prepare('UPDATE project SET scoping=1 WHERE id = ?');
-    return $req->execute(array($projID));
+    $req = $db->prepare('UPDATE project SET scoping=? WHERE id = ?');
+    return $req->execute(array($val,$projID));
 }
 
 function updateCB($projID,$val){

@@ -19,6 +19,11 @@
 </div>
 
 {{ macros.output(projectDates,years,capexMonth,capexTot,implemMonth,implemTot,opexMonth,opexTot,revenuesMonth,revenuesTot,cashreleasingMonth,cashreleasingTot,widercashMonth,widercashTot,netcashPerMonth,netcashTot,netsoccashPerMonth,netsoccashTot,cumulnetcashPerMonth,cumulnetsoccashPerMonth,cumulnetcashTot,cumulnetsoccashTot,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cballuc2csv('cball_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row text-center offset-2">
     <div class=" col-8 mt-5 mx-5 list-table keydates_table">
@@ -43,6 +48,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cballuc2csv('keydates_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 
@@ -81,6 +91,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cballuc2csv('keyratios_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 

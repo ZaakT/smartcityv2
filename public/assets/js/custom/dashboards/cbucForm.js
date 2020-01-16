@@ -18,6 +18,7 @@
         return classes;
     };
 })(jQuery);
+
 function countChecked_zones(formName){
     var nb_selectedZones = 0;
     $("#"+formName).each(function(){
@@ -64,3 +65,109 @@ function countChecked_zones(formName){
 }
 
 countChecked_zones("form_cbuc");
+
+function cbuc2csv(idTable,projName,ucName,selDevSym="£"){
+    var text = "";
+    var labels = [];
+    var data = [];
+    var name = "output_CB_perUC_"+projName;
+    labels.push("Selected Zones","Project","Selected Use Case");
+    $("#selected_zones").each(function(){
+        text = $(this).text();
+        text = text.replace(/\n/g,"");
+        text = text.replace(/\s{2,}/g, "");
+        //text = text.replace(/\s{1}$/, "");
+        var zones = text.split("/");
+        //console.log(zones);
+        for (const key in zones) {
+            if (zones.hasOwnProperty(key)) {
+                const zone = zones[key];
+                data.push([zone]);
+            }
+        }
+    });
+
+    if(idTable == "cbuc_table"){
+        name += "_summary";
+        var j = 0;
+        $("#cbuc_table thead tr").each(function(){
+            if(j != 0){
+                $(this).children('th').each(function(){
+                    text = $(this).text();
+                    text = text.replace(selDevSym+" ",'');
+                    labels.push(text);
+                });
+            }
+            j++;
+        });
+        var i = 0;
+        $("#cbuc_table tbody tr").each(function(){
+            if(i == 0){
+                data[0].push(projName,ucName);
+            } else {
+                if(data.hasOwnProperty(i)){
+                    data[i].push("","");
+                } else {
+                    data.push(["","",""]);
+                }
+            }
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                data[i].push(text);
+            });
+            i++;
+        });
+    } else if(idTable == "keydates_table"){
+        name += "_keydates";
+        labels.push("Date Label (Project)");
+        labels.push("Date (Project)");
+        labels.push("Date Label (Selected Use Case)");
+        labels.push("Date (Selected Use Case)");
+        var i = 0;
+        $("#keydates_table tbody tr").each(function(){
+            if(i == 0){
+                data[0].push(projName,ucName);
+            } else {
+                if(data.hasOwnProperty(i)){
+                    data[i].push("","");
+                } else {
+                    data.push(["","",""]);
+                }
+            }
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                data[i].push(text);
+            });
+            i++;
+        });
+
+    } else if(idTable == "keyratios_table"){
+        name += "_keyratios";
+        labels.push("Ratio Label");
+        labels.push("Ratio Value");
+        var i = 0;
+        $("#keyratios_table tbody tr").each(function(){
+            if(i == 0){
+                data[0].push(projName,ucName);
+            } else {
+                if(data.hasOwnProperty(i)){
+                    data[i].push("","");
+                } else {
+                    data.push(["","",""]);
+                }
+            }
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                data[i].push(text);
+            });
+            i++;
+        });
+        
+    }
+    //console.log(labels);
+    //console.log(data);
+    download_csv(name,labels,data)
+}

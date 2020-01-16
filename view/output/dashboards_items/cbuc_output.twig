@@ -20,7 +20,7 @@
 <div class="row mx-5 text-uppercase">
     <strong>Selected Zones :</strong>
 </div>
-<div class="row mx-5 mb-3">
+<div class="row mx-5 mb-3" id="selected_zones">
     {% for i,level in zones %}
         {% for id,zone in level %}
             {% if not zone['hasChildren'] %}
@@ -30,6 +30,11 @@
     {% endfor %}
 </div>
 {{ macros.output(years,ratio_zones,capex,implem,opex,revenues,cashreleasing,widercash,netcash,netsoccash,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cbuc2csv('cbuc_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row text-center offset-1">
     <div class=" col-10 mt-5 mx-5 list-table keydates_table">
@@ -64,6 +69,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keydates_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 
@@ -102,6 +112,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keyratios_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 

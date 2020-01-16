@@ -249,7 +249,7 @@ function getRatioByVolume($list_nbUC,$selZones){
         }
     }
     //var_dump($nbSel,array_sum($list_nbUC));
-    return $nbSel/array_sum($list_nbUC);
+    return array_sum($list_nbUC)!=0 ? $nbSel/array_sum($list_nbUC) : 0;
 }
 
 function getYears($startdate,$enddate){
@@ -1392,6 +1392,7 @@ function transformForChart($list_data){
 
 function setFinData($selUCS,$ROI,$payback,$fin_score){
     $list = [];
+    //var_dump($_SESSION);
     foreach ($selUCS as $ucID) {
         $list[$ucID] = ["Return per".$_SESSION['devise_symbol']."invested"=>$ROI[$ucID]['score'],"Payback / Project Duration"=>$payback[$ucID]['score'],"Financial Bankability Score"=>$fin_score[$ucID]];
     }

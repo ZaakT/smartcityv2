@@ -100,12 +100,14 @@ function colorFilledVolumes(){
         //console.log(this);
         var element = $(this);
         var value = element.val();
-        value = value=="" ? 0 : parseInt(value);
-        if(value<0){
+        //value = value=="" ? "" : parseInt(value);
+        console.log(value);
+        if(value=="" || value<0){
             element.css("background","salmon");
             element.val("");
             ret = false;
         } else {
+            value = parseInt(value);
             element.val(value);
             element.css("background","palegreen");
         }
@@ -118,7 +120,7 @@ colorFilledVolumes();
 fillTot("form_volumes");
 
 
-function fillByAv(){
+function fillByAv(id){
     $("#"+id+" input").each(function(){
         var element = $(this);
         console.log(element);
@@ -139,7 +141,7 @@ function fillByAv(){
     });
 }
 
-function clearTable(){
+function clearTable(id){
     $("#"+id+" input").each(function(){
         var element = $(this);
             element.val("");

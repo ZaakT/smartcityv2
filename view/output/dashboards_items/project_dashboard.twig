@@ -22,16 +22,31 @@
     <h4 class="text-dark col">Project Scope</h4>
 </div>
 {{ macros.project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('project_scope_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Budget Impact</h4>
 </div>
 {{ macros.budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('budget_all_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Cost Benefits</h4>
 </div>
 {{ macros.cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('cost_benefits_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row mt-5 mb-0 text-center text-uppercase">
     <h4 class="text-dark col">Bankability</h4>

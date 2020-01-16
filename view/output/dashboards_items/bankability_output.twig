@@ -30,6 +30,11 @@
         {{ macros.financial(scope,meas,ucs,selUCS,fin_ROI,fin_payback,fin_score,selDevSym) }}
     </div>
 </div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="bank2csv('financial_bank','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 <div class="row text-center mt-3">
     <div class="col dropdown">
         <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -59,6 +64,11 @@
 <div class="row offset-2">
     <div class="col-8 my-2 mx-5 list-table societal_bank">
         {{ macros.societal(scope,meas,ucs,selUCS,soc_ROI,soc_payback,risk,noncash,soc_score,selDevSym) }}
+    </div>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="bank2csv('societal_bank','{{selected}}','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 <div class="row text-center mt-3">

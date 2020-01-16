@@ -22,6 +22,11 @@
     <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}  {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
 {{ macros.output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) }}
+<div class="row mt-3 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_3','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
 
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=project_dashboard&amp;projID={{projID}}');"></button>
