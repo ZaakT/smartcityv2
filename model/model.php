@@ -15,7 +15,8 @@ function dbConnect()
 
 function getListDevises(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, name, symbol, rateToGBP FROM devise ORDER BY id');
+    $req = $db->prepare('SELECT id, name, symbol, rateToGBP FROM devise ORDER BY id');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id = intval($row['id']);
@@ -108,7 +109,8 @@ function getUser($username){
 
 function getListUsers(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, username, is_admin,creation_date FROM user ORDER BY username');
+    $req = $db->prepare('SELECT id, username, is_admin,creation_date FROM user ORDER BY username');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -200,7 +202,8 @@ function update_ModifDate_ucm($ucmID){
 
 function getListMeasures(){
     $db = dbConnect();
-    $req = $db->query('SELECT id,name,description FROM measure ORDER BY name');
+    $req = $db->prepare('SELECT id,name,description FROM measure ORDER BY name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id = intval($row['id']);
@@ -301,11 +304,12 @@ function getCatByCrit($idCrit){
 
 function getListCrit(){
     $db = dbConnect();
-    $req = $db->query('SELECT crit.id, crit.name, crit.description, critCat.id as id_cat
+    $req = $db->prepare('SELECT crit.id, crit.name, crit.description, critCat.id as id_cat
                     FROM crit
                     INNER JOIN critCat
                     WHERE crit.id_cat = critCat.id
                     ORDER BY name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id = intval($row['id']);
@@ -319,7 +323,8 @@ function getListCrit(){
 
 function getListCritCat(){
     $db = dbConnect();
-    $req = $db->query('SELECT id,name FROM critCat ORDER BY name');
+    $req = $db->prepare('SELECT id,name FROM critCat ORDER BY name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -457,7 +462,8 @@ function deleteCrit($critID){
 
 function getListDLTs(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, name, description FROM dlt ORDER BY name');
+    $req = $db->prepare('SELECT id, name, description FROM dlt ORDER BY name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         array_push($list,$row);
@@ -785,13 +791,14 @@ function update_ModifDate_proj($projID){
 
 function getListUCs(){
     $db = dbConnect();
-    $req = $db->query('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name, id_cat, use_case_cat.name
+    $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name, id_cat, use_case_cat.name
                         FROM use_case
                         INNER JOIN measure
                             INNER JOIN use_case_cat
                                 WHERE use_case.id_meas = measure.id
                                 and use_case.id_cat = use_case_cat.id
                         ORDER BY measure.name,use_case_cat.name,use_case.name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id_uc = intval($row[0]);
@@ -807,9 +814,10 @@ function getListUCs(){
 }
 function getListUCsCat(){
     $db = dbConnect();
-    $req = $db->query('SELECT id, name, description
+    $req = $db->prepare('SELECT id, name, description
                         FROM use_case_cat
                         ORDER BY name');
+    $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id = intval($row['id']);

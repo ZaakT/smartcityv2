@@ -4,7 +4,7 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/dashboards/macro_financing.twig" as macros %}
 
-{% block title %}Dashboards - Financing{% endblock %}
+{% block title %}Dashboards - Cash Flows{% endblock %}
 
 {% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
 
@@ -21,10 +21,10 @@
 <div class="row mt-2">
     <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}&nbsp; {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
-{{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) }}
+{{ macros.output_cashflows(selDevSym,years_LB,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) }}
 <div class="row mt-3 mb-5 text-center">
     <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_2','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
+        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_5','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
     </div>
 </div>
 

@@ -76,58 +76,58 @@
             <tbody>
                 <tr>
                     <td class="item"><strong>Capex</strong> (A)</td>
-                    <td>{{selDevSym}} {{(capex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(capex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(capex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(capex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Implementation</strong> (B)</td>
-                    <td>{{selDevSym}} {{(implem['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(implem['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(implem[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(implem[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
-                    <td>{{selDevSym}} {{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(opex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(opex[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Revenues</strong> (D)</td>
-                    <td>{{selDevSym}} {{(revenues['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(revenues['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(revenues[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(revenues[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
-                    <td>{{selDevSym}} {{(cashreleasing['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(cashreleasing['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(cashreleasing[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(cashreleasing[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Wider Cash Benefits</strong> (F)</td>
-                    <td>{{selDevSym}} {{(widercash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(widercash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(widercash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(widercash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Cash exc.<br>Wider Cost Benefits</strong><br>(E + D - A - B - C)</td>
-                    <td>{{selDevSym}} {{(netcash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(netcash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(netcash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(netcash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
                 <tr>
                     <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
-                    <td>{{selDevSym}} {{(netsoccash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    <td>{{selDevSym}}&nbsp;{{(netsoccash['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}
-                        <td>{{selDevSym}} {{(netsoccash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{(netsoccash[year]*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% endfor %}
                 </tr>
             </tbody>

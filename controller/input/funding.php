@@ -251,8 +251,8 @@ function funding_sources($twig,$is_connected,$scenID=0){
             $funding_target = getFundingTarget($scenID);
 
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
             echo $twig->render('/input/funding_steps/funding_sources.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Scenario",'sel_scen'=>$scen['name'],'part2'=>"Related Project",'parent'=>$parent['name'],'scenarios'=>$list_scenarios,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'entities'=>$selEntities,'scenID'=>$scenID,'funding_target'=>$funding_target,'listSel'=>$listSel)); 
             prereq_Funding();

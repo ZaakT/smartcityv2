@@ -69,7 +69,7 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{selDevSym}}  {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
                     {# <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
@@ -143,7 +143,7 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{selDevSym}}  {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    <td class="" scope="col" colspan=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
                     {# <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
@@ -227,7 +227,7 @@
                         <td class="check-col align-middle"><input type="checkbox" onclick="calcDefineScores({{weighted_scores}});" class="uc" id='{{ucID}}' name="{{ucID}}"></td>
                         <td class="font-weight-bold">{{ ucs[ucID]['name'] }}</td>
                         <td>{{ ucs[ucID]['name_meas'] }}</td>
-                        <td>{{selDevSym}} {{ capex[ucID]['value']|number_format(2,'.',',') }}</td>
+                        <td>{{selDevSym}}&nbsp;{{ capex[ucID]['value']|number_format(2,'.',',') }}</td>
                         <td>{{ capex[ucID]['weight']|number_format(1,'.',',') }} %</td>
                     </tr>
                 {% endfor %}

@@ -13,27 +13,27 @@
             <tbody>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Capex</strong> (A)</td>
-                    <td>{{selDevSym}}  {{values['capex']|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}&nbsp; {{values['capex']|number_format(2,'.',',')}}</td>
                     <td></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Implementation</strong> (B)</td>
-                    <td>{{selDevSym}}  {{values['implem']|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}&nbsp; {{values['implem']|number_format(2,'.',',')}}</td>
                     <td></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Investment</strong> (C = A + B)</td>
-                    <td>{{selDevSym}}  {{values['invest']|number_format(2,'.',',')}}</td>
-                    <td><span>{{selDevSym}}   </span><input class="text-center" type='number' name='wcr_input_invest' id='wcr_input_invest' oninput="checkInputWCR();" step="0.01" value={{selInvest != -1 ? selInvest|number_format(2,'.','') : values['invest']|number_format(2,'.','')}}></td>
+                    <td>{{selDevSym}}&nbsp; {{values['invest']|number_format(2,'.',',')}}</td>
+                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_invest' id='wcr_input_invest' oninput="checkInputWCR();" step="0.01" value={{selInvest != -1 ? selInvest|number_format(2,'.','') : values['invest']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Operations</strong> (D)</td>
-                    <td>{{selDevSym}}  {{values['op']|number_format(2,'.',',')}}</td>
-                    <td><span>{{selDevSym}}   </span><input class="text-center" type='number' name='wcr_input_op' id='wcr_input_op' oninput="checkInputWCR();" step="0.01" value={{selOp != -1 ? selOp|number_format(2,'.','') : values['op']|number_format(2,'.','')}}></td>
+                    <td>{{selDevSym}}&nbsp; {{values['op']|number_format(2,'.',',')}}</td>
+                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_op' id='wcr_input_op' oninput="checkInputWCR();" step="0.01" value={{selOp != -1 ? selOp|number_format(2,'.','') : values['op']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Total Financing</strong> (E = C + D)</td>
-                    <td>{{selDevSym}}  {{values['total']|number_format(2,'.',',')}}</td>
+                    <td>{{selDevSym}}&nbsp; {{values['total']|number_format(2,'.',',')}}</td>
                     <td id="wcr_input_tot"></td>
                 </tr>
             </tbody>
