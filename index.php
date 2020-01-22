@@ -132,10 +132,6 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
                                 }
-
-
-
-
                             } else {
                                 header('Location: ?A=admin&A2=manage_db');
                             }
@@ -162,10 +158,6 @@ try{
                 } else {
                     profile($twig,$is_connected);
                 }
-            }
-            // ---------- PROJECT DEVELOPEMENT ---------- 
-            elseif($_GET['A']=='project_dev'){
-                project_dev($twig,$is_connected);    
             }
             // ---------- PROJECT DESIGN ---------- 
             elseif($_GET['A']=='project_design'){

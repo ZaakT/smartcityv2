@@ -2,13 +2,8 @@
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
         <a class="navbar-brand px-5 py-3" href="?A=home"><h3 class="text-center">Urbatis AI</h3></a>
        
-        <!-- Project Developement -->
-    {% if page=="project_dev" %}
-        <h4 class="nav-item text-center">- Input -<br>Project Developement</h4>
-        <a class="nav-item nav-link" href="?A=project_design">Project Design</a>
-        <a class="nav-item nav-link" href="?A=project_scoping">Project Scoping</a>
-    
-    {% elseif page=="project_design" %}
+        <!-- - Input - / Project Design -->
+        {% if page=="project_design" %}
         <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
         <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">1 - Use Cases Menu</a>
         <a class="nav-item nav-link disabled" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">2 - Measures</a>
@@ -19,6 +14,7 @@
         <a class="nav-item nav-link disabled" id="scoring"  href="?A=project_design&amp;A2=scoring&amp;ucmID={{ selectID }}">7 - Scoring</a>
         <a class="nav-item nav-link disabled" id="global_score"  href="?A=project_design&amp;A2=global_score&amp;ucmID={{ selectID }}">8 - Global Score</a>
     
+        <!-- - Input - / Project Scoping -->
         {% elseif page=="project_scoping" %}
         <h4 class="nav-item text-center">- Input -<br>Project Scoping</h4>
         <a class="nav-item nav-link" id="project" href="?A=project_scoping&amp;A2=project">1 - Project</a>
