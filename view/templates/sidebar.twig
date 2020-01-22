@@ -77,11 +77,26 @@
         <a class="nav-item nav-link disabled" id="financing" href="?A=dashboards&amp;A2=financing&amp;projID={{ selectID }}">7 - Financing</a>
         <a class="nav-item nav-link disabled" id="project_dashboard" href="?A=dashboards&amp;A2=project_dashboard&amp;projID={{ selectID }}">8 - Project Dashboard</a>
 
-        <!-- - Output - / Scenarios -->
-    {% elseif page=="scenarios" %}
-        <h4 class="nav-item text-center">- Output -<br>Scenarios</h4>
-        <a class="nav-item nav-link disabled" id="id" href="?A=scenarios&amp;A2=id">Comparison</a>
-        <a class="nav-item nav-link disabled" id="id" href="?A=scenarios&amp;A2=id">Combination</a>
+        <!-- - Output - / Comparison -->
+    {% elseif page=="comparison" %}
+        <h4 class="nav-item text-center">- Output -<br>Comparison</h4>
+        <a class="nav-item nav-link" id="comp_projects" href="?A=comp_projects">Compare Projects</a>
+        <a class="nav-item nav-link" id="comp_finscen" href="?A=comp_finscen">Compare Financial&nbsp;Scenarios</a>
+    {% elseif page=="comp_projects" %}
+        <h4 class="nav-item text-center">- Output -<br>Compare Projects</h4>
+        <a class="nav-item nav-link" id="projects" href="?A=comp_projects&amp;A2=projects">Projects</a>
+        <a class="nav-item nav-link" id="summary" href="?A=comp_projects&amp;A2=summary">Summary</a>
+        <a class="nav-item nav-link" id="invest" href="?A=comp_projects&amp;A2=invest">Investment</a>
+        <a class="nav-item nav-link" id="op" href="?A=comp_projects&amp;A2=op">Operations</a>
+        <a class="nav-item nav-link" id="cash_flows" href="?A=comp_projects&amp;A2=cash_flows">Cash Flows</a>
+        <a class="nav-item nav-link" id="non_quant" href="?A=comp_projects&amp;A2=non_quant">Non Quantifiable</a>
+        <a class="nav-item nav-link" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Financial & Societal Comp.</a>
+    {% elseif page=="comp_finscen" %}
+        <h4 class="nav-item text-center">- Output -<br>Compare Financial Scenarios</h4>
+        <a class="nav-item nav-link" id="scenarios" href="?A=comp_finscen&amp;A2=scenarios">Scenarios</a>
+        <a class="nav-item nav-link" id="fin_summary" href="?A=comp_finscen&amp;A2=fin_summary">Financing Summary</a>
+        <a class="nav-item nav-link" id="cash_balance" href="?A=comp_finscen&amp;A2=cash_balance">Cash Balance</a>
+
         
         <!-- Admin -->
     {% elseif page=="admin" %}

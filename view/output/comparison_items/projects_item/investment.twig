@@ -1,0 +1,15 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
+
+{% block title %}Compare Projects - Investment Indicators{% endblock %}
+
+{% block content %}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+</div>
+{% endblock %}

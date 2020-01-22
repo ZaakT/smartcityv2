@@ -1724,9 +1724,47 @@ try{
                     dashboards($twig,$is_connected);
                 }              
             }
-            // ---------- SCENARIOS ----------
-            elseif($_GET['A']=='scenarios'){
-                scenarios($twig,$is_connected);        
+            // ---------- COMPARISON ----------
+            elseif($_GET['A']=='comparison'){   
+                comparison($twig,$is_connected);  
+            }
+            elseif($_GET['A']=='comp_projects'){ 
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="projects"){
+                        projects($twig,$is_connected);
+                    } else if($_GET['A2']=="summary"){
+                        projects_summary($twig,$is_connected);
+                    } else if($_GET['A2']=="invest"){
+                        investment($twig,$is_connected);
+                    } else if($_GET['A2']=="op"){
+                        operations($twig,$is_connected);
+                    } else if($_GET['A2']=="cash_flows"){
+                        cash_flows($twig,$is_connected);
+                    } else if($_GET['A2']=="non_quant"){
+                        non_quant($twig,$is_connected);
+                    } else if($_GET['A2']=="finsoc_comp"){
+                        finsoc_comp($twig,$is_connected);
+                    } else {
+                        header('Location: ?A='.$_GET['A']);
+                    }
+                } else {
+                    comp_projects($twig,$is_connected); 
+                }          
+            }
+            elseif($_GET['A']=='comp_finscen'){ 
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="scenarios"){
+                        scenarios($twig,$is_connected);
+                    } else if($_GET['A2']=="fin_summary"){
+                        fin_summary($twig,$is_connected);
+                    } else if($_GET['A2']=="cash_balance"){
+                        cash_balance($twig,$is_connected);
+                    } else {
+                        header('Location: ?A='.$_GET['A']);
+                    }
+                } else {
+                    comp_finscen($twig,$is_connected); 
+                }          
             }
             // ---------- DEVISES ----------
             elseif($_GET['A']=='setDevise'){
