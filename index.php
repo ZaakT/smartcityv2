@@ -1724,6 +1724,8 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="projects"){
                         projects($twig,$is_connected);
+                    } else if($_GET['A2']=="projects_selected"){
+                        projects_selected($_POST);
                     } else if($_GET['A2']=="summary"){
                         projects_summary($twig,$is_connected);
                     } else if($_GET['A2']=="invest"){

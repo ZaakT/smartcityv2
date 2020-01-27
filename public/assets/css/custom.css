@@ -485,7 +485,9 @@ th, td{
     min-width: 15vw; 
 }
 
-
+.summary_projects{
+    max-height: 80vh; 
+}
 
 
 

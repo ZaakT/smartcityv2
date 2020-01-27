@@ -1,4 +1,4 @@
-{% extends '/templates/common_page.twig' %}
+{% extends '/output/comparison_items/comp_projects.twig' %}
 
 {% import "/templates/navbar.twig" as navbar %}
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
@@ -6,10 +6,61 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
 
+{% import "/templates/comparison/macro_projects.twig" as macro %}
+
 {% block title %}Compare Projects - Financial & Societal Components{% endblock %}
+
 
 {% block content %}
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
 </div>
+
+<div class="row">
+    <div class="col">
+        <h4 class="text-center text-dark">Please select Financial & Societal Components Indicators</h4>
+    </div>
+</div>
+{{ macro.sel_compo(list_compo,compoData,projects,'checkSelCompoFinSoc') }}
+<div class="row mt-5">
+    <div class="col">
+        <h4 class="text-center text-dark">Financial & Societal Components Indicators Comparative Graph</h4>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_npv" height="250vh"></canvas>
+    </div>
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_socnpv" height="250vh"></canvas>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_roi" height="250vh"></canvas>
+    </div>
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_socroi" height="250vh"></canvas>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_payback" height="250vh"></canvas>
+    </div>
+    <div class="col mx-3">
+        <canvas class="comp_graph" id="comp_graph_socpayback" height="250vh"></canvas>
+    </div>
+</div>
+ 
+<div class="row m-3 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=comp_projects&amp;A2=non_quant');"></button>
+</div>
+
 {% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="../../public/assets/js/custom/comp_projects/finsocGraph.js"></script>
+    <script type="text/javascript">setNewDeviseFinSoc("{{selDevName}}","{{selDevSym}}");</script>
+{% endblock %}
+

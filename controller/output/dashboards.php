@@ -45,10 +45,10 @@ function cost_benefits_uc($twig,$is_connected,$projID=0){
             $listSelZones = getListSelZones($projID);
             //var_dump($list_ucs);
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'zones'=>$repart_zones,'list_sel'=>$listSelZones));
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/output/dashboards_items/cost_benefits_uc.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'zones'=>$repart_zones,'list_sel'=>$listSelZones));
             prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -161,10 +161,10 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 var_dump($ratioByVolume); */
                 
                 $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                
+                echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");
@@ -2566,10 +2566,10 @@ function financing_out_4($twig,$is_connected,$projID,$post=[]){
                 $benefShare .= ']';
 
                 $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/output/dashboards_items/financing_out_4.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'benefs'=>$benefs,'funding_target'=>$funding_target,'benefNames'=>$benefNames,"benefShare"=>$benefShare));
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                
+                echo $twig->render('/output/dashboards_items/financing_out_4.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'benefs'=>$benefs,'funding_target'=>$funding_target,'benefNames'=>$benefNames,"benefShare"=>$benefShare));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");
@@ -2817,10 +2817,10 @@ function project_dashboard($twig,$is_connected,$projID=0){
             //var_dump($scores);
 
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/output/dashboards_items/project_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'noncash'=>$ratingNonCash,'risk'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores));
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/output/dashboards_items/project_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'noncash'=>$ratingNonCash,'risk'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores));
             prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");

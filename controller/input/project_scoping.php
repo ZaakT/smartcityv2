@@ -616,7 +616,7 @@ function checkSchedulesValidity($schedules,$selScope){
                 if(!array_key_exists($idUC,$schedules['implem']) || !array_key_exists($idUC,$schedules['opex'])){
                     return false;
                 } else {
-                    foreach ($$schedules['implem'][$idUC] as $dateLabel => $date) {
+                    foreach ($schedules['implem'][$idUC] as $dateLabel => $date) {
                         if(empty($date)){
                             return false;
                         }
