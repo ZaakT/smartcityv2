@@ -75,6 +75,13 @@ function showCompGraphCashFlows(compo,show){
                       return ret;
                   }
                 }
+            },
+            tooltips:{
+                callbacks: {
+                    label : function(item,data) {
+                        return item.yLabel == 0 ? "" : item.yLabel.toLocaleString("en-UK",{minimumFractionDigits:0,maximumFractionDigits:2});
+                    }
+                }
             }
         }
     });

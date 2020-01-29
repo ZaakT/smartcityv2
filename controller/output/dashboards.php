@@ -156,9 +156,9 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
 
                 $list_nbUC = getNbUC($projID,$ucID);
                 $ratioByVolume = getRatioByVolume($list_nbUC,$selZones);
-                /* var_dump($selZones);
-                var_dump($list_nbUC);
-                var_dump($ratioByVolume); */
+                /*//var_dump($selZones);
+               //var_dump($list_nbUC);
+               //var_dump($ratioByVolume); */
                 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -188,10 +188,10 @@ function getKeyDatesProj($schedules,$scope){
                 $proj_startdate = $implemSchedule['startdate'];
             } else{
                 $tab_new = explode('/',$implemSchedule['startdate']);
-                $date_new = date_create_from_format('m/Y',$tab_new[0].'/'.$tab_new[1]);
+                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
    
                 $tab_old = explode('/',$proj_startdate);
-                $date_old = date_create_from_format('m/Y',$tab_old[0].'/'.$tab_old[1]);
+                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
 
                 if($date_new < $date_old){
                     $proj_startdate = $tab_new[0]."/".$tab_new[1];
@@ -202,10 +202,10 @@ function getKeyDatesProj($schedules,$scope){
                 $proj_implem_enddate = $implemSchedule['100date'];
             } else{
                 $tab_new = explode('/',$implemSchedule['100date']);
-                $date_new = date_create_from_format('m/Y',$tab_new[0].'/'.$tab_new[1]);
+                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
    
                 $tab_old = explode('/',$proj_implem_enddate);
-                $date_old = date_create_from_format('m/Y',$tab_old[0].'/'.$tab_old[1]);
+                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
 
                 if($date_new > $date_old){
                     $proj_implem_enddate = $tab_new[0]."/".$tab_new[1];
@@ -216,10 +216,10 @@ function getKeyDatesProj($schedules,$scope){
                 $proj_enddate = $opexSchedule['enddate'];
             } else{
                 $tab_new = explode('/',$opexSchedule['enddate']);
-                $date_new = date_create_from_format('m/Y',$tab_new[0].'/'.$tab_new[1]);
+                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
    
                 $tab_old = explode('/',$proj_enddate);
-                $date_old = date_create_from_format('m/Y',$tab_old[0].'/'.$tab_old[1]);
+                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
 
                 if($date_new > $date_old){
                     $proj_enddate = $tab_new[0]."/".$tab_new[1];
@@ -267,11 +267,11 @@ function getYears($startdate,$enddate){
 function createProjectDates($startdate,$enddate){
     $list = [];
     $startdate = explode('/',$startdate);
-    //$startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
+    //$startdate = date_create_from_format('d/m/Y','01/'.$startdate[0].'/'.$startdate[1]);
     $startdate = new DateTime($startdate[1]."-".$startdate[0]."-01");
 
     $enddate = explode('/',$enddate);
-    //$enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
+    //$enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
     $enddate = new DateTime($enddate[1]."-".$enddate[0]."-01");
 
     $interval = new DateInterval('P1M');
@@ -289,22 +289,22 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $list = [];
     //var_dump($proj_dates);
     $startdate_proj = explode('/',$proj_dates[0]);
-    $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
+    $startdate_proj = date_create_from_format('d/m/Y','01/'.$startdate_proj[0].'/'.$startdate_proj[1]);
 
     $startdate = explode('/',$compo_dates['startdate']);
-    $startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
+    $startdate = date_create_from_format('d/m/Y','01/'.$startdate[0].'/'.$startdate[1]);
 
     $date25 = explode('/',$compo_dates['25date']);
-    $date25 = date_create_from_format('m/Y',$date25[0].'/'.$date25[1]);
+    $date25 = date_create_from_format('d/m/Y','01/'.$date25[0].'/'.$date25[1]);
 
     $date50 = explode('/',$compo_dates['50date']);
-    $date50 = date_create_from_format('m/Y',$date50[0].'/'.$date50[1]);
+    $date50 = date_create_from_format('d/m/Y','01/'.$date50[0].'/'.$date50[1]);
 
     $date75 = explode('/',$compo_dates['75date']);
-    $date75 = date_create_from_format('m/Y',$date75[0].'/'.$date75[1]);
+    $date75 = date_create_from_format('d/m/Y','01/'.$date75[0].'/'.$date75[1]);
     
     $date100 = explode('/',$compo_dates['100date']);
-    $date100 = date_create_from_format('m/Y',$date100[0].'/'.$date100[1]);
+    $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
 
     $nb0 = intval($startdate->diff($startdate_proj)->y*12 + $startdate->diff($startdate_proj)->m);
 
@@ -398,25 +398,25 @@ function getRepartPercOpex($compo_dates,$proj_dates){
 
     //var_dump($compo_dates);
     $startdate_proj = explode('/',$proj_dates[0]);
-    $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
+    $startdate_proj = date_create_from_format('d/m/Y','01/'.$startdate_proj[0].'/'.$startdate_proj[1]);
 
     $startdate = explode('/',$compo_dates['startdate']);
-    $startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
+    $startdate = date_create_from_format('d/m/Y','01/'.$startdate[0].'/'.$startdate[1]);
 
     $date25 = explode('/',$compo_dates['25date']);
-    $date25 = date_create_from_format('m/Y',$date25[0].'/'.$date25[1]);
+    $date25 = date_create_from_format('d/m/Y','01/'.$date25[0].'/'.$date25[1]);
 
     $date50 = explode('/',$compo_dates['50date']);
-    $date50 = date_create_from_format('m/Y',$date50[0].'/'.$date50[1]);
+    $date50 = date_create_from_format('d/m/Y','01/'.$date50[0].'/'.$date50[1]);
 
     $date75 = explode('/',$compo_dates['75date']);
-    $date75 = date_create_from_format('m/Y',$date75[0].'/'.$date75[1]);
+    $date75 = date_create_from_format('d/m/Y','01/'.$date75[0].'/'.$date75[1]);
     
     $date100 = explode('/',$compo_dates['100date']);
-    $date100 = date_create_from_format('m/Y',$date100[0].'/'.$date100[1]);
+    $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
     
     $enddate = explode('/',$compo_dates['enddate']);
-    $enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
+    $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
 
     $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
     $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
@@ -499,25 +499,32 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
 
     //var_dump($compo_dates);
     $startdate_proj = explode('/',$proj_dates[0]);
-    $startdate_proj = date_create_from_format('m/Y',$startdate_proj[0].'/'.$startdate_proj[1]);
+    $startdate_proj = date_create_from_format('d/m/Y','01/'.$startdate_proj[0].'/'.$startdate_proj[1]);
 
     $startdate = explode('/',$compo_dates['startdate']);
-    $startdate = date_create_from_format('m/Y',$startdate[0].'/'.$startdate[1]);
+    $startdate = date_create_from_format('d/m/Y','01/'.$startdate[0].'/'.$startdate[1]);
 
     $date25 = explode('/',$compo_dates['25date']);
-    $date25 = date_create_from_format('m/Y',$date25[0].'/'.$date25[1]);
+   //var_dump($date25);
+    $date25 = date_create_from_format('d/m/Y','01/'.$date25[0].'/'.$date25[1]);
+   //var_dump($date25);
+    
 
     $date50 = explode('/',$compo_dates['50date']);
-    $date50 = date_create_from_format('m/Y',$date50[0].'/'.$date50[1]);
+   //var_dump($date50);
+    $date50 = date_create_from_format('d/m/Y','01/'.$date50[0].'/'.$date50[1]);
+   //var_dump($date50);
+
+   //var_dump($date50->diff($date25));
 
     $date75 = explode('/',$compo_dates['75date']);
-    $date75 = date_create_from_format('m/Y',$date75[0].'/'.$date75[1]);
+    $date75 = date_create_from_format('d/m/Y','01/'.$date75[0].'/'.$date75[1]);
     
     $date100 = explode('/',$compo_dates['100date']);
-    $date100 = date_create_from_format('m/Y',$date100[0].'/'.$date100[1]);
+    $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
     
     $enddate = explode('/',$compo_dates['enddate']);
-    $enddate = date_create_from_format('m/Y',$enddate[0].'/'.$enddate[1]);
+    $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
     $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
     $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
@@ -2383,26 +2390,17 @@ function financing_out_5($twig,$is_connected,$projID,$post=[]){
                 $totalTerm = calcTotalLB($datesLB,$years_LB,$list_selLB,$list_FS_noentity_LB,$cashInflow,$reimbTerm,$netDebtTerm,$interestTerm,$termSources);
                 $totalRev = calcTotalLB($datesLB,$years_LB,$list_selLB,$list_FS_noentity_LB,$cashInflow,$reimbRev,$netDebtRev,$interestRev,$revSources);
 
-                //var_dump($interestTerm);
-
                 $funding_target = getFundingTarget($scenID);
-
-                /* $datesFinancing = getFinancingDates($datesLB,$list_selEntities); */
 
                 $temp = calcFundingRessources($funding_target,$list_selFS,$list_selEntities,$years_LB);
                 $funding_ressources = $temp[0];
                 $years = $temp[1];
 
-
-
-
-
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 
-                
-                echo $twig->render('/output/dashboards_items/financing_out_5.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'years_LB'=>$years,'capexTot'=>$capexTot,'implemTot'=>$implemTot,"opexTot"=>$opexTot,"revenuesTot"=>$revenuesTot,"cashreleasingTot"=>$cashreleasingTot,'funding_target'=>$funding_target,'interestTerm'=>$interestTerm,'interestRev'=>$interestRev,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'selFS'=>$list_selFS,'entities'=>$list_selEntities,'funding_ressources'=>$funding_ressources,",funding_ressources"=>$funding_ressources));
+                echo $twig->render('/output/dashboards_items/financing_out_5.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'years'=>$years,'capexTot'=>$capexTot,'implemTot'=>$implemTot,"opexTot"=>$opexTot,"revenuesTot"=>$revenuesTot,"cashreleasingTot"=>$cashreleasingTot,'funding_target'=>$funding_target,'interestTerm'=>$interestTerm,'interestRev'=>$interestRev,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'FS_cat'=>$list_FS_cat,'FS'=>$list_FS,'selFS'=>$list_selFS,'entities'=>$list_selEntities,'funding_ressources'=>$funding_ressources,",funding_ressources"=>$funding_ressources));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");

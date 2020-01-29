@@ -1749,10 +1749,12 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="scenarios"){
                         scenarios($twig,$is_connected);
+                    } else if($_GET['A2']=="scenarios_selected"){
+                        scenarios_selected($_POST);
                     } else if($_GET['A2']=="fin_summary"){
                         fin_summary($twig,$is_connected);
-                    } else if($_GET['A2']=="cash_balance"){
-                        cash_balance($twig,$is_connected);
+                    } else if($_GET['A2']=="cash_flows"){
+                        cash_flows_comp($twig,$is_connected);
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

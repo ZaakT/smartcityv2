@@ -1883,7 +1883,7 @@ function insertOpexUser($projID,$ucID,$opex_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    var_dump($projID,$ucID,$opex_data);
+    //var_dump($projID,$ucID,$opex_data);
     $req = $db->prepare('CALL add_opex(?,?,?,?);');
     $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID));
     return $ret;

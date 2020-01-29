@@ -1,0 +1,37 @@
+{% extends '/output/comparison_items/comp_finscen.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("comp_finscen") }}{% endblock %}
+
+{% import "/templates/comparison/macro_scen.twig" as macros %}
+
+{% block title %}Compare Financial Scenarios - Cash Balance{% endblock %}
+
+{% block content %}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+</div>
+
+<div class="row text-center cash_flows">
+    <h4 id="" class="col text-dark">Cash Flows</span>
+</div>
+<div class="row mt-3 cash_flows">
+    <div class="offset-1 col-10 list-table" style="max-height:100vh">
+        {{ macros.cashflows(selDevSym,years,list_scen,cashFlows) }}
+    </div>
+</div>
+<div class="mt-3 mb-5 row text-center cash_flows">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingCashBalanceChart" height="200vh"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="../../public/assets/js/custom/comp_finscen/cashBalanceGraph.js"></script>
+    <script type="text/javascript">setNewDeviseCashFlows("{{selDevName}}","{{selDevSym}}");</script>
+{% endblock %}

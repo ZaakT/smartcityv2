@@ -80,7 +80,7 @@ function showCompGraphFinSoc(compo,show){
                     ticks: {
                         fontSize : 15,
                         callback: function(value) {
-                            return value == 0 ? "" : value.toLocaleString("en-UK",{minimumFractionDigits:0,maximumFractionDigits:2});
+                            return value == 0 ? "" : (100*value).toLocaleString("en-UK",{minimumFractionDigits:0,maximumFractionDigits:2});
                         },
                         min : unit == "%" ? 0 : undefined
                     },
@@ -109,6 +109,13 @@ function showCompGraphFinSoc(compo,show){
                       }
                       return ret;
                   }
+                }
+            },
+            tooltips:{
+                callbacks: {
+                    label : function(item,data) {
+                        return item.yLabel == 0 ? "" : (100*item.yLabel).toLocaleString("en-UK",{minimumFractionDigits:0,maximumFractionDigits:2});
+                    }
                 }
             }
         }

@@ -1,0 +1,160 @@
+{% macro list_proj(projects,list_scen) %}
+<div class="row text-center">
+    <div class="col mt-3 mx-5 list-table">
+        <table class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" class="check-col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Last Modif.</th>
+                    <th scope="col">Nb Scenarios</th>
+                    <th scope="col">Scoping</th>
+                    <th scope="col">Cost Benefits</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_proj,proj in projects %}
+                <tr id = "tr_{{ id_proj }}" scope="row" class="{{proj['scoping'] and proj['cb'] and list_scen[id_proj]|length >= 1 ? "" : "text-danger font-italic"}}" >
+                    <td class="check-col align-middle"><input {{proj['scoping'] and proj['cb'] and list_scen[id_proj]|length >= 1 ? ""  : "disabled"}} type="checkbox" onclick="countChecked_selProj('form_proj');" class="proj" id='proj_{{ id_proj }}' name="proj_{{ id_proj }}"></td>
+                    <td class="font-weight-bold">{{ proj['name'] }}</td>
+                    <td>{{ proj['description'] }}</td>
+                    <td>{{ proj['modif_date'] }}</td>
+                    <td>{{list_scen[id_proj]|length}}</td>
+                    <td><span title={{proj['scoping'] ? "check" : "x"}} class="oi oi-{{proj['scoping'] ? "check" : "x"}} text-{{proj['scoping'] ? "success" : "danger"}}"></span></td>
+                    <td><span title={{proj['cb'] ? "check" : "x"}} class="oi oi-{{proj['cb'] ? "check" : "x"}} text-{{proj['cb'] ? "success" : "danger"}}"></span></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_scen(projects,list_scen_by_proj) %}
+<div class="row text-center">
+    <div class="col mt-3 mx-5 list-table">
+        <table class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" class="check-col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Last Modif.</th>
+                    <th scope="col">Relative Project</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_proj,list_scen in list_scen_by_proj %}
+                {% for id_scen,scen in list_scen %}
+                    <tr id = "tr_{{ id_scen }}" scope="row" class="proj_{{id_proj}}" >
+                        <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_selScen('form_proj');" class="scen " id='scen_{{ id_scen }}' name="scen_{{ id_scen }}"></td>
+                        <td class="font-weight-bold">{{ scen['name'] }}</td>
+                        <td>{{ scen['description'] }}</td>
+                        <td>{{ scen['modif_date'] }}</td>
+                        <td>{{projects[id_proj]['name']}}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro selCompo(list_compo) %}
+<div class="row text-center">
+    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+        <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" colspan=2>Components</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_compo,compo in list_compo %}
+                <tr id = "tr_{{ id_compo }}" scope="row" class="" >
+                    <td class="check-col align-middle"><input type="checkbox" onclick="showComponent('{{id_compo}}');" class="compo" id='compo_{{ id_compo }}' name="compo_{{ compo }}" checked></td>
+                    <td class="text-capitalize">{{ compo }}</td>
+                </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro summary(list_scen,FS_cat,FS,sel_FS,funding_target,selDevSym)  %}
+<div class="mt-3 mb-5 row text-center funding_mix">
+    <div class="offset-2 col-8 list-table financing_table_2" style="max-height: 200vh;">
+        <table id="financing_table_2" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Funding Sources</th>
+                    {% for id_scen,scen in list_scen %}
+                        <th scope="col">{{scen['name']}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan=5></td></tr>
+                {% for id_cat,cat in FS_cat if cat != FS_cat|last %}
+                <tr class="font-weight-bold">
+                    <td class="item " id="cat_{{id_cat}}">{{cat['name']}}</td>
+                    {% for id_scen,scen in list_scen %}
+                        <td class="sourceCat" id="val_{{id_cat}}_{{id_scen}}"></td>
+                    {% endfor %}
+                </tr>
+                    {% for sourceID,source in FS if source['id_cat']==id_cat%}
+                        <tr>
+                            <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                            {% for id_scen,scen in list_scen %}
+                                {% set share = sel_FS[id_scen][sourceID]['share'] %}
+                                {% set funding_target_value = funding_target[id_scen] %}
+                                <td>{{selDevSym}}&nbsp;{{(funding_target_value*share/100)|number_format(2,'.',',')}}</td>
+                                <td hidden class="sourceValues" id="val_{{id_cat}}_{{sourceID}}_{{id_scen}}">{{funding_target_value*share/100}}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro cashflows(selDevSym,years,list_scen,data)  %}
+<table id="" class='table table-lg table-bordered table-responsive-lg'>
+    <thead class="thead-light text-center sticky-top">
+        <tr>
+            <th scope="col"></th>
+            {% for year in years %}
+                <th scope="col" class="years">{{year}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody class="text-center">
+        {% for id_scen,scen in list_scen %}
+        <tr>
+            <td class="font-weight-bold text-left" style="background-color: #f5f5f5;" colspan={{1 + years|length}}>{{scen['name']}}</td>
+        </tr>
+        <tr>
+            <td class="text-right font-weight-bold">Net&nbsp;Cash</td>
+            {% for year in years %}
+                {% set netcash = data[id_scen]['netcash'][year] %}
+                <td>{{selDevSym}}&nbsp;{{netcash ? netcash|number_format(2,'.',',') : 0.00}}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td class="text-right font-weight-bold">Cash&nbsp;Balance</td>
+            {% for year in years %}
+                {% set cashabalance = data[id_scen]['cashbalance'][year] %}
+                <td class="cash_balance" id="val_{{id_scen}}_{{year}}_{{scen['name']}}">{{selDevSym}}&nbsp;{{cashabalance ? cashabalance|number_format(2,'.',',') : 0.00}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}

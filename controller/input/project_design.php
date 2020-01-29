@@ -266,8 +266,8 @@ function use_case($twig,$is_connected,$ucmID=0){
                 array_push($list_sel,$value[0]);
             }
             /* var_dump($list_ucs);
-            var_dump($ucs);
-            var_dump($list_cat); */
+            //var_dump($ucs);
+            //var_dump($list_cat); */
 
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -481,8 +481,8 @@ function scoring($twig,$is_connected,$ucmID=0){
             $ranks = calcRanks($rates,$orderUC,$orderCrit);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
             /* var_dump($rates);
-            var_dump($list_selCrit);
-            var_dump($ranks); */
+            //var_dump($list_selCrit);
+            //var_dump($ranks); */
             if($ranks && $scores){
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];

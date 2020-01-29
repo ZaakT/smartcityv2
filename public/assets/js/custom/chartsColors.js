@@ -21,7 +21,7 @@ function getColorsArray(ref){
     var list2 = [];
     for (const i in ref) {
         if (ref.hasOwnProperty(i)) {
-            const proj_name = ref[i];
+            //const proj_name = ref[i];
             var color_hex = getRandomColor();
             var color_rgb = hexToRgb(color_hex);
             list.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+0.2+')');

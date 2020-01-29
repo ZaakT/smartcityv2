@@ -6,7 +6,6 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
 
-{% import "/templates/comparison/macro_projects.twig" as macro %}
 
 {% block title %}Output / Compare Projects{% endblock %}
 
@@ -27,5 +26,6 @@
 
 
 {% block scripts %}
+<script type="text/javascript" src="../../public/assets/js/custom/comp_projects/prereq_compProjects.js"></script>
 <script type="text/javascript" src="../../public/assets/js/custom/comp_projects/projectsForm.js"></script>
 {% endblock %}
