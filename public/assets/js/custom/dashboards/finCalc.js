@@ -190,7 +190,7 @@ function showFinancingCashBalanceChart(data){
             datalabels:{
                             display: false,
                         }
-            },  {
+            }/* ,  {
             label: "Cash Balance",
             type: "bar",
             backgroundColor: "rgba(135, 165, 255,0.5)",
@@ -198,7 +198,7 @@ function showFinancingCashBalanceChart(data){
             datalabels:{
                             display: false,
                         }
-            },
+            } */,
         ]
         },
         options: {

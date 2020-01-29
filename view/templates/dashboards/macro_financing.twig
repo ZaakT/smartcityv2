@@ -296,7 +296,7 @@
                     {% set cashFlowTot = [] %}
                     {% set Total_FundingReq2 = [] %}
                     {% for i,year in years %}
-                        {% set cashFlowTot = cashFlowTot|merge([opexTot[year]+revenuesTot[year]+cashreleasingTot[year]]) %}
+                        {% set cashFlowTot = cashFlowTot|merge([opexTot[year]-revenuesTot[year]-cashreleasingTot[year]]) %}
                         {% set temp = Total_FundingReq[i] + cashFlowTot[i]%}
                         {% set Total_FundingReq2 = Total_FundingReq2|merge([temp]) %}  
                         <td>{{cashFlowTot[year]}}{{selDevSym}}&nbsp;{{cashFlowTot[i]|number_format(2,'.',',')}}</td>
@@ -324,22 +324,43 @@
                     <td class="text-left item col_items" style="background-color: #f5f5f5;">Financial Interest<br>(C = g + h + i + j)</td>
                     {% set Total_FundingReq3 = [] %}
                     {% for i,year in years %}
-                        {% set TermLoanValue = 0 %}
-                        {% for idEnt,val in interestTerm[5] %}
-                            {% set TermLoanValue = TermLoanValue + val[year] %}
-                        {% endfor %}
-                        {% set RevLoanValue = 0 %}
-                        {% for idEnt,val in interestRev[6] %}
-                            {% set RevLoanValue = RevLoanValue + val[year] %}
-                        {% endfor %}
-                        {% set AmortBondValue = 0 %}
-                        {% for idEnt,val in interestTerm[7] %}
-                            {% set AmortBondValue = AmortBondValue + val[year] %}
-                        {% endfor %}
-                        {% set BulletBondValue = 0 %}
-                        {% for idEnt,val in interestRev[8] %}
-                            {% set BulletBondValue = BulletBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = 0 %}
+                        {% else %}
+                            {% set TermLoanValue = interestTerm[5][year] %}
+                            {% for idEnt,val in interestTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set RevLoanValue = interestRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in interestRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set AmortBondValue = interestTerm[5][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in interestTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestRev[8] %}
+                            {% set BulletBondValue = interestRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in interestRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        
+
                         {% set FinInt = TermLoanValue + RevLoanValue + AmortBondValue + BulletBondValue %}  
                         {% set temp = Total_FundingReq2[i] + FinInt%}
                         {% set Total_FundingReq3 = Total_FundingReq3|merge([temp]) %}                    
@@ -349,40 +370,60 @@
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">g. Term Loan</td>
                     {% for i,year in years %}
-                        {% set TermLoanValue = 0 %}
-                        {% for idEnt,val in interestTerm[5] %}
-                            {% set TermLoanValue = TermLoanValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = interestTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in interestTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        
                         <td>{{selDevSym}}&nbsp;{{TermLoanValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">h. Revolving Loan</td>
                     {% for i,year in years %}
-                        {% set RevLoanValue = 0 %}
-                        {% for idEnt,val in interestRev[6] %}
-                            {% set RevLoanValue = RevLoanValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestRev[6] %}
+                            {% set RevLoanValue = interestRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in interestRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
                         <td>{{selDevSym}}&nbsp;{{RevLoanValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">i. Amortizing Bond</td>
                     {% for i,year in years %}
-                        {% set AmortBondValue = 0 %}
-                        {% for idEnt,val in interestTerm[7] %}
-                            {% set AmortBondValue = AmortBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestTerm[7] %}
+                            {% set AmortBondValue = interestTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in interestTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
                         <td>{{selDevSym}}&nbsp;{{AmortBondValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item" >
                     <td class="text-right col_items" style="background-color: #f5f5f5;">j. Bullet Bond</td>
                     {% for i,year in years %}
-                        {% set BulletBondValue = 0 %}
-                        {% for idEnt,val in interestRev[8] %}
-                            {% set BulletBondValue = BulletBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestRev[8] %}
+                            {% set BulletBondValue = interestRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in interestRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
                         <td>{{selDevSym}}&nbsp;{{BulletBondValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
@@ -390,22 +431,42 @@
                     <td class="text-left item col_items" style="background-color: #f5f5f5;">Reimbursements<br>(D = k + l + m + n)</td>
                     {% set Total_FundingReq4 = [] %}
                     {% for i,year in years %}
-                        {% set TermLoanValue = 0 %}
-                        {% for idEnt,val in reimbTerm[5] %}
-                            {% set TermLoanValue = TermLoanValue + val[year] %}
-                        {% endfor %}
-                        {% set RevLoanValue = 0 %}
-                        {% for idEnt,val in reimbRev[6] %}
-                            {% set RevLoanValue = RevLoanValue + val[year] %}
-                        {% endfor %}
-                        {% set AmortBondValue = 0 %}
-                        {% for idEnt,val in reimbTerm[7] %}
-                            {% set AmortBondValue = AmortBondValue + val[year] %}
-                        {% endfor %}
-                        {% set BulletBondValue = 0 %}
-                        {% for idEnt,val in reimbRev[8] %}
-                            {% set BulletBondValue = BulletBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in reimbTerm[5] %}
+                            {% set TermLoanValue = reimbTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in reimbTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbRev[6] %}
+                            {% set RevLoanValue = reimbRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in reimbRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbTerm[7] %}
+                            {% set AmortBondValue = reimbTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in reimbTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbRev[8] %}
+                            {% set BulletBondValue = reimbRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in reimbRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
                         {% set Reimb = TermLoanValue + RevLoanValue + AmortBondValue + BulletBondValue %}  
                         {% set temp = Total_FundingReq3[i] + Reimb%}
                         {% set Total_FundingReq4 = Total_FundingReq4|merge([temp]) %}                 
@@ -415,40 +476,56 @@
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">k. Term Loan</td>
                     {% for i,year in years %}
-                        {% set TermLoanValue = 0 %}
-                        {% for idEnt,val in reimbTerm[5] %}
-                            {% set TermLoanValue = TermLoanValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = reimbTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in reimbTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
                         <td>{{selDevSym}}&nbsp;{{TermLoanValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">l. Revolving Loan</td>
                     {% for i,year in years %}
-                        {% set RevLoanValue = 0 %}
-                        {% for idEnt,val in reimbTerm[6] %}
-                            {% set RevLoanValue = RevLoanValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in reimbRev[6] %}
+                            {% set RevLoanValue = reimbRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in reimbRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
                         <td>{{selDevSym}}&nbsp;{{RevLoanValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">m. Amortizing Bond</td>
                     {% for i,year in years %}
-                        {% set AmortBondValue = 0 %}
-                        {% for idEnt,val in reimbTerm[7] %}
-                            {% set AmortBondValue = AmortBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in reimbTerm[7] %}
+                            {% set AmortBondValue = reimbTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in reimbTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
                         <td>{{selDevSym}}&nbsp;{{AmortBondValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
                 <tr class="sub_item">
                     <td class="text-right col_items" style="background-color: #f5f5f5;">n. Bullet Bond</td>
                     {% for i,year in years %}
-                        {% set BulletBondValue = 0 %}
-                        {% for idEnt,val in reimbTerm[8] %}
-                            {% set BulletBondValue = BulletBondValue + val[year] %}
-                        {% endfor %}
+                        {% if 'All Years' in reimbRev[8] %}
+                            {% set BulletBondValue = reimbRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in reimbRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
                         <td>{{selDevSym}}&nbsp;{{BulletBondValue|number_format(2,'.',',')}}</td>
                     {% endfor %}
                 </tr>
