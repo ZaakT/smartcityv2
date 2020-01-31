@@ -3798,5 +3798,5 @@ function getFundingOpt($id_bm,$id_investcap,$id_bank,$id_socbank){
     $list = ['City'=>$city,'Grants'=>$grants,'Equity investors'=>$eq_investors,'Impact Investors'=>$impact_investors,'Bank Debt'=>$bank_debt,'Green Debt'=>$green_debt,'Suppliers'=>$suppliers,'Alternative'=>$alternative];
     arsort($list);
     return $list;
-
 }
+
