@@ -66,6 +66,7 @@ function convertGBPToDev($val){
     }
 }
 
+
 // ---------------------------------------- USERS ----------------------------------------
 
 function getUserCity($idUser){
@@ -117,12 +118,6 @@ function getListUsers(){
     }
     return $list;
 }
-
-/* function userAlreadyExists($username){
-    $db = dbConnect();
-    $req = $db->prepare('SELECT * FROM user WHERE username=?');
-    return $req->execute(array($username));
-} */
 
 function insertUser($user){
     $db = dbConnect();

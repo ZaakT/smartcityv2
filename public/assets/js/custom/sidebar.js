@@ -9,11 +9,11 @@ function colorActive(){
         var element = temp[i].split("&");
         temp2.push(element);
     }
-    
-    active = "#"+ temp2[2][0];
-    $(active).addClass("active");
+    if(temp2.length >= 3){
+        active = "#"+ temp2[2][0];
+        $(active).addClass("active");
+    }
 }
-
 
 colorActive();
 

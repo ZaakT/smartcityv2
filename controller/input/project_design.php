@@ -480,9 +480,6 @@ function scoring($twig,$is_connected,$ucmID=0){
             $rates = getListInputedRates($ucmID);
             $ranks = calcRanks($rates,$orderUC,$orderCrit);
             $scores = calcScores($ranks,$repart_selCrit,count($list_selUC),$orderUC);
-            /* var_dump($rates);
-            //var_dump($list_selCrit);
-            //var_dump($ranks); */
             if($ranks && $scores){
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];

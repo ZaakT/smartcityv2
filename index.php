@@ -1809,10 +1809,8 @@ try{
 }
 // *** IF THERE IS AN ERROR (EXCEPTION), IT IS CAPTURED TO DISPLAY ON A SPECIAL PAGE ***
 catch(Exception $e) {
-    $errorMessage = $e->getMessage();
-    $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
+    $errorMessage = $e->getMessage();    
     echo $twig->render('/others/error.twig',array('error'=>$errorMessage)); 
 }
+
+
