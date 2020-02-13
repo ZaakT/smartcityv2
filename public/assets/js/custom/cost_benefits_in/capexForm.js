@@ -53,12 +53,23 @@ function checkCapexInput(){
     $("#capex_input input").each(function(){
         var val = $(this).val();
         var tab = $(this).classes();
-        if(tab.includes("volume") || tab.includes("period")){
+        if(tab.includes("volume")){
             val = val ? parseInt(val) : -1 ;
             //console.log(val);
             if(val < 0){
                 $(this).css("background","salmon");
                 $(this).val("");
+                ret = false;
+            } else {
+                $(this).val(val);
+                $(this).css("background","palegreen");
+            }
+        } else if (tab.includes("period")){
+            val = val ? parseInt(val) : -1 ;
+            //console.log(val);
+            if(val <= 0){
+                $(this).css("background","salmon");
+                //$(this).val("");
                 ret = false;
             } else {
                 $(this).val(val);

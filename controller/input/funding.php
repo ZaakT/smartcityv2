@@ -297,7 +297,7 @@ function create_entity($post){
             throw new Exception("There is a problem the funding sources");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -363,7 +363,7 @@ function fs_selected($post){
             update_ModifDate_scen($scenID);
             header('Location: ?A=funding&A2=funding_sources&A3=input_entities&scenID='.$scenID);
         } else {
-            throw new Exception("There is no data inputed !");
+            throw new Exception("There is no data input !");
         }
     } else {
         throw new Exception("There is no scenario selected !");
@@ -485,7 +485,7 @@ function entities_inputed($post){
             update_ModifDate_scen($scenID);
             header('Location: ?A=funding&A2=benef&scenID='.$scenID);
         } else {
-            throw new Exception("There is no data inputed !");
+            throw new Exception("There is no data input !");
         }
     } else {
         throw new Exception("There is no scenario selected !");
@@ -534,7 +534,7 @@ function create_benef($post){
         update_ModifDate_scen($scenID);
         header('Location: ?A=funding&A2=benef&scenID='.$scenID);
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -571,7 +571,7 @@ function benef_selected($post){
             update_ModifDate_scen($scenID);
             header('Location: ?A=dashboards&A2=financing&projID='.$projID);
         } else {
-            throw new Exception("There is no data inputed !");
+            throw new Exception("There is no data input !");
         }
     } else {
         throw new Exception("There is no scenario selected !");

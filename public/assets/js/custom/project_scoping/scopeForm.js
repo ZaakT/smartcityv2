@@ -71,9 +71,9 @@ function countChecked_scope(formName) {
     }*/
     
     if(n==0){
-        $("#uc_table, #countUCSelect, #help_uc").attr("hidden","hidden");
+        $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
     } else {
-        $("#uc_table, #countUCSelect").removeAttr('hidden');
+        $("#uc_table, #countUCSelectScope").removeAttr('hidden');
         if(m<=0){
             $("#help_uc").removeAttr('hidden');
         } else {

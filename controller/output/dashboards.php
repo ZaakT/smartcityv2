@@ -85,6 +85,7 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $uc = getUCByID($ucID);
 
                 $list_zones = getListZones();
+                //var_dump($list_zones);
                 $selZonesInfos = getInfosZones($selZones,$list_zones);
                 $sortedZones = sort_zones($list_zones);
                 $sortedSelZones = sort_zones($selZonesInfos);
@@ -153,9 +154,9 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $npv = calcNPV($dr_month,$netcashPerMonth[0]);
                 $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);
 
-
                 $list_nbUC = getNbUC($projID,$ucID);
                 $ratioByVolume = getRatioByVolume($list_nbUC,$selZones);
+
                 /*//var_dump($selZones);
                //var_dump($list_nbUC);
                //var_dump($ratioByVolume); */
@@ -432,7 +433,8 @@ function getRepartPercOpex($compo_dates,$proj_dates){
     for ($i=0; $i < $nb0 ; $i++) { 
         $list[$proj_dates[$i]] = 0;
     }
-    for ($i=$nb0; $i < $nb0+$nb25 ; $i++) { 
+    $list[$proj_dates[$nb0]] = $ratio25;
+    for ($i=$nb0+1; $i < $nb0+$nb25 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
     for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
@@ -459,7 +461,7 @@ function calcOpexPerMonth2($opexRepart,$opexValues){
     $i = 0;
     $prec_percent = 0;
     $prec_date = "";
-    //var_dump($opexRepart);
+    
     foreach ($opexRepart as $date => $percent) {
         $opexTot = 0;
         $i++;
@@ -474,7 +476,7 @@ function calcOpexPerMonth2($opexRepart,$opexValues){
         $prec_percent = $percent;
         $prec_date = $date;
     }
-    //var_dump($list);
+    
     return $list;
 }
 
@@ -525,6 +527,7 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
     
     $enddate = explode('/',$compo_dates['enddate']);
     $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
+    
     $nb0 = intval($startdate_proj->diff($startdate,true)->y*12 + $startdate_proj->diff($startdate,true)->m);
     $nb25 = intval($date25->diff($startdate)->y*12+$date25->diff($startdate)->m)+1;
     $ratio25 = 25/$nb25;
@@ -943,6 +946,7 @@ function add_arrays($a,$b){
     return $list;
 }
 
+
 // ------------------------------- BUDGET PER USE CASE -------------------------------
 
 function budget_uc($twig,$is_connected,$projID=0){
@@ -950,15 +954,16 @@ function budget_uc($twig,$is_connected,$projID=0){
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
+
             $measures = getListMeasures();
             $ucs = getListUCs();
             $scope = getListSelScope($projID);
             //var_dump($list_ucs);
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/output/dashboards_items/budget_uc.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
+            echo $twig->render('/output/dashboards_items/budget_uc.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope));
             prereq_Dashboards();
         } else {
             throw new Exception("This Project doesn't exist !");

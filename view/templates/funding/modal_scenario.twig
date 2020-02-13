@@ -26,6 +26,7 @@
                         <label for="related_project" class="col-sm-4 col-form-label">Related Project</label>
                         <div class="col-sm-8">
                             <select class="form-control" name="related_project" id="related_project">
+                                    <option disabled selected value> -- select a project -- </option>
                                 {% for id,project in projects %}
                                     {% if project['scoping'] and project['cb'] %}
                                     <option name="{{id}}" id="{{id}}" value="{{id}}">{{project['name']}}</option>

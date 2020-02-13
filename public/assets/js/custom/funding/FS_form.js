@@ -43,6 +43,7 @@ function checkInputFS(){
 }
 
 function checkTotFS(){
+    calcOuputFS();
     var sum = 0;
     $("#funding_sources_table .enabledInput").each(function(){
         var val = $(this).val();
@@ -72,7 +73,7 @@ function calcOuputFS(){
         var share = $(this).val()/100;
         var val = share*funding_target;
         console.log(id_source,val);
-        $("#output_"+id_source).text("£ "+val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+        $("#output_"+id_source).text(val.toLocaleString("en-UK",{style:"currency", currency:deviseName,minimumFractionDigits: 0, maximumFractionDigits: 2}));
     });
 }
 checkSelFS();
@@ -173,14 +174,14 @@ function calcOutputEntities(){
         var id_entity = parseInt(id[2]) ? parseInt(id[2]) : 0;
         var share = parseFloat($(this).val())/100;
         var val = share && funding_target ? share*funding_target : "-";
-        $("#output_"+id_source+"_"+id_entity).text("£ "+val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+        $("#output_"+id_source+"_"+id_entity).text(val.toLocaleString("en-EN",{style:"currency", currency:deviseName,minimumFractionDigits: 0, maximumFractionDigits: 2}));
     });
     $("#entities_table .shareFS").each(function(){
         var id = $(this).attr('id').split('_');
         var id_source = parseInt(id[1]);
         var share = parseFloat($(this).text().split("%")[0])/100;
         var val = share&&funding_target ? share*funding_target : "-";
-        $("#output_"+id_source).text("£ "+val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+        $("#output_"+id_source).text(val.toLocaleString("en-EN",{style:"currency", currency:deviseName,minimumFractionDigits: 0, maximumFractionDigits: 2}));
     });
 }
 
@@ -356,7 +357,7 @@ function calcOutputEntities2(){
             var id_entity = parseInt(id[2]) ? parseInt(id[2]) : 0;
             var share = parseFloat($(this).val())/100;
             var val = share && funding_target ? share*funding_target : "-";
-            $("#output_"+id_source+"_"+id_entity).text("£ "+val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+            $("#output_"+id_source+"_"+id_entity).text(val.toLocaleString("en-EN",{style:"currency", currency:deviseName,minimumFractionDigits: 0, maximumFractionDigits: 2}));
         }
     });
     $("#entities_table_2 .shareFS").each(function(){
@@ -364,7 +365,7 @@ function calcOutputEntities2(){
         var id_source = parseInt(id[1]);
         var share = parseFloat($(this).text().split("%")[0])/100;
         var val = share*funding_target;
-        $("#output_"+id_source).text("£ "+val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
+        $("#output_"+id_source).text(val.toLocaleString("en-EN",{minimumFractionDigits: 0, maximumFractionDigits: 2}));
     });
 }
 
@@ -439,9 +440,22 @@ function initSelDates(){
     });
 }
 
-dates = {};
-initDatepickers();
-initDatepickers2();
-initSelDates();
-checkInputEntities();
-checkInputEntities2();
+
+
+function setNewDeviseFunding(name){
+    deviseName = name;
+    try{
+        //do nothing
+    } catch {
+        //do nothing
+    } finally {
+        dates = {};
+        initDatepickers();
+        initDatepickers2();
+        initSelDates();
+        checkInputEntities();
+        checkInputEntities2();
+    }
+}
+
+setNewDeviseFunding("GBP");

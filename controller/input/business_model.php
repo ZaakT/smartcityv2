@@ -73,7 +73,7 @@ function pref_selected($post){
             }
             header('Location: ?A=business_model&A2=reco&projID='.$projID);
         } else {
-            throw new Exception("There is no data inputed !");
+            throw new Exception("There is no data input !");
         }
     } else {
         throw new Exception("There is no project selected !");
@@ -110,7 +110,7 @@ function reco($twig,$is_connected,$projID=0){
             $calcBank = calcBank($projID);
             $bank = getBMBank($calcBank[0]);
             $soc_bank = getBMSocBank($calcBank[1]);
-
+            
             $proj_qualif = ['invest_cap'=>$listInvestCap[$id_investcap]['description'],'proj_bank'=>$listBMBank[$bank],'soc_bm'=>$listBMSocBank[$soc_bank]];
 
             $funding_opt = getFundingOpt($id_bm,$id_investcap,$bank,$soc_bank);
@@ -134,18 +134,18 @@ function reco($twig,$is_connected,$projID=0){
 function getBMBank($bank){ //should correspond with the database
     if($bank <= 3)
         return 1;
-    else if (4 <= $bank && $bank <= 6) //to check with manuel
+    else if (3 < $bank && $bank <= 7) //to check with manuel
         return 2;
-    else if ($bank >= 7)
+    else if ($bank > 7)
         return 3;
 }
 
 function getBMSocBank($bank){ //should correspond with the database
     if($bank <= 3)
         return 1;
-    else if (4 <= $bank && $bank <= 6) //to check with manuel
+    else if (3 < $bank && $bank <= 7) //to check with manuel
         return 2;
-    else if ($bank >= 7)
+    else if ($bank > 7)
         return 3;
 }
 

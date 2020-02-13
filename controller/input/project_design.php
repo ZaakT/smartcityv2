@@ -452,7 +452,7 @@ function rates_inputed($post){
             throw new Exception("No UCM selected !");
         }
     } else {
-        throw new Exception("No rate inputed !");
+        throw new Exception("No rate input !");
     }
 }
 

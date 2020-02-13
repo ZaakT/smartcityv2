@@ -25,6 +25,7 @@ function getListDevises(){
         $symbol = $row['symbol'];
         $list[$id] = ['name'=>$name,'symbol'=>$symbol,'rateToGBP'=>$rateToGBP];
     }
+    $list = !empty($list) ? $list : [1=>['name'=>'GBP','symbol'=>'£','rateToGBP'=>1]];
     return $list;
 }
 
@@ -687,7 +688,7 @@ function insertRates($ucmID,$list_per_uc){
         }
     }
     if(!$ret){
-        throw new Exception("All inputed rate not inserted");
+        throw new Exception("All input rate not inserted");
     }
     return $ret;
 }
@@ -3191,13 +3192,10 @@ function getOpexValues($projID,$ucID){
     $list = [];
     while($res = $req->fetch()){
         $id_item = intval($res['id_item']);
-
         $an_var_vol = floatval($res['an_var_vol']);
         $rate1 = pow(1+($an_var_vol/100),1/12);
-
         $an_var_unitcost = floatval($res['an_var_unitcost']);
         $rate2 = pow(1+($an_var_unitcost/100),1/12);
-
         $cost = convertGBPToDev(floatval($res['cost']));
 
         $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];

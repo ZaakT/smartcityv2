@@ -64,7 +64,7 @@ function checkOpexInput(){
                 $(this).val(val);
                 $(this).css("background","palegreen");
             }
-        } else if (tab.includes("unit_cost") || tab.includes("anVarVol") || tab.includes("anVarCost")){
+        } else if (tab.includes("unit_cost")){
             //console.log(val);
             val = val ? parseFloat(val) : -1 ;
             //console.log(val);
@@ -80,6 +80,23 @@ function checkOpexInput(){
                 //$(this).val(val);
                 $(this).css("background","palegreen");
                 //$(this).val(val.toLocaleString(undefined));
+            }
+        }  else if (tab.includes("anVarVol") || tab.includes("anVarCost")){
+            //console.log(val);
+            if(val){
+                val = parseFloat(val);
+                var temp = String(val).split(".");
+                if (temp.length==2 && temp[1].length>3){
+                    $(this).css("background","salmon");
+                    ret = false;
+                } else {
+                    //$(this).val(val);
+                    $(this).css("background","palegreen");
+                    //$(this).val(val.toLocaleString(undefined));
+                }
+            } else {
+                $(this).css("background","salmon");
+                ret = false;
             }
         }
     });

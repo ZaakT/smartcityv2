@@ -10,7 +10,6 @@
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                 </tr>
-                
             </thead>
             <tbody>
             {% for id,item in capex %}
@@ -119,7 +118,7 @@
                     {% endif %}
                     <td scope="col"><input id="vol_{{id_capex}}" name="vol_{{id_capex}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['volume']}}"></td> 
                     <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost" type="number" min=0 step=0.001 required oninput="checkCapexInput();" value="{{selCapex[id_capex]['unit_cost']}}"></td> 
-                    <td scope="col"><input class="text-center period" id="period_{{id_capex}}" name="period_{{id_capex}}" min=0 step=1 type="number" oninput="checkCapexInput();" required value="{{selCapex[id_capex]['period']}}"></td>
+                    <td scope="col"><input class="text-center period" id="period_{{id_capex}}" name="period_{{id_capex}}" min=1 step=1 type="number" oninput="checkCapexInput();" required value="{{selCapex[id_capex]['period']}}"></td>
                 </tr> 
             {% endfor %}
             </tbody>

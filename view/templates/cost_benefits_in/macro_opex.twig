@@ -144,8 +144,8 @@
                     {% else %}
                     <td scope="col">{{ opex_user[id_opex]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="anVarVol_{{id_opex}}" name="anVarVol_{{id_opex}}" class="text-center anVarVol" type="number" min=0 step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['anVarVol']}}"><span> %</span></td> 
-                    <td scope="col"><input id="anVarCost_{{id_opex}}" name="anVarCost_{{id_opex}}" class="text-center anVarCost" type="number" min=0 step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['anVarCost']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarVol_{{id_opex}}" name="anVarVol_{{id_opex}}" class="text-center anVarVol" type="number" step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['anVarVol']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarCost_{{id_opex}}" name="anVarCost_{{id_opex}}" class="text-center anVarCost" type="number" step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['anVarCost']}}"><span> %</span></td> 
                 </tr> 
             {% endfor %}
             </tbody>

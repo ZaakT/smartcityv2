@@ -194,10 +194,10 @@ function capex_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_ratio);
             $devises = getListDevises();
             
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/cost_benefits_steps/capex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"capex_advice"=>$list_capex_advice,"capex_user"=>$list_capex_user,"selCapex"=>$list_selCapex,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/input/cost_benefits_steps/capex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"capex_advice"=>$list_capex_advice,"capex_user"=>$list_capex_user,"selCapex"=>$list_selCapex,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
             prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=project');
@@ -247,7 +247,7 @@ function capex_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -298,10 +298,10 @@ function implem($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     $list_selImplem = getListSelImplem($projID,$ucID);          
                     //var_dump($list_selImplem);
                     $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/cost_benefits_steps/implem.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"implem_advice"=>$list_implem_advice,"implem_user"=>$list_implem_user,'isTaken'=>$isTaken,'selImplem'=>$list_selImplem));
+                    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                    
+                    echo $twig->render('/input/cost_benefits_steps/implem.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"implem_advice"=>$list_implem_advice,"implem_user"=>$list_implem_user,'isTaken'=>$isTaken,'selImplem'=>$list_selImplem));
                     prereq_CostBenefits();
                 } else {
                     throw new Exception("This Use Case doesn't exist !");
@@ -410,10 +410,10 @@ function implem_input($twig,$is_connected,$projID=0,$ucID=0){
             $list_ratio = getRatioCompoImplem($list_sel_implem_advice,$compo['id']);
             //var_dump($list_ratio);
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/cost_benefits_steps/implem_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"implem_advice"=>$list_implem_advice,"implem_user"=>$list_implem_user,"selImplem"=>$list_selImplem,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/input/cost_benefits_steps/implem_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"implem_advice"=>$list_implem_advice,"implem_user"=>$list_implem_user,"selImplem"=>$list_selImplem,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
             prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=project');
@@ -457,7 +457,7 @@ function implem_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -667,7 +667,7 @@ function opex_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -882,7 +882,7 @@ function revenues_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -1061,7 +1061,7 @@ function cashreleasing_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -1291,7 +1291,7 @@ function widercash_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -1520,7 +1520,7 @@ function noncash_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 
@@ -1718,7 +1718,7 @@ function risks_inputed($post){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("There is no data inputed !");
+        throw new Exception("There is no data input !");
     }
 }
 

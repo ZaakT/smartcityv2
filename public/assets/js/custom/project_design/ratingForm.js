@@ -8,7 +8,7 @@ function colorFilledRating(){
         value = value=="" ? 0 : parseInt(value);
         //console.log(value);
         if(value<1 || value>10){
-            element.css("background","salmon");
+            element.css("background","whitesmoke");
         } else {
             element.css("background","palegreen");
         }

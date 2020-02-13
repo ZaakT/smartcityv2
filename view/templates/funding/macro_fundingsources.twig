@@ -91,7 +91,7 @@
                                     {{entities[id_source]|first['name']}}
                                 </td>
                                 <td rowspan={{entities[id_source]|length != 0 ? entities[id_source]|length : 1 }} colspan=1 id="shareFS_{{id_source}}">{{listSel[id_source]['share']}} %</td>
-                                <td colspan=1 style="width:15%;"><input class="text-center" id="share_{{id_source}}_{{entities[id_source]|keys|first}}" name="share_{{id_source}}_{{entities[id_source]|keys|first}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entities[id_source]|first['share']}}"><span> %</span>
+                                <td colspan=1 style="width:15%;"><input class="text-center" id="share_{{id_source}}_{{entities[id_source]|keys|first}}" name="share_{{id_source}}_{{entities[id_source]|keys|first}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entities[id_source]|first['share']}}"><span>&nbsp;%</span>
                                 </td>
                                 <td><div class="input-append date" id="date_{{id_source}}_{{entities[id_source]|keys|first}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
                                     <input id="input_date_{{id_source}}_{{entities[id_source]|keys|first}}" name="input_date_{{id_source}}_{{entities[id_source]|keys|first}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entities[id_source]|first['start_date']}}"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
@@ -99,18 +99,18 @@
                                 <td id="output_{{id_source}}_{{entities[id_source]|keys|first}}" colspan=1>to calculate</td>     
                         </tr>
                         {% for id_entity, entity in entities[id_source]|slice(start+1,last,true) %}
+                        <tr>
                             <td class="align-text-top entities_{{id_source}}">
                                 {{entity['name']}}
-                                <td colspan=1><input class="text-center" id="share_{{id_source}}_{{id_entity}}" name="share_{{id_source}}_{{id_entity}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entity['share']}}"><span> %</span></td>
+                                <td colspan=1><input class="text-center" id="share_{{id_source}}_{{id_entity}}" name="share_{{id_source}}_{{id_entity}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entity['share']}}"><span>&nbsp;%</span></td>
 
                                 <td><div class="input-append date" id="date_{{id_source}}_{{id_entity}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
                                     <input id="input_date_{{id_source}}_{{id_entity}}" name="input_date_{{id_source}}_{{id_entity}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entity['start_date']}}"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
                                 </div></td>
                                 <td id="output_{{id_source}}_{{id_entity}}" colspan=1>to calculate</td id="output_{{id_entity}}">    
                             </td>
-                        {% endfor %}
-                        <tr>
                         </tr>
+                        {% endfor %}
                                 {% else %}
                             {#<td colspan=1 class="font-italic">No entity !</td>#}
                             <td id="shareFS_{{id_source}}" class="shareFS" rowspan=1 colspan=2>{{listSel[id_source]['share']}} %</td>      
