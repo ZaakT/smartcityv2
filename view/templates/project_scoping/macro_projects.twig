@@ -17,7 +17,7 @@
             <tbody>
             {% for proj in projects %}
                 <tr id = "tr_{{ proj[0] }}" scope="row">
-                    <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" required></td>
+                    <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" {{projects|length == 1 ? "checked" : ""}} required></td>
                     <td>{{ proj[1] }}</td>
                     <td>{{ proj[2] }}</td>
                     <td>{{ proj[7] }}</td>

@@ -15,17 +15,19 @@
                 </tr>
             </thead>
             <tbody>
-            {% for ucm in ucms %}
-                <tr id = "tr_{{ ucm[0] }}" scope="row">
-                    <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" required></td>
-                    <td>{{ ucm[1] }}</td>
-                    <td>{{ ucm[2] }}</td>
-                    <td>{{ ucm[4] }}</td>
-                    <td>{{ ucm[3] }}</td>
-                    <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUCM_{{ ucm[0] }}"></span></a></td>
-                    {{ modal.delete_ucm(ucm[0],ucm[1]) }}
-                </tr>
-            {% endfor %}
+
+                {% for ucm in ucms %}
+                    <tr id = "tr_{{ ucm[0] }}" scope="row">
+                        <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" {{ucms|length == 1 ? "checked" : ""}} required></td> //non
+                        <td>{{ ucm[1] }}</td>
+                        <td>{{ ucm[2] }}</td>
+                        <td>{{ ucm[4] }}</td>
+                        <td>{{ ucm[3] }}</td>
+                        <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUCM_{{ ucm[0] }}"></span></a></td>
+                        {{ modal.delete_ucm(ucm[0],ucm[1]) }}
+                    </tr>
+                {% endfor %}
+
             </tbody>
         </table>
     </div>

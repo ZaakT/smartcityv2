@@ -14,13 +14,18 @@
 .sidebar a, h4{
     color:white;
 }
+
+.h4, h4 {
+    font-size: 1.4rem;
+}
+
 /* 
 #page-content-wrapper{
 
 } */
 
 .navbar-brand{
-    font-size: 1em;
+    font-size: 0.8em;
     text-transform: uppercase;
 }
 
@@ -137,7 +142,7 @@ th, td{
 }
 
 .navbar {
-    font-size: 20px;
+    font-size: 17px;
 }
 
 .summary_table {

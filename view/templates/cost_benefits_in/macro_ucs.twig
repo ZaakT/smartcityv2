@@ -16,7 +16,7 @@
             {% for meas,list_ucs in selScope %}
                 {% for uc in list_ucs %}
                 <tr id = "tr_{{ uc }}" scope="row">
-                    <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" required></td>
+                    <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} required></td>
                     <td scope="col">{{ ucs[uc]['name'] }}</td>
                     <td scope="col">{{ ucs[uc]['description'] }}</td>
                     <td scope="col">{{measures[meas]['name']}}</td>
