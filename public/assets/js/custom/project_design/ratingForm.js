@@ -10,7 +10,7 @@ function colorFilledRating(){
         if(value<1 || value>10){
             element.css("background","whitesmoke");
         } else {
-            element.css("background","palegreen");
+            element.css("background","#C3E6CB");
         }
     });
 }

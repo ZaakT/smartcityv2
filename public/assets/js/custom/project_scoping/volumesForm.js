@@ -109,7 +109,7 @@ function colorFilledVolumes(){
         } else {
             value = parseInt(value);
             element.val(value);
-            element.css("background","palegreen");
+            element.css("background","#C3E6CB");
         }
     });
     return ret

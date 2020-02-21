@@ -61,7 +61,7 @@ function checkImplemInput(){
                 ret = false;
             } else {
                 $(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if ($(this).classes().includes("unit_cost")){
             val = val ? parseFloat(val) : -1 ;
@@ -75,7 +75,7 @@ function checkImplemInput(){
                 ret = false;
             } else {
                 //$(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });

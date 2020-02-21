@@ -34,7 +34,7 @@
 }
 
 .list-table{
-    max-height: 50vh;
+    max-height: 100vh;
     overflow-y: auto;
 }
 
@@ -500,4 +500,32 @@ th, td{
     min-width: 25px;
     max-width: 25px;
     text-align: center;
+}
+
+.guideline{
+    background-color: #DEE2E6;
+}
+
+input{
+    border-radius: 4px;
+    border-style: hidden;
+}
+
+thead th{
+    font-weight: normal;
+}
+
+/* tests*/
+.guideline-table th{
+    background: #DEE2E6 0% 0% no-repeat padding-box;
+    border: 1px solid #707070;
+    opacity: 1;
+}
+
+.guideline-table .table-bordered{
+    border: 1px solid #707070;
+}
+
+.guideline-table tbody{
+    background-color: white;
 }

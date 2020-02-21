@@ -1,6 +1,8 @@
 {% macro list_indic(meas,list_ucs,ucs,measures,ratio,components) %}
 <div class="offset-2 row text-center">
+
     <div class="col-8 mx-5 mt-4 mb-5 list-table">
+        <h3 class="col">Indicative Ratio Nb {{measures[meas]['name']}}/Use Case item</h3>
         <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
@@ -39,7 +41,7 @@
                     <th colspan=1 rowspan= 2 scope="col">Zone</th>
                     {% set nbCompo = components|filter(compo => compo['id_meas']==meas)|length %}
                     {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                        <th colspan=1 rowspan= 2 scope="col">Nb of {{compo['name']}}</br>for the selected zone</th>
+                        <th colspan=1 rowspan= 1 scope="col">Nb of {{compo['name']}}</br>for the selected zone</th>
                     {% endfor %}
                     {% for uc in list_ucs %}
                         <th colspan={{2+2*nbCompo}} scope="col">{{ucs[uc]['name']}}</th>
@@ -50,7 +52,7 @@
                         <th scope="col">Project Size</th>
                         {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
                             <th scope="col">Nb of {{compo['name']}}</br>for the selected size</th>
-                            <th scope="col">Nb of {{compo['name']}} / UC</th>
+                            <th scope="col">Nb of {{compo['name']}} / UC item</th>
                         {% endfor %}
                         <th scope="col">Nb of {{ucs[uc]['name']}}</th>
                     {% endfor %}

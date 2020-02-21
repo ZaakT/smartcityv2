@@ -2,7 +2,7 @@ function colorFilledGS(test){
     $("#table_GS input").each(function(){
         var element = $(this);
         if(test){
-            element.css("background","palegreen");
+            element.css("background","#C3E6CB");
         } else {
             element.css("background","salmon");
         }

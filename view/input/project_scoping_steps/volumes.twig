@@ -27,7 +27,7 @@
         <form class="col container-fluid" name="form_volumes" id="form_volumes" action="?A=project_scoping&amp;A2=volumes_selected" method="post" onsubmit="return colorFilledVolumes();">
             {% for meas,list_ucs in scope %}
             <div class="row text-center mt-5 mb-0">
-                <h3 class="col">Input volumes for {{measures[meas]['name']}}</h3>
+                <h2 class="col">Input volumes for {{measures[meas]['name']}}</h2>
             </div>
             {{ list.list_indic(meas,list_ucs,ucs,measures,ratio,components) }}
             <div class="row m-3 btn-group-sm justify-content-center" role="group">
@@ -37,9 +37,10 @@
             {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel) }}
             {% endfor %}
             
-            <div class="row mt-4 mb-0 text-center">
+            {# <div class="row mt-4 mb-0 text-center">
                 <span id="countUCSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
-            </div>
+            </div> #}
+
             <div class="row text-center mt-3">
                 <h6 id="help_uc" class="col text-danger font-weight-bold text-center" hidden>Please select at least one Use Case !</h6>
             </div>

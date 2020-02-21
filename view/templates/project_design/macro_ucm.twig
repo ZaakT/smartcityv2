@@ -18,7 +18,7 @@
 
                 {% for ucm in ucms %}
                     <tr id = "tr_{{ ucm[0] }}" scope="row">
-                        <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" {{ucms|length == 1 ? "checked" : ""}} required></td> //non
+                        <td class="check-col"><input type="radio" id='radio_ucm' name="radio_ucm" value="{{ ucm[0] }}" {{ucms|length == 1 ? "checked" : ""}} required></td>
                         <td>{{ ucm[1] }}</td>
                         <td>{{ ucm[2] }}</td>
                         <td>{{ ucm[4] }}</td>

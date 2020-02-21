@@ -62,7 +62,7 @@ function checkCapexInput(){
                 ret = false;
             } else {
                 $(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (tab.includes("period")){
             val = val ? parseInt(val) : -1 ;
@@ -73,7 +73,7 @@ function checkCapexInput(){
                 ret = false;
             } else {
                 $(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (tab.includes("unit_cost")){
             val = val ? parseFloat(val) : -1 ;
@@ -87,7 +87,7 @@ function checkCapexInput(){
                 ret = false;
             } else {
                 //$(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });

@@ -62,7 +62,7 @@ function checkOpexInput(){
                 ret = false;
             } else {
                 $(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (tab.includes("unit_cost")){
             //console.log(val);
@@ -78,7 +78,7 @@ function checkOpexInput(){
                 ret = false;
             } else {
                 //$(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
                 //$(this).val(val.toLocaleString(undefined));
             }
         }  else if (tab.includes("anVarVol") || tab.includes("anVarCost")){
@@ -91,7 +91,7 @@ function checkOpexInput(){
                     ret = false;
                 } else {
                     //$(this).val(val);
-                    $(this).css("background","palegreen");
+                    $(this).css("background","#C3E6CB");
                     //$(this).val(val.toLocaleString(undefined));
                 }
             } else {

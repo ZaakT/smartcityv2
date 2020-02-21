@@ -7,7 +7,7 @@ function checkRate(){
         return false;
     } else {
         //$("#discount_rate_input").val(val);
-        $("#discount_rate_input").css("background","palegreen");
+        $("#discount_rate_input").css("background","#C3E6CB");
         return true;
     }
 }

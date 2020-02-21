@@ -35,7 +35,7 @@ function checkInputFS(){
                 $(this).css("background","salmon");
                 ret = false;
             } else {
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });
@@ -57,7 +57,7 @@ function checkTotFS(){
         }
     });
     if(sum==100){
-        $("#funding_sources_table .enabledInput").css("background","palegreen");
+        $("#funding_sources_table .enabledInput").css("background","#C3E6CB");
         return checkInputFS();
     } else {
         //console.log("ddd");
@@ -150,7 +150,7 @@ function checkInputEntities(){
             $(this).css("background","salmon");
             ret = false;
         } else {
-            $(this).css("background","palegreen");
+            $(this).css("background","#C3E6CB");
         }
     });
     $("#entities_table .date input").each(function(){
@@ -159,7 +159,7 @@ function checkInputEntities(){
             $(this).css("background","salmon");
             ret = false;
         } else {
-            $(this).css("background","palegreen");
+            $(this).css("background","#C3E6CB");
         }
     });
     calcOutputEntities();
@@ -224,7 +224,7 @@ function checkTotEntities(){
                 ret = false;
             } else {
                 /* list_entities.forEach((id_entity) => {
-                    $("#share_"+id_source+"_"+id_entity).css("background","palegreen");
+                    $("#share_"+id_source+"_"+id_entity).css("background","#C3E6CB");
                 }); */
             }
         }
@@ -283,7 +283,7 @@ function checkInputEntities2(){
                 $(this).css("background","salmon");
                 ret = false;
             } else {
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (inputCat=="interest"){
             var val = $(this).val();
@@ -296,7 +296,7 @@ function checkInputEntities2(){
                 $(this).css("background","salmon");
                 ret = false;
             } else {
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });
@@ -310,7 +310,7 @@ function checkInputEntities2(){
             $(this).css("background","salmon");
             ret = false;
         } else {
-            $(this).css("background","palegreen");
+            $(this).css("background","#C3E6CB");
         }
     });
     calcOutputEntities2();
@@ -411,7 +411,7 @@ function checkTotEntities2(){
                 ret = false;
             } else {
                 /* list_entities.forEach((id_entity) => {
-                    $("#share_"+id_source+"_"+id_entity).css("background","palegreen");
+                    $("#share_"+id_source+"_"+id_entity).css("background","#C3E6CB");
                 }); */
             }
         }

@@ -16,7 +16,7 @@ function checkInputBenef(){
                 $(this).css("background","salmon");
                 ret = false;
             } else {
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });
@@ -39,7 +39,7 @@ function checkTotBenef(){
     });
     calcOuputBenef();
     if(sum==100){
-        $("#benef_table input[type='number']").css("background","palegreen");
+        $("#benef_table input[type='number']").css("background","#C3E6CB");
         return checkInputBenef();
     } else {
         //console.log("ddd");

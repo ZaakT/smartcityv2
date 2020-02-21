@@ -52,7 +52,7 @@ function checkValidity(part,uc){
             current_date = dates_saved[part][uc][date];
             if(current_date!=""){
                 if(current_date > prec_date){
-                    $("#"+part+"_"+date+"_"+uc+" input").css("background","palegreen");
+                    $("#"+part+"_"+date+"_"+uc+" input").css("background","#C3E6CB");
                 } else {
                     $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                     ret = false;
@@ -64,7 +64,7 @@ function checkValidity(part,uc){
             }
         } else {
             if(current_date!=""){
-                $("#"+part+"_"+date+"_"+uc+" input").css("background","palegreen");
+                $("#"+part+"_"+date+"_"+uc+" input").css("background","#C3E6CB");
                 prec_date = dates_saved[part][uc][date];
             } else {
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
@@ -82,8 +82,8 @@ function checkValidity(part,uc){
                 $("#implem_100date_"+uc+" input").css("background","salmon");
                 ret = false;
             } else {
-                $("#opex_enddate_"+uc+" input").css("background","palegreen");
-                $("#implem_100date_"+uc+" input").css("background","palegreen");
+                $("#opex_enddate_"+uc+" input").css("background","#C3E6CB");
+                $("#implem_100date_"+uc+" input").css("background","#C3E6CB");
                 ret = true;
             }
         }
@@ -95,8 +95,8 @@ function checkValidity(part,uc){
                 $("#implem_100date_"+uc+" input").css("background","salmon");
                 ret = false;
             } else {
-                $("#revenues_enddate_"+uc+" input").css("background","palegreen");
-                $("#implem_100date_"+uc+" input").css("background","palegreen");
+                $("#revenues_enddate_"+uc+" input").css("background","#C3E6CB");
+                $("#implem_100date_"+uc+" input").css("background","#C3E6CB");
                 ret = true;
             }
         }

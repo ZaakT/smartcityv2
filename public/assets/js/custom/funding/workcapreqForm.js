@@ -20,7 +20,7 @@ function checkInputWCR(){
             $(this).css("background","salmon");
             ret = false;
         } else {
-            $(this).css("background","palegreen");
+            $(this).css("background","#C3E6CB");
         }
     });
     calcTotWCR();

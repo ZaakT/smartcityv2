@@ -1,21 +1,26 @@
 {% macro list_mags(mags) %}
 {% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
 <div class="offset-2 row text-center">
-    <div class="col-8 m-5 list-table">
+
+    
+    <div class="col-6 m-5 list-table">
+
+    <h3 class="text-center"> Indicative share of infrastructure </h3>
+
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col">Magnitude</th>
-                    <th scope="col">Range Min</th>
-                    <th scope="col">Range Max</th>
+                    <th scope="col">Deployment</th>
+                    <th scope="col">Range</th>
+                    {# <th scope="col">Range Max</th> #}
                 </tr>
             </thead>
             <tbody>
             {% for id_mag,mag in mags %}
                 <tr id = "tr_{{ id_mag }}" scope="row">
                     <td style={{color[id_mag-1]}}>{{ mag['name'] }}</td>
-                    <td>{{ mag['range_min'] }}%</td>
-                    <td>{{ mag['range_max'] }}%</td>
+                    <td>{{ mag['range_min'] }} - {{ mag['range_max'] }}%</td>
+                    {# <td>{{ mag['range_max'] }}%</td> #}
                 </tr>
             {% endfor %}
             </tbody>

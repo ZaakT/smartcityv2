@@ -62,7 +62,7 @@ function checkWiderCashInput(){
                 ret = false;
             } else {
                 $(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (tab.includes("unitCost") || tab.includes("anVarVol") || tab.includes("anVarCost") || tab.includes("volRed") || tab.includes("unitCostRed")){
             val = val ? parseFloat(val) : -1 ;
@@ -76,7 +76,7 @@ function checkWiderCashInput(){
                 ret = false;
             } else {
                 //$(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         } else if (tab.includes("unitIndic")){
             //console.log(val);
@@ -85,7 +85,7 @@ function checkWiderCashInput(){
                 ret = false;
             } else {
                 //$(this).val(val);
-                $(this).css("background","palegreen");
+                $(this).css("background","#C3E6CB");
             }
         }
     });
