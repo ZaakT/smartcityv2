@@ -356,6 +356,7 @@ function calcRepartCrit($list_cat,$list_crit){
 // ---------------------------------------- RATING ----------------------------------------
 
 function rating($twig,$is_connected,$ucmID=0){
+    //sends all the needed data to display on rating page
     $user = getUser($_SESSION['username']);
     if($ucmID!=0){
         if(getUCMByID($ucmID,$user[0])){
@@ -397,6 +398,7 @@ function rating($twig,$is_connected,$ucmID=0){
 }
 
 function calcRepartUC($list_meas,$list_ucs,$measures){
+    //renvoie une liste res pour laquelle chaque cellule correspond au nombre de UC de la liste en paramètres qui font partie de cette measure
     $res = [];
     foreach ($list_meas as $meas) {
         $count = 0;
@@ -417,8 +419,8 @@ function rates_inputed($post){
             $ucmID = $_SESSION['ucmID'];
             $list_selUC = getListSelUC($ucmID);
             $orderUC = [];
-            foreach ($list_selUC as $uc) {
-                array_push($orderUC,intval($uc[0]));
+            foreach ($list_selUC as $uc) {   //pour tous les UC sélectionnés
+                array_push($orderUC,intval($uc[0])); //on push l'id du UC dans $orderUC
             }
             $list_selCrit = getListSelCrit($ucmID);
             //var_dump($list_selCrit);
@@ -426,9 +428,9 @@ function rates_inputed($post){
             //var_dump(empty($listSelUC));
             $list_rates = [];
             //var_dump($post);
-            foreach ($post as $key => $value) {
+            foreach ($post as $key => $value) { //pour toutes les données entrées
                 if(isset($key)){
-                    $IDs = explode("_",$key);
+                    $IDs = explode("_",$key); 
                     $ucID = intval($IDs[0]);
                     $critID = intval($IDs[1]);
                     if(array_key_exists($ucID,$list_rates)){
@@ -507,7 +509,7 @@ function calcRanks($rates,$orderUC,$orderCrit){
     $rates_by_crit = [];
     foreach ($rates as $idUC => $dicCritRates) {
         foreach ($dicCritRates as $idCrit => $rate) {
-            //var_dump(strval($idUC."/".$idCrit."/".$rate));
+                            //var_dump(strval($idUC."/".$idCrit."/".$rate));
             if(array_key_exists($idCrit,$rates_by_crit)){
                 $rates_by_crit[$idCrit]=[$idUC=>intval($rate)]+$rates_by_crit[$idCrit];
             }
@@ -521,7 +523,7 @@ function calcRanks($rates,$orderUC,$orderCrit){
     //var_dump($rates_by_crit);
     $ranks = [];
     foreach ($rates_by_crit as $idCrit => $dicUCsRates) {
-        arsort($dicUCsRates);
+        arsort($dicUCsRates); //tri inverse en fonction des valeurs
         $rank = 1;
         $old_rate = 0;
         $counter = 0;
@@ -585,8 +587,10 @@ function calcScores($ranks,$repart_selCrit,$n,$orderUC){
         //var_dump($dicUCsRates);
         foreach ($orderUC as $idUC) {
             $sum = isset($scores[$idCat][$idUC]) ? $scores[$idCat][$idUC] : 0;
-            //var_dump($sum);
-            $scores[$idCat][$idUC] = number_format(10*(1 - ($sum-$nbCrit)/($n-1)/$nbCrit),2);
+            //var_dump($sum, $nbCrit, $n);
+            //$scores[$idCat][$idUC] = number_format(10*(1 - ($sum-$nbCrit)/($n-1)/$nbCrit),2);   ancienne formule
+            $scores[$idCat][$idUC] = number_format(10*(1 - ($sum-$nbCrit)/($nbCrit*$n - $nbCrit)), 2);  //Borda 
+            //var_dump($n,$scores);
         }
     }
     //var_dump($scores);

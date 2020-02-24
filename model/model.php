@@ -1332,6 +1332,23 @@ function getCapexUserItem($projID,$ucID,$name){
 }
 
 function getListCapexAdvice($ucID){
+/* 
+CAPEX_ITEM_ADVICE
+id int(11)            id of the advice
+unit varchar(255)     ex: per lamppost
+source text 
+range_min int(11) 
+range_max
+
+CAPEX_UC
+id_item int(11) PK 
+id_uc int(11) PK
+
+CAPEX_ITEM_ADVICE
+id int(11) AI PK 
+name varchar(255) 
+description text
+*/
     $db = dbConnect();
     $req = $db->prepare("SELECT *
                             FROM capex_item_advice
