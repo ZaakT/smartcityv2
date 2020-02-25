@@ -93,7 +93,7 @@
 {% macro list_implem_input(selDevSym,implem_advice,implem_user,selImplem) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
-        <table id="implem_input" class='table table-sm table-bordered table-responsive-lg'>
+        <table id="implem_input" class='table table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Implementation Component</th>
@@ -110,8 +110,8 @@
                     {% else %}
                     <td scope="col">{{ implem_user[id_implem]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="vol_{{id_implem}}" name="vol_{{id_implem}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkImplemInput();" value="{{selImplem[id_implem]['volume']}}"></td> 
-                    <td scope="col"><input id="cost_{{id_implem}}" name="cost_{{id_implem}}" class="text-center unit_cost" type="number" min=0 step=0.001 required oninput="checkImplemInput();" value="{{selImplem[id_implem]['unit_cost']}}"></td> 
+                    <td scope="col"><input id="vol_{{id_implem}}" name="vol_{{id_implem}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkImplemInput();" value="{{selImplem[id_implem]['volume']}}"></td> 
+                    <td scope="col"><input id="cost_{{id_implem}}" name="cost_{{id_implem}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkImplemInput();" value="{{selImplem[id_implem]['unit_cost']}}"></td> 
                 </tr> 
             {% endfor %}
             </tbody>

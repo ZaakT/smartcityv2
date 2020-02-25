@@ -14,35 +14,51 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
-<div class="row jumbotron text-light m-5 bg-dark p-3">
-    <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
-    </div>
-</div>
-
+{#-------------- corps --------------#}
 {% if selCashReleasing %}
-<form id="form_cashreleasing_input" name="form_cashreleasing_input" action="?A=cost_benefits&amp;A2=cashreleasing_inputed" method="post" onsubmit="return checkCashReleasingPeriod() && checkCashReleasingInput();">
-{% set test = false %}
-{% for id_cashreleasing,data in selCashReleasing if test == false %}
-    {% if id_cashreleasing in cashreleasing_advice|keys %}
-        {% set test = true %}
-    {% endif %}
-{% endfor %}
+    <form id="form_cashreleasing_input" name="form_cashreleasing_input" action="?A=cost_benefits&amp;A2=cashreleasing_inputed" method="post" onsubmit="return checkCashReleasingPeriod() && checkCashReleasingInput();">
+    {% set test = false %}
+    {% for id_cashreleasing,data in selCashReleasing if test == false %}
+        {% if id_cashreleasing in cashreleasing_advice|keys %}
+            {% set test = true %}
+        {% endif %}
+    {% endfor %}
 
-{{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
-{% if test %}
-{{ list.list_cashreleasing_guid(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing,compo,ratio) }}
-{% endif %}
-{{ list.list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
-{{ list.list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
-{# {{ list.list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }} #}
+    <div class="container-fluid">
 
-<div class="row m-3 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_cashreleasing');"></button>
-</div>
+        <section class="row">
+            <div class="col-lg-8 text-left">
 
-</form>
+                <h2 class="ml-5 mt-5"> Cash Releasing Benefits </h2>
+                {#-------------- jumbotron --------------#}
+                <div class="row jumbotron m-4 p-2">
+                    <div class="col text-center">
+                        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+                    </div>
+                </div>
+
+                {#-------------- tab input et total --------------#}
+                {{ list.list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
+                {{ list.list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
+                {# {{ list.list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }} #}
+
+                {#-------------- bouton flèche --------------#}
+                <div class="row m-3 text-center text-dark">
+                    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_cashreleasing');"></button>
+                </div>
+            </div>
+
+            {#-------------- tab guide --------------#}
+            <div class="col-lg-4 guideline">
+                <h3 class="text-center mt-5 pt-2"> Guideline </h3>
+                    {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
+
+                    {% if test %}
+                    {{ list.list_cashreleasing_guid(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing,compo,ratio) }}
+                    {% endif %}
+
+    </form>
 {% else %}
 <h2 class="text-center">There is no cashreleasing item, please contact an administrator</h2>
 {% endif %}

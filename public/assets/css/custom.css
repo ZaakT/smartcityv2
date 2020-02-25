@@ -494,8 +494,6 @@ th, td{
     max-height: 80vh; 
 }
 
-
-
 .check-col{
     min-width: 25px;
     max-width: 25px;
@@ -530,8 +528,14 @@ thead th{
     background-color: white;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
 }
