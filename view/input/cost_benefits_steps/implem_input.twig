@@ -14,34 +14,56 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
-<div class="row jumbotron text-light m-5 bg-dark p-3">
-    <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
-    </div>
+{#-------------- corps --------------#}
+<div class="container-fluid">
+
+    <section class="row">
+        <div class="col-lg-8 text-left">
+
+            <h2 class="ml-5 mt-5"> Implementation cost </h2>
+             {#-------------- jumbotron --------------#}
+            <div class="row jumbotron m-4 p-2">
+                <div class="col text-center">
+                    <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+                </div>
+            </div>
+
+            {#-------------- Test advice implementation ------------#}
+            {% if selImplem %}
+            <form id="form_implem_input" name="form_implem_input" action="?A=cost_benefits&amp;A2=implem_inputed" method="post" onsubmit="checkImplemInput();">
+            {% set test = false %}
+            {% for id_implem,data in selImplem if test == false %}
+                {% if id_implem in implem_advice|keys %}
+                    {% set test = true %}
+                {% endif %}
+            {% endfor %}
+            {#-------------- tab input et total --------------#}
+            {{ list.list_implem_input(selDevSym,implem_advice,implem_user,selImplem) }}
+            {{ list.list_implem_total(selDevSym,implem_advice,implem_user,selImplem) }}
+
+            {#-------------- bouton flèche --------------#}
+            <div class="row m-3 text-center text-dark">
+                <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_implem');"></button>
+            </div>
+
+            
+        </div>
+
+        <div class="col-lg-4 guideline">
+             <h3 class="text-center mt-5 pt-2"> Guideline </h3>
+            {#-------------- tab guide --------------#}
+            {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
+
+            {% if test %}
+            {{ list.list_implem_guid(selDevSym,implem_advice,implem_user,selImplem,compo,ratio) }}
+            {% endif %}
+
+        </div>
+    </section>
 </div>
-
-{% if selImplem %}
-<form id="form_implem_input" name="form_implem_input" action="?A=cost_benefits&amp;A2=implem_inputed" method="post" onsubmit="checkImplemInput();">
-{% set test = false %}
-{% for id_implem,data in selImplem if test == false %}
-    {% if id_implem in implem_advice|keys %}
-        {% set test = true %}
-    {% endif %}
-{% endfor %}
-
-{{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
-
-{% if test %}
-{{ list.list_implem_guid(selDevSym,implem_advice,implem_user,selImplem,compo,ratio) }}
-{% endif %}
-{{ list.list_implem_input(selDevSym,implem_advice,implem_user,selImplem) }}
-{{ list.list_implem_total(selDevSym,implem_advice,implem_user,selImplem) }}
-
-<div class="row m-3 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_implem');"></button>
-</div>
-
 </form>
+
+
 {% else %}
 <h2 class="text-center">There is no implementation item, please contact an administrator</h2>
 {% endif %}
