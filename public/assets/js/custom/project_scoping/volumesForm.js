@@ -8,7 +8,7 @@ function searchIDs(formName){
         var id_compo = parseInt(tab[2]);
         var id_uc = parseInt(tab[3]);
         var id_zone = parseInt(tab[4]);
-        //console.log(id_compo,id_uc,id_zone);
+                                        //console.log(id_compo,id_uc,id_zone);
         if(!list_ucs.includes(id_uc)){
             list_ucs.push(id_uc);
         }
@@ -19,15 +19,15 @@ function searchIDs(formName){
             list_zones.push(id_zone);
         }
     });
-    //console.log(list_ucs,list_compo,list_zones);
+                                    //console.log(list_ucs,list_compo,list_zones);
     return [list_ucs,list_compo,list_zones];
 }
 
-function calcTot(compo,zones,item,uc=""){
+function calcTot(compo,zones,item,uc=""){ //calcule les sommes totales de chaque catégorie
     var sum = 0;
     var val = 0;
     zones.forEach((zone) => {
-        //console.log("#val_"+item+compo+uc+"_"+zone);
+                                        console.log("#val_"+item+compo+uc+"_"+zone);
         val = $("#val_"+item+compo+uc+"_"+zone).text().replace(/\s/g,'');
         if($("#val_"+item+compo+uc+"_"+zone).val()){
             val += $("#val_"+item+compo+uc+"_"+zone).val().replace(/\s/g,'');
@@ -38,10 +38,11 @@ function calcTot(compo,zones,item,uc=""){
     })
     sum = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     sum = sum!="NaN" ? sum : "0";
+    //$("#tot_"+item+compo+uc).text("test calcTot");
     $("#tot_"+item+compo+uc).text(sum);
 }
 
-function calcTotUC(uc,zone,compo){
+function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zone
     var val_1 = $("#val_nb_"+compo+"_"+uc+"_"+zone).val();
     var val_2 = $("#val_nbuc_"+compo+"_"+uc+"_"+zone).val();
     if(val_1 && val_2){
@@ -57,12 +58,13 @@ function calcTotUC(uc,zone,compo){
             res = "-";
         }
         $("#totUC_"+uc+"_"+zone).text(res);
+        //$("#totUC_"+uc+"_"+zone).text("test calcTotUC");
         return res;
     }
     return 0;
 }
 
-function fillTot(formName){
+function fillTot(formName){  //calcule le nombre total de use case 
     colorFilledVolumes();
     const list_ucs = searchIDs(formName)[0];
     const list_compo = searchIDs(formName)[1];
@@ -83,11 +85,12 @@ function fillTot(formName){
             sum = 0;
             list_zones.forEach((zone) => {
                 val = calcTotUC(uc,zone,compo);
-                //console.log(val);
+                                                console.log(val);
                 if(val!="-"){
                     sum += val;
                 }
                 $("#tot_totUC_"+uc).text(sum);
+                //$("#tot_totUC_"+uc).text("test fillTot");
             })
         })
     })
@@ -95,9 +98,9 @@ function fillTot(formName){
 
 function colorFilledVolumes(){
     var ret = true;
-    //console.log("--------------------");
+                                    console.log("--------------------");
     $(".volumes_table input").each(function(){
-        //console.log(this);
+                                        console.log(this);
         var element = $(this);
         var value = element.val();
         //value = value=="" ? "" : parseInt(value);

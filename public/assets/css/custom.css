@@ -114,7 +114,7 @@ th, td{
     text-align: center;
 }
 .volumes_table th{
-    min-width: 200px;
+    max-heigth: 100px;
 }
 
 #schedules_implem {
@@ -509,7 +509,7 @@ input{
     border-style: hidden;
 }
 
-thead th{
+th{
     font-weight: normal;
 }
 
@@ -538,4 +538,10 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance:textfield;
+}
+
+#separatorrow{
+    border-bottom: hidden;
+    border-left: hidden;
+    border-right: hidden;
 }

@@ -1,9 +1,8 @@
 {% macro list_indic(meas,list_ucs,ucs,measures,ratio,components) %}
-<div class="offset-2 row text-center">
-
-    <div class="col-8 mx-5 mt-4 mb-5 list-table">
-        <h3 class="col">Indicative Ratio Nb {{measures[meas]['name']}}/Use Case item</h3>
-        <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg'>
+<div class="row text-center">
+    <div class="ml-4 mr-4 mt-4">
+        <h4 class="col" style="color:#212529;">Indicative Ratio Number of {{measures[meas]['name']}} per Use Case item</h4>
+        <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg guideline-table'>
             <thead class="thead-light text-center">
                 <tr>
                     <th colspan=1 rowspan= 2 scope="col">Component</th>
@@ -30,80 +29,149 @@
 </div>
 {% endmacro %}
 
-{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel=[])  %}
-
-{% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
-<div class="row text-center">
-    <div class="col mx-5 mb-5 list-table">
-        <table id="volumes_table_{{meas}}" class='volumes_table table table-lg table-bordered table-responsive-lg'>
-            <thead class="thead-dark text-center">
+{% macro list_guid_compo(components, perimeter, meas, compo_per_zone)  %}
+    <div class="ml-4 mr-4 mt-4">
+        <h4 class="col" style="color:#212529;">Number of Component per Zone</h4>
+        <table id="ratio_table_{{meas}}" class='table guideline-table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
                 <tr>
-                    <th colspan=1 rowspan= 2 scope="col">Zone</th>
-                    {% set nbCompo = components|filter(compo => compo['id_meas']==meas)|length %}
-                    {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                        <th colspan=1 rowspan= 1 scope="col">Nb of {{compo['name']}}</br>for the selected zone</th>
-                    {% endfor %}
-                    {% for uc in list_ucs %}
-                        <th colspan={{2+2*nbCompo}} scope="col">{{ucs[uc]['name']}}</th>
-                    {% endfor %}
-                </tr>
-                <tr>
-                    {% for uc in list_ucs %}
-                        <th scope="col">Project Size</th>
-                        {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                            <th scope="col">Nb of {{compo['name']}}</br>for the selected size</th>
-                            <th scope="col">Nb of {{compo['name']}} / UC item</th>
+                    <th scope="col">Component</th>
+                        {% for item in perimeter %}
+                            {% for id,zone in item %}
+                                {% if zone['hasChildren'] == false %}
+                                    <th scope="col">{{ zone['name'] }} </th>
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
-                        <th scope="col">Nb of {{ucs[uc]['name']}}</th>
-                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
-            {% for item in perimeter %}
-                {% for id,zone in item %}
-                    {% if zone['hasChildren'] == false %}
-                    <tr id = "tr_{{ id }}" scope="row">
-                        <td class="font-weight-bold">{{ zone['name'] }}</td>
-                        {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                            <td class="val_zones" id="val_zones_{{id_compo}}_{{id}}" scope="col">{{compo_per_zone[id_compo][id]|number_format(0,'.',',')}}</td>
+                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                    <tr scope="row">
+                        <td scope="col" class="font-weight-bold">{{compo['name']}}</td>
+                        {% for item in perimeter %}
+                            {% for id,zone in item %}
+                                {% if zone['hasChildren'] == false %}
+                                    <td class="val_zones" id="val_zones_{{id_compo}}_{{id}}" scope="col">{{ compo_per_zone[id_compo][id] ? compo_per_zone[id_compo][id]|number_format(0,'.',',') : "-" }}</td>
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
-                        {% for uc in list_ucs %}
+                    </tr>         
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endmacro %}
+
+{% macro list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel=[])  %}
+<script src="extensions/sticky-header/bootstrap-table-sticky-header.js"></script>
+{% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
+
+<div class="row text-center">
+    <div class="col mt-2">
+        <table data-sticky-header="true" id="volumes_table_{{meas}}" class='volumes_table table table-lg table-bordered table-responsive-lg'>
+            {# HEADER #}
+            <thead class="thead-dark text-center">
+                <tr>
+                    {% set nbZones = 0 %}
+                    <th colspan=2 scope="col"></th>
+                    {% for item in perimeter %}
+                        {% for id,zone in item %}
+                            {% if zone['hasChildren'] == false %}
+                                <th scope="col">{{ zone['name'] }} </th>
+                                {% set nbZones = nbZones + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <th colspan=2 scope="col"> TOTAL </th>
+                </tr>
+            </thead>
+                  
+            {# TBODY #}
+            <tbody class="thead-dark">
+            {% set nbCompo = components|filter(compo => compo['id_meas']==meas)|length %}
+            {% for uc in list_ucs %}
+            {#PROJECT SIZE#}
+            <tr id = "tr_{{uc}}" scope="row"> 
+                <th rowspan={{2 + 2*nbCompo}} scope="col">{{ucs[uc]['name']}}</th>
+                {#titre#}
+                <th scope="col">Project Size</th>
+                {#pour toutes les zones#}
+                {% for item in perimeter %}
+                    {% for id,zone in item %}
+                        {% if zone['hasChildren'] == false %}
                             {% if sizes[id][uc] %}
                                 <td scope="col" style={{color[sizes[id][uc]-1]}}>
                                     {{mags[sizes[id][uc]]['name']}}
                                     </br>
                                     ({{mags[sizes[id][uc]]['range_min']}}% - {{mags[sizes[id][uc]]['range_max']}}%)
                                 </td>
-                                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                                    <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td>
-                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_per_uc']}}" placeholder="{{ratio[id_compo][uc]}}"></td>
-                                {% endfor %}
-                                <td id="totUC_{{uc}}_{{id}}" scope="col">-</td>
                             {% else %}
-                                <td colspan={{2+2*nbCompo}} class="text-danger font-weight-bold" scope="col">
+                                <td rowpan={{2+2*nbCompo}} class="text-danger font-weight-bold" scope="col">
                                     Please return in "Size" and validate the selection
                                 </td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                    {% endif %}                 
-                {% endfor %}
-            {% endfor %}
-            <tr class="text-primary font-weight-bolder thead-light">
-                <th class="text-uppercase">Total</th>
-                {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                    <td id="tot_zones_{{id_compo}}" scope="col">-</td>
-                {% endfor %}
-                {% for uc in list_ucs %}
-                    <td scope="col"></td>
-                    {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
-                    <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>
-                    <td id="tot_nbuc_{{id_compo}}_{{uc}}" scope="col">-</td>
-                    {% endfor %}
-                    <td id="tot_totUC_{{uc}}" scope="col">-</td>
-                {% endfor %}
+                {% endif %}{% endif %}{% endfor %}{% endfor %}
+                {#total#}
+                <td scope="col"></td>
             </tr>
+
+            {#DUO NB OF COMPONENETS+RATION COMPO/UC#}
+            {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
+                {#NB OF COMPONENTS#}
+                <tr id = "tr_{{uc}}" scope="row"> 
+                    {#titre#}
+                    <th scope="col">Nb of {{compo['name']}}</br>for the selected size</th>
+                    {#pour toutes les zones#}
+                    {% for item in perimeter %}
+                        {% for id,zone in item %}
+                            {% if zone['hasChildren'] == false %}
+                                {% if sizes[id][uc] %}
+                                <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td>
+                    {% endif %}{% endif %}{% endfor %}{% endfor %}
+                    {#Total#}
+                    <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>
+                </tr>
+
+                {#RATIO#}
+                <tr id = "tr_{{uc}}" scope="row"> 
+                    {#titre#}
+                    <th scope="col">Nb of {{compo['name']}} / UC item</th>
+                    {#pour toutes les zones#}
+                        {% for item in perimeter %}
+                            {% for id,zone in item %}
+                                {% if zone['hasChildren'] == false %}
+                                    {% if sizes[id][uc] %}
+                                    <td scope="col"><input class="val_nbuc" id="val_nbuc_{{id_compo}}_{{uc}}_{{id}}" name ="val_nbuc_{{id_compo}}_{{uc}}_{{id}}"type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_per_uc']}}" placeholder="{{ratio[id_compo][uc]}}"></td>
+                        {% endif %}{% endif %}{% endfor %}{% endfor %}
+                    {#Total#}
+                    <td id="tot_nbuc_{{id_compo}}_{{uc}}" scope="col">-</td>
+                </tr>
+            {% endfor %}
+
+            {#NB OF UC#}
+            <tr id = "tr_{{uc}}" scope="row"> 
+                {#titre#}
+                <th scope="col">Nb of {{ucs[uc]['name']}}</th>
+                {#pour toutes les zones#}
+                {% for item in perimeter %}
+                    {% for id,zone in item %}
+                        {% if zone['hasChildren'] == false %}
+                            {% if sizes[id][uc] %}
+                            <td id="totUC_{{uc}}_{{id}}" scope="col">-</td>
+                {% endif %}{% endif %}{% endfor %}{% endfor %}
+                {#Total#}
+                <td id="tot_totUC_{{uc}}" scope="col" class="text-primary font-weight-bolder thead-light">-</td>          
+            </tr>
+
+            {#SEPARATEUR#}
+            <tr id = "separatorrow">
+                <td colspan={{ 3 + nbZones }}></td>
+            </tr>
+            {% endfor %}
+
             </tbody>
+
         </table>
     </div>
 </div>
