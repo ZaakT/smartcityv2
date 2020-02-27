@@ -189,20 +189,20 @@ list_selCapex = id_item,unit_cost,volume,period
         if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
             $proj = getProjByID($projID,$user[0]);
             $uc = getUCByID($ucID);
-                var_dump($uc);
+                //var_dump($uc);
             $list_selCapex = getListSelCapex($projID,$ucID);
             //var_dump($list_selCapex);
             $list_capex_advice = getListCapexAdvice($ucID); 
-                var_dump($list_capex_advice);
+                //var_dump($list_capex_advice);
             $list_sel_capex_advice = getListSelByType($list_selCapex,$list_capex_advice);
             //var_dump($list_sel_capex_advice);
             $list_capex_user = getListCapexUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
             $nb_compo = getNbTotalCompo($compo['id']);
             $nb_uc = getNbTotalUC($projID,$ucID);
-                 var_dump($nb_compo,$nb_uc);
+                 //var_dump($nb_compo,$nb_uc);
             $list_ratio = getRatioCompoCapex($list_sel_capex_advice,$compo['id']);
-                 var_dump($list_ratio);
+                 //var_dump($list_ratio);
             $devises = getListDevises();
             
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];

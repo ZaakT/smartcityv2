@@ -51,12 +51,14 @@
 
     {#-------------- tab guide --------------#}
     <div class="col-lg-4 guideline">
-        <h3 class="text-center mt-5 pt-2"> Guideline </h3>
+        <div class="sticky-guideline">
+        <h1 class="text-center mt-5 pt-2"> Guideline </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
         {% if test %}
         {{ list.list_opex_guid(selDevSym,opex_advice,opex_user,selOpex,compo,ratio) }}
         {% endif %}
+        </div>
     </div>
 
     </section>

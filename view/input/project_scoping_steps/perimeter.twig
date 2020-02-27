@@ -26,9 +26,15 @@
 <div class ="row">
 {% if zones %}
     <form class="col container-fluid" id="form_zones" name="form_zones" action="?A=project_scoping&amp;A2=perimeter_selected" method="post" onsubmit="return countChecked_zones('form_zones');">
-        {% for level,item in zones %}
-            {{ list.list_zones(item,level,list_sel) }}
-        {% endfor %}
+        <div class="container-fluid">
+            <section class="row">        
+            {% for level,item in zones %}
+                <div class="col-lg-{{ 12 / zones|length }} text-center">
+                    {{ list.list_zones(item,level,list_sel) }}
+                </div> {# à continuer. problème: dissocier en plusieurs tableaux les zones#}
+            {% endfor %}
+            </section>
+        </div>
         
         <div class="row mt-4 mb-0 text-center">
             <span id="countZonesSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>

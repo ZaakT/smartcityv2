@@ -55,12 +55,13 @@
             </form>
         </div> 
 
+        {#---------------- guideline ----------------#}
         <div class="col-lg-4 guideline">
-            <div class="sticky-top">
-                <h3 class="text-center mt-5 pt-2"> Guideline </h3>
+            <div class="sticky-guideline">
+                <h1 class="text-center mt-5 pt-2"> Guideline </h1>
                 
                 {% for meas,list_ucs in scope %}
-                <h3 class="col mt-5 mb-4">{{measures[meas]['name']}}</h3>
+                <h2 class="col mt-5 mb-4">{{measures[meas]['name']}}</h2>
                 {{ list.list_indic(meas,list_ucs,ucs,measures,ratio,components) }}
                 {{ list.list_guid_compo(components, perimeter, meas, compo_per_zone) }}
                 {% endfor %}

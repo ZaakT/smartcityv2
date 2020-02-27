@@ -1,7 +1,7 @@
 {% macro list_indic(meas,list_ucs,ucs,measures,ratio,components) %}
-<div class="row text-center">
+<div class="text-center">
     <div class="ml-4 mr-4 mt-4">
-        <h4 class="col" style="color:#212529;">Indicative Ratio Number of {{measures[meas]['name']}} per Use Case item</h4>
+        <h3 class="col" style="color:#212529;">Indicative Ratio Number of {{measures[meas]['name']}} per Use Case item</h3>
         <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg guideline-table'>
             <thead class="thead-light text-center">
                 <tr>
@@ -30,8 +30,8 @@
 {% endmacro %}
 
 {% macro list_guid_compo(components, perimeter, meas, compo_per_zone)  %}
-    <div class="ml-4 mr-4 mt-4">
-        <h4 class="col" style="color:#212529;">Number of Component per Zone</h4>
+    <div class="ml-4 mr-4 mt-4 text-center">
+        <h3 class="col" style="color:#212529;">Number of Component per Zone</h3>
         <table id="ratio_table_{{meas}}" class='table guideline-table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
@@ -69,8 +69,8 @@
 {% set color = ["background:#D9ADC4;","background:#BFB6E3;","background:#AEC8CD;","background:#A1E3A6;","background:#D9D5A5;"] %}
 
 <div class="row text-center">
-    <div class="col mt-2">
-        <table data-sticky-header="true" id="volumes_table_{{meas}}" class='volumes_table table table-lg table-bordered table-responsive-lg'>
+    <div class="mt-2 table-responsive">
+        <table data-sticky-header="true" id="volumes_table_{{meas}}" class='volumes_table table table-lg table-bordered'>
             {# HEADER #}
             <thead class="thead-dark text-center">
                 <tr>

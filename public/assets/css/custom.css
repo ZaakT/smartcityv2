@@ -501,7 +501,10 @@ th, td{
 }
 
 .guideline{
-    background-color: #DEE2E6;
+    /*background-color: #DEE2E6;*/
+    background-color: white;
+    border-left: solid #DEE2E6 1px ;
+    font-size: .875rem;
 }
 
 input{
@@ -520,6 +523,18 @@ th{
     opacity: 1;
 }
 
+.guideline h1{
+    font-size: 1.75rem;
+}
+
+.guideline h2{
+    font-size: 1.25rem;
+}
+
+.guideline h3{
+    font-size: 1rem;
+}
+
 .guideline-table .table-bordered{
     border: 1px solid #707070;
 }
@@ -527,6 +542,13 @@ th{
 .guideline-table tbody{
     background-color: white;
 }
+
+.sticky-guideline {
+    position:sticky;
+    right:0;
+    top:100px;
+}
+
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
