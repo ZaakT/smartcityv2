@@ -20,6 +20,7 @@
 })(jQuery);
 
 
+
 function countChecked_scope(formName) {
     var n = 0;
     var m = 0;   
@@ -30,7 +31,7 @@ function countChecked_scope(formName) {
                 var measID = $(this).attr('id');
                 if(this.checked==true){
                     n++;
-                    console.log(measID);
+                    //console.log(measID);
                     $("."+measID).removeAttr("hidden");
                 } else {
                     //console.log(measID);

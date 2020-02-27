@@ -501,9 +501,9 @@ th, td{
 }
 
 .guideline{
-    /*background-color: #DEE2E6;*/
-    background-color: white;
-    border-left: solid #DEE2E6 1px ;
+    background-color: #DEE2E6;
+    /*background-color: white;*/
+    border-left: hidden #DEE2E6 1px ;
     font-size: .875rem;
 }
 
@@ -518,7 +518,7 @@ th{
 
 /* tests*/
 .guideline-table th{
-    background: #DEE2E6 0% 0% no-repeat padding-box;
+    background: #DEE2E6 no-repeat padding-box;
     border: 1px solid #707070;
     opacity: 1;
 }

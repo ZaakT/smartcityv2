@@ -51,18 +51,18 @@ function checkValidity(part,uc){
         if(date!="startdate"){
             current_date = dates_saved[part][uc][date];
             if(current_date!=""){
-                if(current_date > prec_date){
+                if(current_date > prec_date){   //TOUTES DATES DOIT ETRE SUPERIEURE A LA PRECEDENTE
                     $("#"+part+"_"+date+"_"+uc+" input").css("background","#C3E6CB");
                 } else {
                     $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                     ret = false;
                 }
-                prec_date = dates_saved[part][uc][date];
+                prec_date = dates_saved[part][uc][date]; 
             } else {
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","salmon");
                 ret = false;
             }
-        } else {
+        } else { //si startdate
             if(current_date!=""){
                 $("#"+part+"_"+date+"_"+uc+" input").css("background","#C3E6CB");
                 prec_date = dates_saved[part][uc][date];
@@ -77,7 +77,7 @@ function checkValidity(part,uc){
         if(part=="opex" && date=="enddate"){
             var date_opex = dates_saved[part][uc][date];
             var date_implem = dates_saved["implem"][uc]["100date"];
-            if(date_opex < date_implem){
+            if(date_opex < date_implem){   //ENDDATE OPEX DOIT ETRE SUP A DATE IMPLEM 100%
                 $("#opex_enddate_"+uc+" input").css("background","salmon");
                 $("#implem_100date_"+uc+" input").css("background","salmon");
                 ret = false;
@@ -90,7 +90,7 @@ function checkValidity(part,uc){
         if(part=="revenues" && date=="enddate"){
             var date_revenues = dates_saved[part][uc][date];
             var date_implem = dates_saved["implem"][uc]["100date"];
-            if(date_revenues < date_implem){
+            if(date_revenues < date_implem){ //ENDDATE REVENUES DOIT ETRE > IMPLEM 100
                 $("#revenues_enddate_"+uc+" input").css("background","salmon");
                 $("#implem_100date_"+uc+" input").css("background","salmon");
                 ret = false;

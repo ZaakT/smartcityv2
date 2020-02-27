@@ -1265,6 +1265,7 @@ function insertSelDates($projID,$list){
     $req_revenue = $db->prepare("INSERT INTO revenue_schedule
                             (id_proj,id_uc,start_date,25_rampup,50_rampup,75_rampup,100_rampup,end_date)
                             VALUES (?,?,?,?,?,?,?,?)");
+    //var_dump($list['implem'], $list['opex'], $list['revenues']);
     foreach ($list['implem'] as $id_uc => $data) {
         $ret = $req_implem->execute(array($projID,$id_uc,$data['startdate'],$data['25date'],$data['50date'],$data['75date'],$data['100date']));
     }
