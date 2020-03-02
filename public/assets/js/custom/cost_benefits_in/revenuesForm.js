@@ -84,6 +84,7 @@ function checkRevenuesInput(){
     return ret;
 }
 
+/*
 function calcTotRevenues(){
     var sum = 0;
     $("#tot_table_rev td").each(function(){
@@ -116,6 +117,55 @@ function calcTotRevenues(){
                 }
             } else if (temp.length==2) {
                 $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+            }
+        }
+    });
+}
+*/
+
+function calcTotRevenues(){
+    var sum = [0, 0, 0 ,0];
+    $("#tot_table_rev td").each(function(){
+        var id = $(this).attr('id');
+        if (id){
+            var temp = id.split("_");
+            if (temp.length==3){
+                var varvol = parseFloat($("#anVarVol_"+temp[2]).val());
+                varvol = varvol ? varvol/100 : 0;
+                var varrev = parseFloat($("#anVarRev_"+temp[2]).val());
+                varrev = varrev ? varrev/100 : 0;
+                var vartot = varvol+varrev;
+
+                var volume = parseInt($("#vol_"+temp[2]).val());
+                var unitcost = parseFloat($("#rev_"+temp[2]).val());
+                var tot = volume && unitcost ? 12*volume*unitcost : 0;
+
+                if(temp[1]=="rev"){
+                    $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                    sum[0] += tot;
+                } else if(temp[1]=="year+1"){
+                    var year1 = tot + tot * vartot / 100;
+                    $(this).text(year1.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                    sum[1] += year1;
+                } else if(temp[1]=="year+2"){
+                    var year2 = tot + tot * 2 * vartot / 100;
+                    $(this).text(year2.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                    sum[2] += year2;
+                } else if(temp[1]=="year+3"){
+                    var year3 = tot + tot * 3 * vartot / 100;
+                    $(this).text(year3.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                    sum[3] += year3;
+                }
+            } else if (temp.length==2) {
+                if(temp[1]=="rev"){ 
+                    $(this).text(sum[0].toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                } else if(temp[1] == "year+1"){
+                    $(this).text(sum[1].toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                } else if(temp[1] == "year+2"){
+                    $(this).text(sum[2].toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                } else if(temp[1] == "year+3"){
+                    $(this).text(sum[3].toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                }
             }
         }
     });

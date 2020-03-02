@@ -144,7 +144,6 @@ function calcTotOpex(){
 
 function calcTotOpex(){
     var sum = [0, 0, 0 ,0];
-    var tot = 0;
     $("#tot_table_opex td").each(function(){
         var id = $(this).attr('id');
         if (id){
