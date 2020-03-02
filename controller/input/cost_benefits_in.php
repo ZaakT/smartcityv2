@@ -1881,7 +1881,7 @@ function checkCashReleasing($projID,$ucID){
 function checkWiderCash($projID,$ucID){
     $listSel = getListSelWiderCash($projID,$ucID);
     if(!empty($listSel)){
-        echo "<script>checkProgress('cwb');</script>";
+        echo "<script>checkProgress('wcb');</script>";
         return 1;
     } else {
         return 2;
@@ -1948,6 +1948,7 @@ function checkProgress(){
             checkRevenues($projID,$ucID);
             checkCashReleasing($projID,$ucID);
             checkWiderCash($projID,$ucID);
+            checkNonCash($projID,$ucID);
             checkRisks($projID,$ucID);
     }
 }

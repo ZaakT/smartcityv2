@@ -18,7 +18,7 @@
             <tbody>
             {% for id,scen in scenarios %}
                 <tr id = "tr_{{ id }}" scope="row">
-                    <td class="check-col"><input type="radio" id='radio_scen' name="radio_scen" value="{{ id }}" required></td>
+                    <td class="check-col"><input type="radio" id='radio_scen' name="radio_scen" value="{{ id }}" {{scenarios|length == 1 ? "checked" : ""}} required></td>
                     <td>{{ scen['name'] }}</td>
                     <td>{{ scen['description'] }}</td>
                     <td>{{ projects[scen['id_proj']]['name'] }}</td>
