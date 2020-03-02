@@ -5,25 +5,25 @@
         <!-- - Input - / Project Design -->
         {% if page=="project_design" %}
         <h4 class="nav-item text-center">- Input -<br>Project Design</h4>
-        <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">1 - Use Cases Menu</a>
-        <a class="nav-item nav-link disabled" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">2 - Measures</a>
-        <a class="nav-item nav-link disabled" id="criteria" href="?A=project_design&amp;A2=criteria&amp;ucmID={{ selectID }}">3 - Criteria</a>
-        <a class="nav-item nav-link disabled" id="geography" href="?A=project_design&amp;A2=geography&amp;ucmID={{ selectID }}">4 - Geography</a>
-        <a class="nav-item nav-link disabled" id="use_case" href="?A=project_design&amp;A2=use_case&amp;ucmID={{ selectID }}">5 - Use Case</a>
-        <a class="nav-item nav-link disabled" id="rating"  href="?A=project_design&amp;A2=rating&amp;ucmID={{ selectID }}">6 - Rating</a>
-        <a class="nav-item nav-link disabled" id="scoring"  href="?A=project_design&amp;A2=scoring&amp;ucmID={{ selectID }}">7 - Scoring</a>
-        <a class="nav-item nav-link disabled" id="global_score"  href="?A=project_design&amp;A2=global_score&amp;ucmID={{ selectID }}">8 - Global Score</a>
+        <a class="nav-item nav-link" id="ucm" href="?A=project_design&amp;A2=ucm">Use Cases Menu</a>
+        <a class="nav-item nav-link disabled" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">Measures</a>
+        <a class="nav-item nav-link disabled" id="criteria" href="?A=project_design&amp;A2=criteria&amp;ucmID={{ selectID }}">Criteria</a>
+        <a class="nav-item nav-link disabled" id="geography" href="?A=project_design&amp;A2=geography&amp;ucmID={{ selectID }}">Geography</a>
+        <a class="nav-item nav-link disabled" id="use_case" href="?A=project_design&amp;A2=use_case&amp;ucmID={{ selectID }}">Use Case</a>
+        <a class="nav-item nav-link disabled" id="rating"  href="?A=project_design&amp;A2=rating&amp;ucmID={{ selectID }}">Rating</a>
+        <a class="nav-item nav-link disabled" id="scoring"  href="?A=project_design&amp;A2=scoring&amp;ucmID={{ selectID }}">Scoring</a>
+        <a class="nav-item nav-link disabled" id="global_score"  href="?A=project_design&amp;A2=global_score&amp;ucmID={{ selectID }}">Global Score</a>
     
         <!-- - Input - / Project Scoping -->
         {% elseif page=="project_scoping" %}
         <h4 class="nav-item text-center">- Input -<br>Project Scoping</h4>
-        <a class="nav-item nav-link" id="project" href="?A=project_scoping&amp;A2=project">1 - Project</a>
-        <a class="nav-item nav-link disabled" id="scope" href="?A=project_scoping&amp;A2=scope&amp;projID={{ selectID }}">2 - Scope</a>
-        <a class="nav-item nav-link disabled" id="perimeter" href="?A=project_scoping&amp;A2=perimeter&amp;projID={{ selectID }}">3 - Perimeter</a>
-        <a class="nav-item nav-link disabled" id="size" href="?A=project_scoping&amp;A2=size&amp;projID={{ selectID }}">4 - Size</a>
-        <a class="nav-item nav-link disabled" id="volumes" href="?A=project_scoping&amp;A2=volumes&amp;projID={{ selectID }}">5 - Volumes</a>
-        <a class="nav-item nav-link disabled" id="schedule" href="?A=project_scoping&amp;A2=schedule&amp;projID={{ selectID }}">6 - Schedule</a>
-        <a class="nav-item nav-link disabled" id="discount_rate" href="?A=project_scoping&amp;A2=discount_rate&amp;projID={{ selectID }}">7 - Discount Rate</a>
+        <a class="nav-item nav-link" id="project" href="?A=project_scoping&amp;A2=project"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project</a>
+        <a class="nav-item nav-link disabled" id="scope" href="?A=project_scoping&amp;A2=scope&amp;projID={{ selectID }}"><span id="scope-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Scope</a>
+        <a class="nav-item nav-link disabled" id="perimeter" href="?A=project_scoping&amp;A2=perimeter&amp;projID={{ selectID }}"><span id="perimeter-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Perimeter</a>
+        <a class="nav-item nav-link disabled" id="size" href="?A=project_scoping&amp;A2=size&amp;projID={{ selectID }}"><span id="size-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Size</a>
+        <a class="nav-item nav-link disabled" id="volumes" href="?A=project_scoping&amp;A2=volumes&amp;projID={{ selectID }}"><span id="volume-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Volumes</a>
+        <a class="nav-item nav-link disabled" id="schedule" href="?A=project_scoping&amp;A2=schedule&amp;projID={{ selectID }}"><span id="schedule-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Schedule</a>
+        <a class="nav-item nav-link disabled" id="discount_rate" href="?A=project_scoping&amp;A2=discount_rate&amp;projID={{ selectID }}"><span id="discount_rate-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Discount Rate</a>
         
 
 
@@ -32,17 +32,17 @@
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
         <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>        
-        <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb">1 - Project</a>
-        <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}">2 - Use Cases</a>
-        <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">3 - Capex</a>
-        <a class="nav-item nav-link disabled" id="implem" href="?A=cost_benefits&amp;A2=implem&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">4 - Implementation</a>
-        <a class="nav-item nav-link disabled" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">5 - Opex</a>
-        <a class="nav-item nav-link disabled" id="revenues" href="?A=cost_benefits&amp;A2=revenues&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">6 - Revenues</a>
-        <a class="nav-item nav-link disabled" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">7 - Cash Releasing Benefits</a>
-        <a class="nav-item nav-link disabled" id="widercash" href="?A=cost_benefits&amp;A2=widercash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">8 - Wider Cash Benefits</a>
-        <a class="nav-item nav-link disabled" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">9 - Non Cash Benefits</a>
-        <a class="nav-item nav-link disabled" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">10 - Risks</a>
-        <a class="nav-item nav-link disabled" id="summary" href="?A=cost_benefits&amp;A2=summary&amp;projID={{ selectID }}">11 - Summary</a>
+        <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project</a>
+        <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}"><span id="uc-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Cases</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="implem" href="?A=cost_benefits&amp;A2=implem&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="implem-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Implementation</a>
+        <a class="nav-item nav-link disabled" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
+        <a class="nav-item nav-link disabled" id="revenues" href="?A=cost_benefits&amp;A2=revenues&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="revenues-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Revenues</a>
+        <a class="nav-item nav-link disabled" id="cashreleasing" href="?A=cost_benefits&amp;A2=cashreleasing&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="crb-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Cash Releasing Benefits</a>
+        <a class="nav-item nav-link disabled" id="widercash" href="?A=cost_benefits&amp;A2=widercash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="wcb-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Wider Cash Benefits</a>
+        <a class="nav-item nav-link disabled" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="ncb-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Non Cash Benefits</a>
+        <a class="nav-item nav-link disabled" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="risks-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Risks</a>
+        <a class="nav-item nav-link disabled" id="summary" href="?A=cost_benefits&amp;A2=summary&amp;projID={{ selectID }}">Summary</a>
 
 
 

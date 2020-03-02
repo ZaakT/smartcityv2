@@ -33,3 +33,8 @@ function prereq_ProjectScoping4(check){
         });
     }
 }
+
+function checkProgress(part){
+        $("#"+part+"-item").removeClass("d-none");
+        console.log("yoyo");
+}

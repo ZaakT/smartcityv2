@@ -30,3 +30,7 @@ function prereq_CostBenefits2(check,hasRevSchedule){
         });
     }
 } */
+
+function checkProgress(part){
+    $("#"+part+"-item").removeClass("d-none");
+}

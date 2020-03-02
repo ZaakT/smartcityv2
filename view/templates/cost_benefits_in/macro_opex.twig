@@ -110,7 +110,7 @@
                     {% else %}
                     <td scope="col">{{ opex_user[id_opex]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['volume']}}"></td> 
+                    <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput();" value="{{ (selOpexce[id_opex]['range_min'] + selOpexce[id_opex]['range_max']) / 2 }}"></td> 
                     <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['unit_cost']}}"></td> 
                 </tr> 
             {% endfor %}

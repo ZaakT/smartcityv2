@@ -579,7 +579,7 @@ function discount_rate_selected($post){
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectScoping(){
     if(isset($_SESSION['projID'])){
-        echo "<script>prereq_ProjectScoping1(true);</script>";
+        echo "<script>prereq_ProjectScoping1(true); checkProgress('project');</script>";
         $projID = $_SESSION['projID'];
         $selScope = getListSelScope($projID);
         $selPerimeter = getListSelZones($projID);
@@ -592,13 +592,22 @@ function prereq_ProjectScoping(){
         $scheduleValid = checkSchedulesValidity($schedules,$selScope);
 
         if(!empty($selScope)){
-                echo "<script>prereq_ProjectScoping2(true);</script>";
+                echo "<script>prereq_ProjectScoping2(true); checkProgress('scope');</script>";
             if (!empty($selPerimeter)) {
-                    echo "<script>prereq_ProjectScoping3(true);</script>";
+                    echo "<script>prereq_ProjectScoping3(true); checkProgress('perimeter');</script>";
                 if(!empty($selSizes) && $sizesValid){
-                        echo "<script>prereq_ProjectScoping4(true);</script>";
+                        echo "<script>prereq_ProjectScoping4(true); checkProgress('size');</script>";
                 }
             }
+        }
+        if(!empty(getListSelVolumes($projID))){
+            echo "<script>checkProgress('volume');</script>";
+        }
+        if(!empty($schedules)){
+            echo "<script>checkProgress('schedule');</script>";
+        }
+        if(!empty($selDiscountRate)){
+            echo "<script>checkProgress('discount_rate');</script>";
         }
         if(!empty($selScope) && $sizesValid && $scheduleValid && $selDiscountRate){
             updateScoping($projID,1);

@@ -127,7 +127,7 @@
                         {% for id,zone in item %}
                             {% if zone['hasChildren'] == false %}
                                 {% if sizes[id][uc] %}
-                                <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td>
+                                <td scope="col"><input class="val_nb" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 max="{{compo_per_zone[id_compo][id]}}" oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td>
                     {% endif %}{% endif %}{% endfor %}{% endfor %}
                     {#Total#}
                     <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>

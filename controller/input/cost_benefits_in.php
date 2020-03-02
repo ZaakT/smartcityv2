@@ -1831,6 +1831,7 @@ function checkCBInputs($projID,$scope){
 function checkCapex($projID,$ucID){
     $listSel = getListSelCapex($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('capex');</script>";
         return 1;
     } else {
         return 2;
@@ -1840,6 +1841,7 @@ function checkCapex($projID,$ucID){
 function checkImplem($projID,$ucID){
     $listSel = getListSelImplem($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('implem');</script>";
         return 1;
     } else {
         return 2;
@@ -1849,6 +1851,7 @@ function checkImplem($projID,$ucID){
 function checkOpex($projID,$ucID){
     $listSel = getListSelOpex($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('opex');</script>";
         return 1;
     } else {
         return 2;
@@ -1858,6 +1861,7 @@ function checkOpex($projID,$ucID){
 function checkRevenues($projID,$ucID){
     $listSel = getListSelRevenues($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('revenues');</script>";
         return 1;
     } else {
         return 2;
@@ -1867,6 +1871,7 @@ function checkRevenues($projID,$ucID){
 function checkCashReleasing($projID,$ucID){
     $listSel = getListSelCashReleasing($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('crb');</script>";
         return 1;
     } else {
         return 2;
@@ -1876,6 +1881,7 @@ function checkCashReleasing($projID,$ucID){
 function checkWiderCash($projID,$ucID){
     $listSel = getListSelWiderCash($projID,$ucID);
     if(!empty($listSel)){
+        echo "<script>checkProgress('cwb');</script>";
         return 1;
     } else {
         return 2;
@@ -1892,6 +1898,7 @@ function checkNonCash($projID,$ucID){
                 return 0;
             }
         }
+        echo "<script>checkProgress('ncb');</script>";
         return 1;
     }
 }
@@ -1906,6 +1913,7 @@ function checkRisks($projID,$ucID){
                 return 0;
             }
         }
+        echo "<script>checkProgress('risks');</script>";
         return 1;
     }
 }
@@ -1913,6 +1921,7 @@ function checkRisks($projID,$ucID){
 
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_CostBenefits(){
+    checkProgress();
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
             echo "<script>prereq_CostBenefits1(true);</script>";
@@ -1925,4 +1934,21 @@ function prereq_CostBenefits(){
     }
 }
 
-
+// ----------------------------------------- PROGRESS ---------------------------------------------
+function checkProgress(){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        echo "<script>checkProgress('project');</script>";
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            echo "<script>checkProgress('uc');</script>";
+            checkCapex($projID,$ucID);
+            checkImplem($projID,$ucID);
+            checkOpex($projID,$ucID);
+            checkRevenues($projID,$ucID);
+            checkCashReleasing($projID,$ucID);
+            checkWiderCash($projID,$ucID);
+            checkRisks($projID,$ucID);
+    }
+}
+}
