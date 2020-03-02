@@ -34,7 +34,7 @@
 }
 
 .list-table{
-    max-height: 100vh;
+    /*max-height: 100vh;*/
     overflow-y: auto;
 }
 
@@ -563,7 +563,6 @@ input[type=number] {
 }
 
 #separatorrow{
-    border-bottom: hidden;
     border-left: hidden;
     border-right: hidden;
 }

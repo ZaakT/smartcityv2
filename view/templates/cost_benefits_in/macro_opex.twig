@@ -91,12 +91,13 @@
 {% endmacro %}
 
 {% macro list_opex_input(selDevSym,opex_advice,opex_user,selOpex) %}
-<div class="row m-4 text-center">
-    <div class="col mt-2 list-table">
-        <table id="opex_input" class='table table-bordered table-responsive-lg text-center'>
+<div class="row m-2 text-center">
+    <div class="col mt-2">
+        <table id="opex_input" class='table table-bordered table-responsive-md text-center'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Opex Component</th>
+                    <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
                 </tr>
@@ -110,6 +111,13 @@
                     {% else %}
                     <td scope="col">{{ opex_user[id_opex]['name'] }}</td>
                     {% endif %}
+
+                    {% if id_opex in opex_advice|keys %}
+                        <td scope="col"><input id="unitIndic_{{id_opex}}" name="unitIndic_{{id_opex}}" class="text-center unitIndic text-secondary pt-1 pb-1" type="text" required style="max-width:100%;" value="{{opex_advice[id_opex]['unit']}}" readonly></td>
+                        {% else %}
+                        <td scope="col"><input id="unitIndic_{{id_opex}}" name="unitIndic_{{id_opex}}" class="text-center unitIndic pt-1 pb-1" type="text" required style="max-width:100%;" value="{{selOpex[id_opex]['unit_indic']}}"></td>
+                    {% endif %}
+
                     <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput();" value="{{ (selOpexce[id_opex]['range_min'] + selOpexce[id_opex]['range_max']) / 2 }}"></td> 
                     <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['unit_cost']}}"></td> 
                 </tr> 

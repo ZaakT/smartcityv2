@@ -91,12 +91,13 @@
 {% endmacro %}
 
 {% macro list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues) %}
-<div class="row m-4 text-center">
-    <div class="col mt-2 list-table">
+<div class="row m-2 text-center">
+    <div class="col mt-2">
         <table id="revenues_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Revenues Component</th>
+                    <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Revenues<br>( in {{selDevSym}}  per month)</th>
                 </tr>
@@ -110,6 +111,13 @@
                     {% else %}
                     <td scope="col">{{ revenues_user[id_revenues]['name'] }}</td>
                     {% endif %}
+
+                    {% if id_revenues in revenues_advice|keys %}
+                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic text-secondary pt-1 pb-1" type="text" required style="max-width:100%;" value="{{revenues_advice[id_revenues]['unit']}}" readonly></td>
+                    {% else %}
+                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic pt-1 pb-1" type="text" required style="max-width:100%;" value="{{selRevenues[id_revenues]['unit_indic']}}"></td>
+                    {% endif %}
+
                     <td scope="col"><input id="vol_{{id_revenues}}" name="vol_{{id_revenues}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['volume']}}"></td> 
                     <td scope="col"><input id="rev_{{id_revenues}}" name="rev_{{id_revenues}}" class="text-center unit_rev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['unit_rev']}}"></td> 
                 </tr> 

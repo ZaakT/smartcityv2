@@ -1,21 +1,21 @@
 {% macro summary(meas,ucs,selScope,list_checks) %}
-{% set symb = ["x","check","check"] %}
-{% set color = ["text-danger","text-success","text-success"] %}
+{% set symb = ["x","check","media-record"] %}
+{% set color = ["text-danger","text-success","text-warning"] %}
 
 <div class="row m-5 text-center">
     <div class="offset-3 col-6 list-table">
-        <table class='table table-sm table-bordered table-responsive-lg'>
+        <table class='table table-sm table-bordered table-responsive-lg text-center'>
             <thead class="thead thead-light text-center">
                 <tr>
-                    <th scope="col">Input in process</th> 
-                    <!-- <th scope="col">No Input</th>  -->
-                    <th scope="col">Input Completed</th> 
+                    <th scope="col">Error</th> 
+                    <th scope="col">No Input</th>
+                    <th scope="col">Filled</th> 
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td scope="col"><span title="{{symb[0]}}" class="oi oi-{{symb[0]}} {{color[0]}}"></span></td>
-                    <!-- <td scope="col"><span title="{{symb[2]}}" class="oi oi-{{symb[2]}} {{color[2]}}"></span></td> -->
+                    <td scope="col"><span title="{{symb[2]}}" class="oi oi-{{symb[2]}} {{color[2]}}"></span></td>
                     <td scope="col"><span title="{{symb[1]}}" class="oi oi-{{symb[1]}} {{color[1]}}"></span></td>
                 </tr>
             </tbody>
@@ -25,7 +25,7 @@
 
 <div class="row m-5 text-center">
     <div class="col list-table summary_table">
-        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg'>
+        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg text-center'>
             <thead class="thead thead-light text-center">
                 <tr>
                     <th rowspan=2 scope="col"></th>

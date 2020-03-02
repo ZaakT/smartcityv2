@@ -312,7 +312,7 @@
 {% macro list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
-        <table id="cashreleasing_input" class='table table-sm table-bordered table-responsive-lg'>
+        <table id="cashreleasing_input" class='table table table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col" colspan=2 >Wider Cash Component</th> 
@@ -339,6 +339,10 @@
                 {% endfor %} 
             </tr>
 
+            <tr id = "separatorrow">
+                <td colspan={{2 + selCashReleasing|length}}></td>
+            </tr>
+
             <tr id="tr_2_1" scope="row" class="thead-dark">
                 <th scope="col" rowspan=2 class="thead-dark">Baseline</th> 
                 <th scope="col" class="thead-dark">Volume</th> 
@@ -352,6 +356,10 @@
                 {% for id_cashreleasing,data in selCashReleasing %}                    
                         <td scope="col"><input id="unitCost_{{id_cashreleasing}}" name="unitCost_{{id_cashreleasing}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost']}}">  </td>                           
                 {% endfor %} 
+            </tr>
+
+            <tr id = "separatorrow">
+                <td colspan={{2 + selCashReleasing|length}}></td>
             </tr>
 
             <tr id="tr_3_1" scope="row" class="thead-dark">
@@ -377,6 +385,7 @@
 </div>
 {% endmacro %}
 
+{#
 {% macro list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
@@ -401,6 +410,44 @@
                     <td scope="col"><input id="anVarCost_{{id_cashreleasing}}" name="anVarCost_{{id_cashreleasing}}" class="text-center anVarCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selCashReleasing[id_cashreleasing]['anVarCost']}}"><span> %</span></td> 
                 </tr> 
             {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+#}
+
+{% macro list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+<div class="row m-4 text-center">
+    <div class="col mt-2 list-table">
+        <table id="cashreleasing_input" class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">Cost Variation</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                            {% if id_cashreleasing in cashreleasing_advice|keys %}
+                            <th scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                            {% else %}
+                            <th scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
+                            {% endif %}
+                    {% endfor %}
+                </tr>
+                
+            </thead>
+            <tbody class="thead-dark">
+                <tr id = "tr_1" scope="row">
+                    <th scope="col">Volume Variation<br>( in % per year)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col"><input id="anVarVol_{{id_cashreleasing}}" name="anVarVol_{{id_cashreleasing}}" class="text-center anVarVol pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarVol']}}"><span> %</span></td> 
+                    {% endfor %}
+                </tr>
+
+                <tr id = "tr_1" scope="row">
+                    <th scope="col">Unit Cost Variation<br>( in % per year)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %} 
+                        <td scope="col"><input id="anVarCost_{{id_cashreleasing}}" name="anVarCost_{{id_cashreleasing}}" class="text-center anVarCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['anVarCost']}}"><span> %</span></td> 
+                    {% endfor %}
+                </tr>         
             </tbody>
         </table>
     </div>
