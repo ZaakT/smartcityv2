@@ -81,7 +81,7 @@
                 {% endfor %} 
             </tr>
             <tr id="tr_2" scope="row">
-                <td scope="col" class="">Ratio per {{compo['name']}}</td>    
+                <td scope="col" class="">Use Case</th> {# {{compo['name']}} #}  
                 {% for id_widercash,data in selWiderCash %}
                     {% if id_widercash in widercash_advice|keys %}
                         <td scope="col">{{ ratio[id_widercash]['val'] >= 0 ? ratio[id_widercash]['val'] : "-"  }}</td>

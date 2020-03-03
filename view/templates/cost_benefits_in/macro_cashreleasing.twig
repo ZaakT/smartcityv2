@@ -131,7 +131,7 @@
                 {% endfor %} 
             </tr>
             <tr id="tr_2" scope="row">
-                <td scope="col" class="">Ratio per {{compo['name']}}</td>    
+                <td scope="col" class="">Ratio per Use Case</th> {# {{compo['name']}} #}
                 {% for id_cashreleasing,data in selCashRealeasing %}
                     {% if id_cashreleasing in cashreleasing_advice|keys %}
                         <td scope="col">{{ ratio[id_cashreleasing]['val'] >= 0 ? ratio[id_cashreleasing]['val'] : "-"  }}</td>
@@ -456,7 +456,7 @@
 
 
 {% macro list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
-<div class="row ml-5 mr-5 pl-5 pr-5 text-center">
+<div class="row m-4 text-center">
     <div class="col list-table">
         <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
