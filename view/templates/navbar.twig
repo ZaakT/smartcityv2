@@ -1,3 +1,5 @@
+{################## VERSION INPUT OUTPUT ####################
+
 {% macro navbar(is_connected=false,is_admin=false,devises=[]) %}
   {% if is_connected %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -31,6 +33,101 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="?A=business_model">Business Model</a>
+      </li>
+    </ul>
+  </div>
+  <ul class="navbar-nav">
+      {% if is_admin %}
+      <li class="nav-item"><a href="?A=admin"><span class="oi oi-wrench nav-link"  title="wrench" aria-hidden="true"></span></a></li>
+      {% endif %}      
+      <li class="nav-item"><a href="?A=profile"><span class="oi oi-person nav-link"  title="person" aria-hidden="true"></span></a></li>
+      <li class="nav-item"><a href="#"><span class="oi oi-account-logout nav-link" data-toggle="modal" data-target="#askLogoutModal" title="account-logout" aria-hidden="true"></span></a></li>
+      <li class="nav-item dropleft">
+          <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Language</a>
+            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Currency</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              {% if devises %}
+                {% for id_devise,devise in devises %}
+                  <a class="dropdown-item" id="link_setDevise_{{id_devise}}" href="?A=setDevise&amp;id={{id_devise}}">{{devise['name']}} ({{devise['symbol']}})</a>
+                  <script type='text/javascript'>getPart({{id_devise}});</script>
+                {% endfor %}
+              {% else %}                  
+              <span class="dropdown-item text-danger font-italic">There is no devise, please contact an administrator</>
+              {% endif %}
+            </div>
+          </div>
+      </li>
+  </ul>
+</nav>
+  {% else %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top d-flex justify-content-end">
+  <ul class="navbar-nav">
+      <li class="nav-item dropleft">
+          <span class="nav-link oi oi-cog disabled" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Language</a>
+          </div>
+      </li>
+  </ul>
+</nav>
+  {% endif %}
+  
+<!-- Modal -->
+<div class="modal fade" id="askLogoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Logging out confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Do you want to log out ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <a  href="?A=logout"><button type="button" class="btn btn-dark">Yes</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}  #}
+
+
+{# VERSION PROJECT DESIGN - CB - FINANCING #}
+
+{% macro navbar(is_connected=false,is_admin=false,devises=[]) %}
+  {% if is_connected %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="?A=project_design">Project Design <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cost-Benefits </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="?A=project_scoping">Input Project</a>
+          <a class="dropdown-item" href="?A=cost_benefits">Input Use Case</a>
+          <a class="dropdown-item" href="?A=dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?A=comparison">Comparison</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Financing </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="?A=funding">Funding</a>
+          <a class="dropdown-item" href="?A=business_model">Business Model</a>
+        </div>
       </li>
     </ul>
   </div>
