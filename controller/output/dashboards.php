@@ -96,6 +96,10 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
 
                 $schedules = getListSelDates($projID);
                 $keydates_proj = getKeyDatesProj($schedules,$scope);
+                $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
+                $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
+                $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
+                //var_dump($keydates_proj);
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
@@ -103,10 +107,11 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $opexSchedule = $schedules['opex'][$ucID];
                 $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
 
-                $uc_stardate = $implemSchedule['startdate'];
-                $uc_implem_enddate = $implemSchedule['100date'];
-                $uc_enddate = $opexSchedule['enddate'];
+                $uc_stardate = date_format(date_create_from_format('m/Y',$implemSchedule['startdate']), 'M/Y');
+                $uc_implem_enddate = date_format(date_create_from_format('m/Y',$implemSchedule['100date']), 'M/Y');
+                $uc_enddate = date_format(date_create_from_format('m/Y',$opexSchedule['enddate']), 'M/Y');
                 $keydates_uc = [$uc_stardate,$uc_implem_enddate,$uc_enddate];
+                //var_dump($keydates_uc);
 
                 $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
                 $capex = getTotCapexByUC($projID,$ucID);
@@ -156,6 +161,9 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
 
                 $list_nbUC = getNbUC($projID,$ucID);
                 $ratioByVolume = getRatioByVolume($list_nbUC,$selZones);
+
+                $netcashPerMonth[1] = date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y');
+                $netsoccashPerMonth[1] = date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y');
 
                 /*//var_dump($selZones);
                //var_dump($list_nbUC);
@@ -307,6 +315,7 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $date100 = explode('/',$compo_dates['100date']);
     $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
 
+    //var_dump($startdate, $startdate_proj);
     $nb0 = intval($startdate->diff($startdate_proj)->y*12 + $startdate->diff($startdate_proj)->m);
 
     $nb25 = intval($date25->diff($startdate)->y*12 + $date25->diff($startdate)->m)+1;
@@ -785,6 +794,9 @@ function cost_benefits_all($twig,$is_connected,$projID){
             $keydates_proj = getKeyDatesProj($schedules,$scope);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
             $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+            $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
+            $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
+            $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
             
             // For each UC
             // -> get schedules
@@ -891,13 +903,13 @@ function cost_benefits_all($twig,$is_connected,$projID){
             $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth);
             //var_dump($netcashPerMonth);
             $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
-            $breakeven = $netcashPerMonth[1];
+            $breakeven = date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y');
             $cumulnetcashPerMonth = $netcashPerMonth[2];
             $cumulnetcashTot = $netcashTot[1];
 
             $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth,$widercashPerMonth);
             $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
-            $soc_breakeven = $netsoccashPerMonth[1];
+            $soc_breakeven = date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y');
             $cumulnetsoccashPerMonth = $netsoccashPerMonth[2];
             $cumulnetsoccashTot = $netsoccashTot[1];
 
