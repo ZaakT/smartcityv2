@@ -131,7 +131,7 @@ function perimeter($twig,$is_connected,$projID=0){
             $list_zones = getListZones();
             $repart_zones = sort_zones($list_zones);
             //var_dump($list_zones);
-            //var_dump($repart_zones);
+            //var_dump($repart_zones[2]);
             $listSelZones = getListSelZones($projID);
             //var_dump($listSelZones);
             $devises = getListDevises();

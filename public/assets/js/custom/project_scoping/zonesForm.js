@@ -55,27 +55,30 @@ function countChecked_zones(formName){
     var nb_selectedZones = 0;
     $("#"+formName).each(function(){
         var j = 1;
-        while($(".level_"+j).length!=0){
+        while($(".level_"+j).length!=0){ //tant qu'il y a des niveaux
             var nb_hasChildren_checked = 0;
             var nb_checked = 0;
-            $('.level_'+j).find('tr').each(function(){
-                var tab = $(this).classes();
-                var hasChildren = tab.includes("hasChildren");
+            $('.level_'+j).find('tr').each(function(){ //pour toutes les lignes des tableaux
+                var classes = $(this).classes();
+                //console.log(classes);
+                var hasChildren = classes.includes("hasChildren");
+                //console.log(hasChildren);
                 var input = $(this).find('input');
                 var id_input = input.attr('id');
+                //console.log(id_input);
                 if(id_input!=undefined){
-                    if(input.prop('checked')){
-                        nb_checked++;
-                        $(".child_"+id_input).removeAttr("hidden");
-                        if(hasChildren){
-                            nb_hasChildren_checked++;
-                            $('.level_'+(j+1)).removeAttr("hidden");
+                    if(input.prop('checked')){ //si la case de cette ligne est checkée, càd si la zone est sélectionnées
+                        nb_checked++; 
+                        $(".child_"+id_input).removeAttr("hidden"); //on affiche les zones enfants de cette zone
+                        if(hasChildren){ //si la zone a des enfants
+                            nb_hasChildren_checked++; 
+                            $('.level_'+(j+1)).removeAttr("hidden"); //on affiche les tableaux de niveau supérieurs
                         }
-                    } else {
-                        $(".child_"+id_input).find('input').prop("checked",false);
-                        $(".child_"+id_input).attr("hidden","hidden");
-                        if(nb_checked<=0){
-                            $('.level_'+(j+1)).attr("hidden","hidden");
+                    } else {//sinon si pas d'enfants
+                        $(".child_"+id_input).find('input').prop("checked",false); //les enfants de cette zone sont déselectionnés
+                        $(".child_"+id_input).attr("hidden","hidden"); //on cache les enfants de cette zone
+                        if(nb_checked<=0){ // si le nombre de zones selctionnées == 0
+                            $('.level_'+(j+1)).attr("hidden","hidden"); //on efface les tableaux enfants
                         }
                     }
                 }
@@ -94,6 +97,8 @@ function countChecked_zones(formName){
         $("#help_zones").removeAttr('hidden');
         return false;
     }
+
+
 }
 
 countChecked_zones("form_zones");

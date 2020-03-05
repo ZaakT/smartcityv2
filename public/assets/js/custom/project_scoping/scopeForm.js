@@ -22,7 +22,7 @@
 
 
 function countChecked_scope(formName) {
-    var n = [0, 0, 0];  
+    var n = [0, 0, 0];  //n[0] nb de mesures selectionnées, n[1] nb de cat selectionnes, n[2] nb de UC
     $("#"+formName+" input").each(function(){
         if(this.type.toLowerCase() =='checkbox'){
             var classes = $(this).classes();
@@ -69,45 +69,32 @@ function countChecked_scope(formName) {
     });
 
     $("#countMeasSelectScope").text(n[0]+" selected");
-    //console.log(n);
-    if (n[0] > 0) {
-        $("#help_meas_scope").attr('hidden', 'hidden');
-    }
-    else {
-        $("#help_meas_scope").removeAttr('hidden');
-    }
     $("#countCatSelectScope").text(n[1]+" selected");
     $("#countUCSelectScope").text(n[2]+" selected");
 
-    /*console.log(m);
-    if (m > 0) {
-        $("#help_uc").attr('hidden', 'hidden');
-    }
-    else {
-        $("#help_uc").removeAttr('hidden');
-    }*/
-    
-    if(n[0]==0){
-        $("#cat_table, #countCatSelectScope, #help_cat").attr("hidden","hidden");
+    if (n[0] == 0){
+        $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
+        $("#cat_table, #countCatSelectScope, #help_cat_scope").attr('hidden', 'hidden');
+        $("#help_meas_scope").removeAttr('hidden');
     } else {
         $("#cat_table, #countCatSelectScope").removeAttr('hidden');
-        if(n[2]<=0){
-            $("#help_uc").removeAttr('hidden');
+        $("#help_meas_scope").attr("hidden","hidden");
+        if(n[1] == 0){
+            $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
+            $("#help_cat_scope").removeAttr('hidden');
         } else {
-            $("#help_uc").attr('hidden', 'hidden');
+            $("#help_cat_scope").attr("hidden","hidden");
+            $("#uc_table, #countUCSelectScope").removeAttr('hidden');
+            if (n[2] == 0) {
+                $("#help_uc").removeAttr('hidden');
+            } else {
+                $("#help_uc").attr('hidden', 'hidden');
+            }
         }
     }
 
-    if(n[1]==0){
-        $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
-        $("#help_cat_scope").removeAttr('hidden');
-    } else {
-        $("#help_cat_scope").attr('hidden', 'hidden');
-        $("#countUCSelectScope").removeAttr('hidden');
-    }
-    
 
-    return n[0]>0 && n[2]>0;
+    return n[0]>0 && n[1]>0 && n[2]>0;
 }
 
 countChecked_scope("form_scope");

@@ -1,4 +1,4 @@
-{% macro list_zones(zones,level,list_sel=[]) %}
+{% macro list_zones(zones,level,list_sel=[]) %} {# version verticale #}
 
 <div class="row text-center level_{{level}}">
     <div class="col mt-5 mx-5 list-table">
@@ -30,4 +30,74 @@
         </table>
     </div>
 </div>
+{% endmacro %}
+
+{% macro list_zones2(zones,item,level,list_sel=[]) %}
+{% if level == 1 %}
+    <div class="row text-center level_{{level}}">
+    <div class="col mt-5 list-table">
+        <table id="zones_table" class='table table-sm table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th colspan=3> Select a {{ zones[1][1]['type'] }}</th>
+                </tr>
+                <tr>
+                    <th scope="col"></th>
+                    {# <th scope="col">ID</th> #}
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for zone in item %}
+            {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
+            {% set inputID = zone['hasChildren'] ? "" : ""%}
+                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
+                    <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')"  ></td>
+                    {# <td>{{ zone['id'] }}</td> #}
+                    <td>{{ zone['name'] }}</td>
+                    <td>{{ zone['type'] }}</td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+    </div></div>
+    {% else %}
+{% for levelParent,itemParent in zones if levelParent == level - 1%}
+    {% for zoneParent in itemParent if zoneParent['hasChildren'] %}
+<div class="row text-center level_{{level}}">
+    <div class="col mt-5 list-table">
+        <table id="zones_table" class='table table-sm table-striped table-responsive-lg child_{{zoneParent['id']}}'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th colspan=3> Select a {{ item[level + 1]['type'] }} in {{ zoneParent['name'] }}</th>
+                </tr>
+                <tr>
+                    <th scope="col"></th>
+                    {#<th scope="col">ID</th> #}
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    {# <th scope="col">Parent</th> #}
+                </tr>
+            </thead>
+            <tbody>
+            {% for zone in item if zone['parent'][0] == zoneParent['id'] %}
+            {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
+            {% set inputID = zone['hasChildren'] ? "" : ""%}
+                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
+                    <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')" {{ zone['id'] in list_sel|keys ? "checked" : ""}} ></td>
+                    {# <td>{{ zone['id'] }}</td> #}
+                    <td>{{ zone['name'] }}</td>
+                    <td>{{ zone['type'] }}</td>
+                    {# {% if level > 1  %}
+                    <td>{{zone['parent'][1]}}</td>
+                    {% endif %} #}
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+{% endfor %}{% endfor %}{% endif %}
 {% endmacro %}
