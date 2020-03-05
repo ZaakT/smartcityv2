@@ -65,7 +65,7 @@
     {% else %}
 {% for levelParent,itemParent in zones if levelParent == level - 1%}
     {% for zoneParent in itemParent if zoneParent['hasChildren'] %}
-<div class="row text-center level_{{level}}">
+<div class="row text-center level_{{level}} child_{{zoneParent['id']}}">
     <div class="col mt-5 list-table">
         <table id="zones_table" class='table table-sm table-striped table-responsive-lg child_{{zoneParent['id']}}'>
             <thead class="thead-dark text-center sticky-top">

@@ -455,43 +455,68 @@
 {% endmacro %}
 
 
+
 {% macro list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
 <div class="row m-4 text-center">
     <div class="col list-table">
-        <table id="tot_table" class='table table-lg table-bordered table-responsive-lg'>
+        <table id="tot_table" class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">Wider Cash Component</th>
-                    <th scope="col">Baseline Cost <br>( in {{selDevSym}}  per month)</th>
-                    <th scope="col">Wider Cash Target<br>( in {{selDevSym}}  per month)</th>
-                    <th scope="col">Wider Cash Benefits<br>( in {{selDevSym}}  per month)</th>
-                    <th scope="col">Variation of Volumes<br>(per month)</th>
-                    <th scope="col">Variation of Unit Cost<br>(per month)</th>
-                    <th scope="col">Combined Variation<br>(per month)</th>
+                    <th></th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                            {% if id_cashreleasing in cashreleasing_advice|keys %}
+                            <th scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
+                            {% else %}
+                            <th scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
+                            {% endif %}
+                    {% endfor %}
+                    <th scope="col">Total</th>
                 </tr>
             </thead>
+            
             <tbody>
-            {% for id_cashreleasing,data in selCashReleasing %}
-                <tr id = "tr_{{ id_cashreleasing }}" scope="row">
-                    {% if id_cashreleasing in cashreleasing_advice|keys %}
-                    <td scope="col">{{ cashreleasing_advice[id_cashreleasing]['name'] }}</td>
-                    {% else %}
-                    <td scope="col">{{ cashreleasing_user[id_cashreleasing]['name'] }}</td>
-                    {% endif %}
-                    <td scope="col" id="tot_bc_{{id_cashreleasing}}">-</td>
-                    <td scope="col" id="tot_crt_{{id_cashreleasing}}">-</td>
-                    <td scope="col" id="tot_crb_{{id_cashreleasing}}">-</td>
-                    <td scope="col" id="tot_varvol_{{id_cashreleasing}}">-</td>
-                    <td scope="col" id="tot_varcost_{{id_cashreleasing}}">-</td>
-                    <td scope="col" id="tot_combvar_{{id_cashreleasing}}">-</td>
-                </tr> 
-            {% endfor %}
-                <tr>
-                    <th class="bg-light text-dark">Total</th>
+                <tr scope="row">
+                    <th scope="col">Baseline Cost <br>( in {{selDevSym}}  per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_bc_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
                     <td class="font-weight-bold" scope="col" id="tot_bc">-</td>
+                </tr>
+
+                <tr scope="row">
+                    <th scope="col">Wider Cash Target<br>( in {{selDevSym}}  per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_crt_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
                     <td class="font-weight-bold" scope="col" id="tot_crt">-</td>
+                </tr>
+
+                <tr scope="row">
+                    <th scope="col">Wider Cash Benefits<br>( in {{selDevSym}}  per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_crb_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
                     <td class="font-weight-bold" scope="col" id="tot_crb">-</td>
                 </tr>
+
+                <th scope="col">Variation of Volumes<br>(per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_varvol_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
+                </tr>
+
+                <th scope="col">Variation of Unit Cost<br>(per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_varcost_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
+                </tr>
+
+                <th scope="col">Combined Variation<br>(per month)</th>
+                    {% for id_cashreleasing,data in selCashReleasing %}
+                        <td scope="col" id="tot_combvar_{{id_cashreleasing}}">-</td>
+                    {% endfor %}
+                </tr>
+
             </tbody>
         </table>
     </div>
