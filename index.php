@@ -157,6 +157,16 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db');
                                 }
+                            } else if($_GET['A3']=='manage_noncash_item'){
+                                manage_item('noncash',$twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_risks_item'){
+                                manage_item('risks',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_item_3'){
+                                if(isset($_GET['cat'])){
+                                    create_item3($twig,$is_connected,$_POST,$_GET['cat']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db');
+                                }
                             } elseif($_GET['A3']=="delete_item"){
                                 if(isset($_GET['cat']) && isset($_GET['id'])){
                                     delete_item($_GET['cat'],$_GET['cat']);

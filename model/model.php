@@ -1381,6 +1381,39 @@ description text
     return $list;
 }
 
+function getListCapexItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT capex_item.id,name,description,unit,source,range_min,range_max
+                            FROM capex_item
+                            LEFT JOIN capex_item_advice
+                                ON capex_item.id = capex_item_advice.id
+                            LEFT JOIN capex_uc
+                                ON capex_item.id = capex_uc.id_item
+                                    
+                            WHERE capex_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
 function getListCapexUser($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT capex_item.id,name,description
@@ -1620,6 +1653,39 @@ function getListImplemAdvice($ucID){
     return $list;
 }
 
+function getListImplemItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT implem_item.id,name,description,unit,source,range_min,range_max
+                            FROM implem_item
+                            LEFT JOIN implem_item_advice
+                                ON implem_item.id = implem_item_advice.id
+                            LEFT JOIN implem_uc
+                                ON implem_item.id = implem_uc.id_item
+                                    
+                            WHERE implem_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
 function getListImplemUser($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT implem_item.id,name,description
@@ -1796,6 +1862,39 @@ function getListOpexAdvice($ucID){
                                     WHERE opex_uc.id_uc = ?
                                         and opex_item.id = opex_uc.id_item
                                         and opex_item.id = opex_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListOpexItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT opex_item.id,name,description,unit,source,range_min,range_max
+                            FROM opex_item
+                            LEFT JOIN opex_item_advice
+                                ON opex_item.id = opex_item_advice.id
+                            LEFT JOIN opex_uc
+                                ON opex_item.id = opex_uc.id_item
+                                    
+                            WHERE opex_uc.id_uc = ?
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -2023,6 +2122,39 @@ function getListRevenuesAdvice($ucID){
     return $list;
 }
 
+function getListRevenuesItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT revenues_item.id,name,description,unit,source,range_min,range_max
+                            FROM revenues_item
+                            LEFT JOIN revenues_item_advice
+                                ON revenues_item.id = revenues_item_advice.id
+                            LEFT JOIN revenues_uc
+                                ON revenues_item.id = revenues_uc.id_item
+                                    
+                            WHERE revenues_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
 function getListRevenuesUser($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT revenues_item.id,name,description
@@ -2212,6 +2344,42 @@ function getListCashReleasingAdvice($ucID){
                                     WHERE cashreleasing_uc.id_uc = ?
                                         and cashreleasing_item.id = cashreleasing_uc.id_item
                                         and cashreleasing_item.id = cashreleasing_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $range_min_red_cost = floatval($row['range_min_red_cost']);
+        $range_max_red_cost = floatval($row['range_max_red_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListCashreleasingItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT cashreleasing_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost
+                            FROM cashreleasing_item
+                            LEFT JOIN cashreleasing_item_advice
+                                ON cashreleasing_item.id = cashreleasing_item_advice.id
+                            LEFT JOIN cashreleasing_uc
+                                ON cashreleasing_item.id = cashreleasing_uc.id_item
+                                    
+                            WHERE cashreleasing_uc.id_uc = ?
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -2453,6 +2621,42 @@ function getListWiderCashAdvice($ucID){
     return $list;
 }
 
+function getListWidercashItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT widercash_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost
+                            FROM widercash_item
+                            LEFT JOIN widercash_item_advice
+                                ON widercash_item.id = widercash_item_advice.id
+                            LEFT JOIN widercash_uc
+                                ON widercash_item.id = widercash_uc.id_item
+                                    
+                            WHERE widercash_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $range_min_red_cost = floatval($row['range_min_red_cost']);
+        $range_max_red_cost = floatval($row['range_max_red_cost']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
 function getListWiderCashUser($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT widercash_item.id,name,description
@@ -2661,6 +2865,36 @@ function getListNonCashAdvice($ucID){
     return $list;
 }
 
+
+function getListNoncashItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT noncash_item.id,name,description
+                            FROM noncash_item
+                            LEFT JOIN noncash_item_advice
+                                ON noncash_item.id = noncash_item_advice.id
+                            LEFT JOIN noncash_uc
+                                ON noncash_item.id = noncash_uc.id_item
+                                    
+                            WHERE noncash_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
 function getListNonCashUser($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT noncash_item.id,name,description
@@ -2811,16 +3045,15 @@ function getRiskUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListRiskAdvice($ucID){
+function getListRisksAdvice($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT *
+    $req = $db->prepare("SELECT DISTINCT *
                             FROM risk_item_advice
                             INNER JOIN risk_uc
                                 INNER JOIN risk_item
                                     WHERE risk_uc.id_uc = ?
                                         and risk_item.id = risk_uc.id_item
                                         and risk_item.id = risk_item_advice.id
-                            ORDER BY name
                             ");
     $req->execute(array($ucID));
 
@@ -2834,6 +3067,35 @@ function getListRiskAdvice($ucID){
             $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources];
         } else {
             $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListRisksItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT risk_item.id,risk_item.name,risk_item.description
+                            FROM risk_item
+                            LEFT JOIN risk_item_advice
+                                ON risk_item.id = risk_item_advice.id
+                            LEFT JOIN risk_uc
+                                ON risk_item.id = risk_uc.id_item
+                                    
+                            WHERE risk_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
         }
     }
     //var_dump($list);
@@ -3903,15 +4165,21 @@ function getAllItem2Advice($catItem){
 
 function getAllItem3Advice($catItem){
     $db = dbConnect();
-    $catItemAdvice = $catItem."_item_advice";
-    $catItem = $catItem."_item";
-    $req = $db->prepare("SELECT *
-                            FROM ?
-                                INNER JOIN ?
-                                    WHERE ?.id = ?.id
-                            ORDER BY name
-                            ");
-    $req->execute(array($catItemAdvice, $catItem));
+
+    switch ($catItem) {
+        case "noncash":
+            $req = $db->prepare("SELECT * FROM noncash_item_advice INNER JOIN noncash_item
+                                        WHERE noncash_item.id = noncash_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+
+        case "risks":
+            $req = $db->prepare("SELECT * FROM risks_item_advice INNER JOIN risks_item
+                                        WHERE risks_item.id = risks_item_advice.id ORDER BY name");
+            $req->execute();
+        break;  
+    }
+
 
     $list = [];
     while($row = $req->fetch()){
@@ -3947,6 +4215,12 @@ function getItemByNameAndCat($itemName,$catItem){ //récupère tous les item d'u
         $req->execute(array($itemName));
     } else if ($catItem == 'widercash'){
         $req = $db->prepare('SELECT * FROM widercash_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'noncash'){
+        $req = $db->prepare('SELECT * FROM noncash_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'risks'){
+        $req = $db->prepare('SELECT * FROM risks_item WHERE name = ?');
         $req->execute(array($itemName));
     }
     
@@ -4133,12 +4407,56 @@ function insertItem($item,$catItem){
                 
                     return $ret;
                     break;
+
+                    case 'noncash':
+                        $db->exec('DROP PROCEDURE IF EXISTS `add_noncash`;');
+                        $db->exec(' CREATE PROCEDURE `add_noncash`(
+                                                IN noncash_name VARCHAR(255),
+                                                IN noncash_desc VARCHAR(255),
+                                                IN idUC INT,
+                                                )
+                                                BEGIN
+                                                    DECLARE itemID INT;
+                                                    INSERT INTO noncash_item (name,description) 
+                                                            VALUES (noncash_name,noncash_desc);
+                                                    SET itemID = LAST_INSERT_ID();
+                                                    INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                                    INSERT INTO noncash_item (id) VALUES (itemID);
+                                                END
+                                                    ');
+                        $req = $db->prepare('CALL add_capex(?,?,?);');
+                        $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
+                    
+                        return $ret;
+                        break;
+
+                        case 'risks':
+                            $db->exec('DROP PROCEDURE IF EXISTS `add_risks`;');
+                            $db->exec(' CREATE PROCEDURE `add_risks`(
+                                                    IN risks_name VARCHAR(255),
+                                                    IN risks_desc VARCHAR(255),
+                                                    IN idUC INT,
+                                                    )
+                                                    BEGIN
+                                                        DECLARE itemID INT;
+                                                        INSERT INTO risks_item (name,description) 
+                                                                VALUES (risks_name,risks_desc);
+                                                        SET itemID = LAST_INSERT_ID();
+                                                        INSERT INTO risks_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                                        INSERT INTO risks_item (id) VALUES (itemID);
+                                                    END
+                                                        ');
+                            $req = $db->prepare('CALL add_capex(?,?,?);');
+                            $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
+                        
+                            return $ret;
+                            break;
     }
 
     
 }
 
-function deleteItem($catItem,$itemID){
+function deleteItem($catItem,$itemID) {
     $db = dbConnect();
 
     switch ($catItem) {
@@ -4207,7 +4525,27 @@ function deleteItem($catItem,$itemID){
             $req = $db->prepare('DELETE FROM widercash_uc WHERE id_item = ?');
             return $req->execute(array($itemID));
         break;
-    }
 
-    
+        case "noncash":
+            $req = $db->prepare('DELETE FROM noncash_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM noncash_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM noncash_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "risks":
+            $req = $db->prepare('DELETE FROM risks_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM risks_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM risks_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+    } 
 }

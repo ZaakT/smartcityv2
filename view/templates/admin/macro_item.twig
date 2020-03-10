@@ -12,8 +12,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Use Case ID</th>
-                    <th scope="col">Use Case Name</th>
+                    <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Source of Guidance</th>
                     <th scope="col">Range</th>
@@ -26,8 +25,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
-                            <td>{{ item['UC'][0] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
-                            <td>{{ item['UC'][1] }}</td>
+                            <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td>{{ item['unit'] }}</td>
                             <td>{{ item['source'] }}</td>
                             <td>{{ item['range_min'] }} - {{ item['range_max'] }}</td>
@@ -55,13 +53,12 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Use Case ID</th>
-                    <th scope="col">Use Case Name</th>
+                    <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Source of Guidance</th>
                     <th scope="col">Unit Cost</th>
                     <th scope="col">Volume Reduction Range</th>
-                    <th scope="col">Unit Cost Reduciton Range</th>
+                    <th scope="col">Unit Cost Reduction Range</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -71,8 +68,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
-                            <td>{{ item['UC'][0] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
-                            <td>{{ item['UC'][1] }}</td>
+                            <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td>{{ item['unit'] }}</td>
                             <td>{{ item['source'] }}</td>
                             <td>{{ item['unit_cost'] }}</td>
@@ -102,8 +98,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Use Case ID</th>
-                    <th scope="col">Use Case Name</th>
+                    <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -113,8 +108,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
-                            <td>{{ item['UC'][0] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
-                            <td>{{ item['UC'][1] }}</td>
+                            <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteItem_{{ catItemName }}_{{ id }}"></span></a></td>
                             {{ modal.delete_item(catItemName,id,item['name']) }} 
                         </tr>

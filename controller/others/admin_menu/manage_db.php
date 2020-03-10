@@ -248,8 +248,8 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     $list_item = [];
     $listUC = getListUCs();   
     foreach ($listUC as $id_uc => $UC){ 
-        $fun = 'getList'.ucwords($catName).'Advice';
-        $list_tampon = $fun($id_uc);
+        $fun = 'getList'.ucwords($catName).'Items';
+        $list_tampon = $fun(intval($id_uc));
         foreach ($list_tampon as $id_item => $item){
             $list_item[$id_item] = $item;
             if (array_key_exists('UC',$list_item[$id_item])){
@@ -299,6 +299,19 @@ function create_item2($twig,$is_connected,$post,$catItem){
     $range_max_red_cost = $post['range_max_red_cost'];
     $uc = $post['uc_id'];
     $itemInfos = [$name,$description,$unit,$source,$unit_cost,$range_min_red_nb,$range_max_red_nb,$range_min_red_cost,$range_max_red_cost,$uc];
+    if(!empty(getItemByNameAndCat($name,$catItem))){
+        manage_item($catItem,$twig,$is_connected,true); 
+    } else {
+        insertItem($itemInfos,$catItem);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+    }
+}
+
+function create_item3($twig,$is_connected,$post,$catItem){
+    $name = $post['name'];
+    $description = $post['description'];
+    $uc = $post['uc_id'];
+    $itemInfos = [$name,$description,$uc];
     if(!empty(getItemByNameAndCat($name,$catItem))){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {

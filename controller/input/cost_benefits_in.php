@@ -1584,7 +1584,7 @@ function risks($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                 if(getUCByID($ucID)){
                     $proj = getProjByID($projID,$user[0]);
                     $uc = getUCByID($ucID);
-                    $list_risks_advice = getListRiskAdvice($ucID);   
+                    $list_risks_advice = getListRisksAdvice($ucID);   
                     $list_risks_user = getListRiskUser($projID,$ucID);    
                     $list_selRisks = getListSelRisks($projID,$ucID);          
                     //var_dump($list_selRisks);
