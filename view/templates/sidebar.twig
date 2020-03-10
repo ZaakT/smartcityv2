@@ -103,16 +103,67 @@
         <h4 class="nav-item text-center">Manage Database</h4>
         <a class="nav-item nav-link" id="manage_users" href="?A=admin&amp;A2=manage_db&amp;A3=manage_users"><span class="oi oi-people nav-link" title="people" aria-hidden="true"></span>Users</a>
         <a class="nav-item nav-link" id="manage_measures" href="?A=admin&amp;A2=manage_db&amp;A3=manage_measures"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Measures</a>
-        <a class="nav-item nav-link" id="manage_uc_cat" href="?A=admin&amp;A2=manage_db&amp;A3=manage_uc_cat"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Use Cases Categories</a>
-        <a class="nav-item nav-link" id="manage_usecases" href="?A=admin&amp;A2=manage_db&amp;A3=manage_usecases"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Use Cases</a>
-        <a class="nav-item nav-link" id="manage_crit_cat" href="?A=admin&amp;A2=manage_db&amp;A3=manage_crit_cat"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Criteria Categories</a>
-        <a class="nav-item nav-link" id="manage_criteria" href="?A=admin&amp;A2=manage_db&amp;A3=manage_criteria"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Criteria</a>
+        <li class="active">
+            <a href="#UCSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-item nav-link"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Use Cases</a>
+            <ul class="collapse list-unstyled" id="UCSubmenu">
+                <li>
+                    <a class="nav-item nav-link" id="manage_uc_cat" href="?A=admin&amp;A2=manage_db&amp;A3=manage_uc_cat">Use Cases Categories</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_usecases" href="?A=admin&amp;A2=manage_db&amp;A3=manage_usecases">Use Cases</a>
+                </li>
+            </ul>
+        </li>
+        <li class="active">
+            <a href="#critSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-item nav-link"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Criteria</a>
+                <ul class="collapse list-unstyled" id="critSubmenu">
+                    <li>
+                        <a class="nav-item nav-link" id="manage_crit_cat" href="?A=admin&amp;A2=manage_db&amp;A3=manage_crit_cat">Criteria Categories</a>
+                    </li>
+                    <li>
+                        <a class="nav-item nav-link" id="manage_criteria" href="?A=admin&amp;A2=manage_db&amp;A3=manage_criteria">Criteria</a>
+                    </li>
+                </ul>
+        </li>
         <a class="nav-item nav-link" id="manage_dlt" href="?A=admin&amp;A2=manage_db&amp;A3=manage_dlt"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>District Location Types</a>
-        <a class="nav-item nav-link" id="manage_capex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_capex_item"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Capex Item</a>
-        <a class="nav-item nav-link" id="manage_implem_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_implem_item"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Implementation Item</a>
-        <a class="nav-item nav-link" id="manage_opex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_opex_item"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Opex Item</a>
-        <a class="nav-item nav-link" id="manage_revenues_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_revenues_item"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Revenues Item</a>
+        
+        <li class="active">
+            <a href="#UCInputSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-item nav-link"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Cost Benefits Item</a>
+            <ul class="collapse list-unstyled" id="UCInputSubmenu">
+                <li>
+                    <a class="nav-item nav-link" id="manage_capex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_capex_item">Capex Item</a>
+                </li>
+                <li>
+                   <a class="nav-item nav-link" id="manage_implem_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_implem_item">Implementation Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_opex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_opex_item">Opex Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_revenues_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_revenues_item">Revenues Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_cashreleasing_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_cashreleasing_item">Cash Releasing Benefits Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_widercash_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_widercash_item">Wider Cash Benefits Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_noncash_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_noncash_item">Non Cash Benefits Item</a>
+                </li>
+                <li>
+                    <a class="nav-item nav-link" id="manage_risks_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_risks_item">Risks Item</a>
+                </li>
+            </ul>
+        </li>
         <a class="nav-item nav-link disabled" id="id" href=""><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Other</a>
+        
+        
+        
+        
+        
+        
+        
         
         <!-- Profile -->
     {% elseif page=="profile" %}

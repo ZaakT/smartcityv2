@@ -3817,7 +3817,7 @@ function getAllItem1Advice($catItem){
     $db = dbConnect();
 
     switch ($catItem) {
-        case "opex":
+        case "capex":
             $req = $db->prepare("SELECT * FROM capex_item_advice INNER JOIN capex_item
                                         WHERE capex_item.id = capex_item_advice.id ORDER BY name");
             $req->execute();
@@ -3858,21 +3858,27 @@ function getAllItem1Advice($catItem){
             $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
         }
     }
-    var_dump($list);
+    //var_dump($list);
     return $list;
 }
 
 function getAllItem2Advice($catItem){
     $db = dbConnect();
-    $catItemAdvice = $catItem."_item_advice";
-    $catItem = $catItem."_item";
-    $req = $db->prepare("SELECT *
-                            FROM ?
-                                INNER JOIN ?
-                                    WHERE ?.id = ?.id
-                            ORDER BY name
-                            ");
-    $req->execute(array($catItemAdvice, $catItem));
+
+    switch ($catItem) {
+        case "cashreleasing":
+            $req = $db->prepare("SELECT * FROM cashreleasing_item_advice INNER JOIN cashreleasing_item
+                                        WHERE cashreleasing_item.id = cashreleasing_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+
+        case "widercash":
+            $req = $db->prepare("SELECT * FROM widercash_item_advice INNER JOIN widercash_item
+                                        WHERE widercash_item.id = widercash_item_advice.id ORDER BY name");
+            $req->execute();
+        break;      
+       
+    }
 
     $list = [];
     while($row = $req->fetch()){
@@ -3935,6 +3941,12 @@ function getItemByNameAndCat($itemName,$catItem){ //récupère tous les item d'u
         $req->execute(array($itemName));
     } else if ($catItem == 'revenues'){
         $req = $db->prepare('SELECT * FROM revenues_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'cashreleasing'){
+        $req = $db->prepare('SELECT * FROM cashreleasing_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'widercash'){
+        $req = $db->prepare('SELECT * FROM widercash_item WHERE name = ?');
         $req->execute(array($itemName));
     }
     
@@ -4059,6 +4071,68 @@ function insertItem($item,$catItem){
         
             return $ret;
             break;
+
+            case 'cashreleasing':
+                $db->exec('DROP PROCEDURE IF EXISTS `add_cashreleasing`;');
+                $db->exec(' CREATE PROCEDURE `add_cashreleasing`(
+                                        IN cashreleasing_name VARCHAR(255),
+                                        IN cashreleasing_desc VARCHAR(255),
+                                        IN unit VARCHAR(255),
+                                        IN source VARCHAR(255),
+                                        IN unit_cost INT,
+                                        IN min_red_nb INT,
+                                        IN max_red_nb INT,
+                                        IN min_red_cost INt,
+                                        IN max_red_cost INT,
+                                        IN idUC INT
+                                        )
+                                        BEGIN
+                                            DECLARE itemID INT;
+                                            INSERT INTO revenues_item (name,description)
+                                                VALUES (revenues_name,revenues_desc);
+                                            SET itemID = LAST_INSERT_ID();
+                                            INSERT INTO revenues_uc (id_item,id_uc)
+                                                VALUES (itemID,idUC);
+                                            INSERT INTO revenues_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                                VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
+                                        END
+                                            ');
+                $req = $db->prepare('CALL add_revenues(?,?,?,?,?,?,?,?,?,?);');
+                $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
+            
+                return $ret;
+                break;
+
+                case 'widercash':
+                    $db->exec('DROP PROCEDURE IF EXISTS `add_widercash`;');
+                    $db->exec(' CREATE PROCEDURE `add_widercash`(
+                                            IN widercash_name VARCHAR(255),
+                                            IN widercash_desc VARCHAR(255),
+                                            IN unit VARCHAR(255),
+                                            IN source VARCHAR(255),
+                                            IN unit_cost INT,
+                                            IN min_red_nb INT,
+                                            IN max_red_nb INT,
+                                            IN min_red_cost INt,
+                                            IN max_red_cost INT,
+                                            IN idUC INT
+                                            )
+                                            BEGIN
+                                                DECLARE itemID INT;
+                                                INSERT INTO revenues_item (name,description)
+                                                    VALUES (revenues_name,revenues_desc);
+                                                SET itemID = LAST_INSERT_ID();
+                                                INSERT INTO revenues_uc (id_item,id_uc)
+                                                    VALUES (itemID,idUC);
+                                                INSERT INTO revenues_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                                    VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
+                                            END
+                                                ');
+                    $req = $db->prepare('CALL add_revenues(?,?,?,?,?,?,?,?,?,?);');
+                    $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
+                
+                    return $ret;
+                    break;
     }
 
     
@@ -4109,6 +4183,28 @@ function deleteItem($catItem,$itemID){
             return $req->execute(array($itemID));
 
             $req = $db->prepare('DELETE FROM revenues_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "cashreleasing":
+            $req = $db->prepare('DELETE FROM cashreleasing_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM cashreleasing_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM cashreleasing_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "widercash":
+            $req = $db->prepare('DELETE FROM widercash_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM widercash_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM widercash_uc WHERE id_item = ?');
             return $req->execute(array($itemID));
         break;
     }

@@ -66,11 +66,10 @@
 </div>
 {% endmacro %}
 
-
-{% macro create_item2(catItem) %} {# cash releasing benefits, wider cash benefits #}
-<div class="modal fade" id="createNewItem2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+{% macro create_item2(catItemName, UC) %} {# widercash cashreleasing #}
+<div class="modal fade" id="createNewItem2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createItem2-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_2&amp;cat={{ catItem }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_2&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
@@ -89,6 +88,17 @@
                         <label for="description" class="col-sm-3 col-form-label">Description</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <div class="col-sm-9">
+                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
+                                <option value="" disabled>Select Use Case ID</option>
+                                {% for uc_id, uc in UC %}
+                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -104,29 +114,31 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="volMin" class="col-sm-3 col-form-label">Guidance : volume min</label>
+                        <label for="unit_cost" class="col-sm-3 col-form-label">Unit Cost</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control" name="range_min_red_nb" id="range_min_red_nb" aria-describedby="range_min_red_nbHelp" placeholder="Enter a indicative minimum volume">
+                            <input type="number" class="form-control" name="unit_cost" id="unit_cost" aria-describedby="sourceHelp" placeholder="Enter unit cost">
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="volMax" class="col-sm-3 col-form-label">Guidance : volume max</label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" name="range_max_red_nb" id="range_max_red_nb" aria-describedby="range_max_red_nbHelp" placeholder="Enter a indicative maximum volume">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="range_min_red_nb">Volume Reduction : Min</label>
+                                <input type="number" class="form-control" name="range_min_red_nb" id="range_min_red_nb" aria-describedby="minHelp" placeholder="Enter a indicative minimum">
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="unitCostMin" class="col-sm-3 col-form-label">Guidance : unit cost min</label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" name="range_min_red_cost" id="range_min_red_cost" aria-describedby="unitCostMinHelp" placeholder="Enter a indicative minimum unit cost">
+                        <div class="form-group col-md-6">
+                            <label for="range_max_red_nb">Volume Reduction : Max</label>
+                                <input type="number" class="form-control" name="range_max_red_nb" id="range_max_red_nb" aria-describedby="maxHelp" placeholder="Enter a indicative maximum">
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="unitCostMax" class="col-sm-3 col-form-label">Guidance : unit cost max</label>
-                        <div class="col-sm-9">
-                            <input type="number" class="form-control" name="range_max_red_cost" id="range_max_red_cost" aria-describedby="unitCostMaxHelp" placeholder="Enter a indicative maximum unit cost">
+                    </div>  
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="range_min_red_cost">Unit Cost Reduction : Min</label>
+                                <input type="number" class="form-control" name="range_min_red_cost" id="range_min_red_cost" aria-describedby="minHelp" placeholder="Enter a indicative minimum">
                         </div>
-                    </div>                        
+                        <div class="form-group col-md-6">
+                            <label for="range_max_red_cost">Unit Cost Reduction : Max</label>
+                                <input type="number" class="form-control" name="range_max_red_cost" id="range_max_red_cost" aria-describedby="maxHelp" placeholder="Enter a indicative maximum">
+                        </div>
+                    </div>   
                 </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-dark">Create</button>
@@ -138,10 +150,10 @@
 </div>
 {% endmacro %}
 
-{% macro create_item3(catItem) %} {# risks, non cash benefits ...#}
-<div class="modal fade" id="createNewItem3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+{% macro create_item3(catItemName, UC) %} {# noncash risks #}
+<div class="modal fade" id="createNewItem3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_3&amp;cat={{ catItem }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_1&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
@@ -162,6 +174,18 @@
                             <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <div class="col-sm-9">
+                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
+                                <option value="" disabled>Select Use Case ID</option>
+                                {% for uc_id, uc in UC %}
+                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-dark">Create</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

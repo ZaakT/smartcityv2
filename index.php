@@ -134,16 +134,26 @@ try{
                                 }
 
                             } else if($_GET['A3']=='manage_capex_item'){
-                                manage_capex_item($twig,$is_connected); 
+                                manage_item('capex',$twig,$is_connected); 
                             } else if($_GET['A3']=='manage_opex_item'){
-                                manage_opex_item($twig,$is_connected); 
+                                manage_item('opex',$twig,$is_connected); 
                             } else if($_GET['A3']=='manage_implem_item'){
-                                manage_implem_item($twig,$is_connected); 
+                                manage_item('implem',$twig,$is_connected); 
                             } else if($_GET['A3']=='manage_revenues_item'){
-                                manage_revenues_item($twig,$is_connected); 
+                                manage_item('revenues',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_item_1'){
                                 if(isset($_GET['cat'])){
                                     create_item1($twig,$is_connected,$_POST,$_GET['cat']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db');
+                                }
+                            } else if($_GET['A3']=='manage_cashreleasing_item'){
+                                manage_item('cashreleasing',$twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_widercash_item'){
+                                manage_item('widercash',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_item_2'){
+                                if(isset($_GET['cat'])){
+                                    create_item2($twig,$is_connected,$_POST,$_GET['cat']);
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db');
                                 }
