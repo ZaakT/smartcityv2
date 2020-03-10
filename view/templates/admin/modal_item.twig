@@ -1,0 +1,195 @@
+{% macro create_item1(catItemName, UC) %} {# capex opex implem revenues #}
+<div class="modal fade" id="createNewItem1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_1&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <div class="col-sm-9">
+                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
+                                <option value="" disabled>Select Use Case ID</option>
+                                {% for uc_id, uc in UC %}
+                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="unit" class="col-sm-3 col-form-label">Unit</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="unit" id="unit" aria-describedby="unitHelp" placeholder="Enter a unit">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="source" class="col-sm-3 col-form-label">Guidance Source</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="source" id="source" aria-describedby="sourceHelp" placeholder="Enter a source">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="range_min">Guidance : Min</label>
+                                <input type="number" class="form-control" name="range_min" id="range_min" aria-describedby="minHelp" placeholder="Enter a indicative minimum">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="range_max">Guidance : Max</label>
+                                <input type="number" class="form-control" name="range_max" id="range_max" aria-describedby="maxHelp" placeholder="Enter a indicative maximum">
+                        </div>
+                    </div>   
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro create_item2(catItem) %} {# cash releasing benefits, wider cash benefits #}
+<div class="modal fade" id="createNewItem2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createItem2-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_2&amp;cat={{ catItem }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="unit" class="col-sm-3 col-form-label">Unit</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="unit" id="unit" aria-describedby="unitHelp" placeholder="Enter a unit">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="source" class="col-sm-3 col-form-label">Guidance Source</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="source" id="source" aria-describedby="sourceHelp" placeholder="Enter a source">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="volMin" class="col-sm-3 col-form-label">Guidance : volume min</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="range_min_red_nb" id="range_min_red_nb" aria-describedby="range_min_red_nbHelp" placeholder="Enter a indicative minimum volume">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="volMax" class="col-sm-3 col-form-label">Guidance : volume max</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="range_max_red_nb" id="range_max_red_nb" aria-describedby="range_max_red_nbHelp" placeholder="Enter a indicative maximum volume">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="unitCostMin" class="col-sm-3 col-form-label">Guidance : unit cost min</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="range_min_red_cost" id="range_min_red_cost" aria-describedby="unitCostMinHelp" placeholder="Enter a indicative minimum unit cost">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="unitCostMax" class="col-sm-3 col-form-label">Guidance : unit cost max</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control" name="range_max_red_cost" id="range_max_red_cost" aria-describedby="unitCostMaxHelp" placeholder="Enter a indicative maximum unit cost">
+                        </div>
+                    </div>                        
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro create_item3(catItem) %} {# risks, non cash benefits ...#}
+<div class="modal fade" id="createNewItem3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_3&amp;cat={{ catItem }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
+                        </div>
+                    </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro delete_item(catItem,idItem,nameItem) %}
+<div class="modal fade" id="askDeleteItem_{{ catItem }}_{{ idItem }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Item deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this Item ({{ nameItem }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=admin&amp;A2=manage_db&amp;A3=delete_item&amp;cat={{ catItem }}&amp;id={{ idItem }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}

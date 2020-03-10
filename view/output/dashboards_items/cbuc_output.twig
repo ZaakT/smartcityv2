@@ -36,90 +36,100 @@
     </div>
 </div>
 
-<div class="row text-center offset-1">
-    <div class=" col-10 mt-5 mx-5 list-table keydates_table">
-        <table id="keydates_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
-            <thead class="thead-light text-center">
-                <tr>
-                    <th class="text-uppercase" scope="col" colspan=4> Key Dates</th>
-                </tr>
-                <tr>
-                    <th class="text-uppercase" scope="col" colspan=2>Project</th>
-                    <th class="text-uppercase" scope="col" colspan=2>Selected Use Case</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="item" scope="row">Start Date</td>
-                    <td>{{keydates_proj[0]}}</td>
-                    <td class="item" scope="row">Start Date</td>
-                    <td>{{keydates_uc[0]}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Implem. End Date</td>
-                    <td>{{keydates_proj[1]}}</td>
-                    <td class="item" scope="row">Implem. End Date</td>
-                    <td>{{keydates_uc[1]}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">End Date</td>
-                    <td>{{keydates_proj[2]}}</td>
-                    <td class="item" scope="row">End Date</td>
-                    <td>{{keydates_uc[2]}}</td>
-                </tr>
-            </tbody>
-        </table>
+<div class="container-fluid">
+<section class="row">
+    <div class="col-6 text-center">
+        <div class="row text-center offset-1">
+            <div class=" col-10 mt-5 mx-5 list-table keydates_table">
+                <table id="keydates_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th class="text-uppercase" scope="col" colspan=4> Key Dates</th>
+                        </tr>
+                        <tr>
+                            <th class="text-uppercase" scope="col" colspan=2>Project</th>
+                            <th class="text-uppercase" scope="col" colspan=2>Selected Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item" scope="row">Start Date</td>
+                            <td>{{keydates_proj[0]}}</td>
+                            <td class="item" scope="row">Start Date</td>
+                            <td>{{keydates_uc[0]}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Implem. End Date</td>
+                            <td>{{keydates_proj[1]}}</td>
+                            <td class="item" scope="row">Implem. End Date</td>
+                            <td>{{keydates_uc[1]}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">End Date</td>
+                            <td>{{keydates_proj[2]}}</td>
+                            <td class="item" scope="row">End Date</td>
+                            <td>{{keydates_uc[2]}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-2 mb-5 text-center">
+            <div class="col">
+                <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keydates_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
+            </div>
+        </div>
     </div>
-</div>
-<div class="row mt-2 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keydates_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
+    <div class="col-6 text-center">
+        <div class="row text-center offset-1">
+            <div class=" col-10 mt-5 mx-5 list-table keyratios_table">
+                <table id="keyratios_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th class="text-uppercase" scope="col" colspan=2> Key Performance Indicator</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item" scope="row">Total Investment</td>
+                            <td>{{selDevSym}}&nbsp;{{((implem['tot']+capex['tot'])*ratio_zones)|number_format(2, '.', ',') }}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Net Present Value (NPV)</td>
+                            <td>{{selDevSym}}&nbsp;{{(npv*ratio_zones)|number_format(2, '.', ',')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Societal NPV</td>
+                            <td>{{selDevSym}}&nbsp;{{(socnpv*ratio_zones)|number_format(2, '.', ',')}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Breakeven</td>
+                            <td>{{breakeven ? breakeven : "NA"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Societal Breakeven</td>
+                            <td>{{soc_breakeven ? soc_breakeven : "NA"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Non Cash Benefits Rating</td>
+                            <td>{{noncash_rating!=-1 ? (noncash_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item" scope="row">Risks Rating</td>
+                            <td>{{risks_rating!=-1 ? (risks_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-2 mb-5 text-center">
+            <div class="col">
+                <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keyratios_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
+            </div>
+        </div>
     </div>
+</section>
 </div>
-
-<div class="row text-center offset-2">
-    <div class=" col-8 mt-5 mx-5 list-table keyratios_table">
-        <table id="keyratios_table" class='table table-sm table-striped table-bordered table-responsive-lg'>
-            <thead class="thead-light text-center">
-                <tr>
-                    <th class="text-uppercase" scope="col" colspan=2> Key Ratios</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="item" scope="row">Net Present Value (NPV)</td>
-                    <td>{{selDevSym}}&nbsp;{{(npv*ratio_zones)|number_format(2, '.', ',')}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Societal NPV</td>
-                    <td>{{selDevSym}}&nbsp;{{(socnpv*ratio_zones)|number_format(2, '.', ',')}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Breakeven</td>
-                    <td>{{breakeven ? breakeven : "NA"}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Societal Breakeven</td>
-                    <td>{{soc_breakeven ? soc_breakeven : "NA"}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Non Cash Benefits Rating</td>
-                    <td>{{noncash_rating!=-1 ? (noncash_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
-                </tr>
-                <tr>
-                    <td class="item" scope="row">Risks Rating</td>
-                    <td>{{risks_rating!=-1 ? (risks_rating*ratio_zones)|number_format(2, '.', ',') : "NA"}}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="row mt-2 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="cbuc2csv('keyratios_table','{{selected}}','{{selected2}}','{{selDevSym}}');">Export to CSV</button>
-    </div>
-</div>
-
 <div class="row m-3 text-center text-dark">
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=cost_benefits_all&amp;projID={{projID}}');"></button>
 </div>

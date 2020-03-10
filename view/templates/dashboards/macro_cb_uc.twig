@@ -89,6 +89,13 @@
                     {% endfor %}
                 </tr>
                 <tr>
+                    <td class="item"><strong>Total Investment</strong> (A + B)</td>
+                    <td>{{selDevSym}}&nbsp;{{((implem['tot']+capex['tot'])*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{((implem[year]+capex['tot'])*ratio_zones)|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
                     <td>{{selDevSym}}&nbsp;{{(opex['tot']*ratio_zones)|number_format(2, '.', ',') }}</td>
                     {% for year in years %}

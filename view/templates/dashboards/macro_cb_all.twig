@@ -45,6 +45,17 @@
                     {% endfor %}
                 </tr>
                 <tr>
+                    <td class="item"><strong>Total Investment</strong> (A + B)</td>
+                    <td>{{selDevSym}}&nbsp;{{(implemTot['tot'] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{(implemTot[year] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in dates %}
+                        <td>{{selDevSym}}&nbsp;{{(implemMonth[date] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
                     <td class="item"><strong>Opex</strong> (C)</td>
                     <td>{{selDevSym}}&nbsp;{{(opexTot['tot'])|number_format(2, '.', ',') }}</td>
                     {% for year in years %}

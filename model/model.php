@@ -3811,3 +3811,307 @@ function getFundingOpt($id_bm,$id_investcap,$id_bank,$id_socbank){
     return $list;
 }
 
+// ------------------------------------- MANAGE DATABASE -------------------------------------
+
+function getAllItem1Advice($catItem){
+    $db = dbConnect();
+
+    switch ($catItem) {
+        case "opex":
+            $req = $db->prepare("SELECT * FROM capex_item_advice INNER JOIN capex_item
+                                        WHERE capex_item.id = capex_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+
+        case "opex":
+            $req = $db->prepare("SELECT * FROM opex_item_advice INNER JOIN opex_item
+                                        WHERE opex_item.id = opex_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+
+        case "implem":
+            $req = $db->prepare("SELECT * FROM implem_item_advice INNER JOIN implem_item
+                                        WHERE implem_item.id = implem_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+
+        case "revenues":
+            $req = $db->prepare("SELECT * FROM revnues_item_advice INNER JOIN revenues_item
+                                        WHERE revenues_item.id = revenues_item_advice.id ORDER BY name");
+            $req->execute();
+        break;
+    }
+          
+    $list = [];
+    
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min = intval($row['range_min']);
+        $range_max = intval($row['range_max']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+        }
+    }
+    var_dump($list);
+    return $list;
+}
+
+function getAllItem2Advice($catItem){
+    $db = dbConnect();
+    $catItemAdvice = $catItem."_item_advice";
+    $catItem = $catItem."_item";
+    $req = $db->prepare("SELECT *
+                            FROM ?
+                                INNER JOIN ?
+                                    WHERE ?.id = ?.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($catItemAdvice, $catItem));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = intval($row['range_min_red_nb']);
+        $range_max_red_nb = intval($row['range_max_red_nb']);
+        $range_min_red_cost = intval($row['range_min_red_cost']);
+        $range_max_red_cost = intval($row['range_max_red_cost']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getAllItem3Advice($catItem){
+    $db = dbConnect();
+    $catItemAdvice = $catItem."_item_advice";
+    $catItem = $catItem."_item";
+    $req = $db->prepare("SELECT *
+                            FROM ?
+                                INNER JOIN ?
+                                    WHERE ?.id = ?.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($catItemAdvice, $catItem));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getItemByNameAndCat($itemName,$catItem){ //récupère tous les item d'une catégorie qui ont le nom passé en paramètre
+    $db = dbConnect();
+    if ($catItem == 'capex'){
+        $req = $db->prepare('SELECT * FROM capex_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'implem'){
+        $req = $db->prepare('SELECT * FROM implem_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'opex'){
+        $req = $db->prepare('SELECT * FROM opex_item WHERE name = ?');
+        $req->execute(array($itemName));
+    } else if ($catItem == 'revenues'){
+        $req = $db->prepare('SELECT * FROM revenues_item WHERE name = ?');
+        $req->execute(array($itemName));
+    }
+    
+    return $req->fetch();
+}
+
+function insertItem($item,$catItem){
+    $db = dbConnect();
+
+    $ret = false;
+
+    switch($catItem)
+    {
+        case 'capex':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
+            $db->exec(' CREATE PROCEDURE `add_capex`(
+                                    IN capex_name VARCHAR(255),
+                                    IN capex_desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN range_min INT,
+                                    IN range_max INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO capex_item (name,description)
+                                            VALUES (capex_name,capex_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO capex_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max)
+                                            VALUES (itemID,unit,source,range_min,range_max);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_capex(?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5])));
+        
+            return $ret;
+            break;
+
+        case 'implem':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_implem`;');
+            $db->exec(' CREATE PROCEDURE `add_implem`(
+                                    IN implem_name VARCHAR(255),
+                                    IN implem_desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN range_min INT,
+                                    IN range_max INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO implem_item (name,description)
+                                            VALUES (implem_name,implem_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO implem_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO implem_item_advice (id,unit,source,range_min,range_max)
+                                            VALUES (itemID,unit,source,range_min,range_max);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_implem(?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5])));
+        
+            return $ret;
+            break;
+
+        case 'opex':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_opex`;');
+            $db->exec(' CREATE PROCEDURE `add_opex`(
+                                    IN opex_name VARCHAR(255),
+                                    IN opex_desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN range_min INT,
+                                    IN range_max INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO opex_item (name,description)
+                                            VALUES (opex_name,opex_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO opex_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO opex_item_advice (id,unit,source,range_min,range_max)
+                                            VALUES (itemID,unit,source,range_min,range_max);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_opex(?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5])));
+        
+            return $ret;
+            break;
+
+        case 'revenues':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_revenues`;');
+            $db->exec(' CREATE PROCEDURE `add_revenues`(
+                                    IN revenues_name VARCHAR(255),
+                                    IN revenues_desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN range_min INT,
+                                    IN range_max INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO revenues_item (name,description)
+                                            VALUES (revenues_name,revenues_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO revenues_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO revenues_item_advice (id,unit,source,range_min,range_max)
+                                            VALUES (itemID,unit,source,range_min,range_max);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_revenues(?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5])));
+        
+            return $ret;
+            break;
+    }
+
+    
+}
+
+function deleteItem($catItem,$itemID){
+    $db = dbConnect();
+
+    switch ($catItem) {
+        case "capex":
+            $req = $db->prepare('DELETE FROM capex_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM capex_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM capex_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "implem":
+            $req = $db->prepare('DELETE FROM implem_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM implem_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM implem_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "opex":
+            $req = $db->prepare('DELETE FROM opex_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM opex_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM opex_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "revenues":
+            $req = $db->prepare('DELETE FROM revenues_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM revenues_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM revenues_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+    }
+
+    
+}

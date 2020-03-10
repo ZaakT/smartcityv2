@@ -132,6 +132,28 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
                                 }
+
+                            } else if($_GET['A3']=='manage_capex_item'){
+                                manage_capex_item($twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_opex_item'){
+                                manage_opex_item($twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_implem_item'){
+                                manage_implem_item($twig,$is_connected); 
+                            } else if($_GET['A3']=='manage_revenues_item'){
+                                manage_revenues_item($twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_item_1'){
+                                if(isset($_GET['cat'])){
+                                    create_item1($twig,$is_connected,$_POST,$_GET['cat']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db');
+                                }
+                            } elseif($_GET['A3']=="delete_item"){
+                                if(isset($_GET['cat']) && isset($_GET['id'])){
+                                    delete_item($_GET['cat'],$_GET['cat']);
+                                } else {
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_capex_item');
+                                }
+
                             } else {
                                 header('Location: ?A=admin&A2=manage_db');
                             }

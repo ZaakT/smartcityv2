@@ -20,6 +20,7 @@ function cost_benefits($twig,$is_connected){
 function project_cb($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
+    //var_dump($list_projects);
     if(isset($_SESSION['projID'])){
         unset($_SESSION['projID']);
     }
@@ -75,7 +76,8 @@ function capex($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                 if(getUCByID($ucID)){
                     $proj = getProjByID($projID,$user[0]);
                     $uc = getUCByID($ucID);
-                    $list_capex_advice = getListCapexAdvice($ucID);   
+                    $list_capex_advice = getListCapexAdvice($ucID);
+                    //var_dump($list_capex_advice);   
                     $list_capex_user = getListCapexUser($projID,$ucID);    
                     $list_selCapex = getListSelCapex($projID,$ucID);          
                     //var_dump($list_selCapex);
@@ -927,7 +929,7 @@ function cashreleasing($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     $list_cashreleasing_advice = getListCashReleasingAdvice($ucID);   
                     $list_cashreleasing_user = getListCashReleasingUser($projID,$ucID);    
                     $list_selCashReleasing = getListSelCashReleasing($projID,$ucID);          
-                    //var_dump($list_selCashReleasing);
+                    //var_dump($list_cashreleasing_advice);
                     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];

@@ -1,0 +1,128 @@
+{% macro list_item1(listItem,catItemName,isTaken = false) %}
+{% import "/templates/admin/modal_item.twig" as modal %}
+
+<div class="row text-center">
+    <h6 id="createItem1Help" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
+</div>
+<div class="row mt-2 mb-5 text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Use Case ID</th>
+                    <th scope="col">Use Case Name</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Source of Guidance</th>
+                    <th scope="col">Range</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id,item in listItem %}
+                        <tr scope="row">
+                            <td class="check-col">{{ id }}</td>
+                            <td>{{ item['name'] }}</td>
+                            <td>{{ item['description'] }}</td>
+                            <td>{{ item['UC'][0] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
+                            <td>{{ item['UC'][1] }}</td>
+                            <td>{{ item['unit'] }}</td>
+                            <td>{{ item['source'] }}</td>
+                            <td>{{ item['range_min'] }} - {{ item['range_max'] }}</td>
+                            <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteItem_{{ catItemName }}_{{ id }}"></span></a></td>
+                            {{ modal.delete_item(catItemName,id,item['name']) }} 
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{#
+{% macro list_item2(listItem, isTaken = false) %}
+{% import "/templates/admin/modal_item.twig" as modal %}
+
+<div class="row text-center">
+    <h6 id="createItem1Help" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
+</div>
+<div class="row mt-2 mx-5 mb-5 text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Source of Guidance</th>
+                    <th scope="col">Volume Reduction Range</th>
+                    <th scope="col">Unit Cost Reduciton Range</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id,item in listItem %}
+                        <tr scope="row">
+                            <td class="check-col">{{ id }}</td>
+                            <td>{{ item['name'] }}</td>
+                            <td>{{ item['description'] }}</td>
+                            <td>{{ item['unit'] }}</td>
+                            <td>{{ item['source'] }}</td>
+                            <td>{{ item['range_min_red_nb'] }} - {{ item['range_max_red_nb'] }}</td>
+                            <td>{{ item['range_min_red_cost'] }} - {{ item['range_max_red_cost'] }}</td>
+                            <td><a class="myPopover text-info font-italic"
+                            tabindex="0" 
+                            data-toggle="popover" 
+                            data-placement="right"
+                            title="{{item['name']}}"
+                            data-trigger="focus"
+                            data-html=true
+                            role = "button"
+                            data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit['id']}}.png'/>">Rating Guidance</a></td>
+                            <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteItem_{{ listItem }}_{{ idItem }}"></span></a></td>
+                            {{ modal.delete_item2(id,item['name']) }}
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_item1(listItem, isTaken = false) %}
+{% import "/templates/admin/modal_item.twig" as modal %}
+
+<div class="row text-center">
+    <h6 id="createItem3Help" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
+</div>
+<div class="row mt-2 mx-5 mb-5 text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id,item in listItem %}
+                        <tr scope="row">
+                            <td class="check-col">{{ id }}</td>
+                            <td>{{ item['name'] }}</td>
+                            <td>{{ item['description'] }}</td>
+                            <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteItem_{{ listItem }}_{{ idItem }}"></span></a></td>
+                            {{ modal.delete_item3(id,item['name']) }}
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+#}

@@ -219,7 +219,7 @@ function manage_DLT($twig,$is_connected,$isTaken=false){
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
+
     echo $twig->render('/others/admin_menu/manage_db_items/manage_dlt.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'dlt'=>$list_DLT, 'isTaken'=>$isTaken)); 
 }
 
@@ -239,4 +239,140 @@ function create_dlt($twig,$is_connected,$post){
 function delete_dlt($idDLT){
     deleteDLT(intval($idDLT));
     header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
+}
+
+//------------------------------------- ITEM CAT 1 : capex, opex, implem, revenues  -------------------------------------
+
+function manage_capex_item($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_capex_item = [];
+    $listUC = getListUCs();
+    foreach ($listUC as $id_uc => $UC){
+        $list_tampon = getListCapexAdvice($id_uc);
+        foreach ($list_tampon as $id_item => $item){
+            $list_capex_item[$id_item] = $item;
+            if (array_key_exists('UC',$list_capex_item[$id_item])){
+                $list_capex_item[$id_item]['UC'] += [$id_uc,$UC['name']];
+            } else {
+                $list_capex_item[$id_item]['UC'] = [$id_uc,$UC['name']];
+            }
+        }            
+    }
+    //var_dump($list_capex_item, $UC); 
+
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_capex_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_capex_item,'catItemName'=>'capex', 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    
+}
+
+function manage_implem_item($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_implem_item = [];
+    $listUC = getListUCs();  
+    foreach ($listUC as $id_uc => $UC){ 
+        $list_tampon = getListImplemAdvice($id_uc);
+        foreach ($list_tampon as $id_item => $item){
+            $list_implem_item[$id_item] = $item;
+            if (array_key_exists('UC',$list_implem_item[$id_item])){
+                $list_implem_item[$id_item]['UC'] += [$id_uc,$UC['name']];
+            } else {
+                $list_implem_item[$id_item]['UC'] = [$id_uc,$UC['name']];
+            }
+        }            
+    }
+    //var_dump($list_capex_item, $UC); 
+
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_implem_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_implem_item,'catItemName'=>'implem', 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    
+}
+
+
+function manage_opex_item($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_opex_item = [];
+    $listUC = getListUCs();  
+    foreach ($listUC as $id_uc => $UC){ 
+        $list_tampon = getListOpexAdvice($id_uc);
+        foreach ($list_tampon as $id_item => $item){
+            $list_opex_item[$id_item] = $item;
+            if (array_key_exists('UC',$list_opex_item[$id_item])){
+                $list_opex_item[$id_item]['UC'] += [$id_uc,$UC['name']];
+            } else {
+                $list_opex_item[$id_item]['UC'] = [$id_uc,$UC['name']];
+            }
+        }            
+    }
+    //var_dump($list_capex_item, $UC); 
+
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_opex_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_opex_item,'catItemName'=>'opex', 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    
+}
+
+function manage_revenues_item($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_revenues_item = [];
+    $listUC = getListUCs();   
+    foreach ($listUC as $id_uc => $UC){ 
+        $list_tampon = getListRevenuesAdvice($id_uc);
+        foreach ($list_tampon as $id_item => $item){
+            $list_revenues_item[$id_item] = $item;
+            if (array_key_exists('UC',$list_revenues_item[$id_item])){
+                $list_revenues_item[$id_item]['UC'] += [$id_uc,$UC['name']];
+            } else {
+                $list_revenues_item[$id_item]['UC'] = [$id_uc,$UC['name']];
+            }
+        }            
+    }
+    //var_dump($list_capex_item, $UC); 
+
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_revenues_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_revenues_item,'catItemName'=>'revenues', 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    
+}
+
+
+function create_item1($twig,$is_connected,$post,$catItem){
+    $name = $post['name'];
+    $description = $post['description'];
+    $unit = $post['unit'];
+    $source = $post['source'];
+    $range_min = $post['range_min'];
+    $range_max = $post['range_max'];
+    $uc = $post['uc_id'];
+    $itemInfos = [$name,$description,$unit,$source,$range_min,$range_max,$uc];
+    if(!empty(getItemByNameAndCat($name,$catItem))){
+        switch ($catItem) {
+            case "capex":
+                 manage_capex_item($twig,$is_connected,true); break;
+            case "implem":
+                manage_implem_item($twig,$is_connected,true); break;
+            case "opex":
+                manage_opex_item($twig,$is_connected,true); break;
+            case "revenues":
+                manage_revenues_item($twig,$is_connected,true); break;
+        }
+
+    } else {
+        insertItem($itemInfos,$catItem);
+        header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+    }
+}
+
+function delete_item($catItem,$itemID){
+    deleteItem($catItem, intval($itemID));
+    header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
 }
