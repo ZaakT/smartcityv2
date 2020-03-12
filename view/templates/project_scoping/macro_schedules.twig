@@ -129,11 +129,11 @@
                     {% endfor %}
                     <th scope="col">
                         <span class="oi oi-trash" style="font-size: 20px;" title="trash" aria-haspopup="true" aria-expanded="false" aria-hidden="true" onclick="erase_dates('opex',{{list_ucs_all[0]}});"></span>
-                    </td>
+                    </th>
                     {% for i,id_uc in list_ucs_all|slice(start,last-1) %}
                     <th scope="col">
                         <span id="copy_{{list_ucs_all[i]}}_to_{{list_ucs_all[i+1]}}" class="copy-dates oi oi-arrow-right mx-3" title="arrow-right" aria-haspopup="true" aria-expanded="false"aria-hidden="true" onclick="copy_dates('opex',{{list_ucs_all[i]}},{{list_ucs_all[i+1]}});"></span><span class="oi oi-trash mx-3 erase-dates" title="trash" aria-haspopup="true" aria-expanded="false" aria-hidden="true" onclick="erase_dates('opex',{{list_ucs_all[i+1]}});"></span>
-                    </td>
+                    </th>
                     {% endfor %}
                 </tr>
             </thead>

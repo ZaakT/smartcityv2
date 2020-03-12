@@ -4076,6 +4076,7 @@ function getFundingOpt($id_bm,$id_investcap,$id_bank,$id_socbank){
 // ------------------------------------- MANAGE DATABASE -------------------------------------
 
 function getAllItem1Advice($catItem){
+    //
     $db = dbConnect();
 
     switch ($catItem) {
@@ -4196,7 +4197,8 @@ function getAllItem3Advice($catItem){
     return $list;
 }
 
-function getItemByNameAndCat($itemName,$catItem){ //récupère tous les item d'une catégorie qui ont le nom passé en paramètre
+function getItemByNameAndCat($itemName,$catItem){ 
+    //récupère tous les item d'une catégorie qui ont le nom passé en paramètre
     $db = dbConnect();
     if ($catItem == 'capex'){
         $req = $db->prepare('SELECT * FROM capex_item WHERE name = ?');
@@ -4228,6 +4230,7 @@ function getItemByNameAndCat($itemName,$catItem){ //récupère tous les item d'u
 }
 
 function insertItem($item,$catItem){
+    //insère un item et sa guidance dans la db
     $db = dbConnect();
 
     $ret = false;

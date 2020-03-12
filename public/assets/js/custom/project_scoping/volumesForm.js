@@ -98,7 +98,6 @@ function fillTot(formName){  //calcule le nombre total de use case
 
 function colorFilledVolumes(){
     var ret = true;
-                                    console.log("--------------------");
     $(".volumes_table input").each(function(){
                                         console.log(this);
         var element = $(this);

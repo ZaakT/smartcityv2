@@ -36,15 +36,27 @@
         <table id="size_table" class='table table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th colspan=1 rowspan= 2 scope="col">Zone</th>
+                    <th colspan=1 rowspan=3 scope="col">Zone</th>
                     {% for meas,list_ucs in scope %}
                         <th colspan={{list_ucs|length}} scope="col">{{measures[meas]['name']}}</th>
                     {% endfor %}
                 </tr>
                 <tr>
+                    {% set list_ucs_all = [] %}
+                    {% for id_meas,list_ucs in scope %}
+                        {% for id_uc in list_ucs %}
+                            {% set list_ucs_all = list_ucs_all|merge([id_uc]) %}
+                        {% endfor %}
+                    {% endfor %}
+                    {% set i = 0 %}
                     {% for meas,list_ucs in scope %}
                         {% for uc in list_ucs %}
-                        <th scope="col">{{ucs[uc]['name']}}</th>
+                        <th scope="col">{{ucs[uc]['name']}}</br>
+                        {% if i != 0 %}
+                        <span id="copy_{{list_ucs_all[i]}}_to_{{list_ucs_all[i+1]}}" class="copy-dates oi oi-arrow-right mx-3" title="arrow-right" aria-haspopup="true" aria-expanded="false"aria-hidden="true" onclick="copy_sizes({{ list_ucs_all[i-1] }},{{list_ucs_all[i]}});"></span>
+                        {% endif %}
+                        </th>
+                        {% set i = i+1 %}
                         {% endfor %}
                     {% endfor %}
                 </tr>

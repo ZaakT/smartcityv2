@@ -241,7 +241,7 @@ function delete_dlt($idDLT){
     header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
 }
 
-//------------------------------------- ITEM CAT 1 : capex, opex, implem, revenues  -------------------------------------
+//-------------------------------------  MANAGE ITEM  -------------------------------------
 
 function manage_item($catName,$twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
@@ -271,6 +271,7 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
 
 
 function create_item1($twig,$is_connected,$post,$catItem){
+    //ajoute dans la db un item de catégorie 1 (opex, capex, implementatin, revenues)
     $name = $post['name'];
     $description = $post['description'];
     $unit = $post['unit'];
@@ -288,6 +289,7 @@ function create_item1($twig,$is_connected,$post,$catItem){
 }
 
 function create_item2($twig,$is_connected,$post,$catItem){
+    //ajoute dans la db un item de catégorie 2 (cash releasing b, wider cash b)
     $name = $post['name'];
     $description = $post['description'];
     $unit = $post['unit'];
@@ -308,6 +310,7 @@ function create_item2($twig,$is_connected,$post,$catItem){
 }
 
 function create_item3($twig,$is_connected,$post,$catItem){
+    //ajoute dans la db un item de catégorie 3 (non cash b, risks)
     $name = $post['name'];
     $description = $post['description'];
     $uc = $post['uc_id'];
