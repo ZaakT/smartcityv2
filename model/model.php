@@ -1445,7 +1445,7 @@ function getListCapexUser($projID,$ucID){
 
 function getListSelCapex($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,period
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,ratio,period
                             FROM input_capex
                             INNER JOIN capex_item
                                 WHERE  input_capex.id_uc = ? and id_proj = ? and id_item = capex_item.id
@@ -1458,11 +1458,12 @@ function getListSelCapex($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
+        $ratio = intval($row['ratio']);
         $period = intval($row['period']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period,'ratio'=>$ratio];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period,'ratio'=>$ratio];
         }
     }
     //var_dump($list);

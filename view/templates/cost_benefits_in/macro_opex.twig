@@ -118,8 +118,8 @@
                         <td scope="col"><input id="unitIndic_{{id_opex}}" name="unitIndic_{{id_opex}}" class="text-center unitIndic pt-1 pb-1" type="text" required style="max-width:100%;" value="{{selOpex[id_opex]['unit_indic']}}"></td>
                     {% endif %}
 
-                    <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput();" value="{{ (selOpexce[id_opex]['range_min'] + selOpexce[id_opex]['range_max']) / 2 }}"></td> 
-                    <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput();" value="{{selOpex[id_opex]['unit_cost']}}"></td> 
+                    <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput(vol_{{id_opex}});" value="{{ (selOpexce[id_opex]['range_min'] + selOpexce[id_opex]['range_max']) / 2 }}"></td> 
+                    <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput(cost_{{id_opex}});" value="{{selOpex[id_opex]['unit_cost']}}"></td> 
                 </tr> 
             {% endfor %}
             </tbody>

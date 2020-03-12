@@ -585,6 +585,7 @@ CREATE TABLE input_capex(
    id_proj INT,
    id_uc INT,
    volume INT,
+   ratio INT,
    unit_cost DOUBLE,
    period INT,
    PRIMARY KEY(id_item, id_proj,id_uc),

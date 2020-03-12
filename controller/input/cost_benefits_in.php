@@ -1691,7 +1691,7 @@ function risks_input($twig,$is_connected,$projID=0,$ucID=0){
             $uc = getUCByID($ucID);
             $list_selRisks = getListSelRisks($projID,$ucID);
             //var_dump($list_selRisks);
-            $list_risks_advice = getListRiskAdvice($ucID); 
+            $list_risks_advice = getListRisksAdvice($ucID); 
             $list_sel_risks_advice = getListSelByType($list_selRisks,$list_risks_advice);
             //var_dump($list_sel_risks_advice);
             $list_risks_user = getListRiskUser($projID,$ucID);

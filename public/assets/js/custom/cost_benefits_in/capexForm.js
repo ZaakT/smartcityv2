@@ -48,49 +48,81 @@ function countSelectedCapex(oForm) {
     }
 }
 
-function checkCapexInput(){
+function checkCapexInput(id){
     var ret = true;
-    $("#capex_input input").each(function(){
-        var val = $(this).val();
-        var tab = $(this).classes();
-        if(tab.includes("volume")){
-            val = val ? parseInt(val) : -1 ;
-            //console.log(val);
-            if(val < 0){
-                $(this).css("background","salmon");
-                $(this).val("");
-                ret = false;
-            } else {
-                $(this).val(val);
-                $(this).css("background","#C3E6CB");
-            }
-        } else if (tab.includes("period")){
-            val = val ? parseInt(val) : -1 ;
-            //console.log(val);
-            if(val <= 0){
-                $(this).css("background","salmon");
-                //$(this).val("");
-                ret = false;
-            } else {
-                $(this).val(val);
-                $(this).css("background","#C3E6CB");
-            }
-        } else if (tab.includes("unit_cost")){
-            val = val ? parseFloat(val) : -1 ;
-            var temp = String(val).split(".");
-            if(val < 0.){
-                $(this).css("background","salmon");
-                $(this).val("");
-                ret = false;
-            } else if (temp.length==2 && temp[1].length>3){
-                $(this).css("background","salmon");
-                ret = false;
-            } else {
-                //$(this).val(val);
-                $(this).css("background","#C3E6CB");
-            }
+    id = id.getAttribute('id');
+    //console.log(id);
+    var val = $("#"+id).val();
+    //console.log(val);
+    var tab = $("#"+id).classes();
+    if(tab.includes("volume")){
+        val = val ? parseInt(val) : -1 ;
+        //console.log(val);
+        if(val < 0){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+            //changer la valeur de volume ratio correspondante
+            var volume = val;
+            var nb_uc = $("#nb_uc").html();
+            ratio = Math.round(volume / nb_uc);
+            //console.log(ratio);
+            id = id.split("_");
+            //console.log("rat_"+id[1]);
+            $("#rat_"+id[1]).val(ratio);
         }
-    });
+    } else if (tab.includes("period")){
+        val = val ? parseInt(val) : -1 ;
+        //console.log(val);
+        if(val <= 0){
+            $(this).css("background","salmon");
+            //$(this).val("");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+    } else if (tab.includes("unit_cost")){
+        val = val ? parseFloat(val) : -1 ;
+        var temp = String(val).split(".");
+        if(val < 0.){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if (temp.length==2 && temp[1].length>3){
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+    } else if (tab.includes("ratio")){
+        val = val ? parseFloat(val) : -1 ;
+        var temp = String(val).split(".");
+        if(val < 0.){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if (temp.length==2 && temp[1].length>3){
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
+            //changer la valeur de volume correspondante
+            var ratio = val;
+            var nb_uc = $("#nb_uc").html();
+            volume = Math.round(ratio * nb_uc);
+            //console.log(volume);
+            id = id.split("_");
+            //console.log("vol_"+id[1]);
+            $("#vol_"+id[1]).val(volume);
+        }
+    } 
+
     calcTotCapex();
     return ret;
 }
@@ -121,7 +153,9 @@ function setNewDeviseCapex(name){
     } catch {
         //do nothing
     } finally {
-        checkCapexInput();
+        $("#capex_input input").each(function(){
+            checkCapexInput(this);
+        });
         calcTotCapex();
     }
 }
