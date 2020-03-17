@@ -47,7 +47,7 @@ function countSelectedImplem(oForm) {
         return false;
     }
 }
-
+/*
 function checkImplemInput(){
     var ret = true;
     $("#implem_input input").each(function(){
@@ -81,6 +81,81 @@ function checkImplemInput(){
     });
     calcTotImplem();
     return ret;
+} */
+
+
+function checkImplemInput(id){
+    var ret = true;
+    id = id.getAttribute('id');
+    //console.log(id);
+    var val = $("#"+id).val();
+    //console.log(val);
+    var tab = $("#"+id).classes();
+    if(tab.includes("volume")){
+        val = val ? parseInt(val) : -1 ;
+        //console.log(val);
+        if(val < 0){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+            //changer la valeur de volume ratio correspondante
+            var volume = val;
+            var nb_uc = $("#nb_uc").html();
+            ratio = Math.round(volume / nb_uc);
+            //console.log(ratio);
+            id = id.split("_");
+            //console.log("rat_"+id[1]);
+            $("#rat_"+id[1]).val(ratio);
+            $("#rat_"+id[1]).each(function(){
+                checkImplemInput(this);
+            });
+        }
+    } else if (tab.includes("unit_cost")){
+        val = val ? parseFloat(val) : -1 ;
+        var temp = String(val).split(".");
+        if(val < 0.){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if (temp.length==2 && temp[1].length>3){
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+    } else if (tab.includes("ratio")){
+        val = val ? parseFloat(val) : -1 ;
+        var temp = String(val).split(".");
+        if(val < 0.){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if (temp.length==2 && temp[1].length>3){
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
+            //changer la valeur de volume correspondante
+            var ratio = val;
+            var nb_uc = $("#nb_uc").html();
+            volume = Math.round(ratio * nb_uc);
+            //console.log(volume);
+            id = id.split("_");
+            //console.log("vol_"+id[1]);
+            $("#vol_"+id[1]).val(volume);
+            $("#vol_"+id[1]).each(function(){
+                checkImplemInput(this);
+            });
+        }
+    } 
+
+    calcTotImplem();
+    return ret;
 }
 
 function calcTotImplem(){
@@ -108,8 +183,10 @@ function setNewDeviseImplem(name){
         countSelectedImplem(form_implem);
     } catch {
         //do nothing
-    } finally {
-        checkImplemInput();
+    } finally { 
+        $("#implem_input input").each(function(){
+            checkImplemInput(this);
+        });
         calcTotImplem();
     }
 }
