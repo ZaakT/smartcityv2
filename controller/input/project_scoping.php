@@ -57,7 +57,7 @@ function scope($twig,$is_connected,$projID=0){
             $list_cat = getListUCsCat();
             $list_ucs = getListUCs();
             $listSelScope = getListSelScope($projID);
-            //var_dump($list_ucs);
+            var_dump($listSelScope);
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
