@@ -27,7 +27,7 @@ function calcTot(compo,zones,item,uc=""){ //calcule les sommes totales de chaque
     var sum = 0;
     var val = 0;
     zones.forEach((zone) => {
-                                        console.log("#val_"+item+compo+uc+"_"+zone);
+                                        //console.log("#val_"+item+compo+uc+"_"+zone);
         val = $("#val_"+item+compo+uc+"_"+zone).text().replace(/\s/g,'');
         if($("#val_"+item+compo+uc+"_"+zone).val()){
             val += $("#val_"+item+compo+uc+"_"+zone).val().replace(/\s/g,'');
@@ -42,7 +42,7 @@ function calcTot(compo,zones,item,uc=""){ //calcule les sommes totales de chaque
     $("#tot_"+item+compo+uc).text(sum);
 }
 
-function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zone
+function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zone pour un composant
     var val_1 = $("#val_nb_"+compo+"_"+uc+"_"+zone).val();
     var val_2 = $("#val_nbuc_"+compo+"_"+uc+"_"+zone).val();
     if(val_1 && val_2){
@@ -57,7 +57,7 @@ function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zon
         } else {
             res = "-";
         }
-        $("#totUC_"+uc+"_"+zone).text(res);
+        //$("#totUC_"+uc+"_"+zone).text(res);
         //$("#totUC_"+uc+"_"+zone).text("test calcTotUC");
         return res;
     }
@@ -71,39 +71,40 @@ function fillTot(formName){  //calcule le nombre total de use case
     const list_zones = searchIDs(formName)[2];
     const list_items = ["nb_","nbuc_"];
     list_compo.forEach((compo) => {
-        calcTot(compo,list_zones,"zones_");
+        //calcTot(compo,list_zones,"zones_"); pas compris
         list_items.forEach((item) => {
             list_ucs.forEach((uc) => {
-                calcTot(compo,list_zones,item,"_"+uc);
+                calcTot(compo,list_zones,item,"_"+uc); //calcule les sommes sur zones de la colonne de droite
             })
         })
     })
     list_ucs.forEach((uc) => {
-        var sum = 0;
-        var val = 0;
-        list_compo.forEach((compo) => {
-            sum = 0;
-            list_zones.forEach((zone) => {
-                val = calcTotUC(uc,zone,compo);
-                                                console.log(val);
-                if(val!="-"){
-                    sum += val;
+        var tot_totUC = 0; //total pour un UC (en bas à droite)
+        var totCompoZone = 0; //total pour un composant pour une zone
+
+        list_zones.forEach((zone) => {
+            totZone = 0; //total de UC pour une zone (ligne du bas)
+            list_compo.forEach((compo) => {
+                totCompoZone = calcTotUC(uc,zone,compo);
+                if (totCompoZone != "-"){
+                    totZone += totCompoZone ;
                 }
-                $("#tot_totUC_"+uc).text(sum);
-                //$("#tot_totUC_"+uc).text("test fillTot");
             })
+            $("#totUC_"+uc+"_"+zone).text(totZone);
+            tot_totUC += totZone;
         })
+        $("#tot_totUC_"+uc).text(tot_totUC);
     })
 }
 
 function colorFilledVolumes(){
     var ret = true;
     $(".volumes_table input").each(function(){
-                                        console.log(this);
+                                        //console.log(this);
         var element = $(this);
         var value = element.val();
         //value = value=="" ? "" : parseInt(value);
-        console.log(value);
+        //console.log(value);
         if(value=="" || value<0){
             element.css("background","salmon");
             element.val("");
