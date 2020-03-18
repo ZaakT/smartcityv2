@@ -567,3 +567,6 @@ input[type=number] {
     border-right: hidden;
 }
 
+.table-striped td{
+    border-top: hidden;
+}
