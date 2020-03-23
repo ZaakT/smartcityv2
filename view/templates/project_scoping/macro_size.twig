@@ -53,7 +53,7 @@
                         {% for uc in list_ucs %}
                         <th scope="col">{{ucs[uc]['name']}}</br>
                         {% if i != 0 %}
-                        <span id="copy_{{list_ucs_all[i]}}_to_{{list_ucs_all[i+1]}}" class="copy-dates oi oi-arrow-right mx-3" title="arrow-right" aria-haspopup="true" aria-expanded="false"aria-hidden="true" onclick="copy_sizes({{ list_ucs_all[i-1] }},{{list_ucs_all[i]}});"></span>
+                        <span id="copy_{{list_ucs_all[i]}}_to_{{list_ucs_all[i+1]}}" class="copy-dates oi oi-arrow-right mx-3" title="Copy from previous use case" aria-haspopup="true" aria-expanded="false"aria-hidden="true" onclick="copy_sizes({{ list_ucs_all[i-1] }},{{list_ucs_all[i]}});"></span>
                         {% endif %}
                         </th>
                         {% set i = i+1 %}
