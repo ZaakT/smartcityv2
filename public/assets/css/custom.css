@@ -602,3 +602,15 @@ h3.dash-title {
   border-top: hidden;
   padding: 0.2rem;
 }
+
+#keyDatesTable th, #keyDatesTable td {
+    font-size: .9rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
+    padding-top: .40rem;
+    padding-bottom: 0.40rem;
+}
+
+#keyDatesTable, #kpiTable {
+    margin-bottom: 0rem;
+}

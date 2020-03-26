@@ -43,7 +43,7 @@ var numberOfItems = new Chart($('#numberOfItems'), {
       datasets: [
         {
           label: "# of items",
-          backgroundColor: ["#A3A0FB", "#FFDA83","#FF8373","#55D8FE"],
+          backgroundColor: ["#55D8FE", "#FFDA83","#FF8373","#A3A0FB"],
           data: ucQuantity, //data
           borderWidth : 0
         }
