@@ -148,13 +148,13 @@
                         <tr>
                             <td class="yearCB">{{ year }}</td>
                             <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
-                            <td class="CNSC">{{ (cumulnetsoccash[date])|number_format(2, '.', ',') }}</td>
+                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
                         {% endfor %}
                     </table>
                 </div>
                 <canvas id="myChart"></canvas>
             </div>
-            <div class="row dash-bg-light p-3">
+            <div class="row dash-bg-light m-3 p-3">
                 <h3 class="dash-title">Key Performance Indicator</h3>
                     <table id="kpiTable" class="table dashboard-table">
                         <tr>

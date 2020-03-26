@@ -805,19 +805,19 @@ function cost_benefits_all($twig,$is_connected,$projID){
             /// FINANCIAL FIGURES: netcash, breakeven, cumulated net cash
             $netcashPerMonth = calcNetCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth']);
             $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
-            $breakeven = $netcashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y') : '';//global
+            $breakeven = $netcashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y') : '';
             $cumulnetcashPerMonth = $netcashPerMonth[2];
-            $cumulnetcashTot = $netcashTot[1]; //global
+            $cumulnetcashTot = $netcashTot[1]; 
 
             /// SOCIETAL FIGURES :  netcash, breakeven, cumulated net cash, non cash & risks rating
             $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth'],$ItemsPerMonthAndTot['widercash']['perMonth']);
             $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
-            $soc_breakeven = $netsoccashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y') : '';//global
+            $soc_breakeven = $netsoccashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y') : '';
             $cumulnetsoccashPerMonth = $netsoccashPerMonth[2];
-            $cumulnetsoccashTot = $netsoccashTot[1]; //global
+            $cumulnetsoccashTot = $netsoccashTot[1]; 
 
-            $ratingNonCash = calcRatingNonCash($projID, $scope); //global
-            $ratingRisks = calcRatingRisks($projID, $scope); //global
+            $ratingNonCash = calcRatingNonCash($projID, $scope); 
+            $ratingRisks = calcRatingRisks($projID, $scope); 
 
             //var_dump($netcashPerMonth);
             //var_dump($netcashTot);
@@ -825,8 +825,8 @@ function cost_benefits_all($twig,$is_connected,$projID){
             /// NPV
             $dr_year = getListSelDiscountRate($projID);
             $dr_month = pow(1+($dr_year/100),1/12)-1;
-            $npv = calcNPV($dr_month,$netcashPerMonth[0]); //global
-            $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);//global
+            $npv = calcNPV($dr_month,$netcashPerMonth[0]); 
+            $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);
 
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -946,7 +946,7 @@ function calcRatingNonCash($projID, $scope) {
             $nbUCS++;
         }
     }
-    return $ratingNonCash/$nbUCS;
+    return $nbUCS != 0 ? $ratingNonCash/$nbUCS : -1;;
 }
 
 function calcRatingRisks($projID, $scope) {
@@ -964,7 +964,7 @@ function calcRatingRisks($projID, $scope) {
             $nbUCS++;
         }
     }
-    return $ratingRisks/$nbUCS;
+    return $nbUCS != 0 ? $ratingRisks/$nbUCS : -1;;
 }
 
 function add_arrays($a,$b){
@@ -3145,11 +3145,32 @@ function global_dashboard($twig,$is_connected,$projID=0){
 
             //var_dump($scores);
 
+
+////////////  AJOUTES  \\\\\\\\\\\\\\
+
+            $ItemsPerMonthAndTot = calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears);
+            /////// COST BENEFITS
+            $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
+            $cumulnetcashTot = $netcashTot[1]; 
+            $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
+            $cumulnetsoccashTot = $netsoccashTot[1]; 
+            /////// KPI
+            
+            $breakeven = $netcashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y') : '';
+            $soc_breakeven = $netsoccashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y') : '';
+            $ratingNonCash = calcRatingNonCash($projID, $scope); 
+            $ratingRisks = calcRatingRisks($projID, $scope);
+            // npv
+            $dr_year = getListSelDiscountRate($projID);
+            $dr_month = pow(1+($dr_year/100),1/12)-1;
+            $npv = calcNPV($dr_month,$netcashPerMonth[0]); 
+            $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'noncash'=>$ratingNonCash,'risk'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores));
+            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv,'socnpv'=>$socnpv,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores,'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot));
         
             prereq_Dashboards();
         } else {
