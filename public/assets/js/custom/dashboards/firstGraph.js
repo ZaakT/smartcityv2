@@ -111,7 +111,7 @@ $('.OPI').each(function() {
 });
 //console.log(BOC,NPC,OPI);
 
-BOC=[78436, 78436,78436,78436,78436];
+BOC=[78436, 20436,30436,40436,10436];  //dev
 
 var budgetGraph = new Chart($('#budgetGraph'), {
   type: 'bar',
@@ -160,3 +160,61 @@ var budgetGraph = new Chart($('#budgetGraph'), {
     }
   }
 });
+
+
+////////////////////  COST BENEFITS /////////////////////////
+
+//GET THE DATA FROM THE HIDDEN TABS
+
+var cbLabel = [];
+$('.cbLabel').each(function() {
+  cbLabel.push($(this).html());
+});
+var yearCB = [];
+$('.yearCB').each(function() {
+  yearCB.push($(this).html());
+});
+var CNC = [];
+$('.CNC').each(function() {
+  var temp = $(this).html().replace(',','');
+  CNC.push(temp);
+});
+var CNSC = [];
+$('.CNSC').each(function() {
+  var temp = $(this).html().replace(',','');
+  CNSC.push(temp);
+});
+console.log(cbLabel,yearCB,CNC,CNSC);
+
+
+new Chart(document.getElementById("costbenefitsGraph"), {
+  type: 'line',
+  data: {
+    labels: yearCB,
+    datasets: [{ 
+      data: CNSC,
+      label: cbLabel[1],
+      borderColor: "#55D8FE",
+      backgroundColor: "#55D8FE",
+      fill: false
+    },{ 
+        data: CNC,
+        label: cbLabel[0],
+        borderColor: "#A3A0FB",
+        backgroundColor: "#A3A0FB",
+        fill: false
+      } 
+    ]
+  },
+  options: {
+    title: {
+      display: false
+    },
+    plugins: {
+      datalabels: {
+        display: false
+      }
+    }
+  }
+});
+
