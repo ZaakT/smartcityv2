@@ -570,3 +570,35 @@ input[type=number] {
 .table-striped td{
     border-top: hidden;
 }
+
+.dash-bg {
+    background-color: #F4F5F9;
+    border-radius: 10px;
+}
+
+.dash-bg-light {
+    background-color: white;
+    border-radius: 10px;
+}
+
+h3.dash-title {
+    margin-left: 0.75rem;
+    font-size: 1.15rem;
+    font-weight: bold;
+    color: #252C41;
+}
+
+.dashboard-table th {
+    font-weight: 600;
+}
+
+.table th,
+.table td {
+  border-top: hidden;
+}
+
+#kpiTable th,
+#kpiTable td {
+  border-top: hidden;
+  padding: 0.2rem;
+}

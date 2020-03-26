@@ -1725,6 +1725,18 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }   
+                    } elseif($_GET['A2']=="global_dashboard"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                global_dashboard($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }   
                     } elseif($_GET['A2']=="financing"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
