@@ -1,0 +1,174 @@
+{% macro key_dates(scope,ucs,keydates_uc) %}
+
+<h3 class="dash-title">Key Dates</h3>
+<table id="keyDatesTable" class="table dashboard-table">
+    <tr>
+        <th width="30%">Uses Cases</th>
+        <th width="16%">Start Date</th>
+        <th width="16%">Implem. End Date</th>
+        <th width="16%">End Date</th>
+        <th width="22%">Duration</th>
+    </tr>
+    {% for measID,list_ucs in scope %}
+        {% for ucID in list_ucs %}
+            <tr>
+                <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
+                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
+                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
+                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
+                <td>{{keydates_uc[ucID]['project_duration']}} months</td>
+            </tr>
+    {% endfor %}{% endfor %}
+</table>
+
+{% endmacro %}
+
+{% macro number_uc(scope,measures,ucs,volumes) %}
+
+<h3 class="dash-title">Number of service items</h3>
+
+<div hidden>
+    {% for measID,list_ucs in scope %}
+    <table>
+        <tr>
+            <td class="measureName">{{ measures[measID]['name'] }}</td>
+        </tr>
+        {% for ucID in list_ucs %}
+        <tr>
+            <td class="ucName">{{ucs[ucID]['name']}}</td>
+            <td class="ucQuantity">{{volumes[ucID]|number_format(0,'.',',')}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+<canvas id="numberOfItems" height="100px"/> 
+
+{% endmacro %}
+
+{% macro budget(baselineOpCost, netProjectCost, OBYI, years) %}
+
+<h3 class="dash-title">Budget</h3>
+<div hidden>
+    <table>
+        <tr>
+            <td>Year</td>
+            <td class="budgetLabel">Baseline Operating Cost</td>
+            <td class="budgetLabel">Net Project Cost</td>
+            <td class="budgetLabel">Operating Budget Impact</td>
+        </tr>
+        {% for year in years %}
+        <tr>
+            <td class="yearBudget">{{ year }}</td>
+            <td class="BOC">{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+            <td class="NPC">{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+            <td class="OPI">{{OBYI[year]|number_format(2, '.', ',')}}</td>
+        </tr> 
+        {% endfor %}
+    </table>
+</div>
+<canvas id="budgetGraph" height="200px"></canvas>
+
+{% endmacro %}
+
+{% macro financial_bankability(selDevSym, scope, ucs, fin_ROI, soc_ROI, fin_payback, soc_payback, risksScores, noncashScores, cashreleasing) %}
+
+<h3 class="dash-title">Financial Bankability</h3>
+    <div hidden>
+        <table>
+            <tr>
+                <th>ucName</th>
+                <th class="finBankLabel">Return per {{ selDevSym }} invested</th>
+                <th class="socBankLabel">Societal Return per {{ selDevSym }} invested</th>
+                <th class="finBankLabel">Payback /\n Project Duration</th>
+                <th class="socBankLabel">Societal Payback /\n Project Duration</th>
+                <th class="socBankLabel">Risks</th>
+                <th class="socBankLabel">Non Cash Benefits</th>
+                <th class="finBankLabel">Cash Releasing Benefits</th>
+            </tr>
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                <tr>
+                    <td>{{ ucs[ucID]['name'] }}</td>
+                    <td class="FROI">{{ fin_ROI[ucID]['score']|number_format(2, '.', ',') }}</td>
+                    <td class="SROI">{{ soc_ROI[ucID]['score']|number_format(2, '.', ',') }}</td>
+                    <td class="fin_payback">{{ fin_payback[ucID]['score']|number_format(2, '.', ',') }}</td>
+                    <td class="soc_payback">{{ soc_payback[ucID]['score']|number_format(2, '.', ',') }}</td>
+                        {% if risksScores[ucID]['score'] != -1%} <td class="risksScores">{{risksScores[ucID]['score']|number_format(2, '.', ',')}}</td>
+                        {% else %}<td class="risksScores">0</td>{% endif %}
+                        {% if noncashScores[ucID]['score'] != -1%}<td class="noncashScores">{{noncashScores[ucID]['score']|number_format(2, '.', ',')}}</td>
+                        {% else %}<td class="noncashScores">0</td>{% endif %}
+                        <td class="cashreleasingScore">{{ cashreleasing['tot']}}</td>
+                </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+    </div>
+<canvas id="financialBankabilityChart" height="200px"></canvas>
+
+{% endmacro %}
+
+{% macro societal_bankability() %}
+
+<h3 class="dash-title">Societal Bankability</h3>
+<canvas id="societalBankabilityChart" height="200px"></canvas>
+
+{% endmacro %}
+
+{% macro kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) %}
+
+<h3 class="dash-title">Key Performance Indicator</h3>
+    <table id="kpiTable" class="table dashboard-table">
+        <tr>
+            <th>Total Investment</th>
+            <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
+        </tr>
+        <tr>
+            <th>Net Present Value (NPV)</th>
+            <td>{{ selDevSym }}&nbsp; {{ npv|number_format(2,'.',',') }}</td>
+        </tr>
+        <tr>
+            <th>Societal NPV</th>
+            <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(2,'.',',') }}</td>
+        </tr>
+        <tr>
+            <th>Breakeven</th>
+            <td>{{ breakeven ? breakeven : "NA" }}</td>
+        </tr>
+        <tr>
+            <th>Societal Breakeven</th>
+            <td>{{ soc_breakeven ? soc_breakeven : "NA" }}</td>
+        </tr>
+        <tr>
+            <th>Non Cash Benefits Rating</th>
+            <td>{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
+        </tr>
+        <tr>
+            <th>Risks Rating</th>
+            <td>{{ ratingRisks != -1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}}</td>
+        </tr>
+    </table>
+
+{% endmacro %}
+
+{% macro costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) %}
+
+            <h3 class="dash-title">Cost Benefits</h3>
+                <div hidden>
+                    <table>
+                        <tr>
+                            <td>Year</td>
+                            <td class="cbLabel">Cumulated Net Cash</td>
+                            <td class="cbLabel">Cumulated Net Social Cash</td>
+                        </tr>
+                        {% for year in years %}
+                        <tr>
+                            <td class="yearCB">{{ year }}</td>
+                            <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
+                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
+                        {% endfor %}
+                    </table>
+                </div>
+                <canvas id="costbenefitsGraph"></canvas>
+
+{% endmacro %}

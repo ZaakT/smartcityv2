@@ -1325,6 +1325,7 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
                 //$projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
+                /// initilisation
                 $fin_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
                 $fin_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
                 $fin_score = array_fill_keys($selUCS,0);
@@ -1382,32 +1383,33 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
 
 
                     $fin_ROI[$ucID]["value"] = calcROI($NPV1,$NPV2);
-                    $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]);
+                    $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]); 
                     $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth)[0];
-                    $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100);
+                    $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100); 
                     $fin_score[$ucID] = calcMoyFinBankability($fin_ROI[$ucID]["score"],$fin_payback[$ucID]["score"]);
 
                     $soc_ROI[$ucID]["value"] = calcROI($SOCNPV1,$SOCNPV2);
-                    $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]);
+                    $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]); 
                     $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth)[0];
-                    $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100);
+                    $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100); 
                     $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
-                    $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]);
+                    $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]); 
                     $risk[$ucID]["value"] = getRisksRating($projID,$ucID);
-                    $risk[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]);
+                    $risk[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]); 
                     $soc_score[$ucID] = calcMoySocBankability($soc_ROI[$ucID]["score"],$soc_payback[$ucID]["score"],$noncash[$ucID]["score"],$risk[$ucID]["score"]);
                 }
 
                 $fin_data = setFinData($selUCS,$fin_ROI,$fin_payback,$fin_score);
-                $fin_data = transformForChart($fin_data);
+                $fin_data = transformForChart($fin_data); //concerts to JSON
 
                 $soc_data = setSocData($selUCS,$soc_ROI,$soc_payback,$noncash,$risk,$soc_score);
+                var_dump($soc_data);
                 $soc_data = transformForChart($soc_data);
-                //var_dump($soc_data);
+                var_dump($soc_data);
 
                 $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
     echo $twig->render('/output/dashboards_items/bankability_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'meas'=>$meas,'ucs'=>$ucs,'scope'=>$scope,'selUCS'=>$selUCS,'fin_ROI'=>$fin_ROI,'fin_payback'=>$fin_payback,'fin_score'=>$fin_score,'soc_ROI'=>$soc_ROI,'soc_payback'=>$soc_payback,'noncash'=>$noncash,'risk'=>$risk,'soc_score'=>$soc_score,'fin_data'=>$fin_data,'soc_data'=>$soc_data));
                 prereq_Dashboards();
@@ -3154,8 +3156,8 @@ function global_dashboard($twig,$is_connected,$projID=0){
             $cumulnetcashTot = $netcashTot[1]; 
             $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
             $cumulnetsoccashTot = $netsoccashTot[1]; 
+
             /////// KPI
-            
             $breakeven = $netcashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netcashPerMonth[1]), 'M/Y') : '';
             $soc_breakeven = $netsoccashPerMonth[1] ? date_format(date_create_from_format('m/Y',$netsoccashPerMonth[1]), 'M/Y') : '';
             $ratingNonCash = calcRatingNonCash($projID, $scope); 
@@ -3163,14 +3165,38 @@ function global_dashboard($twig,$is_connected,$projID=0){
             // npv
             $dr_year = getListSelDiscountRate($projID);
             $dr_month = pow(1+($dr_year/100),1/12)-1;
-            $npv = calcNPV($dr_month,$netcashPerMonth[0]); 
-            $socnpv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+            $npv1 = calcNPV($dr_month,$netcashPerMonth[0]); 
+            $socnpv1 = calcNPV($dr_month,$netsoccashPerMonth[0]);
+
+            /////// BANKABILITY
+
+            $npv2 = calcNPV($dr_month,$sum_capex_implem);
+            $fin_ROI[$ucID]["value"] = calcROI($npv1,$npv2);
+            $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]); //g
+            
+            $socnpv2 = calcNPV($dr_month,$sum_capex_implem);
+            $soc_ROI[$ucID]["value"] = calcROI($socnpv1, $socnpv2);
+            $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]); //g
+            
+            $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth)[0];
+            $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100); //g
+
+            $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth)[0];
+            $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100); //g
+
+            $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
+            $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]); 
+            $risks[$ucID]["value"] = getRisksRating($projID,$ucID);
+            $risks[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]); 
+
+            //var_dump($fin_ROI, $soc_ROI, $fin_payback, $soc_payback);
+            
 
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv,'socnpv'=>$socnpv,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores,'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot));
+            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'projectDates'=>$projectDates,'years'=>$projectYears,'netProjectCost'=>$netProjectCost,'baselineOpCost'=>$baselineOpCost,'budgetCost'=>$budgetCost,'OBYI'=>$OBYI,'CRV'=>$CRV,'capex'=>$capexTot['tot'],"netcash"=>$netcashTot[0]['tot'],"netsoccash"=>$netsoccashTot[0]['tot'],'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv1,'socnpv'=>$socnpv1,'ROI'=>$ROI,'SOCROI'=>$SOCROI,'payback'=>$payback,'socpayback'=>$socpayback,'scores'=>$scores,'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'noncashScores'=>$noncash, 'risksScores'=>$risks));
         
             prereq_Dashboards();
         } else {

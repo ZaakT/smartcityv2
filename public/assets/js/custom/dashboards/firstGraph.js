@@ -6,7 +6,7 @@ var i = 0;
 
 $('.uc').each(function() {
   id = $(this).attr('id').split("_");
-  console.log(id);
+  //console.log(id);
   //$('#start_'+id[1]).style.backgroundColor = colors[i]+"0.4)";  
   //$('#imp_'+id[1]).style.backgroundColor = colors[i]+"0.7)";
   //$('#end_'+id[1]).style.backgroundColor = colors[i]+"1)";
@@ -184,7 +184,7 @@ $('.CNSC').each(function() {
   var temp = $(this).html().replace(',','');
   CNSC.push(temp);
 });
-console.log(cbLabel,yearCB,CNC,CNSC);
+//console.log(cbLabel,yearCB,CNC,CNSC);
 
 
 new Chart(document.getElementById("costbenefitsGraph"), {
@@ -215,6 +215,127 @@ new Chart(document.getElementById("costbenefitsGraph"), {
         display: false
       }
     }
+  }
+});
+
+////////////////////  FINANCIAL BANKABILIY /////////////////////////
+
+//GET THE DATA FROM THE HIDDEN TABS
+colors = ["#55D8FE", "#FFDA83","#FF8373","#A3A0FB"];
+//         
+
+var FROI = [];
+$('.FROI').each(function() {
+  FROI.push($(this).html());
+});
+var fin_payback = [];
+$('.fin_payback').each(function() {
+  fin_payback.push($(this).html());
+});
+var cashreleasingScore = [];
+$('.cashreleasingScore').each(function() {
+  cashreleasingScore.push($(this).html());
+});
+
+//console.log(FROI, fin_payback, soc_payback, finBankLabel);
+
+finBankLabel = [['Return per '+$('#currency').html()+' invested'],['Payback /','Project Duration'],['Cash Releasing', 'Benefits']];
+
+// BUILD DATASETS
+var finBankDatasets = { 
+                        labels: finBankLabel,
+                        datasets: []
+};
+var i = 0;
+ucName.forEach((uc)=>{
+  finBankDatasets.datasets.push({
+    label: ucName[i],
+    fill: false,
+    backgroundColor: "rgba(179,181,198,0.2)",
+    borderColor: colors[i],
+    data: [FROI[i],fin_payback[i], cashreleasingScore[i]]
+  });
+  i++;
+});
+//console.log(finBankDatasets);
+
+//CHART
+new Chart($('#financialBankabilityChart'), {
+  type: 'radar',
+  data: finBankDatasets,
+  options: {
+    title: {
+      display: false
+    },
+    legend: {
+      position: "bottom"
+    },
+    plugins: {
+      datalabels: {
+        display: false
+      }
+      }
+  }
+});
+
+
+
+////////////////////  SOCIETAL BANKABILIY /////////////////////////
+
+//GET THE DATA FROM THE HIDDEN TABS
+
+var SROI = [];
+$('.SROI').each(function() {
+  SROI.push($(this).html());
+});
+var soc_payback = [];
+$('.soc_payback').each(function() {
+  soc_payback.push($(this).html());
+});
+var risksScores = [];
+$('.risksScores').each(function() {
+  risksScores.push($(this).html());
+});
+var noncashScores = [];
+$('.noncashScores').each(function() {
+  noncashScores.push($(this).html());
+});
+var socBankLabel = [['Societal Return','per '+$('#currency').html()+' invested'],['Societal Payback /','Project Duration'],'Risks',['Non Cash','Benefits']];
+
+// BUILD DATASETS
+var socBankDatasets = { 
+  labels: socBankLabel,
+  datasets: []
+};
+var i = 0;
+ucName.forEach((uc)=>{
+  socBankDatasets.datasets.push({
+    label: ucName[i],
+    fill: false,
+    backgroundColor: "rgba(179,181,198,0.2)",
+    borderColor: colors[i],
+    data: [SROI[i],soc_payback[i], risksScores[i], noncashScores[i]]
+  });
+  i++;
+});
+//console.log(socBankDatasets);
+
+//CHART
+new Chart($('#societalBankabilityChart'), {
+  type: 'radar',
+  data: socBankDatasets,
+  options: {
+    title: {
+      display: false
+    },
+    legend: {
+      display: false
+    },
+    plugins: {
+      datalabels: {
+        display: false
+      }
+      }
   }
 });
 

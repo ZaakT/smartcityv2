@@ -2,7 +2,7 @@
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/dashboards/macro_projdash.twig" as macros %}
+{% import "/templates/dashboards/macro_globaldash.twig" as macros %}
 
 {% block title %}Dashboards - Project Dashboard{% endblock %}
 
@@ -12,9 +12,9 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
+<h2 class="ml-5 mt-5" style="font-weight: 600;">Project Dashboard</h2>
 
-
-<div class="row jumbotron text-light m-5 bg-dark p-3">
+<div hidden class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
         <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
@@ -24,73 +24,20 @@
     <section class="row">
         {# SCOPE #}
         <section class="dash-bg m-3 col-5">
+            {# KEY DATES #}
             <div class="row dash-bg-light m-3 p-3">
-                <h3 class="dash-title">Key Dates</h3>
-                <table id="keyDatesTable" class="table dashboard-table">
-                    <tr>
-                        <th width="30%">Uses Cases</th>
-                        <th width="16%">Start Date</th>
-                        <th width="16%">Implem. End Date</th>
-                        <th width="16%">End Date</th>
-                        <th width="22%">Duration</th>
-                    </tr>
-                    {% for measID,list_ucs in scope %}
-                        {% for ucID in list_ucs %}
-                            <tr>
-                                <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
-                                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
-                                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
-                                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
-                                <td>{{keydates_uc[ucID]['project_duration']}} months</td>
-                            </tr>
-                    {% endfor %}{% endfor %}
-                </table>
-
+                {{ macros.key_dates(scope,ucs,keydates_uc) }}
             </div>
+            {# # OF UC #}
             <div class="row dash-bg-light m-3 p-3">
-                <h3 class="dash-title">Number of service items</h3>
-
-                <div hidden>
-                    {% for measID,list_ucs in scope %}
-                    <table>
-                        <tr>
-                            <td class="measureName">{{ measures[measID]['name'] }}</td>
-                        </tr>
-                        {% for ucID in list_ucs %}
-                        <tr>
-                            <td class="ucName">{{ucs[ucID]['name']}}</td>
-                            <td class="ucQuantity">{{volumes[ucID]|number_format(0,'.',',')}}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                    {% endfor %}
-                </div>
-             <canvas id="numberOfItems" height="100px"/>     
+                {{ macros.number_uc(scope,measures,ucs,volumes) }}
+            </div>    
         </section>
 
         {# BUGDET #}
         <section class="dash-bg m-3 col-6">
             <div class="row dash-bg-light m-3 p-3">
-                <h3 class="dash-title">Budget</h3>
-                <div hidden>
-                    <table>
-                        <tr>
-                            <td>Year</td>
-                            <td class="budgetLabel">Baseline Operating Cost</td>
-                            <td class="budgetLabel">Net Project Cost</td>
-                            <td class="budgetLabel">Operating Budget Impact</td>
-                        </tr>
-                        {% for year in years %}
-                        <tr>
-                            <td class="yearBudget">{{ year }}</td>
-                            <td class="BOC">{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
-                            <td class="NPC">{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
-                            <td class="OPI">{{OBYI[year]|number_format(2, '.', ',')}}</td>
-                        </tr> 
-                        {% endfor %}
-                    </table>
-                </div>
-                <canvas id="budgetGraph"></canvas>
+            {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
             </div>
         </section>
     </section>
@@ -99,109 +46,24 @@
     <section class="row">
         {# BANKABILITY #}
         <section class="dash-bg m-3 col-5">
-            <div class="row dash-bg-light m-3 p-3">
-            <h3 class="dash-title">Financial Bankability</h3>
-                <div>
-                    <table>
-                        <tr>
-                            <th>ucName</th>
-                            <th>Return per {{ selDevSym }} invested</th>
-                            <th>Societal Return per {{ selDevSym }} invested</th>
-                            <th>Payback/Project Duration</th>
-                            <th>Societal Payback/Project Duration</th>
-                            <th>Risks</th>
-                            <th>Non Cash Benefits</th>
-                        </tr>
-                        {% for measID,list_ucs in scope %}
-                            {% for ucID in list_ucs %}
-                            <tr>
-                                <td>{{ ucs[ucID]['name'] }}</td>
-                                <td>{{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
-                                <td>??</td>
-                                <td>{{ payback[ucID]['value']|number_format(2, '.', ',') }}%</td>
-                                <td>??</td>
-                                 {% if risk[ucID]['value'] != -1%} <td>{{risk[ucID]['value']|number_format(2, '.', ',')}}</td>
-                                 {% else %}<td>-1</td>{% endif %}
-                                 {% if noncash[ucID]['value'] != -1%}<td>{{noncash[ucID]['value']|number_format(2, '.', ',')}}</td>
-                                 {% else %}<td>-1</td>{% endif %}
-                            </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    </table>
-                </div>
-                <canvas id="financialBankabilityChart"></canvas>
+            <div class="row dash-bg-light m-3 p-1">
+                {{ macros.financial_bankability(selDevSym, scope, ucs, fin_ROI, soc_ROI, fin_payback, soc_payback, risksScores, noncashScores, cashreleasing) }}
+            </div>
+            <div class="row dash-bg-light m-3 p-1">
+                {{ macros.societal_bankability() }}
             </div>
         </section>
 
         {# CB + KPI #}
         <section class="dash-bg m-3 col-6">
-            <div class="row dash-bg-light m-3 p-3">
-            <h4 class="dash-title">Cost Benefits</h4>
-                <div hidden>
-                    <table>
-                        <tr>
-                            <td>Year</td>
-                            <td class="cbLabel">Cumulated Net Cash</td>
-                            <td class="cbLabel">Cumulated Net Social Cash</td>
-                        </tr>
-                        {% for year in years %}
-                        <tr>
-                            <td class="yearCB">{{ year }}</td>
-                            <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
-                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
-                        {% endfor %}
-                    </table>
+                <div class="row dash-bg-light m-3 p-3">
+                    {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
                 </div>
-                <canvas id="costbenefitsGraph"></canvas>
-            </div>
-            <div class="row dash-bg-light m-3 p-3">
-                <h3 class="dash-title">Key Performance Indicator</h3>
-                    <table id="kpiTable" class="table dashboard-table">
-                        <tr>
-                            <th>Total Investment</th>
-                            <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Net Present Value (NPV)</th>
-                            <td>{{ selDevSym }}&nbsp; {{ npv|number_format(2,'.',',') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Societal NPV</th>
-                            <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(2,'.',',') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Breakeven</th>
-                            <td>{{ breakeven ? breakeven : "NA" }}</td>
-                        </tr>
-                        <tr>
-                            <th>Societal Breakeven</th>
-                            <td>{{ soc_breakeven ? soc_breakeven : "NA" }}</td>
-                        </tr>
-                        <tr>
-                            <th>Non Cash Benefits Rating</th>
-                            <td>{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
-                        </tr>
-                        <tr>
-                            <th>Risks Rating</th>
-                            <td>{{ ratingRisks != -1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}}</td>
-                        </tr>
-                    </table>
-            </div>
+                <div class="row dash-bg-light m-3 p-3">
+                    {{ macros.kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) }}
+                </div>
         </section>
     </section>
 </div>
-
-{# {{ macros.project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) }}
-
-{{ macros.budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV,selDevSym) }}
-<div class="row mt-2 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="projdash2csv('budget_all_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
-    </div>
-</div>
-
-{{ macros.cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback,selDevSym) }}
-
-{{ macros.bankability(scores,selDevSym) }} #}
 
 {% endblock %}
