@@ -1,0 +1,80 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_cb.twig" as macros %}
+
+{% block title %}Dashboards - Project Dashboard{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<h2 class="ml-5 mt-5" style="font-weight: 600;">Cost Benefits</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        {# SELECTION #}
+        <div class="col-6">
+            <div class="dash-bg m-3 row">
+                {# UC #}
+                <div class="dash-bg-light m-3 p-3">
+                    <h3 class="dash-title mb-3">Use Case Selection</h3>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <div>
+                                <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
+                                        checked>
+                                <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {# ZONES #}
+                <div class="dash-bg-light m-3 p-3">
+                    <h3 class="dash-title mb-3">Zone Selection</h3>
+                    {% for idZone,zone in list_sel %}
+                        {% if zone['hasChildren'] == false %}
+                            <div>
+                                <input type="checkbox" id="select_zone_{{ idZone }}" name="select_uc_{{ idZone }}"
+                                        checked>
+                                <label for="select_uc_{{ idZone }}">
+                                {% if list_sel[zone['parent']]['parent'] != 0 %}
+                                    {{ list_sel[list_sel[zone['parent']]['parent']]['name'] }} / {% endif %}
+                                {{ list_sel[zone['parent']]['name'] }} / {{ zone['name'] }}</label>
+                            </div>
+                            {% endif %}
+                    {% endfor %}
+
+                </div>    
+            </div>
+
+            {# KEY DATES #}
+            <div class="dash-bg m-3 row">
+                    <div class="dash-bg-light m-3 p-3">
+                    {{ macros.key_dates(scope,ucs,keydates_uc) }}
+                    </div>
+            </div>
+        </div>
+    
+
+
+        <div class="col-6">
+            {#GRAPH #}
+            <div class="dash-bg m-3 row">
+                <div class="dash-bg-light m-3 p-3">
+                </div>
+            </div>
+
+            {# KPI #}
+            <div class="dash-bg m-3 row">
+                <div class="dash-bg-light m-3 p-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

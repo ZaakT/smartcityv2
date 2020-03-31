@@ -36,9 +36,11 @@
 
         {# BUGDET #}
         <section class="dash-bg m-3 col-6">
-            <div class="row dash-bg-light m-3 p-3">
-            {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
-            </div>
+            <a id="budget_all" class="dash-link" href="?A=dashboards&amp;A2=budget_all&amp;projID={{ projID }}">
+                <div class="row dash-bg-light m-3 p-3">
+                {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
+                </div>
+            </a> 
         </section>
     </section>
 
@@ -46,22 +48,26 @@
     <section class="row">
         {# BANKABILITY #}
         <section class="dash-bg m-3 col-5">
+            <a id="bankability" class="dash-link" href="?A=dashboards&amp;A2=bankability&amp;projID={{ projID }}">
             <div class="row dash-bg-light m-3 p-1">
                 {{ macros.financial_bankability(selDevSym, scope, ucs, fin_ROI, soc_ROI, fin_payback, soc_payback, risksScores, noncashScores, cashreleasing) }}
             </div>
             <div class="row dash-bg-light m-3 p-1">
                 {{ macros.societal_bankability() }}
             </div>
+            <a/>
         </section>
 
         {# CB + KPI #}
         <section class="dash-bg m-3 col-6">
+            <a id="cost_benefits_all" class="dash-link" href="?A=dashboards&amp;A2=cost_benefits_all&amp;projID={{ projID }}">
                 <div class="row dash-bg-light m-3 p-3">
                     {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
                 </div>
                 <div class="row dash-bg-light m-3 p-3">
                     {{ macros.kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) }}
                 </div>
+            </a>
         </section>
     </section>
 </div>

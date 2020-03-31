@@ -1622,7 +1622,7 @@ try{
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
                             //var_dump($projID);
-                            header('Location: ?A=dashboards&A2=cost_benefits_uc&projID='.$projID);
+                            header('Location: ?A=dashboards&A2=global_dashboard&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="cost_benefits_uc"){
                         if(isset($_GET['projID'])){
@@ -1648,6 +1648,18 @@ try{
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
                                 cost_benefits_all($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }
+                    } elseif($_GET['A2']=="cost_benefits"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                cb_output_v2($twig,$is_connected,$_GET['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');

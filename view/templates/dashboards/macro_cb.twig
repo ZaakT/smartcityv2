@@ -1,0 +1,24 @@
+{% macro key_dates(scope,ucs,keydates_uc) %}
+
+<h3 class="dash-title">Key Dates</h3>
+<table id="keyDatesTable" class="table dashboard-table">
+    <tr>
+        <th width="30%">Uses Cases</th>
+        <th width="16%">Start Date</th>
+        <th width="16%">Implem. End Date</th>
+        <th width="16%">End Date</th>
+        <th width="22%">Duration</th>
+    </tr>
+    {% for measID,list_ucs in scope %}
+        {% for ucID in list_ucs %}
+            <tr>
+                <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
+                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
+                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
+                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
+                <td>{{keydates_uc[ucID]['project_duration']}} months</td>
+            </tr>
+    {% endfor %}{% endfor %}
+</table>
+
+{% endmacro %}

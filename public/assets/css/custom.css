@@ -614,3 +614,11 @@ h3.dash-title {
 #keyDatesTable, #kpiTable {
     margin-bottom: 0rem;
 }
+
+.dash-link:hover .dash-bg-light {
+    background-color: #F9FAFC;
+}
+
+.dash-link:hover {
+    text-decoration: none;
+}
