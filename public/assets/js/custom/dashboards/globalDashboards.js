@@ -184,7 +184,7 @@ $('.CNSC').each(function() {
   var temp = $(this).html().replace(',','');
   CNSC.push(temp);
 });
-//console.log(cbLabel,yearCB,CNC,CNSC);
+console.log(cbLabel,yearCB,CNC,CNSC);
 
 
 new Chart(document.getElementById("costbenefitsGraph"), {

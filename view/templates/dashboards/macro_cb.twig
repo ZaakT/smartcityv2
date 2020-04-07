@@ -1,7 +1,7 @@
 {% macro key_dates(scope,ucs,keydates_uc) %}
 
 <h3 class="dash-title">Key Dates</h3>
-<table id="keyDatesTable" class="table dashboard-table">
+<table class="table dashboard-table">
     <tr>
         <th width="30%">Uses Cases</th>
         <th width="16%">Start Date</th>
@@ -11,14 +11,116 @@
     </tr>
     {% for measID,list_ucs in scope %}
         {% for ucID in list_ucs %}
-            <tr>
+            <tr id="keydates_{{ ucID }}">
                 <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
-                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
-                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
-                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
+                <td id="start_{{ ucID }}">{{keydates_uc[ucID][0]}}</td>
+                <td id="imp_{{ ucID }}">{{keydates_uc[ucID][1]}}</td>
+                <td id="end_{{ ucID }}">{{ keydates_uc[ucID][2] }}</td>
                 <td>{{keydates_uc[ucID]['project_duration']}} months</td>
             </tr>
     {% endfor %}{% endfor %}
 </table>
 
+{% endmacro %}
+
+{% macro kpi(selDevSym,scope,implem,capex,npv,socnpv,breakeven,soc_breakeven,noncash_rating,risks_rating) %} 
+
+<table id="kpiData" hidden>
+    <tr>
+        <th>Total Investment</th>
+        <th>Net Present Value (NPV)</th>
+        <th>Societal NPV</th>
+        <th>Breakeven</th>
+        <th>Societal Breakeven</th>
+        <th>Non Cash Benefits Rating</th>
+        <th>Risks Rating</th>
+    </tr>
+    {% for measID,list_ucs in scope %}
+        {% for ucID in list_ucs %}
+            <tr>
+                <td id="tot_invest_{{ ucID }}">{{ (implem[ucID]['tot'] + capex[ucID]['tot'])|number_format(2,'.', '') }}</td>
+                <td id="npv_{{ ucID }}">{{ npv[ucID]|number_format(2,'.','') }}</td>
+                <td id="socnpv_{{ ucID }}">{{ socnpv[ucID]|number_format(2,'.','') }}</td>
+                <td id="breakeven_{{ ucID }}">{{ breakeven[ucID][1] ? breakeven[ucID][1] : "NA" }}</td>
+                <td id="soc_breakeven_{{ ucID }}">{{ soc_breakeven[ucID][1] ? soc_breakeven[ucID][1] : "NA" }}</td>
+                <td id="noncash_rating_{{ ucID }}">{{ noncash_rating[ucID] != -1 ? (noncash_rating[ucID])|number_format(2,'.','') : "NA"}}</td>
+                <td id="risks_rating_{{ ucID }}">{{ risks_rating[ucID] != -1 ? (risks_rating[ucID])|number_format(2,'.','') : "NA"}}</td>
+            </tr>
+    {% endfor %}{% endfor %}
+</table>
+
+<h3 class="dash-title">Key Performance Indicator</h3>
+    <table id="kpiTable" class="table dashboard-table">
+        <tr>
+            <th>Total Investment</th>
+            <td id="tot_invest">{{ selDevSym }}&nbsp; - </td>
+        </tr>
+        <tr>
+            <th>Net Present Value (NPV)</th>
+            <td id="npv">{{ selDevSym }}&nbsp; -</td>
+        </tr>
+        <tr>
+            <th>Societal NPV</th>
+            <td id="socnpv">{{ selDevSym }}&nbsp; -</td>
+        </tr>
+        <tr>
+            <th>Breakeven</th>
+            <td id="breakeven"> - </td>
+        </tr>
+        <tr>
+            <th>Societal Breakeven</th>
+            <td id="socbreakeven"> - </td>
+        </tr>
+        <tr>
+            <th>Non Cash Benefits Rating</th>
+            <td id="ncbr"> - </td>
+        </tr>
+        <tr>
+            <th>Risks Rating</th>
+            <td id="rr"> - </td>
+        </tr>
+    </table>
+
+{% endmacro %}
+
+{% macro graph(scope,cumulnetcashTot,cumulnetsoccashTot,ucs,years) %} 
+                    <div hidden>
+                        <table>
+                            <tr>
+                                <td class="labels">Cumulated Net Cash</td>
+                                {% for measID,list_ucs in scope %}
+                                    {% for ucID in list_ucs %}
+                                <td>{{ ucs[ucID]['name'] }}</td>
+                                {% endfor %}{% endfor %}
+                            </tr>
+                            {% for year in years %}
+                            <tr>
+                                <td class="yearCNC">{{ year }}</td>
+                                {% for measID,list_ucs in scope %}
+                                    {% for ucID in list_ucs %}
+                                <td class="CNC_{{ ucID }}">{{ (cumulnetcashTot[ucID][year])|number_format(2,'.','') }}</td>
+                                {% endfor %}{% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <table>
+                            <tr>
+                                <td class="labels">Cumulated Net Social Cash</td>
+                                {% for measID,list_ucs in scope %}
+                                    {% for ucID in list_ucs %}
+                                <td>{{ ucs[ucID]['name'] }}</td>
+                                {% endfor %}{% endfor %}
+                            </tr>
+                            {% for year in years %}
+                            <tr>
+                                <td class="yearCNSC">{{ year }}</td>
+                                {% for measID,list_ucs in scope %}
+                                    {% for ucID in list_ucs %}
+                                <td class="CNSC_{{ ucID }}">{{ (cumulnetsoccashTot[ucID][year])|number_format(2,'.','') }}</td>
+                                {% endfor %}{% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <canvas id="cbGraph"></canvas> 
 {% endmacro %}
