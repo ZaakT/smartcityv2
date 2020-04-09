@@ -26,7 +26,7 @@
                         {% for ucID in list_ucs %}
                             <div>
                                 <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
-                                        checked="true" onclick="update_UC()">
+                                        checked="true" onclick="update()">
                                 <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
                             </div>
                         {% endfor %}
@@ -38,16 +38,16 @@
                     {% for idZone,zone in list_sel %}
                         {% if zone['hasChildren'] == false %}
                             <div>
-                                <input type="checkbox" id="select_zone_{{ idZone }}" name="select_uc_{{ idZone }}"
-                                        checked>
-                                <label for="select_uc_{{ idZone }}">
+                                <input type="checkbox" id="select_zone_{{ idZone }}" name="select_zone_{{ idZone }}"
+                                        checked="true" onclick="update()">
+                                <label for="select_zone_{{ idZone }}">
                                 {% if list_sel[zone['parent']]['parent'] != 0 %}
                                     {{ list_sel[list_sel[zone['parent']]['parent']]['name'] }} / {% endif %}
                                 {{ list_sel[zone['parent']]['name'] }} / {{ zone['name'] }}</label>
                             </div>
                             {% endif %}
                     {% endfor %}
-
+                    <span id="ratio_zones" hidden>{{ ratio_zones }}</span>
                 </div>    
             </div>
 

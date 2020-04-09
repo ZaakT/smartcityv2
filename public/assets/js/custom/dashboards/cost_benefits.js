@@ -10,10 +10,72 @@ $('.uc').each(function() {
 
 
 /////// FONCTION UPDATE
-function update_UC() {
+function update() {
 
-    keyDates();
-    update_data_table ();
+    var sumRatioZonePerUC = update_zone();
+    keyDates(sumRatioZonePerUC);
+    update_data_table (sumRatioZonePerUC);
+    kpi(sumRatioZonePerUC);
+    update_graph(sumRatioZonePerUC);
+
+
+}
+
+function kpi(sumRatioZonePerUC){
+    //KPI   => format d'affichage et changement de devise
+    // sommer
+    var totalInvestment = 0;
+    var npv = 0;
+    var socnpv = 0;
+    var breakeven = 0;
+    var socbreakeven = 0;
+    var ncbr = [0,0]; //[nb de ncbr précisé, somme des ncbr précisés]
+    var rr = [0,0];
+
+    list_uc.forEach(function(ucID) {
+        //console.log("kpi");
+        var checkBox = $('#select_uc_'+ucID);
+
+        //calculs: somme de chaque indicateurs
+        if (checkBox.prop("checked") == true) {
+            totalInvestment += ( Number($('#tot_invest_'+ucID).html()) * sumRatioZonePerUC[ucID]);
+            npv += ( Number($('#npv_'+ucID).html()) * sumRatioZonePerUC[ucID]);
+            socnpv += ( Number($('#socnpv_'+ucID).html()) * sumRatioZonePerUC[ucID]);
+            if ($('#noncash_rating_'+ucID).html() != "NA") {
+                ncbr[0]++;
+                ncbr[1] += Number($('#noncash_rating_'+ucID).html());
+            }
+            if ($('#risks_rating_'+ucID).html() != "NA") {
+                rr[0]++;
+                rr[1] += Number($('#risks_rating_'+ucID).html());
+            }
+        }
+    }); 
+    //affichage
+    var currency = $('#currency').html().replace('(','').replace(')',' ');
+    //console.log(currency);
+    $('#tot_invest').html(currency+totalInvestment.toFixed(2));
+    $('#npv').html(currency+npv.toFixed(2));
+    $('#socnpv').html(currency+socnpv.toFixed(2));
+    $('#ncbr').html(ncbr[0] > 0 ? (ncbr[1]/ncbr[0]).toFixed(2) : "NA");
+    $('#rr').html(rr[0] > 0 ? rr[1]/rr[0].toFixed(2) : "NA");    
+}
+
+function keyDates (sumRatioZonePerUC) {   //passer le id en paramètre?
+    list_uc.forEach(function(ucID) {
+    //console.log("keydates");
+    var checkBox = $('#select_uc_'+ucID);
+
+    if (checkBox.prop("checked") == true) {
+        $('#keydates_'+ucID).removeAttr('hidden');
+    } else if (checkBox.prop("checked") == false){
+        $('#keydates_'+ucID).attr('hidden','');
+    }
+    });  
+}
+
+
+function update_graph(sumRatioZonePerUC) {
 
     ////// DATA GRAPH
     var labels = [];
@@ -40,7 +102,7 @@ function update_UC() {
             });
             for(var i=0; i < CNC.length; i++)    //we sums it with the previous datas
             {
-                CNC[i] += CNCtemp[i];
+                CNC[i] += ( CNCtemp[i] * sumRatioZonePerUC[ucID]);
             }
         }
     });
@@ -60,66 +122,10 @@ function update_UC() {
             });
             for(var i=0; i < CNSC.length; i++)
             {
-                CNSC[i] += CNSCtemp[i];
+                CNSC[i] += ( CNSCtemp[i] * sumRatioZonePerUC[ucID]);
             }
         }
     });
-    update_graph(labels, yearCB, CNC, CNSC);
-
-//KPI   => format d'affichage et changement de devise
-// sommer
-var totalInvestment = 0;
-var npv = 0;
-var socnpv = 0;
-var breakeven = 0;
-var socbreakeven = 0;
-var ncbr = [0,0]; //[nb de ncbr précisé, somme des ncbr précisés]
-var rr = [0,0];
-
-list_uc.forEach(function(ucID) {
-    //console.log("kpi");
-    var checkBox = $('#select_uc_'+ucID);
-
-    //calculs: somme de chaque indicateurs
-    if (checkBox.prop("checked") == true) {
-        totalInvestment += Number($('#tot_invest_'+ucID).html());
-        npv += Number($('#npv_'+ucID).html());
-        socnpv += Number($('#socnpv_'+ucID).html());
-        if ($('#noncash_rating_'+ucID).html() != "NA") {
-            ncbr[0]++;
-            ncbr[1] += Number($('#noncash_rating_'+ucID).html());
-        }
-        if ($('#risks_rating_'+ucID).html() != "NA") {
-            rr[0]++;
-            rr[1] += Number($('#risks_rating_'+ucID).html());
-        }
-    }
-}); 
-//affichage
-var currency = $('#currency').html().replace('(','').replace(')',' ');
-//console.log(currency);
-$('#tot_invest').html(currency+totalInvestment);
-$('#npv').html(currency+npv.toFixed(2));
-$('#socnpv').html(currency+socnpv.toFixed(2));
-$('#ncbr').html(ncbr[0] > 0 ? (ncbr[1]/ncbr[0]).toFixed(2) : "NA");
-$('#rr').html(rr[0] > 0 ? rr[1]/rr[0].toFixed(2) : "NA");
-}
-
-function keyDates () {   //passer le id en paramètre?
-    list_uc.forEach(function(ucID) {
-    //console.log("keydates");
-    var checkBox = $('#select_uc_'+ucID);
-
-    if (checkBox.prop("checked") == true) {
-        $('#keydates_'+ucID).removeAttr('hidden');
-    } else if (checkBox.prop("checked") == false){
-        $('#keydates_'+ucID).attr('hidden','');
-    }
-    });  
-}
-
-
-function update_graph(labels, yearCB, CNC, CNSC) {
 
   new Chart(document.getElementById("cbGraph"), {
   type: 'line',
@@ -155,7 +161,7 @@ function update_graph(labels, yearCB, CNC, CNSC) {
 
 
 
-function update_data_table () {
+function update_data_table (sumRatioZonePerUC) {
     //calc longueur des tab = nb year + nb date + 1
     var lengthdates = $('.year').length + $('.date').length + 1;
     //console.log('lengthdates:'+lengthdates);
@@ -202,47 +208,47 @@ function update_data_table () {
         var cumulnetsoccashtemp = [];
         if (checkBox.prop("checked") == true) {  //if it's checked
             $('.capex_'+ucID).each(function() {    //we create a tab with all the data of the uc in it
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 capextemp.push(temp);
             });
             $('.implem_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 implemtemp.push(temp);
             });
             $('.invest_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 investtemp.push(temp);
             });
             $('.opex_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 opextemp.push(temp);
             });
             $('.revenues_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 revenuestemp.push(temp);
             });
             $('.cashreleasing_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 cashreleasingtemp.push(temp);
             });
             $('.widercash_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 widercashtemp.push(temp);
             });
             $('.netcash_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 netcashtemp.push(temp);
             });
             $('.cumulnetcash_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 cumulnetcashtemp.push(temp);
             });
             $('.netsoccash_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 netsoccashtemp.push(temp);
             });
             $('.cumulnetsoccash_'+ucID).each(function() {   
-                var temp = Number($(this).html());
+                var temp = Number($(this).html()) * sumRatioZonePerUC[ucID];
                 cumulnetsoccashtemp.push(temp);
             });
             for(var i=0; i < lengthdates; i++)    //we sum it with the previous datas
@@ -283,6 +289,25 @@ function update_data_table () {
     }
 
 }
+function update_zone(){
+    var ratio_zones = JSON.parse($('#ratio_zones').html());
+    var sumRatioZonePerUC = new Object();
+    list_uc.forEach(function(ucID) {
+        sumRatioZonePerUC[ucID] = 0;
+        });
+    console.log(sumRatioZonePerUC);
+    list_uc.forEach(function(ucID) {
+        //on parcout chaque zone
+        //si cochée, on somme
+        for (var idZone in ratio_zones) {
+            var checkBox = $('#select_zone_'+idZone);
+            if (checkBox.prop("checked") == true) {
+                sumRatioZonePerUC[ucID] += Number(ratio_zones[idZone][ucID]);
+            }
+        }   
+    });
+    console.log(ratio_zones, sumRatioZonePerUC);
+    return sumRatioZonePerUC;
+}
 
-
-update_UC();
+update();

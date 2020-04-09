@@ -71,6 +71,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
 
                 //ZONE SELECTION
                 $listSelZones = getListSelZones($projID);
+                //var_dump($selZones, $listSelZones);
                                 
                 foreach($listSelZones as $id => $zone) {
                     $listSelZones[$id]['hasChildren'] = false;
@@ -156,22 +157,24 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                     $cumulNetSocCash[$ucID] = calcNetSocCashTot($netsoccashPerMonth[$ucID][0],$projectYears)[1];
 
                     $list_nbUC = getNbUC($projID,$ucID);
-                    $ratioByVolume = getRatioByVolume($list_nbUC,$selZones); //ok   
+                    //var_dump($list_nbUC, $selZones);
+                    foreach($listSelZones as $id => $zone) {
+                        $ratioByVolume[$id][$ucID] = getRatioByVolume($list_nbUC,$id); //ok   
+                    }
+                    
 
                 }}
 
                 
-                
+                $ratioByVolume = json_encode($ratioByVolume);
                 //var_dump($projectDates);
+                //var_dump($ratioByVolume, $listSelZones);
                 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                
-                //echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot[$ucID],'implem'=>$implemTot[$ucID],'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
 
-
-                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth));
+                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth,'ratio_zones'=>$ratioByVolume));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");
@@ -402,7 +405,9 @@ function calcNPV($dr,$netcash){
 function getRatioByVolume($list_nbUC,$selZones){
     $nbSel = 0;
     foreach ($list_nbUC as $id_zone => $nbUC) {
-        if(in_array($id_zone,$selZones)){
+        //if(in_array($id_zone,$selZones)){
+        //if(array_key_exists($id_zone, $selZones)) {
+        if ($id_zone == $selZones) {
             //var_dump($id_zone);
             $nbSel+= $nbUC;
         }
