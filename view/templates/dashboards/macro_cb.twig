@@ -41,8 +41,8 @@
                 <td id="tot_invest_{{ ucID }}">{{ (implem[ucID]['tot'] + capex[ucID]['tot'])|number_format(2,'.', '') }}</td>
                 <td id="npv_{{ ucID }}">{{ npv[ucID]|number_format(2,'.','') }}</td>
                 <td id="socnpv_{{ ucID }}">{{ socnpv[ucID]|number_format(2,'.','') }}</td>
-                <td id="breakeven_{{ ucID }}">{{ breakeven[ucID][1] ? breakeven[ucID][1] : "NA" }}</td>
-                <td id="soc_breakeven_{{ ucID }}">{{ soc_breakeven[ucID][1] ? soc_breakeven[ucID][1] : "NA" }}</td>
+                <td id="breakeven_{{ ucID }}">{{ breakeven[ucID] ? breakeven[ucID] : "NA" }}</td>
+                <td id="soc_breakeven_{{ ucID }}">{{ soc_breakeven[ucID] ? soc_breakeven[ucID] : "NA" }}</td>
                 <td id="noncash_rating_{{ ucID }}">{{ noncash_rating[ucID] != -1 ? (noncash_rating[ucID])|number_format(2,'.','') : "NA"}}</td>
                 <td id="risks_rating_{{ ucID }}">{{ risks_rating[ucID] != -1 ? (risks_rating[ucID])|number_format(2,'.','') : "NA"}}</td>
             </tr>
@@ -123,4 +123,380 @@
                         </table>
                     </div>
                     <canvas id="cbGraph"></canvas> 
+{% endmacro %}
+
+{% macro data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth) %} 
+<div class="row text-center ">
+    <div class="col list-table cball_table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col" style="min-width: 15vw; max-width: 15vw;"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col" class="year">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1></th>
+                    {% for date in projectDates %}
+                        <th scope="col" class="date">{{date}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item"><strong>Capex</strong> (A)</td>
+                    <td id="capex_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="capex_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="capex_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Implementation</strong> (B)</td>
+                    <td id="implem_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="implem_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="implem_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Total Investment</strong> (A + B)</td>
+                    <td id="invest_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="invest_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="invest_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Opex</strong> (C)</td>
+                    <td id="opex_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="opex_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="opex_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Revenues</strong> (D)</td>
+                    <td id="revenues_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="revenues_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="revenues_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
+                    <td id="cashreleasing_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="cashreleasing_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="cashreleasing_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
+                    <td id="widercash_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="widercash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="widercash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
+                    <td id="netcash_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="netcash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="netcash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cumulated<br>Net Cash exc. WCB</strong></td>
+                    <td>-</td>  {# rappel: rien #}
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="cumnetcash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="cumnetcash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
+                    <td id="netsoccash_0">-</td>
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="netsoccash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="netsoccash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item"><strong>Cumulated<br>Net Societal Cash</strong></td>
+                    <td>-</td> {# rappel: rien #}
+                    {% set i = 1 %}
+                    {% for year in years %}
+                        <td id="cumnetsoccash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="cumnetsoccash_{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <div class="row text-center" hidden>
+     <div class="col mt-2 mx-5 list-table cball_table">
+        <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col" style="min-width: 15vw; max-width: 15vw;"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1></th>
+                    {% for date in projectDates %}
+                        <th scope="col">{{date}}</th>
+                    {% endfor %}
+
+                </tr>
+            </thead>
+            <tbody>
+                    <td class="item" rowspan=4><strong>Capex</strong> (A)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="capex_{{ ucID }}">{{(capex[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="capex_{{ ucID }}">{{(capex[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="capex_{{ ucID }}">{{(capexMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                <tr>
+                    <td class="item" rowspan=4><strong>Implementation</strong> (B)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>    
+                            <td class="implem_{{ ucID }}">{{(implem[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="implem_{{ ucID }}">{{(implem[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="implem_{{ ucID }}">{{(implemMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Total Investment</strong> (A + B)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="invest_{{ ucID }}">{{(implem[ucID]['tot'] + capex[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="invest_{{ ucID }}">{{(implem[ucID][year] + capex[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="invest_{{ ucID }}">{{(implemMonth[ucID][date] + capexTot[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Opex</strong> (C)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="opex_{{ ucID }}">{{(opex[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="opex_{{ ucID }}">{{(opex[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="opex_{{ ucID }}">{{(opexMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Revenues</strong> (D)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="revenues_{{ ucID }}">{{(revenues[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="revenues_{{ ucID }}">{{(revenues[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="revenues_{{ ucID }}">{{(revenuesMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="cashreleasing_{{ ucID }}">{{(cashreleasing[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="cashreleasing_{{ ucID }}">{{(cashreleasing[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="cashreleasing_{{ ucID }}">{{(cashreleasingMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Wider Cost Benefits</strong> (F)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="widercash_{{ ucID }}">{{(widercash[ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="widercash_{{ ucID }}">{{(widercash[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="widercash_{{ ucID }}">{{(widercashMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="netcash_{{ ucID }}">{{(netcash[ucID][0]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="netcash_{{ ucID }}">{{(netcash[ucID][0][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="netcash_{{ ucID }}">{{(netcashPerMonth[ucID][0][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Cumulated<br>Net Cash exc. WCB</strong></td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td>-</td>
+                            {% for year in years %}
+                                <td class="cumulnetcash_{{ ucID }}">{{(cumulnetcashTot[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="cumulnetcash_{{ ucID }}">{{(cumulnetcashPerMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="netsoccash_{{ ucID }}">{{(netsoccashTot[ucID][0]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="netsoccash_{{ ucID }}">{{(netsoccash[ucID][0][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="netsoccash_{{ ucID }}">{{(netsoccashPerMonth[ucID][0][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" rowspan=4><strong>Cumulated<br>Net Societal Cash</strong></td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td>-</td>
+                            {% for year in years %}
+                                <td class="cumulnetsoccash_{{ ucID }}">{{(cumulnetsoccashTot[ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% for date in projectDates %}
+                                <td class="cumulnetsoccash_{{ ucID }}">{{(cumulnetsoccashPerMonth[ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+
 {% endmacro %}

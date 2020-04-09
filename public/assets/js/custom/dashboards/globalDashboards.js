@@ -176,12 +176,12 @@ $('.yearCB').each(function() {
 });
 var CNC = [];
 $('.CNC').each(function() {
-  var temp = $(this).html().replace(',','');
+  var temp = $(this).html();
   CNC.push(temp);
 });
 var CNSC = [];
 $('.CNSC').each(function() {
-  var temp = $(this).html().replace(',','');
+  var temp = $(this).html();
   CNSC.push(temp);
 });
 console.log(cbLabel,yearCB,CNC,CNSC);

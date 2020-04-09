@@ -99,41 +99,41 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
     
                     $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
                     $capex = getTotCapexByUC($projID,$ucID);
-                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
-                    $capexTot[$ucID] = calcCapexTot($capexPerMonth,$projectYears); //ok
+                    $capexPerMonth[$ucID] = calcCapexPerMonth($implemRepart,$capex);
+                    $capexTot[$ucID] = calcCapexTot($capexPerMonth[$ucID],$projectYears); //ok
 
                     $implem = getTotImplemByUC($projID,$ucID);
-                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
-                    $implemTot[$ucID] = calcImplemTot($implemPerMonth,$projectYears); //ok
+                    $implemPerMonth[$ucID] = calcImplemPerMonth($implemRepart,$implem);
+                    $implemTot[$ucID] = calcImplemTot($implemPerMonth[$ucID],$projectYears); //ok
                     
                     $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
                     $opexValues = getOpexValues($projID,$ucID);
-                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
-                    $opexTot2[$ucID] = calcOpexTot($opexPerMonth,$projectYears); //ok
+                    $opexPerMonth[$ucID] = calcOpexPerMonth2($opexRepart,$opexValues);
+                    $opexTot2[$ucID] = calcOpexTot($opexPerMonth[$ucID],$projectYears); //ok
     
                     if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         //var_dump($revenuesRepart);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
-                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
-                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
+                        $revenuesPerMonth[$ucID] = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth[$ucID],$projectYears); //ok
                     } else {
-                        $revenuesPerMonth = array_fill_keys($projectDates,0);
-                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
+                        $revenuesPerMonth[$ucID] = array_fill_keys($projectDates,0);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth[$ucID],$projectYears); //ok
                     }
     
                     $cashreleasingValues = getCashReleasingValues($projID,$ucID);
-                    $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
-                    $cashreleasingTot2[$ucID] = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears); //ok
+                    $cashreleasingValuesMonth[$ucID] = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    $cashreleasingTot2[$ucID] = calcCashReleasingTot($cashreleasingValuesMonth[$ucID],$projectYears); //ok
                     
                     $widercashValues = getWiderCashValues($projID,$ucID);
-                    $widercashValuesMonth = calcWiderCashPerMonth2($opexRepart,$widercashValues);
-                    $widercashTot2[$ucID] = calcWiderCashTot($widercashValuesMonth,$projectYears); //ok
+                    $widercashValuesMonth[$ucID] = calcWiderCashPerMonth2($opexRepart,$widercashValues);
+                    $widercashTot2[$ucID] = calcWiderCashTot($widercashValuesMonth[$ucID],$projectYears); //ok
     
-                    $netcashPerMonth[$ucID] = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingValuesMonth); //ok
+                    $netcashPerMonth[$ucID] = calcNetCashPerMonth($projectDates,$capexPerMonth[$ucID],$implemPerMonth[$ucID],$opexPerMonth[$ucID],$revenuesPerMonth[$ucID],$cashreleasingValuesMonth[$ucID]); //ok
                     $netcashTot[$ucID] = calcNetCashTot($netcashPerMonth[$ucID][0],$projectYears); //ok
     
-                    $netsoccashPerMonth[$ucID] = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingValuesMonth,$widercashValuesMonth);
+                    $netsoccashPerMonth[$ucID] = calcNetSocCashPerMonth($projectDates,$capexPerMonth[$ucID],$implemPerMonth[$ucID],$opexPerMonth[$ucID],$revenuesPerMonth[$ucID],$cashreleasingValuesMonth[$ucID],$widercashValuesMonth[$ucID]);
                     $netsoccashTot[$ucID] = calcNetSocCashTot($netsoccashPerMonth[$ucID][0],$projectYears); //ok
     
                     $ratingNonCash[$ucID] = getNonCashRating($projID,$ucID); //ok
@@ -145,7 +145,12 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                     $socnpv[$ucID] = calcNPV($dr_month,$netsoccashPerMonth[$ucID][0]); //ok
     
                     $netcashPerMonth[$ucID][1] = $netcashPerMonth[$ucID][1] ? date_format(date_create_from_format('m/Y',$netcashPerMonth[$ucID][1]), 'M/Y') : '';
+                    $cumulnetcashPerMonth[$ucID] = $netcashPerMonth[$ucID][2];
                     $netsoccashPerMonth[$ucID][1] = $netsoccashPerMonth[$ucID][1] ? date_format(date_create_from_format('m/Y',$netsoccashPerMonth[$ucID][1]), 'M/Y') : '';
+                    $cumulnetsoccashPerMonth[$ucID] = $netsoccashPerMonth[$ucID][2];
+
+                    $breakeven[$ucID] = $netcashPerMonth[$ucID][1];
+                    $soc_breakeven[$ucID] = $netsoccashPerMonth[$ucID][1];
                     
                     $cumultNetCash[$ucID] = calcNetCashTot($netcashPerMonth[$ucID][0],$projectYears)[1];
                     $cumulNetSocCash[$ucID] = calcNetSocCashTot($netsoccashPerMonth[$ucID][0],$projectYears)[1];
@@ -157,7 +162,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
 
                 
                 
-                //var_dump($cumultNetCash, $cumulNetSocCash, $keydates_uc);
+                //var_dump($projectDates);
                 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -165,11 +170,8 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                 
                 //echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot[$ucID],'implem'=>$implemTot[$ucID],'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
 
-                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,        'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,
-                'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,
-                'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,
-                'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,
-                'breakeven'=>$netcashPerMonth,'soc_breakeven'=>$netsoccashPerMonth,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash));
+
+                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");
@@ -321,7 +323,7 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 
-                echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks));
+                echo $twig->render('/output/dashboards_items/cbuc_output.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'part2'=>"Use Case",'selected2'=>$uc['name'],'zones'=>$sortedSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot[0],'netsoccash'=>$netsoccashTot[0],'ratio_zones'=>$ratioByVolume,'keydates_uc'=>$keydates_uc,'keydates_proj'=>$keydates_proj,'breakeven'=>$netcashPerMonth[1],'soc_breakeven'=>$netsoccashPerMonth[1],'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks, 'projectDates'=>$projectDates));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");

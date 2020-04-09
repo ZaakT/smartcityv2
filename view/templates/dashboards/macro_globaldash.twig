@@ -164,8 +164,8 @@
                         {% for year in years %}
                         <tr>
                             <td class="yearCB">{{ year }}</td>
-                            <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', ',') }}</td>
-                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', ',') }}</td>
+                            <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', '') }}</td>
+                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', '') }}</td>
                         {% endfor %}
                     </table>
                 </div>
