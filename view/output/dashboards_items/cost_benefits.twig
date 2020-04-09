@@ -17,7 +17,7 @@
 <div class="container-fluid">
     <div class="row">
         {# SELECTION #}
-        <div class="col-5">
+        <div class="col-md-5">
             <div class="container-fluid dash-bg m-3 p-3 row">
                 {# UC #}
                 <div class="col-5 container-fluid dash-bg-light p-3">
@@ -82,10 +82,13 @@
     {# BIG DATA TABLE#}
         <div class="container-fluid dash-bg m-3 row">
             <div class="container-fluid dash-bg-light m-3 p-3">
+            <h3 class="dash-title">Title</h3>
                 {{ macros.data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth) }}
             </div>
         </div>
     </div>
 </div>
 
+
+<script type="text/javascript" src="../../public/assets/js/custom/dashboards/cost_benefits.js"></script>
 {% endblock %}

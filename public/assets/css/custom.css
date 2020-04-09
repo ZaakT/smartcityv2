@@ -190,15 +190,54 @@ th, td{
     font-size: smaller;
 }
 
+/*
 .cball_table {
     max-height: 80vh;
-}
+}*/
 
+.cball_table {
+    background-color: #ffffff;
+}
 .cball_table .item{
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
+.cball_table .table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: #F4F5F9;
+}
+.cball_table .table-striped tbody tr:hover {
+    background-color: #e9ecefbb;
+}
+
+
+/*
+.cball_table tbody td {
+    border : hidden;
+}
+
+
+
+
+    background-color: #ffffff;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: #495057;
+} 
+
+.cball_table thead {
+    background-color: #ffffff;    
+    border-style: solid;
+    border-color: #495057;
+}
+
+.cball_table thead th {
+    border-style: solid;
+    border-color: #495057;
+}
+*/
+
+
 
 .financial_bank .item{
     color: #495057;
@@ -622,3 +661,5 @@ h3.dash-title {
 .dash-link:hover {
     text-decoration: none;
 }
+
+
