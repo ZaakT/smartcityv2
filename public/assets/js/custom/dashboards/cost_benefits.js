@@ -96,11 +96,13 @@ list_uc.forEach(function(ucID) {
     }
 }); 
 //affichage
-$('#tot_invest').html('£ '+totalInvestment);
-$('#npv').html('£ '+npv);
-$('#socnpv').html('£ '+socnpv);
-$('#ncbr').html(ncbr[0] > 0 ? ncbr[1]/ncbr[0] : "NA");
-$('#rr').html(rr[0] > 0 ? rr[1]/rr[0] : "NA");
+var currency = $('#currency').html().replace('(','').replace(')',' ');
+//console.log(currency);
+$('#tot_invest').html(currency+totalInvestment);
+$('#npv').html(currency+npv.toFixed(2));
+$('#socnpv').html(currency+socnpv.toFixed(2));
+$('#ncbr').html(ncbr[0] > 0 ? (ncbr[1]/ncbr[0]).toFixed(2) : "NA");
+$('#rr').html(rr[0] > 0 ? rr[1]/rr[0].toFixed(2) : "NA");
 }
 
 function keyDates () {   //passer le id en paramètre?
@@ -265,19 +267,19 @@ function update_data_table () {
     });
     //console.log(cumulnetcash, netsoccash, cumulnetsoccash);
     for(var i=0; i < lengthdates; i++) {
-        $('#capex_'+i).html(capex[i]);
-        $('#implem_'+i).html(implem[i]);
-        $('#invest_'+i).html(invest[i]);
-        $('#opex_'+i).html(opex[i]);
-        $('#revenues_'+i).html(revenues[i]);
-        $('#cashreleasing_'+i).html(cashreleasing[i]);
-        $('#widercash_'+i).html(widercash[i]);
-        $('#netcash_'+i).html(netcash[i]);
-        $('#netsoccash_'+i).html(netsoccash[i]);
+        $('#capex_'+i).html(capex[i].toFixed(2));
+        $('#implem_'+i).html(implem[i].toFixed(2));
+        $('#invest_'+i).html(invest[i].toFixed(2));
+        $('#opex_'+i).html(opex[i].toFixed(2));
+        $('#revenues_'+i).html(revenues[i].toFixed(2));
+        $('#cashreleasing_'+i).html(cashreleasing[i].toFixed(2));
+        $('#widercash_'+i).html(widercash[i].toFixed(2));
+        $('#netcash_'+i).html(netcash[i].toFixed(2));
+        $('#netsoccash_'+i).html(netsoccash[i].toFixed(2));
     }
     for(var i=1; i < lengthdates; i++) {
-        $('#cumnetcash_'+i).html(cumulnetcash[i-1]);
-        $('#cumnetsoccash_'+i).html(cumulnetsoccash[i-1]);
+        $('#cumnetcash_'+i).html(cumulnetcash[i-1].toFixed(2));
+        $('#cumnetsoccash_'+i).html(cumulnetsoccash[i-1].toFixed(2));
     }
 
 }
