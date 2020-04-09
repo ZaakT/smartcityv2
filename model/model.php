@@ -4204,6 +4204,7 @@ function getAllItem3Advice($catItem){
 function getItemByNameAndCat($itemName,$catItem){ 
     //récupère tous les item d'une catégorie qui ont le nom passé en paramètre
     $db = dbConnect();
+    var_dump($itemName);
     if ($catItem == 'capex'){
         $req = $db->prepare('SELECT * FROM capex_item WHERE name = ?');
         $req->execute(array($itemName));
@@ -4235,6 +4236,7 @@ function getItemByNameAndCat($itemName,$catItem){
 
 function insertItem($item,$catItem){
     //insère un item et sa guidance dans la db
+    var_dump($item, $catItem);
     $db = dbConnect();
 
     $ret = false;
@@ -4369,16 +4371,16 @@ function insertItem($item,$catItem){
                                         )
                                         BEGIN
                                             DECLARE itemID INT;
-                                            INSERT INTO revenues_item (name,description)
-                                                VALUES (revenues_name,revenues_desc);
+                                            INSERT INTO cashreleasing_item (name,description)
+                                                VALUES (cashreleasing_name,cashreleasing_desc);
                                             SET itemID = LAST_INSERT_ID();
-                                            INSERT INTO revenues_uc (id_item,id_uc)
+                                            INSERT INTO cashreleasing_uc (id_item,id_uc)
                                                 VALUES (itemID,idUC);
-                                            INSERT INTO revenues_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                            INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
                                                 VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
                                         END
                                             ');
-                $req = $db->prepare('CALL add_revenues(?,?,?,?,?,?,?,?,?,?);');
+                $req = $db->prepare('CALL add_cashreleasing(?,?,?,?,?,?,?,?,?,?);');
                 $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
             
                 return $ret;
@@ -4400,16 +4402,16 @@ function insertItem($item,$catItem){
                                             )
                                             BEGIN
                                                 DECLARE itemID INT;
-                                                INSERT INTO revenues_item (name,description)
-                                                    VALUES (revenues_name,revenues_desc);
+                                                INSERT INTO widercash_item (name,description)
+                                                    VALUES (widercash_name,widercash_desc);
                                                 SET itemID = LAST_INSERT_ID();
-                                                INSERT INTO revenues_uc (id_item,id_uc)
+                                                INSERT INTO widercash_uc (id_item,id_uc)
                                                     VALUES (itemID,idUC);
-                                                INSERT INTO revenues_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                                INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
                                                     VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
                                             END
                                                 ');
-                    $req = $db->prepare('CALL add_revenues(?,?,?,?,?,?,?,?,?,?);');
+                    $req = $db->prepare('CALL add_widercash(?,?,?,?,?,?,?,?,?,?);');
                     $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
                 
                     return $ret;
@@ -4420,7 +4422,7 @@ function insertItem($item,$catItem){
                         $db->exec(' CREATE PROCEDURE `add_noncash`(
                                                 IN noncash_name VARCHAR(255),
                                                 IN noncash_desc VARCHAR(255),
-                                                IN idUC INT,
+                                                IN idUC INT
                                                 )
                                                 BEGIN
                                                     DECLARE itemID INT;
@@ -4428,10 +4430,9 @@ function insertItem($item,$catItem){
                                                             VALUES (noncash_name,noncash_desc);
                                                     SET itemID = LAST_INSERT_ID();
                                                     INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
-                                                    INSERT INTO noncash_item (id) VALUES (itemID);
                                                 END
                                                     ');
-                        $req = $db->prepare('CALL add_capex(?,?,?);');
+                        $req = $db->prepare('CALL add_noncash(?,?,?);');
                         $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
                     
                         return $ret;
@@ -4442,7 +4443,7 @@ function insertItem($item,$catItem){
                             $db->exec(' CREATE PROCEDURE `add_risks`(
                                                     IN risks_name VARCHAR(255),
                                                     IN risks_desc VARCHAR(255),
-                                                    IN idUC INT,
+                                                    IN idUC INT
                                                     )
                                                     BEGIN
                                                         DECLARE itemID INT;
@@ -4450,10 +4451,9 @@ function insertItem($item,$catItem){
                                                                 VALUES (risks_name,risks_desc);
                                                         SET itemID = LAST_INSERT_ID();
                                                         INSERT INTO risks_uc (id_item,id_uc) VALUES (itemID,idUC);
-                                                        INSERT INTO risks_item (id) VALUES (itemID);
                                                     END
                                                         ');
-                            $req = $db->prepare('CALL add_capex(?,?,?);');
+                            $req = $db->prepare('CALL add_risks(?,?,?);');
                             $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
                         
                             return $ret;

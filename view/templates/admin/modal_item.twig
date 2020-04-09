@@ -4,7 +4,7 @@
         <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_1&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new {{ catItemName }} item informations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -153,7 +153,7 @@
 {% macro create_item3(catItemName, UC) %} {# noncash risks #}
 <div class="modal fade" id="createNewItem3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_1&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+        <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_3&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new item informations</h5>

@@ -167,8 +167,6 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
 
                 
                 $ratioByVolume = json_encode($ratioByVolume);
-                //var_dump($projectDates);
-                //var_dump($ratioByVolume, $listSelZones);
                 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
