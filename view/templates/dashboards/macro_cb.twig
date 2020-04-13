@@ -1,7 +1,7 @@
 {% macro key_dates(scope,ucs,keydates_uc) %}
 
 <h3 class="dash-title">Key Dates</h3>
-<table class="table dashboard-table">
+<table class="dashboard-table">
     <tr>
         <th width="30%">Uses Cases</th>
         <th width="16%">Start Date</th>
@@ -122,7 +122,7 @@
                             {% endfor %}
                         </table>
                     </div>
-                    <canvas id="cbGraph"></canvas> 
+                    <canvas id="cbGraph" height="215px"></canvas> 
 {% endmacro %}
 
 {% macro data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth) %} 

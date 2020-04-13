@@ -210,35 +210,6 @@ th, td{
     background-color: #e9ecefbb;
 }
 
-
-/*
-.cball_table tbody td {
-    border : hidden;
-}
-
-
-
-
-    background-color: #ffffff;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-color: #495057;
-} 
-
-.cball_table thead {
-    background-color: #ffffff;    
-    border-style: solid;
-    border-color: #495057;
-}
-
-.cball_table thead th {
-    border-style: solid;
-    border-color: #495057;
-}
-*/
-
-
-
 .financial_bank .item{
     color: #495057;
     background-color: #e9ecef;
@@ -629,6 +600,13 @@ h3.dash-title {
 
 .dashboard-table th {
     font-weight: 600;
+
+}
+
+.dashboard-table th,
+.dashboard-table td {
+  padding: 0.2rem;
+  vertical-align: top;
 }
 
 .table th,
@@ -661,5 +639,3 @@ h3.dash-title {
 .dash-link:hover {
     text-decoration: none;
 }
-
-
