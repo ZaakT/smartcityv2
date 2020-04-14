@@ -639,3 +639,7 @@ h3.dash-title {
 .dash-link:hover {
     text-decoration: none;
 }
+
+#form_schedule h3:hover {
+    font-weight: bold;
+}

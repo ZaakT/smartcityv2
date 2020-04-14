@@ -203,6 +203,25 @@ function erase_dates(part,uc){
     checkValidity(part,uc);
 }
 
+function show_hide_tab(part) {
+    //si cette partie a comme attribut hidden
+        //retirer 
+        //changer le chevron bottom pour top
+    //sinon
+        //l'ajouter
+        //changer le chevron top pour bottom
+    var elt = $('#'+part);
+    if ( elt[0].hasAttribute("hidden") ){
+        elt.removeAttr('hidden');
+        $('#'+part+'_bottom').attr('hidden', true);
+        $('#'+part+'_top').removeAttr('hidden');
+    } else {
+        elt.attr('hidden', true);
+        $('#'+part+'_top').attr('hidden', true);
+        $('#'+part+'_bottom').removeAttr('hidden');
+    }
+}
+
 dates_saved = {};
 list_ucs = searchUCids();
 list_dates = ["startdate","25date","50date","75date","100date","enddate"];
