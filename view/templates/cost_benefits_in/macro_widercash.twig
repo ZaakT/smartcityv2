@@ -62,6 +62,55 @@
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
+                    <th scope="col" rowspan=2 >Cash Releasing Component</th>
+                    <th scope="col"></th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
+                </tr>
+                <tr>
+                    <th scope="col">Unit Indicator</th>
+                    <th scope="col">Ratio per {{compo['name']}}</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Range of<br>Volume Reduction</th>
+                    <th scope="col">Range of<br>Unit Cost Reduction</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_widercash,data in selWiderCash %}
+                {% if id_widercash in widercash_advice|keys %}
+                <tr id = "tr_{{ id_widercash }}" scope="row">
+                    <td scope="col">{{ widercash_advice[id_widercash]['name'] }}</td>
+                    <td scope="col">{{ widercash_advice[id_widercash]['unit'] != "" ? widercash_advice[id_widercash]['unit'] : "-" }}</td>
+                    <td scope="col">{{ ratio[id_widercash]['val'] >= 0 ? ratio[id_widercash]['val'] : "-"  }}</td>
+                    <td scope="col">{{ widercash_advice[id_widercash]['unit_cost'] != "" ? widercash_advice[id_widercash]['unit_cost'] : "-" }}</td>
+                    
+                    {% if widercash_advice[id_widercash]['range_max_red_nb'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ widercash_advice[id_widercash]['range_min_red_nb'] }}% - {{ widercash_advice[id_widercash]['range_max_red_nb'] }}%</td>
+                    {% endif %}
+                    
+                    {% if widercash_advice[id_widercash]['range_max_red_cost'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ widercash_advice[id_widercash]['range_min_red_cost'] }}% - {{ widercash_advice[id_widercash]['range_max_red_cost'] }}%</td>
+                    {% endif %}
+                </tr>   
+                {% endif %}      
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{#
+{% macro list_widercash_guid(selDevSym,widercash_advice,widercash_user,selWiderCash,compo,ratio) %}
+<div class="m-1 mt-5 row text-center guideline-table">
+    <div class="">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
                     <th scope="col" >Wider Cash Component</th> 
                     {% for id_widercash,data in selWiderCash %}
                         {% if id_widercash in widercash_advice|keys %}
@@ -81,7 +130,7 @@
                 {% endfor %} 
             </tr>
             <tr id="tr_2" scope="row">
-                <td scope="col" class="">Use Case</th> {# {{compo['name']}} #}  
+                <td scope="col" class="">Use Case</th> 
                 {% for id_widercash,data in selWiderCash %}
                     {% if id_widercash in widercash_advice|keys %}
                         <td scope="col">{{ ratio[id_widercash]['val'] >= 0 ? ratio[id_widercash]['val'] : "-"  }}</td>
@@ -126,7 +175,61 @@
     </div>
 </div>
 {% endmacro %}
+#}
 
+{% macro list_widercash_input(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
+<div class="row m-4 text-center">
+    <div class="col mt-2 list-table">
+        <table id="widercash_input" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" rowspan=2>Cash Releasing Component</th>
+                    <th scope="col"></th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
+
+                </tr>
+                <tr>
+                    <th scope="col">Unit Indicator</th>
+                    <th scope="col">Volume</th>
+                    <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
+                    <th scope="col">Volume Reduction</th>
+                    <th scope="col">Unit Cost Reduction</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_widercash,data in selWiderCash %}
+                <tr id = "tr_{{ id_widercash }}" scope="row">
+                    {% if id_widercash in widercash_advice|keys %}
+                    <td scope="col">{{ widercash_advice[id_widercash]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ widercash_user[id_widercash]['name'] }}</td>
+                    {% endif %}
+
+                    {% if id_widercash in widercash_advice|keys %}
+                    <td scope="col"><input id="unitIndic_{{id_widercash}}" name="unitIndic_{{id_widercash}}" class="text-center unitIndic text-secondary pt-1 pb-1" type="text" required oninput="checkWiderCashInput();" style="max-width:100%;" value="{{widercash_advice[id_widercash]['unit']}}" readonly></td>
+                    {% else %}
+                    <td scope="col"><input id="unitIndic_{{id_widercash}}" name="unitIndic_{{id_widercash}}" class="text-center unitIndic pt-1 pb-1" type="text" required oninput="checkWiderCashInput();" style="max-width:100%;" value="{{selWiderCash[id_widercash]['unit_indic']}}"></td>
+                    {% endif %}
+
+                    <td scope="col"><input id="vol_{{id_widercash}}" name="vol_{{id_widercash}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['volume']}}"></td>
+
+                    <td scope="col"><input id="unitCost_{{id_widercash}}" name="unitCost_{{id_widercash}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost']}}"></td> 
+
+                    <td scope="col"><input id="volRed_{{id_widercash}}" name="volRed_{{id_widercash}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['vol_red']}}" style="max-width:80%;"><span> %</span></td> 
+
+                    <td scope="col"><input id="unitCostRed_{{id_widercash}}" name="unitCostRed_{{id_widercash}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost_red']}}" style="max-width:80%;"><span> %</span></td> 
+
+                    
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{#
 {% macro list_widercash_input(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
@@ -202,8 +305,9 @@
     </div>
 </div>
 {% endmacro %}
+#}
 
-{#
+
 {% macro list_widercash_input_2(widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
@@ -233,8 +337,8 @@
     </div>
 </div>
 {% endmacro %}
-#}
 
+{#
 {% macro list_widercash_input_2(widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
@@ -271,8 +375,8 @@
     </div>
 </div>
 {% endmacro %}
+#}
 
-{#}
 {% macro list_widercash_total(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
 <div class="row ml-5 mr-5 pl-5 pr-5 text-center">
     <div class="col list-table">
@@ -314,8 +418,9 @@
         </table>
     </div>
 </div>
-{% endmacro %} #}
+{% endmacro %}
 
+{#
 {% macro list_widercash_total(selDevSym,widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-4 text-center">
     <div class="col list-table">
@@ -382,3 +487,4 @@
     </div>
 </div>
 {% endmacro %}
+#}
