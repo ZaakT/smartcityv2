@@ -212,14 +212,13 @@
                     <td scope="col"><input id="unitIndic_{{id_widercash}}" name="unitIndic_{{id_widercash}}" class="text-center unitIndic pt-1 pb-1" type="text" required oninput="checkWiderCashInput();" style="max-width:100%;" value="{{selWiderCash[id_widercash]['unit_indic']}}"></td>
                     {% endif %}
 
-                    <td scope="col"><input id="vol_{{id_widercash}}" name="vol_{{id_widercash}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['volume']}}"></td>
+                    <td scope="col"><input id="vol_{{id_widercash}}" name="vol_{{id_widercash}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['volume']}}" placeholder="{{ratio['id_widercash']['val'] * nb_uc}}"></td>
 
-                    <td scope="col"><input id="unitCost_{{id_widercash}}" name="unitCost_{{id_widercash}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost']}}"></td> 
+                    <td scope="col"><input id="unitCost_{{id_widercash}}" name="unitCost_{{id_widercash}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost']}}" placeholder="{{ widercash_advice['id_widercash']['unit_cost'] }}"></td> 
 
-                    <td scope="col"><input id="volRed_{{id_widercash}}" name="volRed_{{id_widercash}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['vol_red']}}" style="max-width:80%;"><span> %</span></td> 
+                    <td scope="col"><input id="volRed_{{id_widercash}}" name="volRed_{{id_widercash}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['vol_red']}}" placeholder="{{ (widercash_advice['id_widercash']['range_min_red_nb'] + widercash_advice['id_widercash']['range_max_red_nb']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
 
-                    <td scope="col"><input id="unitCostRed_{{id_widercash}}" name="unitCostRed_{{id_widercash}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost_red']}}" style="max-width:80%;"><span> %</span></td> 
-
+                    <td scope="col"><input id="unitCostRed_{{id_widercash}}" name="unitCostRed_{{id_widercash}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost_red']}}" placeholder="{{ (widercash_advice['id_widercash']['range_min_red_cost'] + widercash_advice['id_widercash']['range_max_red_cost']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
                     
                 </tr> 
             {% endfor %}

@@ -90,7 +90,7 @@
 </div>
 {% endmacro %}
 
-{% macro list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues) %}
+{% macro list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues,nb_uc) %}
 <div class="row m-2 text-center">
     <div class="col mt-2">
         <table id="revenues_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -98,6 +98,7 @@
                 <tr>
                     <th scope="col">Revenues Component</th>
                     <th scope="col">Unit Indicator</th>
+                    <th scope="col">Ratio per Use Case</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Revenues<br>( in {{selDevSym}}  per month)</th>
                 </tr>
@@ -118,8 +119,11 @@
                         <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic pt-1 pb-1" type="text" required style="max-width:100%;" value="{{selRevenues[id_revenues]['unit_indic']}}"></td>
                     {% endif %}
 
-                    <td scope="col"><input id="vol_{{id_revenues}}" name="vol_{{id_revenues}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['volume']}}"></td> 
-                    <td scope="col"><input id="rev_{{id_revenues}}" name="rev_{{id_revenues}}" class="text-center unit_rev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput();" value="{{selRevenues[id_revenues]['unit_rev']}}"></td> 
+                    <td scope="col"><input id="rat_{{id_revenues}}" name="rat_{{id_revenues}}" class="text-center ratio pt-1 pb-1" type="number" min=0 step=0.01 required oninput="checRevenuesInput(rat_{{id_revenues}});" placeholder="{{ratio[id_revenues]['val']}}"></td> 
+
+                    <td scope="col"><input id="vol_{{id_revenues}}" name="vol_{{id_revenues}}" class="text-center volume" type="number" min=0 step=1 required oninput="checkRevenuesInput(vol_{{id_revenues}});" value="{{selRevenues[id_revenues]['volume']}}" placeholder="{{ratio[id_revenues]['val'] * nb_uc}}"></td> 
+
+                    <td scope="col"><input id="rev_{{id_revenues}}" name="rev_{{id_revenues}}" class="text-center unit_rev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput(rev_{{id_revenues}});" value="{{selRevenues[id_revenues]['unit_rev']}}" placeholder="{{( revenues_advice[id_revenues]['range_min'] + opex_advice[id_opex]['range_max']) / 2 }}"></td> 
                 </tr> 
             {% endfor %}
             </tbody>

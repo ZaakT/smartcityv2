@@ -120,9 +120,9 @@
                     <td scope="col"><input id="rat_{{id_capex}}" name="rat_{{id_capex}}" class="text-center ratio pt-2 pb-2" type="number" min=0 step=1 required oninput="checkCapexInput(rat_{{id_capex}});" 
                     value="{{ selCapex[id_capex]['ratio'] ? selCapex[id_capex]['ratio'] : ratio[id_capex]['val'] }}"></td> 
 
-                    <td scope="col"><input id="vol_{{id_capex}}" name="vol_{{id_capex}}" class="text-center volume pt-2 pb-2" type="number" min=0 step=1 required oninput="checkCapexInput(vol_{{id_capex}});" value="{{ selCapex[id_capex]['volume'] ? selCapex[id_capex]['volume'] : ratio[id_capex]['val'] * nb_uc }}"></td> 
+                    <td scope="col"><input id="vol_{{id_capex}}" name="vol_{{id_capex}}" class="text-center volume pt-2 pb-2" type="number" min=0 step=1 required oninput="checkCapexInput(vol_{{id_capex}});" value="{{ selCapex[id_capex]['volume']}}" placeholder="{{ ratio[id_capex]['val'] * nb_uc }}"></td> 
 
-                    <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost pt-2 pb-2" type="number" min=0 step=0.001 required oninput="checkCapexInput(cost_{{id_capex}});" value="{{ selCapex[id_capex]['unit_cost'] ? selCapex[id_capex]['unit_cost'] : (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
+                    <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost pt-2 pb-2" type="number" min=0 step=0.001 required oninput="checkCapexInput(cost_{{id_capex}});" value="{{ selCapex[id_capex]['unit_cost'] }}" placeholder="{{ (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
 
                     <td scope="col"><input class="text-center period pt-2 pb-2" id="period_{{id_capex}}" name="period_{{id_capex}}" min=1 step=1 type="number" oninput="checkCapexInput(period_{{id_capex}});" required value="{{ selCapex[id_capex]['period']}}"></td>
                 </tr> 

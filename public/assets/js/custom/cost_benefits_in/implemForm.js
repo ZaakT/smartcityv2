@@ -110,7 +110,6 @@ function checkImplemInput(id){
             //console.log("rat_"+id[1]);
             $("#rat_"+id[1]).val(ratio);
             $("#rat_"+id[1]).each(function(){
-                checkImplemInput(this);
             });
         }
     } else if (tab.includes("unit_cost")){
@@ -149,7 +148,6 @@ function checkImplemInput(id){
             //console.log("vol_"+id[1]);
             $("#vol_"+id[1]).val(volume);
             $("#vol_"+id[1]).each(function(){
-                checkImplemInput(this);
             });
         }
     } 

@@ -177,7 +177,7 @@
 {% endmacro %}
 #}
 
-{% macro list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) %}
+{% macro list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing,nb_uc) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
         <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
@@ -212,13 +212,13 @@
                     <td scope="col"><input id="unitIndic_{{id_cashreleasing}}" name="unitIndic_{{id_cashreleasing}}" class="text-center unitIndic pt-1 pb-1" type="text" required oninput="checkCashReleasingInput();" style="max-width:100%;" value="{{selCashReleasing[id_cashreleasing]['unit_indic']}}"></td>
                     {% endif %}
 
-                    <td scope="col"><input id="vol_{{id_cashreleasing}}" name="vol_{{id_cashreleasing}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['volume']}}"></td>
+                    <td scope="col"><input id="vol_{{id_cashreleasing}}" name="vol_{{id_cashreleasing}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['volume']}}" placeholder="{{ratio['id_cashreleasing']['val'] * nb_uc}}"></td>
 
-                    <td scope="col"><input id="unitCost_{{id_cashreleasing}}" name="unitCost_{{id_cashreleasing}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost']}}"></td> 
+                    <td scope="col"><input id="unitCost_{{id_cashreleasing}}" name="unitCost_{{id_cashreleasing}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost']}}" placeholder="{{ cashreleasing_advice['id_cashreleasing']['unit_cost'] }}"></td> 
 
-                    <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}" style="max-width:80%;"><span> %</span></td> 
+                    <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}" placeholder="{{ (cashreleasing_advice['id_cashreleasing']['range_min_red_nb'] + cashreleasing_advice['id_cashreleasing']['range_max_red_nb']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
 
-                    <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}" style="max-width:80%;"><span> %</span></td> 
+                    <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}" placeholder="{{ (cashreleasing_advice['id_cashreleasing']['range_min_red_cost'] + cashreleasing_advice['id_cashreleasing']['range_max_red_cost']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
 
                     
                 </tr> 
