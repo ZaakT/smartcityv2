@@ -1445,7 +1445,7 @@ function getListCapexUser($projID,$ucID){
 
 function getListSelCapex($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,ratio,period
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,period
                             FROM input_capex
                             INNER JOIN capex_item
                                 WHERE  input_capex.id_uc = ? and id_proj = ? and id_item = capex_item.id
@@ -1458,12 +1458,11 @@ function getListSelCapex($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
-        $ratio = intval($row['ratio']);
         $period = intval($row['period']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period,'ratio'=>$ratio];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period,'ratio'=>$ratio];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period];
         }
     }
     //var_dump($list);
@@ -1566,12 +1565,11 @@ function insertCapexInputed($projID,$ucID,$list){
     $ret = false;
     $req = $db->prepare("UPDATE input_capex
                             SET volume = ?,
-                                ratio = ?,
                                 unit_cost = ?,
                                 period = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['ratio'],convertDevToGBP($data['unit_cost']),$data['period'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['period'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -1720,7 +1718,7 @@ function getListImplemUser($projID,$ucID){
 
 function getListSelImplem($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,ratio
+    $req = $db->prepare("SELECT id_item,unit_cost,volume
                             FROM input_implem
                             INNER JOIN implem_item
                                 WHERE  input_implem.id_uc = ? and id_proj = ? and id_item = implem_item.id
@@ -1733,11 +1731,10 @@ function getListSelImplem($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
-        $ratio = intval($row['ratio']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume, 'ratio'=>$ratio];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'ratio'=>$ratio];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume];
         }
     }
     //var_dump($list);
@@ -1822,11 +1819,10 @@ function insertImplemInputed($projID,$ucID,$list){
     $ret = false;
     $req = $db->prepare("UPDATE input_implem
                             SET volume = ?,
-                                ratio = ?,
                                 unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],$data['ratio'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));
     }
     return $ret;
 }

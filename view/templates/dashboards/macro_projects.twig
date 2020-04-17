@@ -22,8 +22,10 @@
                     <td>{{ proj[2] }}</td>
                     <td>{{ proj[7] }}</td>
                     <td>{{ proj[6] }}</td>
-                    <td><span title={{proj[9] ? "check" : "x"}} class="oi oi-{{proj[9] ? "check" : "x"}} text-{{proj[9] ? "success" : "danger"}}"></span></td>
-                    <td><span title={{proj[10] ? "check" : "x"}} class="oi oi-{{proj[10] ? "check" : "x"}} text-{{proj[10] ? "success" : "danger"}}"></span></td>
+                    {# <td><span title={{proj[9] ? "check" : "x"}} class="oi oi-{{proj[9] ? "check" : "x"}} text-{{proj[9] ? "success" : "danger"}}"></span></td>
+                    <td><span title={{proj[10] ? "check" : "x"}} class="oi oi-{{proj[10] ? "check" : "x"}} text-{{proj[10] ? "success" : "danger"}}"></span></td> #}
+                    <td><img width=20 height=20 id="{{ proj[9] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[9] ? "full_circle" : "empty_circle" }}.png"/></td>
+                    <td><img width=20 height=20 id="{{ proj[10] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[10] ? "full_circle" : "empty_circle" }}.png"/></td>
                 </tr>
             {% endfor %}
             </tbody>

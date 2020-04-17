@@ -197,7 +197,6 @@ list_selCapex = id_item,unit_cost,volume,period
             $list_capex_advice = getListCapexAdvice($ucID); 
                 //var_dump($list_capex_advice);
             $list_sel_capex_advice = getListSelByType($list_selCapex,$list_capex_advice);
-            //var_dump($list_sel_capex_advice);
             $list_capex_user = getListCapexUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
             $nb_compo = getNbTotalCompo($compo['id']);
