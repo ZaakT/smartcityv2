@@ -1,3 +1,15 @@
+function formatNumber(number)
+{
+    number = number.toFixed(2) + '';
+    x = number.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+    }
+    return x1 + x2;
+}
 // récupérer la liste des uc
 //   get list of uc
 //   pour chacun, vérifier si la checkbox est check
@@ -273,15 +285,15 @@ function update_data_table (sumRatioZonePerUC) {
     });
     //console.log(cumulnetcash, netsoccash, cumulnetsoccash);
     for(var i=0; i < lengthdates; i++) {
-        $('#capex_'+i).html(capex[i].toFixed(2));
-        $('#implem_'+i).html(implem[i].toFixed(2));
-        $('#invest_'+i).html(invest[i].toFixed(2));
-        $('#opex_'+i).html(opex[i].toFixed(2));
-        $('#revenues_'+i).html(revenues[i].toFixed(2));
-        $('#cashreleasing_'+i).html(cashreleasing[i].toFixed(2));
-        $('#widercash_'+i).html(widercash[i].toFixed(2));
-        $('#netcash_'+i).html(netcash[i].toFixed(2));
-        $('#netsoccash_'+i).html(netsoccash[i].toFixed(2));
+        $('#capex_'+i).html(formatNumber(capex[i]));
+        $('#implem_'+i).html(formatNumber(implem[i]));
+        $('#invest_'+i).html(formatNumber(invest[i]));
+        $('#opex_'+i).html(formatNumber(opex[i]));
+        $('#revenues_'+i).html(formatNumber(revenues[i]));
+        $('#cashreleasing_'+i).html(formatNumber(cashreleasing[i]));
+        $('#widercash_'+i).html(formatNumber(widercash[i]));
+        $('#netcash_'+i).html(formatNumber(netcash[i]));
+        $('#netsoccash_'+i).html(formatNumber(netsoccash[i]));
     }
     for(var i=1; i < lengthdates; i++) {
         $('#cumnetcash_'+i).html(cumulnetcash[i-1].toFixed(2));
@@ -308,6 +320,19 @@ function update_zone(){
     });
     console.log(ratio_zones, sumRatioZonePerUC);
     return sumRatioZonePerUC;
+}
+
+function show_hide_months(){
+    var elt = $('.month-cell');
+    if ( elt[0].hasAttribute("hidden") ){
+        elt.removeAttr('hidden');
+        $('#cb_chevron_right').attr('hidden', true);
+        $('#cb_chevron_left').removeAttr('hidden');
+    } else {
+        elt.attr('hidden', true);
+        $('#cb_chevron_left').attr('hidden', true);
+        $('#cb_chevron_right').removeAttr('hidden');
+    }
 }
 
 update();

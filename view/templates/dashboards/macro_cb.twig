@@ -13,10 +13,10 @@
         {% for ucID in list_ucs %}
             <tr id="keydates_{{ ucID }}">
                 <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
-                <td id="start_{{ ucID }}">{{keydates_uc[ucID][0]}}</td>
-                <td id="imp_{{ ucID }}">{{keydates_uc[ucID][1]}}</td>
-                <td id="end_{{ ucID }}">{{ keydates_uc[ucID][2] }}</td>
-                <td>{{keydates_uc[ucID]['project_duration']}} months</td>
+                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
+                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
+                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
+                <td>{{ keydates_uc[ucID]['project_duration'] }} months</td>
             </tr>
     {% endfor %}{% endfor %}
 </table>
@@ -51,29 +51,29 @@
 
 <h3 class="dash-title">Key Performance Indicator</h3>
     <table id="kpiTable" class="table dashboard-table">
-        <tr>
+        <tr class="kpi-border">
             <th>Total Investment</th>
             <td id="tot_invest">{{ selDevSym }}&nbsp; - </td>
         </tr>
         <tr>
-            <th>Net Present Value (NPV)</th>
-            <td id="npv">{{ selDevSym }}&nbsp; -</td>
+            <th class="kpi-border">Net Present Value (NPV)</th>
+            <td id="npv" class="kpi-border">{{ selDevSym }}&nbsp; -</td>
         </tr>
         <tr>
             <th>Societal NPV</th>
             <td id="socnpv">{{ selDevSym }}&nbsp; -</td>
         </tr>
         <tr>
-            <th>Breakeven</th>
-            <td id="breakeven"> - </td>
+            <th class="kpi-border">Breakeven</th>
+            <td id="breakeven" class="kpi-border"> - </td>
         </tr>
         <tr>
             <th>Societal Breakeven</th>
             <td id="socbreakeven"> - </td>
         </tr>
         <tr>
-            <th>Non Cash Benefits Rating</th>
-            <td id="ncbr"> - </td>
+            <th class="kpi-border">Non Cash Benefits Rating</th>
+            <td id="ncbr" class="kpi-border"> - </td>
         </tr>
         <tr>
             <th>Risks Rating</th>
@@ -125,10 +125,10 @@
                     <canvas id="cbGraph" height="215px"></canvas> 
 {% endmacro %}
 
-{% macro data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth) %} 
+{% macro data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth, selDevSym) %} 
 <div class="row text-center ">
     <div class="col list-table cball_table">
-        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+        <table id="cost_benefits_data" class='table table-lg table-bordered table-striped table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
                     <th scope="col" style="min-width: 15vw; max-width: 15vw;"></th>
@@ -136,15 +136,15 @@
                     {% for year in years %}
                         <th scope="col" class="year">{{year}}</th>
                     {% endfor %}
-                    <th rowspan=1></th>
+                    <th rowspan=1 onclick="show_hide_months()" id="click-cell"><span hidden id="cb_chevron_right" class="oi oi-chevron-right" title="Click to show per-month cost-benefits" aria-hidden="true"></span><span id="cb_chevron_left" class="oi oi-chevron-left" title="Click to hide per-month cost-benefits" aria-hidden="true"></span></th>
                     {% for date in projectDates %}
-                        <th scope="col" class="date">{{date}}</th>
+                        <th scope="col" class="date month-cell">{{date}}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="item"><strong>Capex</strong> (A)</td>
+                    <td class="item"><strong>Capex</strong> (A) in {{ selDevSym }}</td>
                     <td id="capex_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -153,12 +153,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="capex_{{ i }}">-</td>
+                        <td id="capex_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Implementation</strong> (B)</td>
+                    <td class="item"><strong>Implementation</strong> (B) in {{ selDevSym }}</td>
                     <td id="implem_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -167,12 +167,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="implem_{{ i }}">-</td>
+                        <td id="implem_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Total Investment</strong> (A + B)</td>
+                    <td class="item"><strong>Total Investment</strong> (A + B) in {{ selDevSym }}</td>
                     <td id="invest_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -181,12 +181,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="invest_{{ i }}">-</td>
+                        <td id="invest_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Opex</strong> (C)</td>
+                    <td class="item"><strong>Opex</strong> (C) in {{ selDevSym }}</td>
                     <td id="opex_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -195,12 +195,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="opex_{{ i }}">-</td>
+                        <td id="opex_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Revenues</strong> (D)</td>
+                    <td class="item"><strong>Revenues</strong> (D) in {{ selDevSym }}</td>
                     <td id="revenues_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -209,12 +209,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="revenues_{{ i }}">-</td>
+                        <td id="revenues_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Cash Releasing<br>Cost Benefits</strong> (E)</td>
+                    <td class="item"><strong>Cash Releasing Benefits</strong> (E) in {{ selDevSym }}</td>
                     <td id="cashreleasing_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -223,12 +223,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="cashreleasing_{{ i }}">-</td>
+                        <td id="cashreleasing_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Wider Cost Benefits</strong> (F)</td>
+                    <td class="item"><strong>Wider Benefits</strong> (F) in {{ selDevSym }}</td>
                     <td id="widercash_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -237,12 +237,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="widercash_{{ i }}">-</td>
+                        <td id="widercash_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Net Cash exc. WCB</strong><br>(E + D - A - B - C)</td>
+                    <td class="item"><strong>Net Cash excl. WB</strong> in {{ selDevSym }}<br>(E + D - A - B - C)</td>
                     <td id="netcash_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -251,12 +251,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="netcash_{{ i }}">-</td>
+                        <td id="netcash_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Cumulated<br>Net Cash exc. WCB</strong></td>
+                    <td class="item"><strong>Cumulated<br>Net Cash excl. WB</strong> in {{ selDevSym }}</td>
                     <td>-</td>  {# rappel: rien #}
                     {% set i = 1 %}
                     {% for year in years %}
@@ -265,12 +265,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="cumnetcash_{{ i }}">-</td>
+                        <td id="cumnetcash_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Net Societal Cash</strong><br>(F + E + D - A - B - C)</td>
+                    <td class="item"><strong>Net Societal Cash</strong> in {{ selDevSym }}<br>(F + E + D - A - B - C)</td>
                     <td id="netsoccash_0">-</td>
                     {% set i = 1 %}
                     {% for year in years %}
@@ -279,12 +279,12 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="netsoccash_{{ i }}">-</td>
+                        <td id="netsoccash_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>
                 <tr>
-                    <td class="item"><strong>Cumulated<br>Net Societal Cash</strong></td>
+                    <td class="item"><strong>Cumulated<br>Net Societal Cash</strong> in {{ selDevSym }}</td>
                     <td>-</td> {# rappel: rien #}
                     {% set i = 1 %}
                     {% for year in years %}
@@ -293,7 +293,7 @@
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
                     {% for date in projectDates %}
-                        <td id="cumnetsoccash_{{ i }}">-</td>
+                        <td id="cumnetsoccash_{{ i }}" class="month-cell">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                 </tr>

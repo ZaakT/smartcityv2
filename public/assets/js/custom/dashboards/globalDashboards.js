@@ -1,4 +1,5 @@
 var space = '                   ';
+var currency = $('#currency').html().replace('(','').replace(')',' ');
 ////////////////////  KEY DATES  /////////////////////////
 var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(255,218,131,","rgba(255,131,115,","rgba(85,216,254,","rgba(0,123,255,"];
 var id = 0;
@@ -50,6 +51,7 @@ var numberOfItems = new Chart($('#numberOfItems'), {
       ]
     },
     options: {
+      responsive:true,
       title: {
         display: true,
         text: space+measureName, //data
@@ -77,7 +79,7 @@ var numberOfItems = new Chart($('#numberOfItems'), {
       },
       plugins: {
       datalabels: {
-        display: false
+        display: true
       }
       }
     }
@@ -149,8 +151,10 @@ var budgetGraph = new Chart($('#budgetGraph'), {
       }],
       yAxes: [{
           stacked: true,
-         display: true,
-          labelString: "$"//$('#currency').html()
+          scaleLabel: {
+            display: true,
+          labelString: 'Cash (in '+currency+')'
+          }          
       }]
     },
     plugins: {
@@ -239,7 +243,7 @@ $('.cashreleasingScore').each(function() {
 
 //console.log(FROI, fin_payback, soc_payback, finBankLabel);
 
-finBankLabel = [['Return per '+$('#currency').html()+' invested'],['Payback /','Project Duration'],['Cash Releasing', 'Benefits']];
+finBankLabel = [['Return per '+currency+' invested'],['Payback /','Project Duration'],['Cash Releasing', 'Benefits']];
 
 // BUILD DATASETS
 var finBankDatasets = { 
@@ -300,7 +304,7 @@ var noncashScores = [];
 $('.noncashScores').each(function() {
   noncashScores.push($(this).html());
 });
-var socBankLabel = [['Societal Return','per '+$('#currency').html()+' invested'],['Societal Payback /','Project Duration'],'Risks',['Non Cash','Benefits']];
+var socBankLabel = [['Societal Return','per '+currency+' invested'],['Societal Payback /','Project Duration'],'Risks',['Non Cash','Benefits']];
 
 // BUILD DATASETS
 var socBankDatasets = { 

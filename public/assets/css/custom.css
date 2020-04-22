@@ -600,7 +600,6 @@ h3.dash-title {
 
 .dashboard-table th {
     font-weight: 600;
-
 }
 
 .dashboard-table th,
@@ -642,4 +641,22 @@ h3.dash-title {
 
 #form_schedule h3:hover {
     font-weight: bold;
+}
+
+.selection-list {
+    max-height: 20vh;
+    overflow-y: auto;
+}
+
+.dash-bg-light #kpiTable .kpi-border {
+    border-top: 1px solid #dee2e6;
+}
+
+#cost_benefits_data #click-cell:hover .oi {
+    transform: scale(1.5);
+}
+
+
+#cost_benefits_data td {
+    white-space: nowrap;
 }

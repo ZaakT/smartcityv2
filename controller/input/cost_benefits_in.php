@@ -604,10 +604,10 @@ function opex_input($twig,$is_connected,$projID=0,$ucID=0){
             $proj = getProjByID($projID,$user[0]);
             $uc = getUCByID($ucID);
             $list_selOpex = getListSelOpex($projID,$ucID);
-            var_dump($list_selOpex);
+            //var_dump($list_selOpex);
             $list_opex_advice = getListOpexAdvice($ucID); 
             $list_sel_opex_advice = getListSelByType($list_selOpex,$list_opex_advice);
-            var_dump($list_sel_opex_advice);
+            //var_dump($list_sel_opex_advice);
             $list_opex_user = getListOpexUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
             $nb_compo = getNbTotalCompo($compo['id']);

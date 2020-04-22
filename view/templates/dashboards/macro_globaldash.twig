@@ -16,7 +16,7 @@
                 <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
                 <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
                 <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
-                <td>{{keydates_uc[ucID]['project_duration']}} months</td>
+                <td>{{ keydates_uc[ucID]['project_duration'] }} months</td>
             </tr>
     {% endfor %}{% endfor %}
 </table>
@@ -118,30 +118,30 @@
 {% macro kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) %}
 
 <h3 class="dash-title">Key Performance Indicator</h3>
-    <table id="kpiTable" class="table dashboard-table">
+    <table id="kpiTable" class="table dashboard-table" style="border-collapse: collapse; ">
         <tr>
             <th>Total Investment</th>
             <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
         </tr>
         <tr>
-            <th>Net Present Value (NPV)</th>
-            <td>{{ selDevSym }}&nbsp; {{ npv|number_format(2,'.',',') }}</td>
+            <th class="kpi-border">Net Present Value (NPV)</th>
+            <td class="kpi-border">{{ selDevSym }}&nbsp; {{ npv|number_format(2,'.',',') }}</td>
         </tr>
         <tr>
             <th>Societal NPV</th>
             <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(2,'.',',') }}</td>
         </tr>
         <tr>
-            <th>Breakeven</th>
-            <td>{{ breakeven ? breakeven : "NA" }}</td>
+            <th class="kpi-border">Breakeven</th>
+            <td class="kpi-border">{{ breakeven ? breakeven : "NA" }}</td>
         </tr>
         <tr>
             <th>Societal Breakeven</th>
             <td>{{ soc_breakeven ? soc_breakeven : "NA" }}</td>
         </tr>
         <tr>
-            <th>Non Cash Benefits Rating</th>
-            <td>{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
+            <th class="kpi-border">Non Cash Benefits Rating</th>
+            <td class="kpi-border">{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
         </tr>
         <tr>
             <th>Risks Rating</th>
