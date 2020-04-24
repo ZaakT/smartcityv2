@@ -1668,6 +1668,18 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }
+                    }  elseif($_GET['A2']=="budget"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                budget_output($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }                    
                     } elseif($_GET['A2']=="budget_uc"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){

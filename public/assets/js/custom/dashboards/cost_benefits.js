@@ -301,6 +301,7 @@ function update_data_table (sumRatioZonePerUC) {
     }
 
 }
+
 function update_zone(){
     var ratio_zones = JSON.parse($('#ratio_zones').html());
     var sumRatioZonePerUC = new Object();

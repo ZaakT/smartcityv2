@@ -85,6 +85,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                         
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
+
                 foreach ($scope as $measID => $list_ucs) {
                     foreach ($list_ucs as $ucID) {
 
@@ -1134,6 +1135,104 @@ function add_arrays($a,$b){
     return $list;
 }
 
+//------------------------------- BUDGET DYNAMIC UC LIST -------------------------------
+
+function budget_output($twig,$is_connected,$projID,$post=[]){
+    if($projID!=0){
+        $user = getUser($_SESSION['username']);
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $scope = getListSelScope($projID);
+            $selScope = getListSelScope($projID);
+            $ucs = getListUCs();
+
+            $schedules = getListSelDates($projID);
+            $keydates_proj = getKeyDatesProj($schedules,$selScope);
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); //
+            $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+
+            foreach ($scope as $measID => $list_ucs) {
+                foreach ($list_ucs as $ucID) {
+            
+                    $implemSchedule = $schedules['implem'][$ucID];
+                    $opexSchedule = $schedules['opex'][$ucID];
+                    $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+                    //var_dump($implemRepart);
+                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+                    //var_dump($capexPerMonth);
+                    $capexTot = calcCapexTot($capexPerMonth,$projectYears);
+                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                    $implemTot[$ucID] = calcImplemTot($implemPerMonth,$projectYears); //
+                    
+                    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                    $opexValues = getOpexValues($projID,$ucID);
+                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+                    $opexTot2[$ucID] = calcOpexTot($opexPerMonth,$projectYears); //
+
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+                        $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                        //var_dump($revenuesRepart);
+                        $revenuesValues = getRevenuesValues($projID,$ucID);
+                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //
+                    } else {
+                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //
+                    }
+
+                    $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                    $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    $cashreleasingTot2 = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears);
+                    
+                    $capexAmortization[$ucID] = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears); //
+                    
+                    $baseline_crb = getBaselineCRB($projID,$ucID);
+                    $netProjectCost[$ucID] = calcNetProjectCost($projectYears,$implemTot[$ucID],$opexTot2[$ucID],$revenuesTot2[$ucID],$capexAmortization[$ucID]); //
+                    $baselineOpCost[$ucID] = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot2); //
+                    $budgetCost[$ucID] = add_arrays($netProjectCost[$ucID],$baselineOpCost[$ucID]); //
+
+                    $OB = calcOB($projectYears,$budgetCost[$ucID]);
+                    $OBYI[$ucID] = $OB[0]; //
+                    $OBCI[$ucID] = $OB[1]; //
+
+                    $CRV[$ucID] = getCRV($projectYears,$capexTot,$capexAmortization[$ucID]); //
+                }
+            }
+
+            $data = array(
+                'implem' => $implemTot,
+                'opex' => $opexTot2,
+                'revenues' => $revenuesTot2,
+                'netProjectCost' => $netProjectCost,
+                'baselineOpCost' => $baselineOpCost,
+                'budgetCost' => $budgetCost,
+                'capexAmort' => $capexAmortization,
+                'OBYI' => $OBYI,
+                'OBCI' => $OBCI,
+                'CRV' => $CRV
+            );
+            //var_dump($data);
+            $data = json_encode($data);
+
+            $devises = getListDevises();
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+
+            echo $twig->render('/output/dashboards_items/budget.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$scope, 'ucs'=>$ucs, 'years'=>$projectYears,'data'=>$data ));
+            prereq_Dashboards();
+        } else {
+            throw new Exception("This project doesn't exist !");
+        }
+    } else {
+        throw new Exception("No Project selected !");
+    }
+}
+
+
 
 // ------------------------------- BUDGET PER USE CASE -------------------------------
 
@@ -1963,7 +2062,7 @@ function financing_out_2($twig,$is_connected,$projID,$post=[]){
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                
+                 var_dump($list_selLB, $list_FS_noentity_LB);
                 echo $twig->render('/output/dashboards_items/financing_out_2.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'list_selLB'=>$list_selLB,'years'=>$years_LB,'dates'=>$datesLB[0],'list_FS_noentity_LB'=>$list_FS_noentity_LB,'FS'=>$list_FS,'cashInflow'=>$cashInflow,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'termSources'=>$termSources,'revSources'=>$revSources,'netDebtTerm'=>$netDebtTerm,'netDebtRev'=>$netDebtRev,'interestTerm'=>$interestTerm,'interestRev'=>$interestRev,'totalTerm'=>$totalTerm,'totalRev'=>$totalRev));
                 prereq_Dashboards();
             } else {

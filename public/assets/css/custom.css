@@ -179,14 +179,20 @@ th, td{
     font-weight: bold;
 }
 
-.budget_uc_table .item, .budget_all_table .item{
+.budget_uc_table .item, .budget_all_table .item, .budget_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
-    min-width: 15vw;
+    min-width: 13vw;
 }
 
-.budget_uc_table .sub_item, .budget_all_table .sub_item{
+.budget_table .thead-light th {
+    color: #495057;
+    background-color: #e9ecef;;
+    border-color: #dee2e6;
+}
+
+.budget_uc_table .sub_item, .budget_all_table .sub_item, .budget_table .sub_item{
     font-size: smaller;
 }
 
@@ -203,10 +209,10 @@ th, td{
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
-.cball_table .table-striped tbody tr:nth-of-type(2n+1) {
+.cball_table .table-striped tbody tr:nth-of-type(2n+1),.budget_table .table-striped tbody tr:nth-of-type(2n+1) {
     background-color: #F4F5F9;
 }
-.cball_table .table-striped tbody tr:hover {
+.cball_table .table-striped tbody tr:hover, .budget_table .table-striped tbody tr:hover {
     background-color: #e9ecefbb;
 }
 
@@ -644,7 +650,7 @@ h3.dash-title {
 }
 
 .selection-list {
-    max-height: 20vh;
+    max-height: 21vh;
     overflow-y: auto;
 }
 
@@ -657,6 +663,6 @@ h3.dash-title {
 }
 
 
-#cost_benefits_data td {
+#cost_benefits_data td, #budget_table td {
     white-space: nowrap;
 }
