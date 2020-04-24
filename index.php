@@ -1506,6 +1506,18 @@ try{
                         else {
                             header('Location: ?A=business_model&A2=project');
                         }
+                    } elseif($_GET['A2']=="bm"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                business_model_interactive($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=business_model&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=business_model&A2=project');
+                        }
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

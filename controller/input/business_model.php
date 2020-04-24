@@ -28,6 +28,67 @@ function project_bm($twig,$is_connected){
     echo $twig->render('/input/business_model_steps/project_bm.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects)); 
 }
 
+// ---------------------------------------- BUSINESS MODEL INTERACTIVE  ----------------------------------------
+
+function business_model_interactive($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+
+            $selBM = getSelBM($projID);
+
+            $listInvestCap = getListInvestCap();
+            $listPaybackConst = getListPaybackConst();
+            $listBusinessModelPref = getListBusinessModelPref();
+            $listBMBank = getListBMBank();
+            $listBMSocBank = getListBMSocBank();
+            $listBMReco = getListBMReco();
+
+            $id_investcap = $selBM['id_investcap'];
+            $id_payconst = $selBM['id_payconst'];
+            $id_bmpref = $selBM['id_bmpref'];
+
+            $BM_infos = ['invest_cap'=>$listInvestCap[$id_investcap]['description'],'payback_const'=>$listPaybackConst[$id_payconst]['description'],'bm_pref'=>$listBusinessModelPref[$id_bmpref]['description']];
+
+            $reco = getBMReco($id_investcap,$id_payconst,$id_bmpref);
+
+            $id_bm = $reco[1];
+            
+            $calcBank = calcBank($projID);
+            
+            $bank = getBMBank($calcBank[0]);
+            
+            $soc_bank = getBMSocBank($calcBank[1]);
+            
+            $proj_qualif = ['invest_cap'=>$listInvestCap[$id_investcap]['description'],'proj_bank'=>$listBMBank[$bank],'soc_bm'=>$listBMSocBank[$soc_bank]];
+
+            $funding_opt = getFundingOpt($id_bm,$id_investcap,$bank,$soc_bank);
+            /* $funding_opt = ['City'=>0,'Grants'=>0,'Equity investors'=>0,'Impact Investors'=>0,'Bank Debt'=>0,'Green Debt'=>0,'Suppliers'=>0,'Alternative'=>0]; */
+            //var_dump($proj_qualif);
+
+
+            $infosJSON = json_encode(['invest_cap'=>$listInvestCap, 'payback_const'=>$listPaybackConst, 'bm_pref'=>$listBusinessModelPref]);
+
+
+
+            var_dump($listInvestCap, $listPaybackConst, $listBusinessModelPref);
+
+
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/business_model_steps/bm.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'investCap'=>$listInvestCap,'paybackConst'=>$listPaybackConst,'businessModelPref'=>$listBusinessModelPref, 'BM_infos'=>$BM_infos,'reco'=>$reco,'proj_qualif'=>$proj_qualif,'listBMReco'=>$listBMReco,'funding_opt'=>$funding_opt, 'bm_infos_json'=>$infosJSON));
+            prereq_BusinessModel();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=business_model&A2=project');
+    }
+}
+
 // ---------------------------------------- PREFERENCES ----------------------------------------
 
 
@@ -108,7 +169,9 @@ function reco($twig,$is_connected,$projID=0){
             $id_bm = $reco[1];
             
             $calcBank = calcBank($projID);
+            
             $bank = getBMBank($calcBank[0]);
+            var_dump($calcBank, $bank);
             $soc_bank = getBMSocBank($calcBank[1]);
             
             $proj_qualif = ['invest_cap'=>$listInvestCap[$id_investcap]['description'],'proj_bank'=>$listBMBank[$bank],'soc_bm'=>$listBMSocBank[$soc_bank]];

@@ -1,0 +1,120 @@
+{% extends '/input/business_model.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/business_model/macro_reco.twig" as macros %}
+{% import "/templates/business_model/macro_pref.twig" as selection %}
+
+{% block title %}Business Model - Recommendations{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("business_model",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<form name="form_bm_pref" id="form_bm_pref" action="?A=business_model&amp;A2=pref_selected" method='post'>
+
+
+<div class="container-fluid">
+    <div class="row">
+        {# SELECTION #}
+        <div class="col-3">
+            <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
+                {# UC #}
+                
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        <h4 class="text-dark col text-center">Investment Capactity</h4>
+                        <div class="row mt-3 mb-5 text-center">
+                            <div class="col">
+                                <select name="invest_cap" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required>
+                                {% for id,item in investCap %}
+                                    <option value={{id}} onclick="update_infos('invest_cap',{{id}});">{{selDevSym}}&nbsp; {{item['name']}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
+                        <h4 class="text-dark col text-center">Payback Constraints</h4>
+                        {{ selection.sel_const(paybackConst) }}                        
+                    </div>
+                    <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
+                        <h4 class="text-dark col text-center">Business Model Preference</h4>
+                        {{ selection.sel_bm_pref(businessModelPref) }}
+                    </div>
+              
+            </div>
+        </div>
+        <div class="col-4">
+            {# TABLE #}
+
+            <div class="row jumbotron text-light bg-secondary mx-3 pt-2 pb-0">
+                <div class="col text-center">
+                    <p>This provides you with a recommendation on the best fit business model according to your project constraints &amp features.</p>
+                </div>
+            </div>           
+
+            <span id="bm_infos_json" hidden>{{ bm_infos_json }}</span>
+
+<div class="col list-table infos_table">
+    <table id="infos_table" class='table table-lg table-bordered table-responsive-lg'>
+        <thead class="thead-light text-center">
+            <tr>
+                <th colspan=2 class="text-uppercase">project constraints &amp; features</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="item">Investment Capacity</td>
+                <td id="invest_cap" class="text-primary bg-light res">{{BM_infos['invest_cap']}}</td>
+            </tr>
+            <tr>
+                <td class="item">Payback</td>
+                <td id="payback_const" class="text-primary bg-light res">{{BM_infos['payback_const']}}</td>
+            </tr>
+            <tr>
+                <td class="item">Business Model</td>
+                <td id="bm_pref" class="text-primary bg-light res">{{BM_infos['bm_pref']}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+            {{ macros.list_reco(reco,listBMReco) }}
+            
+    <div class="row text-center text-dark">
+        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
+    </div>
+
+        </div>
+        <div class="col-4">
+            {# TABLE #}
+
+            <div class="row jumbotron text-light bg-secondary mx-3 pt-2 pb-0">
+                <div class="col text-center">
+                    <p>This provides you with a recommendation on most relevant financing options.</p>
+                </div>
+            </div>
+            {{ macros.list_proj_qualif(proj_qualif) }}
+            {{ macros.list_funding_opt(funding_opt,listFundingOpt) }}
+
+        </div>
+    </div>    
+</div>
+
+
+</form>
+
+
+
+
+{# <div class="row m-5 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=business_model&amp;A2=reco2&amp;projID={{projID}}');"></button>
+</div> #}
+{% endblock %}
