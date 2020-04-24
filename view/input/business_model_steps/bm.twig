@@ -27,27 +27,44 @@
         {# SELECTION #}
         <div class="col-3">
             <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
-                {# UC #}
-                
+                    {# INVESTMENT CAPACITY #}
                     <div class="container-fluid dash-bg-light p-3 m-3">
                         <h4 class="text-dark col text-center">Investment Capactity</h4>
                         <div class="row mt-3 mb-5 text-center">
                             <div class="col">
-                                <select name="invest_cap" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required>
+                                <select id="select_invest_cap" name="invest_cap" class="selectpicker" data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('invest_cap');">
                                 {% for id,item in investCap %}
-                                    <option value={{id}} onclick="update_infos('invest_cap',{{id}});">{{selDevSym}}&nbsp; {{item['name']}}</option>
+                                    <option value={{id}}>{{selDevSym}}&nbsp; {{item['name']}}</option>
                                 {% endfor %}
                                 </select>
                             </div>
                         </div>
                     </div>
+                    {# PAYBACK CONSTRAINTS #}
                     <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
                         <h4 class="text-dark col text-center">Payback Constraints</h4>
-                        {{ selection.sel_const(paybackConst) }}                        
+                        <div class="row mt-3 mb-5 text-center">
+                            <div class="col">
+                                <select id="select_payback_const" name="payback_const" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('payback_const');">
+                                {% for id,item in paybackConst %}
+                                    <option value={{id}}>{{item['name']}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>                       
                     </div>
+                    {# BM PREFERENCE #}                    
                     <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
                         <h4 class="text-dark col text-center">Business Model Preference</h4>
-                        {{ selection.sel_bm_pref(businessModelPref) }}
+                        <div class="row mt-3 mb-5 text-center">
+                            <div class="col">
+                                <select id="select_bm_pref" name="bm_pref" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('bm_pref');">
+                                {% for id,item in businessModelPref %}
+                                    <option value={{id}}>{{item['name']}}</option>
+                                {% endfor %}
+                                </select>
+                            </div>
+                        </div>
                     </div>
               
             </div>
@@ -73,15 +90,15 @@
         <tbody>
             <tr>
                 <td class="item">Investment Capacity</td>
-                <td id="invest_cap" class="text-primary bg-light res">{{BM_infos['invest_cap']}}</td>
+                <td id="invest_cap" class="text-primary bg-light res">-</td>
             </tr>
             <tr>
                 <td class="item">Payback</td>
-                <td id="payback_const" class="text-primary bg-light res">{{BM_infos['payback_const']}}</td>
+                <td id="payback_const" class="text-primary bg-light res">-</td>
             </tr>
             <tr>
                 <td class="item">Business Model</td>
-                <td id="bm_pref" class="text-primary bg-light res">{{BM_infos['bm_pref']}}</td>
+                <td id="bm_pref" class="text-primary bg-light res">-</td>
             </tr>
         </tbody>
     </table>
@@ -101,7 +118,26 @@
                     <p>This provides you with a recommendation on most relevant financing options.</p>
                 </div>
             </div>
-            {{ macros.list_proj_qualif(proj_qualif) }}
+
+            <div class="col list-table proj_qualif_table">
+                <table id="proj_qualif_table" class='table table-lg table-bordered table-responsive-lg'>
+                    <thead class="thead-light text-center">
+                        <tr>
+                            <th colspan=2 class="text-uppercase">Project Qualifications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="item">Project Bankability</td>
+                            <td class="text-primary bg-light res">{{proj_qualif['proj_bank']['description']}}</td>
+                        </tr>
+                        <tr>
+                            <td class="item">Societal Business Model</td>
+                            <td class="text-primary bg-light res">{{proj_qualif['soc_bm']['description']}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             {{ macros.list_funding_opt(funding_opt,listFundingOpt) }}
 
         </div>

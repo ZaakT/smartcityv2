@@ -8,11 +8,15 @@ console.log(bm_infos);
 //  function update_infos(item,value)
 //    va chercher la valeur correspondate et l'affiche dans le tableau et dans investment capacity qualif si item = invest cap
 
-function update_infos(item, value){
-    console.log('ok');
+function update_infos(item){
+    var value = $('#select_'+item).val();
     var text = bm_infos[item][value]['description'];
     $('#'+item).html(text);
+    
+    //project qualif si invest cap!!
 }
+
+
 
 //  function updaye_bm_reco()
 //     récupère les valeurs des trois items input
