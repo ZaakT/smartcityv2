@@ -426,9 +426,9 @@ th, td{
 }
 
 .reco_table .item{
-    color: #495057;
+    /* color: #495057;
     background-color: #e9ecef;
-    border-color: #dee2e6;
+    border-color: #dee2e6; */
     font-weight: bold;
 }
 
@@ -439,9 +439,9 @@ th, td{
 }
 
 .infos_table .item{
-    color: #495057;
+    /* color: #495057;
     background-color: #e9ecef;
-    border-color: #dee2e6;
+    border-color: #dee2e6; */
     font-weight: bold;
 }
 
@@ -451,10 +451,14 @@ th, td{
     text-transform: uppercase;
 }
 
+.infos_table th, .proj_qualif_table th, .reco_table th, .funding_opt_table th, #reco_bestfit, #reco_second, #reco_notreco {
+    border-radius: 7px;
+}
+
 .proj_qualif_table .item{
-    color: #495057;
+    /* color: #495057;
     background-color: #e9ecef;
-    border-color: #dee2e6;
+    border-color: #dee2e6; */
     font-weight: bold;
 }
 
@@ -465,9 +469,9 @@ th, td{
 }
 
 .funding_opt_table .item{
-    color: #495057;
+    /* color: #495057;
     background-color: #e9ecef;
-    border-color: #dee2e6;
+    border-color: #dee2e6; */
     font-weight: bold;
 }
 

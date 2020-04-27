@@ -1478,7 +1478,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=business_model&A2=pref&projID='.$projID);
+                            header('Location: ?A=business_model&A2=bm&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="pref"){
                         if(isset($_GET['projID'])){

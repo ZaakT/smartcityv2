@@ -2,8 +2,7 @@
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/business_model/macro_reco.twig" as macros %}
-{% import "/templates/business_model/macro_pref.twig" as selection %}
+{% import "/templates/business_model/macro_bm.twig" as macros %}
 
 {% block title %}Business Model - Recommendations{% endblock %}
 
@@ -13,141 +12,84 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
-<div class="row jumbotron text-light m-5 bg-dark p-3">
-    <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
-    </div>
-</div>
+<h2 class="m-4 ml-5">Business Model Recommendations</h2>
 
 <form name="form_bm_pref" id="form_bm_pref" action="?A=business_model&amp;A2=pref_selected" method='post'>
 
+    <div class="container-fluid">
+        <div class="row">
+            {# SELECTION #}
+            <div class="col-3">
+                <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
 
-<div class="container-fluid">
-    <div class="row">
-        {# SELECTION #}
-        <div class="col-3">
-            <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
+                    <span id="db_sel_bm" hidden>{{ db_sel_bm }}</span>
+
                     {# INVESTMENT CAPACITY #}
                     <div class="container-fluid dash-bg-light p-3 m-3">
                         <h4 class="text-dark col text-center">Investment Capactity</h4>
-                        <div class="row mt-3 mb-5 text-center">
-                            <div class="col">
-                                <select id="select_invest_cap" name="invest_cap" class="selectpicker" data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('invest_cap');">
-                                {% for id,item in investCap %}
-                                    <option value={{id}}>{{selDevSym}}&nbsp; {{item['name']}}</option>
-                                {% endfor %}
-                                </select>
-                            </div>
-                        </div>
+                        {{ macros.selectpicker(investCap, 'invest_cap', selDevSym) }}
                     </div>
+
                     {# PAYBACK CONSTRAINTS #}
-                    <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
+                    <div class="container-fluid dash-bg-light p-3 m-3">
                         <h4 class="text-dark col text-center">Payback Constraints</h4>
-                        <div class="row mt-3 mb-5 text-center">
-                            <div class="col">
-                                <select id="select_payback_const" name="payback_const" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('payback_const');">
-                                {% for id,item in paybackConst %}
-                                    <option value={{id}}>{{item['name']}}</option>
-                                {% endfor %}
-                                </select>
-                            </div>
-                        </div>                       
+                        {{ macros.selectpicker(paybackConst, 'payback_const', '') }}
                     </div>
-                    {# BM PREFERENCE #}                    
-                    <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
-                        <h4 class="text-dark col text-center">Business Model Preference</h4>
-                        <div class="row mt-3 mb-5 text-center">
-                            <div class="col">
-                                <select id="select_bm_pref" name="bm_pref" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('bm_pref');">
-                                {% for id,item in businessModelPref %}
-                                    <option value={{id}}>{{item['name']}}</option>
-                                {% endfor %}
-                                </select>
-                            </div>
+
+                    {# BM PREFERENCE #}  
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        <h4 class="text-dark col text-center">Business Model Preference</h4>                  
+                        {{ macros.selectpicker(businessModelPref, 'bm_pref', '') }}
+                    </div>
+
+                    <button class="btn btn-link offset-5 col-2 oi oi-circle-check next-button mt-5 b-3" title="circle-check" style="font-size:50px;" aria-hidden="true" onclick=""></button>
+                
+                </div>
+            </div>
+
+            {# 2E COLONNE #}
+            <div class="col-4">                
+                <div class="container-fluid dash-bg m-1 ml-3 p-3 row">  
+
+                    <div class="row jumbotron text-light bg-secondary mb-2 mx-3 pt-2 pb-0">
+                        <div class="col text-center">
+                            <p>This provides you with a recommendation on the best fit business model according to your project constraints &amp features.</p>
+                        </div>
+                    </div>                 
+        
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        {{ macros.list_infos(bm_infos_json) }}
+                    </div>
+
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        {{ macros.list_reco(bm_reco_json, bm_reco_names) }}
+                    </div>
+                </div>
+            </div>
+
+            {# 3E COLONNE #}
+            <div class="col-5">
+                <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
+
+                    <div class="row jumbotron text-light bg-secondary mx-3 mb-2 pt-2 pb-0">
+                        <div class="col text-center">
+                            <p>This provides you with a recommendation on most relevant financing options.</p>
                         </div>
                     </div>
-              
-            </div>
-        </div>
-        <div class="col-4">
-            {# TABLE #}
 
-            <div class="row jumbotron text-light bg-secondary mx-3 pt-2 pb-0">
-                <div class="col text-center">
-                    <p>This provides you with a recommendation on the best fit business model according to your project constraints &amp features.</p>
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        {{ macros.list_qualif(proj_qualif) }}
+                    </div>
+                    
+                    <div class="container-fluid dash-bg-light p-3 m-3">
+                        {{ macros.list_share_funding_options(funding_opt,funding_options_json)}}
+                    </div>
                 </div>
-            </div>           
-
-            <span id="bm_infos_json" hidden>{{ bm_infos_json }}</span>
-
-<div class="col list-table infos_table">
-    <table id="infos_table" class='table table-lg table-bordered table-responsive-lg'>
-        <thead class="thead-light text-center">
-            <tr>
-                <th colspan=2 class="text-uppercase">project constraints &amp; features</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="item">Investment Capacity</td>
-                <td id="invest_cap" class="text-primary bg-light res">-</td>
-            </tr>
-            <tr>
-                <td class="item">Payback</td>
-                <td id="payback_const" class="text-primary bg-light res">-</td>
-            </tr>
-            <tr>
-                <td class="item">Business Model</td>
-                <td id="bm_pref" class="text-primary bg-light res">-</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-            {{ macros.list_reco(reco,listBMReco) }}
-            
-    <div class="row text-center text-dark">
-        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
+            </div>
+        </div>    
     </div>
 
-        </div>
-        <div class="col-4">
-            {# TABLE #}
-
-            <div class="row jumbotron text-light bg-secondary mx-3 pt-2 pb-0">
-                <div class="col text-center">
-                    <p>This provides you with a recommendation on most relevant financing options.</p>
-                </div>
-            </div>
-
-            <div class="col list-table proj_qualif_table">
-                <table id="proj_qualif_table" class='table table-lg table-bordered table-responsive-lg'>
-                    <thead class="thead-light text-center">
-                        <tr>
-                            <th colspan=2 class="text-uppercase">Project Qualifications</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="item">Project Bankability</td>
-                            <td class="text-primary bg-light res">{{proj_qualif['proj_bank']['description']}}</td>
-                        </tr>
-                        <tr>
-                            <td class="item">Societal Business Model</td>
-                            <td class="text-primary bg-light res">{{proj_qualif['soc_bm']['description']}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            {{ macros.list_funding_opt(funding_opt,listFundingOpt) }}
-
-        </div>
-    </div>    
-</div>
-
-
 </form>
-
-
 
 
 {# <div class="row m-5 text-center text-dark">

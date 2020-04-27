@@ -1,0 +1,112 @@
+{% macro selectpicker(list, name, selDevSym)%}
+<div class="row mt-3 mb-5 text-center">
+    <div class="col">
+        <select id="select_{{name}}" name="{{name}}" class="selectpicker" data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('{{name}}');">
+        {% for id,item in list %}
+            <option value={{id}}>{{selDevSym ? selDevSym : ''}}&nbsp;{{item['name']}}</option>
+        {% endfor %}
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_infos(bm_infos_json) %}
+<span id="bm_infos_json" hidden>{{ bm_infos_json }}</span>
+
+<div class="col list-table infos_table">
+    <table id="infos_table" class='table '>
+        <thead class="thead-light text-center">
+            <tr>
+                <th colspan=2 class="text-uppercase">project constraints &amp; features</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="item">Investment Capacity</td>
+                <td id="invest_cap" class="text-primary res">-</td>
+            </tr>
+            <tr>
+                <td class="item">Payback</td>
+                <td id="payback_const" class="text-primary res">-</td>
+            </tr>
+            <tr>
+                <td class="item">Business Model</td>
+                <td id="bm_pref" class="text-primary res">-</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
+
+{% macro list_reco(bm_reco_json, bm_reco_names) %}
+<span id="bm_reco_json" hidden>{{ bm_reco_json }}</span>
+<span id="bm_reco_names" hidden>{{ bm_reco_names }}</span>
+
+
+<div class="col list-table reco_table">
+    <table id="reco_table" class='table table-lg table-responsive-lg'>
+        <thead class="thead-light text-center">
+            <tr>
+                <th colspan=2 class="text-uppercase">Business Model Recommendations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="item">Best Fit</td>
+                <td id="reco_bestfit" class="bg-success res">-</td>
+            </tr>
+            <tr>
+                <td class="item">Second Choice</td>
+                <td id="reco_second" class="bg-warning res">-</td>
+            </tr>
+            <tr>
+                <td class="item">Not Recommanded</td>
+                <td id="reco_notreco" class="bg-danger res">-</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
+
+{% macro list_qualif(proj_qualif) %}
+<div class="col list-table proj_qualif_table">
+    <table id="proj_qualif_table" class='table table-lg  table-responsive-lg'>
+        <thead class="thead-light text-center">
+            <tr>
+                <th colspan=2 class="text-uppercase">Project Qualifications</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="item">Project Bankability</td>
+                <td class="text-primary bg-light res">{{proj_qualif['proj_bank']['description']}}</td>
+            </tr>
+            <tr>
+                <td class="item">Societal Business Model</td>
+                <td class="text-primary bg-light res">{{proj_qualif['soc_bm']['description']}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
+
+{% macro list_share_funding_options(funding_opt,funding_options_json) %}
+<span id="funding_options_json" hidden>{{ funding_options_json }}</span>
+<div class="col list-table funding_opt_table">
+    <table id="funding_opt_table" class='table table-lg table-responsive-lg'>
+        <thead class="thead-light text-center">
+            <tr>
+                <th colspan=2 class="text-uppercase">Proposed share of funding options </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item,value in funding_opt %}
+            <tr>
+                <td class="item">{{item}}</td>
+                <td id="FO_{{ item|replace({' ': _}) }}" class="font-weight-bold text-center text-dark">-</td>                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
