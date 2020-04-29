@@ -2025,6 +2025,211 @@ function financing_out($twig,$is_connected,$projID=0){
         header('Location: ?A=dashboards&A2=project_out');
     }
 }
+function financing_out2($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $listScen = getListScenariosByProj($projID);
+
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/output/dashboards_items/financing_out2.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'listScen'=>$listScen));
+            prereq_Dashboards();
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=dashboards&A2=project_out');
+    }
+}
+
+function financing_general($twig,$is_connected,$projID,$post=[]){
+    if($post and isset($post['scenario'])){
+        if($projID!=0){
+            $user = getUser($_SESSION['username']);
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                $scenID = intval($post['scenario']);
+                $scen = getScenByID($scenID);
+                $list_FS = getListFundingSources();
+                $list_selFS = getListSelFS($scenID);
+                $list_selLB = getListLoansAndBonds($scenID);
+                $list_selOthers = getListOthers($scenID);
+                $list_selEntities = getEntities($list_selLB,$list_selOthers);
+
+                $list_FS_noentity = getFStoInclude($list_selEntities,$list_selFS,$list_FS);
+                $list_FS_noentity_LB = $list_FS_noentity[0];
+                $list_FS_noentity_others = $list_FS_noentity[1];
+                //var_dump($list_selLB,$list_FS_noentity_LB);
+                $datesLB = getDatesLB($list_selLB,$list_FS_noentity_LB);
+                $years_LB = array_merge(['All Years'],$datesLB[3]);
+                $funding_target = getFundingTarget($scenID);
+                $cashInflow = calcCashInflow($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB);
+                $termSources = [5,7]; // here are the IDs of "Term Sources" (Loans & Bonds -> Term) --> it must correspond to the DB
+                $revSources = [6,8]; // here are the IDs of "Revolving Sources" (Loans & Bonds -> Revolving) --> it must correspond to the DB
+                $reimbTerm = calcReimbTerm($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB,$termSources);
+                $reimbRev = calcReimbRev($datesLB,$years_LB,$funding_target,$list_selLB,$list_FS_noentity_LB,$revSources);
+                $netDebtTerm = calcNetDebt($datesLB,$years_LB,$cashInflow,$reimbTerm,$list_selLB,$list_FS_noentity_LB,$termSources);
+                $netDebtRev = calcNetDebt($datesLB,$years_LB,$cashInflow,$reimbRev,$list_selLB,$list_FS_noentity_LB,$revSources);
+                $interestTerm = calcInterest($datesLB,$years_LB,$netDebtTerm,$list_selLB,$list_FS_noentity_LB,$termSources);
+                $interestRev = calcInterest($datesLB,$years_LB,$netDebtRev,$list_selLB,$list_FS_noentity_LB,$revSources);
+                $totalTerm = calcTotalLB($datesLB,$years_LB,$list_selLB,$list_FS_noentity_LB,$cashInflow,$reimbTerm,$netDebtTerm,$interestTerm,$termSources);
+                $totalRev = calcTotalLB($datesLB,$years_LB,$list_selLB,$list_FS_noentity_LB,$cashInflow,$reimbRev,$netDebtRev,$interestRev,$revSources);
+
+
+                //FUNDING SOURCES
+                $list_FS_cat = getListFundingSourcesCat();
+
+                $datesOthers = getDatesOthers($list_selOthers,$list_FS_noentity_others);
+
+                $keydates_LB = array_replace($datesLB[1], $datesLB[2]);
+                $keydates_others = array_replace($datesOthers[0], $datesOthers[1]);
+
+                $keydates = array_replace($keydates_LB,$keydates_others);
+
+                $labels = "[";
+                $i = 0;
+                foreach($list_FS_cat as $id_cat => $cat){
+                    $i++;
+                    $labels .= "'".$cat['name']."'";
+                    if($i < sizeof($list_FS_cat)){
+                        $labels .= ',';
+                    }
+                }
+                $labels .= ']';
+                //var_dump($labels);
+
+                //4
+                $benefs = getListBenef($scenID);
+                
+                $benefNames = "[";
+                $benefShare = "[";
+                $i = 0;
+                foreach($benefs as $benefID => $benef){
+                    $i++;
+                    $benefNames .= "'".$benef['name']."'";
+                    $benefShare .= "'".$benef['share']."'";
+                    if($i < sizeof($benefs)){
+                        $benefNames .= ',';
+                        $benefShare .= ',';
+                    }
+                }
+                $benefNames .= ']';
+                $benefShare .= ']';
+                
+
+                // 5
+                
+                $scope = getListSelScope($projID);
+                $schedules = getListSelDates($projID);
+                $keydates_proj = getKeyDatesProj($schedules,$scope);
+                $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+                $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+                
+                // For each UC
+                // -> get schedules
+                // -> calc repartitions (% / month)
+                // -> calc values PER MONTH & TOT
+                // -> increment capex, implem, .... PER MONTH & TOT
+
+                $capexPerMonth = array_fill_keys($projectDates,0);
+                $capexTot = ['tot'=>0] + array_fill_keys($projectYears,0);
+
+                $implemPerMonth = array_fill_keys($projectDates,0);
+                $implemTot = ['tot'=>0] + array_fill_keys($projectYears,0);
+
+                $opexPerMonth = array_fill_keys($projectDates,0);
+                $opexTot = ['tot'=>0] + array_fill_keys($projectYears,0);
+
+                $revenuesPerMonth = array_fill_keys($projectDates,0);
+                $revenuesTot = ['tot'=>0] + array_fill_keys($projectYears,0);
+
+                $cashreleasingPerMonth = array_fill_keys($projectDates,0);
+                $cashreleasingTot = ['tot'=>0] + array_fill_keys($projectYears,0);
+
+                $nbUCS = 0;
+
+                foreach ($scope as $measID => $list_ucs) {
+                    $nbUCS+=sizeof($list_ucs);
+                    foreach ($list_ucs as $ucID) {
+                        $implemSchedule = $schedules['implem'][$ucID];
+                        $opexSchedule = $schedules['opex'][$ucID];
+                        $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                        $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+
+                        $capex = getTotCapexByUC($projID,$ucID);
+                        $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
+                        $capexTot_new = calcCapexTot($capexPerMonth_new,$projectYears);
+                        $capexPerMonth = add_arrays($capexPerMonth,$capexPerMonth_new);
+                        $capexTot = add_arrays($capexTot,$capexTot_new);
+
+                        $implem = getTotImplemByUC($projID,$ucID);
+                        $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
+                        $implemTot_new = calcImplemTot($implemPerMonth_new,$projectYears);
+                        $implemPerMonth = add_arrays($implemPerMonth,$implemPerMonth_new);
+                        $implemTot = add_arrays($implemTot,$implemTot_new);
+                        
+                        $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                        $opex = getOpexValues($projID,$ucID);
+                        $opexPerMonth_new = calcOpexPerMonth2($opexRepart,$opex);
+                        $opexTot_new = calcOpexTot($opexPerMonth_new,$projectYears);
+                        $opexPerMonth = add_arrays($opexPerMonth,$opexPerMonth_new);
+                        $opexTot = add_arrays($opexTot,$opexTot_new);
+
+                        if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+                            $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                            $revenuesValues = getRevenuesValues($projID,$ucID);
+                            $revenuesPerMonth_new = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                            $revenuesTot_new = calcRevenuesTot($revenuesPerMonth_new,$projectYears);
+                            $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
+                            $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
+                        } else {
+                            $revenuesPerMonth_new = array_fill_keys($projectDates,0);
+                            $revenuesPerMonth = add_arrays($revenuesPerMonth,$revenuesPerMonth_new);
+                            $revenuesTot_new = calcRevenuesTot($revenuesPerMonth,$projectYears);
+                            $revenuesTot = add_arrays($revenuesTot,$revenuesTot_new);
+                        }
+
+                        $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                        $cashreleasingPerMonth_new = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                        $cashreleasingTot_new = calcCashReleasingTot($cashreleasingPerMonth_new,$projectYears);
+                        $cashreleasingPerMonth = add_arrays($cashreleasingPerMonth,$cashreleasingPerMonth_new);
+                        $cashreleasingTot = add_arrays($cashreleasingTot,$cashreleasingTot_new);
+                    }
+                }     
+
+
+                $funding_target = getFundingTarget($scenID);
+
+                $temp = calcFundingRessources($funding_target,$list_selFS,$list_selEntities,$years_LB);
+                $funding_ressources = $temp[0];
+                $years = $temp[1];
+
+                $devises = getListDevises();
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                echo $twig->render('/output/dashboards_items/financing_general.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'list_selLB'=>$list_selLB,'years_LB'=>$years_LB,'dates'=>$datesLB[0],'list_FS_noentity_LB'=>$list_FS_noentity_LB,'FS'=>$list_FS,'cashInflow'=>$cashInflow,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'termSources'=>$termSources,'revSources'=>$revSources,'netDebtTerm'=>$netDebtTerm,'netDebtRev'=>$netDebtRev,'interestTerm'=>$interestTerm,'interestRev'=>$interestRev,'totalTerm'=>$totalTerm,'totalRev'=>$totalRev,
+            
+                'funding_target'=>$funding_target, 'FS_cat'=>$list_FS_cat, 'labels'=>$labels, 'keydates'=>$keydates, 'FS'=>$list_FS, 'entities'=>$list_selEntities, 'selFS'=>$list_selFS,
+            
+                'benefs'=>$benefs,'benefNames'=>$benefNames,"benefShare"=>$benefShare,
+            
+                'years'=>$years,'funding_ressources'=>$funding_ressources,'capexTot'=>$capexTot,'implemTot'=>$implemTot,"opexTot"=>$opexTot,"revenuesTot"=>$revenuesTot,"cashreleasingTot"=>$cashreleasingTot));
+                prereq_Dashboards();
+            } else {
+                throw new Exception("This project doesn't exist !");
+            }
+        } else {
+            throw new Exception("No Project selected !");
+        }
+    } else {
+        throw new Exception("No UC selected !");
+    }
+}
 
 function financing_out_2($twig,$is_connected,$projID,$post=[]){
     if($post and isset($post['scenario'])){
@@ -2062,7 +2267,6 @@ function financing_out_2($twig,$is_connected,$projID,$post=[]){
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                 var_dump($list_selLB, $list_FS_noentity_LB);
                 echo $twig->render('/output/dashboards_items/financing_out_2.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,'scenID'=>$scenID,"selected"=>$proj[1],'part2'=>"Scenario",'selected2'=>$scen['name'],'list_selLB'=>$list_selLB,'years'=>$years_LB,'dates'=>$datesLB[0],'list_FS_noentity_LB'=>$list_FS_noentity_LB,'FS'=>$list_FS,'cashInflow'=>$cashInflow,'reimbTerm'=>$reimbTerm,'reimbRev'=>$reimbRev,'termSources'=>$termSources,'revSources'=>$revSources,'netDebtTerm'=>$netDebtTerm,'netDebtRev'=>$netDebtRev,'interestTerm'=>$interestTerm,'interestRev'=>$interestRev,'totalTerm'=>$totalTerm,'totalRev'=>$totalRev));
                 prereq_Dashboards();
             } else {
@@ -2440,7 +2644,7 @@ function calcCashInflow($dates,$years,$funding_target,$selLB,$FS_noentity_LB){
             $startdate = $keydates_LB[$sourceID][$entityID]['startdate'];
             $list[$sourceID][$entityID][$startdate] = $funding_target*$share/100;
             $temp = explode('/',$startdate);
-            $list[$sourceID][$entityID][$temp[1]] += $funding_target*$share/100;
+            //$list[$sourceID][$entityID][$temp[1]] += $funding_target*$share/100;
             $list[$sourceID][$entityID]['All Years'] += $funding_target*$share/100;
 
         }
