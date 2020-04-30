@@ -37,66 +37,92 @@
         </div>
     </div>
 
-    {% for sourceID,source in FS %}
-        {% if source['id_type'] == 2 and (list_selLB[sourceID] or list_FS_noentity_LB[sourceID]) %}
-            <div class="row text-center mt-5"><h3 class="col text-dark">{{source['name']}}</h3></div>
-            {% if sourceID in termSources %}
-                {% set reimb = reimbTerm %}
-                {% set netDebt = netDebtTerm %}
-                {% set interest = interestTerm %}
-                {% set total = totalTerm %}
-            {% else %}
-                {% if sourceID in revSources %}
-                    {% set reimb = reimbRev %}
-                    {% set netDebt = netDebtRev %}
-                    {% set interest = interestRev %}
-                    {% set total = totalRev %}
-                {% else %}
-                    {% set reimb = [] %}  
-                    {% set netDebt = [] %}  
-                    {% set interest = [] %} 
-                    {% set total = [] %}   
-                {% endif %}
-            {% endif %}
-            
-            {{ macros.output_LB(dates,years_LB,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb,netDebt,interest,total,selDevSym) }}
-            <div class="row mt-3 mb-5 text-center">
-                <div class="col">
-                    <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table','{{selected}}','{{selected2}}','{{source['name']}}','{{sourceID}}','{{selDevSym}}');">Export to CSV</button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6">
+            <div class="container-fluid dash-bg m-1 ml-2 p-4 row">
+                {# AMORTIZING BONDS #}                
+                <div class="container-fluid dash-bg-light p-3">
+
+                    {% for sourceID,source in FS %}
+                        {% if source['id_type'] == 2 and (list_selLB[sourceID] or list_FS_noentity_LB[sourceID]) %}
+                            <h3 class="dash-title mb-3 text-dark">{{source['name']}}</h3>
+                            {% if sourceID in termSources %}
+                                {% set reimb = reimbTerm %}
+                                {% set netDebt = netDebtTerm %}
+                                {% set interest = interestTerm %}
+                                {% set total = totalTerm %}
+                            {% else %}
+                                {% if sourceID in revSources %}
+                                    {% set reimb = reimbRev %}
+                                    {% set netDebt = netDebtRev %}
+                                    {% set interest = interestRev %}
+                                    {% set total = totalRev %}
+                                {% else %}
+                                    {% set reimb = [] %}  
+                                    {% set netDebt = [] %}  
+                                    {% set interest = [] %} 
+                                    {% set total = [] %}   
+                                {% endif %}
+                            {% endif %}
+                            
+                            {{ macros.output_LB(dates,years_LB,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb,netDebt,interest,total,selDevSym) }}
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
-        {% endif %}
-    {% endfor %}
+
+            {# FUNDING SOURCES#}
+            <div class="container-fluid dash-bg mt-4 m-1 ml-2 p-4 row">
+                <div class="container-fluid dash-bg-light p-3">
+                    <h3 class="dash-title mb-3">Funding Sources</h3>
+
+                    {# 3 #}
+
+                    {{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) }}
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-6">
+            {# FUNDING TARGET#}
+            <div class="container-fluid dash-bg m-1 ml-2 p-4 row">
+                <div class="container-fluid dash-bg-light p-3">
+                    <div class="row mt-2">
+                        <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}&nbsp; {{funding_target|number_format(2,'.',',')}}</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid dash-bg mt-4 m-1 ml-2 p-4 row">
+                {# BENEFICIARIES #}                
+                <div class="container-fluid dash-bg-light p-3">
+                    <h3 class="dash-title mb-3">Beneficiaries</h3>
+
+                    {# 4 #}
+
+                    {{ macros.output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) }}
+                    <div class="row mt-3 mb-5 text-center">
+                        <div class="col">
+                            <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_3','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid dash-bg mt-4 m-1 ml-2 p-4 row">
+                {# BENEFICIARIES #}                
+                <div class="container-fluid dash-bg-light p-3">
+                    <h3 class="dash-title mb-3">Beneficiaries</h3>
+         
+                    {# 5 #}
+
+                    {{ macros.output_cashflows(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) }}
 
 
-{# 3 #}
-<div class="row mt-2">
-    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}&nbsp; {{funding_target|number_format(2,'.',',')}}</h5>
-</div>
-{{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) }}
-<div class="row mt-3 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_2','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
-    </div>
-</div>
+                </div>
+            </div>
+        </div>
 
-{# 4 #}
-
-{{ macros.output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) }}
-<div class="row mt-3 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_3','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
-    </div>
-</div>
-
-{# 5 #}
-
-{{ macros.output_cashflows(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) }}
-<div class="row mt-3 mb-5 text-center">
-    <div class="col">
-        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_5','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
-    </div>
-</div>
 
 <form name="form_finout" id="form_finout" action="?A=dashboards&amp;A2=financing&amp;A3=output4&amp;projID={{projID}}" method="post" onsubmit="">
     <input type="number" name="scenario" id="scenario" hidden value={{scenID}}>

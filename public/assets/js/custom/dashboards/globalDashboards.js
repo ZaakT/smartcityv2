@@ -211,6 +211,14 @@ new Chart(document.getElementById("costbenefitsGraph"), {
     ]
   },
   options: {
+    scales: {
+      yAxes: [{
+          scaleLabel: {
+            display: true,
+          labelString: 'Cash (in '+currency+')'
+          }          
+      }]
+    },
     title: {
       display: false
     },

@@ -19,6 +19,7 @@ var list_uc = [];
 $('.uc').each(function() {
     list_uc.push($(this).attr('id').replace('uc_',''));
 });
+var currency = $('#currency').html().replace('(','').replace(')',' ');
 
 
 /////// FONCTION UPDATE
@@ -159,6 +160,14 @@ function update_graph(sumRatioZonePerUC) {
     ]
   },
   options: {
+    scales: {
+        yAxes: [{
+            scaleLabel: {
+              display: true,
+            labelString: 'Cash (in '+currency+')'
+            }          
+        }]
+      },
     title: {
       display: false
     },
