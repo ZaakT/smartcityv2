@@ -3,6 +3,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/dashboards/macro_financing_general.twig" as macros %}
+{% import "/templates/dashboards/modal_financing.twig" as modal %}
 
 {% block title %}Dashboards - Financing{% endblock %}
 
@@ -11,6 +12,8 @@
 {% block content %}
 {% if not list_selLB and not list_FS_noentity_LB %}
     {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
+
+    <h2>Financing Dashboard</h2>
 
     <div class="row jumbotron text-light m-5 bg-dark p-3">
         <div class="col text-center">
@@ -31,12 +34,15 @@
 
     {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
+    
+    <h2 class="ml-5 mt-5 mb-3" style="font-weight: 600;">Financing Dashboard</h2>
+{#
     <div class="row jumbotron text-light m-5 bg-dark p-3">
         <div class="col text-center">
             <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
         </div>
     </div>
-
+#}
 <div class="container-fluid">
     <div class="row">
         <div class="col-6">
@@ -46,7 +52,7 @@
 
                     {% for sourceID,source in FS %}
                         {% if source['id_type'] == 2 and (list_selLB[sourceID] or list_FS_noentity_LB[sourceID]) %}
-                            <h3 class="dash-title mb-3 text-dark">{{source['name']}}</h3>
+                            <h3 class="dash-title mb-4 text-dark">{{source['name']}}</h3>
                             {% if sourceID in termSources %}
                                 {% set reimb = reimbTerm %}
                                 {% set netDebt = netDebtTerm %}
@@ -67,8 +73,15 @@
                             {% endif %}
                             
                             {{ macros.output_LB(dates,years_LB,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb,netDebt,interest,total,selDevSym) }}
+                             {{ modal.loans_and_bonds_table(dates,years_LB,FS,list_selLB,list_FS_noentity_LB,sourceID,cashInflow,reimb,netDebt,interest,total,selDevSym) }}
                         {% endif %}
                     {% endfor %}
+                    <div class="text-center">
+                        <button type="button" class="btn btn-outline-secondary m-3" data-toggle="modal" data-target="#loans_and_bonds_table">
+                            More Details
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
@@ -80,6 +93,12 @@
                     {# 3 #}
 
                     {{ macros.output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) }}
+
+                    <div class="row mt-3 mb-5 text-center">
+                        <div class="col">
+                            <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_2','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
+                        </div>
+                    </div>
 
                 </div>
             </div>
@@ -117,6 +136,13 @@
                     {# 5 #}
 
                     {{ macros.output_cashflows(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) }}
+                    {{ modal.cash_balance(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) }}
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-outline-secondary m-3" data-toggle="modal" data-target="#cash_balance">
+                            More Details
+                        </button>
+                    </div>
 
 
                 </div>
@@ -124,12 +150,12 @@
         </div>
 
 
-<form name="form_finout" id="form_finout" action="?A=dashboards&amp;A2=financing&amp;A3=output4&amp;projID={{projID}}" method="post" onsubmit="">
+{# <form name="form_finout" id="form_finout" action="?A=dashboards&amp;A2=financing&amp;A3=output4&amp;projID={{projID}}" method="post" onsubmit="">
     <input type="number" name="scenario" id="scenario" hidden value={{scenID}}>
     <div class="row m-3 text-center text-dark">
         <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
     </div>
-</form>
+</form> #}
 
 {% endif %}
 {% endblock %}

@@ -16,7 +16,7 @@
 
 {% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total,selDevSym) %}
 {#<div class="row text-center ">#}
-    <div class="mt-2 mx-3 list-table financing_table">
+    <div class="mt-2 mx-3 list-table financing_table" data-toggle="modal" data-target="#loans_and_bonds_table">
         <table id="financing_table_{{sourceRef}}" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
@@ -187,7 +187,7 @@
 
 
 {% macro output_cashflows(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) %}
-
+{#
 <div hidden class="mt-5 row text-center">
     <div class="offset-1 col-10 list-table financing_table_5">
         <table id="financing_table_5" class='table table-lg table-bordered table-responsive-lg'>
@@ -541,6 +541,7 @@
         </table>
     </div>
 </div> 
+#}
 <div class="mt-3 p-2 row text-center">
         <canvas id="FinancingCashBalanceChart"></canvas>
         <iframe src=null hidden

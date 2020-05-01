@@ -314,11 +314,6 @@ function getYears(){
 }
 
 
-
-
-
-
-
 function fin2csv(idTable,projName,scenName,sourceName,sourceID,selDevSym="£"){
     var text = "";
     var labels = [];

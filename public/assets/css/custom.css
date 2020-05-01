@@ -480,9 +480,9 @@ th, td{
 }
 
 
-.financing_table_5{
+/* .financing_table_5{
     max-height: 70vh;  
-}
+} */
 
 .financing_table_5 .item{
     color: #495057;
@@ -500,7 +500,7 @@ th, td{
 }
 
 .financing_table_5 .col_others{
-    min-width: 10vw;
+    min-width: 5vw;
     width: auto;
     max-width: none;
 }
@@ -670,3 +670,10 @@ h3.dash-title {
 #cost_benefits_data td, #budget_table td {
     white-space: nowrap;
 }
+
+@media (min-width: 768px) {
+    .modal-xl {
+      width: 90%;
+     max-width:1500px;
+    }
+  }
