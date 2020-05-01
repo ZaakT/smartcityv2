@@ -1,6 +1,7 @@
 deviseName = "";
 deviseSym = "";
 cashbalance = [];
+colors = ['#2f7ed8', '#492970', '#1aadce', '#0d233a', '#8bbc21', '#910000'];
 function setNewDeviseFin(name='GBP',sym='£'){
     values = {};
     values2 = {};
@@ -102,13 +103,17 @@ function showFinancingOptChart(labels){
         myFinancingOptChart.destroy();
     }
     var data = [];
+    var i = 0;
     for (const id_cat in values) {
         if (values.hasOwnProperty(id_cat)) {
             const tab = values[id_cat];
             var val = tab['share'];
             if(val!=0){
                 data.push(val);
+                $('#cat_'+id_cat).css("color", colors[i]);
+                i++;
             }
+
         }
     }
 
@@ -119,19 +124,33 @@ function showFinancingOptChart(labels){
             labels: labels,
             datasets: [{
                 label: "Funding Sources Categories",
-                backgroundColor: ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce',
-                '#492970'],
-                data: data
+                backgroundColor: colors, //['rgb(47,126,216)', 'rgb(13,35,58)', 'rgb(139, 188, 33)', 'rgb(145,0,0)', 'rgb(26, 173, 206)', 'rgb(73,41,112)' ]
+                data: data,
+                borderWidth : 0
               }]
         },
         options: {
             responsive: true,
             title: {
               display: true,
-              text: 'Financing share in % for categories'
+              text: 'Financing share per categories',
+              fontSize: 15
             },
             legend: {
               display: false
+            },
+            plugins: {
+                datalabels: {
+                    display : true,
+                    color: '#ffffff',
+                    formatter: function (value) {
+                        return Math.round(value) + '%';
+                    },
+                    font: {
+                        size: 15,
+                        weight : 'bold'
+                    }
+                }
             }
         }
     });
@@ -144,6 +163,22 @@ function showFinancingBenefChart(labels,data){
         myFinancingBenefChart.destroy();
     }
 
+    var rows = $('#financing_table_3 tbody tr td');
+    console.log(rows);
+    var i = 0;
+    rows.each(function() {
+        console.log(this);
+        if (i % 2 == 0) {
+            $(this).css("color", colors[i/2]);
+        }
+        i++;
+    });
+
+    //pour le tableau d'id financing_table_3
+    //pour chaque row
+    //pour la premier td
+    //color[i]
+
     var ctx = $('#FinancingBenefChart').get(0).getContext('2d');
     myFinancingBenefChart = new Chart(ctx, {
         type: 'doughnut',
@@ -151,19 +186,33 @@ function showFinancingBenefChart(labels,data){
             labels: labels,
             datasets: [{
                 label: "Beneficiaries",
-                backgroundColor: ['#2f7ed8', '#0d233a', '#8bbc21', '#910000', '#1aadce',
-                '#492970'],
-                data: data
+                backgroundColor: colors,
+                data: data,
+                borderWidth: 0
               }]
         },
         options: {
             responsive: true,
             title: {
               display: true,
-              text: 'Share of Funding in %'
+              text: 'Share of Funding',
+              fontSize: 15
             },
             legend: {
               display: false
+            },
+            plugins: {
+                datalabels: {
+                    display : true,
+                    color: '#ffffff',
+                    formatter: function (value) {
+                        return Math.round(value) + '%';
+                    },
+                    font: {
+                        size: 15,
+                        weight : 'bold'
+                    }
+                }
             }
         }
     });
