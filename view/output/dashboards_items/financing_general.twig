@@ -32,10 +32,9 @@
     </div>
 {% else %}
 
-    {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
-    
-    <h2 class="ml-5 mt-5 mb-3" style="font-weight: 600;">Financing Dashboard</h2>
+<h2 class="ml-5 mt-5 mb-3" style="font-weight: 600;">Financing Dashboard</h2>
 {#
     <div class="row jumbotron text-light m-5 bg-dark p-3">
         <div class="col text-center">
@@ -128,6 +127,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="container-fluid dash-bg mt-4 m-1 ml-2 p-4 row">
                 {# Cash Balance #}                
                 <div class="container-fluid dash-bg-light p-3">
@@ -148,20 +148,14 @@
                 </div>
             </div>
         </div>
-
-
-{# <form name="form_finout" id="form_finout" action="?A=dashboards&amp;A2=financing&amp;A3=output4&amp;projID={{projID}}" method="post" onsubmit="">
-    <input type="number" name="scenario" id="scenario" hidden value={{scenID}}>
-    <div class="row m-3 text-center text-dark">
-        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
     </div>
-</form> #}
+</div>
+
 
 {% endif %}
 {% endblock %}
 
 {% block scripts %}
     {{ parent() }}
-    <script type="text/javascript">setNewDeviseFin("{{selDevName}}");</script>
     <script type="text/javascript">setNewDeviseFin("{{selDevName}}");</script>
 {% endblock %}

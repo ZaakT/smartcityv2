@@ -2,6 +2,7 @@ deviseName = "";
 deviseSym = "";
 cashbalance = [];
 colors = ['#2f7ed8', '#492970', '#1aadce', '#0d233a', '#8bbc21', '#910000'];
+
 function setNewDeviseFin(name='GBP',sym='£'){
     values = {};
     values2 = {};

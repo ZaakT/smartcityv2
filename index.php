@@ -1778,44 +1778,18 @@ try{
                             if($_GET['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
-                                        financing_out_2($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } else if($_GET['A3']=="output2"){
+                                        financing_general($twig,$is_connected,$_GET['projID'],$_POST);
+                                /*    } else if($_GET['A3']=="output2"){
                                         financing_out_5($twig,$is_connected,$_GET['projID'],$_POST);
                                     } else if($_GET['A3']=="output3"){
                                         financing_out_3($twig,$is_connected,$_GET['projID'],$_POST);
                                     } else if($_GET['A3']=="output4"){
-                                        financing_out_4($twig,$is_connected,$_GET['projID'],$_POST);
+                                        financing_out_4($twig,$is_connected,$_GET['projID'],$_POST); */
                                     } else {
                                         header('Location: ?A=dashboards&A2=financing&projID='.$_GET['projID']);
                                     }
                                 } else {
                                     financing_out($twig,$is_connected,$_GET['projID']);
-                                }
-                            }
-                            else { 
-                                header('Location: ?A=dashboards&A2=project');
-                            }
-                        }
-                        else {
-                            header('Location: ?A=dashboards&A2=project');
-                        }
-                    } elseif($_GET['A2']=="financing2"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                if(isset($_GET['A3'])){
-                                    if($_GET['A3']=="output"){
-                                        financing_general($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } else if($_GET['A3']=="output2"){
-                                        financing_out_5($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } else if($_GET['A3']=="output3"){
-                                        financing_out_3($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } else if($_GET['A3']=="output4"){
-                                        financing_out_4($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } else {
-                                        header('Location: ?A=dashboards&A2=financing&projID='.$_GET['projID']);
-                                    }
-                                } else {
-                                    financing_out2($twig,$is_connected,$_GET['projID']);
                                 }
                             }
                             else { 

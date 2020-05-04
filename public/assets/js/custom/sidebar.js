@@ -4,6 +4,7 @@ function colorActive(){
     var NomDuFichier     = CheminComplet.substring(CheminComplet.lastIndexOf( "/" )+1 );
     var temp = NomDuFichier.split('=');
     var temp2 = [];
+    console.log(NomDuFichier);
     
     for (let i = 0; i < temp.length; i++) {
         var element = temp[i].split("&");

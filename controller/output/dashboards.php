@@ -2025,26 +2025,7 @@ function financing_out($twig,$is_connected,$projID=0){
         header('Location: ?A=dashboards&A2=project_out');
     }
 }
-function financing_out2($twig,$is_connected,$projID=0){
-    $user = getUser($_SESSION['username']);
-    if($projID!=0){
-        if(getProjByID($projID,$user[0])){
-            $proj = getProjByID($projID,$user[0]);
-            $listScen = getListScenariosByProj($projID);
 
-            $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/output/dashboards_items/financing_out2.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'listScen'=>$listScen));
-            prereq_Dashboards();
-        } else {
-            throw new Exception("This Project doesn't exist !");
-        }
-    } else {
-        header('Location: ?A=dashboards&A2=project_out');
-    }
-}
 
 function financing_general($twig,$is_connected,$projID,$post=[]){
     if($post and isset($post['scenario'])){
@@ -2060,6 +2041,7 @@ function financing_general($twig,$is_connected,$projID,$post=[]){
                 $list_selOthers = getListOthers($scenID);
                 $list_selEntities = getEntities($list_selLB,$list_selOthers);
 
+                // BONDS
                 $list_FS_noentity = getFStoInclude($list_selEntities,$list_selFS,$list_FS);
                 $list_FS_noentity_LB = $list_FS_noentity[0];
                 $list_FS_noentity_others = $list_FS_noentity[1];
@@ -2102,7 +2084,7 @@ function financing_general($twig,$is_connected,$projID,$post=[]){
                 $labels .= ']';
                 //var_dump($labels);
 
-                //4
+                // BENEFICARIES
                 $benefs = getListBenef($scenID);
                 
                 $benefNames = "[";
@@ -2121,7 +2103,7 @@ function financing_general($twig,$is_connected,$projID,$post=[]){
                 $benefShare .= ']';
                 
 
-                // 5
+                // CASH BALANCE PROFILE
                 
                 $scope = getListSelScope($projID);
                 $schedules = getListSelDates($projID);
