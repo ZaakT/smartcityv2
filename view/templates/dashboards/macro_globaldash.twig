@@ -21,41 +21,6 @@
     {% endfor %}{% endfor %}
 </table>
 
-                <div class="container" hidden>
-                    <div class="arrows">
-                        <div class="arrow ">
-                            <span>5G</span>
-                        </div>
-                        <div class="arrow step1">
-                            <span>01/2012</span>
-                        </div>
-                        <div class="arrow step2">
-                            <span>02/2013</span>
-                        </div>
-                        <div class="arrow step3">
-                            <span>02/2017</span>
-                        </div>
-                        <div class="arrow step4">
-                            <span>43 months</span>
-                        </div>
- 
-                        <div class="arrow step0">
-                            <span>ucname</span>
-                        </div>
-                        <div class="arrow step1">
-                            <span>1. Stop</span>
-                        </div>
-                        <div class="arrow step2">
-                            <span>2. Look</span>
-                        </div>
-                        <div class="arrow step3">
-                            <span>3. Listen</span>
-                        </div>
-                        <div class="arrow step4">
-                            <span>21 months</span>
-                        </div>
-                    </div>
-                </div>
 
     <div class="container">
         
@@ -85,7 +50,7 @@
 
 {% macro number_uc(scope,measures,ucs,volumes) %}
 
-<h3 class="dash-title">Number of service items</h3>
+<h3 class="dash-title mb-3">Number of service items</h3>
 
 <div hidden>
     {% for measID,list_ucs in scope %}

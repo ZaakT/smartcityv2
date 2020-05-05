@@ -10,6 +10,22 @@ function formatNumber(number)
     }
     return x1 + x2;
 }
+
+////////// CHANGE TH ECOLOR OF THE KEY DATES \\\\\\\\\\\\\\\\\\
+var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(255,218,131,","rgba(255,131,115,","rgba(85,216,254,","rgba(0,123,255,"];
+var i=0;
+$('.uc').each(function() {
+    id = $(this).attr('id').split("_");
+    console.log(id);
+    $('#step1_'+id[1]).css("background-color", colors[i]+"0.4)"); 
+    console.log('border-left : 12px solid '+colors[i]+'0.4);');
+    document.styleSheets[3].addRule('#step1_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.4);');
+    $('#step2_'+id[1]).css("background-color", colors[i]+"0.7)");
+    document.styleSheets[3].addRule('#step2_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.3);');
+    $('#step3_'+id[1]).css("background-color", colors[i]+"1)"); 
+    i++;
+  });
+
 // récupérer la liste des uc
 //   get list of uc
 //   pour chacun, vérifier si la checkbox est check

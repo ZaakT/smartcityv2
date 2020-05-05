@@ -4,14 +4,14 @@
 <table class="dashboard-table">
     <tr>
         <th width="30%">Uses Cases</th>
-        <th width="16%">Start Date</th>
-        <th width="16%">Implem. End Date</th>
-        <th width="16%">End Date</th>
-        <th width="22%">Duration</th>
+        <th width="17.5%">Start Date</th>
+        <th width="17.5%">Implem. End Date</th>
+        <th width="17.5%">End Date</th>
+        <th width="17.5%">Duration</th>
     </tr>
     {% for measID,list_ucs in scope %}
         {% for ucID in list_ucs %}
-            <tr id="keydates_{{ ucID }}">
+            <tr hidden>
                 <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
                 <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
                 <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
@@ -20,6 +20,30 @@
             </tr>
     {% endfor %}{% endfor %}
 </table>
+
+<div class="container">
+        
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                <div class="arrows" id="keydates_{{ ucID }}">
+                        <div class="arrow ucnamearrow">
+                            <span>{{ ucs[ucID]['name'] }}</span>
+                        </div>
+                        <div id="step1_{{ ucID }}" class="arrow step1">
+                            <span>{{keydates_uc[ucID]['startdate']}}</span>
+                        </div>
+                        <div id="step2_{{ ucID }}" class="arrow step2">
+                            <span>{{keydates_uc[ucID]['implem_enddate']}}</span>
+                        </div>
+                        <div id="step3_{{ ucID }}" class="arrow step3">
+                            <span>{{ keydates_uc[ucID]['enddate'] }}</span>
+                        </div>
+                        <div class="arrow duration">
+                            <span>{{ keydates_uc[ucID]['project_duration'] }} months</span>
+                        </div> </div>
+            {% endfor %}{% endfor %}
+       
+    </div>
 
 {% endmacro %}
 
