@@ -1,7 +1,7 @@
 {% macro key_dates(scope,ucs,keydates_uc) %}
 
 <h3 class="dash-title">Key Dates</h3>
-<table id="keyDatesTable" class="table dashboard-table">
+<table id="keyDatesTable" class=" text-center table dashboard-table">
     <tr>
         <th width="30%">Uses Cases</th>
         <th width="16%">Start Date</th>
@@ -11,15 +11,75 @@
     </tr>
     {% for measID,list_ucs in scope %}
         {% for ucID in list_ucs %}
-            <tr>
-                <td class="uc" id="uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</td>
-                <td id="start_{{ ucID }}">{{keydates_uc[ucID]['startdate']}}</td>
-                <td id="imp_{{ ucID }}">{{keydates_uc[ucID]['implem_enddate']}}</td>
-                <td id="end_{{ ucID }}">{{ keydates_uc[ucID]['enddate'] }}</td>
-                <td>{{ keydates_uc[ucID]['project_duration'] }} months</td>
+            <tr hidden>
+                <td class="uc" id="uc_{{ ucID }}" width="30%">{{ ucs[ucID]['name'] }}</td>
+                <td id="start_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['startdate']}}  </td>
+                <td id="imp_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['implem_enddate']}}  </td>
+                <td id="end_{{ ucID }}" width="17.5%">{{ keydates_uc[ucID]['enddate'] }}  </td>
+                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} months</td>
             </tr>
     {% endfor %}{% endfor %}
 </table>
+
+                <div class="container" hidden>
+                    <div class="arrows">
+                        <div class="arrow ">
+                            <span>5G</span>
+                        </div>
+                        <div class="arrow step1">
+                            <span>01/2012</span>
+                        </div>
+                        <div class="arrow step2">
+                            <span>02/2013</span>
+                        </div>
+                        <div class="arrow step3">
+                            <span>02/2017</span>
+                        </div>
+                        <div class="arrow step4">
+                            <span>43 months</span>
+                        </div>
+ 
+                        <div class="arrow step0">
+                            <span>ucname</span>
+                        </div>
+                        <div class="arrow step1">
+                            <span>1. Stop</span>
+                        </div>
+                        <div class="arrow step2">
+                            <span>2. Look</span>
+                        </div>
+                        <div class="arrow step3">
+                            <span>3. Listen</span>
+                        </div>
+                        <div class="arrow step4">
+                            <span>21 months</span>
+                        </div>
+                    </div>
+                </div>
+
+    <div class="container">
+        
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                <div class="arrows">
+                        <div class="arrow ucnamearrow">
+                            <span>{{ ucs[ucID]['name'] }}</span>
+                        </div>
+                        <div id="step1_{{ ucID }}" class="arrow step1">
+                            <span>{{keydates_uc[ucID]['startdate']}}</span>
+                        </div>
+                        <div id="step2_{{ ucID }}" class="arrow step2">
+                            <span>{{keydates_uc[ucID]['implem_enddate']}}</span>
+                        </div>
+                        <div id="step3_{{ ucID }}" class="arrow step3">
+                            <span>{{ keydates_uc[ucID]['enddate'] }}</span>
+                        </div>
+                        <div class="arrow duration">
+                            <span>{{ keydates_uc[ucID]['project_duration'] }} months</span>
+                        </div> </div>
+            {% endfor %}{% endfor %}
+       
+    </div>
 
 {% endmacro %}
 

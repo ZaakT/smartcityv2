@@ -677,3 +677,146 @@ h3.dash-title {
      max-width:1500px;
     }
   }
+
+/* Base layout
+body { background-color: #cdcdcd;} */
+
+.container {
+	width: 100%;
+    margin: 20px 0;
+    padding: 0 0;
+}
+
+.arrows {
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	overflow: hidden; /* forces this div to 'contain' it's floated children */
+	padding: 2px 0;
+	position: relative;
+}
+
+
+/* Arrows - i.e. the box and the wedge */
+.arrow {
+	float: left;
+	margin: 0;
+	width: 17.5%;
+	padding: 5px 3px;
+	position: relative;
+    text-align: center;
+    font-size: .9em;
+}
+
+.ucnamearrow {
+    width: 30%;
+}
+
+.arrow:after {
+	border-top: 16px solid transparent; /* positionnement vertical des flèches*/
+	border-bottom: 16px solid transparent;
+	border-left: 8px solid transparent; /* unnecessary here... it's only for reference. */
+	content: "";
+	height: 0;
+	position: absolute;
+	right: -12px; /* positionnement horizontal des fleches */
+	top: 0;
+	width: 0;
+	z-index: 2;
+}
+
+.arrow:last-child:after {
+	border: none;
+	right: 0;
+}
+
+
+/* Colour each section */
+.ucnamearrow, .duration {
+    background-color: white;
+}
+
+.step1 {
+    background-color: #E5461C;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.step2 {background-color: #C4261E;}
+
+.step3 {
+    background-color: #681010;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
+/* Colour the wedge to match it's associated box */
+.arrow.step1:after { border-left: 12px solid #E5461C; }  /* largeur des flèches */
+
+.arrow.step2:after { border-left: 12px solid #C4261E; }
+
+
+/* Typography */
+.arrow span {
+	position: relative;
+}
+
+.step1 span, .step2 span, .step3 span {
+	color: #484e53;
+}
+
+
+@media only screen and (max-width: 1440px) {
+	.arrow { width: 31.5%;}
+}
+
+@media only screen and (max-width: 1000px) {
+	/*.arrows {overflow: visible;}*/ /* May be needed for some browsers. Need to test. */
+	
+	.arrow {
+		float: none;
+		padding: 25px 30px;
+		text-align: left;
+		width: 100%;
+	}
+	
+	.arrow:first-child {
+		border-radius: 6px 6px 0 0;
+	}
+	
+	.arrow:last-child {
+		border-radius: 0 0 6px 6px;
+	}
+	
+	.arrow:after {
+		top: auto;
+		bottom: -23px;
+		left: 30px;
+		background-color: transparent;
+		border-top: 15px solid transparent;
+		border-right: 15px solid transparent;
+		border-bottom: 10px solid transparent;
+		border-left: 17px solid transparent;
+	}
+	
+	.arrow.step1:after {
+		border-top-color: #E5461C;
+		border-left-color: transparent
+	}
+	
+	.arrow.step2:after {
+		border-top-color: #C4261E;
+		border-left-color: transparent;
+	}
+}
+
+/**
+* TODO a/o 11/2017
+* ==================
+* 1. Add option to have the 3rd box be an arrow.
+* 2. Add CSS for arrows that point left. (Toggle class?)
+* 3. Hover/Onstate colour effect.
+* 4. Create a flexbox version.
+*
+*/

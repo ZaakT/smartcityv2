@@ -5,17 +5,20 @@ var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(255,218,131,","rgba(
 var id = 0;
 var i = 0;
 
+
+////////// CHANGE TH ECOLOR OF THE KEY DATES \\\\\\\\\\\\\\\\\\
 $('.uc').each(function() {
   id = $(this).attr('id').split("_");
-  //console.log(id);
-  //$('#start_'+id[1]).style.backgroundColor = colors[i]+"0.4)";  
-  //$('#imp_'+id[1]).style.backgroundColor = colors[i]+"0.7)";
-  //$('#end_'+id[1]).style.backgroundColor = colors[i]+"1)";
+  console.log(id);
+  $('#step1_'+id[1]).css("background-color", colors[i]+"0.4)"); 
+  console.log('border-left : 12px solid '+colors[i]+'0.4);');
+  document.styleSheets[3].addRule('#step1_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.4);');
+  $('#step2_'+id[1]).css("background-color", colors[i]+"0.7)");
+  document.styleSheets[3].addRule('#step2_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.3);');
+  $('#step3_'+id[1]).css("background-color", colors[i]+"1)"); 
   i++;
 });
 
-//var elt = $('#start_'+'1');                       PROBLEME POUR CHANGER DE COULEUR
-//elt.style.backgroundColor = "green"; 
 
 
 
@@ -34,7 +37,11 @@ $('.ucQuantity').each(function() {
  // console.log($(this).html());
   ucQuantity.push($(this).html());
 });
-//console.log(ucName,ucQuantity);
+var donutColors = colors;
+for (var key in donutColors){
+  donutColors[key] += '1)';
+}
+//console.log(donutColors);
 
 //DISPLAY GRAPH
 var numberOfItems = new Chart($('#numberOfItems'), {
@@ -44,7 +51,7 @@ var numberOfItems = new Chart($('#numberOfItems'), {
       datasets: [
         {
           label: "# of items",
-          backgroundColor: ["#55D8FE", "#FFDA83","#FF8373","#A3A0FB"],
+          backgroundColor: donutColors,
           data: ucQuantity, //data
           borderWidth : 0
         }
@@ -64,7 +71,6 @@ var numberOfItems = new Chart($('#numberOfItems'), {
         position: "right",
         labels: {
            boxWidth: 20,
-           padding: 15,
            align: "center",
            fontSize: 15
         }
@@ -113,7 +119,7 @@ $('.OPI').each(function() {
 });
 //console.log(BOC,NPC,OPI);
 
-BOC=[78436, 20436,30436,40436,10436];  //dev
+//BOC=[78436, 20436,30436,40436,10436];  //dev
 
 var budgetGraph = new Chart($('#budgetGraph'), {
   type: 'bar',
@@ -188,7 +194,7 @@ $('.CNSC').each(function() {
   var temp = $(this).html();
   CNSC.push(temp);
 });
-console.log(cbLabel,yearCB,CNC,CNSC);
+//console.log(cbLabel,yearCB,CNC,CNSC);
 
 
 new Chart(document.getElementById("costbenefitsGraph"), {
