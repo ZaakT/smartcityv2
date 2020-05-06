@@ -67,7 +67,7 @@ function showGlobalScoresChart(chartLabels,chartData){
         options: {
             title : {
                 display: true,
-                text : "Global Scores per Use Case",
+                text : "Overal Score per Use Case",
                 fontSize : 20,
             },
             scales: {
@@ -80,7 +80,7 @@ function showGlobalScoresChart(chartLabels,chartData){
                     },
                     scaleLabel: {
                       display: true,
-                      labelString: 'Global Scores',
+                      labelString: 'Overal Score',
                       fontSize : 18,
                     },
                 }],

@@ -1,7 +1,7 @@
 {% macro critCat_input(sel_critCat,repart_selCrit,repart_crit,weights_table) %}
-{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
-<div class="row m-3 text-center">
-    <div class="offset-3 col-6 list-table">       
+{% set color = ["rgba(95,227,161,0.5)", "rgba(163,160,251,0.5)","rgba(255,218,131,0.5)","rgba(255,131,115,0.5)","rgba(85,216,254,0.5)","rgba(0,123,255)"] %}
+<div class="m-4 pt-4 text-center">
+    <div class="list-table">       
         <table id="table_GS" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark">
                 <tr scope="row">
@@ -23,15 +23,14 @@
 {% endmacro %}
 
 {% macro critCat_info(sel_critCat,repart_selCrit,repart_crit) %}
-{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
-<div class="row m-3 text-center">
-    <div class="offset-2 col-8 list-table">       
+{% set color = ["rgba(95,227,161,0.5)", "rgba(163,160,251,0.5)","rgba(255,218,131,0.5)","rgba(255,131,115,0.5)","rgba(85,216,254,0.5)","rgba(0,123,255)"] %}
+<div class="m-4 mt-5 text-center">  
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light">
                 <tr scope="row">
                     <th scope="col">Criteria Category</th>
-                    <th scope="col">Ratio of Criteria selected</th>
-                    <th scope="col">Weight of Criteria selected</th>
+                    <th scope="col">Number of criteria selected</th>
+                    <th scope="col">% share of criteria per category total</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,13 +54,11 @@
                 </tr>
             </td>
         </table>
-    </div>
 </div>
 {% endmacro %}
 
 {% macro critCat_recap(sel_ucs,globalScores) %}
-<div class="row m-5 text-center">
-    <div class="offset-1 col-10 list-table">       
+<div class="m-4 mt-5 text-center">
         <table class='table table-lg table-bordered table-responsive-lg'>
             <thead class="bg-dark text-light">
                 <tr scope="row">
@@ -73,7 +70,7 @@
             </thead>
             <tbody>
                 <tr scope="row">
-                    <td scope="col" class="bg-dark text-light">Global Scores</td>
+                    <td scope="col" class="bg-dark text-light">Overal Score</td>
                     {% for uc in sel_ucs %}
                     <td colspan=1 rowspan=1 scope="col">{{globalScores[uc[0]]|number_format(2,'.',',')}}</td>
                     {% endfor %}
@@ -81,5 +78,4 @@
             </tbody>
         </table>
     </div>
-</div>    
 {% endmacro %}

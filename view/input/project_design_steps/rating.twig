@@ -22,14 +22,17 @@
 {% if sel_ucs %} 
 <div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
     <div class="col text-center">
-        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
-        <p>You will receive guidance throughout to facilitate your data input.</p>
-        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+        <p>The Table below is used to record your rating of each criteria for each Use Case from 1 (low) to 10 (high).</p> 
+        <p>A Guidance scale is available to assist you with your choice of rating - please click on Rating Guidance
+        Rating Default setting ranges are provided to assist with rating input.</p> 
+        <p>Prepopulated average rating values are automatically applied if you click on Apply Default Value. 
+        <p>Values can be discarded by clicking on Clear All.</p>
+</p>
     </div>
 </div>
 <div class="row m-3 btn-group-sm justify-content-center" role="group">
-    <button class="col-2 btn btn-dark" onclick="fillByAv('table_rate');">Fill with default values</button>
-    <button class="offset-1 col-1 btn btn-danger" onclick="clearTable('table_rate');">Clear all</button>
+    <button class="col-2 btn btn-dark" onclick="fillByAv('table_rate');">Apply Default Value</button>
+    <button class="offset-1 col-2 btn btn-danger" onclick="clearTable('table_rate');">Clear All</button>
 </div>
 <div class ="row">
     <form class="col container-fluid" name="form_rate" action="?A=project_design&amp;A2=rates_inputed" method="post">

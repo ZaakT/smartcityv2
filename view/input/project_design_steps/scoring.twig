@@ -20,10 +20,11 @@
 
 <div class="row jumbotron text-light mx-5 mt-5 mb-0 bg-dark p-3">
     <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+        <p>The table below computes and displays the Score of each Use Case by Criteria Category (1 - Lowest to 10 - Highest).</p>
     </div>
 </div>
 
+{#
 <!-- ___________________________________________ RANK ___________________________________________ -->
 <div class ="row mx-5 mt-3 ">
     <div class="col container-fluid">
@@ -67,12 +68,12 @@
         <canvas id="ranksChart" hidden></canvas>   
     </div>
 </div>
-
+#}
 <!-- ___________________________________________ SCORE ___________________________________________ -->
 <div class ="row mx-5 mt-3">
     <div class="col container-fluid">
         <div class="row text-center mt-5 mb-3">
-            <h2 class="col">Use Case Scoring per Criteria Category</h2>
+            <h2 class="col">Display Graph by Criteria Category</h2>
         </div>
         {{ tables.scores_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,scores) }}
     </div>

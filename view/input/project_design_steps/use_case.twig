@@ -18,42 +18,56 @@
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
     {% if ucs %} 
-<div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
-    <div class="col text-center">
-        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
-        <p>You will receive guidance throughout to facilitate your data input.</p>
-        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
-    </div>
-</div>
-<div class="row">
-    <div id="test" class="offset-3 col-6 mt-1">
-        <table id="table_uc_legend" class='table table-sm table-bordered table-responsive-sm align-middle text-center'>
-            <thead class="thead-light">
-                <tr>
-                    <th>Not So Relevant</th>
-                    <th>Relevant</th>
-                    <th>Very Relevant</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan=3 class="text-uppercase">Individualy</td>
-                </tr>
-                <tr>
-                    <td><img width=30 height=30 id="circle_0" src="../../../public/img/circle_0.png"/></td>
-                    <td><img width=30 height=30 id="circle_1" src="../../../public/img/circle_1.png"/></td>
-                    <td><img width=30 height=30 id="circle_2" src="../../../public/img/circle_2.png"/></td>
-                </tr>
-                <tr>
-                    <td colspan=3 class="text-uppercase">In Average</td>
-                </tr>
-                <tr>
-                    <td style="background:orange;"></td>
-                    <td style="background:yellow;"></td>
-                    <td style="background:yellowgreen;"></td> 
-                </tr>
-            </tbody> 
-        </table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-7">
+            <div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
+                <div class="col text-center">
+                    <p>The Table below helps you to choose the most relevant Use Cases based on the previously selected list of criteria.</p>
+                    <p>Guidance is provided with prepopulated graded level of pertinence to assist you with Use Case selection :</br>Not so pertinent = Empty circle/orange </br>Pertinent = Half circle/Yellow </br>Very Pertinent = Full circle/Green.</p>
+                    <p>For more detailed guidance on the pertinence of selected Criteria and District Location Type, please click on the Grey buttons below the table.</p>
+                    <p>Click on the bottom arrow once you have completed your choice of criteria to confirm your selection.</p>
+
+                    {# <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+                    <p>You will receive guidance throughout to facilitate your data input.</p>
+                    <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p> #}
+                </div>
+            </div>
+        </div>
+        <div class="col-5">
+                <div id="test" class="mt-5 mx-5 pt-5 p-3">
+                    <table id="table_uc_legend" class='table table-sm table-bordered table-responsive-sm align-middle text-center'>
+                        <thead class="thead-light">
+                            <tr>
+                                <th colspan=3><strong>Pertinence Level</strong></th>
+                            </tr>
+                            <tr>
+                                <th>Low</th>
+                                <th>Medium</th>
+                                <th>High</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan=3 class="text-uppercase">Per Criteria</td>
+                            </tr>
+                            <tr>
+                                <td><img width=30 height=30 id="circle_0" src="../../../public/img/circle_0.png"/></td>
+                                <td><img width=30 height=30 id="circle_1" src="../../../public/img/circle_1.png"/></td>
+                                <td><img width=30 height=30 id="circle_2" src="../../../public/img/circle_2.png"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan=3 class="text-uppercase">On Average</td>
+                            </tr>
+                            <tr>
+                                <td style="background:orange;"></td>
+                                <td style="background:yellow;"></td>
+                                <td style="background:yellowgreen;"></td> 
+                            </tr>
+                        </tbody> 
+                    </table>
+                </div>
+        </div>
     </div>
 </div>
 
