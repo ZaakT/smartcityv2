@@ -1749,6 +1749,18 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }
+                    } elseif($_GET['A2']=="bankability_new"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                    bankability_new($twig,$is_connected,$_GET['projID']);
+                            }
+                            else { 
+                                header('Location: ?A=dashboards&A2=project');
+                            }
+                        }
+                        else {
+                            header('Location: ?A=dashboards&A2=project');
+                        }
                     } elseif($_GET['A2']=="project_dashboard"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){

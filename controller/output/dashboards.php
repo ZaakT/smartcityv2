@@ -1529,6 +1529,121 @@ function budget_all($twig,$is_connected,$projID){
 
 // ------------------------------- BANKABILITY -------------------------------
 
+function bankability_new($twig,$is_connected,$projID,$post=[]){
+        if($projID!=0){
+            $user = getUser($_SESSION['username']);
+            if(getProjByID($projID,$user[0])){
+                $proj = getProjByID($projID,$user[0]);
+                $meas = getListMeasures();
+                $ucs = getListUCs();
+                $scope = getListSelScope($projID);
+                $selUCS = [];
+                foreach ($post as $ucID => $value) {
+                    array_push($selUCS,$ucID);
+                }
+            
+                $schedules = getListSelDates($projID);
+                $keydates_proj = getKeyDatesProj($schedules,$scope);
+                //$projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+                $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+
+                /// initilisation
+                $fin_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $fin_score = array_fill_keys($selUCS,0);
+
+                $soc_ROI = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_payback = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $noncash = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $risk = array_fill_keys($selUCS,["value"=>0,"score"=>0]);
+                $soc_score = array_fill_keys($selUCS,0);
+
+                foreach ($selUCS as $ucID) {
+
+                    $implemSchedule = $schedules['implem'][$ucID];
+                    $opexSchedule = $schedules['opex'][$ucID];
+                    $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+
+                    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+
+                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+
+                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+                    
+                    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+                    $opex = getOpexValues($projID,$ucID);
+                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opex);
+
+                    if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+                        $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                        $revenuesValues = getRevenuesValues($projID,$ucID);
+                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                    } else {
+                        $revenuesPerMonth = array_fill_keys($projectDates,0);
+                    }
+
+                    $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+                    $cashreleasingPerMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    
+                    $widercashValues = getWiderCashValues($projID,$ucID);
+                    $widercashPerMonth= calcWiderCashPerMonth2($opexRepart,$widercashValues);
+
+                    $dr_year = getListSelDiscountRate($projID);
+                    $dr_month = pow(1+($dr_year/100),1/12)-1;
+
+                    $sum_capex_implem = add_arrays($capexPerMonth,$implemPerMonth);
+
+                    $netcashPerMonth = calcNetCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth);
+                    $NPV1 = calcNPV($dr_month,$netcashPerMonth[0]);
+                    $NPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+                    $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$capexPerMonth,$implemPerMonth,$opexPerMonth,$revenuesPerMonth,$cashreleasingPerMonth,$widercashPerMonth);
+                    $SOCNPV1 = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                    $SOCNPV2 = calcNPV($dr_month,$sum_capex_implem);
+
+
+                    $fin_ROI[$ucID]["value"] = calcROI($NPV1,$NPV2);
+                    $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]); 
+                    $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth)[0];
+                    $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100); 
+                    $fin_score[$ucID] = calcMoyFinBankability($fin_ROI[$ucID]["score"],$fin_payback[$ucID]["score"]);
+
+                    $soc_ROI[$ucID]["value"] = calcROI($SOCNPV1,$SOCNPV2);
+                    $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]); 
+                    $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth)[0];
+                    $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100); 
+                    $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
+                    $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]); 
+                    $risk[$ucID]["value"] = getRisksRating($projID,$ucID);
+                    $risk[$ucID]["score"] = calcRisk_score($risk[$ucID]["value"]); 
+                    $soc_score[$ucID] = calcMoySocBankability($soc_ROI[$ucID]["score"],$soc_payback[$ucID]["score"],$noncash[$ucID]["score"],$risk[$ucID]["score"]);
+                }
+
+                $fin_data = setFinData($selUCS,$fin_ROI,$fin_payback,$fin_score);
+                $fin_data = transformForChart($fin_data); //concerts to JSON
+
+                $soc_data = setSocData($selUCS,$soc_ROI,$soc_payback,$noncash,$risk,$soc_score);
+                var_dump($soc_data);
+                $soc_data = transformForChart($soc_data);
+                var_dump($soc_data);
+
+                $devises = getListDevises();
+                $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/output/dashboards_items/bankability_new.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'meas'=>$meas,'ucs'=>$ucs,'scope'=>$scope,'selUCS'=>$selUCS,'fin_ROI'=>$fin_ROI,'fin_payback'=>$fin_payback,'fin_score'=>$fin_score,'soc_ROI'=>$soc_ROI,'soc_payback'=>$soc_payback,'noncash'=>$noncash,'risk'=>$risk,'soc_score'=>$soc_score,'fin_data'=>$fin_data,'soc_data'=>$soc_data));
+                prereq_Dashboards();
+            } else {
+                throw new Exception("This project doesn't exist !");
+            }
+        } else {
+            throw new Exception("No Project selected !");
+        }
+
+}
+
 function bankability($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){

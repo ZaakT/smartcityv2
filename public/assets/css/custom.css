@@ -811,12 +811,18 @@ body { background-color: #cdcdcd;} */
 	}
 }
 
-/**
-* TODO a/o 11/2017
-* ==================
-* 1. Add option to have the 3rd box be an arrow.
-* 2. Add CSS for arrows that point left. (Toggle class?)
-* 3. Hover/Onstate colour effect.
-* 4. Create a flexbox version.
-*
-*/
+
+
+.form-control-inline {
+    min-width: 0;
+    max-width: 50%;
+    width : auto;
+}
+
+#input_target_nogo td {
+    white-space : nowrap;
+}
+
+#input_target_nogo input {
+    border-style: solid;
+}

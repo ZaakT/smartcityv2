@@ -302,3 +302,59 @@
     </div>
 </div>
 {% endmacro %}
+
+
+{###############           NEW            ################}
+
+{% macro input_target_nogo(selDevSym) %} {# manque les finos sauvegardées #}
+
+<div class="row">
+
+<table id="input_target_nogo" class="table">
+
+    <thead>
+        <th></th>
+        <th>No Go</th>
+        <th>Target</th>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>Net Present Value</td>
+            <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
+            <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
+        </tr>
+        <tr>
+            <td>Return on Investment</td>
+            <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
+            <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
+        </tr>
+        <tr>
+            <td>Payback</td>
+            <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
+            <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
+        </tr>
+        <tr>
+            <td>Risk Rating</td>
+            <td><input id="rr_nogo" name="rr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+            <td><input id="rr_target" name="rr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+        </tr>
+        <tr>
+            <td>Non Quantifiable Benefits rating</td>
+            <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+            <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+</div>
+
+<div class="text-center">
+    <button type="button" class="btn btn-outline-secondary m-3">
+        OK
+    </button>
+</div>
+
+{% endmacro %}
