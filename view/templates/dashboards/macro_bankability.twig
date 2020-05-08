@@ -32,7 +32,7 @@
 <table id="financial_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
     <thead class="thead-light text-center">
         <tr>
-            <th class="bank_values" scope="col" rowspan=3></th>
+            <th class="bank_values" scope="col" rowspan hidden=3></th>
             {% for measID,list_ucs in scope %}
                 {% set nb2 = 0 %}
                 {% for ucID in list_ucs %}
@@ -40,14 +40,14 @@
                         {% set nb2 = nb2 + 1 %}
                     {% endif %}
                 {% endfor %}
-                <th class="" scope="col" colspan={{nb2}}>{{meas[measID]['name']}}</th>
+                <th class="" scope="col" colspan hidden={{nb2}}>{{meas[measID]['name']}}</th>
             {% endfor %}
         </tr>
         <tr>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                     {% if ucID in selUCS %}                    
-                    <th class="bank_score" scope="col" colspan=1>{{ucs[ucID]['name']}}</th>
+                    <th class="bank_score" scope="col" colspan hidden=1>{{ucs[ucID]['name']}}</th>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -56,8 +56,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                     {% if ucID in selUCS %} 
-                    <th class="" scope="col" colspan=1>Value</th>
-                    {# <th class="" scope="col" colspan=1>Score / 10</th>
+                    <th class="" scope="col" colspan hidden=1>Value</th>
+                    {# <th class="" scope="col" colspan hidden=1>Score / 10</th>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -69,8 +69,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
-                    {# <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                    <td class="" scope="col" colspan hidden=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    {# <td class="" scope="col" colspan hidden=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -80,8 +80,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{payback[ucID]['value']|number_format(2, '.', ',')}}%</th>
-                    {# <td class="" scope="col" colspan=1>{{payback[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                    <td class="" scope="col" colspan hidden=1>{{payback[ucID]['value']|number_format(2, '.', ',')}}%</th>
+                    {# <td class="" scope="col" colspan hidden=1>{{payback[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -91,8 +91,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                {# <td class="" scope="col" colspan=1></td> #}
-                <td class="" scope="col" colspan=1>{{score[ucID]|number_format(1, '.', ',')}}</td>
+                {# <td class="" scope="col" colspan hidden=1></td> #}
+                <td class="" scope="col" colspan hidden=1>{{score[ucID]|number_format(1, '.', ',')}}</td>
                 {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -106,7 +106,7 @@
 <table id="societal_bank" class='table table-sm table-bordered table-striped table-responsive-lg'>
     <thead class="thead-light text-center">
         <tr>
-            <th class="" scope="col" rowspan=3></th>
+            <th class="" scope="col" rowspan hidden=3></th>
             {% for measID,list_ucs in scope %}
                 {% set nb2 = 0 %}
                 {% for ucID in list_ucs %}
@@ -114,14 +114,14 @@
                         {% set nb2 = nb2 + 1 %}
                     {% endif %}
                 {% endfor %}
-                <th class="" scope="col" colspan={{nb2}}>{{meas[measID]['name']}}</th>
+                <th class="" scope="col" colspan hidden={{nb2}}>{{meas[measID]['name']}}</th>
             {% endfor %}
         </tr>
         <tr>
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                     {% if ucID in selUCS %}                    
-                    <th class="" scope="col" colspan=1>{{ucs[ucID]['name']}}</th>
+                    <th class="" scope="col" colspan hidden=1>{{ucs[ucID]['name']}}</th>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -130,8 +130,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                     {% if ucID in selUCS %} 
-                    <th class="" scope="col" colspan=1></th>
-                    <th class="" scope="col" colspan=1>Score / 10</th>
+                    <th class="" scope="col" colspan hidden=1></th>
+                    <th class="" scope="col" colspan hidden=1>Score / 10</th>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -143,8 +143,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
-                    {# <td class="" scope="col" colspan=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                    <td class="" scope="col" colspan hidden=1>{{selDevSym}}&nbsp; {{ROI[ucID]['value']|number_format(2, '.', ',')}}</td>
+                    {# <td class="" scope="col" colspan hidden=1>{{ROI[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -154,8 +154,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    <td class="" scope="col" colspan=1>{{payback[ucID]['value']|number_format(2, '.', ',')}} %</th>
-                    {# <td class="" scope="col" colspan=1>{{payback[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                    <td class="" scope="col" colspan hidden=1>{{payback[ucID]['value']|number_format(2, '.', ',')}} %</th>
+                    {# <td class="" scope="col" colspan hidden=1>{{payback[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -166,11 +166,11 @@
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
                     {% if risk[ucID]['value'] != -1%}
-                        <td class="" scope="col" colspan=1>{{risk[ucID]['value']|number_format(2, '.', ',')}}</td>
-                        {# <td class="" scope="col" colspan=1>{{risk[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                        <td class="" scope="col" colspan hidden=1>{{risk[ucID]['value']|number_format(2, '.', ',')}}</td>
+                        {# <td class="" scope="col" colspan hidden=1>{{risk[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                     {% else %}
-                        <td class="" scope="col" colspan=1>NA</td>
-                        {# <td class="" scope="col" colspan=1>NA</td> #}
+                        <td class="" scope="col" colspan hidden=1>NA</td>
+                        {# <td class="" scope="col" colspan hidden=1>NA</td> #}
                     {% endif %}
                 {% endif %}
                 {% endfor %}
@@ -182,11 +182,11 @@
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
                     {% if noncash[ucID]['value'] != -1%}
-                        <td class="" scope="col" colspan=1>{{noncash[ucID]['value']|number_format(2, '.', ',')}}</td>
-                        {# <td class="" scope="col" colspan=1>{{noncash[ucID]['score']|number_format(1, '.', ',')}}</td> #}
+                        <td class="" scope="col" colspan hidden=1>{{noncash[ucID]['value']|number_format(2, '.', ',')}}</td>
+                        {# <td class="" scope="col" colspan hidden=1>{{noncash[ucID]['score']|number_format(1, '.', ',')}}</td> #}
                         {% else %}
-                        <td class="" scope="col" colspan=1>NA</td>
-                        {# <td class="" scope="col" colspan=1>NA</td> #}
+                        <td class="" scope="col" colspan hidden=1>NA</td>
+                        {# <td class="" scope="col" colspan hidden=1>NA</td> #}
                     {% endif %}
                 {% endif %}
                 {% endfor %}
@@ -197,8 +197,8 @@
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
                 {% if ucID in selUCS %} 
-                    {# <td class="" scope="col" colspan=1></td> #}
-                    <td class="" scope="col" colspan=1>{{score[ucID]|number_format(1, '.', ',')}}</td>
+                    {# <td class="" scope="col" colspan hidden=1></td> #}
+                    <td class="" scope="col" colspan hidden=1>{{score[ucID]|number_format(1, '.', ',')}}</td>
                 {% endif %}
                 {% endfor %}
             {% endfor %}
@@ -243,7 +243,7 @@
         <table id="bank_define_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col" colspan=2 class="text-uppercase">Project Bankability Scoring</th>
+                    <th scope="col" colspan hidden=2 class="text-uppercase">Project Bankability Scoring</th>
                 </tr>
             </thead>
             <tbody class="text-center">
@@ -276,7 +276,7 @@
         <table id="bank_overall_table" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center">
                 <tr>
-                    <th scope="col" colspan=2 class="text-uppercase">Overall</th>
+                    <th scope="col" colspan hidden=2 class="text-uppercase">Overall</th>
                 </tr>
             </thead>
             <tbody>
@@ -286,11 +286,11 @@
                 </tr>
                 <tr>
                     <td class="bg-dark font-weight-bold text-light" scope="row">Weight of<br>Financial Bankability</td>
-                    <td><input class="text-center" id="finbank_weight" name="finbank_weight" value="50" type='number'  oninput="checkInputOverall();" min=0 max=100 style="max-width:80%;"><span> %</span></td>
+                    <td><input class="text-center" id="finbank_weight" name="finbank_weight" value="50" type='number'  oninput="checkInputOverall();" min=0 max=100 style="max-width:80%;"><span hidden> %</span hidden></td>
                 </tr>
                 <tr>
                     <td class="bg-dark font-weight-bold text-light" scope="row">Weight of<br>Societal Bankability</td>
-                    <td><input class="text-center" id="socbank_weight" name="socbank_weight" value="50" type='number' oninput="checkInputOverall();" min=0 max=100 style="max-width:80%;"><span> %</span></td>
+                    <td><input class="text-center" id="socbank_weight" name="socbank_weight" value="50" type='number' oninput="checkInputOverall();" min=0 max=100 style="max-width:80%;"><span hidden> %</span hidden></td>
                 </tr>
             </tbody>
         </table>
@@ -308,8 +308,6 @@
 
 {% macro input_target_nogo(selDevSym) %} {# manque les finos sauvegardées #}
 
-<div class="row">
-
 <table id="input_target_nogo" class="table">
 
     <thead>
@@ -320,41 +318,118 @@
 
     <tbody>
         <tr>
-            <td>Net Present Value</td>
+            <th>Net Present Value</th>
             <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
             <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
         </tr>
         <tr>
-            <td>Return on Investment</td>
+            <th>Return on Investment</th>
             <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
             <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
         </tr>
         <tr>
-            <td>Payback</td>
+            <th>Payback</th>
             <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
             <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
         </tr>
         <tr>
-            <td>Risk Rating</td>
+            <th>Risk Rating</th>
             <td><input id="rr_nogo" name="rr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
             <td><input id="rr_target" name="rr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
         </tr>
         <tr>
-            <td>Non Quantifiable Benefits rating</td>
+            <th>Non Quantifiable Benefits Rating</th>
             <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
-            <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+            <td><input id="nqbr_target" name="nqbr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
         </tr>
 
     </tbody>
 
 </table>
 
-</div>
-
 <div class="text-center">
-    <button type="button" class="btn btn-outline-secondary m-3">
+    <button type="button" class="btn btn-outline-secondary m-3" onclick="update_bankability();">
         OK
     </button>
 </div>
+
+{% endmacro %}
+
+{% macro project_score(selDevSym) %}
+
+<table id="project_score_table" class="table">
+
+    <thead>
+        <th></th>
+        <th>Target</th>
+        <th>Financial Bankability</th>
+        <th>Societal Bankability</th>
+    </thead>
+
+    <tbody>
+        <tr>
+            <th>Net Present Value</th>
+            <td id="display_target_npv"> - </td>
+            <td>
+                <span hidden id="fin_npv_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden id="fin_npv_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+            <td>
+                <span hidden id="soc_npv_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden id="soc_npv_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+        </tr>
+        <tr>
+            <th>Return on Investment</th>
+            <td id="display_target_roi"> - </td>
+            <td>
+                <span hidden id="fin_roi_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden id="fin_roi_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+            <td>
+                <span hidden id="soc_roi_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true">
+                <span hidden id="soc_roi_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+        </tr>
+        <tr>
+            <th>Payback</th>
+            <td id="display_target_payback"> - </td>
+            <td>
+                <span hidden id="fin_payback_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden id="fin_payback_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+            <td>
+                <span hidden id="soc_payback_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden id="soc_payback_thumb-down" class="oi oi-thumb-down" title="soc_payback_thumb-down" aria-hidden="true"></span hidden>
+            </td>
+        </tr>
+        <tr>
+            <th>Risk Rating</th>
+            <td id="display_target_rr"> - </td>
+            <td>
+                <span hidden class="rr_thumb-up oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden class="rr_thumb-down oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+            <td>
+                <span hidden class="rr_thumb-up oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden class="rr_thumb-down oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+        </tr>
+        <tr>
+            <th>Non Quantifiable Benefits Rating</th>
+            <td id="display_target_nqbr"> - </td>
+            <td>     
+                <span hidden class="nqbr_thumb-up oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden class="nqbr_thumb-down oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+            <td>
+                <span hidden class="nqbr_thumb-up oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span hidden>
+                <span hidden class="nqbr_thumb-down oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span hidden>
+            </td>
+        </tr>
+        
+    </tbody>
+
+</table>
 
 {% endmacro %}

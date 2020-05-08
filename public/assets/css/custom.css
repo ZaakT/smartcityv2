@@ -815,7 +815,7 @@ body { background-color: #cdcdcd;} */
 
 .form-control-inline {
     min-width: 0;
-    max-width: 50%;
+    max-width: 60%;
     width : auto;
 }
 
@@ -823,6 +823,27 @@ body { background-color: #cdcdcd;} */
     white-space : nowrap;
 }
 
+#input_target_nogo th, #project_score_table th {
+    font-weight: 600;
+}
+
 #input_target_nogo input {
     border-style: solid;
+}
+
+#input_target_nogo {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#project_score_table td, #project_score_table thead th {
+    text-align: center;
+}
+
+#project_score_table td span {
+    font-size: 30px;
+}
+
+#project_score_table .oi-thumb-down {
+    color: red;
 }
