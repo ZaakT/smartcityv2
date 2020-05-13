@@ -1724,34 +1724,9 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }                    
-                    } elseif($_GET['A2']=="bankability"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                if(isset($_GET['A3'])){
-                                    if($_GET['A3']=="output"){
-                                        //var_dump($_POST);
-                                        bankability_output($twig,$is_connected,$_GET['projID'],$_POST);
-                                    } 
-                                    else if($_GET['A3']=="output2"){
-                                        //var_dump($_POST);
-                                        bankability_output2($twig,$is_connected,$_GET['projID'],$_POST);
-                                    }else {
-                                        header('Location: ?A=dashboards&A2=bankability&projID='.$_GET['projID']);
-                                    }
-                                } else {
-                                    bankability($twig,$is_connected,$_GET['projID']);
-                                }
-                            }
-                            else { 
-                                header('Location: ?A=dashboards&A2=project');
-                            }
-                        }
-                        else {
-                            header('Location: ?A=dashboards&A2=project');
-                        }
                     } else if($_GET['A2']=="bankability_input") {
                         bankability_input_nogo_target($_POST);                    
-                    } elseif($_GET['A2']=="bankability_new"){
+                    } elseif($_GET['A2']=="bankability"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
                                     bankability_new($twig,$is_connected,$_GET['projID']);

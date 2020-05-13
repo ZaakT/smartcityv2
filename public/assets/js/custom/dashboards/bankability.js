@@ -2,10 +2,13 @@
 var projectData = JSON.parse($('#bankability_data').html());
 var currency = $('#currency').html().replace('(','').replace(')',' ');
 createCharts();
+update_bankability();
 
 //vérifier que target > nogo!! et no
 
 function update_bankability(){
+    //corrects si tous les input sont non nuls, des nombres, que target >= no go pour npv roi nqbr et l'inverse poru payback et rr
+
     //quand on clique sur le bouton ok
     //récupérer les input
     // si tous les input ne sont pas corrects: afficher "please rentrer tout"
@@ -40,12 +43,62 @@ function update_bankability(){
     };
     //console.log(input);
 
-    var score = projectScore(input);
+    if (checkInput()) {
+        var score = projectScore(input);
 
-    overalAssessment(score);
+        overalAssessment(score);
 
-    updateCharts(input);
+        updateCharts(input);
+    }
+}
 
+function checkInput(){
+        //GET ALL THE INPUT DATA 
+        var input = {
+            'npv':{
+                'nogo':$('#npv_nogo').val(),
+                'target':$('#npv_target').val()
+            },
+            'roi':{
+                'nogo':$('#roi_nogo').val(),
+                'target':$('#roi_target').val()
+            },
+            'payback':{
+                'nogo':$('#payback_nogo').val(),
+                'target':$('#payback_target').val()
+            },
+            'rr':{
+                'nogo':$('#rr_nogo').val(),
+                'target':$('#rr_target').val()
+            },
+            'nqbr':{
+                'nogo':$('#nqbr_nogo').val(),
+                'target':$('#nqbr_target').val()
+            }
+        };
+        //console.log(input);
+    
+        var flagVerif = true;
+        for (var key in input) {
+            if (input[key]['nogo'] == "" || !input['target'] == "") { //vérifier que les entrées sont non nulles
+                flagVerif = false;
+                $('#errorInput').html("Error: make sure every input is completed");
+                break;
+            } else if ((key == 'npv' || key == 'roi' || key == 'nqbr') && Number(input[key]['nogo']) > Number(input[key]['target'])) { 
+                //que les relations d'ordres sont respectées
+                flagVerif = false;
+                $('#errorInput').html("Error: No go value has to be lower than Target value for Net Present Value, Return on Investment and Non Quantifiable Benefits Rating");
+                break;
+            } else if ((key == 'rr' || key == 'payback') && Number(input[key]['target']) > Number(input[key]['nogo'])) {
+                flagVerif = false;
+                $('#errorInput').html("Error: No go value has to be greater than Target value for Payback and Risk Rating");
+                break;
+            } else {
+                $('#errorInput').html("");
+            }
+        }
+
+    return flagVerif;
 }
 
 function updateCharts(input) {
@@ -94,7 +147,8 @@ function updateCharts(input) {
             Number(input['nqbr']['target']), 
             Number(input['nqbr']['nogo'])),
         ];
-    
+    console.log(financialChartData, societalChartData);
+
     if (financialChart.data.datasets.length > 2) {
         financialChart.data.datasets.pop();
         societalChart.data.datasets.pop();
@@ -107,7 +161,7 @@ function updateCharts(input) {
         borderColor: 'rgb(85, 216, 254)',
         borderWidth: 2,
         pointRadius: 2,
-        data: societalChartData
+        data: financialChartData
       });
       financialChart.update();
 
@@ -118,7 +172,7 @@ function updateCharts(input) {
         borderColor: 'rgb(163, 160, 251)',
         borderWidth: 2,
         pointRadius: 2,
-        data: financialChartData
+        data: societalChartData
       });
       societalChart.update();  
         

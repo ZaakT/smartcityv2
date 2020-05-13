@@ -3737,6 +3737,7 @@ function getBankabilitInputNogoTarget($projID){
     $db = dbConnect();
     $req = $db->prepare('SELECT * FROM bankability_input_nogo_target WHERE id = ?');
     $req->execute(Array($projID));
+    $list=[];
     while($row = $req->fetch()){
         $npv_nogo = floatval($row['npv_nogo']);
         $npv_target = floatval($row['npv_target']);
@@ -3744,11 +3745,13 @@ function getBankabilitInputNogoTarget($projID){
         $roi_target = floatval($row['roi_target']);
         $payback_nogo = floatval($row['payback_nogo']);
         $payback_target = floatval($row['payback_target']);
-        $rr_nogo = floatval($row['rr_nogo']);
-        $rr_target = floatval($row['rr_target']);
-        $nqbr_nogo = floatval($row['nqbr_nogo']);
-        $nqbr_target = floatval($row['nqbr_target']);
+        $rr_nogo = floatval($row['risks_rating_nogo']);
+        $rr_target = floatval($row['risks_rating_target']);
+        $nqbr_nogo = floatval($row['noncash_rating_nogo']);
+        $nqbr_target = floatval($row['noncash_rating_target']);
+    $list = ['npv_nogo'=>$npv_nogo, 'npv_target'=>$npv_target, 'roi_nogo'=>$roi_nogo, 'roi_target'=>$roi_target, 'payback_nogo'=>$payback_nogo, 'payback_target'=>$payback_target, 'rr_nogo'=>$rr_nogo, 'rr_target'=>$rr_target, 'nqbr_nogo'=>$nqbr_nogo, 'nqbr_target'=>$nqbr_target];
     }
+    return $list;
 }
 
 // ---------------------------------------- ENTITY ----------------------------------------
