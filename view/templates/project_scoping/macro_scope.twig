@@ -14,9 +14,9 @@
             {% for id_meas,meas in measures %}
                 <tr id = "tr_{{ id_meas }}" scope="row">
                     {% if (id_meas in list_sel|keys ) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" style="width:10%;"checked></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" style="width:10%;"></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" ></td>
                     {% endif %}
                     <td style="width:35%;">{{ meas['name'] }}</td>
                     <td style="width:55%;">{{ meas['description'] }}</td>
@@ -97,9 +97,9 @@
                     {% if test %}
                         <tr id="tr_{{id_uc}}_id_cat" scope="row" class="meas_{{id_meas}}">
                             {% if checked %}
-                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="cat" id='cat_{{id_cat}}' name="cat_{{id_cat}}" style="width:10%;" checked></td>
+                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="cat" id='cat_{{id_cat}}' name="cat_{{id_cat}}"  checked></td>
                             {% else %}
-                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="cat" id='cat_{{id_cat}}' name="cat_{{id_cat}}" style="width:10%;"></td>
+                            <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="cat" id='cat_{{id_cat}}' name="cat_{{id_cat}}" ></td>
                             {% endif %}
                             <td style="width:90%;">{{ cat_item['name'] }}</td>
                         </tr>
@@ -125,9 +125,9 @@
                  {% for id_uc,uc in ucs if uc['id_cat']==id_cat and uc['id_meas']==id_meas %}
                      <tr id = "tr_{{ id_uc }}" scope="row" class="meas_{{uc['id_meas']}}">
                         {% if (id_uc in list_sel[uc['id_meas']]) %}
-                        <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}" style="width:10%;" checked></td>
+                        <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}"  checked></td>
                         {% else %}
-                        <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}" style="width:10%;"></td>
+                        <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');"  class="uc" id='uc_{{uc['id_meas']}}_{{ id_uc }}' name="uc_{{uc['id_meas']}}_{{ id_uc }}" ></td>
                         {% endif %}
                         <td style="width:90%;">{{ uc['name'] }}</td>
                         {# <td>{{ uc['description'] }}</td> #}
