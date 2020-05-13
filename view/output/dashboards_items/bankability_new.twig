@@ -12,13 +12,14 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
-<span id="bankability_data">{{ bankability_data }}</span>
+<span hidden id="bankability_data">{{ bankability_data }}</span>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-6">
+
+            {# INPUT #}
             <div class="dash-bg container-fluid m-1 mt-5 ml-2 p-4">
-                {# INPUT #}
                 <div class="dash-bg-light container-fluid p-3">
                     <h3 class="dash-title mb-3">Input</h3>
                     {{ macros.input_target_nogo(selDevSym) }}
@@ -26,29 +27,40 @@
             </div>
 
             {# GRAPHS #}
-            <div class="dash-bg container-fluid m-1 ml-2 p-4">
-                <div class="dash-bg-light container-fluid p-3">
-
-                </div>
-            </div>
-        </div>
-
-        <div class="col-6">
-        
-            {# PROJECT BANKABILITY #}
-            <div class="dash-bg container-fluid m-1 ml-2 mt-5 p-4">                
+            <div class="dash-bg container-fluid m-1 ml-2 p-4 mt-4">
                 <div class="dash-bg-light container-fluid p-3">
                     <h3 class="dash-title mb-3">Project Score</h3>
                     {{ macros.project_score(selDevSym) }}
                 </div>
             </div>
 
-            {# OVERAL #}
-            <div class="dash-bg container-fluid m-1 ml-2 p-4">                
-                <div class="dash-bg-light container-fluid p-3">
+        </div>
 
+        <div class="col-6">
+        
+            {# OVERAL #}
+            <div class="dash-bg container-fluid m-1 ml-2 mt-5 p-4">                
+                <div class="dash-bg-light container-fluid p-3">
+                    <h3 class="dash-title mb-3">Overal assessment</h3>
+                    {{ macros.overal_assessment() }}
                 </div>
             </div>
+
+            {# GRAPHS #}
+            <div class="dash-bg container-fluid m-1 ml-2 p-4 mt-4">   
+
+                <div class="dash-bg-light container-fluid p-3">
+                    <h3 class="dash-title mb-3">Financial Bankability</h3>
+                    <canvas id="financialBankabilityChart"></canvas>
+                </div>
+
+                <div class="dash-bg-light container-fluid p-3 mt-3">
+                    <h3 class="dash-title mb-3">Societal Bankability</h3>
+                    <canvas id="societalBankabilityChart"></canvas>  
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>

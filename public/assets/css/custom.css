@@ -847,3 +847,50 @@ body { background-color: #cdcdcd;} */
 #project_score_table .oi-thumb-down {
     color: red;
 }
+
+
+/*          TRAFFIC LIGHT          */
+/*write color in hex
+//traffic-light color 
+@whole: #333;*/
+/*actual traffic-lights 
+@color1: #FF0000;//red
+@color2: #FFFF00;//yellow
+@color3: #00FF00;//green*/
+
+
+#traffic-light {
+  /*main traffic light
+  position: absolute;
+  display:block;
+  left: 50%;
+  top: 50%;   
+  margin-top: -160px;*/
+  background-color:#333;
+  /*width:320px;
+   height:320px; */
+  border-radius:20px;
+  text-align: center;
+  padding: 1% 0;
+}
+#traffic-light span {
+    font-size: 70px;
+}
+
+#redcircle-bankability {
+    color: #5C0006;
+}
+
+#yellowcircle-bankability {
+    color: #737300;
+}
+
+#greencircle-bankability {
+    color: #194A04;
+}
+
+#overal-project {
+    text-align: center;
+    font-weight: bold;
+}
+

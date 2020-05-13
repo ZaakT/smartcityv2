@@ -3727,6 +3727,30 @@ function updateFundingSourceLB($scenID,$sourceID,$infos){
     return $req->execute(Array($infos['startdate'],$infos['maturitydate'],$infos['interest'],$sourceID,$scenID));
 }
 
+function insertInputBankability($npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target,$projID){
+    $db = dbConnect();
+    $req = $db->prepare('REPLACE INTO bankability_input_nogo_target (id, npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, risks_rating_nogo, risks_rating_target, noncash_rating_nogo, noncash_rating_target) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
+    return $req->execute(Array($projID,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
+}
+
+function getBankabilitInputNogoTarget($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM bankability_input_nogo_target WHERE id = ?');
+    $req->execute(Array($projID));
+    while($row = $req->fetch()){
+        $npv_nogo = floatval($row['npv_nogo']);
+        $npv_target = floatval($row['npv_target']);
+        $roi_nogo = floatval($row['roi_nogo']);
+        $roi_target = floatval($row['roi_target']);
+        $payback_nogo = floatval($row['payback_nogo']);
+        $payback_target = floatval($row['payback_target']);
+        $rr_nogo = floatval($row['rr_nogo']);
+        $rr_target = floatval($row['rr_target']);
+        $nqbr_nogo = floatval($row['nqbr_nogo']);
+        $nqbr_target = floatval($row['nqbr_target']);
+    }
+}
+
 // ---------------------------------------- ENTITY ----------------------------------------
 
 function getListLoansAndBonds($scenID){

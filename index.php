@@ -1749,6 +1749,8 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }
+                    } else if($_GET['A2']=="bankability_input") {
+                        bankability_input_nogo_target($_POST);                    
                     } elseif($_GET['A2']=="bankability_new"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){

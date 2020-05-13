@@ -307,51 +307,62 @@
 {###############           NEW            ################}
 
 {% macro input_target_nogo(selDevSym) %} {# manque les finos sauvegardées #}
+<form action="?A=dashboards&amp;A2=bankability_input" method="post" onsubmit="return checkInput());">
 
-<table id="input_target_nogo" class="table">
+    <table id="input_target_nogo" class="table">
 
-    <thead>
-        <th></th>
-        <th>No Go</th>
-        <th>Target</th>
-    </thead>
+        <thead>
+            <th></th>
+            <th>No Go</th>
+            <th>Target</th>
+        </thead>
 
-    <tbody>
-        <tr>
-            <th>Net Present Value</th>
-            <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
-            <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
-        </tr>
-        <tr>
-            <th>Return on Investment</th>
-            <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
-            <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
-        </tr>
-        <tr>
-            <th>Payback</th>
-            <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
-            <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
-        </tr>
-        <tr>
-            <th>Risk Rating</th>
-            <td><input id="rr_nogo" name="rr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
-            <td><input id="rr_target" name="rr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
-        </tr>
-        <tr>
-            <th>Non Quantifiable Benefits Rating</th>
-            <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
-            <td><input id="nqbr_target" name="nqbr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
-        </tr>
+        <tbody>
+            <tr>
+                <th>Net Present Value</th>
+                <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
+                <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;{{selDevSym}}</td>
+            </tr>
+            <tr>
+                <th>Return on Investment</th>
+                <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
+                <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;%</td>
+            </tr>
+            <tr>
+                <th>Payback</th>
+                <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
+                <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" >&nbsp;months</td>
+            </tr>
+            <tr>
+                <th>Risk Rating</th>
+                <td><input id="rr_nogo" name="rr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+                <td><input id="rr_target" name="rr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+            </tr>
+            <tr>
+                <th>Non Quantifiable Benefits Rating</th>
+                <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+                <td><input id="nqbr_target" name="nqbr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required placeholder="valeur enregistrée" ></td>
+            </tr>
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
 
-<div class="text-center">
-    <button type="button" class="btn btn-outline-secondary m-3" onclick="update_bankability();">
-        OK
-    </button>
-</div>
+    <div class="text-center">
+        <button type="button" class="btn btn-outline-secondary m-3" onclick="update_bankability();">
+            Process
+        </button>
+            
+        <button type="button" class="btn btn-outline-secondary m-3" onclick="filldefault();">
+            default
+        </button>
+
+        <button type="submit" class="btn btn-outline-dark m-3" >
+            Save
+        </button>
+    </div>
+
+</form>
 
 {% endmacro %}
 
@@ -433,3 +444,21 @@
 </table>
 
 {% endmacro %}
+
+
+{% macro overal_assessment() %}
+<div class="row">
+    <div class="col-6">
+        <div id="traffic-light">
+            <span id="redcircle-bankability" class="oi oi-media-record ml-3" aria-hidden="true" width="80px"></span>
+            <span id="yellowcircle-bankability" class="oi oi-media-record mx-2" aria-hidden="true"></span>
+            <span id="greencircle-bankability" class="oi oi-media-record mr-3" aria-hidden="true"></span>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="text-center" style="position:absolute; top:40%;">
+            <span id="overal-project">rcytvugbhinjo,gyu gyvbh</span>
+        </div>
+    </div>
+</div>
+{%  endmacro %}

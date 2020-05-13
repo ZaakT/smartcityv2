@@ -1580,7 +1580,7 @@ function bankability_new($twig,$is_connected,$projID,$post=[]){
                 'rating_risks'=>$ratingRisks                
             );
             $bankability_data = json_encode($bankability_data);
-            var_dump($npv1, $socnpv1, $fin_ROI, $soc_ROI, $fin_payback, $soc_payback, $ratingNonCash, $ratingRisks );
+            //var_dump($npv1, $socnpv1, $fin_ROI, $soc_ROI, $fin_payback, $soc_payback, $ratingNonCash, $ratingRisks );
             
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -1597,6 +1597,30 @@ function bankability_new($twig,$is_connected,$projID,$post=[]){
             throw new Exception("No Project selected !");
         }
 
+}
+
+function bankability_input_nogo_target($post=[]){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($post['npv_nogo']) && isset($post['npv_target']) && isset($post['roi_nogo']) && isset($post['roi_target']) && isset($post['payback_nogo']) && isset($post['payback_target']) && isset($post['rr_nogo']) && isset($post['rr_target']) && isset($post['nqbr_nogo']) && isset($post['nqbr_target'])){
+            $npv_nogo = floatval($post['npv_nogo']);
+            $npv_target = floatval($post['npv_target']);
+            $roi_nogo = floatval($post['roi_nogo']);
+            $roi_target = floatval($post['roi_target']);
+            $payback_nogo = floatval($post['payback_nogo']);
+            $payback_target = floatval($post['payback_target']);
+            $rr_nogo = floatval($post['rr_nogo']);
+            $rr_target = floatval($post['rr_target']);
+            $nqbr_nogo = floatval($post['nqbr_nogo']);
+            $nqbr_target = floatval($post['nqbr_target']);
+            insertInputBankability($npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target,$projID);
+            header('Location: ?A=dashboards&A2=bankability&projID='.$projID);
+        } else {
+            throw new Exception("There is an error with the input fields !");
+        }
+    } else {
+        throw new Exception("There is no project selected !");
+    }
 }
 
 function bankability($twig,$is_connected,$projID=0){
