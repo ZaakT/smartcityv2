@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/project_design/modals_rating.twig" as modal %}
 {% import "/templates/project_design/macro_rating.twig" as table %}
 
 {% block sidebar %}{{ sidebar.sidebar("project_design",ucmID) }}{% endblock %}
@@ -41,6 +42,8 @@
                 <div class="row mt-5 text-center" >
                     <h3 class="col">{{meas[id_meas]['name']}}</h3>
                 </div>
+                
+                {{ modal.showguidance(sel_crit) }}
                 {{ table.rating_table(sel_ucs,sel_critCat,sel_crit,repart_selCrit,rates,repart_ucs,guidCrit,ucs_all,meas,cat,id_meas) }}
             {% endif %}
         {% endfor %}

@@ -61,7 +61,7 @@
         {% for ucID in list_ucs %}
         <tr>
             <td class="ucName">{{ucs[ucID]['name']}}</td>
-            <td class="ucQuantity">{{volumes[ucID]|number_format(0,'.',',')}}</td>
+            <td class="ucQuantity">{{volumes[ucID]}}</td>
         </tr>
         {% endfor %}
     </table>
@@ -129,6 +129,7 @@
             {% endfor %}
         </table>
     </div>
+
 <canvas id="financialBankabilityChart" height="200px"></canvas>
 
 {% endmacro %}

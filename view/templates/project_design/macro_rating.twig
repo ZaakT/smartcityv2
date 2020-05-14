@@ -1,5 +1,7 @@
 {% macro rating_table(sel_ucs=[],sel_critCat=[],sel_crit=[],repart_selCrit=[],rates=[],repart_ucs=[],guidCrit=[],ucs_all=[],meas=[],cat=[],id_meas=0) %}
 {% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+
+
 <div class="row">
     <div class="col mt-3 mx-5 list-table text-center rate-table">
         <table id="table_rate" class='table table-lg table-bordered table-striped table-responsive-lg align-middle'>
@@ -17,14 +19,18 @@
                 </tr>
                 <tr scope="row">
                     {% for crit in sel_crit %}
-                    <th><a class="myPopover text-info font-italic"
-                    data-toggle="popover"
-                    tabindex="0" 
-                    data-placement="right" title="{{crit[1]}}"
-                    data-trigger="focus"
-                    role = "button"
-                    data-html=true
-                    data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit[0]}}.png'/>">Rating Guidance</a></th>
+                    <th>
+                        <a hidden class="myPopover text-info font-italic"
+                        data-toggle="popover"
+                        tabindex="0" 
+                        data-placement="right" title="{{crit[1]}}"
+                        data-trigger="focus"
+                        role = "button"
+                        data-html=true
+                        data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit[0]}}.png'/>">Rating Guidance</a>
+                        <button type="button" class="btn btn-sm btn-outline-light" data-toggle="modal" data-target="#showGuidance{{crit['id']}}">Rating Guidance</a>
+                        {# {{ modal.showguidance(crit[0],crit['scoring_guidance'],crit['name'] ) }} #}
+                    </th>
                     {% endfor %}
                 </tr>
             </thead>

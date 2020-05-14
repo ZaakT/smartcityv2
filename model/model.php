@@ -300,7 +300,7 @@ function getCatByCrit($idCrit){
 
 function getListCrit(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT crit.id, crit.name, crit.description, critCat.id as id_cat
+    $req = $db->prepare('SELECT crit.id, crit.name, crit.description, crit.scoring_guidance, critCat.id as id_cat
                     FROM crit
                     INNER JOIN critCat
                     WHERE crit.id_cat = critCat.id
@@ -312,7 +312,9 @@ function getListCrit(){
         $name = $row['name'];
         $description = $row['description'];
         $id_cat = intval($row['id_cat']);
-        array_push($list,['id'=>$id,'description'=>$description,'name'=>$name,'id_cat'=>$id_cat]);
+        $scoring_guidance = $row['scoring_guidance'];
+        var_dump($row['scoring_guidance']);
+        array_push($list,['id'=>$id,'description'=>$description,'name'=>$name,'id_cat'=>$id_cat,'scoring_guidance'=>$scoring_guidance]);
     }
     return $list;
 }
@@ -330,7 +332,7 @@ function getListCritCat(){
 
 function getListSelCrit($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT crit.id, name, description, crit.id_cat
+    $req = $db->prepare('SELECT crit.id, name, description, crit.scoring_guidance, crit.id_cat
                         FROM crit
                         INNER JOIN ucm_sel_crit
                         WHERE (ucm_sel_crit.id_crit = crit.id)

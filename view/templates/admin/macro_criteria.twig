@@ -33,15 +33,19 @@
                             <td>{{ crit['name'] }}</td>
                             <td>{{ crit['description'] }}</td>
                             <td><a class="myPopover text-info font-italic"
-                            tabindex="0" 
-                            data-toggle="popover" 
-                            data-placement="right"
-                            title="{{crit['name']}}"
-                            data-trigger="focus"
-                            data-html=true
-                            role = "button"
-                            data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit['id']}}.png'/>">Rating Guidance</a></td>
-                            <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCrit_{{ crit['id'] }}"></span></a></td>
+                                tabindex="0" 
+                                data-toggle="popover" 
+                                data-placement="right"
+                                title="{{crit['name']}}"
+                                data-trigger="focus"
+                                data-html=true
+                                role = "button"
+                                data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit['id']}}.png'/>">Rating Guidance</a>
+                                {{crit['scoring_guidance']}}
+                            </td>
+                            <td>
+                                <a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCrit_{{ crit['id'] }}"></span></a>
+                            </td>
                             {{ modal.delete_crit(crit['id'],crit['name']) }}
                         </tr>
                     {% endfor %}
