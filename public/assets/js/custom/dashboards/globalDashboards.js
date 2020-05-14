@@ -160,7 +160,16 @@ var budgetGraph = new Chart($('#budgetGraph'), {
           scaleLabel: {
             display: true,
           labelString: 'Cash (in '+currency+')'
-          }          
+          },
+          ticks: {
+            callback: function(value, index, values) {
+                if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    return value;
+                }
+            }
+        }           
       }]
     },
     plugins: {
@@ -222,7 +231,16 @@ new Chart(document.getElementById("costbenefitsGraph"), {
           scaleLabel: {
             display: true,
           labelString: 'Cash (in '+currency+')'
-          }          
+          },
+          ticks: {
+            callback: function(value, index, values) {
+                if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                    return value;
+                }
+            }
+        }           
       }]
     },
     title: {

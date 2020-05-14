@@ -6,7 +6,7 @@ function formatNumber(number)
     x2 = x.length > 1 ? '.' + x[1] : '';
     var rgx = /(\d+)(\d{3})/;
     while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ' ' + '$2');
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
     return x1 + x2;
 }
@@ -83,11 +83,11 @@ function kpi(sumRatioZonePerUC){
     //affichage
     var currency = $('#currency').html().replace('(','').replace(')',' ');
     //console.log(currency);
-    $('#tot_invest').html(currency+totalInvestment.toFixed(2));
-    $('#npv').html(currency+npv.toFixed(2));
-    $('#socnpv').html(currency+socnpv.toFixed(2));
-    $('#ncbr').html(ncbr[0] > 0 ? (ncbr[1]/ncbr[0]).toFixed(2) : "NA");
-    $('#rr').html(rr[0] > 0 ? rr[1]/rr[0].toFixed(2) : "NA");    
+    $('#tot_invest').html(currency+formatNumber(totalInvestment));
+    $('#npv').html(currency+formatNumber(npv));
+    $('#socnpv').html(currency+formatNumber(socnpv));
+    $('#ncbr').html(ncbr[0] > 0 ? formatNumber(ncbr[1]/ncbr[0]) : "NA");
+    $('#rr').html(rr[0] > 0 ? formatNumber(rr[1]/rr[0]) : "NA");    
 }
 
 function keyDates (sumRatioZonePerUC) {   //passer le id en paramètre?
@@ -181,6 +181,15 @@ function update_graph(sumRatioZonePerUC) {
             scaleLabel: {
               display: true,
             labelString: 'Cash (in '+currency+')'
+            },
+            ticks: {
+                callback: function(value, index, values) {
+                    if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                        return value;
+                    }
+                }
             }          
         }]
       },
