@@ -195,8 +195,9 @@ function manage_criteria($twig,$is_connected,$isTaken=false){
 function create_crit($twig,$is_connected,$post){
     $name = $post['name'];
     $description = $post['description'];
+    $scoring_guidance = $post['scoring_guidance'];
     $catID = intval($post['related_category']);
-    $critInfos = [$name,$description,$catID];
+    $critInfos = [$name,$description,$scoring_guidance,$catID];
     if(!empty(getCritByNameAndCat($name,$catID))){
         manage_criteria($twig,$is_connected,true);
     } else {

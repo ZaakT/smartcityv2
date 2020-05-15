@@ -5,14 +5,14 @@
     <h6 id="createCritHelp" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
 </div>
 <div class="row mt-2 mx-5 mb-5 text-center">
-    <div class="offset-1 col-10 list-table">
-        <table class='table table-bordered table-responsive-lg'>
+    <div class="offset-1 col-10">
+        <table class='table table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col" style="width: 10%;">id</th>
-                    <th scope="col" style="width: 30%;">Name</th>
-                    <th scope="col" style="width: 35%;">Description</th>
-                    <th scope="col" style="width: 15%;">Rating Guidance</th>
+                    <th scope="col" style="width: 20%;">Name</th>
+                    <th scope="col" style="width: 25%;">Description</th>
+                    <th scope="col" style="width: 35%;">Rating Guidance</th>
                     <th scope="col" style="width: 10%;"></th>
                 </tr>
             </thead>
@@ -32,7 +32,7 @@
                             <td class="check-col">{{ crit['id'] }}</td>
                             <td>{{ crit['name'] }}</td>
                             <td>{{ crit['description'] }}</td>
-                            <td><a class="myPopover text-info font-italic"
+                            <td class="text-justify">{# <a class="myPopover text-info font-italic"
                                 tabindex="0" 
                                 data-toggle="popover" 
                                 data-placement="right"
@@ -40,8 +40,8 @@
                                 data-trigger="focus"
                                 data-html=true
                                 role = "button"
-                                data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit['id']}}.png'/>">Rating Guidance</a>
-                                {{crit['scoring_guidance']}}
+                                data-content="<img class='img_guid' src='/public/img/Guidance/Rating/criteria{{crit['id']}}.png'/>">Rating Guidance</a> #}
+                                <pre style="white-space: pre-wrap;font-family: inherit;">{{crit['scoring_guidance']}}</pre>
                             </td>
                             <td>
                                 <a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCrit_{{ crit['id'] }}"></span></a>

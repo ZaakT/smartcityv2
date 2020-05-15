@@ -313,7 +313,7 @@ function getListCrit(){
         $description = $row['description'];
         $id_cat = intval($row['id_cat']);
         $scoring_guidance = $row['scoring_guidance'];
-        var_dump($row['scoring_guidance']);
+        //var_dump($row['scoring_guidance'], $scoring_guidance);
         array_push($list,['id'=>$id,'description'=>$description,'name'=>$name,'id_cat'=>$id_cat,'scoring_guidance'=>$scoring_guidance]);
     }
     return $list;
@@ -443,9 +443,9 @@ function getCritByNameAndCat($critName,$catID){
 function insertCrit($crit){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO crit
-                            (name,description,id_cat)
-                            VALUES (?,?,?)');
-    return $req->execute(array($crit[0],$crit[1],$crit[2]));
+                            (name,description,scoring_guidance,id_cat)
+                            VALUES (?,?,?,?)');
+    return $req->execute(array($crit[0],$crit[1],$crit[2],$crit[3]));
 }
 
 function deleteCrit($critID){
