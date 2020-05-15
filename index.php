@@ -169,7 +169,7 @@ try{
                                 }
                             } elseif($_GET['A3']=="delete_item"){
                                 if(isset($_GET['cat']) && isset($_GET['id'])){
-                                    delete_item($_GET['cat'],$_GET['cat']);
+                                    delete_item($_GET['cat'],$_GET['id']);
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_capex_item');
                                 }
