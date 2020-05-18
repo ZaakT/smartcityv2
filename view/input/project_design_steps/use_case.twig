@@ -19,12 +19,11 @@
 
     {% if ucs %} 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-7">
+    
             <div class="row jumbotron text-light bg-dark mt-5 mx-5 p-3">
                 <div class="col text-center">
                     <p>The Table below helps you to choose the most relevant Use Cases based on the previously selected list of criteria.</p>
-                    <p>Guidance is provided with prepopulated graded level of pertinence to assist you with Use Case selection :</br>Not so pertinent = Empty circle/orange </br>Pertinent = Half circle/Yellow </br>Very Pertinent = Full circle/Green.</p>
+                    
                     <p>For more detailed guidance on the pertinence of selected Criteria and District Location Type, please click on the Grey buttons below the table.</p>
                     <p>Click on the bottom arrow once you have completed your choice of criteria to confirm your selection.</p>
 
@@ -33,9 +32,18 @@
                     <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p> #}
                 </div>
             </div>
+        <div class="row"> 
+        <div class="col-6">
+            <div class="row jumbotron mt-4 mb-2 ml-5 mr-2 p-3">
+                <div class="col text-center">
+                    <p>Guidance is provided with prepopulated graded level of pertinence to assist you with Use Case selection :</p>
+                    <p>Not so pertinent = Empty circle/orange </br>Pertinent = Half circle/Yellow </br>Very Pertinent = Full circle/Green.</p>
+                </div>
+            </div>           
         </div>
-        <div class="col-5">
-                <div id="test" class="mt-5 mx-5 pt-5 p-3">
+        <div class="col-6">
+
+                <div id="test" class="mt-1 mx-5 p-3">
                     <table id="table_uc_legend" class='table table-sm table-bordered table-responsive-sm align-middle text-center'>
                         <thead class="thead-light">
                             <tr>
