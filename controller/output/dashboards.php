@@ -159,7 +159,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                     
 
                 }}
-                
+                var_dump($capexPerMonth);
                 $ratioByVolume = json_encode($ratioByVolume);
                 
                 $devises = getListDevises();
@@ -1165,33 +1165,34 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
                     //var_dump($capexPerMonth);
                     $capexTot = calcCapexTot($capexPerMonth,$projectYears);
                     $implem = getTotImplemByUC($projID,$ucID);
-                    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
-                    $implemTot[$ucID] = calcImplemTot($implemPerMonth,$projectYears); //
+                    $implemPerMonth[$ucID] = calcImplemPerMonth($implemRepart,$implem);
+                    $implemTot[$ucID] = calcImplemTot($implemPerMonth[$ucID],$projectYears); //
                     
                     $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
                     $opexValues = getOpexValues($projID,$ucID);
-                    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
-                    $opexTot2[$ucID] = calcOpexTot($opexPerMonth,$projectYears); //
+                    $opexPerMonth[$ucID] = calcOpexPerMonth2($opexRepart,$opexValues);
+                    $opexTot2[$ucID] = calcOpexTot($opexPerMonth[$ucID],$projectYears); //
 
                     if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
                         $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                         //var_dump($revenuesRepart);
                         $revenuesValues = getRevenuesValues($projID,$ucID);
-                        $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
-                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //
+                        $revenuesPerMonth[$ucID] = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth[$ucID],$projectYears); //
                     } else {
-                        $revenuesPerMonth = array_fill_keys($projectDates,0);
-                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth,$projectYears); //
+                        $revenuesPerMonth[$ucID] = array_fill_keys($projectDates,0);
+                        $revenuesTot2[$ucID] = calcRevenuesTot($revenuesPerMonth[$ucID],$projectYears); //
                     }
 
                     $cashreleasingValues = getCashReleasingValues($projID,$ucID);
                     $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
                     $cashreleasingTot2 = calcCashReleasingTot($cashreleasingValuesMonth,$projectYears);
                     
-                    $capexAmortization[$ucID] = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears); //
+                    $capexAmortizationTot[$ucID] = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears)['perYear']; //
+                    $capexAmortizationPerMonth[$ucID] = calcCapexAmort($capexPerMonth,getCapexAmort($projID,$ucID),$projectDates,$projectYears)['perMonth']; //
                     
                     $baseline_crb = getBaselineCRB($projID,$ucID);
-                    $netProjectCost[$ucID] = calcNetProjectCost($projectYears,$implemTot[$ucID],$opexTot2[$ucID],$revenuesTot2[$ucID],$capexAmortization[$ucID]); //
+                    $netProjectCost[$ucID] = calcNetProjectCost($projectYears,$implemTot[$ucID],$opexTot2[$ucID],$revenuesTot2[$ucID],$capexAmortizationTot[$ucID]); //
                     $baselineOpCost[$ucID] = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot2); //
                     $budgetCost[$ucID] = add_arrays($netProjectCost[$ucID],$baselineOpCost[$ucID]); //
 
@@ -1199,9 +1200,11 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
                     $OBYI[$ucID] = $OB[0]; //
                     $OBCI[$ucID] = $OB[1]; //
 
-                    $CRV[$ucID] = getCRV($projectYears,$capexTot,$capexAmortization[$ucID]); //
+                    $CRV[$ucID] = getCRV($projectYears,$capexTot,$capexAmortizationTot[$ucID]); //
                 }
             }
+
+            var_dump($capexAmortizationTot,$capexAmortizationPerMonth);
 
             $data = array(
                 'implem' => $implemTot,
@@ -1210,7 +1213,7 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
                 'netProjectCost' => $netProjectCost,
                 'baselineOpCost' => $baselineOpCost,
                 'budgetCost' => $budgetCost,
-                'capexAmort' => $capexAmortization,
+                'capexAmort' => $capexAmortizationTot,
                 'OBYI' => $OBYI,
                 'OBCI' => $OBCI,
                 'CRV' => $CRV
@@ -1375,6 +1378,7 @@ function calcCapexAmort($capex,$periods,$projectDates,$projectYears){
         $year = $temp[1];
         $list_tot[$year] += $value;
     }
+    $list_tot = ['perYear'=>$list_tot, 'perMonth'=>$list];
     //var_dump($list_tot);
     return $list_tot;
 }
@@ -1424,6 +1428,7 @@ function calcBaselineOpCost($years,$baseline_crb,$crb){
     }
     return $list;
 }
+
 
 
 // ------------------------------- BUDGET ALL USE CASES -------------------------------
@@ -1497,13 +1502,13 @@ function budget_all($twig,$is_connected,$projID){
                     $capexAmort_all = add_arrays($capexAmort_all,$capexAmortization);
                     
                     $baseline_crb = getBaselineCRB($projID,$ucID);
-                    $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot2,$revenuesTot2,$capexAmortization);
+                    $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot2,$revenuesTot2,$capexAmortization['perYear']);
                     $netProjectCost = add_arrays($netProjectCost,$netProjectCost_old);
                     $baselineOpCost_old = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot2);
                     $baselineOpCost = add_arrays($baselineOpCost,$baselineOpCost_old);
                     
 
-                    $CRV_old = getCRV($projectYears,$capexTot,$capexAmortization);
+                    $CRV_old = getCRV($projectYears,$capexTot,$capexAmortization['perYear']);
                     $CRV = add_arrays($CRV,$CRV_old);
                 }
             }
