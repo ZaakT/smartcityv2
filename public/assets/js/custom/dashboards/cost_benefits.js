@@ -16,9 +16,9 @@ var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(255,218,131,","rgba(
 var i=0;
 $('.uc').each(function() {
     id = $(this).attr('id').split("_");
-    console.log(id);
+    //console.log(id);
     $('#step1_'+id[1]).css("background-color", colors[i]+"0.4)"); 
-    console.log('border-left : 12px solid '+colors[i]+'0.4);');
+    //console.log('border-left : 12px solid '+colors[i]+'0.4);');
     document.styleSheets[3].addRule('#step1_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.4);');
     $('#step2_'+id[1]).css("background-color", colors[i]+"0.7)");
     document.styleSheets[3].addRule('#step2_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.3);');
@@ -342,7 +342,7 @@ function update_zone(){
     list_uc.forEach(function(ucID) {
         sumRatioZonePerUC[ucID] = 0;
         });
-    console.log(sumRatioZonePerUC);
+    //console.log(sumRatioZonePerUC);
     list_uc.forEach(function(ucID) {
         //on parcout chaque zone
         //si cochée, on somme
@@ -353,7 +353,7 @@ function update_zone(){
             }
         }   
     });
-    console.log(ratio_zones, sumRatioZonePerUC);
+    //console.log(ratio_zones, sumRatioZonePerUC);
     return sumRatioZonePerUC;
 }
 
@@ -368,6 +368,38 @@ function show_hide_months(){
         $('#cb_chevron_left').attr('hidden', true);
         $('#cb_chevron_right').removeAttr('hidden');
     }
+}
+
+function cballuc2csv(idTable,projName,selDevSym="£"){
+    var text = "";
+    var labels = [];
+    var data = [];
+    var name = "output_CB_allUC_"+projName;
+    labels.push("Project");
+    if(idTable == "cost_benefits_data"){
+        name += "_summary";
+        $("#cost_benefits_data thead th").each(function(){
+            text = $(this).text();
+            labels.push(text);
+        });
+        var i = 0;
+        $("#cost_benefits_data tbody tr").each(function(){
+            if(i == 0){
+                data.push([projName]);
+            } else {
+                data.push([""]);
+            }
+            i++;
+            $(this).children('td').each(function(){
+                text = $(this).text();
+                text = text.replace(selDevSym+" ",'');
+                data[data.length-1].push(text);
+            });
+        });
+    }
+    //console.log(labels);
+    //console.log(data);
+    download_csv(name,labels,data)
 }
 
 update();

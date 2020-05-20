@@ -1,5 +1,5 @@
 
-function cballuc2csv(idTable,projName,selDevSym="£"){
+/* function cballuc2csv(idTable,projName,selDevSym="£"){
     var text = "";
     var labels = [];
     var data = [];
@@ -67,4 +67,4 @@ function cballuc2csv(idTable,projName,selDevSym="£"){
     //console.log(labels);
     //console.log(data);
     download_csv(name,labels,data)
-}
+} */
