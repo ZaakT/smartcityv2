@@ -156,10 +156,12 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                     foreach($listSelZones as $id => $zone) {
                         $ratioByVolume[$id][$ucID] = getRatioByVolume($list_nbUC,$id); //ok   
                     }
-                    
+                         
 
                 }}
-                var_dump($capexPerMonth);
+                //var_dump($capexPerMonth);
+
+
                 $ratioByVolume = json_encode($ratioByVolume);
                 
                 $devises = getListDevises();
@@ -174,6 +176,22 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
         } else {
             throw new Exception("No Project selected !");
         }
+}
+
+function check_if_UC_is_completed($projID,$selScope) {
+    //checks whether a use case has minimum one cost benefits item completed (aka at least on "check" symbol in the summary table)
+    $check = checkCBInputs($projID,$selScope);
+    $uc_completed = [];
+    //var_dump($check);
+    foreach ($check[0] as $idUC => $list_ucs) {
+        $uc_completed[$idUC] = false;
+    }
+    foreach ($check[0] as $idUC => $list_ucs) {
+        foreach ($list_ucs as $cb_item => $check_status) {
+            if ($check_status == 1) $uc_completed[$idUC] = true;
+        }
+    }
+    return $uc_completed;
 }
 // ------------------------------- COST BENEFITS PER USE CASE -------------------------------
 
@@ -1413,6 +1431,7 @@ function calcNetProjectCost($years,$a,$b,$c,$d){
     // a : implem, b : opex, c : revenues, d : capex_amortization
     $list = [];
     $list['current'] = 0;
+    //var_dump($years,$a,$b,$c,$d);
     foreach ($years as $year) {
         $list[$year] = $a[$year] + $b[$year] - $c[$year] + $d[$year];
     }
@@ -3512,6 +3531,10 @@ function global_dashboard($twig,$is_connected,$projID=0){
 
                 }
             }
+
+            
+            $uc_check_completed = check_if_UC_is_completed($projID,$scope);
+            var_dump($uc_check_completed);
             
             //var_dump($fin_ROI, $soc_ROI, $fin_payback, $soc_payback);
             
@@ -3521,7 +3544,7 @@ function global_dashboard($twig,$is_connected,$projID=0){
             
             echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'years'=>$projectYears,'netProjectCost'=>$budgetGraphData['netProjectCost'],'baselineOpCost'=>$budgetGraphData['baselineOpCost'],'OBYI'=>$budgetGraphData['OBYI'],
             'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv1,'socnpv'=>$socnpv1,
-           'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'noncashScores'=>$noncash, 'risksScores'=>$risks ));
+           'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'noncashScores'=>$noncash, 'risksScores'=>$risks, 'uc_completed'=>$uc_check_completed ));
 
             prereq_Dashboards();
         } else {
@@ -3670,7 +3693,7 @@ function getBudgetGraphData($projectDates,$projectYears,$schedules,$scope,$projI
             $capexAmort_all = add_arrays($capexAmort_all,$capexAmortization);
 
             $baseline_crb = getBaselineCRB($projID,$ucID);
-            $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot_new,$revenuesTot_new,$capexAmortization);
+            $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot_new,$revenuesTot_new,$capexAmortization['perYear']);
             $netProjectCost = add_arrays($netProjectCost,$netProjectCost_old);
             $baselineOpCost_old = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot_new);
             $baselineOpCost = add_arrays($baselineOpCost,$baselineOpCost_old);

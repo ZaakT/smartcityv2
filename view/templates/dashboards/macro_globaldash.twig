@@ -1,4 +1,4 @@
-{% macro key_dates(scope,ucs,keydates_uc) %}
+{% macro key_dates(scope,ucs,keydates_uc,uc_completed) %}
 
 <h3 class="dash-title">Key Dates</h3>
 <table id="keyDatesTable" class=" text-center table dashboard-table">
@@ -26,8 +26,9 @@
         
             {% for measID,list_ucs in scope %}
                 {% for ucID in list_ucs %}
-                <div class="arrows">
-                        <div class="arrow ucnamearrow">
+                {% if uc_completed[ucID] == true %}
+                    <div class="arrows">
+                            <div class="arrow ucnamearrow">
                             <span>{{ ucs[ucID]['name'] }}</span>
                         </div>
                         <div id="step1_{{ ucID }}" class="arrow step1">
@@ -41,7 +42,28 @@
                         </div>
                         <div class="arrow duration">
                             <span>{{ keydates_uc[ucID]['project_duration'] }} months</span>
-                        </div> </div>
+                        </div> 
+                    </div>
+                {% else %}
+                    <div class="arrows">
+                            <div class="arrow ucnamearrow">
+                            <span>{{ ucs[ucID]['name'] }}</span>
+                        </div>
+                        <div id="step1_{{ ucID }}" class="arrow step1">
+                            <span>NA</span>
+                        </div>
+                        <div id="step2_{{ ucID }}" class="arrow step2">
+                            <span>NA</span>
+                        </div>
+                        <div id="step3_{{ ucID }}" class="arrow step3">
+                            <span>NA</span>
+                        </div>
+                        <div class="arrow duration">
+                            <span>NA</span>
+                        </div> 
+                    </div>
+                {% endif %}
+
             {% endfor %}{% endfor %}
        
     </div>
