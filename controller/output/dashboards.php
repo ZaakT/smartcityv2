@@ -160,7 +160,9 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
 
                 }}
                 //var_dump($capexPerMonth);
-
+                
+                $uc_check_completed = check_if_UC_is_completed($projID,$scope);
+                //   var_dump($uc_check_completed);
 
                 $ratioByVolume = json_encode($ratioByVolume);
                 
@@ -168,7 +170,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
-                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth,'ratio_zones'=>$ratioByVolume));
+                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth,'ratio_zones'=>$ratioByVolume, 'uc_completed'=>$uc_check_completed));
                 prereq_Dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");
@@ -1224,6 +1226,8 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
 
             var_dump($capexAmortizationTot,$capexAmortizationPerMonth);
 
+            $uc_check_completed = check_if_UC_is_completed($projID,$scope);
+
             $data = array(
                 'implem' => $implemTot,
                 'opex' => $opexTot2,
@@ -1243,7 +1247,7 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
-            echo $twig->render('/output/dashboards_items/budget.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$scope, 'ucs'=>$ucs, 'years'=>$projectYears,'data'=>$data ));
+            echo $twig->render('/output/dashboards_items/budget.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$scope, 'ucs'=>$ucs, 'years'=>$projectYears,'data'=>$data, 'uc_completed'=>$uc_check_completed ));
             prereq_Dashboards();
         } else {
             throw new Exception("This project doesn't exist !");

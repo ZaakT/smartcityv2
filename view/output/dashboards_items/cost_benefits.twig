@@ -26,9 +26,15 @@
                         {% for measID,list_ucs in scope %}
                             {% for ucID in list_ucs %}
                                 <div>
+                                    {% if uc_completed[ucID] == true %}
                                     <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
                                             checked="true" onclick="update()">
                                     <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
+                                    {% else %}
+                                    <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
+                                             disabled>
+                                    <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
+                                    {% endif %}
                                 </div>
                             {% endfor %}
                         {% endfor %}
