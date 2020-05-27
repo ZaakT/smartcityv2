@@ -1,7 +1,6 @@
 {% macro workcapreq_table(values,selInvest,selOp,selDevSym) %}
 
-<div class="row offset-2 text-center">
-    <div class="col-8 mx-5 list-table">
+    <div class="row text-center mx-5 list-table">
         <table id="workcapreq_table" class='table table-bordered table-striped table-responsive-lg text-center'>
             <thead class="thead-dark text-center">
                 <tr>
@@ -26,26 +25,38 @@
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Investment</strong> (C = A + B)</td>
-                    <td>{{selDevSym}}&nbsp; {{values['invest']|number_format(2,'.',',')}}</td>
-                    <td><span>%&nbsp;  </span>
-                        <input class="text-center" type='number' name='wcr_input_invest_percent' id='wcr_input_invest_percent' oninput="checkInputWCR();" step="0.1" value={{ selInvest != -1 ? (selInvest * 100 / 2)|number_format(2,'.','') : values['invest']|number_format(2,'.','') }}>
+                    <td>{{selDevSym}}&nbsp; <span id="value_invest_goal">{{values['invest']|number_format(2,'.',',')}}</span></td>
+                    {% set value = 100 %}
+                    {% if selInvest != -1 and values['invest'] > 0 %}
+                        {% set value = (selInvest * 100 / values['invest'])|number_format(2,'.','') %}
+                    {% endif %}
+                    <td>
+                        <input class="text-center" type='number' name='wcr_input_invest_percent' id='wcr_input_invest_percent' oninput="checkInputWCR('wcr_input_invest_percent');calculatePercentage('wcr_input_invest_percent');" step="0.1" value={{ value }}><span>&nbsp;%</span>
                     </td> {#vérifier value !! #}
-                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_invest' id='wcr_input_invest' oninput="checkInputWCR();" step="0.01" value={{selInvest != -1 ? selInvest|number_format(2,'.','') : values['invest']|number_format(2,'.','')}}></td>
+                    {# si selinvest existe et que value[] différent de 0 on fait ça sinon on affiche euhhhhhh 0 ou 100 i guess#}
+                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_invest' id='wcr_input_invest' oninput="checkInputWCR('wcr_input_invest');calculatePercentage('wcr_input_invest');" step="0.01" value={{selInvest != -1 ? selInvest|number_format(2,'.','') : values['invest']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Operations</strong> (D)</td>
-                    <td>{{selDevSym}}&nbsp; {{values['op']|number_format(2,'.',',')}}</td>
-                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_op' id='wcr_input_op' oninput="checkInputWCR();" step="0.01" value={{selOp != -1 ? selOp|number_format(2,'.','') : values['op']|number_format(2,'.','')}}></td>
+                    <td>{{selDevSym}}&nbsp; <span id="value_op_goal">{{values['op']|number_format(2,'.',',')}}</span></td>
+                    {% set value = 100 %}
+                    {% if selInvest != -1 and values['invest'] > 0 %}
+                        {% set value = (selInvest * 100 / values['invest'])|number_format(2,'.','') %}
+                    {% endif %}
+                    <td>
+                        <input class="text-center" type='number' name='wcr_input_op_percent' id='wcr_input_op_percent' oninput="checkInputWCR('wcr_input_op_percent');calculatePercentage('wcr_input_op_percent');" step="0.1" value={{ value }}><span>&nbsp;%</span>
+                    </td> {#vérifier value !! #}
+                    <td><span>{{selDevSym}}&nbsp;  </span><input class="text-center" type='number' name='wcr_input_op' id='wcr_input_op' oninput="checkInputWCR('wcr_input_op');calculatePercentage('wcr_input_op');" step="0.01" value={{selOp != -1 ? selOp|number_format(2,'.','') : values['op']|number_format(2,'.','')}}></td>
                 </tr>
                 <tr scope="row">
                     <td class="bg-dark text-light"><strong>Total Financing</strong> (E = C + D)</td>
                     <td>{{selDevSym}}&nbsp; {{values['total']|number_format(2,'.',',')}}</td>
+                    <td></td> {#somme des pourcentages => js #}                    
                     <td id="wcr_input_tot"></td>
                 </tr>
             </tbody>
         </table>
     </div>
-</div>
 
 
 {% endmacro %}
