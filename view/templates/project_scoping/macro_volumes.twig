@@ -79,12 +79,12 @@
                     {% for item in perimeter %}
                         {% for id,zone in item %}
                             {% if zone['hasChildren'] == false %}
-                                <th scope="col">{{ zone['name'] }} </th>
+                                <th scope="col" style="font-weight:bold;">{{ zone['name'] }} </th>
                                 {% set nbZones = nbZones + 1 %}
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
-                    <th colspan=2 scope="col"> TOTAL </th>
+                    <th colspan=2 scope="col" style="font-weight:bold;"> TOTAL </th>
                 </tr>
             </thead>
                   
@@ -94,7 +94,7 @@
             {% for uc in list_ucs %}
             {#PROJECT SIZE#}
             <tr id = "tr_{{uc}}" scope="row"> 
-                <th rowspan={{2 + 2*nbCompo}} scope="col">{{ucs[uc]['name']}}</th>
+                <th rowspan={{2 + 2*nbCompo}} scope="col" style="font-weight:bold;">{{ucs[uc]['name']}}</th>
                 {#titre#}
                 <th scope="col">Project Size</th>
                 {#pour toutes les zones#}
