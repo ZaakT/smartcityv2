@@ -33,6 +33,8 @@
             <form id="form_risks_input" name="form_risks_input" action="?A=cost_benefits&amp;A2=risks_inputed" method="post" onsubmit="return checkRisksPeriod() && checkRisksInput();">
             {#-------------- tab input et total --------------#}
             {{ list.list_risks_input(risks_advice,risks_user,selRisks) }}
+
+            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
             {{ list.list_risks_total(risks_advice,risks_user,selRisks) }}
 
             {#-------------- bouton flèche --------------#}
