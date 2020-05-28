@@ -328,3 +328,23 @@ function delete_item($catItem,$itemID){
     deleteItem($catItem, intval($itemID));
     header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
 }
+
+function manage_currency($twig,$is_connected,$isTaken=false) {
+    $user = getUser($_SESSION['username']);
+
+    $list_currency = getListDevises();
+    //var_dump($list_currency);
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_currency.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'list_currency'=>$list_currency, 'isTaken'=>$isTaken)); 
+}
+
+function change_currency_rate($twig,$is_connected,$post) {
+
+    $newrate = $post['newrate'];
+    $id = $post['id'];
+    changeExchangeRate($id,$newrate);
+    manage_currency($twig, $is_connected);
+}

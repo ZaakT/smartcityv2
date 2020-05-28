@@ -66,6 +66,10 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_users');
                                 }
 
+                            } else if($_GET['A3']=='manage_currency'){
+                                manage_currency($twig,$is_connected); 
+                            } elseif($_GET['A3']=='change_rate'){
+                                change_currency_rate($twig,$is_connected,$_POST);
                             } else if($_GET['A3']=='manage_measures'){
                                 manage_measures($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_measure'){

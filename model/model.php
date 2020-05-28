@@ -67,6 +67,12 @@ function convertGBPToDev($val){
     }
 }
 
+function changeExchangeRate($id,$newrate){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE devise SET rateToGBP = ? WHERE id = ?');
+    return $req->execute(array($newrate, $id));
+}
+
 
 // ---------------------------------------- USERS ----------------------------------------
 
