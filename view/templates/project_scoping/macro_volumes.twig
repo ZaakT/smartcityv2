@@ -5,7 +5,7 @@
         <table id="ratio_table_{{meas}}" class='ratio_table table table-sm table-bordered table-responsive-lg guideline-table'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th colspan=1 rowspan= 2 scope="col">Component</th>
+                    <th colspan=1 rowspan= 2 scope="col">Reference Feature</th>
                     <th colspan={{list_ucs|length}} scope="col">{{measures[meas]['name']}}</th>
                 </tr>
                 <tr>
@@ -35,7 +35,7 @@
         <table id="ratio_table_{{meas}}" class='table guideline-table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col">Component</th>
+                    <th scope="col">Reference Feature</th>
                         {% for item in perimeter %}
                             {% for id,zone in item %}
                                 {% if zone['hasChildren'] == false %}
