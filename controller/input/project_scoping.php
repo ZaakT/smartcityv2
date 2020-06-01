@@ -234,7 +234,7 @@ function perimeter_selected($post){
                 insertSelZones($projID,$selZones);
             }
             update_ModifDate_proj($projID);            
-            header('Location: ?A=project_scoping&A2=size&projID='.$projID);
+            header('Location: ?A=project_scoping&A2=volumes&projID='.$projID);
 
         } else {
             throw new Exception("No Project selected !");
@@ -601,7 +601,7 @@ function prereq_ProjectScoping(){
         if(!empty($selScope)){
                 echo "<script>prereq_ProjectScoping2(true); checkProgress('scope');</script>";
             if (!empty($selPerimeter)) {
-                    echo "<script>prereq_ProjectScoping3(true); checkProgress('perimeter');</script>";
+                    echo "<script>prereq_ProjectScoping3(true); checkProgress('perimeter');prereq_ProjectScoping4(true);</script>";
                 if(!empty($selSizes) && $sizesValid){
                         echo "<script>prereq_ProjectScoping4(true); checkProgress('size');</script>";
                 }
@@ -616,7 +616,7 @@ function prereq_ProjectScoping(){
         if(!empty($selDiscountRate)){
             echo "<script>checkProgress('discount_rate');</script>";
         }
-        if(!empty($selScope) && $sizesValid && $scheduleValid && $selDiscountRate){
+        if(!empty($selScope) && $scheduleValid && $selDiscountRate){   //&& $sizesValid
             updateScoping($projID,1);
         } else {
             updateScoping($projID,0);

@@ -92,6 +92,8 @@
             <tbody class="thead-dark">
             {% set nbCompo = components|filter(compo => compo['id_meas']==meas)|length %}
             {% for uc in list_ucs %}
+
+            <!--
             {#PROJECT SIZE#}
             <tr id = "tr_{{uc}}" scope="row"> 
                 <th rowspan={{2 + 2*nbCompo}} scope="col" style="font-weight:bold;">{{ucs[uc]['name']}}</th>
@@ -114,8 +116,9 @@
                 {% endif %}{% endif %}{% endfor %}{% endfor %}
                 {#total#}
                 <td scope="col"></td>
-            </tr>
-
+            </tr> -->
+            
+            <th rowspan={{2 + 2*nbCompo}} scope="col" style="font-weight:bold;">{{ucs[uc]['name']}}</th>
             {#DUO NB OF COMPONENETS+RATION COMPO/UC#}
             {% for id_compo,compo in components|filter(compo => compo['id_meas']==meas) %}
                 {#NB OF COMPONENTS#}
