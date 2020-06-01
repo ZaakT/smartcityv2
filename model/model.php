@@ -204,14 +204,15 @@ function update_ModifDate_ucm($ucmID){
 
 function getListMeasures(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id,name,description FROM measure ORDER BY name');
+    $req = $db->prepare('SELECT id,name,description,user FROM measure ORDER BY name');
     $req->execute();
     $list = [];
     while ($row = $req->fetch()){
         $id = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
-        $list[$id] = ['name'=>$name,'description'=>$description];
+        $user = $row['user'];
+        $list[$id] = ['name'=>$name,'description'=>$description,'user'=>$user];
     }
     return $list;
 }
@@ -239,8 +240,8 @@ function getMeasure($measName){
 
 function insertMeasure($measure){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO measure (name,description) VALUES (?,?)');
-    return $req->execute(array($measure[0],$measure[1]));
+    $req = $db->prepare('INSERT INTO measure (name,description,user) VALUES (?,?,?)');
+    return $req->execute(array($measure[0],$measure[1],$measure[2]));
 }
 
 function deleteMeasure($measID){

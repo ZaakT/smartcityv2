@@ -9,10 +9,11 @@
         <table class='table table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col" style="width: 10%;">id</<th>
-                    <th scope="col" style="width: 25%;">Name</<th>
-                    <th scope="col" style="width: 35%;">Description</<th>
-                    <th scope="col" style="width: 20%;">Nb of Use Cases</<th>
+                    <th scope="col" style="width: 10%;">id</th>
+                    <th scope="col" style="width: 25%;">Name</th>
+                    <th scope="col" style="width: 35%;">Description</th>
+                    <th scope="col" style="width: 10%;">Nb of Use Cases</th>
+                    <th scope="col" style="width: 10%;">User</th>
                     <th scope="col" style="width: 10%;"></th>
                 </tr>
             </thead>
@@ -22,6 +23,7 @@
                     <td>{{ measure['name'] }}</td>
                     <td>{{ measure['description'] }}</td>
                     <td>{{ nbUC[id_meas] }}</td>
+                    <td>{{ measure['user'] }}</td>
                     <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteMeasure_{{ id_meas }}"></span></a></td>
                     {{ modal.delete_measure(id_meas,measure['name']) }}
                 </tr>

@@ -1,4 +1,4 @@
-{% macro create_measure() %}
+{% macro create_measure(users) %}
 <div class="modal fade" id="createNewMeasureModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createMeasure-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_measure" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
@@ -14,6 +14,19 @@
                         <label for="name" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="user" class="col-sm-3 col-form-label">User</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="user" id="user">
+                                <option name="0" id="0" value="0">0 : All users</option>
+                                {% for id_user,user in users %}
+                                    <option name="{{user['id']}}" id="{{user['id']}}" value="{{user['id']}}">{{user['id']}} : {{user['username']}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
                 </div>

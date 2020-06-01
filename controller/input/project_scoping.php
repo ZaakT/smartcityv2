@@ -54,6 +54,13 @@ function scope($twig,$is_connected,$projID=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
             $list_measures = getListMeasures();
+            $list_measures_user = [];
+            foreach ($list_measures as $id_measure => $measure){
+                if($measure['user'] == 0 or $measure['user'] == $user[0]){
+                    $list_measures_user[$id_measure] = $measure;
+                }
+            }
+            //var_dump($list_measures_user,$user);
             $list_cat = getListUCsCat();
             $list_ucs = getListUCs();
             $listSelScope = getListSelScope($projID);
@@ -62,7 +69,7 @@ function scope($twig,$is_connected,$projID=0){
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_scoping&A2=scope');

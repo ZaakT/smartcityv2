@@ -11,5 +11,5 @@
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewMeasureModal" role="button">Create a new Measure</button>
 </div>
 {{ list.list_measures(measures,isTaken,listNbUCs) }}
-{{ modal.create_measure() }}
+{{ modal.create_measure(users) }}
 {% endblock %}
