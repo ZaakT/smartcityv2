@@ -127,9 +127,35 @@ function getListUsers(){
 }
 
 function insertUser($user){
-    $db = dbConnect();
+    /*$db = dbConnect();
     $req = $db->prepare('INSERT INTO user (username,salt,password,is_admin) VALUES (?,?,?,?)');
-    return $req->execute(array($user[0],$user[1],$user[2],$user[3]));
+    return $req->execute(array($user[0],$user[1],$user[2],$user[3]));*/
+
+    $nameMeasure = "Project Management ".$user[0];
+    $description = "";
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `insert_user`;');
+    $db->exec(' CREATE PROCEDURE `insert_user`(
+                            IN username VARCHAR(255),
+                            IN salt VARCHAR(255),
+                            IN password VARCHAR(255),
+                            IN nameMeasure VARCHAR(255),
+                            IN description VARCHAR(255),
+                            IN is_admin INT
+                            )
+                            BEGIN
+                                DECLARE userID INT;
+                                INSERT INTO user (username,salt,password,is_admin)
+                                    VALUES (username,salt,password,is_admin);
+                                SET userID = LAST_INSERT_ID();
+                                INSERT INTO measure (name,description,user)
+                                    VALUES (nameMeasure,description,userID);
+                            END
+                                ');
+    $req = $db->prepare('CALL insert_user(?,?,?,?,?,?);');
+    $ret = $req->execute(array($user[0],$user[1],$user[2],$nameMeasure, $description,$user[3]));
+    return $ret;
 }
 
 function modifyUser($user){
