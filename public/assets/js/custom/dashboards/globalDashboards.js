@@ -1,7 +1,7 @@
 var space = '                   ';
 var currency = $('#currency').html().replace('(','').replace(')',' ');
 ////////////////////  KEY DATES  /////////////////////////
-var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(255,218,131,","rgba(255,131,115,","rgba(85,216,254,","rgba(0,123,255,"];
+var colors = ["rgba(95,227,161,", "rgba(163,160,251,","rgba(85,216,254,","rgba(255,218,131,","rgba(255,131,115,","rgba(0,123,255,","rgba(247, 174, 248,", "rgba(214, 255, 121,","rgba(220, 237, 255,"];
 var id = 0;
 var i = 0;
 
@@ -63,7 +63,7 @@ var numberOfItems = new Chart($('#numberOfItems'), {
         display: true,
         text: space+measureName, //data
         position: "top",
-        padding: -20,
+        padding: 0, //-20
         fontSize: 17
       },
       legend: {
@@ -85,7 +85,14 @@ var numberOfItems = new Chart($('#numberOfItems'), {
       },
       plugins: {
       datalabels: {
-        display: true
+        display: true,
+        formatter: function(value, index, values) {
+          if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          } else {
+              return value;
+          }
+      }
       }
       }
     }
