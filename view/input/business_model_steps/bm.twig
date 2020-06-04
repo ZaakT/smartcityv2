@@ -25,20 +25,20 @@
                     <span id="db_sel_bm" hidden>{{ db_sel_bm }}</span>
 
                     {# INVESTMENT CAPACITY #}
-                    <div class="container-fluid dash-bg-light p-3 m-3">
-                        <h4 class="text-dark col text-center">Investment Capactity</h4>
+                    <div class="container-fluid dash-bg-light p-2 m-2 mx-auto">
+                        <h4 class="text-dark col text-center" style="font-size: 1.2rem;">Investment Capactity</h4>
                         {{ macros.selectpicker(investCap, 'invest_cap', selDevSym) }}
                     </div>
 
                     {# PAYBACK CONSTRAINTS #}
-                    <div class="container-fluid dash-bg-light p-3 m-3">
-                        <h4 class="text-dark col text-center">Payback Constraints</h4>
+                    <div class="container-fluid dash-bg-light p-2 m-2 mx-auto">
+                        <h4 class="text-dark col text-center" style="font-size: 1.2rem;"> Payback Constraints</h4>
                         {{ macros.selectpicker(paybackConst, 'payback_const', '') }}
                     </div>
 
                     {# BM PREFERENCE #}  
-                    <div class="container-fluid dash-bg-light p-3 m-3">
-                        <h4 class="text-dark col text-center">Business Model Preference</h4>                  
+                    <div class="container-fluid dash-bg-light p-2 m-2 mx-auto">
+                        <h4 class="text-dark col text-center" style="font-size: 1.2rem;">Business Model Preference</h4>                  
                         {{ macros.selectpicker(businessModelPref, 'bm_pref', '') }}
                     </div>
 
@@ -57,7 +57,7 @@
                         </div>
                     </div>                 
         
-                    <div class="container-fluid dash-bg-light p-3 m-3">
+                    <div hidden class="container-fluid dash-bg-light p-3 m-3">
                         {{ macros.list_infos(bm_infos_json) }}
                     </div>
 

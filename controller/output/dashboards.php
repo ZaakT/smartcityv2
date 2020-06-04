@@ -3538,7 +3538,7 @@ function global_dashboard($twig,$is_connected,$projID=0){
 
             
             $uc_check_completed = check_if_UC_is_completed($projID,$scope);
-            var_dump($uc_check_completed);
+            //var_dump($uc_check_completed);
             
             //var_dump($fin_ROI, $soc_ROI, $fin_payback, $soc_payback);
             

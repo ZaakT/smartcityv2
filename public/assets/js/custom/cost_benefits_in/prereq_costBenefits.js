@@ -34,3 +34,22 @@ function prereq_CostBenefits2(check,hasRevSchedule){
 function checkProgress(part){
     $("#"+part+"-item").removeClass("d-none");
 }
+
+
+function displayGuideline() {
+    var classes = $('#guideline_button').classes();
+    if (classes.includes("active")) {
+        $('#guideline_button').removeClass("active");
+        console.log($('#guideline_button').classes());
+        $('#body').removeClass('col-8');
+        $('#body').addClass('col-12');    
+        $('#guideline').hide();
+    } else {
+        $('#guideline_button').addClass("active");
+        console.log($('#guideline_button').classes());
+        $('#guideline').show();
+        $('#body').removeClass('col-12');
+        $('#body').addClass('col-8');
+        
+    }
+}

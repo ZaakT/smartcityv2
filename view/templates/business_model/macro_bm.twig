@@ -1,13 +1,11 @@
 {% macro selectpicker(list, name, selDevSym)%}
-<div class="row mt-3 mb-5 text-center">
-    <div class="col">
-        <select id="select_{{name}}" name="{{name}}" class="selectpicker" data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('{{name}}');">
+        <select id="select_{{name}}" name="{{name}}" class="selectpicker w-100 m-1 ml-auto" data-style="btn-dark" dropupAuto="false" title="Select an item" required onchange="update_infos('{{name}}');">
         {% for id,item in list %}
             <option value={{id}}>{{selDevSym ? selDevSym : ''}}&nbsp;{{item['name']}}</option>
         {% endfor %}
         </select>
-    </div>
-</div>
+
+
 {% endmacro %}
 
 {% macro list_infos(bm_infos_json) %}
@@ -52,16 +50,17 @@
         </thead>
         <tbody>
             <tr>
-                <td class="item">Best Fit</td>
-                <td id="reco_bestfit" class="bg-success res">-</td>
+                <td id="reco_bestfit" class="text-success res">-</td>
+                <td class="item"><span class="oi oi-thumb-up text-success" style="font-size: 1.5rem" title="thumb-up" aria-hidden="true"></span></td> {# Best Fit #}
+                
             </tr>
             <tr>
-                <td class="item">Second Choice</td>
-                <td id="reco_second" class="bg-warning res">-</td>
+                <td id="reco_second" class="text-warning res">-</td>
+                <td class="item"><span class="oi oi-thumb-up text-warning" style="font-size: 1.5rem" title="thumb-up" aria-hidden="true"></span></td>{# Second Choice #}
             </tr>
             <tr>
-                <td class="item">Not Recommanded</td>
-                <td id="reco_notreco" class="bg-danger res">-</td>
+                <td id="reco_notreco" class="text-danger res">-</td>
+                <td class="item"><span class="oi oi-thumb-down text-danger" style="font-size: 1.5rem" title="thumb-down" aria-hidden="true"></span></td>{# Not Recommanded #}
             </tr>
         </tbody>
     </table>
@@ -92,7 +91,9 @@
 
 {% macro list_share_funding_options(funding_opt,funding_options_json) %}
 <span id="funding_options_json" hidden>{{ funding_options_json }}</span>
-<div class="col list-table funding_opt_table">
+
+
+<div hidden class="col list-table funding_opt_table">
     <table id="funding_opt_table" class='table table-lg table-responsive-lg'>
         <thead class="thead-light text-center">
             <tr>
@@ -103,10 +104,39 @@
             {% for item,value in funding_opt %}
             <tr>
                 <td class="item">{{item}}</td>
-                <td id="FO_{{ item|replace({' ': _}) }}" class="font-weight-bold text-center text-dark">-</td>                
+                <td id="FO_{{ item|replace({' ': _}) }}" class="font-weight-bold text-center text-dark">-</td>               
             </tr>
+            <tr colspan="2">
+</tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
+
+
+
+
+<div class="col funding_opt_table">
+    
+                <h3 class="text-uppercase">Proposed share of funding options </h3>
+           
+            {% for item,value in funding_opt %}
+         
+                <div class=" mt-2">{{item}}</div>
+                           
+          
+          
+
+<div class="progress">
+  <div id="{{ item|replace({' ': _}) }}_0" class="progress-bar" role="progressbar" style="width: 20%; background-color:red;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+  <div id="{{ item|replace({' ': _}) }}_1" class="progress-bar" role="progressbar" style="width: 20%; background-color:orange;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+  <div id="{{ item|replace({' ': _}) }}_2" class="progress-bar" role="progressbar" style="width: 20%; background-color:yellow;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+  <div id="{{ item|replace({' ': _}) }}_3" class="progress-bar" role="progressbar" style="width: 20%; background-color:greenYellow;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+  <div id="{{ item|replace({' ': _}) }}_4" class="progress-bar" role="progressbar" style="width: 20%; background-color:green;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+            {% endfor %}
+
+
 </div>
 {% endmacro %}

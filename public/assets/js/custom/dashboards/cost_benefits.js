@@ -1,6 +1,6 @@
-function formatNumber(number)
+function formatNumber(number,n)
 {
-    number = number.toFixed(2) + '';
+    number = number.toFixed(n) + '';
     x = number.split('.');
     x1 = x[0];
     x2 = x.length > 1 ? '.' + x[1] : '';
@@ -83,11 +83,11 @@ function kpi(sumRatioZonePerUC){
     //affichage
     var currency = $('#currency').html().replace('(','').replace(')',' ');
     //console.log(currency);
-    $('#tot_invest').html(currency+formatNumber(totalInvestment));
-    $('#npv').html(currency+formatNumber(npv));
-    $('#socnpv').html(currency+formatNumber(socnpv));
-    $('#ncbr').html(ncbr[0] > 0 ? formatNumber(ncbr[1]/ncbr[0]) : "NA");
-    $('#rr').html(rr[0] > 0 ? formatNumber(rr[1]/rr[0]) : "NA");    
+    $('#tot_invest').html(currency+formatNumber(totalInvestment,0));
+    $('#npv').html(currency+formatNumber(npv,0));
+    $('#socnpv').html(currency+formatNumber(socnpv,0));
+    $('#ncbr').html(ncbr[0] > 0 ? formatNumber(ncbr[1]/ncbr[0],2)+" / 10" : "NA");
+    $('#rr').html(rr[0] > 0 ? formatNumber(rr[1]/rr[0],2)+" / 10" : "NA");    
 }
 
 function keyDates (sumRatioZonePerUC) {   //passer le id en paramètre?

@@ -27,9 +27,12 @@
 <div class="container-fluid">
 
     <section class="row">
-        <div class="col-lg-8 text-left">
+        <div id="body" class="col-12 text-left">
 
-         <h2 class="ml-5 mt-5"> Opex (Operational Expenditure) </h2>
+        <div class="row">
+            <h2 class="ml-5 mt-5"> Opex (Operational Expenditure) </h2> 
+            <button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+        </div>
         {#-------------- jumbotron --------------#}
         <div class="row jumbotron m-4 p-2">
             <div class="col text-center">
@@ -52,12 +55,13 @@
     </div>
 
     {#-------------- tab guide --------------#}
-    <div class="col-lg-4 guideline">
+    <div id="guideline" style="display:none;" class="col-lg-4 guideline">
         <div class="sticky-guideline">
-        <h1 class="text-center mt-5 pt-2"> Guideline </h1>
+        <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
         {% if test %}
+        <h1 class="text-center mt-5 pt-2"> Guideline </h1>
         {{ list.list_opex_guid(selDevSym,opex_advice,opex_user,selOpex,compo,ratio) }}
         {% endif %}
         </div>

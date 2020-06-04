@@ -158,6 +158,7 @@ function calcTotCashReleasing(){
     });
 }
 
+
 try{
     countSelectedCashReleasing(form_cashreleasing);
 } catch {

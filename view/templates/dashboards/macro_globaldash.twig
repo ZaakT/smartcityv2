@@ -6,8 +6,8 @@
         <th width="30%">Uses Cases</th>
         <th width="16%">Start Date</th>
         <th width="16%">Implem. End Date</th>
-        <th width="16%">End Date</th>
-        <th width="22%">Duration</th>
+        <th width="16%">Project End Date</th>
+        <th width="22%"></th>
     </tr>
     {% for measID,list_ucs in scope %}
         {% for ucID in list_ucs %}
@@ -72,7 +72,7 @@
 
 {% macro number_uc(scope,measures,ucs,volumes) %}
 
-<h3 class="dash-title mb-3">Number of service items</h3>
+<h3 class="dash-title mb-3">Number of use case items</h3>
 
 <div hidden>
     {% for measID,list_ucs in scope %}
@@ -165,19 +165,19 @@
 
 {% macro kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) %}
 
-<h3 class="dash-title">Key Performance Indicator</h3>
+<h3 class="dash-title">KPI</h3>
     <table id="kpiTable" class="table dashboard-table" style="border-collapse: collapse; ">
         <tr>
             <th>Total Investment</th>
-            <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(2, '.', ',') }}</td>
+            <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(0, '.', ',') }}</td>
         </tr>
         <tr>
             <th class="kpi-border">Net Present Value (NPV)</th>
-            <td class="kpi-border">{{ selDevSym }}&nbsp; {{ npv|number_format(2,'.',',') }}</td>
+            <td class="kpi-border">{{ selDevSym }}&nbsp; {{ npv|number_format(0,'.',',') }}</td>
         </tr>
         <tr>
             <th>Societal NPV</th>
-            <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(2,'.',',') }}</td>
+            <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(0,'.',',') }}</td>
         </tr>
         <tr>
             <th class="kpi-border">Breakeven</th>
@@ -189,11 +189,11 @@
         </tr>
         <tr>
             <th class="kpi-border">Non Cash Benefits Rating</th>
-            <td class="kpi-border">{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}}</td>
+            <td class="kpi-border">{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}} / 10</td>
         </tr>
         <tr>
             <th>Risks Rating</th>
-            <td>{{ ratingRisks != -1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}}</td>
+            <td>{{ ratingRisks != -1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}} / 10</td>
         </tr>
     </table>
 
@@ -201,7 +201,7 @@
 
 {% macro costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) %}
 
-            <h3 class="dash-title">Cost Benefits</h3>
+            <h3 class="dash-title">Cumulated Net Cash</h3>
                 <div hidden>
                     <table>
                         <tr>

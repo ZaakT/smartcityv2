@@ -45,8 +45,18 @@ function update_reco_funding_options(){
         var funding_options = bm_funding_options[reco[1]][invest_cap];
         for (item in funding_options) {
             $('#FO_'+item.replace(' ','')).html(level[funding_options[item]]);
+            for (let i = 0; i <= funding_options[item] ; i++) {
+                $('#'+item.replace(' ','')+'_'+i).show();
+            }
+            for (let i = funding_options[item]+1; i < 5 ; i++) {
+                $('#'+item.replace(' ','')+'_'+i).hide();
+            }
+
+            // show les barres 1 à level et hide barre level+1 à 5
         }
     } 
 }
+
+
 
 

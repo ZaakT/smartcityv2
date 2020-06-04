@@ -52,7 +52,7 @@ function checkWiderCashInput(){
     var ret = true;
     $("#widercash_input input").each(function(){
         var val = $(this).val();
-        var tab = $(this).classes()
+        var tab = $(this).classes();
         if(tab.includes("volume")){
             val = val ? parseInt(val) : -1 ;
             //console.log(val);
@@ -115,7 +115,7 @@ function calcTotWiderCash(){
                     var vol_red = parseFloat($("#volRed_"+temp[2]).val());
                     var cost_red = parseFloat($("#unitCostRed_"+temp[2]).val());
                     var tot = bc&&vol_red&&cost_red ? bc*(100-vol_red)*(100-cost_red)/1E4 : 0;
-                    console.log(tot);
+                    //console.log(tot);
                     $(this).text(tot.toLocaleString(undefined,{maximumFractionDigits:2}));
                     sum_crt += tot;
                 } else if(temp[1]=="crb"){
@@ -157,6 +157,7 @@ function calcTotWiderCash(){
         }
     });
 }
+
 
 try{
     countSelectedWiderCash(form_widercash);
