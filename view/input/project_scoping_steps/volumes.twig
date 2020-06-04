@@ -19,10 +19,10 @@
 
 
 
-<div class="container-fluid">
+<div class="container-fluid px-0">
 <div class ="row">
     {% if scope and sizes and perimeter %} 
-        <div class="col-lg-8 text-left">
+        <div id="body" class="col-12 text-left">
             <form class="col container-fluid" name="form_volumes" id="form_volumes" action="?A=project_scoping&amp;A2=volumes_selected" method="post" onsubmit="return colorFilledVolumes();">
             {#-------------- jumbotron --------------#}
             <div class="row jumbotron m-4 p-2">
@@ -31,8 +31,9 @@
                 </div>
             </div>
             {% for meas,list_ucs in scope %}
-            <div class="row text-center mt-5 mb-0">
-                <h2 class="col">Input volumes for {{measures[meas]['name']}}</h2>
+            <div class="row mt-5 mb-0">
+                <h2 class="mx-auto">Input volumes for {{measures[meas]['name']}}</h2>
+                <button id="guideline_button" type="button"  class=" mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
             </div>
             {#---------- tab input -----------#}
             <div class="row m-3 btn-group-sm justify-content-center" role="group">
@@ -56,8 +57,8 @@
         </div> 
 
         {#---------------- guideline ----------------#}
-        <div class="col-lg-4 guideline">
-            <div class="sticky-guideline">
+        <div id="guideline"  style="display:none;"  class="col-lg-5 guideline">
+            <div class="sticky-guideline list-table">
                 <h1 class="text-center mt-5 pt-2"> Guideline </h1>
                 
                 {% for meas,list_ucs in scope %}
