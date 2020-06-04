@@ -310,12 +310,15 @@
 {% macro list_widercash_input_2(widercash_advice,widercash_user,selWiderCash) %}
 <div class="row m-4 text-center">
     <div class="col mt-2 list-table">
-        <table id="widercash_input" class='table table-sm table-bordered table-responsive-lg'>
+        <table id="widercash_input" class='table table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Wider Cash Component</th>
                     <th scope="col">Volume Variation<br>( in % per year)</th>
                     <th scope="col">Unit Cost Variation<br>( in % per year)</th>
+                    <th scope="col" class="text-dark" style="background-color:#e9ecef">Variation of Volumes<br>(per month)</th>
+                    <th scope="col" class="text-dark" style="background-color:#e9ecef">Variation of Unit Cost<br>(per month)</th>
+                    <th scope="col" class="text-dark" style="background-color:#e9ecef">Combined Variation<br>(per month)</th>                    
                 </tr>
                 
             </thead>
@@ -327,8 +330,11 @@
                     {% else %}
                     <td scope="col">{{ widercash_user[id_widercash]['name'] }}</td>
                     {% endif %}
-                    <td scope="col"><input id="anVarVol_{{id_widercash}}" name="anVarVol_{{id_widercash}}" class="text-center anVarVol pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['anVarVol']}}"><span> %</span></td> 
-                    <td scope="col"><input id="anVarCost_{{id_widercash}}" name="anVarCost_{{id_widercash}}" class="text-center anVarCost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['anVarCost']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarVol_{{id_widercash}}" name="anVarVol_{{id_widercash}}" class="text-center anVarVol pt-1 pb-1 w-90" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['anVarVol']}}"><span> %</span></td> 
+                    <td scope="col"><input id="anVarCost_{{id_widercash}}" name="anVarCost_{{id_widercash}}" class="text-center anVarCost pt-1 pb-1 w-90" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['anVarCost']}}"><span> %</span></td> 
+                    <td scope="col" class="output" id="tot_varvol_{{id_widercash}}">-</td>
+                    <td scope="col" class="output" id="tot_varcost_{{id_widercash}}">-</td>
+                    <td scope="col" class="output" id="tot_combvar_{{id_widercash}}">-</td>                    
                 </tr> 
             {% endfor %}
             </tbody>
@@ -386,9 +392,7 @@
                     <th scope="col">Baseline Cost <br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Wider Cash Target<br>( in {{selDevSym}}  per month)</th>
                     <th scope="col">Wider Cash Benefits<br>( in {{selDevSym}}  per month)</th>
-                    <th scope="col">Variation of Volumes<br>(per month)</th>
-                    <th scope="col">Variation of Unit Cost<br>(per month)</th>
-                    <th scope="col">Combined Variation<br>(per month)</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -399,19 +403,17 @@
                     {% else %}
                     <td scope="col">{{ widercash_user[id_widercash]['name'] }}</td>
                     {% endif %}
-                    <td scope="col" id="tot_bc_{{id_widercash}}">-</td>
-                    <td scope="col" id="tot_crt_{{id_widercash}}">-</td>
-                    <td scope="col" id="tot_crb_{{id_widercash}}">-</td>
-                    <td scope="col" id="tot_varvol_{{id_widercash}}">-</td>
-                    <td scope="col" id="tot_varcost_{{id_widercash}}">-</td>
-                    <td scope="col" id="tot_combvar_{{id_widercash}}">-</td>
+                    <td scope="col" id="tot_bc_{{id_widercash}}" class="output">-</td>
+                    <td scope="col" id="tot_crt_{{id_widercash}}" class="output">-</td>
+                    <td scope="col" id="tot_crb_{{id_widercash}}" class="output">-</td>
+
                 </tr> 
             {% endfor %}
                 <tr>
                     <th class="bg-light text-dark">Total</th>
-                    <td class="font-weight-bold" scope="col" id="tot_bc">-</td>
-                    <td class="font-weight-bold" scope="col" id="tot_crt">-</td>
-                    <td class="font-weight-bold" scope="col" id="tot_crb">-</td>
+                    <td class="font-weight-bold output" scope="col" id="tot_bc">-</td>
+                    <td class="font-weight-bold output" scope="col" id="tot_crt">-</td>
+                    <td class="font-weight-bold output" scope="col" id="tot_crb">-</td>
                 </tr>
             </tbody>
         </table>

@@ -894,3 +894,10 @@ body { background-color: #cdcdcd;} */
     font-weight: bold;
 }
 
+.w-90 {
+    width: 90%;
+}
+
+.w-80 {
+    width: 80%;
+}

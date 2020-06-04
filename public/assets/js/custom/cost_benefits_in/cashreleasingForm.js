@@ -97,7 +97,7 @@ function calcTotCashReleasing(){
     var sum_bc = 0;
     var sum_crt = 0;
     var sum_crb = 0;
-    $("#tot_table td").each(function(){
+    $(".output").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -115,7 +115,7 @@ function calcTotCashReleasing(){
                     var vol_red = parseFloat($("#volRed_"+temp[2]).val());
                     var cost_red = parseFloat($("#unitCostRed_"+temp[2]).val());
                     var tot = bc&&vol_red&&cost_red ? bc*(100-vol_red)*(100-cost_red)/1E4 : 0;
-                    console.log(tot);
+                    //console.log(tot);
                     $(this).text(tot.toLocaleString(undefined,{maximumFractionDigits:2}));
                     sum_crt += tot;
                 } else if(temp[1]=="crb"){
