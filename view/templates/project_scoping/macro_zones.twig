@@ -33,6 +33,7 @@
 {% endmacro %}
 
 {% macro list_zones2(zones,item,level,list_sel=[]) %}
+
 {% if level == 1 %}
     <div class="row text-center level_{{level}}">
     <div class="col mt-5 list-table">
@@ -53,7 +54,7 @@
             {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
             {% set inputID = zone['hasChildren'] ? "" : ""%}
                 <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
-                    <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')"  ></td>
+                    <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')" {{ zone['id'] in list_sel|keys ? "checked" : ""}} ></td>
                     {# <td>{{ zone['id'] }}</td> #}
                     <td>{{ zone['name'] }}</td>
                     <td>{{ zone['type'] }}</td>
@@ -62,12 +63,14 @@
             </tbody>
         </table>
     </div></div>
-    {% else %}
+
+{% else %}
+
 {% for levelParent,itemParent in zones if levelParent == level - 1%}
     {% for zoneParent in itemParent if zoneParent['hasChildren'] %}
 <div class="row text-center level_{{level}} child_{{zoneParent['id']}}">
     <div class="col mt-5 list-table">
-        <table id="zones_table" class='table table-sm table-striped table-responsive-lg child_{{zoneParent['id']}}'>
+        <table id="zones_table" class='table table-sm table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th colspan=3> Select a {{ item[level + 1]['type'] }} in {{ zoneParent['name'] }}</th>
