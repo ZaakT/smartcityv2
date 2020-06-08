@@ -1144,7 +1144,7 @@ function getRatio(){
 
 function getListSelVolumes($projID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_zone,id_uc,nb_compo,nb_per_uc
+    $req = $db->prepare("SELECT id_zone,id_uc,nb_compo,nb_per_uc,nb_tot_uc
                             FROM volumes_input
                             WHERE id_proj = ?");
     $req->execute(array($projID));
@@ -1154,14 +1154,15 @@ function getListSelVolumes($projID){
         $id_uc = intval($row['id_uc']);
         $nb_compo = intval($row['nb_compo']);
         $nb_per_uc = intval($row['nb_per_uc']);
+        $nb_tot_uc = intval($row['nb_tot_uc']);
         if(array_key_exists($id_zone,$list)){
             if(array_key_exists($id_uc,$list[$id_zone])){
-                $list[$id_zone][$id_uc] += ['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc];
+                $list[$id_zone][$id_uc] += ['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc, 'nb_tot_uc'=>$nb_tot_uc];
             } else {
-                $list[$id_zone] += [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc]];
+                $list[$id_zone] += [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc, 'nb_tot_uc'=>$nb_tot_uc]];
             }
         } else {
-            $list[$id_zone] = [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc]];
+            $list[$id_zone] = [$id_uc=>['nb_compo'=>$nb_compo,'nb_per_uc'=>$nb_per_uc, 'nb_tot_uc'=>$nb_tot_uc]];
         }
     }
     //var_dump($list);
@@ -1173,11 +1174,11 @@ function insertSelVolumes($projID,$list){
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("INSERT INTO volumes_input
-                            (id_proj,id_zone,id_uc,nb_compo,nb_per_uc)
-                            VALUES (?,?,?,?,?)");
+                            (id_proj,id_zone,id_uc,nb_tot_uc)
+                            VALUES (?,?,?,?)");
     foreach ($list as $id_zone => $list_ucs) {
         foreach ($list_ucs as $id_uc => $data) {
-            $ret = $req->execute(array($projID,$id_zone,$id_uc,$data['nb_compo'],$data['nb_per_uc']));
+            $ret = $req->execute(array($projID,$id_zone,$id_uc,$data['nb_compo']));
         }
     }
     return $ret;
@@ -3646,12 +3647,17 @@ function getRisksRating($projID,$ucID){
 
 function getListVolumesPerUC($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT SUM(nb_compo/nb_per_uc) as volume
+    $req = $db->prepare("SELECT SUM(nb_compo/nb_per_uc) as volumeCalculated, nb_tot_uc as volumeDirectInput
                             FROM volumes_input
                             WHERE id_proj = ? and id_uc = ?");
     $req->execute(array($projID,$ucID));
-    $res = $req->fetch()['volume'];
-    return intval($res);
+    $res = $req->fetch();
+    if ($res['volumeDirectInput']) {
+        return intval($res['volumeDirectInput']);
+    } else {
+        return intval($res['volumeCalculated']);
+    }
+    
 }
 
 

@@ -84,6 +84,7 @@ function kpi(sumRatioZonePerUC){
     var currency = $('#currency').html().replace('(','').replace(')',' ');
     //console.log(currency);
     $('#tot_invest').html(currency+formatNumber(totalInvestment,0));
+    console.log(npv);
     $('#npv').html(currency+formatNumber(npv,0));
     $('#socnpv').html(currency+formatNumber(socnpv,0));
     $('#ncbr').html(ncbr[0] > 0 ? formatNumber(ncbr[1]/ncbr[0],2)+" / 10" : "NA");

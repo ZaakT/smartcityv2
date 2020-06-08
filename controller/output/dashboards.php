@@ -162,7 +162,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                 //var_dump($capexPerMonth);
                 
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
-                //   var_dump($uc_check_completed);
+                var_dump($npv, $socnpv);
 
                 $ratioByVolume = json_encode($ratioByVolume);
                 

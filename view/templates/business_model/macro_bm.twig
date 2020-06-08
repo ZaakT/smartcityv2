@@ -93,7 +93,7 @@
 <span id="funding_options_json" hidden>{{ funding_options_json }}</span>
 
 
-<div hidden class="col list-table funding_opt_table">
+{#<div class="col list-table funding_opt_table">
     <table id="funding_opt_table" class='table table-lg table-responsive-lg'>
         <thead class="thead-light text-center">
             <tr>
@@ -111,14 +111,20 @@
             {% endfor %}
         </tbody>
     </table>
-</div>
+</div> #}
 
 
 
-
+<table id="funding_opt_table" class='proj_qualif_table table table-lg table-responsive-lg'>
+    <thead class="thead-light text-center" >
+        <tr>
+            <th colspan=2 class="text-uppercase" style="border-bottom:none;">Proposed share of funding options </th>
+        </tr>
+    </thead>
+</table>
 <div class="col funding_opt_table">
     
-    <h3 class="text-uppercase">Proposed share of funding options </h3>
+    {#<h3 class="text-uppercase">Proposed share of funding options </h3>#}
         {% for item,value in funding_opt %}
             <div class=" mt-2">{{item}}</div>
             <div class="progress">

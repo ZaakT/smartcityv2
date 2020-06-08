@@ -64,7 +64,7 @@ function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zon
     return 0;
 }
 
-function fillTot(formName){  //calcule le nombre total de use case 
+function fillTot(formName){  //calcule le nombre total de use case lorsque nb de composant ou ration comp/uc est modifié
     colorFilledVolumes();
     const list_ucs = searchIDs(formName)[0];
     const list_compo = searchIDs(formName)[1];
@@ -90,7 +90,31 @@ function fillTot(formName){  //calcule le nombre total de use case
                     totZone += totCompoZone ;
                 }
             })
-            $("#totUC_"+uc+"_"+zone).text(totZone);
+            $("#totUC_"+uc+"_"+zone).val(totZone);
+            tot_totUC += totZone;
+        })
+        $("#tot_totUC_"+uc).text(tot_totUC);
+    })
+}
+
+function fillTot2(formName){ //calcule le nombre total de use case  lorsque le nb de use case item par quartier est modifié
+    const list_ucs = searchIDs(formName)[0];
+    const list_compo = searchIDs(formName)[1];
+    const list_zones = searchIDs(formName)[2];
+    const list_items = ["nb_","nbuc_"];
+    list_compo.forEach((compo) => {
+        //calcTot(compo,list_zones,"zones_"); pas compris
+        list_items.forEach((item) => {
+            list_ucs.forEach((uc) => {
+                calcTot(compo,list_zones,item,"_"+uc); //calcule les sommes sur zones de la colonne de droite
+            })
+        })
+    })
+    list_ucs.forEach((uc) => {
+        var tot_totUC = 0; //total pour un UC (en bas à droite)
+
+        list_zones.forEach((zone) => {
+            totZone = Number($("#totUC_"+uc+"_"+zone).val()); //total de UC pour une zone (ligne du bas)
             tot_totUC += totZone;
         })
         $("#tot_totUC_"+uc).text(tot_totUC);
@@ -105,7 +129,7 @@ function colorFilledVolumes(){
         var value = element.val();
         //value = value=="" ? "" : parseInt(value);
         //console.log(value);
-        if(value=="" || value<0){
+        if( value=="" || value<0){
             element.css("background","salmon");
             element.val("");
             ret = false;
@@ -120,7 +144,7 @@ function colorFilledVolumes(){
 
 colorFilledVolumes();
 
-fillTot("form_volumes");
+fillTot2("form_volumes");
 
 
 function fillByAv(id){

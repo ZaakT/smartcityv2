@@ -414,10 +414,19 @@ function volumes_selected($post=[]){
 
 function getVolumesFromPost($post){
     $list_volumes = [];
+    //var_dump($post);
     foreach ($post as $key => $value) {
         if(isset($key)){
             $temp = explode('_',$key);
-            $type = $temp[1];
+            $type = $temp[0];
+            $id_uc = $temp[1];
+            $id_zone = $temp[2];
+                    
+            if($type=='totUC'){
+                $list_volumes[$id_zone][$id_uc] = ['nb_compo'=>intval($value)];
+            } 
+            
+            /* $type = $temp[1];     ANCIENNE VERSION OU ON CALCULAIT MANUELLEMENT
             //$id_comp = intval($temp[2]);
             $id_uc = intval($temp[3]);
             $id_zone = intval($temp[4]);
@@ -449,6 +458,8 @@ function getVolumesFromPost($post){
                     throw new Exception("There is an error with inputs names");
                 }
             }
+
+            */
         }
     }
     return $list_volumes;
