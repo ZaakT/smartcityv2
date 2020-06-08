@@ -140,7 +140,7 @@ function perimeter($twig,$is_connected,$projID=0){
             //var_dump($list_zones);
             //var_dump($repart_zones[2]);
             $listSelZones = getListSelZones($projID);
-            var_dump($listSelZones);
+            //var_dump($listSelZones);
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
