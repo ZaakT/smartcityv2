@@ -9,9 +9,9 @@ var i = 0;
 ////////// CHANGE TH ECOLOR OF THE KEY DATES \\\\\\\\\\\\\\\\\\
 $('.uc').each(function() {
   id = $(this).attr('id').split("_");
-  console.log(id);
+  //console.log(id);
   $('#step1_'+id[1]).css("background-color", colors[i]+"0.4)"); 
-  console.log('border-left : 12px solid '+colors[i]+'0.4);');
+  //console.log('border-left : 12px solid '+colors[i]+'0.4);');
   document.styleSheets[3].addRule('#step1_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.4);');
   $('#step2_'+id[1]).css("background-color", colors[i]+"0.7)");
   document.styleSheets[3].addRule('#step2_'+id[1]+'::after','border-left : 12px solid rgb(255,255,255,0.3);');
@@ -41,7 +41,7 @@ var donutColors = colors;
 for (var key in donutColors){
   donutColors[key] += '1)';
 }
-console.log(ucQuantity);
+//console.log(ucQuantity);
 
 //DISPLAY GRAPH
 var numberOfItems = new Chart($('#numberOfItems'), {
@@ -261,124 +261,193 @@ new Chart(document.getElementById("costbenefitsGraph"), {
   }
 });
 
-////////////////////  FINANCIAL BANKABILIY /////////////////////////
 
-//GET THE DATA FROM THE HIDDEN TABS
-colors = ["#55D8FE", "#FFDA83","#FF8373","#A3A0FB"];
-//         
 
-var FROI = [];
-$('.FROI').each(function() {
-  FROI.push($(this).html());
-});
-var fin_payback = [];
-$('.fin_payback').each(function() {
-  fin_payback.push($(this).html());
-});
-var cashreleasingScore = [];
-$('.cashreleasingScore').each(function() {
-  cashreleasingScore.push($(this).html());
-});
+/////////////  FINANCIAL AND SOCIETAL BANKABILITY \\\\\\\\\\\\\\\\\\
 
-//console.log(FROI, fin_payback, soc_payback, finBankLabel);
+//récupérer les input nogo target
+//récupérer les valeurs fin and soc
+//Calculer valeurs a afficher dans graphiques
+     
 
-finBankLabel = [['Return per '+currency+' invested'],['Payback /','Project Duration'],['Cash Releasing', 'Benefits']];
+function createCharts(input,projectData) {
 
-// BUILD DATASETS
-var finBankDatasets = { 
-                        labels: finBankLabel,
-                        datasets: []
-};
-var i = 0;
-ucName.forEach((uc)=>{
-  finBankDatasets.datasets.push({
-    label: ucName[i],
-    fill: false,
-    backgroundColor: "rgba(179,181,198,0.2)",
-    borderColor: colors[i],
-    data: [FROI[i],fin_payback[i], cashreleasingScore[i]]
-  });
-  i++;
-});
-//console.log(finBankDatasets);
+  var financialChartData =  [
+    calcChartValue(
+        Number(projectData['fin_npv']), 
+        Number(input['npv_target']), 
+        Number(input['npv_nogo'])),
+    calcChartValue(
+        Number(projectData['fin_roi']), 
+        Number(input['roi_target']), 
+        Number(input['roi_nogo'])),
+    calcChartValue(
+        -Number(projectData['fin_payback']), 
+        -Number(input['payback_target']), 
+        -Number(input['payback_nogo'])),
+    calcChartValue(
+        -Number(projectData['rating_risks']), 
+        -Number(input['rr_target']), 
+        -Number(input['rr_nogo'])),
+    calcChartValue(
+        Number(projectData['rating_noncash']), 
+        Number(input['nqbr_target']), 
+        Number(input['nqbr_nogo'])),
+    ];
 
-//CHART
-new Chart($('#financialBankabilityChart'), {
-  type: 'radar',
-  data: finBankDatasets,
-  options: {
-    title: {
+var societalChartData =  [
+    calcChartValue(
+        Number(projectData['soc_npv']), 
+        Number(input['npv_target']), 
+        Number(input['npv_nogo'])),
+    calcChartValue(
+        Number(projectData['soc_roi']), 
+        Number(input['roi_target']), 
+        Number(input['roi_nogo'])),
+    calcChartValue(
+        -Number(projectData['soc_payback']), 
+        -Number(input['payback_target']), 
+        -Number(input['payback_nogo'])),
+    calcChartValue(
+        -Number(projectData['rating_risks']), 
+        -Number(input['rr_target']), 
+        -Number(input['rr_nogo'])),
+    calcChartValue(
+        Number(projectData['rating_noncash']), 
+        Number(input['nqbr_target']), 
+        Number(input['nqbr_nogo'])),
+    ];
+//console.log(financialChartData, societalChartData);
+
+
+//////////  FINANCIAL BANKABILIY /////////
+financialChart = new Chart($('#financialBankabilityChart'), {
+type: 'radar',
+data: { 
+  labels: ['Net Present Value','Return per '+currency+' invested', ['Payback /','Project Duration'], 'Risks Rating', ['Non Quantifiable', 'Benefits Rating']],
+  datasets: [{
+      label: 'Target',
+      fill: false,
+      pointRadius: 0,
+      borderColor: 'green',
+      data: [4,4,4,4,4]
+    },{
+      label: 'No Go',
+      fill: false,
+      pointRadius: 0,
+      borderColor: 'red',
+      data: [2,2,2,2,2]
+    },{
+      label: 'Project',
+      fill: true,
+      backgroundColor: "rgba(85, 216, 254, 0.2)",
+      borderColor: 'rgb(85, 216, 254)',
+      borderWidth: 2,
+      pointRadius: 2,
+      data: financialChartData
+    }]
+},
+options: {
+  title: {
+    display: false
+  },
+  legend: {
+    position: "right"
+  },
+  plugins: {
+    datalabels: {
       display: false
-    },
-    legend: {
-      position: "bottom"
-    },
-    plugins: {
-      datalabels: {
-        display: false
+    }
+  },
+  scale: {
+      ticks: {
+          callback: function() {return ""},
+          suggestedMin: 0,
+          suggestedMax: 5,
+          stepSize: 1
       }
-      }
+      
   }
+}
 });
 
-
-
-////////////////////  SOCIETAL BANKABILIY /////////////////////////
-
-//GET THE DATA FROM THE HIDDEN TABS
-
-var SROI = [];
-$('.SROI').each(function() {
-  SROI.push($(this).html());
-});
-var soc_payback = [];
-$('.soc_payback').each(function() {
-  soc_payback.push($(this).html());
-});
-var risksScores = [];
-$('.risksScores').each(function() {
-  risksScores.push($(this).html());
-});
-var noncashScores = [];
-$('.noncashScores').each(function() {
-  noncashScores.push($(this).html());
-});
-var socBankLabel = [['Societal Return','per '+currency+' invested'],['Societal Payback /','Project Duration'],'Risks',['Non Cash','Benefits']];
-
-// BUILD DATASETS
-var socBankDatasets = { 
-  labels: socBankLabel,
-  datasets: []
-};
-var i = 0;
-ucName.forEach((uc)=>{
-  socBankDatasets.datasets.push({
-    label: ucName[i],
-    fill: false,
-    backgroundColor: "rgba(179,181,198,0.2)",
-    borderColor: colors[i],
-    data: [SROI[i],soc_payback[i], risksScores[i], noncashScores[i]]
-  });
-  i++;
-});
-//console.log(socBankDatasets);
-
-//CHART
-new Chart($('#societalBankabilityChart'), {
-  type: 'radar',
-  data: socBankDatasets,
-  options: {
-    title: {
+///////////// SOCIETAL BANKABILIY ///////////
+societalChart = new Chart($('#societalBankabilityChart'), {
+type: 'radar',
+data: { 
+  labels: [['Societal','Net Present Value'],['Societal Return', 'per '+currency+' invested'], ['Societal Payback /','Project Duration'], 'Risks Rating', ['Non Quantifiable', 'Benefits Rating']],
+  datasets: [{
+      label: 'Target',
+      fill: false,
+      borderColor: 'green',
+      pointRadius: 0,
+      data: [4,4,4,4,4]
+    },{
+      label: 'No Go',
+      fill: false,
+      borderColor: 'red',
+      pointRadius: 0,
+      data: [2,2,2,2,2]
+    },{
+      label: 'Project',
+      fill: true,
+      backgroundColor: "rgba(163, 160, 251, 0.2)",
+      borderColor: 'rgb(163, 160, 251)',
+      borderWidth: 2,
+      pointRadius: 2,
+      data: societalChartData
+    }]
+},
+options: {
+  title: {
+    display: false
+  },
+  legend: {
+    position: "left"
+  },
+  plugins: {
+    datalabels: {
       display: false
-    },
-    legend: {
-      display: false
-    },
-    plugins: {
-      datalabels: {
-        display: false
+    }
+  },
+  scale: {
+      ticks: {
+          callback: function() {return ""},
+          suggestedMin: 0,
+          suggestedMax: 5,
+          stepSize: 1
       }
-      }
+      
   }
+}
 });
+}
+
+function calcChartValue(projectScore, target, nogo) {
+  var delta = target * 0.05;
+  //console.log(projectScore,target,nogo,delta);
+  var resultat = 0;
+  if ( projectScore < nogo - delta ) resultat = 1;
+  else if ( projectScore <= nogo + delta ) resultat = 2;
+  else if ( projectScore < target - delta) resultat = 3;
+  else if (projectScore <= target + delta) resultat = 4;
+  else resultat = 5;
+
+  return resultat;
+}
+
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+var projectData = JSON.parse($('#bankability_data').html());
+var input = JSON.parse($('#input_nogo_target').html());
+//console.log(input, isEmptyObject(input));
+if (!isEmptyObject(input)) {
+  createCharts(input,projectData);
+} else {
+  $('#financialBankabilityChart').hide();
+  $('#societalBankabilityChart').hide();
+  $('.bankability_error').show();
+}
 

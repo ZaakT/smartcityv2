@@ -310,7 +310,7 @@ function calcProjectScore(projectScore, target, nogo, idSelector) {
         $(idSelector+'_thumb-down').removeAttr('hidden');          
     }
     
-    console.log(idSelector, projectScore, target, nogo, score  );
+    //console.log(idSelector, projectScore, target, nogo, score  );
     return score;
 }
 

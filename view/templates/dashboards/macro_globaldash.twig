@@ -118,49 +118,20 @@
 
 {% endmacro %}
 
-{% macro financial_bankability(selDevSym, scope, ucs, fin_ROI, soc_ROI, fin_payback, soc_payback, risksScores, noncashScores, cashreleasing) %}
-
+{% macro financial_bankability(selDevSym, input_nogo_target, bankability_data) %}
 <h3 class="dash-title">Financial Bankability</h3>
-    <div hidden>
-        <table>
-            <tr>
-                <th>ucName</th>
-                <th class="finBankLabel">Return per {{ selDevSym }} invested</th>
-                <th class="socBankLabel">Societal Return per {{ selDevSym }} invested</th>
-                <th class="finBankLabel">Payback /\n Project Duration</th>
-                <th class="socBankLabel">Societal Payback /\n Project Duration</th>
-                <th class="socBankLabel">Risks</th>
-                <th class="socBankLabel">Non Cash Benefits</th>
-                <th class="finBankLabel">Cash Releasing Benefits</th>
-            </tr>
-            {% for measID,list_ucs in scope %}
-                {% for ucID in list_ucs %}
-                <tr>
-                    <td>{{ ucs[ucID]['name'] }}</td>
-                    <td class="FROI">{{ fin_ROI[ucID]['score']|number_format(2, '.', ',') }}</td>
-                    <td class="SROI">{{ soc_ROI[ucID]['score']|number_format(2, '.', ',') }}</td>
-                    <td class="fin_payback">{{ fin_payback[ucID]['score']|number_format(2, '.', ',') }}</td>
-                    <td class="soc_payback">{{ soc_payback[ucID]['score']|number_format(2, '.', ',') }}</td>
-                        {% if risksScores[ucID]['score'] != -1%} <td class="risksScores">{{risksScores[ucID]['score']|number_format(2, '.', ',')}}</td>
-                        {% else %}<td class="risksScores">0</td>{% endif %}
-                        {% if noncashScores[ucID]['score'] != -1%}<td class="noncashScores">{{noncashScores[ucID]['score']|number_format(2, '.', ',')}}</td>
-                        {% else %}<td class="noncashScores">0</td>{% endif %}
-                        <td class="cashreleasingScore">{{ cashreleasing['tot']}}</td>
-                </tr>
-                {% endfor %}
-            {% endfor %}
-        </table>
-    </div>
 
-<canvas id="financialBankabilityChart" height="200px"></canvas>
+    <span class="d-none" id='input_nogo_target'>{{ input_nogo_target }}</span>
+    <span class="d-none" id='bankability_data'>{{ bankability_data }}</span>
+    <span class="bankability_error" style="display:none;">Please click here to input your bankability criteria.</span>
 
+<canvas id="financialBankabilityChart"></canvas>
 {% endmacro %}
 
 {% macro societal_bankability() %}
-
 <h3 class="dash-title">Societal Bankability</h3>
-<canvas id="societalBankabilityChart" height="200px"></canvas>
-
+<span class="bankability_error" style="display:none;">Please click here to input your bankability criteria.</span>
+<canvas id="societalBankabilityChart"></canvas>
 {% endmacro %}
 
 {% macro kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) %}

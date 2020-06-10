@@ -34,18 +34,17 @@
                 <div class="dash-bg-light container-fluid p-3 mt-4">
                     {{ macros.number_uc(scope,measures,ucs,volumes) }}
                 </div>    
+            </div>            
+            
+            {# BUGDET #}
+            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                <a id="budget_all" class="dash-link" href="?A=dashboards&amp;A2=budget&amp;projID={{ projID }}">
+                    <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
+                    </div>
+                </a> 
             </div>
 
-            <section class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                <a id="bankability" class="dash-link" href="?A=dashboards&amp;A2=bankability&amp;projID={{ projID }}">
-                <div class="dash-bg-light container-fluid p-3">
-                    {{ macros.financial_bankability(selDevSym, scope, ucs, fin_ROI, soc_ROI, fin_payback, soc_payback, risksScores, noncashScores, cashreleasing) }}
-                </div>
-                <div class="dash-bg-light container-fluid p-3">
-                    {{ macros.societal_bankability() }}
-                </div>
-                <a/>
-            </section>
         </div>
 
 
@@ -62,14 +61,18 @@
                 </a>
             </div>
 
-            {# BUGDET #}
-            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                <a id="budget_all" class="dash-link" href="?A=dashboards&amp;A2=budget&amp;projID={{ projID }}">
-                    <div class="dash-bg-light container-fluid p-3">
-                    {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
-                    </div>
-                </a> 
-            </div>
+            {# BANKABIKITY #}
+            <section class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                <a id="bankability" class="dash-link" href="?A=dashboards&amp;A2=bankability&amp;projID={{ projID }}">
+                <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.financial_bankability(selDevSym, input_nogo_target, bankability_data) }}
+                </div>
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                    {{ macros.societal_bankability() }}
+                </div>
+                <a/>
+            </section>
+
         </div>
         
     </div>

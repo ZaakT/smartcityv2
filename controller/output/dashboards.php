@@ -3512,29 +3512,28 @@ function global_dashboard($twig,$is_connected,$projID=0){
             $npv1 = calcNPV($dr_month,$netcashPerMonth[0]); 
             $socnpv1 = calcNPV($dr_month,$netsoccashPerMonth[0]);
             
-            foreach ($scope as $measID => $list_ucs) {
-                foreach ($list_ucs as $ucID) { 
-            /////// BANKABILITY
-            $fin_ROI[$ucID]["value"] = calcROI($npv1,$budgetGraphData['npv2']);
-            $fin_ROI[$ucID]["score"] = calcROI_score($fin_ROI[$ucID]["value"]); 
-     
-            $soc_ROI[$ucID]["value"] = calcROI($socnpv1,$budgetGraphData['npv2']);
-            $soc_ROI[$ucID]["score"] = calcROI_score($soc_ROI[$ucID]["value"]); 
+            //roi
+            $fin_ROI = calcROI($npv1,$budgetGraphData['npv2']);     
+            $soc_ROI = calcROI($socnpv1,$budgetGraphData['npv2']);
+
+            //payback            
+            $fin_payback = calcPayback($netcashPerMonth)[1];
+            $soc_payback = calcPayback($netsoccashPerMonth)[1];
+
+            $inputNogoTarget = json_encode(getBankabilitInputNogoTarget($projID));
+            $bankability_data = array(
+                'fin_npv'=>$npv1,
+                'soc_npv'=>$socnpv1,
+                'fin_roi'=>$fin_ROI,  //meh??
+                'soc_roi'=>$soc_ROI,   //meh??
+                'fin_payback'=>$fin_payback,  //meh?? 
+                'soc_payback'=>$soc_payback,   //meh??
+                'rating_noncash'=>$ratingNonCash,
+                'rating_risks'=>$ratingRisks                
+            );
+            $bankability_data = json_encode($bankability_data);
+
             
-            $fin_payback[$ucID]["value"] = calcPayback($netcashPerMonth)[0];
-            $fin_payback[$ucID]["score"] = calcPayback_score($fin_payback[$ucID]["value"]/100); 
-
-            $soc_payback[$ucID]["value"] = calcPayback($netsoccashPerMonth)[0];
-            $soc_payback[$ucID]["score"] = calcPayback_score($soc_payback[$ucID]["value"]/100); 
-
-            $noncash[$ucID]["value"] = getNonCashRating($projID,$ucID);
-            $noncash[$ucID]["score"] = calcNoncash_score($noncash[$ucID]["value"]);
-
-            $risks[$ucID]["value"] = getRisksRating($projID,$ucID);  //boucle for??
-            $risks[$ucID]["score"] = calcRisk_score($risks[$ucID]["value"]);
-
-                }
-            }
 
             
             $uc_check_completed = check_if_UC_is_completed($projID,$scope);
@@ -3548,7 +3547,7 @@ function global_dashboard($twig,$is_connected,$projID=0){
             
             echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'years'=>$projectYears,'netProjectCost'=>$budgetGraphData['netProjectCost'],'baselineOpCost'=>$budgetGraphData['baselineOpCost'],'OBYI'=>$budgetGraphData['OBYI'],
             'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv1,'socnpv'=>$socnpv1,
-           'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'noncashScores'=>$noncash, 'risksScores'=>$risks, 'uc_completed'=>$uc_check_completed ));
+           'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'input_nogo_target'=>$inputNogoTarget, 'bankability_data'=>$bankability_data, 'uc_completed'=>$uc_check_completed ));
 
             prereq_Dashboards();
         } else {
