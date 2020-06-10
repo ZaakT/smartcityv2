@@ -1610,7 +1610,7 @@ function insertCapexInputed($projID,$ucID,$list){
     return $ret;
 }
 
-function getNbTotalCompo($compoID){
+function getNbTotalCompoForAllZones($compoID){
     $db = dbConnect();
     $req = $db->prepare("SELECT SUM(number) FROM comp_per_zone WHERE id_compo = ?");
     $req->execute(array($compoID));
@@ -1618,9 +1618,17 @@ function getNbTotalCompo($compoID){
     return number_format($res, 0, ',', ' ');
 }
 
+function getNbTotalCompoForSelectedZone($compoID, $zoneID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT number FROM comp_per_zone WHERE id_compo = ? and id_zone = ?");
+    $req->execute(array($compoID,$zoneID));
+    $res = intval($req->fetch()[0]);
+    return $res;
+}
+
 function getNbTotalUC($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT SUM(nb_compo DIV nb_per_uc)
+    $req = $db->prepare("SELECT SUM(nb_tot_uc)
                             FROM volumes_input
                             WHERE id_proj = ?
                                 and id_uc = ?");

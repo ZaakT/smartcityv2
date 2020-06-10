@@ -199,7 +199,16 @@ list_selCapex = id_item,unit_cost,volume,period
             $list_sel_capex_advice = getListSelByType($list_selCapex,$list_capex_advice);
             $list_capex_user = getListCapexUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            }     
+
             $nb_uc = getNbTotalUC($projID,$ucID);
                  //var_dump($nb_uc);
             $list_ratio = getRatioCompoCapex($list_sel_capex_advice,$compo['id']);
@@ -417,7 +426,16 @@ function implem_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_implem_advice);
             $list_implem_user = getListImplemUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            }    
+
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoImplem($list_sel_implem_advice,$compo['id']);
             //var_dump($list_ratio);
@@ -609,8 +627,17 @@ function opex_input($twig,$is_connected,$projID=0,$ucID=0){
             $list_sel_opex_advice = getListSelByType($list_selOpex,$list_opex_advice);
             //var_dump($list_sel_opex_advice);
             $list_opex_user = getListOpexUser($projID,$ucID);
-            $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            $compo = getCompoByUC($ucID);            
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            }    
+            
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoOpex($list_sel_opex_advice,$compo['id']);
             //var_dump($list_ratio);
@@ -829,7 +856,15 @@ function revenues_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_revenues_advice);
             $list_revenues_user = getListRevenuesUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoRevenues($list_sel_revenues_advice,$compo['id']);
             //var_dump($list_ratio);
@@ -1037,7 +1072,15 @@ function cashreleasing_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_cashreleasing_advice);
             $list_cashreleasing_user = getListCashReleasingUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoCashReleasing($list_sel_cashreleasing_advice,$compo['id']);
             //var_dump($list_ratio);
@@ -1267,7 +1310,15 @@ function widercash_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_widercash_advice);
             $list_widercash_user = getListWiderCashUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoWiderCash($list_sel_widercash_advice,$compo['id']);
             //var_dump($list_ratio);
@@ -1497,7 +1548,15 @@ function noncash_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_noncash_advice);
             $list_noncash_user = getListNonCashUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             //var_dump($list_ratio);
             $devises = getListDevises();
@@ -1695,7 +1754,15 @@ function risks_input($twig,$is_connected,$projID=0,$ucID=0){
             //var_dump($list_sel_risks_advice);
             $list_risks_user = getListRiskUser($projID,$ucID);
             $compo = getCompoByUC($ucID);
-            $nb_compo = getNbTotalCompo($compo['id']);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             //var_dump($list_ratio);
             $devises = getListDevises();

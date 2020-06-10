@@ -130,7 +130,7 @@
                         {% for id,zone in item %}
                             {% if zone['hasChildren'] == false %}
                                 {# <td scope="col"><input class="val_nb w-100" id="val_nb_{{id_compo}}_{{uc}}_{{id}}" name="val_nb_{{id_compo}}_{{uc}}_{{id}}" type="number" min=0 max="{{compo_per_zone[id_compo][id]}}" oninput='fillTot("form_volumes");' required value="{{list_sel[id][uc]['nb_compo']}}" placeholder="{{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_min']/100)|number_format(0,'.',',')}} - {{(compo_per_zone[id_compo][id]*mags[sizes[id][uc]]['range_max']/100)|number_format(0,'.',',')}}"></td> #}
-                                <td scope="col" class="val_nb w-100" id="val_nb_{{id_compo}}_{{uc}}_{{id}}">{{ compo_per_zone[id_compo][id] ? compo_per_zone[id_compo][id]|number_format(0,'.',' ') : "-" }}</td>
+                                <td scope="col" class="val_nb w-100" style="width: 1%;white-space: nowrap;" id="val_nb_{{id_compo}}_{{uc}}_{{id}}">{{ compo_per_zone[id_compo][id] ? compo_per_zone[id_compo][id]|number_format(0,'.',' ') : "-" }}</td>
                     {% endif %}{% endfor %}{% endfor %}
                     {#Total#}
                     <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>
@@ -161,7 +161,7 @@
                     {% for id,zone in item %}
                         {% if zone['hasChildren'] == false %}
                             <td scope="col">
-                                <input class="val_nbuc w-100 bg-light" id="totUC_{{uc}}_{{id}}" oninput='fillTot2("form_volumes");' name="totUC_{{uc}}_{{id}}" type="number" min=0 value="{{ list_sel[id][uc]['nb_tot_uc'] ? list_sel[id][uc]['nb_tot_uc'] : ''}}">
+                                <input class="val_nbuc w-100 bg-light" id="totUC_{{uc}}_{{id}}" oninput='fillTot2("form_volumes");' name="totUC_{{uc}}_{{id}}" type="number" min=0 value="{{ list_sel[id][uc]['nb_tot_uc'] ? list_sel[id][uc]['nb_tot_uc'] : ''}}" >
                             </td>
                 {% endif %}{% endfor %}{% endfor %}
                 {#Total#}
