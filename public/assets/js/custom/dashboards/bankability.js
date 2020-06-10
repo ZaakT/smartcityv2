@@ -307,9 +307,10 @@ function calcProjectScore(projectScore, target, nogo, idSelector) {
     } else {
         score = 3;
         $(idSelector+'_thumb-up').attr('hidden', true);
-        $(idSelector+'_thumb-down').removeAttr('hidden');                
+        $(idSelector+'_thumb-down').removeAttr('hidden');          
     }
-    //console.log(projectScore, target, nogo, score  );
+    
+    console.log(idSelector, projectScore, target, nogo, score  );
     return score;
 }
 
