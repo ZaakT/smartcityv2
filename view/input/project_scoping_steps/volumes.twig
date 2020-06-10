@@ -33,12 +33,14 @@
             {% for meas,list_ucs in scope %}
             <div class="row mt-5 mb-0">
                 <h2 class="mx-auto">Input volumes for {{measures[meas]['name']}}</h2>
-                <button id="guideline_button" type="button"  class=" mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+                <button class="align-self-center btn btn-danger col-2 btn-sm" type="button" onclick="clearTable('volumes_table_{{meas}}'); return false;">Clear all</button>
+                <button id="guideline_button" type="button"  class=" mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>               
+                
             </div>
             {#---------- tab input -----------#}
-            <div class="row m-3 btn-group-sm justify-content-center" role="group">
-                <button class="col-3 btn btn-dark" type="button" onclick="fillByAv('volumes_table_{{meas}}'); return false;">Fill with default values</button>
-                <button class="offset-1 col-2 btn btn-danger" type="button" onclick="clearTable('volumes_table_{{meas}}'); return false;">Clear all</button>
+            <div hidden class="row m-3 btn-group-sm justify-content-center" role="group">
+                {# <button class="col-3 btn btn-dark" type="button" onclick="fillByAv('volumes_table_{{meas}}'); return false;">Fill with default values</button> #}
+                
             </div>
             {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel) }}
             {% endfor %}
