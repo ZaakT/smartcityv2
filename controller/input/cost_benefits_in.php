@@ -1425,6 +1425,241 @@ function delete_selection_widercash($projID=0,$ucID=0){
 }
 
 
+// ---------------------------------------- QUANTIFIABLE NON MONETIZABLE BENEFITS ----------------------------------------
+
+function quantifiableBenefits($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            if($ucID!=0){
+                if(getUCByID($ucID)){
+                    $proj = getProjByID($projID,$user[0]);
+                    $uc = getUCByID($ucID);
+                    $list_quantifiable_advice = getListQuantifiableAdvice($ucID);   //remplacer les fonctions!!
+                    $list_quantifiable_user = getListQuantifiableUser($projID,$ucID);    
+                    $list_selQuantifiable = getListSelQuantifiable($projID,$ucID);          
+                    //var_dump($list_selWiderCash);
+                    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/cost_benefits_steps/quantifiable.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"quantifiable_advice"=>$list_quantifiable_advice,"quantifiable_user"=>$list_quantifiable_user,'isTaken'=>$isTaken,'selQuantifiable'=>$list_selQuantifiable));
+                    prereq_CostBenefits();
+                } else {
+                    throw new Exception("This Use Case doesn't exist !");
+                }
+            } else {
+                header('Location: ?A=cost_benefits&A2=use_case_cb');
+            }
+        } else {
+            throw new Exception("This Project doesn't exist !");
+        }
+    } else {
+        header('Location: ?A=cost_benefits&A2=use_case_cb');
+    }
+}
+
+function create_quantifiable($twig,$is_connected,$post){
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            $name = $post['name'];
+            $description = isset($post['description']) ? $post['description'] : "";
+            $quantifiable_infos = ["name"=>$name,"description"=>$description];
+            //var_dump(getQuantifiableUserItem($projID,$ucID,$name));
+            if(!empty(getQuantifiableUserItem($projID,$ucID,$name))){
+                header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
+            } else {
+                insertQuantifiableUser($projID,$ucID,$quantifiable_infos);
+                header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$projID.'&ucID='.$ucID);
+            }
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function delete_quantifiable_user($idQuantifiable){
+    //var_dump(intval($idQuantifiable));
+    if(isset($_SESSION['projID'])){
+        $projID = $_SESSION['projID'];
+        if(isset($_SESSION['ucID'])){
+            $ucID = $_SESSION['ucID'];
+            deleteQuantifiableUser(intval($idQuantifiable));
+            header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            throw new Exception("There is no UC selected !");
+        }
+    } else {
+        throw new Exception("There is no Project selected !");
+    }
+}
+
+function quantifiable_selected($twig,$is_connected,$post=[]){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $selQuantifiable = [];
+                foreach ($post as $id => $value) {
+                    array_push($selQuantifiable,$id);
+                }
+                $selQuantifiable_old = getListSelQuantifiable($projID,$ucID);
+                $selQuantifiable_old_id = getKeys($selQuantifiable_old);
+                $selQuantifiable_diff_rm = array_diff($selQuantifiable_old_id,$selQuantifiable);
+                $selQuantifiable_diff_add = array_diff($selQuantifiable,$selQuantifiable_old_id);
+                //var_dump($selQuantifiable_diff_rm);
+                //var_dump($selQuantifiable_diff_add);
+                if(empty($selQuantifiable_old)){
+                    insertSelQuantifiable($projID,$ucID,$selQuantifiable);
+                } else if (!empty($selQuantifiable_old)) {
+                    deleteSelQuantifiable($projID,$ucID,$selQuantifiable_diff_rm);
+                    insertSelQuantifiable($projID,$ucID,$selQuantifiable_diff_add);
+                }
+                update_ModifDate_proj($projID);
+                updateCB($projID,0);
+                quantifiable_input($twig,$is_connected,$projID,$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("No Quantifiable item selected !");
+    }
+}
+
+function quantifiable_input($twig,$is_connected,$projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            $proj = getProjByID($projID,$user[0]);
+            $uc = getUCByID($ucID);
+            $list_selQuantifiable = getListSelQuantifiable($projID,$ucID);
+            //var_dump($list_selQuantifiable);
+            $list_quantifiable_advice = getListQuantifiableAdvice($ucID); 
+            $list_sel_quantifiable_advice = getListSelByType($list_selQuantifiable,$list_quantifiable_advice);
+            //var_dump($list_sel_quantifiable_advice);
+            $list_quantifiable_user = getListQuantifiableUser($projID,$ucID);
+            $compo = getCompoByUC($ucID);
+            
+            $nb_compo = 0;
+            $selectedZones = getListSelZones($projID);
+            foreach ($selectedZones as $key => $value) {
+                if (!hasChildren($key,$selectedZones)) {
+                    $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
+                }
+                
+            } 
+            $nb_uc = getNbTotalUC($projID,$ucID);
+            //var_dump($list_ratio);
+            $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/cost_benefits_steps/quantifiable_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"quantifiable_advice"=>$list_quantifiable_advice,"quantifiable_user"=>$list_quantifiable_user,"selQuantifiable"=>$list_selQuantifiable,'compo'=>$compo,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+            prereq_CostBenefits();
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
+function quantifiable_inputed($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $list = getListQuantifiableFromPost($post);
+                insertQuantifiableInputed($projID,$ucID,$list);
+                update_ModifDate_proj($projID);
+                updateCB($projID,0);
+                header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("There is no data input !");
+    }
+}
+
+function getListQuantifiableFromPost($post){
+    $list = [];
+    foreach ($post as $key => $value) {
+        $temp = explode('_',$key);
+        //var_dump($temp);
+        if($temp[0]=="vol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['volume'=>$value];
+            } else {
+                $list[$temp[1]] = ['volume'=>$value];
+            }
+        } else if($temp[0]=="unitIndic"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_indic'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_indic'=>$value];
+            }
+        } else if($temp[0]=="anVarVol"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarVol'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarVol'=>$value];
+            }
+        } else if($temp[0]=="anVarCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['anVarCost'=>$value];
+            } else {
+                $list[$temp[1]] = ['anVarCost'=>$value];
+            }
+        } else if($temp[0]=="volRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['vol_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['vol_red'=>$value];
+            }
+        } else if($temp[0]=="unitCostRed"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost_red'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost_red'=>$value];
+            }
+        } else if($temp[0]=="unitCost"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['unit_cost'=>$value];
+            } else {
+                $list[$temp[1]] = ['unit_cost'=>$value];
+            }
+        }
+    }
+    return $list;
+}
+
+function delete_selection_quantifiable($projID=0,$ucID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            deleteAllSelQuantifiable($projID,$ucID);
+            header('Location: ?A=cost_benefits&A2=noncash&projID='.$projID.'&ucID='.$ucID);
+        } else {
+            header('Location: ?A=cost_benefits&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}
+
 
 // ---------------------------------------- NON CASH ----------------------------------------
 

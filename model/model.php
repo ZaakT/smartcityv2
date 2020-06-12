@@ -2754,7 +2754,7 @@ function getListSelWiderCash($projID,$ucID){
         if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         }
     }
     //var_dump($list);
@@ -2862,6 +2862,223 @@ function deleteAllSelWiderCash($projID,$ucID){
 }
 
 
+// ---------------------------------------- QUANTIFIABLE NON MONETIZABLE BENEFITS ----------------------------------------
+
+function getQuantifiableUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM quantifiable_item_user
+                            INNER JOIN quantifiable_uc
+                                INNER JOIN quantifiable_item
+                                    WHERE quantifiable_item_user.id_proj = ?
+                                        and quantifiable_item.id = quantifiable_item_user.id
+                                        and quantifiable_uc.id_uc = ?
+                                        and quantifiable_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+function getListQuantifiableAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM quantifiable_item_advice
+                            INNER JOIN quantifiable_uc
+                                INNER JOIN quantifiable_item
+                                    WHERE quantifiable_uc.id_uc = ?
+                                        and quantifiable_item.id = quantifiable_uc.id_item
+                                        and quantifiable_item.id = quantifiable_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListQuantifiableItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT quantifiable_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb
+                            FROM quantifiable_item
+                            LEFT JOIN quantifiable_item_advice
+                                ON quantifiable_item.id = quantifiable_item_advice.id
+                            LEFT JOIN quantifiable_uc
+                                ON quantifiable_item.id = quantifiable_uc.id_item
+                                    
+                            WHERE quantifiable_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $range_min_red_nb = floatval($row['range_min_red_nb']);
+        $range_max_red_nb = floatval($row['range_max_red_nb']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListQuantifiableUser($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT quantifiable_item.id,name,description
+                            FROM quantifiable_item_user
+                            INNER JOIN quantifiable_uc
+                                INNER JOIN quantifiable_item
+                                    WHERE quantifiable_uc.id_uc = ?
+                                        and quantifiable_item.id = quantifiable_uc.id_item
+                                        and quantifiable_item_user.id_proj = ?
+                                        and quantifiable_item_user.id = quantifiable_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+
+}
+
+function getListSelQuantifiable($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,volume_reduc,annual_var_volume
+                            FROM input_quantifiable
+                            INNER JOIN quantifiable_item
+                                WHERE  input_quantifiable.id_uc = ? and id_proj = ? and id_item = quantifiable_item.id
+                            ORDER BY quantifiable_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_indic = $row['unit_indicator'];
+        $volume = intval($row['volume']);
+        $vol_red = floatval($row['volume_reduc']);
+        $anVarVol = floatval($row['annual_var_volume']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red,'anVarVol'=>$anVarVol];
+        } else {
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red, 'anVarVol'=>$anVarVol];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function insertQuantifiableUser($projID,$ucID,$quantifiable_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_quantifiable`;');
+    $db->exec(' CREATE PROCEDURE `add_quantifiable`(
+                            IN quantifiable_name VARCHAR(255),
+                            IN quantifiable_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO quantifiable_item (name,description)
+                                    VALUES (quantifiable_name,quantifiable_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO quantifiable_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO quantifiable_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_quantifiable(?,?,?,?);');
+    $ret = $req->execute(array($quantifiable_data['name'],$quantifiable_data['description'],$ucID,$projID));
+    return $ret;
+}
+
+function deleteQuantifiableUser($idQuantifiable){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM quantifiable_item WHERE id = ?');
+    return $req->execute(array($idQuantifiable));
+}
+
+function insertSelQuantifiable($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_quantifiable
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelQuantifiable($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_quantifiable WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+
+function insertQuantifiableInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_quantifiable
+                            SET unit_indicator = ?,
+                            volume = ?,
+                            volume_reduc = ?,
+                            annual_var_volume = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['vol_red'],$data['anVarVol'],$projID,$ucID,$id_item));
+
+    }
+    return $ret;
+}
+
+function deleteAllSelQuantifiable($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_quantifiable WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
 
 // ---------------------------------------- NON CASH----------------------------------------
 

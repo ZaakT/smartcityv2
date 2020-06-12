@@ -1,0 +1,72 @@
+{% extends '/input/cost_benefits_in.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/cost_benefits_in/macro_quantifiable.twig" as list %}
+{% import "/templates/cost_benefits_in/modal_quantifiable.twig" as modal %}
+
+{% block title %}Project Scoping - Quantifiable Non Monetizable Benefits{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("cost_benefits",projID,ucID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+{% if 1 %}
+<form id="form_quantifiable" name="form_quantifiable" action="?A=cost_benefits&amp;A2=quantifiable&amp;A3=quantifiable_selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedQuantifiable(form_quantifiable);">
+    {% if quantifiable_advice %}
+    {{ list.list_quantifiable(quantifiable_advice,selQuantifiable) }}
+    {% endif %}
+
+    {% if quantifiable_user %}
+    {{ list.list_quantifiable_user(quantifiable_user,projID,ucID,selQuantifiable) }}
+    {% endif %}
+</form>
+
+<div class="row my-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewQuantifiableModal" role="button">Create a custom item</button>
+</div>
+<div class="row mt-3 text-center">
+    <h6 id="createQuantifiableHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
+</div>
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-sm btn-danger text-light" data-toggle="modal" data-target="#deleteSelectionModal" role="button">Choose none &amp; Skip this part</button>
+</div>
+<div class="row mt-4 mb-0 text-center">
+    <span id="countQuantifiableSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+</div>
+<div class="row text-center mt-3">
+    <h6 id="help_quantifiable" class="col text-danger font-weight-bold text-center" hidden>Please select at least one item !</h6>
+</div>
+<div class="row m-3 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_quantifiable');"></button>
+</div>
+
+{{ modal.create_quantifiable(projID,ucID) }}
+{{ modal.ask_fill(projID,ucID) }}
+{{ modal.delete_selection(projID,ucID) }}
+
+    {% if selQuantifiable|length == 0 and quantifiable_user|length == 0  %}
+    <script type="text/javascript">
+        $('#askFillQuantifiable').modal('show')
+    </script>
+    {% endif %}
+
+<script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/quantifiableForm.js"></script>
+{% else %}
+<h2 class="text-center">There is no Quantifiable Non Monetizable Benefits, please contact an administrator</h2>
+{% endif %}
+
+
+{{ modal.create_quantifiable(projID,ucID) }}
+
+{% endblock %}
+
+

@@ -1,10 +1,10 @@
-{% macro create_widercash(projID=0,ucID=0) %}
-<div class="modal fade" id="createNewWiderCashModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+{% macro create_quantifiable(projID=0,ucID=0) %}
+<div class="modal fade" id="createNewQuantifiableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createWiderCash-form" action="?A=cost_benefits&amp;A2=create_widercash&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+        <form id="createQuantifiable-form" action="?A=cost_benefits&amp;A2=create_quantifiable&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel3">Please enter the new WIDER CASH item informations</h5>
+                <h5 class="modal-title" id="exampleModalLabel3">Please enter the new QUANTIFIABLE NON MONETIZABLE item informations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -34,22 +34,22 @@
 {% endmacro %}
 
 
-{% macro delete_widercash(idWiderCash,nameWiderCash,projID=0,ucID=0) %}
-<div class="modal fade" id="askDeleteWiderCash_{{ idWiderCash}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{% macro delete_quantifiable(idQuantifiable,nameQuantifiable,projID=0,ucID=0) %}
+<div class="modal fade" id="askDeleteQuantifiable_{{ idQuantifiable}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Wider Cash item deleting confirmation</h5>
+                <h5 class="modal-title" id="exampleModalLabel">QUANTIFIABLE NON MONETIZABLE item deleting confirmation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Do you want to delete this REVENUES item ({{ nameWiderCash }}) ?
+                Do you want to delete this REVENUES item ({{ nameQuantifiable }}) ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=cost_benefits&amp;A2=delete_widercash&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idWiderCash }}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A=cost_benefits&amp;A2=delete_quantifiable&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idQuantifiable }}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>
@@ -58,11 +58,11 @@
 
 
 {% macro ask_fill(projID=0,ucID=0) %}
-<div class="modal fade" id="askFillWiderCash" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="askFillQuantifiable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Access to Wider Cash Selection Page</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Access to QUANTIFIABLE NON MONETIZABLE Selection Page</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -72,7 +72,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Yes</button>
-                <a href="?A=cost_benefits&amp;A2=quantifiable&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-secondary">No</button></a>
+                <a href="?A=cost_benefits&amp;A2=noncash&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-secondary">No</button></a>
             </div>
         </div>
     </div>
@@ -94,7 +94,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=cost_benefits&amp;A2=delete_selection_widercash&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A=cost_benefits&amp;A2=delete_selection_quantifiable&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>

@@ -1233,6 +1233,112 @@ try{
                         //var_dump($_POST);
                         widercash_inputed($_POST);
                     
+                    // --- QUANTIFIABLE NON MONETIZABLE BENEFITS ---
+                    } elseif($_GET['A2']=="quantifiable"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['A3'])){
+                                            // --- QUANTIFIABLE SELECTED ---
+                                            if($_GET['A3']=="quantifiable_selected"){
+                                                quantifiable_selected($twig,$is_connected,$_POST);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            if(isset($_GET['isTaken']) && $_GET['isTaken']){
+                                                quantifiableBenefits($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                            } else {
+                                                quantifiableBenefits($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                            }
+                                        }
+                                    }
+                                    else {                                    
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {                                        
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A=cost_benefits&A2=project');
+                            }
+                        }
+                        else {
+                            quantifiableBenefits($twig,$is_connected);
+                        }
+                    } elseif($_GET['A2']=="create_quantifiable"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        create_quantifiable($twig,$is_connected,$_POST);
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    } elseif($_GET['A2']=="delete_quantifiable"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        if(isset($_GET['id'])){
+                                            if($_GET['id']!=0){
+                                                delete_quantifiable_user($_GET['id']);
+                                            }
+                                            else {
+                                                header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$projID.'&ucID='.$ucID);
+                                            }
+                                        }
+                                        else {
+                                            header('Location: ?A=cost_benefits&A2=quantifiable&projID='.$projID.'&ucID='.$ucID);
+                                        }
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    } elseif($_GET['A2']=="delete_selection_quantifiable"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                if(isset($_GET['ucID'])){
+                                    if($_GET['ucID']!=0){
+                                        delete_selection_quantifiable($_GET['projID'],$_GET['ucID']);
+                                    } else {
+                                        header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                    }
+                                } else {
+                                    header('Location: ?A=cost_benefits&A2=use_case_cb&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=cost_benefits&A2=project_cb');  
+                            }    
+                        } else {
+                            header('Location: ?A=cost_benefits&A2=project_cb');
+                        }
+                    // --- INPUTED QUANTIFIABLE ---
+                    } elseif($_GET['A2']=="quantifiable_inputed"){
+                        //var_dump($_POST);
+                        quantifiable_inputed($_POST);
+                    
                     // --- NON CASH ---
                     } elseif($_GET['A2']=="noncash"){
                         if(isset($_GET['projID'])){
