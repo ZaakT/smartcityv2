@@ -90,6 +90,14 @@
                     {% endfor %} 
                 </tr>
                 <tr>
+                    <td class="item">Quantifiable Non Monetizable Benefits</td>
+                    {% for sel_meas,sel_ucs in selScope %} 
+                        {% for uc in sel_ucs %}
+                        <td scope="col"><span title="{{symb[list_checks[uc]['quantifiable']]}}" class="oi oi-{{symb[list_checks[uc]['quantifiable']]}} {{color[list_checks[uc]['quantifiable']]}}"></span></td>
+                        {% endfor %}
+                    {% endfor %} 
+                </tr>                
+                <tr>
                     <td class="item">Non Cash Benefits</td>
                     {% for sel_meas,sel_ucs in selScope %} 
                         {% for uc in sel_ucs %}

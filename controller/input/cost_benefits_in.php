@@ -2118,9 +2118,10 @@ function checkCBInputs($projID,$scope){
             $revenues = checkRevenues($projID,$ucID);
             $cashreleasing = checkCashReleasing($projID,$ucID);
             $widercash = checkWiderCash($projID,$ucID);
+            $quantifiable = checkQuantifiable($projID,$ucID);
             $noncash = checkNonCash($projID,$ucID);
             $risks = checkRisks($projID,$ucID);
-            $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,'widercash'=>$widercash,'noncash'=>$noncash,'risks'=>$risks];
+            $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,'widercash'=>$widercash,'quantifiable'=>$quantifiable,'noncash'=>$noncash,'risks'=>$risks];
             if(in_array(0,$list[$ucID])){
                 $ret = false;
             }
@@ -2191,6 +2192,16 @@ function checkWiderCash($projID,$ucID){
     }
 }
 
+function checkQuantifiable($projID,$ucID){
+    $listSel = getListSelQuantifiable($projID,$ucID);
+    if(!empty($listSel)){
+        echo "<script>checkProgress('quantif');</script>";
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
 function checkNonCash($projID,$ucID){
     $listSel = getListSelNonCash($projID,$ucID);
     if(empty($listSel)){
@@ -2251,6 +2262,7 @@ function checkProgress(){
             checkRevenues($projID,$ucID);
             checkCashReleasing($projID,$ucID);
             checkWiderCash($projID,$ucID);
+            checkQuantifiable($projID,$ucID);
             checkNonCash($projID,$ucID);
             checkRisks($projID,$ucID);
     }
