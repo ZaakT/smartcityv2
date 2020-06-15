@@ -4493,7 +4493,7 @@ function getAllItem3Advice($catItem){
 function getItemByNameAndCat($itemName,$catItem){ 
     //récupère tous les item d'une catégorie qui ont le nom passé en paramètre
     $db = dbConnect();
-    var_dump($itemName);
+    //var_dump($itemName);
     if ($catItem == 'capex'){
         $req = $db->prepare('SELECT * FROM capex_item WHERE name = ?');
         $req->execute(array($itemName));
@@ -4528,7 +4528,7 @@ function getItemByNameAndCat($itemName,$catItem){
 
 function insertItem($item,$catItem){
     //insère un item et sa guidance dans la db
-    var_dump($item, $catItem);
+    //var_dump($item, $catItem);
     $db = dbConnect();
 
     $ret = false;
