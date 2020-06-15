@@ -115,7 +115,7 @@
 
 
 
-<table id="funding_opt_table" class='proj_qualif_table table table-lg table-responsive-lg'>
+<table id="funding_opt_table" class='proj_qualif_table table table-lg table-responsive-lg jauge'>
     <thead class="thead-light text-center" >
         <tr>
             <th colspan=2 class="text-uppercase" style="border-bottom:none;">Proposed share of funding options </th>
@@ -126,7 +126,8 @@
     
     {#<h3 class="text-uppercase">Proposed share of funding options </h3>#}
         {% for item,value in funding_opt %}
-            <div class=" mt-2">{{item}}</div>
+            <div class="mt-2">{{item}}</div>
+            
             <div class="progress">
                 <div id="{{ item|replace({' ': _}) }}_0" class="progress-bar bg-primary" role="progressbar" style="width: 20%; background-color:red;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
                 <div id="{{ item|replace({' ': _}) }}_1" class="progress-bar bg-primary" role="progressbar" style="width: 20%; background-color:orange;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
@@ -138,4 +139,32 @@
 
 
 </div>
+{% endmacro %}
+
+{% macro list_share_funding_options_stars(funding_opt,funding_options_json) %}
+<span id="funding_options_json" hidden>{{ funding_options_json }}</span>
+<table id="funding_opt_table" class='proj_qualif_table table table-lg table-responsive-lg stars'>
+    <thead class="thead-light text-center" >
+        <tr>
+            <th colspan=2 class="text-uppercase" style="border-bottom:none;">Proposed share of funding options </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item,value in funding_opt %}
+            <tr>
+                <td style=" white-space:nowrap;">{{item}}</td>
+                <td style=" white-space:nowrap;">
+                    <span id="{{ item|replace({' ': _}) }}_0" class="oi oi-star" style="font-size: 1.2rem; color: #F4F5F9;" title="star" aria-hidden="true"></span>
+                    <span id="{{ item|replace({' ': _}) }}_1" class="oi oi-star" style="font-size: 1.2rem; color: #F4F5F9;" title="star" aria-hidden="true"></span>
+                    <span id="{{ item|replace({' ': _}) }}_2" class="oi oi-star" style="font-size: 1.2rem; color: #F4F5F9;" title="star" aria-hidden="true"></span>
+                    <span id="{{ item|replace({' ': _}) }}_3" class="oi oi-star" style="font-size: 1.2rem; color: #F4F5F9;" title="star" aria-hidden="true"></span>
+                    <span id="{{ item|replace({' ': _}) }}_4" class="oi oi-star" style="font-size: 1.2rem; color: #F4F5F9;" title="star" aria-hidden="true"></span>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </tbody>
+</table>
+
 {% endmacro %}

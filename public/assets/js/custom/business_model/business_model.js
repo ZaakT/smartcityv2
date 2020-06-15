@@ -34,25 +34,39 @@ function update_reco_funding_options(){
     var invest_cap = $('#select_invest_cap').val();
     var payback_const = $('#select_payback_const').val();
     var bm_pref = $('#select_bm_pref').val();
+    //récupérer unevariable uqi précise si c étoile ou jauge
     if (invest_cap && payback_const && bm_pref ){
         //BUSINESS MODEL RECOMMENDATIONS
         var reco = bm_reco[invest_cap][payback_const][bm_pref];
         $('#reco_bestfit').html(bm_reco_names[reco[1]]['name']);
         $('#reco_second').html(bm_reco_names[reco[2]]['name']);
         $('#reco_notreco').html(bm_reco_names[reco[3]]['name']);
-
-        //FUNDING OPTIONS
+        
         var funding_options = bm_funding_options[reco[1]][invest_cap];
-        for (item in funding_options) {
-            $('#FO_'+item.replace(' ','')).html(level[funding_options[item]]);
-            for (let i = 0; i <= funding_options[item] ; i++) {
-                $('#'+item.replace(' ','')+'_'+i).show();
-            }
-            for (let i = funding_options[item]+1; i < 5 ; i++) {
-                $('#'+item.replace(' ','')+'_'+i).hide();
-            }
 
-            // show les barres 1 à level et hide barre level+1 à 5
+        if ($('#funding_opt_table').hasClass('jauge')) {
+                        //FUNDING OPTIONS JAUGE        
+            for (item in funding_options) {
+                $('#FO_'+item.replace(' ','')).html(level[funding_options[item]]);
+                for (let i = 0; i <= funding_options[item] ; i++) {
+                    $('#'+item.replace(' ','')+'_'+i).show();
+                }
+                for (let i = funding_options[item]+1; i < 5 ; i++) {
+                    $('#'+item.replace(' ','')+'_'+i).hide();
+                }
+
+                // show les barres 1 à level et hide barre level+1 à 5
+            }
+        } else if ($('#funding_opt_table').hasClass('stars')) {
+           //FUNDING OPTIONS ETOILES
+            for (item in funding_options) { //colorer en bleu les étoiles de 0 à level et en gris les étoiles de level à 4
+                for (let i = 0; i <= funding_options[item] ; i++) {
+                    $('#'+item.replace(' ','')+'_'+i).addClass('text-primary');
+                }
+                for (let i = funding_options[item]+1; i < 5 ; i++) {
+                    $('#'+item.replace(' ','')+'_'+i).removeClass('text-primary');
+                }
+            }
         }
     } 
 }
