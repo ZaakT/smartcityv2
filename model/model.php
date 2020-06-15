@@ -4512,6 +4512,9 @@ function getItemByNameAndCat($itemName,$catItem){
     } else if ($catItem == 'widercash'){
         $req = $db->prepare('SELECT * FROM widercash_item WHERE name = ?');
         $req->execute(array($itemName));
+    } else if ($catItem == 'quantifiable'){
+        $req = $db->prepare('SELECT * FROM quantifiable_item WHERE name = ?');
+        $req->execute(array($itemName));
     } else if ($catItem == 'noncash'){
         $req = $db->prepare('SELECT * FROM noncash_item WHERE name = ?');
         $req->execute(array($itemName));
@@ -4670,7 +4673,7 @@ function insertItem($item,$catItem){
                                         END
                                             ');
                 $req = $db->prepare('CALL add_cashreleasing(?,?,?,?,?,?,?,?,?,?);');
-                $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
+                $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
             
                 return $ret;
                 break;
@@ -4701,10 +4704,38 @@ function insertItem($item,$catItem){
                                             END
                                                 ');
                     $req = $db->prepare('CALL add_widercash(?,?,?,?,?,?,?,?,?,?);');
-                    $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[5])));
+                    $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
                 
                     return $ret;
                     break;
+
+                    case 'quantifiable':
+                        $db->exec('DROP PROCEDURE IF EXISTS `add_quantifiable`;');
+                        $db->exec(' CREATE PROCEDURE `add_quantifiable`(
+                                                IN quantifiable_name VARCHAR(255),
+                                                IN quantifiable_desc VARCHAR(255),
+                                                IN unit VARCHAR(255),
+                                                IN source VARCHAR(255),
+                                                IN min_red_nb INT,
+                                                IN max_red_nb INT,
+                                                IN idUC INT
+                                                )
+                                                BEGIN
+                                                    DECLARE itemID INT;
+                                                    INSERT INTO quantifiable_item (name,description)
+                                                        VALUES (quantifiable_name,quantifiable_desc);
+                                                    SET itemID = LAST_INSERT_ID();
+                                                    INSERT INTO quantifiable_uc (id_item,id_uc)
+                                                        VALUES (itemID,idUC);
+                                                    INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
+                                                        VALUES (itemID,unit,source,min_red_nb,max_red_nb);
+                                                END
+                                                    ');
+                        $req = $db->prepare('CALL add_quantifiable(?,?,?,?,?,?,?);');
+                        $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6])));
+                    
+                        return $ret;
+                        break;
 
                     case 'noncash':
                         $db->exec('DROP PROCEDURE IF EXISTS `add_noncash`;');
@@ -4819,6 +4850,17 @@ function deleteItem($catItem,$itemID) {
             return $req->execute(array($itemID));
 
             $req = $db->prepare('DELETE FROM widercash_uc WHERE id_item = ?');
+            return $req->execute(array($itemID));
+        break;
+
+        case "quantifiable":
+            $req = $db->prepare('DELETE FROM quantifiable_item WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM quantifiable_item_advice WHERE id = ?');
+            return $req->execute(array($itemID));
+
+            $req = $db->prepare('DELETE FROM quantifiable_uc WHERE id_item = ?');
             return $req->execute(array($itemID));
         break;
 

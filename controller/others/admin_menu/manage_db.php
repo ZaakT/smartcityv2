@@ -312,7 +312,7 @@ function create_item2($twig,$is_connected,$post,$catItem){
 }
 
 function create_item3($twig,$is_connected,$post,$catItem){
-    //ajoute dans la db un item de catégorie 3 (non cash b, risks)
+    //ajoute dans la db un item quantifiable
     $name = $post['name'];
     $description = $post['description'];
     $uc = $post['uc_id'];
@@ -322,6 +322,24 @@ function create_item3($twig,$is_connected,$post,$catItem){
     } else {
         insertItem($itemInfos,$catItem);
         header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+    }
+}
+
+function create_quantifiable_item($twig,$is_connected,$post){
+    //ajoute dans la db un item de catégorie 3 (non cash b, risks)
+    $name = $post['name'];
+    $description = $post['description'];
+    $unit = $post['unit'];
+    $source = $post['source'];
+    $range_min_red_nb = $post['range_min_red_nb'];
+    $range_max_red_nb = $post['range_max_red_nb'];
+    $uc = $post['uc_id'];    
+    $itemInfos = [$name,$description,$unit,$source,$range_min_red_nb,$range_max_red_nb,$uc];
+    if(!empty(getItemByNameAndCat($name,'quantifiable'))){
+        manage_item('quantifiable',$twig,$is_connected,true); 
+    } else {
+        insertItem($itemInfos,'quantifiable');
+        header('Location: ?A=admin&A2=manage_db&A3=manage_quantifiable_item');
     }
 }
 

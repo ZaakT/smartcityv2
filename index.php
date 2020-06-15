@@ -161,6 +161,10 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db');
                                 }
+                            } else if($_GET['A3']=='manage_quantifiable_item'){
+                                manage_item('quantifiable',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='create_quantifiable_item'){
+                                create_quantifiable_item($twig,$is_connected,$_POST);
                             } else if($_GET['A3']=='manage_noncash_item'){
                                 manage_item('noncash',$twig,$is_connected); 
                             } else if($_GET['A3']=='manage_risks_item'){
