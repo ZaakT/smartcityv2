@@ -12,4 +12,9 @@
 </div>
 {{ list.list_dlt(dlt,isTaken) }}
 {{ modal.create_dlt() }}
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewZoneModal" role="button">Create a new Zone</button>
+</div>
+{{ list.list_zones(zones,isTaken) }}
+{{ modal.create_zone(zones) }}
 {% endblock %}

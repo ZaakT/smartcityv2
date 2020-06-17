@@ -556,6 +556,18 @@ function deleteDLT($idDLT){
     return $req->execute(array($idDLT));
 }
 
+function insertZone($infosZone){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO zone (name,type,id_zone) VALUES (?,?,?)');
+    return $req->execute(array($infosZone[0],$infosZone[1],$infosZone[2]));
+}
+
+function deleteZone($idZone){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM zone WHERE id = ?');
+    return $req->execute(array($idZone));
+}
+
 
 
 // ---------------------------------------- USE CASES ----------------------------------------
