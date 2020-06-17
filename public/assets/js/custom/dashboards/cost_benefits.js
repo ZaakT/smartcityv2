@@ -1,6 +1,6 @@
-function formatNumber(number,n)
+function formatNumber(number)
 {
-    number = number.toFixed(n) + '';
+    number = number.toFixed(0) + '';
     x = number.split('.');
     x1 = x[0];
     x2 = x.length > 1 ? '.' + x[1] : '';
@@ -38,6 +38,7 @@ $('.uc').each(function() {
 var currency = $('#currency').html().replace('(','').replace(')',' ');
 
 
+
 /////// FONCTION UPDATE
 function update() {
 
@@ -63,10 +64,12 @@ function kpi(sumRatioZonePerUC){
 
     list_uc.forEach(function(ucID) {
         //console.log("kpi");
+        console.log(ucID);
         var checkBox = $('#select_uc_'+ucID);
 
         //calculs: somme de chaque indicateurs
         if (checkBox.prop("checked") == true) {
+            console.log(Number($('#tot_invest_'+ucID).html()) * sumRatioZonePerUC[ucID]);
             totalInvestment += ( Number($('#tot_invest_'+ucID).html()) * sumRatioZonePerUC[ucID]);
             npv += ( Number($('#npv_'+ucID).html()) * sumRatioZonePerUC[ucID]);
             socnpv += ( Number($('#socnpv_'+ucID).html()) * sumRatioZonePerUC[ucID]);
@@ -80,11 +83,12 @@ function kpi(sumRatioZonePerUC){
             }
         }
     }); 
+    console.log(totalInvestment, npv, socnpv, ncbr, rr);
     //affichage
     var currency = $('#currency').html().replace('(','').replace(')',' ');
     //console.log(currency);
-    $('#tot_invest').html(currency+formatNumber(totalInvestment,0));
-    console.log(npv);
+    $('#tot_invest').html(currency+totalInvestment);
+    console.log(totalInvestment);
     $('#npv').html(currency+formatNumber(npv,0));
     $('#socnpv').html(currency+formatNumber(socnpv,0));
     $('#ncbr').html(ncbr[0] > 0 ? formatNumber(ncbr[1]/ncbr[0],2)+" / 10" : "NA");
@@ -354,7 +358,7 @@ function update_zone(){
             }
         }   
     });
-    //console.log(ratio_zones, sumRatioZonePerUC);
+    console.log(ratio_zones, sumRatioZonePerUC);
     return sumRatioZonePerUC;
 }
 
@@ -404,3 +408,4 @@ function cballuc2csv(idTable,projName,selDevSym="£"){
 }
 
 update();
+show_hide_months();

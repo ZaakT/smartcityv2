@@ -26,10 +26,10 @@
     <div class="row">
         {# SELECTION #}
         <div class="col-4">
-            <div class="container-fluid dash-bg m-1 ml-3 p-3 row">
+            <div class="container-fluid dash-bg m-1 ml-2 p-4">
                 {# UC #}
                 
-                    <div class="container-fluid dash-bg-light p-3 m-3">
+                    <div class="container-fluid dash-bg-light p-3">
                         <h3 class="dash-title mb-3">Use Case Selection</h3>
                         <div class="selection-list">
                             {% for measID,list_ucs in scope %}
@@ -48,19 +48,23 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <div class="container-fluid dash-bg-light mt-0 m-3 p-3">
-                        <canvas id="budgetGraph" height="200px"></canvas>
-                    </div>
+
               
             </div>
         </div>
         <div class="col-8">
-            {# TABLE #}
+            <div class="container-fluid dash-bg m-1 ml-2 p-4">
+                <div class="container-fluid dash-bg-light p-3">
+                    <canvas id="budgetGraph" height="200px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>   
+    <div class="row">
+                    {# TABLE #}
 
             {{ macros.output_budget(years,data) }}
-
-        </div>
-    </div>    
+    </div> 
 </div>
 
 <div class="row mt-2 mb-5 text-center">

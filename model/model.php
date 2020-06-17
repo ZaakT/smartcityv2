@@ -3711,14 +3711,14 @@ function getTotImplemByUC($projID,$ucID){
 
 function getNbUC($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT nb_compo/nb_per_uc as nb_uc, id_zone
+    $req = $db->prepare("SELECT nb_tot_uc, id_zone
                             FROM volumes_input
                             WHERE id_proj = ? and id_uc = ?");
     $req->execute(array($projID,$ucID));
     $list = [];
     while($row=$req->fetch()){
         $id_zone = intval($row['id_zone']);
-        $nb_uc = intval($row['nb_uc']);
+        $nb_uc = intval($row['nb_tot_uc']);
         $list[$id_zone] = $nb_uc;
     }
     return $list;

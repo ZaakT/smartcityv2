@@ -154,7 +154,8 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                     $list_nbUC = getNbUC($projID,$ucID);
                     //var_dump($list_nbUC, $selZones);
                     foreach($listSelZones as $id => $zone) {
-                        $ratioByVolume[$id][$ucID] = getRatioByVolume($list_nbUC,$id); //ok   
+                        $ratioByVolume[$id][$ucID] = getRatioByVolume($list_nbUC,$id); //ok  
+                        //var_dump($list_nbUC, $id); 
                     }
                          
 
@@ -162,9 +163,10 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                 //var_dump($capexPerMonth);
                 
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
-                var_dump($npv, $socnpv);
+                //var_dump($npv, $socnpv,$breakeven,$soc_breakeven,$ratingNonCash,$ratingRisks);
 
                 $ratioByVolume = json_encode($ratioByVolume);
+                //var_dump($ratioByVolume);
                 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -1224,7 +1226,7 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
                 }
             }
 
-            var_dump($capexAmortizationTot,$capexAmortizationPerMonth);
+            //var_dump($capexAmortizationTot,$capexAmortizationPerMonth);
 
             $uc_check_completed = check_if_UC_is_completed($projID,$scope);
 
