@@ -1634,7 +1634,7 @@ function getNbTotalUC($projID,$ucID){
                                 and id_uc = ?");
     $req->execute(array($projID,$ucID));
     $res = intval($req->fetch()[0]);
-    return number_format($res, 0, ',', ' ');
+    return $res;
 }
 
 function deleteAllSelCapex($projID,$ucID){
