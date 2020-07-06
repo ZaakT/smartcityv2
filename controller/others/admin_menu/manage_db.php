@@ -28,12 +28,17 @@ function create_user($twig,$is_connected,$post){
     } else {
         $isAdmin = 0;
     }
+    if(isset($post['d'])){
+        $profile="d";
+    } elseif(isset($post['s'])) {
+        $profile= "s";
+    }
     $username = $post['username'];
     $passwordClear = $post['password'];
     $salt = uniqid(mt_rand(), true);
     $toHashed = $passwordClear.$salt;
     $hashed = password_hash($toHashed,PASSWORD_DEFAULT); //length = 60 ?
-    $userInfos = [$username,$salt,$hashed,$isAdmin];
+    $userInfos = [$username,$salt,$hashed,$isAdmin,$profile];
     if(!empty(getUser($username))){
         manage_users($twig,$is_connected,true);
     } else {
