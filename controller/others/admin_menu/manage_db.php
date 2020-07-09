@@ -38,6 +38,7 @@ function create_user($twig,$is_connected,$post){
     $salt = uniqid(mt_rand(), true);
     $toHashed = $passwordClear.$salt;
     $hashed = password_hash($toHashed,PASSWORD_DEFAULT); //length = 60 ?
+    $profile=$post['profile'];
     $userInfos = [$username,$salt,$hashed,$isAdmin,$profile];
     if(!empty(getUser($username))){
         manage_users($twig,$is_connected,true);

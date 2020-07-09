@@ -98,7 +98,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -117,7 +117,7 @@ function getUser($username){
 
 function getListUsers(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin,creation_date FROM user ORDER BY username');
+    $req = $db->prepare('SELECT id, username, is_admin,creation_date,profile FROM user ORDER BY username');
     $req->execute();
     $list = [];
     while ($row = $req->fetch()){
@@ -142,19 +142,20 @@ function insertUser($user){
                             IN password VARCHAR(255),
                             IN nameMeasure VARCHAR(255),
                             IN description VARCHAR(255),
-                            IN is_admin INT
+                            IN is_admin INT,
+                            IN profile ENUM("d","s") # Project Developper or Supplier
                             )
                             BEGIN
                                 DECLARE userID INT;
-                                INSERT INTO user (username,salt,password,is_admin)
-                                    VALUES (username,salt,password,is_admin);
+                                INSERT INTO user (username,salt,password,is_admin,profile)
+                                    VALUES (username,salt,password,is_admin,profile);
                                 SET userID = LAST_INSERT_ID();
                                 INSERT INTO measure (name,description,user)
                                     VALUES (nameMeasure,description,userID);
                             END
                                 ');
-    $req = $db->prepare('CALL insert_user(?,?,?,?,?,?);');
-    $ret = $req->execute(array($user[0],$user[1],$user[2],$nameMeasure, $description,$user[3]));
+    $req = $db->prepare('CALL insert_user(?,?,?,?,?,?,?);');
+    $ret = $req->execute(array($user[0],$user[1],$user[2],$nameMeasure, $description,$user[3],$user[4]));
     return $ret;
 }
 
@@ -173,8 +174,6 @@ function deleteUser($userID){
     $req = $db->prepare('DELETE FROM user WHERE id = ?');
     return $req->execute(array($userID));
 }
-
-
 
 
 
