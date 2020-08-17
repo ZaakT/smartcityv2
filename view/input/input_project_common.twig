@@ -1,0 +1,15 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("input_project_common") }}{% endblock %}
+{% block title %}Project Initialization{% endblock %}
+
+
+
+{% block content %}
+test
+{% endblock %}
+

@@ -560,6 +560,41 @@ try{
                 }        
             
             }
+            
+            // ---------- Customer BC ----------
+            // **** 
+            // ---------- Input Project Common ----------
+            elseif($_GET['A']=='input_project_common'){
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        project_ipc($twig,$is_connected);
+                    // --- SELECTED PROJECT ---
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=input_project_common&A2=capex&projID='.$projID);
+                        }
+                    // --- CAPEX ---
+                    } elseif($_GET['A2']=="capex"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                capex_ipc($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=input_project_common&A2=capex');
+                            }
+                        }
+                        else {
+                            use_case_cb($twig,$is_connected);
+                        }
+                    }
+
+                } else {  
+                    input_project_common($twig,$is_connected);
+                }
+            }
+
             // ---------- COST BENEFITS ----------
             elseif($_GET['A']=='cost_benefits'){
                 if(isset($_GET['A2'])){
