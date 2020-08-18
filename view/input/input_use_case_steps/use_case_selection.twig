@@ -1,0 +1,39 @@
+{% extends '/input/input_use_case.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/cost_benefits_in/macro_ucs.twig" as list %}
+
+
+{% block sidebar %}{{ sidebar.sidebar("input_use_case",projID) }}{% endblock %}
+
+{% block title %}Cost Benefits - Use Cases{% endblock %}
+
+{% block content %}
+
+{% if projID==0 %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<form action="?A=input_use_case&amp;A2=uc_selected&amp;projID={{projID}}" method="post">
+{% if selScope %}
+{{ list.list_ucs(selScope,ucs,measures) }}
+{% else %}
+<h2 class="text-center m-5">You have no Use Case !</h2>
+{% endif %}
+
+<div class="row m-3 text-center text-dark">
+    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+</div>
+</form>
+
+{% endif %}
+{% endblock %}

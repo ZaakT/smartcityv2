@@ -594,6 +594,155 @@ try{
                     input_project_common($twig,$is_connected);
                 }
             }
+            // ---------- Input Use Case ----------
+            elseif($_GET['A']=='input_use_case'){
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        \customer_bc\project_iuc($twig,$is_connected);
+                    // --- SELECTED PROJECT ---
+                } elseif($_GET['A2']=="proj_selected"){
+                    if(isset($_POST['radio_proj'])){
+                        $projID = intval($_POST['radio_proj']);
+                        $_SESSION['projID']=$projID;
+                        header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$projID);
+                    }
+
+
+                
+                // --- USE CASES ---
+                } elseif($_GET['A2']=="use_case_selection"){
+                    if(isset($_GET['projID'])){
+                        if($_GET['projID']!=0){
+                            \customer_bc\use_case_selection($twig,$is_connected,$_GET['projID']);
+                        }
+                        else {
+                            header('Location: ?A=input_use_case&A2=use_case_selection');
+                        }
+                    }
+                    else {
+                        \customer_bc\use_case_selection($twig,$is_connected);
+                    }
+                // --- SELECTED USE CASE ---
+                 
+
+
+            } elseif($_GET['A2']=="uc_selected"){
+                if(isset($_GET['projID']) and ($_GET['projID']!=0) and  isset($_POST['radio_uc'])){
+                    //var_dump($_POST);
+                    $ucID = intval($_POST['radio_uc']);
+                    $_SESSION['ucID']=$ucID;
+                    //var_dump($ucID);
+                    header('Location: ?A=input_use_case&A2=capex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                }
+                else {
+                    header('Location: ?A=input_use_case&A2=use_case_selection');
+                }
+
+                // --- CAPEX ---
+                } elseif($_GET['A2']=="capex"){
+                    if(isset($_GET['projID'])){
+                        if($_GET['projID']!=0){
+                            if(isset($_GET['ucID'])){
+                                if($_GET['ucID']!=0){
+                                    if(isset($_GET['A3'])){
+                                        // --- CAPEX SELECTED ---
+                                        if($_GET['A3']=="capex_selected"){
+                                            \customer_bc\capex_selected($twig,$is_connected,$_POST);
+                                        }
+                                        else {
+                                            header('Location: ?A=input_use_case&A2=capex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                        }
+                                    }
+                                    else {
+                                        if(isset($_GET['isTaken']) && $_GET['isTaken']){
+                                            \customer_bc\capex_iuc($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                        } else {
+                                            \customer_bc\capex_iuc($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                        }
+                                    }
+                                }
+                                else {                                    
+                                    header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                                }
+                            } else {                                        
+                                header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                            }
+                        }
+                        else { 
+                            header('Location: ?A=input_use_case&A2=project_selection');
+                        }
+                    }
+                    else {
+                        capex_iuc($twig,$is_connected);
+                    }
+                } elseif($_GET['A2']=="create_capex"){
+                    if(isset($_GET['projID'])){
+                        if($_GET['projID']!=0){
+                            if(isset($_GET['ucID'])){
+                                if($_GET['ucID']!=0){
+                                    \customer_bc\create_capex($twig,$is_connected,$_POST);
+                                } else {
+                                    header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                            }
+                        } else {
+                            header('Location: ?A=input_use_case&A2=project_selection');  
+                        }    
+                    } else {
+                        header('Location: ?A=input_use_case&A2=project_selection');
+                    }
+                } elseif($_GET['A2']=="delete_capex"){
+                    if(isset($_GET['projID'])){
+                        if($_GET['projID']!=0){
+                            if(isset($_GET['ucID'])){
+                                if($_GET['ucID']!=0){
+                                    if(isset($_GET['id'])){
+                                        if($_GET['id']!=0){
+                                            \customer_bc\delete_capex_user($_GET['id']);
+                                        }
+                                        else {
+                                            header('Location: ?A=input_use_case&A2=capex&projID='.$projID.'&ucID='.$ucID);
+                                        }
+                                    }
+                                    else {
+                                        header('Location: ?A=input_use_case&A2=capex&projID='.$projID.'&ucID='.$ucID);
+                                    }
+                                } else {
+                                    header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                            }
+                        } else {
+                            header('Location: ?A=input_use_case&A2=project_selection');  
+                        }    
+                    } else {
+                        header('Location: ?A=input_use_case&A2=project_selection');
+                    }
+                } elseif($_GET['A2']=="delete_selection_capex"){
+                    if(isset($_GET['projID'])){
+                        if($_GET['projID']!=0){
+                            if(isset($_GET['ucID'])){
+                                if($_GET['ucID']!=0){
+                                    \customer_bc\delete_selection_capex($_GET['projID'],$_GET['ucID']);
+                                } else {
+                                    header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                                }
+                            } else {
+                                header('Location: ?A=input_use_case&A2=use_case_selection&projID='.$_GET['projID']);
+                            }
+                        } else {
+                            header('Location: ?A=input_use_case&A2=project_selection');  
+                        }    
+                    } else {
+                        header('Location: ?A=input_use_case&A2=project_selection');
+                    }
+                // --- INPUTED CAPEX ---
+                }
+            } 
+        }
 
             // ---------- COST BENEFITS ----------
             elseif($_GET['A']=='cost_benefits'){

@@ -94,7 +94,7 @@
         <a class="nav-item nav-link disabled" id="op" href="?A=comp_projects&amp;A2=op">Operations</a>
         <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_projects&amp;A2=cash_flows">Cash Flows</a>
         <a class="nav-item nav-link disabled" id="non_quant" href="?A=comp_projects&amp;A2=non_quant">Non Quantifiable</a>
-        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Financial & Societal Comp.</a>
+        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Financial &amp; Societal Comp.</a>
     {% elseif page=="comp_finscen" %}
         <h4 class="nav-item text-center">- Output -<br>Compare Financial Scenarios</h4>
         <a class="nav-item nav-link" id="scenarios" href="?A=comp_finscen&amp;A2=scenarios">Scenarios</a>
@@ -103,13 +103,26 @@
 
 
 
-    <!-- - Input Project Common -->
+    <!-- - Customer BC -->
     {% elseif page=="input_project_common" %}        
         <h4 class="nav-item text-center">Customer BC <br>Input Project Common</h4>
         <a class="nav-item nav-link" id="project_selection" href="?A=input_project_common&amp;A2=project_selection"><span id="scenario-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="capex" href="?A=input_project_common&amp;A2=capex&amp;scenID={{selectID}}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_project_common&amp;A2=deployment_costs&amp;scenID={{selectID}}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment Costs</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_project_common&amp;A2=opex&amp;scenID={{selectID}}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
+    {% elseif page=="input_use_case" %}        
+        <h4 class="nav-item text-center">Customer BC <br>Input Use Case</h4>
+        <a class="nav-item nav-link" id="project_selection" href="?A=input_use_case&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
+        <a class="nav-item nav-link disabled" id="use_case_selection" href="?A=input_use_case&amp;A2=use_case_selection&amp;scenID={{selectID}}"><span id="use_case_selection-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Case Selection</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=input_use_case&amp;A2=use_case_selection&amp;scenID={{selectID}}"><span id="use_case_selection-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="deployment" href="?A=input_use_case&amp;A2=deployment&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="deployment-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment</a>
+        <a class="nav-item nav-link disabled" id="revenues" href="?A=input_use_case&amp;A2=revenues&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="revenues-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Revenues</a>
+        <a class="nav-item nav-link disabled" id="opex" href="?A=input_use_case&amp;A2=opex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
+        <a class="nav-item nav-link disabled" id="cash_releasing_benefits" href="?A=input_use_case&amp;A2=cash_releasing_benefits&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="cash_releasing_benefits-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Cash Releasing Benefits</a>
+        <a class="nav-item nav-link disabled" id="wider_cash_benefits" href="?A=input_use_case&amp;A2=wider_cash_benefits&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="wider_cash_benefits-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Wider Cash Benefits</a>
+        <a class="nav-item nav-link disabled" id="quantifiable_non_monetizable_benefits" href="?A=input_use_case&amp;A2=quantifiable_non_monetizable_benefits&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="quantifiable_non_monetizable_benefits-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Quantifiable Non Monetizable Benefits</a>
+        <a class="nav-item nav-link disabled" id="non_quantifiable_benefits" href="?A=input_use_case&amp;A2=non_quantifiable_benefits&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="non_quantifiable_benefits-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Non Quantifiable Benefits</a>
+        <a class="nav-item nav-link disabled" id="risks" href="?A=input_use_case&amp;A2=risks&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="risks-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Risks</a>
     
         <!-- Admin -->
     {% elseif page=="admin" %}
