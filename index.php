@@ -594,6 +594,39 @@ try{
                     input_project_common($twig,$is_connected);
                 }
             }
+
+            // ---------- Deal Criteria ----------
+            elseif($_GET['A']=='deal_criteria'){
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria');
+                    // --- SELECTED PROJECT ---
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=input_project_common&A2=capex&projID='.$projID);
+                        }
+                    // --- CAPEX ---
+                    } elseif($_GET['A2']=="capex"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                capex_ipc($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=input_project_common&A2=capex');
+                            }
+                        }
+                        else {
+                            use_case_cb($twig,$is_connected);
+                        }
+                    }
+
+                } else {  
+                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria',"Lorem ipsum \n ...",  'Deal Criteria');
+                }
+            }
+
             
 
             // ---------- COST BENEFITS ----------

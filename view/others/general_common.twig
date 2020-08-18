@@ -1,0 +1,36 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar(sideBarName) }}{% endblock %}
+
+
+
+{% block content %}
+<div class="">
+    <div class="row m-5 align-items-center">
+        <div class="col-lg-6 text-center">
+            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+        </div>
+        <div class="col-lg-5">
+            <h2 class="text-center text-uppercase">{% block title %}{{centralTitle|nl2br}}{% endblock %}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+    {{lorem|nl2br}}
+    </div>
+</div>
+<div class="row text-center text-dark">
+    <a href={{nextPage}} class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{scripts|nl2br}}
+{% endblock %}
