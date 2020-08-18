@@ -4,7 +4,7 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-{% block sidebar %}{{ sidebar.sidebar("input_use_case") }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("input_use_case", 0, 0, is_admin) }}{% endblock %}
 
 
 {% block content %}

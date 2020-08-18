@@ -1,4 +1,4 @@
-{% macro sidebar(page,selectID=0,selectID2=0) %}
+{% macro sidebar(page,selectID=0,selectID2=0, is_admin=false) %}
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
         <a class="navbar-brand px-5 py-3" href="?A=home"><h3 class="text-center">Urbatis AI</h3></a>
        
@@ -31,7 +31,7 @@
 
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
-        <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>        
+        <h4 class="nav-item text-center"> {% if is_admin %} {{'- Input -\n Cost Benefits'|nl2br}} {% else %}{{'- Customer BC -\n Input Use Case'|nl2br}} {% endif %}</h4>        
         <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project</a>
         <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}"><span id="uc-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Cases</a>
         <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
