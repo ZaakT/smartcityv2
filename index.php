@@ -606,27 +606,24 @@ try{
             elseif($_GET['A']=='deal_criteria'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria', true, false, false, false);
+                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected', 'deal_criteria', true, false, false, false);
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=input_project_common&A2=capex&projID='.$projID);
+                            header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID);
                         }
-                    // --- CAPEX ---
-                    } elseif($_GET['A2']=="capex"){
+                    // --- DEAL CROTERIA ---
+                    } elseif($_GET['A2']=="deal_criteria"){
                         if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                capex_ipc($twig,$is_connected,$_GET['projID']);
-                            }
-                            else {
-                                header('Location: ?A=input_project_common&A2=capex');
-                            }
+                            deal_criteria($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=deal_criteria&A2project_selection');
                         }
-                        else {
-                            use_case_cb($twig,$is_connected);
-                        }
+                        
+                    } else if($_GET['A2']=="deal_criteria_input") {
+                        deal_criteria_input_nogo_target($_POST);
                     }
 
                 } else {  

@@ -1,0 +1,75 @@
+{% macro input_target_nogo(selDevSym, input) %} 
+<form action="?A=deal_criteria&amp;A2=deal_criteria_input" method="post" onsubmit="return checkInput());">
+
+    <table id="input_target_nogo" class="table">
+
+        <thead>
+            <th></th>
+            <th>No Go</th>
+            <th>Target</th>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th>Payback</th>
+                <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_nogo']}}" >&nbsp;months</td>
+                <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_target']}}" >&nbsp;months</td>
+            </tr>
+            <tr>
+                <th>Societal Payback</th>
+                <td><input id="societal_payback_nogo" name="societal_payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_payback_nogo']}}" >&nbsp;months</td>
+                <td><input id="societal_payback_target" name="societal_payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_payback_target']}}" >&nbsp;months</td>
+            </tr>
+            <tr>
+                <th>ROI</th>
+                <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_nogo']}}" >&nbsp;%</td>
+                <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_target']}}" >&nbsp;%</td>
+            </tr>
+            <tr>
+                <th>Societal ROI</th>
+                <td><input id="societal_roi_nogo" name="societal_roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_roi_nogo']}}" >&nbsp;%</td>
+                <td><input id="societal_roi_target" name="societal_roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_roi_target']}}" >&nbsp;%</td>
+            </tr>
+            <tr>
+                <th>NPV</th>
+                <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_nogo']}}" >&nbsp;{{selDevSym}}</td>
+                <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_target']}}" >&nbsp;{{selDevSym}}</td>
+            </tr> 
+            <tr>
+                <th>Societal NPV</th>
+                <td><input id="societal_npv_nogo" name="societal_npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_npv_nogo']}}" >&nbsp;{{selDevSym}}</td>
+                <td><input id="societal_npv_target" name="societal_npv_target" class="text-center py-1 form-control-inline form-control-inline" type="number" min=0 step=0.01 required value="{{input['societal_npv_target']}}" >&nbsp;{{selDevSym}}</td>
+            </tr>
+            <tr>
+                <th>Non Quantifiable Benefits Rating</th>
+                <td><input id="nqbr_nogo" name="nqbr_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['nqbr_nogo']}}" ></td>
+                <td><input id="nqbr_target" name="nqbr_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['nqbr_nogo']}}" ></td>
+            </tr>
+
+            <tr>
+                <th>Risk</th>
+                <td><input id="risks_rating_nogo" name="risks_rating_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['rr_nogo']}}" ></td>
+                <td><input id="risks_rating_target" name="risks_rating_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['rr_target']}}" ></td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="text-center">
+        <span id="errorInput" style="color:red;"></span>
+    </div>
+
+    <div class="text-center">
+        {# <button type="button" class="btn btn-outline-secondary m-3" onclick="filldefault();">
+            default
+        </button> #}
+
+        <button type="submit" class="btn btn-outline-dark m-3" onsubmit=" return checkInput();" >
+            Save
+        </button>
+    </div>
+
+</form>
+
+{% endmacro %}

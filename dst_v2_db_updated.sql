@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 29 juin 2020 à 10:47
--- Version du serveur :  10.4.10-MariaDB
+-- Généré le :  mer. 19 août 2020 à 10:04
+-- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -142,10 +142,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name`
                             END$$
 
 DROP PROCEDURE IF EXISTS `insert_user`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_user` (IN `username` VARCHAR(255), IN `salt` VARCHAR(255), IN `password` VARCHAR(255), IN `nameMeasure` VARCHAR(255), IN `description` VARCHAR(255), IN `is_admin` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `insert_user` (IN `username` VARCHAR(255), IN `salt` VARCHAR(255), IN `password` VARCHAR(255), IN `nameMeasure` VARCHAR(255), IN `description` VARCHAR(255), IN `is_admin` INT, IN `profile` ENUM("d","s"))  BEGIN
                                 DECLARE userID INT;
-                                INSERT INTO user (username,salt,password,is_admin)
-                                    VALUES (username,salt,password,is_admin);
+                                INSERT INTO user (username,salt,password,is_admin,profile)
+                                    VALUES (username,salt,password,is_admin,profile);
                                 SET userID = LAST_INSERT_ID();
                                 INSERT INTO measure (name,description,user)
                                     VALUES (nameMeasure,description,userID);
@@ -180,7 +180,7 @@ CREATE TABLE IF NOT EXISTS `bankability_input_nogo_target` (
 --
 
 INSERT INTO `bankability_input_nogo_target` (`id`, `npv_nogo`, `npv_target`, `roi_nogo`, `roi_target`, `payback_nogo`, `payback_target`, `risks_rating_nogo`, `risks_rating_target`, `noncash_rating_nogo`, `noncash_rating_target`) VALUES
-(4, 3, 10000, 32, 43, 89, 2, 8, 3, 2, 8);
+(4, 3, 10000, 32, 43, 89, 2, 8, 3, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS `beneficiary` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_finScen` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `share` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_finScen` (`id_finScen`)
@@ -350,7 +350,7 @@ DROP TABLE IF EXISTS `capex_item`;
 CREATE TABLE IF NOT EXISTS `capex_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
@@ -377,7 +377,7 @@ DROP TABLE IF EXISTS `capex_item_advice`;
 CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -465,7 +465,7 @@ DROP TABLE IF EXISTS `cashreleasing_item`;
 CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
@@ -492,7 +492,7 @@ DROP TABLE IF EXISTS `cashreleasing_item_advice`;
 CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `unit_cost` double DEFAULT NULL,
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,
@@ -621,8 +621,8 @@ DROP TABLE IF EXISTS `crit`;
 CREATE TABLE IF NOT EXISTS `crit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `scoring_guidance` text DEFAULT NULL,
+  `description` text,
+  `scoring_guidance` text,
   `id_cat` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`)
@@ -667,6 +667,34 @@ INSERT INTO `critcat` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `deal_criteria_input_nogo_target`
+--
+
+DROP TABLE IF EXISTS `deal_criteria_input_nogo_target`;
+CREATE TABLE IF NOT EXISTS `deal_criteria_input_nogo_target` (
+  `id` int(11) NOT NULL,
+  `societal_npv_nogo` int(11) DEFAULT NULL,
+  `societal_npv_target` int(11) DEFAULT NULL,
+  `societal_roi_nogo` int(11) DEFAULT NULL,
+  `societal_roi_target` int(11) DEFAULT NULL,
+  `societal_payback_nogo` int(11) DEFAULT NULL,
+  `societal_payback_target` int(11) DEFAULT NULL,
+  `npv_nogo` int(11) DEFAULT NULL,
+  `npv_target` int(11) DEFAULT NULL,
+  `roi_nogo` int(11) DEFAULT NULL,
+  `roi_target` int(11) DEFAULT NULL,
+  `payback_nogo` int(11) DEFAULT NULL,
+  `payback_target` int(11) DEFAULT NULL,
+  `risks_rating_nogo` int(11) DEFAULT NULL,
+  `risks_rating_target` int(11) DEFAULT NULL,
+  `noncash_rating_nogo` int(11) DEFAULT NULL,
+  `noncash_rating_target` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `devise`
 --
 
@@ -675,7 +703,7 @@ CREATE TABLE IF NOT EXISTS `devise` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `symbol` varchar(255) DEFAULT NULL,
-  `rateToGBP` double DEFAULT 1,
+  `rateToGBP` double DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
@@ -698,7 +726,7 @@ DROP TABLE IF EXISTS `dlt`;
 CREATE TABLE IF NOT EXISTS `dlt` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -723,7 +751,7 @@ CREATE TABLE IF NOT EXISTS `entity` (
   `id_source` int(11) NOT NULL,
   `id_finScen` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `start_date` date DEFAULT NULL,
   `share` double DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -750,11 +778,11 @@ DROP TABLE IF EXISTS `financing_scenario`;
 CREATE TABLE IF NOT EXISTS `financing_scenario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `input_invest` double DEFAULT -1,
-  `input_op` double DEFAULT -1,
-  `creation_date` datetime DEFAULT current_timestamp(),
-  `modif_date` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `description` text,
+  `input_invest` double DEFAULT '-1',
+  `input_op` double DEFAULT '-1',
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modif_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `id_proj` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
@@ -779,11 +807,11 @@ INSERT INTO `financing_scenario` (`id`, `name`, `description`, `input_invest`, `
 DROP TABLE IF EXISTS `funding_source`;
 CREATE TABLE IF NOT EXISTS `funding_source` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_type` int(11) NOT NULL DEFAULT 1,
+  `id_type` int(11) NOT NULL DEFAULT '1',
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `id_cat` int(11) NOT NULL,
-  `hasEntities` tinyint(4) DEFAULT 1,
+  `hasEntities` tinyint(4) DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`),
   KEY `id_type` (`id_type`)
@@ -816,7 +844,7 @@ DROP TABLE IF EXISTS `funding_sources_category`;
 CREATE TABLE IF NOT EXISTS `funding_sources_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
@@ -842,7 +870,7 @@ DROP TABLE IF EXISTS `funding_sources_type`;
 CREATE TABLE IF NOT EXISTS `funding_sources_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -864,7 +892,7 @@ DROP TABLE IF EXISTS `implem_item`;
 CREATE TABLE IF NOT EXISTS `implem_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
@@ -890,7 +918,7 @@ DROP TABLE IF EXISTS `implem_item_advice`;
 CREATE TABLE IF NOT EXISTS `implem_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -1602,11 +1630,11 @@ DROP TABLE IF EXISTS `measure`;
 CREATE TABLE IF NOT EXISTS `measure` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `user` int(11) NOT NULL DEFAULT 0,
+  `description` text,
+  `user` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -1614,7 +1642,13 @@ CREATE TABLE IF NOT EXISTS `measure` (
 
 INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
 (1, 'Measure1', '', 0),
-(4, 'measure test admin', 'test test', 1);
+(4, 'measure test admin', 'test test', 1),
+(11, 'Project Management Zak', '', 4),
+(12, 'Project Management test', '', 6),
+(13, 'Project Management test1', '', 7),
+(14, 'Project Management test2', '', 8),
+(15, 'Project Management ZakSup', '', 10),
+(16, 'Project Management adminD', '', 11);
 
 -- --------------------------------------------------------
 
@@ -1626,8 +1660,8 @@ DROP TABLE IF EXISTS `noncash_item`;
 CREATE TABLE IF NOT EXISTS `noncash_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `sources` text DEFAULT NULL,
+  `description` text,
+  `sources` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
@@ -1720,7 +1754,7 @@ DROP TABLE IF EXISTS `opex_item`;
 CREATE TABLE IF NOT EXISTS `opex_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -1745,7 +1779,7 @@ DROP TABLE IF EXISTS `opex_item_advice`;
 CREATE TABLE IF NOT EXISTS `opex_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -1923,28 +1957,29 @@ DROP TABLE IF EXISTS `project`;
 CREATE TABLE IF NOT EXISTS `project` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `discount_rate` double DEFAULT NULL,
   `weight_bank` double DEFAULT NULL,
   `weight_bank_soc` double DEFAULT NULL,
-  `creation_date` datetime DEFAULT current_timestamp(),
-  `modif_date` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modif_date` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `id_user` int(11) NOT NULL,
-  `scoping` tinyint(4) DEFAULT 0,
-  `cb` tinyint(4) DEFAULT 0,
+  `scoping` tinyint(4) DEFAULT '0',
+  `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
-(4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-06-17 12:39:53', 1, 1, 0),
+(4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-08-18 16:02:38', 1, 1, 0),
 (3, 'TESTVé', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-03-18 13:51:36', 1, 0, 1),
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
-(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-06-16 10:25:02', 1, 1, 1);
+(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-06-16 10:25:02', 1, 1, 1),
+(7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2001,7 +2036,10 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (6, 1),
 (6, 2),
 (6, 4),
-(6, 5);
+(6, 5),
+(7, 1),
+(7, 3),
+(7, 6);
 
 -- --------------------------------------------------------
 
@@ -2095,7 +2133,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (3, 1),
 (4, 1),
 (5, 1),
-(6, 1);
+(6, 1),
+(7, 1);
 
 -- --------------------------------------------------------
 
@@ -2130,6 +2169,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (3, 6),
 (5, 4),
 (7, 4),
+(7, 7),
 (9, 4),
 (10, 4),
 (11, 4);
@@ -2144,7 +2184,7 @@ DROP TABLE IF EXISTS `quantifiable_item`;
 CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
@@ -2166,7 +2206,7 @@ DROP TABLE IF EXISTS `quantifiable_item_advice`;
 CREATE TABLE IF NOT EXISTS `quantifiable_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -2359,7 +2399,7 @@ DROP TABLE IF EXISTS `revenues_item`;
 CREATE TABLE IF NOT EXISTS `revenues_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
@@ -2385,7 +2425,7 @@ DROP TABLE IF EXISTS `revenues_item_advice`;
 CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -2497,8 +2537,8 @@ DROP TABLE IF EXISTS `risk_item`;
 CREATE TABLE IF NOT EXISTS `risk_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `sources` text DEFAULT NULL,
+  `description` text,
+  `sources` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -2599,8 +2639,8 @@ DROP TABLE IF EXISTS `sel_funding_source`;
 CREATE TABLE IF NOT EXISTS `sel_funding_source` (
   `id_finScen` int(11) NOT NULL,
   `id_source` int(11) NOT NULL,
-  `share` double DEFAULT 0,
-  `interest` double DEFAULT 0,
+  `share` double DEFAULT '0',
+  `interest` double DEFAULT '0',
   `start_date` date DEFAULT NULL,
   `maturity_date` date DEFAULT NULL,
   PRIMARY KEY (`id_finScen`,`id_source`),
@@ -2687,14 +2727,26 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_crit` (
 INSERT INTO `ucm_sel_crit` (`id_crit`, `id_ucm`) VALUES
 (1, 1),
 (1, 4),
+(1, 6),
+(1, 7),
 (2, 1),
 (2, 4),
+(2, 6),
 (3, 1),
+(3, 6),
+(3, 7),
 (4, 1),
 (4, 4),
+(4, 6),
 (5, 1),
 (5, 4),
-(6, 4);
+(5, 7),
+(6, 4),
+(6, 6),
+(6, 7),
+(9, 6),
+(9, 7),
+(10, 6);
 
 -- --------------------------------------------------------
 
@@ -2718,8 +2770,12 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_critcat` (
 INSERT INTO `ucm_sel_critcat` (`id_critCat`, `id_ucm`, `weight`) VALUES
 (2, 1, 50),
 (1, 1, 50),
-(2, 4, 21),
-(1, 4, 79);
+(2, 4, 15),
+(1, 4, 85),
+(1, 6, NULL),
+(2, 6, NULL),
+(2, 7, 50),
+(1, 7, 50);
 
 -- --------------------------------------------------------
 
@@ -2742,7 +2798,11 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_dlt` (
 INSERT INTO `ucm_sel_dlt` (`id_ucm`, `id_dlt`) VALUES
 (1, 1),
 (4, 1),
-(4, 2);
+(4, 2),
+(6, 1),
+(7, 2),
+(8, 1),
+(8, 2);
 
 -- --------------------------------------------------------
 
@@ -2766,7 +2826,10 @@ INSERT INTO `ucm_sel_measure` (`id_meas`, `id_ucm`) VALUES
 (1, 1),
 (1, 3),
 (1, 4),
-(2, 4);
+(1, 6),
+(1, 7),
+(2, 4),
+(15, 8);
 
 -- --------------------------------------------------------
 
@@ -2788,13 +2851,25 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_uc` (
 
 INSERT INTO `ucm_sel_uc` (`id_uc`, `id_ucm`) VALUES
 (1, 1),
+(1, 7),
 (2, 1),
+(2, 4),
+(2, 6),
+(2, 7),
 (3, 1),
+(3, 7),
 (5, 1),
 (5, 4),
-(6, 4),
+(5, 6),
+(5, 7),
+(7, 4),
+(7, 6),
+(7, 7),
 (9, 4),
-(10, 4);
+(9, 6),
+(10, 4),
+(10, 6),
+(11, 7);
 
 -- --------------------------------------------------------
 
@@ -2855,26 +2930,71 @@ INSERT INTO `uc_vs_crit_input` (`id_uc`, `id_crit`, `id_ucm`, `rate`) VALUES
 (2, 5, 1, 2),
 (2, 2, 1, 2),
 (2, 1, 1, 2),
-(9, 6, 4, 5),
-(9, 1, 4, 4),
-(9, 2, 4, 4),
-(9, 5, 4, 4),
-(9, 4, 4, 4),
-(10, 6, 4, 5),
-(10, 1, 4, 4),
-(10, 2, 4, 4),
-(10, 5, 4, 4),
-(10, 4, 4, 4),
-(5, 6, 4, 4),
+(9, 4, 4, 5),
+(9, 3, 4, 5),
+(9, 2, 4, 5),
+(9, 1, 4, 5),
+(9, 10, 4, 5),
+(9, 6, 4, 4),
+(2, 9, 4, 4),
+(2, 4, 4, 4),
+(2, 3, 4, 4),
+(2, 2, 4, 4),
+(2, 1, 4, 4),
+(2, 10, 4, 4),
+(2, 6, 4, 5),
+(7, 9, 4, 5),
+(7, 4, 4, 4),
+(7, 3, 4, 4),
+(7, 2, 4, 4),
+(7, 1, 4, 5),
+(7, 10, 4, 4),
+(7, 6, 4, 4),
+(9, 9, 4, 4),
+(5, 6, 4, 5),
+(5, 10, 4, 4),
 (5, 1, 4, 4),
 (5, 2, 4, 4),
-(5, 5, 4, 4),
+(5, 3, 4, 4),
 (5, 4, 4, 4),
-(6, 6, 4, 5),
-(6, 1, 4, 4),
-(6, 2, 4, 5),
-(6, 5, 4, 4),
-(6, 4, 4, 5);
+(5, 9, 4, 4),
+(10, 6, 4, 4),
+(10, 10, 4, 4),
+(10, 1, 4, 4),
+(10, 2, 4, 4),
+(10, 3, 4, 4),
+(10, 4, 4, 4),
+(10, 9, 4, 4),
+(7, 6, 7, 3),
+(7, 1, 7, 3),
+(7, 5, 7, 4),
+(7, 3, 7, 5),
+(7, 9, 7, 6),
+(2, 6, 7, 3),
+(2, 1, 7, 7),
+(2, 5, 7, 4),
+(2, 3, 7, 7),
+(2, 9, 7, 4),
+(1, 6, 7, 7),
+(1, 1, 7, 4),
+(1, 5, 7, 7),
+(1, 3, 7, 5),
+(1, 9, 7, 3),
+(5, 6, 7, 5),
+(5, 1, 7, 7),
+(5, 5, 7, 9),
+(5, 3, 7, 1),
+(5, 9, 7, 5),
+(3, 6, 7, 3),
+(3, 1, 7, 5),
+(3, 5, 7, 6),
+(3, 3, 7, 7),
+(3, 9, 7, 4),
+(11, 6, 7, 2),
+(11, 1, 7, 1),
+(11, 5, 7, 7),
+(11, 3, 7, 9),
+(11, 9, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -2908,19 +3028,23 @@ CREATE TABLE IF NOT EXISTS `user` (
   `salt` varchar(255) NOT NULL,
   `is_admin` tinyint(1) DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT NULL,
-  `creation_date` datetime DEFAULT current_timestamp(),
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `profile` enum('d','s') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57'),
-(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08');
+INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`) VALUES
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd'),
+(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
+(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
+(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
+(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 's');
 
 -- --------------------------------------------------------
 
@@ -2960,7 +3084,7 @@ DROP TABLE IF EXISTS `use_case`;
 CREATE TABLE IF NOT EXISTS `use_case` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   `id_meas` int(11) NOT NULL,
   `id_cat` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -2993,22 +3117,25 @@ DROP TABLE IF EXISTS `use_cases_menu`;
 CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
-  `creation_date` datetime DEFAULT current_timestamp(),
-  `modif_date` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `description` text,
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modif_date` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
 --
 
-INSERT INTO `use_cases_menu` (`id`, `name`, `description`, `creation_date`, `modif_date`, `id_user`) VALUES
-(1, 'projet', '', '2020-02-11 14:55:56', '2020-05-14 16:34:23', 1),
-(4, 'projet2', '', '2020-04-17 11:09:45', '2020-05-18 09:57:59', 1),
-(3, 'uc_eval', '', '2020-02-13 12:22:10', '2020-02-13 12:22:20', 2);
+INSERT INTO `use_cases_menu` (`id`, `name`, `description`, `creation_date`, `id_user`) VALUES
+(1, 'projet', '', '2020-02-11 14:55:56', 1),
+(4, 'projet2', '', '2020-04-17 11:09:45', 1),
+(3, 'uc_eval', '', '2020-02-13 12:22:10', 2),
+(6, 'test', 'testing', '2020-06-29 16:12:35', 1),
+(7, 'test1', 'test', '2020-07-16 16:04:46', 5),
+(8, 'test1', 'test', '2020-08-17 09:19:57', 10);
 
 -- --------------------------------------------------------
 
@@ -3020,7 +3147,7 @@ DROP TABLE IF EXISTS `use_case_cat`;
 CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
@@ -3121,7 +3248,7 @@ DROP TABLE IF EXISTS `widercash_item`;
 CREATE TABLE IF NOT EXISTS `widercash_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
@@ -3147,7 +3274,7 @@ DROP TABLE IF EXISTS `widercash_item_advice`;
 CREATE TABLE IF NOT EXISTS `widercash_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `unit` varchar(255) DEFAULT NULL,
-  `source` text DEFAULT NULL,
+  `source` text,
   `unit_cost` double DEFAULT NULL,
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,

@@ -1,0 +1,37 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% import "/templates/deal_criteria/macro.twig" as macros %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% block sidebar %}{{ sidebar.sidebar("deal_criteria") }}{% endblock %}
+
+
+{% block title %}Deal Criteria{% endblock %}
+
+
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>Lorep ipsum</p>
+        <p>..............</p>
+        <p>In this section, the Toolkit ...</p>
+    </div>
+</div>
+
+
+    <div class="dash-bg container-fluid m-1 mt-5 ml-2 p-4">
+        <div class="dash-bg-light container-fluid p-3">
+            <h3 class="dash-title mb-3">Deal Criteria</h3>
+            {{ macros.input_target_nogo(selDevSym,input) }}
+        </div>
+    </div>
+{% endblock %}
