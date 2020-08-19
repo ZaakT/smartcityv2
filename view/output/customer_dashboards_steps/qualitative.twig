@@ -1,0 +1,26 @@
+{% extends '/input/project_design.twig' %}
+
+{% import "/templates/choose_redirect.twig" as redirect %}
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
+
+{% block title %}Dashbords - Qualitative{% endblock %}
+
+{% block content %}
+
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>Lorep ipsum</p>
+        <p>..............</p>
+        <p>In this section, the Toolkit ...</p>
+    </div>
+</div>
+
+
+{% endblock %}
+

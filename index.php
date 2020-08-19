@@ -625,11 +625,61 @@ try{
                     } else if($_GET['A2']=="deal_criteria_input") {
                         deal_criteria_input_nogo_target($_POST);
                     }
-
                 } else {  
                     \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria',"Lorem ipsum \n ...",  'Deal Criteria');
                 }
             }
+            elseif($_GET['A']=='customer_dashboards'){
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards', true, false, false, false);
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=customer_dashboards&A2=summary&projID='.$projID);
+                        }
+                    }elseif($_GET['A2']=="summary"){
+                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
+                            dashboards_summary($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=customer_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="project_details"){
+                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
+                            dashboards_project_details($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=customer_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="use_case_details"){
+                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
+                            dashboards_use_case_details($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=customer_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="non_monetizable"){
+                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
+                            dashboards_non_monetizable($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=customer_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="qualitative"){
+                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
+                            dashboards_qualitative($twig,$is_connected, $_GET['projID']);
+                        }else{
+                            header('Location: ?A=customer_dashboards&A2project_selection');
+                        }
+                    }
+                }else{
+                    $scripts='
+                    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
+                    ';
+                    \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=project_selection', 'customer_dashboards',"Lorem ipsum \n ...",  'Customer Dashboards', $scripts);
+
+                }
+            }
+
+
 
             
 
