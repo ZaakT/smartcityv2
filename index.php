@@ -425,7 +425,7 @@ try{
                 if(isset($_GET['A2'])){
                     // --- PROJECT ---
                     if($_GET['A2']=="project"){
-                        \general\project($twig,$is_connected,'?A=project_scoping&A2=proj_selected','project_scoping', true, false, false, true);
+                        \general\project($twig,$is_connected,'?A=project_scoping&A2=proj_selected','project_scoping');
                     }
                     
                     elseif($_GET['A2']=="create_proj"){
@@ -553,16 +553,8 @@ try{
                         header('Location: ?A='.$_GET['A']);
                     }
                 } else {
-                    $scripts = '
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/zonesForm.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/sizeForm.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/prereq_projectScoping.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/volumesForm.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
-                    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
-                    ';
-                    \general\commonPage($twig,$is_connected, "?A=project_scoping&A2=project", "project_scoping", 'Lorem ipsum ...', "Project Scoping", $scripts);
+
+                    \general\commonPage($twig,$is_connected, "?A=project_scoping&A2=project", "project_scoping");
                     //project_scoping($twig,$is_connected);
                 }        
             
@@ -606,7 +598,7 @@ try{
             elseif($_GET['A']=='deal_criteria'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected', 'deal_criteria', true, false, false, false);
+                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected', 'deal_criteria');
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
@@ -626,13 +618,14 @@ try{
                         deal_criteria_input_nogo_target($_POST);
                     }
                 } else {  
-                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria',"Lorem ipsum \n ...",  'Deal Criteria');
+                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria');
                 }
             }
+            // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards', true, false, false, false);
+                        \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards');
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
@@ -671,10 +664,7 @@ try{
                         }
                     }
                 }else{
-                    $scripts='
-                    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
-                    ';
-                    \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=project_selection', 'customer_dashboards',"Lorem ipsum \n ...",  'Customer Dashboards', $scripts);
+                    \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=project_selection', 'customer_dashboards');
 
                 }
             }
@@ -688,7 +678,7 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project_cb"){
                         //project_cb($twig,$is_connected);
-                        \general\project($twig,$is_connected, "?A=cost_benefits&A2=proj_selected", "cost_benefits", false, true, true, false, '/input/cost_benefits_in.twig');
+                        \general\project($twig,$is_connected, "?A=cost_benefits&A2=proj_selected", "cost_benefits");
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
@@ -1873,7 +1863,7 @@ try{
             elseif($_GET['A']=='dashboards'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
-                        project_out($twig,$is_connected);
+                        \general\project($twig,$is_connected, "?A=dashboards&A2=proj_selected",'dashboards');
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){

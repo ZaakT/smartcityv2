@@ -16,14 +16,30 @@
             <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
-            <h2 class="text-center text-uppercase">{% block title %}{{centralTitle|nl2br}}{% endblock %}</h2>
+            <h2 class="text-center text-uppercase">
+            {% block title %}
+                {% if sideBarName=='customer_dashboards' %}
+                    Customer Dashboards
+                {% elseif sideBarName=='project_scoping' %}
+                    Project Scoping
+                {% elseif sideBarName=='deal_criteria' %}
+                    Deal Criteria
+                {% endif %}
+            {% endblock %}</h2>
         </div>
     </div>
 </div>
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
-    {{lorem|nl2br}}
+    {% if sideBarName=='customer_dashboards' %}
+        Lorem ipsum ...
+
+    {% elseif sideBarName=='project_scoping' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='deal_criteria' %}
+        Lorem ipsum ...
+    {% endif %}
     </div>
 </div>
 <div class="row text-center text-dark">
@@ -33,4 +49,17 @@
 
 {% block scripts %}
 {{scripts|nl2br}}
+
+{% if sideBarName=='customer_dashboards' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
+
+{% elseif sideBarName=='project_scoping' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/zonesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/sizeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/prereq_projectScoping.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/volumesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
+{% endif %}
 {% endblock %}

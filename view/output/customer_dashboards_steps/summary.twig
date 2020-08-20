@@ -3,6 +3,7 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/customer_dashboards/macro_summary.twig" as macros %}
 
 {% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
 
@@ -12,15 +13,70 @@
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
-
-<div class="row jumbotron text-light bg-dark m-5 p-3">
+<div hidden class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
-        <p>Lorep ipsum</p>
-        <p>..............</p>
-        <p>In this section, the Toolkit ...</p>
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
     </div>
 </div>
 
 
+<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">Financial: Summary - </span><span style="font-weight: 400;"></span>{{ selected }}</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 px-0">
+            {# SCOPE #}
+            <div class="dash-bg container-fluid m-1 ml-2 p-4">
+                {# KEY DATES #}
+                <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.key_dates(scope,ucs,keydates_uc,uc_completed) }}
+                </div>
+
+                {# # OF UC #}
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                <h3 class="dash-title mb-3">Project Score</h3>
+                    {{ macros.project_score(selDevSym) }}
+                </div>    
+            </div>            
+            
+            {# BUGDET #}
+            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                    <div class="dash-bg-light container-fluid p-3">
+                    {#{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }#}
+                    </div>
+            </div>
+
+        </div>
+
+
+        {# CB + KPI #}
+        <div class="col-6">
+            <div class="dash-bg container-fluid m-1 ml-2 p-4">
+                    <div class="dash-bg-light container-fluid p-3">
+                        {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
+                    </div>
+                    <div class="dash-bg-light container-fluid p-3 mt-4">
+                        {#{ macros.kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) }#}
+                    </div>
+            </div>
+
+            {# BANKABIKITY #}
+            <section class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                <div class="dash-bg-light container-fluid p-3">
+                    {#{ macros.financial_bankability(selDevSym, input_nogo_target, bankability_data) }#}
+                </div>
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                    {#{ macros.societal_bankability() }#}
+                </div>
+            </section>
+
+        </div>
+        
+    </div>
+
+    </section>
+</div>
+
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/summary.js"></script>
 {% endblock %}
 

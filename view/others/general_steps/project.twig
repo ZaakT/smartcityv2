@@ -1,3 +1,51 @@
+
+
+{# default parametres #}
+    {% set deleteMode = true %}
+    {% set scopeMode = true %}
+    {% set veriScopefMode = false %}
+    {% set createMode = true %}
+    {% set costBenefitsMode = false %}
+    {% set  verifCostBenefits = false %}
+    {% set commonPage = '/others/general_common.twig' %}
+    {% set lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem.'%}
+
+
+{% if sideBarName =="project_scoping" %}
+    {% set scopeMode = false %}
+
+{% elseif sideBarName =="deal_criteria" %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+
+{% elseif sideBarName =="customer_dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+
+{% elseif sideBarName =="cost_benefits" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set commonPage = '/input/cost_benefits_in.twig' %}
+
+{% elseif sideBarName =="dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+    {% set commonPage = '/output/dashboards.twig' %}
+
+{% endif %}
+
+
+
+
+
+
 {% extends commonPage %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
@@ -10,11 +58,13 @@
 
 {% block content %}
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{% if lorem != '' %}
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+        <p class="text-justify">{{lorem|nl2br}} </p>
     </div>
 </div>
+{% endif %}
 
 {% if createMode %}
 <div class="row m-3">
@@ -27,7 +77,7 @@
 
 <form action={{nextPage}} method="post">
 {% if projects %}
-{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode) }}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits) }}
 {% else %}
 <h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}

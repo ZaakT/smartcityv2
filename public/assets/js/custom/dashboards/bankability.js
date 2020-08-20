@@ -178,6 +178,7 @@ function updateCharts(input) {
         
 }
 
+
 function createCharts() {
 ////////////////////  FINANCIAL BANKABILIY /////////////////////////
 //CHART
