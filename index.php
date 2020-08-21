@@ -595,7 +595,7 @@ try{
                             }
                         } elseif(isset($_GET['ucID']) and $_GET['ucID']!=0){
                             // --- CAPEX OR OPEX (XPEX) ---
-                            if($_GET['A2']=="capex" or $_GET['A2']=="opex"){
+                            if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']); 

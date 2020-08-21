@@ -1,5 +1,5 @@
 {% macro list_xpex(xpex,selXpex=[], type="capex") %}
-<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested {% if type=="capex" %}Capex{% else %}Opex{% endif %} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -29,7 +29,7 @@
 {% macro list_xpex_user(xpex_user,projID=0,ucID=0,selXpex=[]) %}
 {% import "/templates/cutomer_bc/modal_xpex.twig" as modal %}
 
-<h3 class="text-center mt-5 mb-3 text-uppercase">Custom {% if type=="capex" %}Capex{% else %}Opex{% endif %} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">Custom {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-bordered table-striped table-responsive-lg'>
@@ -65,7 +65,7 @@
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col">{% if type=="capex" %}Capex{% else %}Opex{% endif %} Component</th>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per Use Case</th> {# {{compo['name']}} #}
                     <th scope="col">Range of the Unit Cost ( in {{selDevSym}} )</th>
@@ -100,7 +100,7 @@
         <table id="xpex_input" class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">{% if type=="capex" %}Capex{% else %}Opex{% endif %} Component</th>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
                     <th scope="col">Ratio per Use Case</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
@@ -139,8 +139,8 @@
         <table id="tot_table_xpex" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">{% if type=="capex" %}Capex{% else %}Opex{% endif %} Component</th>
-                    <th scope="col">Total {% if type=="capex" %}Capex{% else %}Opex{% endif %} ( in {{selDevSym}} )</th>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">Total {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} ( in {{selDevSym}} )</th>
                 </tr>
                 
             </thead>

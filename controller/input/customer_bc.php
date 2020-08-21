@@ -19,10 +19,16 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
                         $list_xpex_advice = getListCapexAdvice($ucID); 
                         $list_xpex_user = getListCapexUser($projID,$ucID);    
                         $list_selXpex = getListSelCapex($projID,$ucID); 
-                    }else{
+                    }elseif($type=="opex"){
                         $list_xpex_advice = getListOpexAdvice($ucID); 
                         $list_xpex_user = getListOpexUser($projID,$ucID);    
                         $list_selXpex = getListSelOpex($projID,$ucID); 
+                    }elseif($type=="deployment_costs"){
+                        $list_xpex_advice = getListImplemAdvice($ucID);
+                        $list_xpex_user = getListImplemUser($projID,$ucID);     
+                        $list_selXpex = getListSelImplem($projID,$ucID); 
+                    }else{
+                        throw new Exception("Wrong type.");
                     }
 
                     $devises = getListDevises();
