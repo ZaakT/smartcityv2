@@ -23,7 +23,7 @@ function submitForm(formName){
     $("#"+formName).submit();
 }
 
-function countSelectedImplem(oForm) {
+function countSelectedXpex(oForm) {
     var i, n = 0;
     var oElement;
     for (i = 0; i < oForm.elements.length; i++) {
@@ -36,55 +36,19 @@ function countSelectedImplem(oForm) {
             }
         }
     }
-    $("#countImplemSelect").text(n+" selected");
+    $("#countXpexSelect").text(n+" selected");
     //console.log(n);
     if (n >= 1) {
-        $("#help_implem").attr('hidden', 'hidden');
+        $("#help_xpex").attr('hidden', 'hidden');
         return true;
     }
     else {
-        $("#help_implem").removeAttr('hidden');
+        $("#help_xpex").removeAttr('hidden');
         return false;
     }
 }
-/*
-function checkImplemInput(){
-    var ret = true;
-    $("#implem_input input").each(function(){
-        var val = $(this).val();
-        if($(this).classes().includes("volume")){
-            val = val ? parseInt(val) : -1 ;
-            //console.log(val);
-            if(val < 0){
-                $(this).css("background","salmon");
-                $(this).val("");
-                ret = false;
-            } else {
-                $(this).val(val);
-                $(this).css("background","#C3E6CB");
-            }
-        } else if ($(this).classes().includes("unit_cost")){
-            val = val ? parseFloat(val) : -1 ;
-            var temp = String(val).split(".");
-            if(val < 0.){
-                $(this).css("background","salmon");
-                $(this).val("");
-                ret = false;
-            } else if (temp.length==2 && temp[1].length>3){
-                $(this).css("background","salmon");
-                ret = false;
-            } else {
-                //$(this).val(val);
-                $(this).css("background","#C3E6CB");
-            }
-        }
-    });
-    calcTotImplem();
-    return ret;
-} */
 
-
-function checkImplemInput(id){
+function checkXpexInput(id){
     var ret = true;
     id = id.getAttribute('id');
     //console.log(id);
@@ -109,8 +73,17 @@ function checkImplemInput(id){
             id = id.split("_");
             //console.log("rat_"+id[1]);
             $("#rat_"+id[1]).val(ratio);
-            $("#rat_"+id[1]).each(function(){
-            });
+        }
+    } else if (tab.includes("period")){
+        val = val ? parseInt(val) : -1 ;
+        //console.log(val);
+        if(val <= 0){
+            $(this).css("background","salmon");
+            //$(this).val("");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
         }
     } else if (tab.includes("unit_cost")){
         val = val ? parseFloat(val) : -1 ;
@@ -147,18 +120,16 @@ function checkImplemInput(id){
             id = id.split("_");
             //console.log("vol_"+id[1]);
             $("#vol_"+id[1]).val(volume);
-            $("#vol_"+id[1]).each(function(){
-            });
         }
     } 
 
-    calcTotImplem();
+    calcTotXpex();
     return ret;
 }
 
-function calcTotImplem(){
+function calcTotXpex(){
     var sum = 0;
-    $("#tot_table_implem td").each(function(){
+    $("#tot_table_xpex td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
@@ -175,18 +146,18 @@ function calcTotImplem(){
     });
 }
 
-function setNewDeviseImplem(name){
+function setNewDeviseXpex(name){
     deviseName = name;
     try{
-        countSelectedImplem(form_implem);
+        countSelectedXpex(form_xpex);
     } catch {
         //do nothing
-    } finally { 
-        $("#implem_input input").each(function(){
-            checkImplemInput(this);
+    } finally {
+        $("#xpex_input input").each(function(){
+            checkXpexInput(this);
         });
-        calcTotImplem();
+        calcTotXpex();
     }
 }
 
-setNewDeviseImplem("GBP");
+setNewDeviseXpex("GBP");

@@ -576,13 +576,43 @@ try{
                             $_SESSION['projID']=$projID;
                             header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
                         }
-                    // --- USE CASE SELECTION ---
-                    } elseif($_GET['A2']=="use_case_selection"){
-                        if(isset($_GET['projID']) and $_GET['projID']!=0){
-                            \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_GET['projID'],'input_project_common',$_GET['projID']);                        }
-                        else {
-                            header('Location: ?A=input_project_common&A2=project_selection');
+                    
+                    }elseif(isset($_GET['projID']) and $_GET['projID']!=0){
+                        // --- USE CASE SELECTION ---
+                        if($_GET['A2']=="use_case_selection"){
+                                \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_GET['projID'],'input_project_common',$_GET['projID']);                        
+
+                        } elseif($_GET['A2']=="use_case_selected"){
+                            if(isset($_POST['radio_uc'])){
+                                //var_dump($_POST);
+                                $ucID = intval($_POST['radio_uc']);
+                                $_SESSION['ucID']=$ucID;
+                                //var_dump($ucID);
+                                header('Location: ?A='.$_GET['A'].'&A2=capex&A3=selection&projID='.$_GET['projID'].'&ucID='.$ucID);
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_selection');
+                            }
+                        } elseif(isset($_GET['ucID']) and $_GET['ucID']!=0){
+                            // --- CAPEX OR OPEX (XPEX) ---
+                            if($_GET['A2']=="capex" or $_GET['A2']=="opex"){
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="selection"){
+                                        xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']); 
+                                    }
+                                }else {
+                                    xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']);
+                                }
+
+                            }else{
+                                
+                                header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
+                            }
                         }
+
+                            
+                    } else {
+                        header('Location: ?A=input_project_common&A2=project_selection');
                     }
 
                 } else {  

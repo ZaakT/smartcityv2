@@ -1,3 +1,5 @@
+
+
 ;!(function ($) {
     $.fn.classes = function (callback) {
         var classes = [];
@@ -47,6 +49,7 @@ function countSelectedCapex(oForm) {
         return false;
     }
 }
+
 
 function checkCapexInput(id){
     var ret = true;
@@ -126,6 +129,7 @@ function checkCapexInput(id){
     calcTotCapex();
     return ret;
 }
+
 
 function calcTotCapex(){
     var sum = 0;

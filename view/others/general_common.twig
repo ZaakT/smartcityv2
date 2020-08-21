@@ -5,7 +5,7 @@
 
 {% import "/templates/sidebar.twig" as sidebar %}
 
-{% block sidebar %}{{ sidebar.sidebar(sideBarName) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName, projID, ucID) }}{% endblock %}
 
 
 
@@ -54,7 +54,7 @@
 {% block scripts %}
 
 {% if sideBarName=='customer_dashboards' %}
-    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/Customer BC/prereq_dashbords.js"></script>
 
 {% elseif sideBarName=='project_scoping' %}
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
@@ -64,5 +64,9 @@
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/volumesForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
+
+{% elseif sideBarName =='input_project_common' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
+    
 {% endif %}
 {% endblock %}
