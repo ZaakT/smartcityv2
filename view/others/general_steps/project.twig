@@ -39,6 +39,10 @@
     {% set  verifCostBenefits = true %}
     {% set commonPage = '/output/dashboards.twig' %}
 
+{% elseif sideBarName =="input_project_common" %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+
 {% endif %}
 
 

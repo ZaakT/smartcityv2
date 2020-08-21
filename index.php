@@ -566,31 +566,28 @@ try{
             elseif($_GET['A']=='input_project_common'){
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
-                        project_ipc($twig,$is_connected);
+                        \general\project($twig,$is_connected, '?A=input_project_common&A2=proj_selected',  'input_project_common');
+                        //project_ipc($twig,$is_connected);
+
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=input_project_common&A2=capex&projID='.$projID);
+                            header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
                         }
-                    // --- CAPEX ---
-                    } elseif($_GET['A2']=="capex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                capex_ipc($twig,$is_connected,$_GET['projID']);
-                            }
-                            else {
-                                header('Location: ?A=input_project_common&A2=capex');
-                            }
-                        }
+                    // --- USE CASE SELECTION ---
+                    } elseif($_GET['A2']=="use_case_selection"){
+                        if(isset($_GET['projID']) and $_GET['projID']!=0){
+                            \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_GET['projID'],'input_project_common',$_GET['projID']);                        }
                         else {
-                            use_case_cb($twig,$is_connected);
+                            header('Location: ?A=input_project_common&A2=project_selection');
                         }
                     }
 
                 } else {  
-                    input_project_common($twig,$is_connected);
+                    //input_project_common($twig,$is_connected);
+                    \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=project_selection", "input_project_common");
                 }
             }
 

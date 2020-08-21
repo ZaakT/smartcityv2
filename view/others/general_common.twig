@@ -24,6 +24,8 @@
                     Project Scoping
                 {% elseif sideBarName=='deal_criteria' %}
                     Deal Criteria
+                {% elseif sideBarName=='input_project_common' %}
+                    Project Initialization
                 {% endif %}
             {% endblock %}</h2>
         </div>
@@ -39,6 +41,8 @@
         Lorem ipsum ...
     {% elseif sideBarName=='deal_criteria' %}
         Lorem ipsum ...
+    {% elseif sideBarName=='input_project_common' %}
+        Lorem ipsum ...
     {% endif %}
     </div>
 </div>
@@ -48,7 +52,6 @@
 {% endblock %}
 
 {% block scripts %}
-{{scripts|nl2br}}
 
 {% if sideBarName=='customer_dashboards' %}
     <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
