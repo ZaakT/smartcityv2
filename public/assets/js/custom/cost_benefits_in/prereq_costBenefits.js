@@ -1,9 +1,11 @@
 
+
+
 function prereq_CostBenefits1(check){
     var parts_cond = ["use_case_cb","summary"];
     if(check){
         parts_cond.forEach(part => {
-            //console.log(part);
+            console.log(part);
             $("#"+part).removeClass("disabled");
         });
     }

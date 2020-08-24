@@ -54,7 +54,8 @@
 {% block scripts %}
 
 {% if sideBarName=='customer_dashboards' %}
-    <script type="text/javascript" src="../../public/assets/js/custom/Customer BC/prereq_dashbords.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_dashbords.js"></script>
+
 
 {% elseif sideBarName=='project_scoping' %}
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
@@ -67,6 +68,7 @@
 
 {% elseif sideBarName =='input_project_common' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
     
 {% endif %}
 {% endblock %}

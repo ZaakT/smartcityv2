@@ -3,7 +3,11 @@
 require_once('model/model.php');
 
 // -- Input Project Common
-
+function prereq_ipc($nb){
+    if(isset($_GET['A2'])){
+        echo "<script>prereq_ipc($nb);</script>";
+    }
+}
 
 
 function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTaken=false){
@@ -36,7 +40,7 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
                     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                     
                     echo $twig->render('/input/input_project_common_steps/xpex_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"xpex_advice"=>$list_xpex_advice,"xpex_user"=>$list_xpex_user,'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'ucID'=>$ucID, 'projID'=>$projID));
-                    //prereq_CostBenefits();
+                    prereq_ipc(1);
                 } else {
                     throw new Exception("This Use Case doesn't exist !");
                 }
