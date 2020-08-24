@@ -599,7 +599,7 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']); 
-                                    }elseif($_GET['A3']=="selectde"){
+                                    }elseif($_GET['A3']=="selected"){
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2']); 
                                     }elseif($_GET['A3']=="create_xpex"){
                                         create_xpex($twig,$is_connected, $_POST,  $_GET['A2']); 

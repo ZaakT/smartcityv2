@@ -66,7 +66,7 @@ function xpex_selected($twig,$is_connected,$post, $type){
                     array_push($selXpex,$id);
                 }
                 if($type=="capex"){
-                    $selXpex_old_id = getKeys($selXpex_old);
+                    $selXpex_old = getListSelCapex($projID,$ucID);
                 }elseif($type=="opex"){
                     $selXpex_old = getListSelOpex($projID,$ucID);
                 }elseif($type=="deployment_costs"){
@@ -76,14 +76,29 @@ function xpex_selected($twig,$is_connected,$post, $type){
                 $selXpex_diff_rm = array_diff($selXpex_old_id,$selXpex);
                 $selXpex_diff_add = array_diff($selXpex,$selXpex_old_id);
                 if(empty($selXpex_old)){
-                    insertSelXpex($projID,$ucID,$selXpex);
+                    if($type=="capex"){
+                        insertSelCapex($projID,$ucID,$selXpex);
+                    }elseif($type=="opex"){
+                        insertSelOpex($projID,$ucID,$selXpex);
+                    }elseif($type=="deployment_costs"){
+                        insertSelImplem($projID,$ucID,$selXpex);
+                    }
                 } elseif (!empty($selXpex_old)) {
-                    deleteSelXpex($projID,$ucID,$selXpex_diff_rm);
-                    insertSelXpex($projID,$ucID,$selXpex_diff_add);
+                    if($type=="capex"){
+                        deleteSelCapex($projID,$ucID,$selXpex_diff_rm);
+                        insertSelCapex($projID,$ucID,$selXpex_diff_add);
+                    }elseif($type=="opex"){
+                        deleteSelOpex($projID,$ucID,$selXpex_diff_rm);
+                        insertSelOpex($projID,$ucID,$selXpex_diff_add);
+                    }elseif($type=="deployment_costs"){
+                        deleteSelImplem($projID,$ucID,$selXpex_diff_rm);
+                        insertSelImplem($projID,$ucID,$selXpex_diff_add);
+                    }
                 }else {
                     throw new Exception("Wrong type.");
                 }
                 update_ModifDate_proj($projID);
+                $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 xpex_input($twig,$is_connected,$projID,$ucID, $type);
                 updateCB($projID,0);
             } else {
@@ -93,7 +108,7 @@ function xpex_selected($twig,$is_connected,$post, $type){
             throw new Exception("There is no Project selected !");
         }
     } else {
-        throw new Exception("No Capex item selected !");
+        throw new Exception("No Xpex item selected !");
     }
 }
 
@@ -152,8 +167,8 @@ function xpex_input($twig,$is_connected,$projID=0,$ucID=0, $type="capex"){
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 
-                echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"capex_advice"=>$list_xpex_advice,"capex_user"=>$list_xpex_user,"selCapex"=>$list_selXpex,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc, 'type'=>$type));
-                prereq_CostBenefits();
+                echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"xpex_advice"=>$list_xpex_advice,"xpex_user"=>$list_xpex_user,"selXpex"=>$list_selXpex,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc, 'type'=>$type));
+                prereq_ipc(1);
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }

@@ -128,20 +128,26 @@ function checkXpexInput(id){
 }
 
 function calcTotXpex(){
-    var sum = 0;
-    $("#tot_table_xpex td").each(function(){
+    $("#xpex_table td").each(function(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
-            if (temp.length==2){
+            document.write("temp");
+            if (temp[0]=="cost0"){
+
                 var val1 = parseInt($("#vol_"+temp[1]).val());
-                var val2 = parseFloat($("#cost_"+temp[1]).val());
+                var val2 = parseFloat($("#unit_cost_"+temp[1]).text());
                 var tot = val1 && val2 ? val1*val2 : 0;
                 $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
-                sum += tot;
-            } else if (temp.length==1) {
-                $(this).text(sum.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+            } 
+            else if(temp[0]=="cost1"){
+
+                var val1 = parseInt($("#vol_"+temp[1]).val());
+                var val2 = parseFloat($("#unit_cost_"+temp[1]).val());
+                var tot = val1 && val2 ? val1*val2 : 0;
+                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             }
+            
         }
     });
 }
@@ -159,5 +165,3 @@ function setNewDeviseXpex(name){
         calcTotXpex();
     }
 }
-
-setNewDeviseXpex("GBP");
