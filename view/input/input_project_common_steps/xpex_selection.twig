@@ -30,7 +30,7 @@
     {{ list.list_xpex(xpex_advice,selXpex, type) }}
     {% endif %}
 
-    {% if capX_user %}
+    {% if xpex_user %}
     {{ list.list_xpex_user(xpex_user,projID,ucID,selXpex, type) }}
     {% endif %}
 </form>
@@ -51,14 +51,14 @@
     <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_xpex');"></button>
 </div>
 
-{#{ modal.create_capex(projID,ucID) }}
+{{ modal.create_xpex(projID,ucID, type) }}
 {{ modal.delete_selection(projID,ucID) }}
 
-    {% if selXpex|length == 0 and capex_user|length == 0  %}
+    {% if selXpex|length == 0 and xpex_user|length == 0  %}
     <script type="text/javascript">
         $('#askFillXpex').modal('show')
     </script>
-    {% endif %#}
+    {% endif %}
 
 
 

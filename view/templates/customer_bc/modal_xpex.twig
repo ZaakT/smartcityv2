@@ -1,7 +1,7 @@
 {% macro create_xpex(projID=0,ucID=0, type="capex") %}
 <div class="modal fade" id="createNewXpexModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createXpex-form" action="?A=cost_benefits&amp;A2=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+        <form id="createXpex-form" action="?A=input_project_common&amp;A2={{type}}&amp;A3=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel3">Please enter the new {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif type =="deployment_costs"%}deployment and set-up{% endif %} item informations</h5>
@@ -49,7 +49,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=cost_benefits&amp;A2=delete_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idXpex }}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A=input_project_common&amp;A2={{type}}&amp;A3=delete_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idXpex }}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>
@@ -59,3 +59,24 @@
 
 
 
+{% macro delete_selection(projID=0,ucID=0) %}
+<div class="modal fade" id="deleteSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selection Deleting Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete the selection and skip this part ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=input_project_common&amp;A2=delete_selection_capex&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
