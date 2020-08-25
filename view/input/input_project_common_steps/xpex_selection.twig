@@ -54,12 +54,6 @@
 {{ modal.create_xpex(projID,ucID, type) }}
 {{ modal.delete_selection(projID,ucID) }}
 
-    {% if selXpex|length == 0 and xpex_user|length == 0  %}
-    <script type="text/javascript">
-        $('#askFillXpex').modal('show')
-    </script>
-    {% endif %}
-
 
 
 

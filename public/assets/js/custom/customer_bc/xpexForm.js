@@ -132,7 +132,6 @@ function calcTotXpex(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
-            document.write("temp");
             if (temp[0]=="cost0"){
 
                 var val1 = parseInt($("#vol_"+temp[1]).val());
@@ -159,9 +158,11 @@ function setNewDeviseXpex(name){
     } catch {
         //do nothing
     } finally {
-        $("#xpex_input input").each(function(){
+        $("input").each(function(){
             checkXpexInput(this);
         });
         calcTotXpex();
     }
 }
+
+setNewDeviseXpex("GBP");

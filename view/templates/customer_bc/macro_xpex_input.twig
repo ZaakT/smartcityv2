@@ -17,13 +17,9 @@
                     
                     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
 
-                    {% if fromNTT %}<td scope="col" id="unit_cost_{{id_xpex}}" name="vol_{{id_xpex}}" >{{selXpex[id_xpex]['unit_cost']}}
-                    {% else %}<td scope="col"><input id="unit_cost_{{id_xpex}}" name="vol_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}">{% endif %}</td> 
+                    {% if fromNTT %}<td scope="col" id="unit_cost_{{id_xpex}}" name="unit_cost_{{id_xpex}}" >{{selXpex[id_xpex]['unit_cost']}}
+                    {% else %}<td scope="col"><input id="unit_cost_{{id_xpex}}" name="unit_cost_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(unit_cost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}">{% endif %}</td> 
 
-   
-                    {#}<td scope="col" id="unit_cost_{{id_xpex}}" name="unit_cost_{{id_xpex}}" >{% if fromNTT %} {{selXpex[id_xpex]['unit_cost']}}
-                    {% else %}<input id="unit_cost_{{id_xpex}}" name="unit_cost_{{id_xpex}}" class="text-center unit_cost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkXpexInput(cost_{{id_xpex}});" value="{{selXpex[id_xpex]['unit_cost']}}" placeholder="{{ (xpex_advice[id_xpex]['range_min'] + xpex_advice[id_xpex]['range_max']) / 2 }}"> {% endif %}</td>
-                    {#}
                     <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
                 
                     <td scope="col" id='cost{% if fromNTT %}0{% else %}1{% endif %}_{{id_xpex}}' > - </td> 

@@ -1,5 +1,3 @@
-
-
 ;!(function ($) {
     $.fn.classes = function (callback) {
         var classes = [];
@@ -157,7 +155,7 @@ function setNewDeviseCapex(name){
     } catch {
         //do nothing
     } finally {
-        $("#capex_input input").each(function(){
+        $("input").each(function(){
             checkCapexInput(this);
         });
         calcTotCapex();
