@@ -236,3 +236,75 @@ function delete_xpex_user($idXpex, $type){
         throw new Exception("There is no Project selected !");
     }
 }
+
+
+function xpex_inputed($post){
+    if($post){
+        if(isset($_SESSION['projID'])){
+            $projID = $_SESSION['projID'];
+            if(isset($_SESSION['ucID'])){
+                $ucID = $_SESSION['ucID'];
+                $list = [];
+                foreach ($post as $key => $value) {
+                    $temp = explode('_',$key);
+                    $type=$_GET['A2'];
+                    if($temp[0]=="vol"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['volume'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['volume'=>$value];
+                        }
+                    } else if($temp[0]=="unitCost"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit_cost'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit_cost'=>$value];
+                        }
+                    } else if($temp[0]=="period"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['period'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['period'=>$value];
+                        }
+                    } else if($temp[0]=="anVarVol"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarVol'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarVol'=>$value];
+                        }
+                    } else if($temp[0]=="anVarCost"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarCost'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarCost'=>$value];
+                        }
+                    }else{
+                        throw new Exception("Error !");
+                    }
+                }
+                //print_r($list);
+
+                if($type=="capex"){
+                    insertCapexInputed($projID,$ucID,$list);
+                }elseif($type=="opex"){
+                    insertOpexInputed($projID,$ucID,$list);
+                }elseif($type=="deployment_costs"){
+                    insertImplemInputed($projID,$ucID,$list);
+                }else{
+                    throw new Exception("Wrong type !");
+                }
+                update_ModifDate_proj($projID);
+                updateCB($projID,0);
+                //echo "<script>alert('ok');</script>";
+                header('Location: ?A=input_project_common&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+                
+            } else {
+                throw new Exception("There is no UC selected !");
+            }
+        } else {
+            throw new Exception("There is no Project selected !");
+        }
+    } else {
+        throw new Exception("There is no data input !");
+    }
+}

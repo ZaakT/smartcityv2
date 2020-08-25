@@ -51,7 +51,7 @@ function countSelectedXpex(oForm) {
 function checkXpexInput(id){
     var ret = true;
     id = id.getAttribute('id');
-    //console.log(id);
+    console.log(id);
     var val = $("#"+id).val();
     //console.log(val);
     var tab = $("#"+id).classes();
@@ -73,19 +73,8 @@ function checkXpexInput(id){
             id = id.split("_");
             //console.log("rat_"+id[1]);
             $("#rat_"+id[1]).val(ratio);
-        }
-    } else if (tab.includes("period")){
-        val = val ? parseInt(val) : -1 ;
-        //console.log(val);
-        if(val <= 0){
-            $(this).css("background","salmon");
-            //$(this).val("");
-            ret = false;
-        } else {
-            $("#"+id).val(val);
-            $("#"+id).css("background","#C3E6CB");
-        }
-    } else if (tab.includes("unit_cost")){
+        } 
+    } else if (tab.includes("unitCost") || tab.includes("period")){
         val = val ? parseFloat(val) : -1 ;
         var temp = String(val).split(".");
         if(val < 0.){
@@ -99,29 +88,19 @@ function checkXpexInput(id){
             //$(this).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
-    } else if (tab.includes("ratio")){
+    } else if(tab.includes("anVarCost") || tab.includes("anVarVol")){
         val = val ? parseFloat(val) : -1 ;
-        var temp = String(val).split(".");
-        if(val < 0.){
+
+        console.log(val);
+        if(val < 0 || val > 100){
             $("#"+id).css("background","salmon");
             $("#"+id).val("");
             ret = false;
-        } else if (temp.length==2 && temp[1].length>3){
-            $("#"+id).css("background","salmon");
-            ret = false;
         } else {
-            //$(this).val(val);
+            //$("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
-            //changer la valeur de volume correspondante
-            var ratio = val;
-            var nb_uc = $("#nb_uc").html();
-            volume = Math.round(ratio * nb_uc);
-            //console.log(volume);
-            id = id.split("_");
-            //console.log("vol_"+id[1]);
-            $("#vol_"+id[1]).val(volume);
-        }
-    } 
+        } 
+    }
 
     calcTotXpex();
     return ret;
@@ -132,20 +111,13 @@ function calcTotXpex(){
         var id = $(this).attr('id');
         if (id){
             var temp = id.split("_");
-            if (temp[0]=="cost0"){
+            if (temp[0]=="cost"){
 
                 var val1 = parseInt($("#vol_"+temp[1]).val());
-                var val2 = parseFloat($("#unit_cost_"+temp[1]).text());
+                var val2 = parseFloat($("#unitCost_"+temp[1]).val());
                 var tot = val1 && val2 ? val1*val2 : 0;
                 $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             } 
-            else if(temp[0]=="cost1"){
-
-                var val1 = parseInt($("#vol_"+temp[1]).val());
-                var val2 = parseFloat($("#unit_cost_"+temp[1]).val());
-                var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
-            }
             
         }
     });

@@ -610,6 +610,13 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_GET['projID'].'&ucID='.$_GET['ucID']);
                                         }
                                         
+                                    }elseif($_GET['A3']=="inputed"){
+                                        if(isset($_POST)){
+                                            xpex_inputed($_POST);
+                                        }
+                                        else{
+                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_GET['projID'].'&ucID='.$_GET['ucID']);
+                                        }
                                     }
                                 }else {
                                     xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']);
