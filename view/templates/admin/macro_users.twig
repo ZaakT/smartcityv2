@@ -13,6 +13,7 @@
                     <th scope="col">Username</<th>
                     <th scope="col">Admin</th>
                     <th scope="col">Creation Date</th>
+                    <th scope="col">Profile</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -22,6 +23,7 @@
                     <td>{{ user[1] }}</td>
                     <td>{{ user[2] ? "Yes" : "No" }}</td>
                     <td>{{ user[3]|date("d/m/Y") }}</td>
+                    <td>{{ user[4] }}</td>
                     <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUser_{{ user[0] }}"></span></a></td>
                     {{ modal.delete_user(user[0],user[1]) }}
                 </tr>
