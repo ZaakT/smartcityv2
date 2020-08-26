@@ -100,7 +100,7 @@ function xpex_selected($twig,$is_connected,$post, $type){
                 update_ModifDate_proj($projID);
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 xpex_input($twig,$is_connected,$projID,$ucID, $type);
-                updateCB($projID,0);
+                //updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
             }
@@ -294,7 +294,7 @@ function xpex_inputed($post){
                     throw new Exception("Wrong type !");
                 }
                 update_ModifDate_proj($projID);
-                updateCB($projID,0);
+                //updateCB($projID,0);
                 //echo "<script>alert('ok');</script>";
                 header('Location: ?A=input_project_common&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
                 
