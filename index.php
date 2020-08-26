@@ -434,6 +434,15 @@ try{
                             ucm1($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED USE CASES MENU ---
+                    elseif($_GET['A2']=="ucm_selected"){
+                        if(isset($_POST['radio_ucm'])){
+                            $ucmID = intval($_POST['radio_ucm']);
+                            $_SESSION['ucmID']=$ucmID;
+                            //var_dump($ucmID);
+                            header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
+                        }
+                    }
                 } else {
                     project_sdesign($twig,$is_connected);
                 }
