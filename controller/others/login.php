@@ -14,7 +14,6 @@ function login($twig,$username_in=true,$password_in=true){
     
     echo $twig->render('/others/login.twig',array('username'=>$username,'username_in'=>$username_in,'password_in'=>$password_in)); 
     
-    echo $twig->render('/others/home.twig');
 }
 
 function connexion($twig,$post){
