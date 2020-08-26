@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 19 août 2020 à 10:04
+-- Généré le :  mer. 26 août 2020 à 09:02
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -687,10 +687,17 @@ CREATE TABLE IF NOT EXISTS `deal_criteria_input_nogo_target` (
   `payback_target` int(11) DEFAULT NULL,
   `risks_rating_nogo` int(11) DEFAULT NULL,
   `risks_rating_target` int(11) DEFAULT NULL,
-  `noncash_rating_nogo` int(11) DEFAULT NULL,
-  `noncash_rating_target` int(11) DEFAULT NULL,
+  `nqbr_nogo` int(11) DEFAULT NULL,
+  `nqbr_target` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `deal_criteria_input_nogo_target`
+--
+
+INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `societal_npv_target`, `societal_roi_nogo`, `societal_roi_target`, `societal_payback_nogo`, `societal_payback_target`, `npv_nogo`, `npv_target`, `roi_nogo`, `roi_target`, `payback_nogo`, `payback_target`, `risks_rating_nogo`, `risks_rating_target`, `nqbr_nogo`, `nqbr_target`) VALUES
+(6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10);
 
 -- --------------------------------------------------------
 
@@ -1057,8 +1064,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (2, 4, 2, 19, 50, 1),
 (3, 4, 2, 543, 50, 1),
 (12, 4, 3, 43, 28.5, 5),
-(4, 6, 1, NULL, NULL, NULL),
-(3, 6, 1, NULL, NULL, NULL),
+(4, 6, 1, 0, 0, 1),
+(3, 6, 1, 0, 0, 1),
 (15, 4, 7, 1568, 54, 54),
 (17, 6, 3, NULL, NULL, NULL);
 
@@ -1978,7 +1985,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-08-18 16:02:38', 1, 1, 0),
 (3, 'TESTVé', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-03-18 13:51:36', 1, 0, 1),
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
-(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-06-16 10:25:02', 1, 1, 1),
+(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-08-26 10:12:56', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0);
 
 -- --------------------------------------------------------
