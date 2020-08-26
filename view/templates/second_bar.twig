@@ -12,6 +12,8 @@
         <span class="mx-2">|</span>
         <span class="text-uppercase">Role : </span>&ensp;<strong>{{is_admin ? "Admin" : "Common"}}</strong>
         <span class="mx-2">|</span>
+        <span class="text-uppercase">Profile : </span>&ensp;<strong>{{user[4] == "d" ? "Project Developper" : "Supplier"}}</strong>
+        <span class="mx-2">|</span>
         <span class="text-uppercase">Currency :</span>&ensp;<strong>{{ devise_name }} <span id='currency'>({{ devise_sym }})</span></strong>
     </div>
 </div>
