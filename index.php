@@ -422,7 +422,17 @@ try{
             }
             // ---------- PROJECT SDESIGN ----------
             elseif($_GET['A']=='project_sdesign'){
-                project_sdesign($twig,$is_connected);
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="ucm"){
+                        if(isset($_GET['isTaken']) && $_GET['isTaken']){
+                            ucm($twig,$is_connected,true);
+                        } else {
+                            ucm($twig,$is_connected);
+                        }
+                    }
+                } else {
+                    project_sdesign($twig,$is_connected);
+                }
             }
             // ---------- PROJECT SCOPING ----------
             elseif($_GET['A']=='project_scoping'){
