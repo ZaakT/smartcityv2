@@ -2147,7 +2147,7 @@ try{
                         header('Location: ?A=login');
                     }
                 } else {
-                    login($twig);
+                login($twig);
                 }
             } else {
                 header('Location: ?A=login');

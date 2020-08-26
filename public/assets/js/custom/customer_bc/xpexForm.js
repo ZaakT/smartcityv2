@@ -138,3 +138,5 @@ function setNewDeviseXpex(name){
 }
 
 setNewDeviseXpex("GBP");
+
+scp -r ./ -P 1356 insightadm@ns3079645.ip-217-182-139.eu:~/smartcity_v2_test/smart_city_save 
