@@ -103,7 +103,15 @@
         <a class="nav-item nav-link disabled" id="fin_summary" href="?A=comp_finscen&amp;A2=fin_summary">Financing Summary</a>
         <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_finscen&amp;A2=cash_flows">Cash Flows</a>
 
+        {# PROJECT INITIALISATION #}
 
+        <!-- - Input - / Project Initialization -->
+    {% elseif page=="project_sdesign" %}
+        <h4 class="nav-item text-center"><br>Project Initialization</h4>
+        <a class="nav-item nav-link" id="measures" href="?A=project_design&amp;A2=measures&amp;ucmID={{ selectID }}">Project selection</a>
+        <a class="nav-item nav-link disabled" id="criteria" href="?A=project_design&amp;A2=criteria&amp;ucmID={{ selectID }}">Scope</a>
+        <a class="nav-item nav-link disabled" id="geography" href="?A=project_design&amp;A2=geography&amp;ucmID={{ selectID }}">Perimeter</a>
+ 
 
     <!-- - Customer BC -->
     {% elseif page=="input_project_common" %}        
@@ -194,7 +202,6 @@
             </ul>
         </li>
         <a class="nav-item nav-link disabled" id="id" href=""><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Other</a>
-        
         
         
         
