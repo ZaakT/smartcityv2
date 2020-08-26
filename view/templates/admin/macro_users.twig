@@ -23,7 +23,7 @@
                     <td>{{ user[1] }}</td>
                     <td>{{ user[2] ? "Yes" : "No" }}</td>
                     <td>{{ user[3]|date("d/m/Y") }}</td>
-                    <td>{{ user[4] }}</td>
+                    <td>{{ user[4] == "d" ? "Project Developper" : "Supplier" }}</td>
                     <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUser_{{ user[0] }}"></span></a></td>
                     {{ modal.delete_user(user[0],user[1]) }}
                 </tr>

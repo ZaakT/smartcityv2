@@ -1,56 +1,54 @@
 {% macro create_user() %}
 	<div class="modal fade" id="createNewUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<form id="createUser-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_user" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group row">
-							<label for="username" class="col-sm-2 col-form-label">Username</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter a username" required>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="password" class="col-sm-2 col-form-label">Password</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control" name="password" id="password" placeholder="Enter a password" required>
-							</div>
-						</div>
-						<div class="form-group row">
-							<label for="passwordConfirmation" class="col-sm-2 col-form-label">Confirm Password</label>
-							<div class="col-sm-10">
-								<input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Confirm password" required>
-								<small id="pwMatch" class="text-danger" hidden></small>
-							</div>
-						</div>
-						<div class="form-check row">
-							<div class="col-sm-10">
-								<input type="checkbox" class="form-check-input" name="isAdmin" id="isAdmin">
-								<label class="form-check-label" for="isAdmin">is Admin ?</label>
-							</div>
-						</div>
-						<div class="form-group col-md-12">
-							<label for="profile">Profile</label>
-							<select id="profile" class="form-control">
-								<option value="d">Project Developer</option>
-								<option value="s">Supplier</option>
-							</select>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-dark">Create</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document">
+        <form id="createUser-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_user" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new user informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-2 col-form-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter a username" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Enter a password" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="passwordConfirmation" class="col-sm-2 col-form-label">Confirm Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Confirm password" required>                    <small id="pwMatch" class="text-danger" hidden></small>
+                        </div>
+                    </div>
+                    <div class="form-check row">
+                        <div class="col-sm-10">
+                            <input type="checkbox" class="form-check-input" name="isAdmin" id="isAdmin">
+                            <label class="form-check-label" for="isAdmin">is Admin ?</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6 mt-2">
+                        <select id="profile" name="profile" class="form-control">
+                            <option value="d">Project Developer</option>
+                            <option value="s">Supplier</option>
+                        </select>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
 {% endmacro %}
 
 
