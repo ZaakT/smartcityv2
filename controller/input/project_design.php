@@ -15,6 +15,15 @@ function project_design($twig,$is_connected){
     echo $twig->render('/input/project_design.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'username'=>$user[1],'is_admin'=>$user[3])); 
 }
 
+function project_sdesign($twig,$is_connected){
+    $user = getUser($_SESSION['username']);
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_sdesign.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'username'=>$user[1],'is_admin'=>$user[3])); 
+}
+
 
 
 // ---------------------------------------- USE CASES MENU ----------------------------------------
