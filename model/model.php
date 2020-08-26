@@ -4019,7 +4019,11 @@ function insertInputBankability($npv_nogo,$npv_target,$roi_nogo,$roi_target,$pay
     $req = $db->prepare('REPLACE INTO bankability_input_nogo_target (id, npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, risks_rating_nogo, risks_rating_target, noncash_rating_nogo, noncash_rating_target) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
     return $req->execute(Array($projID,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
 }
-
+function insertInputDealCriteria($societal_npv_nogo,$societal_npv_target,$societal_roi_nogo,$societal_roi_target,$societal_payback_nogo,$societal_payback_target, $npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target,$projID){
+    $db = dbConnect();
+    $req = $db->prepare('REPLACE INTO deal_criteria_input_nogo_target (id, societal_npv_nogo, societal_npv_target, societal_roi_nogo, societal_roi_target, societal_payback_nogo, societal_payback_target,npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, risks_rating_nogo, risks_rating_target, nqbr_nogo, nqbr_target) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+    return $req->execute(Array($projID,$societal_npv_nogo,$societal_npv_target,$societal_roi_nogo,$societal_roi_target,$societal_payback_nogo,$societal_payback_target,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
+}
 function getBankabilitInputNogoTarget($projID){
     $db = dbConnect();
     $req = $db->prepare('SELECT * FROM bankability_input_nogo_target WHERE id = ?');
