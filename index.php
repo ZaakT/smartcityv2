@@ -420,6 +420,20 @@ try{
                     project_design($twig,$is_connected);
                 } 
             }
+            // ---------- PROJECT SDESIGN ----------
+            elseif($_GET['A']=='project_sdesign'){
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="ucm1"){
+                        if(isset($_GET['isTaken']) && $_GET['isTaken']){
+                            ucm1($twig,$is_connected,true);
+                        } else {
+                            ucm1($twig,$is_connected);
+                        }
+                    }
+                } else {
+                    project_sdesign($twig,$is_connected);
+                }
+            }
             // ---------- PROJECT SCOPING ----------
             elseif($_GET['A']=='project_scoping'){
                 if(isset($_GET['A2'])){

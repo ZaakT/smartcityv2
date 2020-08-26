@@ -1,0 +1,40 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_sdesign") }}{% endblock %}
+
+{% block content %}
+
+<div class="row m-5 align-items-center">
+    <div class="col">
+        <h2 class="text-center text-uppercase">{% block title %}Project Design for Suppliers{% endblock %}</h2>
+    </div>
+</div>
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>The Decision Support Tool helps you to assess the relative value of use cases based on relevant criteria.</p>
+        <p>You will receive guidance throughout to facilitate your data input.</p>
+        <p>In this section, the Toolkit generates a <strong>Ranking of Use Case Criteria</strong> and a <strong>Global Scoring</strong> based on selected criteria.</p>
+    </div>
+</div>
+<div class="row text-center text-dark">
+    <a href="?A=project_sdesign&amp;A2=ucm1" class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/measForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/critForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/DLTsForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/ucsForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/table.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/ratingForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/scoringCharts.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/globalScoreForm.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/prereq_projectDesign.js"></script>
+{% endblock %}

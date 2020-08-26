@@ -47,3 +47,17 @@ function isConnected(){
     }
     return isset($_SESSION['id']) and isset($_SESSION['username']);
 }
+
+function isDev(){
+    if($_SESSION['profile'] == "d" ){
+        setcookie('username',$_SESSION['username']);
+    }
+    return isset($_SESSION['id']) AND isset($_SESSION['username']) AND isset($_SESSION['profile']);
+}
+
+function isSupplier(){
+    if($_SESSION['profile'] == "d" ){
+        setcookie('username',$_SESSION['username']);
+    }
+    return isset($_SESSION['id']) AND isset($_SESSION['username']) AND isset($_SESSION['profile']);
+}
