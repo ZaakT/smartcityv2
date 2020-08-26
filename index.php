@@ -423,11 +423,11 @@ try{
             // ---------- PROJECT SDESIGN ----------
             elseif($_GET['A']=='project_sdesign'){
                 if(isset($_GET['A2'])){
-                    if($_GET['A2']=="ucm"){
+                    if($_GET['A2']=="ucm1"){
                         if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                            ucm($twig,$is_connected,true);
+                            ucm1($twig,$is_connected,true);
                         } else {
-                            ucm($twig,$is_connected);
+                            ucm1($twig,$is_connected);
                         }
                     }
                 } else {
