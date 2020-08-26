@@ -3547,9 +3547,18 @@ function global_dashboard($twig,$is_connected,$projID=0){
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'years'=>$projectYears,'netProjectCost'=>$budgetGraphData['netProjectCost'],'baselineOpCost'=>$budgetGraphData['baselineOpCost'],'OBYI'=>$budgetGraphData['OBYI'],
-            'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv1,'socnpv'=>$socnpv1,
-           'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'input_nogo_target'=>$inputNogoTarget, 'bankability_data'=>$bankability_data, 'uc_completed'=>$uc_check_completed ));
+            echo $twig->render('/output/dashboards_items/global_dashboard.twig',array('is_connected'=>$is_connected,
+            'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],
+            'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'measures'=>$measures,
+            'ucs'=>$ucs,'scope'=>$scope,'volumes'=>$volumes,'keydates_uc'=>$keydates_uc,'years'=>$projectYears,
+            'netProjectCost'=>$budgetGraphData['netProjectCost'],'baselineOpCost'=>$budgetGraphData['baselineOpCost'],
+            'OBYI'=>$budgetGraphData['OBYI'],'ratingNonCash'=>$ratingNonCash,'ratingRisks'=>$ratingRisks,'npv'=>$npv1,
+            'socnpv'=>$socnpv1,'breakeven'=>$breakeven, 'soc_breakeven'=>$soc_breakeven,
+            'capexTot'=>$ItemsPerMonthAndTot['capex']['tot'],'implemTot'=>$ItemsPerMonthAndTot['implem']['tot'], 
+            'cumulnetcashTot'=>$cumulnetcashTot, 'cumulnetsoccashTot'=>$cumulnetsoccashTot,
+            'cashreleasingTot'=>$ItemsPerMonthAndTot['cashreleasing']['tot'],'fin_ROI'=>$fin_ROI, 
+            'soc_ROI'=>$soc_ROI, 'fin_payback'=>$fin_payback, 'soc_payback'=>$soc_payback, 'input_nogo_target'=>$inputNogoTarget, 
+            'bankability_data'=>$bankability_data, 'uc_completed'=>$uc_check_completed ));
 
             prereq_Dashboards();
         } else {

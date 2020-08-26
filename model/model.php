@@ -7,7 +7,8 @@ function dbConnect()
     $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         return $db;
     } catch(Exception $e){ 
-        throw new Exception("Access to the database impossible !");
+        throw  $e;
+        throw new Exception("Access to the database impossible !" );
     }
 }
 
@@ -98,7 +99,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -117,7 +118,7 @@ function getUser($username){
 
 function getListUsers(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin,creation_date FROM user ORDER BY username');
+    $req = $db->prepare('SELECT id, username, is_admin,creation_date,profile FROM user ORDER BY username');
     $req->execute();
     $list = [];
     while ($row = $req->fetch()){
@@ -142,19 +143,20 @@ function insertUser($user){
                             IN password VARCHAR(255),
                             IN nameMeasure VARCHAR(255),
                             IN description VARCHAR(255),
-                            IN is_admin INT
+                            IN is_admin INT,
+                            IN profile ENUM("d","s") # Project Developper or Supplier
                             )
                             BEGIN
                                 DECLARE userID INT;
-                                INSERT INTO user (username,salt,password,is_admin)
-                                    VALUES (username,salt,password,is_admin);
+                                INSERT INTO user (username,salt,password,is_admin,profile)
+                                    VALUES (username,salt,password,is_admin,profile);
                                 SET userID = LAST_INSERT_ID();
                                 INSERT INTO measure (name,description,user)
                                     VALUES (nameMeasure,description,userID);
                             END
                                 ');
-    $req = $db->prepare('CALL insert_user(?,?,?,?,?,?);');
-    $ret = $req->execute(array($user[0],$user[1],$user[2],$nameMeasure, $description,$user[3]));
+    $req = $db->prepare('CALL insert_user(?,?,?,?,?,?,?);');
+    $ret = $req->execute(array($user[0],$user[1],$user[2],$nameMeasure, $description,$user[3],$user[4]));
     return $ret;
 }
 
@@ -173,8 +175,6 @@ function deleteUser($userID){
     $req = $db->prepare('DELETE FROM user WHERE id = ?');
     return $req->execute(array($userID));
 }
-
-
 
 
 
@@ -4011,6 +4011,13 @@ function insertInputBankability($npv_nogo,$npv_target,$roi_nogo,$roi_target,$pay
     return $req->execute(Array($projID,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
 }
 
+function insertInputDealCriteria($societal_npv_nogo,$societal_npv_target,$societal_roi_nogo,$societal_roi_target,$societal_payback_nogo,$societal_payback_target, $npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target,$projID){
+    $db = dbConnect();
+    $req = $db->prepare('REPLACE INTO deal_criteria_input_nogo_target (id, societal_npv_nogo, societal_npv_target, societal_roi_nogo, societal_roi_target, societal_payback_nogo, societal_payback_target,npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, risks_rating_nogo, risks_rating_target, nqbr_nogo, nqbr_target) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+    return $req->execute(Array($projID,$societal_npv_nogo,$societal_npv_target,$societal_roi_nogo,$societal_roi_target,$societal_payback_nogo,$societal_payback_target,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
+}
+
+
 function getBankabilitInputNogoTarget($projID){
     $db = dbConnect();
     $req = $db->prepare('SELECT * FROM bankability_input_nogo_target WHERE id = ?');
@@ -4028,6 +4035,34 @@ function getBankabilitInputNogoTarget($projID){
         $nqbr_nogo = floatval($row['noncash_rating_nogo']);
         $nqbr_target = floatval($row['noncash_rating_target']);
     $list = ['npv_nogo'=>$npv_nogo, 'npv_target'=>$npv_target, 'roi_nogo'=>$roi_nogo, 'roi_target'=>$roi_target, 'payback_nogo'=>$payback_nogo, 'payback_target'=>$payback_target, 'rr_nogo'=>$rr_nogo, 'rr_target'=>$rr_target, 'nqbr_nogo'=>$nqbr_nogo, 'nqbr_target'=>$nqbr_target];
+    }
+    return $list;
+}
+
+function getDealCriteriaInputNogoTarget($projID){
+    //Fonction qui sert dans le deal criteria du Customer BC
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM deal_criteria_input_nogo_target WHERE id = ?');
+    $req->execute(Array($projID));
+    $list=[];
+    while($row = $req->fetch()){
+        $societal_npv_nogo = floatval($row['societal_npv_nogo']);
+        $societal_npv_target = floatval($row['societal_npv_target']);
+        $societal_roi_nogo = floatval($row['societal_roi_nogo']);
+        $societal_roi_target = floatval($row['societal_roi_target']);
+        $societal_payback_nogo = floatval($row['societal_payback_nogo']);
+        $societal_payback_target = floatval($row['societal_payback_target']);
+        $npv_nogo = floatval($row['npv_nogo']);
+        $npv_target = floatval($row['npv_target']);
+        $roi_nogo = floatval($row['roi_nogo']);
+        $roi_target = floatval($row['roi_target']);
+        $payback_nogo = floatval($row['payback_nogo']);
+        $payback_target = floatval($row['payback_target']);
+        $rr_nogo = floatval($row['risks_rating_nogo']);
+        $rr_target = floatval($row['risks_rating_target']);
+        $nqbr_nogo = floatval($row['nqbr_nogo']);
+        $nqbr_target = floatval($row['nqbr_target']);
+    $list = ['societal_npv_nogo'=>$npv_nogo, 'societal_npv_target'=>$npv_target, 'societal_roi_nogo'=>$roi_nogo, 'societal_roi_target'=>$roi_target, 'societal_payback_nogo'=>$payback_nogo, 'societal_payback_target'=>$payback_target,'npv_nogo'=>$npv_nogo, 'npv_target'=>$npv_target, 'roi_nogo'=>$roi_nogo, 'roi_target'=>$roi_target, 'payback_nogo'=>$payback_nogo, 'payback_target'=>$payback_target, 'rr_nogo'=>$rr_nogo, 'rr_target'=>$rr_target, 'nqbr_nogo'=>$nqbr_nogo, 'nqbr_target'=>$nqbr_target];
     }
     return $list;
 }

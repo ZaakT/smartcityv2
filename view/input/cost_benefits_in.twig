@@ -4,7 +4,9 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-{% block sidebar %}{{ sidebar.sidebar("cost_benefits") }}{% endblock %}
+{% block sidebar %}
+{{ sidebar.sidebar("cost_benefits") }}
+{% endblock %}
 
 
 

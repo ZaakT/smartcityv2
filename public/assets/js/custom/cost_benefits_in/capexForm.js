@@ -48,6 +48,7 @@ function countSelectedCapex(oForm) {
     }
 }
 
+
 function checkCapexInput(id){
     var ret = true;
     id = id.getAttribute('id');
@@ -127,6 +128,7 @@ function checkCapexInput(id){
     return ret;
 }
 
+
 function calcTotCapex(){
     var sum = 0;
     $("#tot_table_capex td").each(function(){
@@ -153,7 +155,7 @@ function setNewDeviseCapex(name){
     } catch {
         //do nothing
     } finally {
-        $("#capex_input input").each(function(){
+        $("input").each(function(){
             checkCapexInput(this);
         });
         calcTotCapex();

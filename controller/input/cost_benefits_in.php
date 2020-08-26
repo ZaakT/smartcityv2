@@ -15,6 +15,16 @@ function cost_benefits($twig,$is_connected){
 
 // --- Cost Benefits Steps
 
+function title(){
+    if(isset($_GET['d'])){
+        echo '- Input -\n Cost Benefits';
+    }
+    else{
+        echo '- Customer BC -\n Input Use Case';
+    }
+
+}
+
 // ---------------------------------------- PROJECT ----------------------------------------
 
 function project_cb($twig,$is_connected){

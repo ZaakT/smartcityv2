@@ -1,0 +1,96 @@
+
+
+{# default parametres #}
+    {% set deleteMode = true %}
+    {% set scopeMode = true %}
+    {% set veriScopefMode = false %}
+    {% set createMode = true %}
+    {% set costBenefitsMode = false %}
+    {% set  verifCostBenefits = false %}
+    {% set commonPage = '/others/general_common.twig' %}
+    {% set lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem.'%}
+
+
+{% if sideBarName =="project_scoping" %}
+    {% set scopeMode = false %}
+
+{% elseif sideBarName =="deal_criteria" %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+
+{% elseif sideBarName =="customer_dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+
+{% elseif sideBarName =="cost_benefits" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set commonPage = '/input/cost_benefits_in.twig' %}
+
+{% elseif sideBarName =="dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+    {% set commonPage = '/output/dashboards.twig' %}
+
+{% elseif sideBarName =="input_project_common" %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+
+{% endif %}
+
+
+
+
+
+
+{% extends commonPage %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/general/macro_projects.twig" as list %}
+{% import "/templates/general/modals_proj.twig" as modal %}
+
+
+
+
+
+{% block content %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{% if lorem != '' %}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">{{lorem|nl2br}} </p>
+    </div>
+</div>
+{% endif %}
+
+{% if createMode %}
+<div class="row m-3">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewProjModal" role="button">Create a new</button>
+</div>
+<div class="row mt-3 text-center">
+    <h6 id="createProjHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
+</div>
+{% endif %}
+
+<form action={{nextPage}} method="post">
+{% if projects %}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits) }}
+{% else %}
+<h2 class="text-center m-5">You have no Project !</h2>
+{% endif %}
+
+<div class="row m-3 text-center text-dark">
+    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button {{projects ? "" : "disabled"}}" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+</div>
+</form>
+
+{% if createMode %}{{ modal.create_proj(1) }}{% endif %}
+
+{% endblock %}

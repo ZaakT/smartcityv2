@@ -1,5 +1,4 @@
 {% macro list_capex(capex,selCapex=[]) %}
-
 <h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Capex Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
@@ -123,7 +122,7 @@
 
                     <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCapexInput(cost_{{id_capex}});" value="{{ selCapex[id_capex]['unit_cost'] }}" placeholder="{{ (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
 
-                    <td scope="col"><input class="text-center period pt-1 pb-1" id="period_{{id_capex}}" name="period_{{id_capex}}" min=1 step=1 type="number" oninput="checkCapexInput(period_{{id_capex}});" required value="{{ selCapex[id_capex]['period'] ? selCapex[id_capex]['period'] : "" }}"></td>
+                    <td scope="col"><input id="period_{{id_capex}}" name="period_{{id_capex}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkCapexInput(period_{{id_capex}});" value="{{ selCapex[id_capex]['period'] ? selCapex[id_capex]['period'] : "" }}"></td>
                 </tr> 
             {% endfor %}
             </tbody>

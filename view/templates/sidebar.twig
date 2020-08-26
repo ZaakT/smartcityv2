@@ -1,4 +1,6 @@
-{% macro sidebar(page,selectID=0,selectID2=0) %}
+
+
+{% macro sidebar(page,selectID=0,selectID2=0, is_admin=false) %}
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
         <a class="navbar-brand px-5 py-3" href="?A=home"><h3 class="text-center">Urbatis AI</h3></a>
        
@@ -31,7 +33,7 @@
 
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" %}
-        <h4 class="nav-item text-center">- Input -<br>Cost Benefits</h4>        
+        <h4 class="nav-item text-center"> {% if is_admin %} {{'- Input -\n Cost Benefits'|nl2br}} {% else %}{{'- Customer BC -\n Input Use Case'|nl2br}} {% endif %}</h4>        
         <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project</a>
         <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}"><span id="uc-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Cases</a>
         <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
@@ -94,12 +96,35 @@
         <a class="nav-item nav-link disabled" id="op" href="?A=comp_projects&amp;A2=op">Operations</a>
         <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_projects&amp;A2=cash_flows">Cash Flows</a>
         <a class="nav-item nav-link disabled" id="non_quant" href="?A=comp_projects&amp;A2=non_quant">Non Quantifiable</a>
-        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Financial & Societal Comp.</a>
+        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Financial &amp; Societal Comp.</a>
     {% elseif page=="comp_finscen" %}
         <h4 class="nav-item text-center">- Output -<br>Compare Financial Scenarios</h4>
         <a class="nav-item nav-link" id="scenarios" href="?A=comp_finscen&amp;A2=scenarios">Scenarios</a>
         <a class="nav-item nav-link disabled" id="fin_summary" href="?A=comp_finscen&amp;A2=fin_summary">Financing Summary</a>
         <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_finscen&amp;A2=cash_flows">Cash Flows</a>
+
+
+
+    <!-- - Customer BC -->
+    {% elseif page=="input_project_common" %}        
+        <h4 class="nav-item text-center">Customer BC <br>Input Project Common</h4>
+        <a class="nav-item nav-link" id="project_selection" href="?A=input_project_common&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
+        <a class="nav-item nav-link disabled" id="use_case_selection" href="?A=input_project_common&amp;A2=use_case_selection&amp;projID={{selectID}}"><span id="use_case_selection-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use case selection</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=input_project_common&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_project_common&amp;A2=deployment_costs&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment Costs</a>
+        <a class="nav-item nav-link disabled" id="opex" href="?A=input_project_common&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
+    {% elseif page=="deal_criteria" %}
+        <h4 class="nav-item text-center">Customer BC <br>Deal Criteria</h4>
+        <a class="nav-item nav-link" id="project_selection" href="?A=deal_criteria&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
+        <a class="nav-item nav-link disabled" id="deal_criteria" href="?A=input_project_common&amp;A2=deal_criteria&amp;projID={{selectID}}"><span id="deal_criteria-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deal Criteria</a>
+    {% elseif page=="customer_dashboards" %}
+        <h4 class="nav-item text-center">Customer BC <br>Dashboards</h4>
+        <a class="nav-item nav-link" id="project_selection" href="?A=customer_dashboards&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
+        <a class="nav-item nav-link disabled" id="summary" href="?A=customer_dashboards&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
+        <a class="nav-item nav-link disabled" id="project_details" href="?A=customer_dashboards&amp;A2=project_details&amp;projID={{selectID}}"><span id="project_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project Details</a>
+        <a class="nav-item nav-link disabled" id="use_case_details" href="?A=customer_dashboards&amp;A2=use_case_details&amp;projID={{selectID}}"><span id="use_case_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Case Details</a>
+        <a class="nav-item nav-link disabled" id="non_monetizable" href="?A=customer_dashboards&amp;A2=non_monetizable&amp;projID={{selectID}}"><span id="non_monetizable-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Non Monetizable</a>
+        <a class="nav-item nav-link disabled" id="qualitative" href="?A=customer_dashboards&amp;A2=qualitative&amp;projID={{selectID}}"><span id="qualitative-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Qualitative</a>
 
         
         <!-- Admin -->
