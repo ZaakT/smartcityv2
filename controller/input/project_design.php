@@ -39,6 +39,17 @@ function ucm($twig,$is_connected,$isTaken=false){
     echo $twig->render('/input/project_design_steps/ucm.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken,'part'=>'Use Cases Menu','username'=>$user[1])); 
 }
 
+function ucm1($twig,$is_connected,$isTaken=false){
+    $user = getUser($_SESSION['username']);
+    $list_ucms = getListUCMS($user[0]);
+    //var_dump($list_ucms);
+    $devises = getListDevises();
+    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    
+    echo $twig->render('/input/project_design_steps/ucm1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucms'=>$list_ucms,'isTaken'=>$isTaken,'part'=>'Use Cases Menu','username'=>$user[1])); 
+}
+
 function create_ucm($post){
     $name = $post['name'];
     $description = isset($post['description']) ? $post['description'] : "";
