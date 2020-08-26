@@ -32,6 +32,10 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader(__DIR__ . '/view');
 $twig = new Environment($loader);
 
+$twig->addGlobal('userRole', getUserRole());
+$twig->addGlobal('isDev', isDev());
+$twig->addGlobal('isSup', isSup());
+
 $is_connected = isConnected();
 
 // *** WE WILL TRY TO DO ***

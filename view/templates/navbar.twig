@@ -110,6 +110,7 @@
       <li class="nav-item">
         <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
       </li>
+      {% if isDev %}
       <li class="nav-item">
         <a class="nav-link" href="?A=project_design">Project Design <span class="sr-only">(current)</span></a>
       </li>
@@ -129,7 +130,7 @@
           <a class="dropdown-item" href="?A=business_model">Business Model</a>
         </div>
       </li>
-
+      {% else %}
       {#                  SUPPLIER AND CUSTOMER BC              #}
 
       <li class="nav-item">
@@ -154,6 +155,7 @@
           <a class="dropdown-item" href="?A=customer_dashboards">Dashboards</a>
         </div>
       </li>
+      {% endif %}
     </ul>
   </div>
   <ul class="navbar-nav">

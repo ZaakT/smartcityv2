@@ -25,12 +25,15 @@ function connexion($twig,$post){
             $id = getUser($username)[0];
             $password_db = getUser($username)[2];
             $salt = getUser($username)[4];
+            $profile = getUser($username)[5];
             $isPasswordCorrect = password_verify($password_in.$salt,$password_db);
             if($isPasswordCorrect){
                 session_start();
                 $_SESSION['id'] = $id;
                 $_SESSION['username'] = $username;
+                $_SESSION['profile'] = $profile;
                 setcookie('username',$_SESSION['username'],time()+3600*24*365);
+                setcookie('profile',$_SESSION['profile'],time()+3600*24*365);
                 header('Location: ?A=home');
             } else {
                 login($twig,true,false);
@@ -49,15 +52,21 @@ function isConnected(){
 }
 
 function isDev(){
-    if($_SESSION['profile'] == "d" ){
-        setcookie('username',$_SESSION['username']);
-    }
-    return isset($_SESSION['id']) AND isset($_SESSION['username']) AND isset($_SESSION['profile']);
+    return getUserRole()=="project_developper";
 }
 
-function isSupplier(){
-    if($_SESSION['profile'] == "d" ){
-        setcookie('username',$_SESSION['username']);
+function isSup(){
+    return getUserRole()=="supplier";
+}
+
+function getUserRole(){
+    if(isset($_SESSION['profile'])){
+        setcookie('profile',$_SESSION['profile']);
+        if($_SESSION['profile'] == "d" ){
+            return "project_developper";
+        }else if($_SESSION['profile'] == "s" ){
+            return "supplier";
+        }
+        throw new Exception("Wrong profile ! : ");
     }
-    return isset($_SESSION['id']) AND isset($_SESSION['username']) AND isset($_SESSION['profile']);
 }
