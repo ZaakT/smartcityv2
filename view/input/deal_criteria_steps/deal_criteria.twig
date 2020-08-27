@@ -1,4 +1,6 @@
+{% set sideBarName = "deal_criteria" %}
 {% extends '/templates/common_page.twig' %}
+{% set sideBarName = "deal_criteria" %}
 
 {% import "/templates/navbar.twig" as navbar %}
 {% import "/templates/deal_criteria/macro.twig" as macros %}
@@ -34,5 +36,11 @@
             {{ macros.input_target_nogo(selDevSym,input) }}
         </div>
     </div>
+{% endblock %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="../../public/assets/js/custom/deal_criteria/form.js"></script>
 {% endblock %}
 
