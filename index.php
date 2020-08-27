@@ -443,6 +443,18 @@ try{
                             header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
                         }
                     }
+                    elseif($_GET['A2']=="scope"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                scope($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_sdesign&A2=scope');
+                            }
+                        }
+                        else {
+                            scope($twig,$is_connected);
+                        }}
                 } else {
                     project_sdesign($twig,$is_connected);
                 }
