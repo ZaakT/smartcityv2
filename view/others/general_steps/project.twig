@@ -16,6 +16,7 @@
 {% elseif sideBarName =="deal_criteria" %}
     {% set scopeMode = false %}
     {% set createMode = false %}
+    {% set lorem = 'Select Project for Deal Criteria set up.' %}
 
 {% elseif sideBarName =="customer_dashboards" %}
     {% set deleteMode = false %}
@@ -23,6 +24,7 @@
     {% set createMode = false %}
     {% set costBenefitsMode = true %}
     {% set  verifCostBenefits = true %}
+    {% set lorem = 'Select a project to obtain dashboard.' %}
 
 {% elseif sideBarName =="cost_benefits" %}
     {% set deleteMode = false %}
