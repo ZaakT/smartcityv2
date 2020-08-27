@@ -470,9 +470,9 @@ try{
                         }
                     }
                     elseif($_GET['A2']=="scope"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                scope($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                scope($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=scope');
@@ -487,9 +487,9 @@ try{
                         scope_selected($_POST);
                     // --- PERIMETER ---
                     } elseif($_GET['A2']=="perimeter"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                perimeter($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                perimeter($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=perimeter');
@@ -504,9 +504,9 @@ try{
                         perimeter_selected($_POST);
                     // --- SIZE ---
                     } elseif($_GET['A2']=="size"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                size($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                size($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=size');
@@ -521,9 +521,9 @@ try{
                         size_selected($_POST);
                     // --- VOLUMES ---
                     } elseif($_GET['A2']=="volumes"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                volumes($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                volumes($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=volumes');
@@ -538,9 +538,9 @@ try{
                         volumes_selected($_POST);
                     // --- SCHEDULE ---
                     } elseif($_GET['A2']=="schedule"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                schedule($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                schedule($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=schedule');
@@ -555,9 +555,9 @@ try{
                         schedules_selected($_POST);
                     // --- DISCOUNT RATE ---
                     } elseif($_GET['A2']=="discount_rate"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                discount_rate($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                discount_rate($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=discount_rate');
@@ -599,10 +599,10 @@ try{
                             header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
                         }
                     
-                    }elseif(isset($_GET['projID']) and $_GET['projID']!=0){
+                    }elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                         // --- USE CASE SELECTION ---
                         if($_GET['A2']=="use_case_selection"){
-                                \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_GET['projID'],'input_project_common',$_GET['projID']);                        
+                                \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_SESSION['projID'],'input_project_common',$_SESSION['projID']);                        
 
                         } elseif($_GET['A2']=="use_case_selected"){
                             if(isset($_POST['radio_uc'])){
@@ -610,7 +610,7 @@ try{
                                 $ucID = intval($_POST['radio_uc']);
                                 $_SESSION['ucID']=$ucID;
                                 //var_dump($ucID);
-                                header('Location: ?A='.$_GET['A'].'&A2=capex&A3=selection&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                header('Location: ?A='.$_GET['A'].'&A2=capex&A3=selection&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                             }
                             else {
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_selection');
@@ -620,7 +620,7 @@ try{
                             if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
-                                        xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']); 
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']); 
                                     }elseif($_GET['A3']=="selected"){
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2']); 
                                     }elseif($_GET['A3']=="create_xpex"){
@@ -629,7 +629,7 @@ try{
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2']); 
                                         }else{
-                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_GET['projID'].'&ucID='.$_GET['ucID']);
+                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
                                         }
                                         
                                     }elseif($_GET['A3']=="inputed"){
@@ -637,11 +637,11 @@ try{
                                             xpex_inputed($_POST);
                                         }
                                         else{
-                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_GET['projID'].'&ucID='.$_GET['ucID']);
+                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
                                         }
                                     }
                                 }else {
-                                    xpex_selection($twig,$is_connected,$_GET['projID'], $_GET['ucID'], $_GET['A2']);
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']);
                                 }
 
                             }else{
@@ -676,8 +676,8 @@ try{
                         }
                     // --- DEAL CROTERIA ---
                     } elseif($_GET['A2']=="deal_criteria"){
-                        if(isset($_GET['projID'])){
-                            deal_criteria($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            deal_criteria($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=deal_criteria&A2project_selection');
                         }
@@ -702,32 +702,32 @@ try{
                             header('Location: ?A=customer_dashboards&A2=summary&projID='.$projID);
                         }
                     }elseif($_GET['A2']=="summary"){
-                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="project_details"){
-                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
-                            dashboards_project_details($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="use_case_details"){
-                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
-                            dashboards_use_case_details($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="non_monetizable"){
-                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
-                            dashboards_non_monetizable($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_non_monetizable($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="qualitative"){
-                        if(isset($_GET['projID'])&&$_GET['projID']!=0){
-                            dashboards_qualitative($twig,$is_connected, $_GET['projID']);
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_qualitative($twig,$is_connected, $_SESSION['projID']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
@@ -759,9 +759,9 @@ try{
                         }
                     // --- USE CASES ---
                     } elseif($_GET['A2']=="use_case_cb"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                \general\use_case_selection($twig,$is_connected,'?A=cost_benefits&A2=uc_selected&projID='.$_GET['projID'],$_GET['A'],$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                \general\use_case_selection($twig,$is_connected,'?A=cost_benefits&A2=uc_selected&projID='.$_SESSION['projID'],$_GET['A'],$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
@@ -772,14 +772,14 @@ try{
                         }
                     // --- SELECTED USE CASE ---
                     } elseif($_GET['A2']=="uc_selected"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_POST['radio_uc'])){
                                     //var_dump($_POST);
                                     $ucID = intval($_POST['radio_uc']);
                                     $_SESSION['ucID']=$ucID;
                                     //var_dump($ucID);
-                                    header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                    header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                 }
                                 else {
                                     header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
@@ -795,8 +795,8 @@ try{
 
                     // --- CAPEX ---
                     } elseif($_GET['A2']=="capex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -805,22 +805,22 @@ try{
                                                 capex_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                capex($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                capex($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -831,16 +831,16 @@ try{
                             capex($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_capex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_capex($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -849,8 +849,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_capex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -865,10 +865,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -877,16 +877,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_capex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_capex($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_capex($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -901,8 +901,8 @@ try{
 
                     // --- IMPLEM ---
                     } elseif($_GET['A2']=="implem"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -911,22 +911,22 @@ try{
                                                 implem_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=implem&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=implem&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                implem($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                implem($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                implem($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                implem($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -937,16 +937,16 @@ try{
                             implem($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_implem"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_implem($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -955,8 +955,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_implem"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -971,10 +971,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=implem&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -983,16 +983,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_implem"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_implem($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_implem($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1007,8 +1007,8 @@ try{
 
                     // --- OPEX ---
                     } elseif($_GET['A2']=="opex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1017,22 +1017,22 @@ try{
                                                 opex_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=opex&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=opex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                opex($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                opex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                opex($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                opex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1043,16 +1043,16 @@ try{
                             opex($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_opex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_opex($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1061,8 +1061,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_opex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1077,10 +1077,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=opex&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1089,16 +1089,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_opex"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_opex($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_opex($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1113,8 +1113,8 @@ try{
 
                     // --- REVENUES ---
                     } elseif($_GET['A2']=="revenues"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1123,22 +1123,22 @@ try{
                                                 revenues_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=revenues&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=revenues&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                revenues($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                revenues($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                revenues($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                revenues($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1149,16 +1149,16 @@ try{
                             revenues($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_revenues"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_revenues($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1167,8 +1167,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_revenues"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1183,10 +1183,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=revenues&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1195,16 +1195,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_revenues"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_revenues($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_revenues($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1219,8 +1219,8 @@ try{
 
                     // --- CASH RELEASING ---
                     } elseif($_GET['A2']=="cashreleasing"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1229,22 +1229,22 @@ try{
                                                 cashreleasing_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=cashreleasing&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=cashreleasing&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                cashreleasing($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                cashreleasing($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                cashreleasing($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                cashreleasing($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1255,16 +1255,16 @@ try{
                             cashreleasing($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_cashreleasing"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_cashreleasing($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1273,8 +1273,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_cashreleasing"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1289,10 +1289,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1301,16 +1301,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_cashreleasing"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_cashreleasing($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_cashreleasing($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1325,8 +1325,8 @@ try{
                     
                     // --- WIDER CASH ---
                     } elseif($_GET['A2']=="widercash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1335,22 +1335,22 @@ try{
                                                 widercash_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=widercash&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=widercash&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                widercash($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                widercash($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                widercash($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                widercash($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1361,16 +1361,16 @@ try{
                             widercash($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_widercash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_widercash($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1379,8 +1379,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_widercash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1395,10 +1395,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=widercash&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1407,16 +1407,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_widercash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_widercash($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_widercash($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1431,8 +1431,8 @@ try{
                     
                     // --- QUANTIFIABLE NON MONETIZABLE BENEFITS ---
                     } elseif($_GET['A2']=="quantifiable"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1441,22 +1441,22 @@ try{
                                                 quantifiable_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=quantifiable&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=quantifiable&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                quantifiableBenefits($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                quantifiableBenefits($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                quantifiableBenefits($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                quantifiableBenefits($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1467,16 +1467,16 @@ try{
                             quantifiableBenefits($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_quantifiable"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_quantifiable($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1485,8 +1485,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_quantifiable"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1501,10 +1501,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=quantifiable&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1513,16 +1513,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_quantifiable"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_quantifiable($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_quantifiable($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1537,8 +1537,8 @@ try{
                     
                     // --- NON CASH ---
                     } elseif($_GET['A2']=="noncash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1547,22 +1547,22 @@ try{
                                                 noncash_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=noncash&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=noncash&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                noncash($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                noncash($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                noncash($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                noncash($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1573,16 +1573,16 @@ try{
                             noncash($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_noncash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_noncash($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1591,8 +1591,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_noncash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1607,10 +1607,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=noncash&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1619,16 +1619,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_noncash"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_noncash($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_noncash($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1643,8 +1643,8 @@ try{
                     
                     // --- RISKS ---
                     } elseif($_GET['A2']=="risks"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['A3'])){
@@ -1653,22 +1653,22 @@ try{
                                                 risks_selected($twig,$is_connected,$_POST);
                                             }
                                             else {
-                                                header('Location: ?A='.$_GET['A'].'&A2=risks&projID='.$_GET['projID'].'&ucID='.$ucID);
+                                                header('Location: ?A='.$_GET['A'].'&A2=risks&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                             }
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                risks($twig,$is_connected,$_GET['projID'],$_GET['ucID'],true);
+                                                risks($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                risks($twig,$is_connected,$_GET['projID'],$_GET['ucID']);
+                                                risks($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
                                     else {                                    
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {                                        
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1679,16 +1679,16 @@ try{
                             risks($twig,$is_connected);
                         }
                     } elseif($_GET['A2']=="create_risk"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         create_risk($twig,$is_connected,$_POST);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1697,8 +1697,8 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_risk"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
                                         if(isset($_GET['id'])){
@@ -1713,10 +1713,10 @@ try{
                                             header('Location: ?A='.$_GET['A'].'&A2=risks&projID='.$projID.'&ucID='.$ucID);
                                         }
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1725,16 +1725,16 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     } elseif($_GET['A2']=="delete_selection_risks"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
                                     if($_GET['ucID']!=0){
-                                        delete_selection_risks($_GET['projID'],$_GET['ucID']);
+                                        delete_selection_risks($_SESSION['projID'],$_GET['ucID']);
                                     } else {
-                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                        header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_GET['projID']);
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$_SESSION['projID']);
                                 }
                             } else {
                                 header('Location: ?A='.$_GET['A'].'&A2=project_cb');  
@@ -1749,12 +1749,12 @@ try{
 
                     // --- SUMMARY ---
                     } elseif($_GET['A2']=="summary"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['confirm'])){
-                                    summary($twig,$is_connected,$_GET['projID'],$_GET['confirm']);
+                                    summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm']);
                                 } else {
-                                    summary($twig,$is_connected,$_GET['projID']);
+                                    summary($twig,$is_connected,$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1788,9 +1788,9 @@ try{
                             header('Location: ?A=business_model&A2=bm&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="pref"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                pref($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                pref($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=business_model&A2=project');
@@ -1802,9 +1802,9 @@ try{
                     } elseif($_GET['A2']=="pref_selected"){
                         pref_selected($_POST);
                     } elseif($_GET['A2']=="reco"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                reco($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                reco($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=business_model&A2=project');
@@ -1814,9 +1814,9 @@ try{
                             header('Location: ?A=business_model&A2=project');
                         }
                     } elseif($_GET['A2']=="bm"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                business_model_interactive($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                business_model_interactive($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=business_model&A2=project');
@@ -1946,16 +1946,16 @@ try{
                             header('Location: ?A=dashboards&A2=global_dashboard&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="cost_benefits_uc"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
-                                        cbuc_output($twig,$is_connected,$_GET['projID'],$_POST);
+                                        cbuc_output($twig,$is_connected,$_SESSION['projID'],$_POST);
                                     } else {
-                                        header('Location: ?A=dashboards&A2=cost_benefits_uc&projID='.$_GET['projID']);
+                                        header('Location: ?A=dashboards&A2=cost_benefits_uc&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    cost_benefits_uc($twig,$is_connected,$_GET['projID']);
+                                    cost_benefits_uc($twig,$is_connected,$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -1966,9 +1966,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }
                     } elseif($_GET['A2']=="cost_benefits_all"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                cost_benefits_all($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                cost_benefits_all($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -1978,9 +1978,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }
                     } elseif($_GET['A2']=="cost_benefits"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                cb_output_v2($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                cb_output_v2($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -1990,9 +1990,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }
                     }  elseif($_GET['A2']=="budget"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                budget_output($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                budget_output($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -2002,16 +2002,16 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }                    
                     } elseif($_GET['A2']=="budget_uc"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
-                                        budget_uc_output($twig,$is_connected,$_GET['projID'],$_POST);
+                                        budget_uc_output($twig,$is_connected,$_SESSION['projID'],$_POST);
                                     } else {
-                                        header('Location: ?A=dashboards&A2=budget_uc&projID='.$_GET['projID']);
+                                        header('Location: ?A=dashboards&A2=budget_uc&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    budget_uc($twig,$is_connected,$_GET['projID']);
+                                    budget_uc($twig,$is_connected,$_SESSION['projID']);
                                 }
                             }
                             else { 
@@ -2022,9 +2022,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }
                     } elseif($_GET['A2']=="budget_all"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                budget_all($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                budget_all($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -2036,9 +2036,9 @@ try{
                     } else if($_GET['A2']=="bankability_input") {
                         bankability_input_nogo_target($_POST);                    
                     } elseif($_GET['A2']=="bankability"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                    bankability_new($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                    bankability_new($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -2048,9 +2048,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }
                     } elseif($_GET['A2']=="project_dashboard"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                project_dashboard($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                project_dashboard($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -2060,9 +2060,9 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }   
                     } elseif($_GET['A2']=="global_dashboard"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                global_dashboard($twig,$is_connected,$_GET['projID']);
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                global_dashboard($twig,$is_connected,$_SESSION['projID']);
                             }
                             else { 
                                 header('Location: ?A=dashboards&A2=project');
@@ -2072,22 +2072,22 @@ try{
                             header('Location: ?A=dashboards&A2=project');
                         }   
                     } elseif($_GET['A2']=="financing"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
-                                        financing_general($twig,$is_connected,$_GET['projID'],$_POST);
+                                        financing_general($twig,$is_connected,$_SESSION['projID'],$_POST);
                                 /*    } else if($_GET['A3']=="output2"){
-                                        financing_out_5($twig,$is_connected,$_GET['projID'],$_POST);
+                                        financing_out_5($twig,$is_connected,$_SESSION['projID'],$_POST);
                                     } else if($_GET['A3']=="output3"){
-                                        financing_out_3($twig,$is_connected,$_GET['projID'],$_POST);
+                                        financing_out_3($twig,$is_connected,$_SESSION['projID'],$_POST);
                                     } else if($_GET['A3']=="output4"){
-                                        financing_out_4($twig,$is_connected,$_GET['projID'],$_POST); */
+                                        financing_out_4($twig,$is_connected,$_SESSION['projID'],$_POST); */
                                     } else {
-                                        header('Location: ?A=dashboards&A2=financing&projID='.$_GET['projID']);
+                                        header('Location: ?A=dashboards&A2=financing&projID='.$_SESSION['projID']);
                                     }
                                 } else {
-                                    financing_out($twig,$is_connected,$_GET['projID']);
+                                    financing_out($twig,$is_connected,$_SESSION['projID']);
                                 }
                             }
                             else { 
