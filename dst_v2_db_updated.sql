@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 26 août 2020 à 14:46
+-- Généré le :  jeu. 27 août 2020 à 13:38
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -1985,7 +1985,7 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-08-18 16:02:38', 1, 1, 0),
-(3, 'TESTVé', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-08-26 16:00:58', 1, 1, 1),
+(3, 'TESTV2', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-08-27 15:38:50', 1, 1, 0),
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
 (6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-08-26 11:12:58', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0);
@@ -3056,7 +3056,7 @@ INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `passwor
 (2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
-(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 's');
+(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd');
 
 -- --------------------------------------------------------
 

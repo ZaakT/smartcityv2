@@ -4,13 +4,17 @@
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/customer_dashboards/macro_project_details.twig" as macros %}
 
 {% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
 
 {% block title %}Dashbords - Project Details{% endblock %}
 
 {% block content %}
-
+{% set data = [capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth] %}
+{% set title = ["Capex", "Implementation", "Total Investment", "Opex", "Revenues", "Cash Releasing Benefits", "Wider Benefits", "Cumulated \nNet Cash excl. WB", "Net Societal Cash", "Cumulated\Net Societal Cash"] %}
+{% set subtitle = ["(A)", "(B)", "(A + B)", "(C)", "(D)", "(E)", "(F)", "(E + D - A - B - C)", "","(F + E + D - A - B - C)", ""] %}
+{% set ident = ["capex", "implem", "invest", "opex", "revenues","cashreleasing",  "widercash", "netcash","cumnetcash","netsoccash", "cumnetsoccash"] %}
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
@@ -21,6 +25,20 @@
         <p>In this section, the Toolkit ...</p>
     </div>
 </div>
+
+
+<div class="container-fluid dash-bg m-3 row">
+            <div class="container-fluid dash-bg-light m-3 p-3">
+            <h3 class="dash-title">Cost-benefits output</h3>
+                {{ macros.data_table(scope, years, projectDates, data, title, subtitle, ident, selDevSym) }}
+                <div class="row mt-2 mb-5 text-center">
+                    <div class="col">
+                        <button class="btn btn-sm btn-primary" onclick="cballuc2csv('cost_benefits_data','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
 {% endblock %}

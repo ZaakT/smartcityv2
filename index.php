@@ -644,7 +644,8 @@ try{
                                     xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']);
                                 }
 
-                            }else{
+                            }                             
+                            else{
                                 
                                 header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
                             }

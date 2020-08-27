@@ -1,0 +1,81 @@
+{% macro data_table(scope,  years, projectDates, data, title, subtitle, lettres, ident, selDevSym) %} 
+<div class="row text-center ">
+    <div class="col list-table cball_table">
+        <table id="cost_benefits_data" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col" style="min-width: 15vw; max-width: 15vw;"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col" class="year">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1 onclick="show_hide_months()" id="click-cell"><span hidden id="cb_chevron_right" class="oi oi-chevron-right" title="Click to show per-month cost-benefits" aria-hidden="true"></span><span id="cb_chevron_left" class="oi oi-chevron-left" title="Click to hide per-month cost-benefits" aria-hidden="true"></span></th>
+                    {% for date in projectDates %}
+                        <th scope="col" class="date month-cell">{{date}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% set i = 0 %}
+                {% for j in 0..title|length-1 %}
+                <tr>
+                    <td class="item"><strong>{{title[j]|nl2br}}</strong> in {{ selDevSym }} {{subtitle[j]}}</td>
+                    <td id="{{ident[j]}}_{{i}}">-</td>
+                    
+                    {% for year in years %}
+                        <td id="{{ident[j]}}{{ i }}">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                    <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                    {% for date in projectDates %}
+                        <td id="{{ident[j]}}_{{ i }}" class="month-cell">-</td>
+                        {% set i = i + 1 %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row text-center" hidden>
+     <div class="col mt-2 mx-5 list-table cball_table">
+        <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg' data-fixed-columns="true" data-fixed-number="4">
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col" style="min-width: 15vw; max-width: 15vw;"></th>
+                    <th scope="col">Total</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1></th>
+                    {% for date in projectDates %}
+                        <th scope="col">{{date}}</th>
+                    {% endfor %}
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for j in 0..title|length-1 %}
+             <tr>
+                    <td class="item"><strong>{{title[j]|nl2br}}</strong> in {{ selDevSym }} {{subtitle[j]}}</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                        <tr>
+                            <td class="{{ident[j]}}_{{ ucID }}">{{(data[j][ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            {% for year in years %}
+                                <td class="{{ident[j]}}_{{ ucID }}">{{(data[j][ucID][year])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                            <td  class="item" style="min-width:5vw;" rowspan=1></td>
+                            {% set j = j+1 %}
+                            {% for date in projectDates %}
+                                <td class="{{ident[j]}}_{{ ucID }}">{{(data[j][ucID][date])|number_format(2, '.', '') }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}{% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
