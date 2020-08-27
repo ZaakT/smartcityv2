@@ -436,6 +436,27 @@ try{
                             ucm1($twig,$is_connected);
                         }
                     }
+                    // --- SELECTED USE CASES MENU ---
+                    elseif($_GET['A2']=="ucm_selected"){
+                        if(isset($_POST['radio_ucm'])){
+                            $ucmID = intval($_POST['radio_ucm']);
+                            $_SESSION['ucmID']=$ucmID;
+                            //var_dump($ucmID);
+                            header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
+                        }
+                    }
+                    elseif($_GET['A2']=="scope"){
+                        if(isset($_GET['projID'])){
+                            if($_GET['projID']!=0){
+                                scope($twig,$is_connected,$_GET['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_sdesign&A2=scope');
+                            }
+                        }
+                        else {
+                            scope($twig,$is_connected);
+                        }}
                 } else {
                     project_sdesign($twig,$is_connected);
                 }
