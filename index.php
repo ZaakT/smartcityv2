@@ -434,6 +434,10 @@ try{
                             ucm1($twig,$is_connected);
                         }
                     }
+                    // --------- Create UCM ----------
+                    elseif($_GET['A2']=="create_ucm"){
+                        create_ucm1($_POST);
+                    }
                     // --- SELECTED USE CASES MENU ---
                     elseif($_GET['A2']=="ucm_selected"){
                         if(isset($_POST['radio_ucm'])){

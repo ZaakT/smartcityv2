@@ -62,6 +62,19 @@ function create_ucm($post){
         insertUCM($ucmInfos);
         header('Location: ?A=project_design&A2=ucm');
     }
+
+}function create_ucm1($post){
+    $name = $post['name'];
+    $description = isset($post['description']) ? $post['description'] : "";
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $ucmInfos = [$name,$description,$idUser];
+    if(!empty(getUCM($idUser,$name))){
+        header('Location: ?A=project_sdesign&A2=ucm&isTaken=true');
+    } else {
+        insertUCM($ucmInfos);
+        header('Location: ?A=project_sdesign&A2=ucm');
+    }
 }
 
 function delete_ucm($idUCM){
