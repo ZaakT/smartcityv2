@@ -582,6 +582,7 @@ try{
             // **** 
             // ---------- Input Project Common ----------
             elseif($_GET['A']=='input_project_common'){
+                verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=input_project_common&A2=proj_selected',  'input_project_common');
@@ -659,6 +660,7 @@ try{
 
             // ---------- Deal Criteria ----------
             elseif($_GET['A']=='deal_criteria'){
+                verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected', 'deal_criteria');
@@ -686,6 +688,7 @@ try{
             }
             // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
+                verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards');
@@ -1769,6 +1772,7 @@ try{
 
             // ---------- BUSINESS MODEL ----------
             elseif($_GET['A']=='business_model'){
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         project_bm($twig,$is_connected);
@@ -1828,6 +1832,7 @@ try{
 
             // ---------- FUNDING ----------
             elseif($_GET['A']=='funding'){
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="scenario"){
                         if(isset($_GET['isTaken']) && $_GET['isTaken']){
@@ -1924,6 +1929,7 @@ try{
             }
             // ---------- DASHBOARDS ----------
             elseif($_GET['A']=='dashboards'){
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         \general\project($twig,$is_connected, "?A=dashboards&A2=proj_selected",'dashboards');
@@ -2095,10 +2101,12 @@ try{
                 }              
             }
             // ---------- COMPARISON ----------
-            elseif($_GET['A']=='comparison'){   
+            elseif($_GET['A']=='comparison'){  
+                verifIsDev(); 
                 comparison($twig,$is_connected);  
             }
             elseif($_GET['A']=='comp_projects'){ 
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="projects"){
                         projects($twig,$is_connected);
@@ -2124,6 +2132,7 @@ try{
                 }          
             }
             elseif($_GET['A']=='comp_finscen'){ 
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="scenarios"){
                         scenarios($twig,$is_connected);
