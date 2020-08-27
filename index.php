@@ -223,6 +223,7 @@ try{
             }
             // ---------- PROJECT DESIGN ---------- 
             elseif($_GET['A']=='project_design'){
+                verifIsDev();
                 /* var_dump($_POST); */
                 // ??? IN THE CASE WHERE AN ACTION2 (A2) IS GIVEN ???
                 if(isset($_GET['A2'])){
@@ -426,6 +427,7 @@ try{
             }
             // ---------- PROJECT SDESIGN ----------
             elseif($_GET['A']=='project_sdesign'){
+                verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="ucm1"){
                         if(isset($_GET['isTaken']) && $_GET['isTaken']){
@@ -440,6 +442,7 @@ try{
             }
             // ---------- PROJECT SCOPING ----------
             elseif($_GET['A']=='project_scoping'){
+                verifIsDev();
                 if(isset($_GET['A2'])){
                     // --- PROJECT ---
                     if($_GET['A2']=="project"){
@@ -741,6 +744,7 @@ try{
 
             // ---------- COST BENEFITS ----------
             elseif($_GET['A']=='cost_benefits' or $_GET['A']=='input_use_case'){
+                //Available for Dev AND sup, do NOT use verifIsSup(); or verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project_cb"){
                         //project_cb($twig,$is_connected);

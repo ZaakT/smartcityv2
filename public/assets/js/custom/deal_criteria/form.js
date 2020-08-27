@@ -53,22 +53,19 @@ function checkInput(id){
     }
     if(orderDict[idType]){//!(((orderDict[idType] && idGoal=="target") || (!orderDict[idType] && idGoal!="target")) && isSup(id, idType.concat("_", opGoal)))
         if(idGoal == "target" && !isSup(id, idType +"_"+ "nogo")){
-            console.log("it's me 2 !");
             $("#"+idType +"_"+ "nogo").val($("#"+id).val());
+            checkInput("#"+idType +"_"+ "nogo");
         }else if(idGoal == "nogo" && !isInf(id, idType +"_"+ "target")){
-            console.log("it's me 3 !");
             $("#"+idType +"_"+ "target").val($("#"+id).val());
+            checkInput("#"+idType +"_"+ "target");
         }
     } else {
         if(idGoal == "target" && !isInf(id, idType +"_"+ "nogo")){
-            console.log("it's me 4 !");
-            console.log("#"+idType +"_"+ "nogo");
-            console.log(isInf(id, idType +"_"+ "nogo"));
             $("#"+idType +"_"+ "nogo").val($("#"+id).val());
+            checkInput("#"+idType +"_"+ "nogo");
         }else if(idGoal == "nogo" && !isSup(id, idType +"_"+ "target")){
-            console.log("it's me 5 !");
-            console.log(isInf(id, idType +"_"+ "target"));
             $("#"+idType +"_"+ "target").val($("#"+id).val());
+            checkInput("#"+idType +"_"+ "target");
         }
     }  
 
