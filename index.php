@@ -754,7 +754,7 @@ try{
                     } elseif($_GET['A2']=="use_case_cb"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                use_case_cb($twig,$is_connected,$_GET['projID']);
+                                \general\use_case_selection($twig,$is_connected,'?A=cost_benefits&A2=uc_selected&projID='.$_GET['projID'],$_GET['A'],$_GET['projID']);
                             }
                             else {
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');

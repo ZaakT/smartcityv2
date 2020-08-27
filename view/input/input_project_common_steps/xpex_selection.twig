@@ -6,6 +6,7 @@
 {% import "/templates/customer_bc/macro_xpex.twig" as list %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 
+
 {% block title %}Project Initialsization{% endblock %}
 
 
@@ -14,11 +15,19 @@
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
+{% if type == "capex" %}
+    {% set lorem = 'Create and provide short description of Investment / Fixed assets procured from NTT or from third parties.' %}
+    {{coucou1}}
+{% elseif type == "deployment_costs" %}
+    {% set lorem = 'Create and provide short description of Deployment & Set up cost items provided by NTT or by third parties.' %}
+{% elseif type == "opex" %}
+    {% set lorem = 'Create and provide short description of Opex / running cost procured from NTT or from third parties.' %}
+{% endif %}
 
 <h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Input </span><span style="font-weight: 400;"></span></h2>
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+        <p class="text-justify">{{lorem|nl2br}} </p>
     </div>
 </div>
 
