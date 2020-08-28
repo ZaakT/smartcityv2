@@ -445,17 +445,17 @@ try{
                             header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
                         }
                     }
-                    elseif($_GET['A2']=="scope"){
+                    elseif($_GET['A2']=="scope1"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                scope($twig,$is_connected,$_GET['projID']);
+                                scope1($twig,$is_connected,$_GET['projID']);
                             }
                             else {
-                                header('Location: ?A=project_sdesign&A2=scope');
+                                header('Location: ?A=project_sdesign&A2=scope1');
                             }
                         }
                         else {
-                            scope($twig,$is_connected);
+                            scope1($twig,$is_connected);
                         }}
                 } else {
                     project_sdesign($twig,$is_connected);
