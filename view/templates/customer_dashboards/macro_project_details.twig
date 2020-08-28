@@ -1,5 +1,5 @@
-{% macro data_table(scope,  years, projectDates, data, title, subtitle, lettres, ident, selDevSym) %} 
-<div class="row text-center ">
+{#% macro data_table(scope, years, projectDates, title, subtitle,  ident, selDevSym) %} 
+<div class="row text-center " hidden>
     <div class="col list-table cball_table">
         <table id="cost_benefits_data" class='table table-lg table-bordered table-striped table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
@@ -16,14 +16,15 @@
                 </tr>
             </thead>
             <tbody>
-            {% set i = 0 %}
+            
                 {% for j in 0..title|length-1 %}
+                {% set i = 0 %}
                 <tr>
                     <td class="item"><strong>{{title[j]|nl2br}}</strong> in {{ selDevSym }} {{subtitle[j]}}</td>
                     <td id="{{ident[j]}}_{{i}}">-</td>
-                    
+                    {% set i = i + 1 %}
                     {% for year in years %}
-                        <td id="{{ident[j]}}{{ i }}">-</td>
+                        <td id="{{ident[j]}}_{{ i }}">-</td>
                         {% set i = i + 1 %}
                     {% endfor %}
                     <td  class="item" style="min-width:5vw;" rowspan=1></td>
@@ -37,7 +38,7 @@
         </table>
     </div>
 </div>
-<div class="row text-center" hidden>
+<div class="row text-center">
      <div class="col mt-2 mx-5 list-table cball_table">
         <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg' data-fixed-columns="true" data-fixed-number="4">
             <thead class="thead-light text-center sticky-top">
@@ -61,7 +62,7 @@
                     {% for measID,list_ucs in scope %}
                         {% for ucID in list_ucs %}
                         <tr>
-                            <td class="{{ident[j]}}_{{ ucID }}">{{(data[j][ucID]['tot'])|number_format(2, '.', '') }}</td>
+                            <td class="{{ident[j]}}_{{ ucID }}">{% if ident[j]=="invest" %}{{(data.implem[ucID]['tot'] + data.capex[ucID]['tot'])|number_format(2, '.', '') }}{% else %}{{(data[j][ucID]['tot'])|number_format(2, '.', '') }}{% endif %}</td>
                             {% for year in years %}
                                 <td class="{{ident[j]}}_{{ ucID }}">{{(data[j][ucID][year])|number_format(2, '.', '') }}</td>
                             {% endfor %}
@@ -78,4 +79,32 @@
         </table>
     </div>
 </div>
+{% endmacro %#}
+
+
+{% macro table(ligneNames, colNames, selDevSym) %}
+<div class="row text-center">
+     <div class="col mt-2 mx-5 list-table cball_table">
+        <table id="cball_table" class='table table-lg table-bordered table-striped table-responsive-lg' data-fixed-columns="true" data-fixed-number="4">
+            <thead class="thead-light text-center sticky-top">
+            <tr>
+                {% for colName in colNames %}
+                <th scope="col">{{colName}}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                {% for ligneName in ligneNames %}
+                    <td class="item {{ligneName[1]}}" {{ligneName[2]==3 ? "style='font-size:13px'"}}>{{ligneName[2]==1 ? "<strong>"}}{% for _ in range(0, (ligneName[2]-1)*4) %}&nbsp;{% endfor %}{{ligneName[0]}}{{ligneName[2]==1 ? "</strong>"}} </td>
+                    {% for i in 0..colNames|length-2 %}
+                        <td>{{i}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endmacro %}

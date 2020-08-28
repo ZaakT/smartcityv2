@@ -76,7 +76,7 @@ function getUserRole(){
 function verifIsDev(){
     // If the user is not dev he will be redirected to the home page
     if(!isDev()){
-        //header('Location: ?A=home');
+        header('Location: ?A=home');
     }
 
 }
@@ -84,6 +84,6 @@ function verifIsDev(){
 function verifIsSup(){
     // If the user is not sup he will be redirected to the home page
     if(!isSup()){
-        //header('Location: ?A=home');
+        header('Location: ?A=home');
     }
 }

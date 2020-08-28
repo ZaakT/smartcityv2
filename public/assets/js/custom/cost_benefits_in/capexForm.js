@@ -116,6 +116,7 @@ function checkCapexInput(id){
             //changer la valeur de volume correspondante
             var ratio = val;
             var nb_uc = $("#nb_uc").html();
+            console.log(nb_uc);
             volume = Math.round(ratio * nb_uc);
             //console.log(volume);
             id = id.split("_");

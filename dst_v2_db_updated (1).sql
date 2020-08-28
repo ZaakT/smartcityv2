@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 28 août 2020 à 14:03
+-- Généré le :  ven. 28 août 2020 à 13:58
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -97,16 +97,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(2
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO quantifiable_item (name,description)
-                                    VALUES (quantifiable_name,quantifiable_desc);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO quantifiable_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO quantifiable_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `min_red_nb` INT, IN `max_red_nb` INT, IN `idUC` INT)  BEGIN
+                                                    DECLARE itemID INT;
+                                                    INSERT INTO quantifiable_item (name,description)
+                                                        VALUES (quantifiable_name,quantifiable_desc);
+                                                    SET itemID = LAST_INSERT_ID();
+                                                    INSERT INTO quantifiable_uc (id_item,id_uc)
+                                                        VALUES (itemID,idUC);
+                                                    INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
+                                                        VALUES (itemID,unit,source,min_red_nb,max_red_nb);
+                                                END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -355,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -368,8 +368,7 @@ INSERT INTO `capex_item` (`id`, `name`, `description`) VALUES
 (5, 'Capex name delibererement long 2', ''),
 (13, 'custom capex item', 'descr'),
 (17, '_-fghçjiopk', ''),
-(15, '5G capex item', ''),
-(18, 'SFR', '');
+(15, '5G capex item', '');
 
 -- --------------------------------------------------------
 
@@ -412,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -426,8 +425,7 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (5, 1),
 (13, 4),
 (15, 4),
-(17, 6),
-(18, 8);
+(17, 6);
 
 -- --------------------------------------------------------
 
@@ -458,8 +456,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (14, 6),
 (15, 7),
 (16, 6),
-(17, 3),
-(18, 1);
+(17, 3);
 
 -- --------------------------------------------------------
 
@@ -1085,8 +1082,7 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (17, 6, 3, NULL, NULL, NULL),
 (4, 8, 1, 100, 5500, 5),
 (5, 8, 1, 80, 2500, 2),
-(3, 8, 1, 2400, 200, 3),
-(18, 8, 1, 400, 1500, 5);
+(3, 8, 1, 2400, 200, 3);
 
 -- --------------------------------------------------------
 
@@ -1252,9 +1248,7 @@ CREATE TABLE IF NOT EXISTS `input_quantifiable` (
 --
 
 INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `volume_reduc`, `annual_var_volume`) VALUES
-(1, 4, 7, 'per test', 43, 43, 54),
-(5, 8, 1, NULL, NULL, NULL, NULL),
-(6, 8, 1, 'personne', 750, 10, 5);
+(1, 4, 7, 'per test', 43, 43, 54);
 
 -- --------------------------------------------------------
 
@@ -2033,7 +2027,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
 (6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-08-26 11:12:58', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-08-28 16:03:37', 1, 1, 0);
+(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-08-28 15:56:38', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -2256,7 +2250,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2264,8 +2258,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
 
 INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (1, 'test', 'htyjh'),
-(4, 'example quantifiable item', 'lorem ipsum'),
-(6, 'Enfants dans les parcs', '');
+(4, 'example quantifiable item', 'lorem ipsum');
 
 -- --------------------------------------------------------
 
@@ -2305,16 +2298,14 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
 --
 
 INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
-(1, 4),
-(5, 8),
-(6, 8);
+(1, 4);
 
 -- --------------------------------------------------------
 
@@ -2338,9 +2329,7 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (1, 7),
 (2, 2),
 (3, 5),
-(4, 7),
-(5, 1),
-(6, 1);
+(4, 7);
 
 -- --------------------------------------------------------
 

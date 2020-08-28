@@ -54,3 +54,18 @@ Pourquoi limiter les probabiltés à des multiples de 10 ? Il faudrait le dire p
 ### Working Capital Req.
 La fleche ne fait aucune action.
 
+
+
+http://smartcityv2/?A=cost_benefits&A2=capex&A3=capex_selected&projID=8&ucID=1 : pb dans la table capex
+
+http://smartcityv2/?A=cost_benefits&A2=capex&projID=8&ucID=9 : create a capex
+
+
+
+http://smartcityv2/?A=dashboards&A2=global_dashboard&projID=8 : 
+pou certains projets, le dashbord bug (pour myProject par exemple)
+
+dans le selection d'un projet, la valuer de "costs Benefits" peut changer sans raison.
+
+où est passé la page size ??? : 
+http://smartcityv2/?A=project_scoping&A2=size&projID=4

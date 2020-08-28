@@ -24,13 +24,14 @@
 <div class ="row">
     {% if scope and sizes and perimeter %} 
         <div id="body" class="col-12 text-left">
-            <form class="col container-fluid" name="form_volumes" id="form_volumes" action="?A=project_scoping&amp;A2=volumes_selected" method="post" onsubmit="return colorFilledVolumes();">
-            {#-------------- jumbotron --------------#}
+                       {#-------------- jumbotron --------------#}
             <div class="row jumbotron m-4 p-2">
                 <div class="col text-center">
                     <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
                 </div>
             </div>
+            <form class="col container-fluid" name="form_volumes" id="form_volumes" action="?A=project_scoping&amp;A2=volumes_selected" method="post" onsubmit="return colorFilledVolumes();">
+ 
             {% for meas,list_ucs in scope %}
             <div class="row mt-5 mb-0">
                 <h2 class="mx-auto">Input volumes for {{measures[meas]['name']}}</h2>
@@ -39,10 +40,12 @@
                 
             </div>
             {#---------- tab input -----------#}
+
             <div hidden class="row m-3 btn-group-sm justify-content-center" role="group">
                 {# <button class="col-3 btn btn-dark" type="button" onclick="fillByAv('volumes_table_{{meas}}'); return false;">Fill with default values</button> #}
                 
             </div>
+            
             {{ list.list_volumes(perimeter,meas,list_ucs,ucs,sizes,mags,components,compo_per_zone,ratio,list_sel) }}
             {% endfor %}
             
@@ -71,6 +74,8 @@
                 {% endfor %}
             </div>
     {% else %}
+
+
         <h2 class="col text-center m-5">Missing zone / use case / magnitude, please contact an administrator.</h2>
     {% endif %}
     </div>

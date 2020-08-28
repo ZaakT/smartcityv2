@@ -21,6 +21,9 @@ function dashboards_summary($twig,$is_connected, $projID){
                 $ucs = getListUCs();
                 $scope = getListSelScope($projID);
                 
+
+           
+                
                 $schedules = getListSelDates($projID);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
@@ -63,8 +66,11 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
             //var_dump($post);
             $selZones = [];
 
+            
+
             $proj = getProjByID($projID,$user[0]);
             $measures = getListMeasures();
+            $ucs = getListUCs();
             $scope = getListSelScope($projID);
 
             $schedules = getListSelDates($projID);
@@ -90,8 +96,20 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
             $selZonesInfos = getInfosZones($selZones,$list_zones);
 
 
+
                     
-                    
+                                        //ZONE SELECTION
+            $listSelZones = getListSelZones($projID);
+            //var_dump($selZones, $listSelZones);
+                            
+            foreach($listSelZones as $id => $zone) {
+                $listSelZones[$id]['hasChildren'] = false;
+            }
+            foreach($listSelZones as $id => $zone) {
+                if ( array_key_exists($zone['parent'],$listSelZones) ) {
+                    $listSelZones[$zone['parent']]['hasChildren'] = true;
+                }   
+            }  
             $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
 
@@ -161,6 +179,7 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
 
             }}
             //var_dump($capexPerMonth);
+            $uc_check_completed = check_if_UC_is_completed($projID,$scope);
             
 
 
@@ -173,12 +192,12 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
                 'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],
 
-                'scope'=>$scope,"years"=>$projectYears,'projectDates'=>$projectDates,'capex'=>$capexTot,'capexMonth'=>$capexPerMonth
+                'scope'=>$scope,"years"=>$projectYears,'projectDates'=>$projectDates,'capex'=>$capexTot,'capexMonth'=>$capexPerMonth,'list_sel'=>$listSelZones
                 ,'implem'=>$implemTot,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,
-                'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth,'cashreleasing'=>$cashreleasingTot2
+                'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth,'cashreleasing'=>$cashreleasingTot2,'ucs'=>$ucs
                 ,'widercash'=>$widercashTot2, 'widercashMonth'=>$widercashValuesMonth, 'netcash'=>$netcashTot, 'netcashPerMonth'=>$netcashPerMonth
                 ,'cumulnetcashTot'=>$cumultNetCash, 'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth
-                ,'netsoccash'=>$netsoccashTot,'netsoccashPerMonth'=>$netsoccashPerMonth,'cumulnetsoccashTot'=>$cumulNetSocCash)); 
+                ,'netsoccash'=>$netsoccashTot,'netsoccashPerMonth'=>$netsoccashPerMonth,'cumulnetsoccashTot'=>$cumulNetSocCash, 'uc_completed'=>$uc_check_completed)); 
                 
             
                 prereq_dashbords();
@@ -201,8 +220,16 @@ function dashboards_use_case_details($twig,$is_connected, $projID){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
-            $proj = getProjByID($projID,$user[0]);           
-            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
+            $proj = getProjByID($projID,$user[0]);  
+            $scope = getListSelScope($projID);
+            
+            $list_ucs = getListUCs();
+            $selScope = getListSelScope($projID);
+
+            $schedules = getListSelDates($projID);
+            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);         
+            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'years'=>$projectYears, 'selDevSym'=>$selDevSym,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
             prereq_dashbords();
         }
     }

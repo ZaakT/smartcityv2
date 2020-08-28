@@ -437,7 +437,7 @@ function volumes_selected($post=[]){
                 insertSelVolumes($projID,$list_volumes);
             }
             //var_dump($listSelVolumes);
-            update_ModifDate_proj($projID);            
+            update_ModifDate_proj($projID);           
             header('Location: ?A=project_scoping&A2=schedule&projID='.$projID);
 
         } else {
