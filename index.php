@@ -456,7 +456,8 @@ try{
                         }
                         else {
                             scope1($twig,$is_connected);
-                        }}
+                        }
+                    }
                 } else {
                     project_sdesign($twig,$is_connected);
                 }
