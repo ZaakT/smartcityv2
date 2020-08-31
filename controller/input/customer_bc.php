@@ -20,16 +20,34 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
                     $proj = getProjByID($projID,$user[0]);
                     $uc = getUCByID($ucID);
                     if($type=="capex"){
-                        $list_xpex_advice = getListCapexAdvice($ucID); 
-                        $list_xpex_user = getListCapexUser($projID,$ucID);    
+                        
+                        $list_xpex_advice_from_ntt = getListCapexAdvice($ucID, "from_ntt"); 
+                        $list_xpex_advice_from_outside_ntt = getListCapexAdvice($ucID, "from_outside_ntt"); 
+                        $list_xpex_advice_internal = getListCapexAdvice($ucID, "internal"); 
+
+                        $list_xpex_user_from_ntt  = getListOpexUser($projID,$ucID, "from_ntt");    
+                        $list_xpex_user_from_outside_ntt  = getListCapexUser($projID,$ucID, "from_outside_ntt"); 
+                        $list_xpex_user_internal  = getListCapexUser($projID,$ucID, "internal"); 
+ 
                         $list_selXpex = getListSelCapex($projID,$ucID); 
                     }elseif($type=="opex"){
-                        $list_xpex_advice = getListOpexAdvice($ucID); 
-                        $list_xpex_user = getListOpexUser($projID,$ucID);    
+                        $list_xpex_advice_from_ntt = getListOpexAdvice($ucID, "from_ntt"); 
+                        $list_xpex_advice_from_outside_ntt = getListOpexAdvice($ucID, "from_outside_ntt"); 
+                        $list_xpex_advice_internal = getListOpexAdvice($ucID, "internal"); 
+
+                        $list_xpex_user_from_ntt  = getListOpexUser($projID,$ucID, "from_ntt");    
+                        $list_xpex_user_from_outside_ntt  = getListOpexUser($projID,$ucID, "from_outside_ntt"); 
+                        $list_xpex_user_internal  = getListOpexUser($projID,$ucID, "internal"); 
                         $list_selXpex = getListSelOpex($projID,$ucID); 
                     }elseif($type=="deployment_costs"){
-                        $list_xpex_advice = getListImplemAdvice($ucID);
-                        $list_xpex_user = getListImplemUser($projID,$ucID);     
+                        $list_xpex_advice_from_ntt = getListImplemAdvice($ucID, "from_ntt"); 
+                        $list_xpex_advice_from_outside_ntt = getListImplemAdvice($ucID, "from_outside_ntt"); 
+                        $list_xpex_advice_internal = getListImplemAdvice($ucID, "internal"); 
+
+                        $list_xpex_user_from_ntt  = getListImplemUser($projID,$ucID, "from_ntt");    
+                        $list_xpex_user_from_outside_ntt  = getListImplemUser($projID,$ucID, "from_outside_ntt"); 
+                        $list_xpex_user_internal  = getListImplemUser($projID,$ucID, "internal"); 
+                        
                         $list_selXpex = getListSelImplem($projID,$ucID); 
                     }else{
                         throw new Exception("Wrong type.");
@@ -38,8 +56,13 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
                     $devises = getListDevises();
                     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                    
-                    echo $twig->render('/input/input_project_common_steps/xpex_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"xpex_advice"=>$list_xpex_advice,"xpex_user"=>$list_xpex_user,'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'ucID'=>$ucID, 'projID'=>$projID));
+
+                    echo $twig->render('/input/input_project_common_steps/xpex_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
+                    'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
+                    'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,
+                    "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
+                    "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
+                    'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'ucID'=>$ucID, 'projID'=>$projID));
                     prereq_ipc(1);
                 } else {
                     throw new Exception("This Use Case doesn't exist !");
@@ -184,7 +207,9 @@ function create_xpex($twig,$is_connected, $post,  $type) {
             $ucID = $_SESSION['ucID'];
             $name = $post['name'];
             $description = isset($post['description']) ? $post['description'] : "";
+            $origine = $post['origine'];
             $xpex_infos = ["name"=>$name,"description"=>$description];
+
             //var_dump(getCapexUserItem($projID,$ucID,$name));
             echo $name;
             if($name==''){
@@ -194,11 +219,11 @@ function create_xpex($twig,$is_connected, $post,  $type) {
                 header('Location: ?A=input_project_common&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 if($type=="capex"){
-                    insertCapexUser($projID,$ucID,$xpex_infos);
+                    insertCapexUser($projID,$ucID,$xpex_infos, $origine);
                 }elseif($type=="opex"){
-                    insertOpexUser($projID,$ucID,$xpex_infos);
+                    insertOpexUser($projID,$ucID,$xpex_infos, $origine);
                 }elseif($type=='deployment_costs'){
-                    insertImplemUser($projID,$ucID,$xpex_infos);
+                    insertImplemUser($projID,$ucID,$xpex_infos, $origine);
                 }else{
                     throw new Exception("Wrong type !");
                 }

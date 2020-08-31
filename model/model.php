@@ -1391,7 +1391,7 @@ function getCapexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListCapexAdvice($ucID){
+function getListCapexAdvice($ucID, $origine = "all"){
 /* 
 CAPEX_ITEM_ADVICE
 id int(11)            id of the advice
@@ -1410,6 +1410,16 @@ name varchar(255)
 description text
 */
     $db = dbConnect();
+    $origine_selection = "";
+
+    if($origine=="from_ntt"){
+        $origine_selection = "and capex_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and capex_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and capex_item.origine = 'internal'";
+    }
+
     $req = $db->prepare("SELECT *
                             FROM capex_item_advice
                             INNER JOIN capex_uc
@@ -1417,6 +1427,7 @@ description text
                                     WHERE capex_uc.id_uc = ?
                                         and capex_item.id = capex_uc.id_item
                                         and capex_item.id = capex_item_advice.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1473,8 +1484,18 @@ function getListCapexItems($ucID){
     return $list;
 }
 
-function getListCapexUser($projID,$ucID){
+function getListCapexUser($projID,$ucID, $origine = "all"){
     $db = dbConnect();
+    $origine_selection = "";
+
+    if($origine=="from_ntt"){
+        $origine_selection = "and capex_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and capex_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and capex_item.origine = 'internal'";
+    }
+
     $req = $db->prepare("SELECT capex_item.id,name,description
                             FROM capex_item_user
                             INNER JOIN capex_uc
@@ -1483,6 +1504,7 @@ function getListCapexUser($projID,$ucID){
                                         and capex_item.id = capex_uc.id_item
                                         and capex_item_user.id_proj = ?
                                         and capex_item_user.id = capex_item.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1528,7 +1550,8 @@ function getListSelCapex($projID,$ucID){
     return $list;
 }
 
-function insertCapexUser($projID,$ucID,$capex_data){
+
+function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
@@ -1536,12 +1559,13 @@ function insertCapexUser($projID,$ucID,$capex_data){
                             IN capex_name VARCHAR(255),
                             IN capex_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN origine VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO capex_item (name,description)
-                                    VALUES (capex_name,capex_desc);
+                                INSERT INTO capex_item (name,description, origine)
+                                    VALUES (capex_name,capex_desc, origine);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO capex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -1549,8 +1573,8 @@ function insertCapexUser($projID,$ucID,$capex_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_capex(?,?,?,?);');
-    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_capex(?,?,?,?, ?);');
+    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID, $origine));
     return $ret;
 }
 
@@ -1688,8 +1712,20 @@ function getImplemUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListImplemAdvice($ucID){
+function getListImplemAdvice($ucID, $origine = "all"){
     $db = dbConnect();
+    $origine_selection = "";
+
+echo "origine : $origine_selection<br>";
+    if($origine=="from_ntt"){
+        $origine_selection = "and implem_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and implem_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and implem_item.origine = 'internal'";
+    }
+
+    
     $req = $db->prepare("SELECT *
                             FROM implem_item_advice
                             INNER JOIN implem_uc
@@ -1697,6 +1733,7 @@ function getListImplemAdvice($ucID){
                                     WHERE implem_uc.id_uc = ?
                                         and implem_item.id = implem_uc.id_item
                                         and implem_item.id = implem_item_advice.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1753,8 +1790,19 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser($projID,$ucID){
+function getListImplemUser($projID,$ucID,  $origine = "all"){
     $db = dbConnect();
+    $origine_selection = "";
+
+
+    if($origine=="from_ntt"){
+        $origine_selection = "and implem_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and implem_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and implem_item.origine = 'internal'";
+    }
+
     $req = $db->prepare("SELECT implem_item.id,name,description
                             FROM implem_item_user
                             INNER JOIN implem_uc
@@ -1763,6 +1811,7 @@ function getListImplemUser($projID,$ucID){
                                         and implem_item.id = implem_uc.id_item
                                         and implem_item_user.id_proj = ?
                                         and implem_item_user.id = implem_item.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1920,8 +1969,18 @@ function getOpexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListOpexAdvice($ucID){
+function getListOpexAdvice($ucID, $origine = "all"){
     $db = dbConnect();
+    $origine_selection = "";
+
+    if($origine=="from_ntt"){
+        $origine_selection = "and opex_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and opex_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and opex_item.origine = 'internal'";
+    }
+
     $req = $db->prepare("SELECT *
                             FROM opex_item_advice
                             INNER JOIN opex_uc
@@ -1929,6 +1988,7 @@ function getListOpexAdvice($ucID){
                                     WHERE opex_uc.id_uc = ?
                                         and opex_item.id = opex_uc.id_item
                                         and opex_item.id = opex_item_advice.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1985,8 +2045,19 @@ function getListOpexItems($ucID){
     return $list;
 }
 
-function getListOpexUser($projID,$ucID){
+function getListOpexUser($projID,$ucID, $origine = "all"){
     $db = dbConnect();
+    $origine_selection = "";
+
+    if($origine=="from_ntt"){
+        $origine_selection = "and opex_item.origine = 'from_ntt'";
+    }elseif($origine == "from_outside_ntt"){
+        $origine_selection = "and opex_item.origine = 'from_outside_ntt'";
+    }elseif($origine == "internal"){
+               $origine_selection = "and opex_item.origine = 'internal'";
+    }
+
+
     $req = $db->prepare("SELECT opex_item.id,name,description
                             FROM opex_item_user
                             INNER JOIN opex_uc
@@ -1995,6 +2066,7 @@ function getListOpexUser($projID,$ucID){
                                         and opex_item.id = opex_uc.id_item
                                         and opex_item_user.id_proj = ?
                                         and opex_item_user.id = opex_item.id
+                                        $origine_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));

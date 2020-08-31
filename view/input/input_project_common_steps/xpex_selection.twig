@@ -35,12 +35,12 @@
 
 <form id="form_xpex" name="form_xpex" action="?A=input_project_common&amp;A2={{type}}&amp;A3=selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedXpex(form_xpex);">
     
-    {% if xpex_advice %}
-    {{ list.list_xpex(xpex_advice,selXpex, type) }}
+    {% if xpex_advice_from_ntt or  xpex_advice_from_outside_ntt or xpex_advice_internal %}
+    {{ list.list_xpex(xpex_advice_from_ntt, xpex_advice_from_outside_ntt, xpex_advice_internal, projID,ucID,selXpex, type) }}
     {% endif %}
 
-    {% if xpex_user %}
-    {{ list.list_xpex_user(xpex_user,projID,ucID,selXpex, type) }}
+    {% if xpex_user_from_ntt or  xpex_user_from_outside_ntt or xpex_user_internal %}
+    {{ list.list_xpex(xpex_user_from_ntt, xpex_user_from_outside_ntt, xpex_user_internal, projID,ucID,selXpex, type, true) }}
     {% endif %}
 </form>
 
