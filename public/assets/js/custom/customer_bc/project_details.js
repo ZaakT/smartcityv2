@@ -30,7 +30,7 @@ function updateData(){
     
     for(let i = 0; i < ucData[0].length; i++){
         for(let j = 0; j < ucData.length; j++){
-            $("#"+i+"_"+j).text(ucData[j][i]);
+            $("#"+i+"_"+j).text(Math.round(ucData[j][i]));
             
         }
     }

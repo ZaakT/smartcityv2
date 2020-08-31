@@ -723,26 +723,21 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
     $list[$proj_dates[$nb0]] = $ratio25;
     for ($i=$nb0+1; $i < $nb0+$nb25 ; $i++) { 
         
-        echo '$i='.$i.', $proj_dates[$i]='.$proj_dates[$i].'<br>';
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
-    echo $nb0+$nb25+$nb50+$nb75+$nb100;
-    echo "--- <br>";
-    print_r($proj_dates);
-    for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) {  
-        echo '$i='.$i.', $proj_dates[$i]='.$proj_dates[$i].'<br>';
+    for ($i=$nb25; $i < $nb50 ; $i++) {  
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb0+$nb25+$nb50; $i < $nb0+$nb25+$nb50+$nb75 ; $i++) { 
+    for ($i=$nb50; $i < $nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75; $i < $nb0+$nb25+$nb50+$nb75+$nb100 ; $i++) { 
+    for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < $nb0+$nb25+$nb50+$nb75+$nb100+$nb_end ; $i++) { 
+    for ($i=$nb100; $i < $nb_end ; $i++) { 
         $list[$proj_dates[$i]] = 100;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
+    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
         $list[$proj_dates[$i]] = 0;
     }
     //var_dump($list);
@@ -3471,7 +3466,6 @@ function getWeightedScores2($fin_score,$soc_score,$capexList){
 function prereq_Dashboards(){
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
-            echo "<script>prereq_dashboards(true);</script>";
     }
 }
 
@@ -3482,7 +3476,6 @@ function global_dashboard($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
-            echo "on rentre dans le getProjByID<br>";
             $proj = getProjByID($projID,$user[0]);
             $measures = getListMeasures();
             $ucs = getListUCs();
@@ -3684,10 +3677,7 @@ function getBudgetGraphData($projectDates,$projectYears,$schedules,$scope,$projI
             $opexPerMonth_new = calcOpexPerMonth2($opexRepart,$opex);
             $opexTot_new = calcOpexTot($opexPerMonth_new,$projectYears);
             $opexPerMonth = add_arrays($opexPerMonth,$opexPerMonth_new);
-            echo 'scheduleFilled($revenuesSchedule) : '.scheduleFilled($revenuesSchedule)."<br>";
-            echo '!empty($revenuesSchedule) : '.!empty($revenuesSchedule)."<br>";
             if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
-                echo 'on rentre dans le if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule))<br>';
                 $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                 $revenuesValues = getRevenuesValues($projID,$ucID);
                 $revenuesPerMonth_new = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
