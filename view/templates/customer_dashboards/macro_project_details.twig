@@ -95,10 +95,10 @@
             </thead>
             <tbody>
                 <tr>
-                {% for ligneName in ligneNames %}
-                    <td class="item {{ligneName[1]}}" {{ligneName[2]==3 ? "style='font-size:13px'"}}>{{ligneName[2]==1 ? "<strong>"}}{% for _ in range(0, (ligneName[2]-1)*4) %}&nbsp;{% endfor %}{{ligneName[0]}}{{ligneName[2]==1 ? "</strong>"}} </td>
-                    {% for i in 0..colNames|length-2 %}
-                        <td>{{i}}</td>
+                {% for i  in 0..ligneNames|length-1 %}
+                    <td class="item {{ligneNames[i][1]}}" {{ligneNames[i][2]==3 ? "style='font-size:13px'"}}>{{ligneNames[i][2]==1 ? "<strong>"}}{% for _ in range(0, (ligneNames[i][2]-1)*4) %}&nbsp;{% endfor %}{{ligneNames[i][0]}}{{ligneNames[i][2]==1 ? "</strong>"}} </td>
+                    {% for j in 0..colNames|length-2 %}
+                        <td id="{{i}}_{{j}}">-</td>
                     {% endfor %}
                 </tr>
                 {% endfor %}
@@ -106,5 +106,7 @@
         </table>
     </div>
 </div>
+
+
 
 {% endmacro %}

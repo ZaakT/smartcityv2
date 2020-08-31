@@ -36,7 +36,19 @@
     ["Net Societal Cash", "netSocietalCash", 1],
     ["Cummulated Net Cash", "cummulatedNetSocietalCash", 1]
 ] %}
+{% set colNames = ["", "2015", "2016"] %}
 {% set colNames = [""]|merge(years) %}
+
+
+{#% set data = [["1", 
+                    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"], 
+                    ["0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5", "0.5"]
+                ],
+                ["3", 
+                    ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"],
+                    ["1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7"]
+                ]] %#}
+
 
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
@@ -53,11 +65,13 @@
             <tr> 
                 <td> Select Use Case : </td> 
                 <td> 
-                    <div class="col-sm-3  center">
-                        <select id="uc" name="uc" class="form-control">
+                    <div class="col text-center">
+                        <select id="uc" name="uc" class="form-control" onchange="updateData()">
+                        {% set i = true  %}
                         {% for meas,list_ucs in selScope %}
                             {% for uc in list_ucs %}
-                                <option value="{{ uc }}">{{ ucs[uc]['name'] }}</option>
+                                <option value="{{ uc }}" {{ i ? 'selected="selected"' }}>{{ ucs[uc]['name'] }}</option>
+                                {% set i = false %}
                             {% endfor %}
                         {% endfor %}
                         </select>
@@ -67,13 +81,14 @@
         </table>
     </div>
 </div>
-<div class="dash-bg container-fluid m-1 ml-2 p-4">
-    <div class="dash-bg-light container-fluid p-3">
 
 
-        {{ table.table(lineNames, colNames,  selDevSym) }}
-    </div>
-</div>
+
+{{ table.table(lineNames, colNames,  selDevSym) }}
+
+<div id="data"  data-to-show="{{ data|json_encode }}"></div>
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
+
 
 
 {% endblock %}

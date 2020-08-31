@@ -210,6 +210,66 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
     }
 }
 
+function getUcsData($projID,$selScope, $projectYears, $scope){
+    //return a list of all data needed in Case Details
+    $list = [] ;
+    for($i = 1; $i<=count($selScope); $i++ ){
+        for($j = 0; $j<count($selScope[$i]); $j++){
+            $ucID = $selScope[$i][$j];
+            array_push($list, getUcData($projID,$ucID, $projectYears, $scope));
+        }
+    }
+    
+
+    return $list;
+}
+
+function getUcData($projID, $ucID, $projectYears, $scope){
+    // return the data needed for the table Use Case Details for the ucID passed in argument.
+    $list = [$ucID];
+
+    $schedules = getListSelDates($projID);
+    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
+    $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
+    $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
+    $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+    $implemSchedule = $schedules['implem'][$ucID];
+    $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+    // Cash-out Capex
+
+    $capex = getTotCapexByUC($projID,$ucID);
+    $capexPerMonth = calcCapexPerMonth($implemRepart,$capex);
+    $capexTot = calcCapexTot($capexPerMonth,$projectYears);
+
+    //Cash-out Opex
+    $opexSchedule = $schedules['opex'][$ucID];
+    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+    $opexValues = getOpexValues($projID,$ucID);
+    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+    $opexTot = calcOpexTot($opexPerMonth,$projectYears);
+
+    //Cash-out Deployment 
+    $implem = getTotImplemByUC($projID,$ucID);
+    $implemPerMonth = calcImplemPerMonth($implemRepart,$implem);
+    $implemTot = calcImplemTot($implemPerMonth,$projectYears);
+
+
+    for ($i = 0; $i<count($projectYears); $i++){
+        array_push($list, getUcDataYear($projID, $ucID, $projectYears[$i], $capexTot, $implemTot, $opexTot));
+    }
+    return $list;
+
+}
+
+function getUcDataYear($projID, $ucID, $year, $capexTot, $implemTot, $opexTot){
+    //return the data for the uc corresponding to the year.
+
+    $cash_out = $capexTot[$year] + $opexTot[$year] + $implemTot[$year] ;
+
+    return [$cash_out, $capexTot[$year], 0, 0, $implemTot[$year], 10, 20, 0, $opexTot[$year], 0, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+
+}
 
 function dashboards_use_case_details($twig,$is_connected, $projID){
     $user = getUser($_SESSION['username']);
@@ -225,11 +285,12 @@ function dashboards_use_case_details($twig,$is_connected, $projID){
             
             $list_ucs = getListUCs();
             $selScope = getListSelScope($projID);
-
             $schedules = getListSelDates($projID);
             $keydates_proj = getKeyDatesProj($schedules,$scope);
-            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);         
-            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'years'=>$projectYears, 'selDevSym'=>$selDevSym,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);  
+            $ucsData= getUcsData($projID, $selScope, $projectYears, $scope);    
+            //print_r($ucsData);   
+            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
             prereq_dashbords();
         }
     }

@@ -796,6 +796,8 @@ function getListWeights($ucmID){
 
 // ---------------------------------------- PROJECT ----------------------------------------
 
+
+
 function getProjByID($id,$idUser){
     $db = dbConnect();
     $req = $db->prepare('SELECT * FROM project WHERE id = ? and id_user = ?');
