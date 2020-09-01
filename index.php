@@ -887,8 +887,8 @@ try{
                 }
             }
 
-            elseif($_GET['A']=='cost_benefits' or $_GET['A']=='input_use_case_supplier'){
-
+            elseif($_GET['A']=='input_use_case_supplier') {
+                
             }
 
             // ---------- COST BENEFITS ----------
