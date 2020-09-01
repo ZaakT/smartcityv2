@@ -761,9 +761,53 @@ try{
                 }
             }
 
+            elseif($_GET['A']=='suppliers_dashboards'){
+                verifIsSup();
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        \general\project($twig,$is_connected, '?A=suppliers_dashboards&A2=proj_selected', 'suppliers_dashboards');
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=suppliers_dashboards&A2=summary&projID='.$projID);
+                        }
+                    }elseif($_GET['A2']=="summary"){
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID']);
+                        }else{
+                            header('Location: ?A=suppliers_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="project_details"){
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID']);
+                        }else{
+                            header('Location: ?A=suppliers_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="use_case_details"){
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID']);
+                        }else{
+                            header('Location: ?A=suppliers_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="non_monetizable"){
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_non_monetizable($twig,$is_connected, $_SESSION['projID']);
+                        }else{
+                            header('Location: ?A=suppliers_dashboards&A2project_selection');
+                        }
+                    }elseif($_GET['A2']=="qualitative"){
+                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
+                            dashboards_qualitative($twig,$is_connected, $_SESSION['projID']);
+                        }else{
+                            header('Location: ?A=suppliers_dashboards&A2project_selection');
+                        }
+                    }
+                }else{
+                    \general\commonPage($twig,$is_connected, '?A=suppliers_dashboards&A2=project_selection', 'suppliers_dashboards');
 
-
-            
+                }
+            }
 
             // ---------- COST BENEFITS ----------
             elseif($_GET['A']=='cost_benefits' or $_GET['A']=='input_use_case'){
@@ -1954,6 +1998,17 @@ try{
                     funding($twig,$is_connected); 
                 }            
             }
+
+            // ---------- SCENARIO SETTINGS ----------
+            elseif($_GET['A']=='scenario_settings'){
+                verifIsDev();
+                if(isset($_GET['A2'])){
+                    
+                } else {  
+                    scenario_settings($twig,$is_connected); 
+                }            
+            }
+
             // ---------- DASHBOARDS ----------
             elseif($_GET['A']=='dashboards'){
                 verifIsDev();
