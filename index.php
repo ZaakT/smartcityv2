@@ -603,9 +603,87 @@ try{
             
             }
             
-            // ---------- Customer BC ----------
+            // ---------- Customer BC / Supplier BC ----------
             // **** 
             // ---------- Input Project Common ----------
+            elseif($_GET['A']=='input_project_common_supplier'){
+                verifIsSup();
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=='project_selection'){
+                        \general\project($twig,$is_connected, '?A=input_project_common_supplier&A2=proj_selected',  'input_project_common_supplier');
+                        //project_ipc($twig,$is_connected);
+
+                    // --- SELECTED PROJECT ---
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=input_project_common_supplier&A2=schedule&projID='.$projID);
+                        }
+                    
+                    }elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
+                        // --- USE CASE SELECTION ---
+                        if($_GET['A2']=="schedule"){
+                                \general\schedule($twig,$is_connected,'?A=input_project_common&A2=schedule&projID='.$_SESSION['projID'],'input_project_common',$_SESSION['projID']);                        
+
+                        } elseif($_GET['A2']=="schedule"){
+                            if(isset($_POST['radio_uc'])){
+                                //var_dump($_POST);
+                                $ucID = intval($_POST['radio_uc']);
+                                $_SESSION['ucID']=$ucID;
+                                //var_dump($ucID);
+                                header('Location: ?A='.$_GET['A'].'&A2=capex&A3=selection&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_selection');
+                            }
+                        } elseif(isset($_GET['ucID']) and $_GET['ucID']!=0){
+                            // --- CAPEX OR OPEX OR DEPLOYMENT COST  (XPEX) ---
+                            if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3']=="selection"){
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']); 
+                                    }elseif($_GET['A3']=="selected"){
+                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2']); 
+                                    }elseif($_GET['A3']=="create_xpex"){
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2']); 
+                                    }elseif($_GET['A3']=="delete_xpex"){
+                                        if(isset($_GET['id'])){
+                                            delete_xpex_user($_GET['id'],$_GET['A2']); 
+                                        }else{
+                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                        }
+                                        
+                                    }elseif($_GET['A3']=="inputed"){
+                                        if(isset($_POST)){
+                                            xpex_inputed($_POST);
+                                        }
+                                        else{
+                                            header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                        }
+                                    }
+                                }else {
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']);
+                                }
+
+                            }                             
+                            else{
+                                
+                                header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
+                            }
+                        }
+
+                            
+                    } else {
+                        header('Location: ?A=input_project_common&A2=project_selection');
+                    }
+
+                } else {  
+                    //input_project_common($twig,$is_connected);
+                    \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=project_selection", "input_project_common");
+                }
+            }
+
             elseif($_GET['A']=='input_project_common'){
                 verifIsSup();
                 if(isset($_GET['A2'])){
@@ -807,6 +885,10 @@ try{
                     \general\commonPage($twig,$is_connected, '?A=suppliers_dashboards&A2=project_selection', 'suppliers_dashboards');
 
                 }
+            }
+
+            elseif($_GET['A']=='cost_benefits' or $_GET['A']=='input_use_case_supplier'){
+
             }
 
             // ---------- COST BENEFITS ----------
@@ -2003,7 +2085,7 @@ try{
             elseif($_GET['A']=='scenario_settings'){
                 verifIsDev();
                 if(isset($_GET['A2'])){
-                    
+                    //progression
                 } else {  
                     scenario_settings($twig,$is_connected); 
                 }            
