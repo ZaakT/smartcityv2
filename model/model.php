@@ -8,7 +8,7 @@ function dbConnect()
         return $db;
     } catch(Exception $e){ 
         try {
-            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=33060', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=3306', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
                 return $db;
         } catch (Exception $e2) {
             throw new Exception("Access to the database impossible ! : 
@@ -3766,6 +3766,29 @@ function getTotCapexByUC($projID,$ucID){
     return convertGBPToDev($tot);
 }
 
+function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){
+    //not valable for opex
+    if($xpex!="capex" and $xpex!="implem"){
+        throw new Exception("Wrong xpex (this function is not valable for opex) ! ");
+    }
+    if($origine!="from_ntt" and $origine!="from_outside_ntt" and $origine!="internal"){
+        throw new Exception("Wrong origine !");
+    }
+    if($origine=="internal" and $xpex=="capex" ){
+        throw new Exception ("Capex can't be internal.");
+    }
+    $db = dbConnect();
+    $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
+                            FROM input_'.$xpex.' 
+                            JOIN '.$xpex.'_item 
+                            ON id_item=id
+                            WHERE id_proj = ? and id_uc = ? and origine = ?');
+    $req->execute(array($projID,$ucID, $origine));
+    $res = $req->fetch()['tot'];
+    $tot = floatval($res);
+    return convertGBPToDev($tot);
+}
+
 function getCapexAmort($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare('SELECT id_item,period
@@ -3818,6 +3841,28 @@ function getNbUC($projID,$ucID){
     return $list;
 }
 
+function getOpexValuesOrigine($projID,$ucID, $origine){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
+                            FROM input_opex
+                            JOIN opex_item
+                            ON id = id_item
+                            WHERE id_proj = ? and id_uc = ? and origine = ?');
+    $req->execute(array($projID,$ucID, $origine));
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+        $an_var_vol = floatval($res['an_var_vol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+        $an_var_unitcost = floatval($res['an_var_unitcost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+        $cost = convertGBPToDev(floatval($res['cost']));
+
+        $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    //var_dump($list);
+    return $list;
+}
 function getOpexValues($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item

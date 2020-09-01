@@ -28,7 +28,7 @@
                             <select class="form-control" name="origine" id="origine" required>
                                 <option value = "from_ntt" selected> From NTT </option>
                                 <option value = "from_outside_ntt"> From Outside NTT </option>
-                                <option value = "internal"> Internal </option>
+                                {{ type!="capex" ? '<option value = "internal"> Internal </option>' }}
                             </select>
                         </div>
                     </div>
