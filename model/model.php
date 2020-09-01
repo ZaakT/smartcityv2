@@ -1716,7 +1716,6 @@ function getListImplemAdvice($ucID, $origine = "all"){
     $db = dbConnect();
     $origine_selection = "";
 
-echo "origine : $origine_selection<br>";
     if($origine=="from_ntt"){
         $origine_selection = "and implem_item.origine = 'from_ntt'";
     }elseif($origine == "from_outside_ntt"){

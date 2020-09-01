@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 28 août 2020 à 13:58
+-- Généré le :  mar. 01 sep. 2020 à 08:32
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -97,16 +97,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(2
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `min_red_nb` INT, IN `max_red_nb` INT, IN `idUC` INT)  BEGIN
-                                                    DECLARE itemID INT;
-                                                    INSERT INTO quantifiable_item (name,description)
-                                                        VALUES (quantifiable_name,quantifiable_desc);
-                                                    SET itemID = LAST_INSERT_ID();
-                                                    INSERT INTO quantifiable_uc (id_item,id_uc)
-                                                        VALUES (itemID,idUC);
-                                                    INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
-                                                        VALUES (itemID,unit,source,min_red_nb,max_red_nb);
-                                                END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO quantifiable_item (name,description)
+                                    VALUES (quantifiable_name,quantifiable_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO quantifiable_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO quantifiable_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -354,21 +354,25 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt' COMMENT 'Used in supplier part',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
 --
 
-INSERT INTO `capex_item` (`id`, `name`, `description`) VALUES
-(4, 'Capex name delibererement long 1', ''),
-(2, 'capexitem1', ''),
-(3, 'capexitem2', ''),
-(5, 'Capex name delibererement long 2', ''),
-(13, 'custom capex item', 'descr'),
-(17, '_-fghçjiopk', ''),
-(15, '5G capex item', '');
+INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`) VALUES
+(4, 'Capex name delibererement long 1', '', 'from_ntt'),
+(2, 'capexitem1', '', 'from_ntt'),
+(3, 'capexitem2', '', 'from_ntt'),
+(5, 'Capex name delibererement long 2', '', 'from_ntt'),
+(13, 'custom capex item', 'descr', 'from_ntt'),
+(17, '_-fghçjiopk', '', 'from_ntt'),
+(15, '5G capex item', '', 'from_ntt'),
+(19, 'test', '', 'from_ntt'),
+(21, 'Custom', '', 'from_ntt'),
+(22, 'cap', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -411,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -425,7 +429,14 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (5, 1),
 (13, 4),
 (15, 4),
-(17, 6);
+(17, 6),
+(18, 8),
+(19, 8),
+(20, 8),
+(21, 8),
+(22, 8),
+(23, 4),
+(24, 4);
 
 -- --------------------------------------------------------
 
@@ -456,7 +467,14 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (14, 6),
 (15, 7),
 (16, 6),
-(17, 3);
+(17, 3),
+(18, 1),
+(19, 1),
+(20, 1),
+(21, 1),
+(22, 1),
+(23, 7),
+(24, 7);
 
 -- --------------------------------------------------------
 
@@ -903,20 +921,22 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
 --
 
-INSERT INTO `implem_item` (`id`, `name`, `description`) VALUES
-(1, 'impitem1', ''),
-(3, 'implementation item 2', 'description'),
-(4, 'implementation item 2', ''),
-(5, 'test imp item', '10/03 10:28'),
-(6, 'IMPLEM', ''),
-(8, '5G IMPLEM ITEM', '');
+INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`) VALUES
+(1, 'impitem1', '', 'from_ntt'),
+(3, 'implementation item 2', 'description', 'from_ntt'),
+(4, 'implementation item 2', '', 'from_ntt'),
+(5, 'test imp item', '10/03 10:28', 'from_ntt'),
+(6, 'IMPLEM', '', 'from_ntt'),
+(8, '5G IMPLEM ITEM', '', 'from_ntt'),
+(11, 'aaaa', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -956,7 +976,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_user`
@@ -967,7 +987,10 @@ INSERT INTO `implem_item_user` (`id`, `id_proj`) VALUES
 (3, 1),
 (4, 4),
 (6, 4),
-(8, 4);
+(8, 4),
+(9, 8),
+(10, 8),
+(11, 8);
 
 -- --------------------------------------------------------
 
@@ -995,8 +1018,8 @@ CREATE TABLE IF NOT EXISTS `implem_schedule` (
 INSERT INTO `implem_schedule` (`id_uc`, `id_proj`, `start_date`, `25_completion`, `50_completion`, `75_completion`, `100_completion`) VALUES
 (1, 3, '2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2021-04-01'),
 (2, 3, '2020-01-01', '2020-02-01', '2020-03-01', '2020-04-01', '2021-04-01'),
-(3, 6, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-06-01'),
-(1, 6, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-06-01'),
+(3, 6, '2012-02-01', '2013-03-01', '2013-08-01', '2014-08-01', '2014-12-01'),
+(1, 6, '2012-02-01', '2013-03-01', '2013-08-01', '2014-08-01', '2014-12-01'),
 (10, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
 (3, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
 (5, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
@@ -1040,7 +1063,10 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (5, 5),
 (6, 3),
 (7, 6),
-(8, 7);
+(8, 7),
+(9, 1),
+(10, 1),
+(11, 1);
 
 -- --------------------------------------------------------
 
@@ -1076,13 +1102,16 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (2, 4, 2, 19, 50, 1),
 (3, 4, 2, 543, 50, 1),
 (12, 4, 3, 43, 28.5, 5),
-(4, 6, 1, 0, 0, 1),
-(3, 6, 1, 0, 0, 1),
+(4, 6, 1, 200, 20, 1),
+(3, 6, 1, 1000, 500, 1),
 (15, 4, 7, 1568, 54, 54),
 (17, 6, 3, NULL, NULL, NULL),
-(4, 8, 1, 100, 5500, 5),
-(5, 8, 1, 80, 2500, 2),
-(3, 8, 1, 2400, 200, 3);
+(4, 8, 1, 132, 5500, 5),
+(5, 8, 1, 660, 2500, 2),
+(3, 8, 1, 237, 200, 3),
+(18, 8, 1, 400, 1500, 5),
+(4, 3, 1, NULL, NULL, NULL),
+(19, 8, 1, 197, 100, 2);
 
 -- --------------------------------------------------------
 
@@ -1122,7 +1151,10 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (7, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (3, 8, 1, 'per example', 10, NULL, 10, 5, 6, 5, 5),
 (1, 8, 1, 'per example', 1500, NULL, 500, 5, 0, 5, 5),
-(2, 8, 1, 'per example', 5, NULL, 12000, 10, 10, 5, 5);
+(2, 8, 1, 'per example', 5, NULL, 12000, 10, 10, 5, 5),
+(3, 6, 1, 'per example', 10, NULL, 10, 1, 4, 10, 5),
+(1, 6, 1, 'per example', 20, NULL, 58, 2, 5, 1, 2),
+(2, 6, 1, 'per example', 30, NULL, 4, 4, 2, 4, 5);
 
 -- --------------------------------------------------------
 
@@ -1154,8 +1186,9 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (4, 4, 2, 1900, 1),
 (4, 6, 3, 621, 2),
 (4, 8, 7, 43545, 5),
-(8, 1, 1, 400, 100),
-(8, 3, 1, 100, 1200);
+(8, 1, 1, 396, 100),
+(8, 3, 1, 132, 1200),
+(6, 1, 1, 200, 500);
 
 -- --------------------------------------------------------
 
@@ -1185,7 +1218,8 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (3, 4, 1, 10, 25),
 (4, 4, 3, 9, 70),
 (5, 4, 2, 7, 50),
-(9, 8, 1, 7, 20);
+(9, 8, 1, 7, 20),
+(10, 6, 1, 5, 10);
 
 -- --------------------------------------------------------
 
@@ -1220,8 +1254,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (4, 2, 1, 67, 4, 2.5, 0, 0),
 (4, 4, 3, 56, NULL, 78, 6, 6),
 (4, 5, 2, 54, NULL, 5, 0, 0),
-(8, 2, 1, 100, NULL, 1050, 3, 10),
-(8, 1, 1, 240, NULL, 25, 20, -5);
+(8, 2, 1, 132, NULL, 1050, 3, 10),
+(8, 1, 1, 264, NULL, 25, 20, -5),
+(6, 2, 1, 300, NULL, 152, 10, 5);
 
 -- --------------------------------------------------------
 
@@ -1248,7 +1283,9 @@ CREATE TABLE IF NOT EXISTS `input_quantifiable` (
 --
 
 INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `volume_reduc`, `annual_var_volume`) VALUES
-(1, 4, 7, 'per test', 43, 43, 54);
+(1, 4, 7, 'per test', 43, 43, 54),
+(5, 8, 1, NULL, NULL, NULL, NULL),
+(6, 8, 1, 'personne', 750, 10, 5);
 
 -- --------------------------------------------------------
 
@@ -1281,8 +1318,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (4, 3, 2, 453, NULL, 54, 54, 5),
 (4, 4, 3, 78, NULL, 2, 45, 12),
 (4, 6, 2, NULL, NULL, NULL, NULL, NULL),
-(8, 1, 1, 30, NULL, 5, 5, 6),
-(8, 2, 1, 0, NULL, 0, 3, 1);
+(8, 1, 1, 5, NULL, 5, 5, 6),
+(8, 2, 1, 50, NULL, 1500, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -1312,7 +1349,8 @@ INSERT INTO `input_risk` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `pro
 (3, 4, 1, 10, 23),
 (4, 4, 3, 7, 80),
 (5, 4, 2, 7, 80),
-(6, 8, 1, 9, 10);
+(6, 8, 1, 9, 10),
+(7, 6, 1, 3, 50);
 
 -- --------------------------------------------------------
 
@@ -1353,7 +1391,8 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (5, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (8, 4, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (1, 8, 1, 'per example', 5, NULL, 10, 1, 2, 4, 4),
-(2, 8, 1, 'per example', 500, NULL, 2, 2, 2, 7, 5);
+(2, 8, 1, 'per example', 500, NULL, 2, 2, 2, 7, 5),
+(1, 6, 1, 'per example', 10, NULL, 20, 4, 5, 40, 2);
 
 -- --------------------------------------------------------
 
@@ -1698,7 +1737,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -1713,7 +1752,8 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (6, 'hivordfkjn', 'bgfkjbxn', NULL),
 (7, 'bvuid', 'vfdx', NULL),
 (8, 'testestest', 'vfd', NULL),
-(9, 'Bonheur', '', NULL);
+(9, 'Bonheur', '', NULL),
+(10, 'non cash item', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -1739,7 +1779,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -1751,7 +1791,8 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (3, 4),
 (4, 4),
 (5, 4),
-(9, 8);
+(9, 8),
+(10, 6);
 
 -- --------------------------------------------------------
 
@@ -1780,7 +1821,8 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (6, 5),
 (7, 5),
 (8, 3),
-(9, 1);
+(9, 1),
+(10, 1);
 
 -- --------------------------------------------------------
 
@@ -1793,6 +1835,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
@@ -1800,12 +1843,12 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
 -- Déchargement des données de la table `opex_item`
 --
 
-INSERT INTO `opex_item` (`id`, `name`, `description`) VALUES
-(1, 'opexitem1', ''),
-(2, 'opex item 2', ''),
-(3, 'uc2 opex', ''),
-(4, 'TEST OPEX ITEM', '10H 10 MARS'),
-(5, 'OPEX', '');
+INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`) VALUES
+(1, 'opexitem1', '', 'from_ntt'),
+(2, 'opex item 2', '', 'from_ntt'),
+(3, 'uc2 opex', '', 'from_ntt'),
+(4, 'TEST OPEX ITEM', '10H 10 MARS', 'from_ntt'),
+(5, 'OPEX', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -1887,8 +1930,8 @@ INSERT INTO `opex_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `50_
 (1, 1, '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01', '2020-06-01', '2020-07-01'),
 (1, 3, '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01', '2020-06-01', '2022-02-01'),
 (2, 3, '2020-02-01', '2020-03-01', '2020-04-01', '2020-05-01', '2020-06-01', '2022-02-01'),
-(3, 6, '2012-03-01', '2012-04-01', '2012-05-01', '2012-06-01', '2012-07-01', '2012-08-01'),
-(1, 6, '2012-03-01', '2012-04-01', '2012-05-01', '2012-06-01', '2012-07-01', '2012-08-01'),
+(3, 6, '2012-03-01', '2012-09-01', '2013-04-01', '2013-09-01', '2014-09-01', '2015-02-01'),
+(1, 6, '2012-03-01', '2012-09-01', '2013-04-01', '2013-09-01', '2014-09-01', '2015-02-01'),
 (10, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (3, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (5, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
@@ -2023,11 +2066,11 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-08-18 16:02:38', 1, 1, 0),
-(3, 'TESTV2', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-08-27 15:38:50', 1, 1, 0),
+(3, 'TESTV2', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-08-31 15:09:49', 1, 1, 0),
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
-(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-08-26 11:12:58', 1, 1, 1),
+(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-08-31 16:22:57', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-08-28 15:56:38', 1, 1, 1);
+(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-08-31 15:40:34', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -2124,46 +2167,78 @@ INSERT INTO `project_size` (`id_uc`, `id_zone`, `id_mag`, `id_proj`) VALUES
 (1, 4, 2, 3),
 (1, 4, 2, 4),
 (1, 4, 2, 6),
+(1, 4, 2, 8),
 (1, 5, 2, 1),
 (1, 5, 2, 4),
 (1, 5, 2, 6),
+(1, 5, 3, 8),
 (1, 6, 2, 4),
+(1, 6, 2, 8),
 (1, 7, 2, 5),
 (1, 7, 3, 3),
 (1, 7, 3, 4),
+(1, 7, 3, 8),
 (2, 3, 2, 1),
 (2, 4, 2, 3),
 (2, 4, 2, 4),
+(2, 4, 2, 8),
 (2, 4, 3, 1),
 (2, 5, 2, 1),
 (2, 5, 2, 4),
+(2, 5, 3, 8),
 (2, 6, 2, 4),
+(2, 6, 2, 8),
 (2, 7, 2, 5),
 (2, 7, 3, 3),
 (2, 7, 3, 4),
+(2, 7, 3, 8),
 (3, 3, 3, 1),
 (3, 4, 2, 1),
 (3, 4, 2, 3),
 (3, 4, 2, 4),
 (3, 4, 2, 6),
+(3, 4, 2, 8),
 (3, 5, 2, 1),
 (3, 5, 2, 4),
 (3, 5, 2, 6),
+(3, 5, 3, 8),
 (3, 6, 2, 4),
+(3, 6, 2, 8),
 (3, 7, 3, 3),
 (3, 7, 3, 4),
+(3, 7, 3, 8),
+(5, 4, 2, 8),
+(5, 5, 3, 8),
+(5, 6, 2, 8),
+(5, 7, 3, 8),
 (7, 4, 2, 4),
+(7, 4, 2, 8),
 (7, 5, 2, 4),
+(7, 5, 3, 8),
 (7, 6, 2, 4),
+(7, 6, 2, 8),
 (7, 7, 2, 4),
+(7, 7, 3, 8),
 (9, 4, 2, 4),
+(9, 4, 2, 8),
 (9, 5, 2, 4),
+(9, 5, 3, 8),
 (9, 6, 2, 4),
+(9, 6, 2, 8),
 (9, 7, 2, 4),
+(9, 7, 3, 8),
 (10, 4, 2, 4),
+(10, 4, 2, 8),
 (10, 5, 2, 4),
+(10, 5, 3, 8),
 (10, 6, 2, 4),
-(10, 7, 2, 4);
+(10, 6, 2, 8),
+(10, 7, 2, 4),
+(10, 7, 3, 8),
+(11, 4, 2, 8),
+(11, 5, 3, 8),
+(11, 6, 2, 8),
+(11, 7, 3, 8);
 
 -- --------------------------------------------------------
 
@@ -2250,7 +2325,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2258,7 +2333,8 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
 
 INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (1, 'test', 'htyjh'),
-(4, 'example quantifiable item', 'lorem ipsum');
+(4, 'example quantifiable item', 'lorem ipsum'),
+(6, 'Enfants dans les parcs', '');
 
 -- --------------------------------------------------------
 
@@ -2298,14 +2374,16 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
 --
 
 INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
-(1, 4);
+(1, 4),
+(5, 8),
+(6, 8);
 
 -- --------------------------------------------------------
 
@@ -2329,7 +2407,9 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (1, 7),
 (2, 2),
 (3, 5),
-(4, 7);
+(4, 7),
+(5, 1),
+(6, 1);
 
 -- --------------------------------------------------------
 
@@ -2600,7 +2680,9 @@ INSERT INTO `revenue_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `
 (1, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
 (9, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
 (2, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
-(7, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01');
+(7, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
+(3, 6, '2013-05-01', '2013-12-01', '2014-05-01', '2015-09-01', '2016-06-01', '2017-11-01'),
+(1, 6, '2013-05-01', '2013-12-01', '2014-05-01', '2015-09-01', '2016-06-01', '2017-11-01');
 
 -- --------------------------------------------------------
 
@@ -2615,7 +2697,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -2627,7 +2709,8 @@ INSERT INTO `risk_item` (`id`, `name`, `description`, `sources`) VALUES
 (3, 'risk custom item 1', '', NULL),
 (4, 'risks', '', NULL),
 (5, 'risks', '', NULL),
-(6, 'Maladie', '', NULL);
+(6, 'Maladie', '', NULL),
+(7, 'Peur', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2653,7 +2736,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -2665,7 +2748,8 @@ INSERT INTO `risk_item_user` (`id`, `id_proj`) VALUES
 (3, 4),
 (4, 4),
 (5, 4),
-(6, 8);
+(6, 8),
+(7, 6);
 
 -- --------------------------------------------------------
 
@@ -2691,7 +2775,8 @@ INSERT INTO `risk_uc` (`id_item`, `id_uc`) VALUES
 (3, 1),
 (4, 3),
 (5, 2),
-(6, 1);
+(6, 1),
+(7, 1);
 
 -- --------------------------------------------------------
 
@@ -3011,16 +3096,16 @@ CREATE TABLE IF NOT EXISTS `uc_vs_crit_input` (
 --
 
 INSERT INTO `uc_vs_crit_input` (`id_uc`, `id_crit`, `id_ucm`, `rate`) VALUES
-(5, 4, 1, 5),
-(5, 3, 1, 5),
-(5, 5, 1, 4),
-(5, 2, 1, 4),
-(5, 1, 1, 5),
 (3, 4, 1, 5),
 (3, 3, 1, 5),
 (3, 5, 1, 9),
 (3, 2, 1, 10),
 (3, 1, 1, 2),
+(5, 4, 1, 5),
+(5, 3, 1, 5),
+(5, 5, 1, 4),
+(5, 2, 1, 4),
+(5, 1, 1, 5),
 (1, 4, 1, 2),
 (1, 3, 1, 3),
 (1, 5, 1, 3),
@@ -3288,7 +3373,7 @@ CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
@@ -3301,7 +3386,9 @@ INSERT INTO `use_cases_menu` (`id`, `name`, `description`, `creation_date`, `id_
 (6, 'test', 'testing', '2020-06-29 16:12:35', 1),
 (7, 'test1', 'test', '2020-07-16 16:04:46', 5),
 (8, 'test1', 'test', '2020-08-17 09:19:57', 10),
-(9, 'MyProject', '', '2020-08-28 14:59:04', 1);
+(9, 'MyProject', '', '2020-08-28 14:59:04', 1),
+(10, 'Project1', '', '2020-08-31 15:11:38', 1),
+(11, 'MyProject2', 'test', '2020-08-31 15:12:59', 1);
 
 -- --------------------------------------------------------
 
@@ -3375,10 +3462,10 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (3, 7, 3, NULL, NULL, 10),
 (1, 7, 3, NULL, NULL, 10),
 (2, 7, 3, NULL, NULL, 10),
-(3, 5, 6, 0, 5, 10),
-(1, 5, 6, 54, 3, 10),
-(3, 4, 6, 0, 5, 10),
-(1, 4, 6, 5446, 5, 10),
+(3, 5, 6, NULL, NULL, 10),
+(1, 5, 6, NULL, NULL, 10),
+(3, 4, 6, NULL, NULL, 10),
+(1, 4, 6, NULL, NULL, 10),
 (11, 6, 4, NULL, NULL, 65),
 (10, 6, 4, NULL, NULL, 11),
 (3, 6, 4, NULL, NULL, 2),
@@ -3403,8 +3490,38 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (9, 7, 4, NULL, NULL, 65),
 (2, 7, 4, NULL, NULL, 76),
 (7, 7, 4, NULL, NULL, 654),
-(1, 3, 8, 100, 10, 10),
-(1, 2, 8, 100, 10, 10);
+(2, 7, 8, NULL, NULL, 33),
+(7, 7, 8, NULL, NULL, 10),
+(9, 7, 8, NULL, NULL, 33),
+(1, 7, 8, NULL, NULL, 33),
+(5, 7, 8, NULL, NULL, 33),
+(3, 7, 8, NULL, NULL, 33),
+(10, 7, 8, NULL, NULL, 33),
+(11, 7, 8, NULL, NULL, 33),
+(7, 4, 8, NULL, NULL, 3),
+(2, 4, 8, NULL, NULL, 11),
+(9, 4, 8, NULL, NULL, 11),
+(1, 4, 8, NULL, NULL, 11),
+(5, 4, 8, NULL, NULL, 11),
+(3, 4, 8, NULL, NULL, 11),
+(10, 4, 8, NULL, NULL, 11),
+(11, 4, 8, NULL, NULL, 11),
+(7, 5, 8, NULL, NULL, 5),
+(2, 5, 8, NULL, NULL, 11),
+(9, 5, 8, NULL, NULL, 11),
+(1, 5, 8, NULL, NULL, 11),
+(5, 5, 8, NULL, NULL, 11),
+(3, 5, 8, NULL, NULL, 11),
+(10, 5, 8, NULL, NULL, 11),
+(11, 5, 8, NULL, NULL, 11),
+(7, 6, 8, NULL, NULL, 2),
+(2, 6, 8, NULL, NULL, 11),
+(9, 6, 8, NULL, NULL, 11),
+(1, 6, 8, NULL, NULL, 11),
+(5, 6, 8, NULL, NULL, 11),
+(3, 6, 8, NULL, NULL, 11),
+(10, 6, 8, NULL, NULL, 11),
+(11, 6, 8, NULL, NULL, 11);
 
 -- --------------------------------------------------------
 
