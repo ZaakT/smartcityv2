@@ -436,6 +436,18 @@ try{
                             ucm1($twig,$is_connected);
                         }
                     }
+                    // --------- Create UCM ----------
+                    elseif($_GET['A2']=="create_ucm1"){
+                        create_ucm1($_POST);
+                    }
+                    elseif($_GET['A2']=="delete_ucm1"){
+                        if(isset($_GET['id'])){
+                            delete_ucm1($_GET['id']);
+                        }
+                        else {
+                            header('Location: ?A=project_sdesign&A2=ucm1');
+                        }
+                    }
                     // --- SELECTED USE CASES MENU ---
                     elseif($_GET['A2']=="ucm_selected"){
                         if(isset($_POST['radio_ucm'])){
