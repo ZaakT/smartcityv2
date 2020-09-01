@@ -38,20 +38,14 @@
     ["Cummulated Net Societal Cash", "cummulatedNetSocietalCash", 1]
 ] %}
 {% set colNames = [""]|merge(years) %}
-{#% set colNames = ["", "2015", "2016"] %#}
 
-{#% set data = [["0", 
-                    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
-                    ["1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7", "1.7"]
-                    ]] %#}
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
-        <p>Lorep ipsum</p>
-        <p>..............</p>
-        <p>In this section, the Toolkit ...</p>
+        <p>Dashboard of Project Cash-Out and Cash-In items (annual / monthly scheduling).</p>
+
     </div>
 </div>
 {{ table.table(lineNames, colNames, selDevSym) }}
