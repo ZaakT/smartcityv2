@@ -1856,7 +1856,7 @@ function getListSelImplem($projID,$ucID){
     return $list;
 }
 
-function insertImplemUser($projID,$ucID,$implem_data){
+function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_implem`;');
@@ -1864,12 +1864,13 @@ function insertImplemUser($projID,$ucID,$implem_data){
                             IN implem_name VARCHAR(255),
                             IN implem_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN origine VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO implem_item (name,description)
-                                    VALUES (implem_name,implem_desc);
+                                INSERT INTO implem_item (name,description, origine)
+                                    VALUES (implem_name,implem_desc, origine);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO implem_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -1877,8 +1878,8 @@ function insertImplemUser($projID,$ucID,$implem_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_implem(?,?,?,?);');
-    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_implem(?,?,?,?,?);');
+    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine));
     return $ret;
 }
 
@@ -2113,7 +2114,8 @@ function getListSelOpex($projID,$ucID){
     return $list;
 }
 
-function insertOpexUser($projID,$ucID,$opex_data){
+
+function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_opex`;');
@@ -2121,12 +2123,13 @@ function insertOpexUser($projID,$ucID,$opex_data){
                             IN opex_name VARCHAR(255),
                             IN opex_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN origine VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO opex_item (name,description)
-                                    VALUES (opex_name,opex_desc);
+                                INSERT INTO opex_item (name,description, origine)
+                                    VALUES (opex_name,opex_desc, origine);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO opex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2135,8 +2138,8 @@ function insertOpexUser($projID,$ucID,$opex_data){
                             END
                                 ');
     //var_dump($projID,$ucID,$opex_data);
-    $req = $db->prepare('CALL add_opex(?,?,?,?);');
-    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_opex(?,?,?,?, ?);');
+    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine));
     return $ret;
 }
 

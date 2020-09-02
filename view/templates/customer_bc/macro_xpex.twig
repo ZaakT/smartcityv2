@@ -1,4 +1,4 @@
-{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", userMode = false ) %}
+{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false ) %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 {% for id,item in xpex %}
     <tr id = "tr_{{ id }}" scope="row">
@@ -7,17 +7,17 @@
         <td scope="col">{{ item['description'] }}</td>  
         {% if userMode %}                  
             <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
-            {{ modal.delete_xpex(id,item['name'],projID,ucID, type) }}
+            {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
         {% endif %}
     </tr>         
 {% endfor %}
 {% endmacro %}
 
-{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", userMode = false) %}
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false) %}
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 
 
-<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and sideBarName == "input_project_common") %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -31,15 +31,15 @@
             </thead>
             {% if xpex_from_ntt %}
                 <td colspan="{{userMode ? 4 : 3 }}"> <strong>Procured From NTT </strong></td>
-                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
             {% endif %}
             {% if xpex_from_outside_ntt %}
                 <td colspan="{{userMode ? 4 : 3 }}"><strong>Procured From Outside NTT </strong></td>
-                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
             {% endif %}
             {% if xpex_internal %}
                 <td colspan="{{userMode ? 4 : 3 }}"><strong> Internal </strong></td>
-                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, userMode) }}
+                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, userMode) }}
             {% endif %}
         </table>
     </div>

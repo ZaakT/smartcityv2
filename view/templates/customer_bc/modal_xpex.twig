@@ -1,7 +1,7 @@
-{% macro create_xpex(projID=0,ucID=0, type="capex") %}
+{% macro create_xpex(projID=0,ucID=0, type="capex", sideBarName) %}
 <div class="modal fade" id="createNewXpexModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createXpex-form" action="?A=input_project_common&amp;A2={{type}}&amp;A3=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+        <form id="createXpex-form" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel3">Please enter the new {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif type =="deployment_costs"%}deployment and set-up{% endif %} item informations</h5>
@@ -28,7 +28,7 @@
                             <select class="form-control" name="origine" id="origine" required>
                                 <option value = "from_ntt" selected> From NTT </option>
                                 <option value = "from_outside_ntt"> From Outside NTT </option>
-                                {{ type!="capex" ? '<option value = "internal"> Internal </option>' }}
+                                {{ (type!="capex" and isSup ) ? '<option value = "internal"> Internal </option>' }}
                             </select>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
 {% endmacro %}
 
 
-{% macro delete_xpex(idXpex,nameXpex,projID=0,ucID=0, type="capex") %}
+{% macro delete_xpex(idXpex,nameXpex,projID=0,ucID=0, type="capex", sideBarName) %}
 <div class="modal fade" id="askDeleteXpex_{{ idXpex}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -59,7 +59,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=input_project_common&amp;A2={{type}}&amp;A3=delete_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idXpex }}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idXpex }}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@
 
 
 
-{% macro delete_selection(projID=0,ucID=0) %}
+{% macro delete_selection(projID=0,ucID=0, sideBarName) %}
 <div class="modal fade" id="deleteSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -84,7 +84,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=input_project_common&amp;A2=delete_selection_capex&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_selection&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>

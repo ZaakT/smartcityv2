@@ -13,9 +13,9 @@ function prereq_CostBenefits1(check){
 
 function prereq_CostBenefits2(check,hasRevSchedule){
     if(hasRevSchedule){
-        var parts_cond = ["capex","implem","opex","revenues","cashreleasing","widercash","quantifiable","noncash","risks"];
+        var parts_cond = ["capex","implem", "deployment_costs","opex","revenues","cashreleasing","widercash","quantifiable","noncash","risks"];
     } else {
-        var parts_cond = ["capex","implem","opex","cashreleasing","widercash","quantifiable","noncash","risks"];
+        var parts_cond = ["capex","implem", "deployment_costs","opex","cashreleasing","widercash","quantifiable","noncash","risks"];
     }
     if(check){
         parts_cond.forEach(part => {
