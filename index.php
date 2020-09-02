@@ -617,17 +617,30 @@ try{
             
             // ---------- Customer BC / Supplier BC ----------
             // **** 
-            // ---------- Input Project Common ----------
+            // ---------- Input Project Common SUPPLIER ----------
             elseif($_GET['A']=='input_project_common_supplier'){
                 verifIsSup();
                 if(isset($_GET['A2'])){
-                   
+                    if($_GET['A2']=='project_selection'){
+                        \general\project($twig,$is_connected, '?A=input_project_common_supplier&A2=proj_selected',  'input_project_common_supplier');
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A=input_project_common_supplier&A2=schedule&projID='.$projID);
+                        }
+                    } elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
+                        if($_GET['A2']=="schedule"){
+                            supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
+                        }
+                    }
                 } else {  
                     //input_project_common($twig,$is_connected);
                     \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
                 }
             }
 
+            // ---------- Input Project Common CUSTOMER ----------
             elseif($_GET['A']=='input_project_common'){
                 verifIsSup();
                 if(isset($_GET['A2'])){
