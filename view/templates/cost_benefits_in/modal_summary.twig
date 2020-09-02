@@ -12,10 +12,16 @@
                 Where do you want to go now ?
             </div>
             <div class="modal-footer justify-content-center">
+            {% if isDev %}
                 <a href="?A=funding&amp;A2=scenario"><button type="button" class="btn btn-secondary">Funding</button></a>
                 <a href="?A=business_model&amp;A2=project"><button type="button" class="btn btn-secondary">Business Model</button></a>
                 <a href="?A=dashboards&amp;A2=project"><button type="button" class="btn btn-dark">Dashboards</button></a>
                 <a href="?A=comp_projects&amp;A2=projects"><button type="button" class="btn btn-dark">Comparison</button></a>
+            {% elseif isSup %}
+                <a href="?A=customer_dashboards"><button type="button" class="btn btn-dark">Dashboards</button></a>
+                <a href="?A=deal_criteria&amp;A3=customer"><button type="button" class="btn btn-dark">Deal Criteria</button></a>
+
+            {% endif %}
             </div>
         </div>
     </div>

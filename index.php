@@ -763,30 +763,35 @@ try{
             // ---------- Deal Criteria ----------
             elseif($_GET['A']=='deal_criteria'){
                 verifIsSup();
-                if(isset($_GET['A2'])){
-                    if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
-                    // --- SELECTED PROJECT ---
-                    } elseif($_GET['A2']=="proj_selected"){
-                        if(isset($_POST['radio_proj'])){
-                            $projID = intval($_POST['radio_proj']);
-                            $_SESSION['projID']=$projID;
-                            header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID.'&A3='.$_GET['A3']);
+                if(isset($_GET['A3']) and ($_GET['A3']=="" or $_GET['A3']=="supplier" or $_GET['A3']=="customer")){
+                    if(isset($_GET['A2'])){
+                        if($_GET['A2']=='project_selection'){
+                            \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
+                        // --- SELECTED PROJECT ---
+                        } elseif($_GET['A2']=="proj_selected"){
+                            if(isset($_POST['radio_proj'])){
+                                $projID = intval($_POST['radio_proj']);
+                                $_SESSION['projID']=$projID;
+                                header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID.'&A3='.$_GET['A3']);
+                            }
+                        // --- DEAL CRiTERIA ---
+                        } elseif($_GET['A2']=="deal_criteria"){
+                            if(isset($_SESSION['projID'])){
+                                deal_criteria($twig,$is_connected, $_SESSION['projID'], $_GET['A3']);
+                            }else{
+                                header('Location: ?A=deal_criteria&A2project_selection&A3='.$_GET['A3']);
+                            }
+                            
+                        } else if($_GET['A2']=="deal_criteria_input") {
+                            deal_criteria_input_nogo_target($_POST, $_GET['A3']);
                         }
-                    // --- DEAL CRiTERIA ---
-                    } elseif($_GET['A2']=="deal_criteria"){
-                        if(isset($_SESSION['projID'])){
-                            deal_criteria($twig,$is_connected, $_SESSION['projID'], $_GET['A3']);
-                        }else{
-                            header('Location: ?A=deal_criteria&A2project_selection&A3='.$_GET['A3']);
-                        }
-                        
-                    } else if($_GET['A2']=="deal_criteria_input") {
-                        deal_criteria_input_nogo_target($_POST, $_GET['A3']);
+                    } else {  
+                        \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
                     }
-                } else {  
-                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
+                }else{
+                    header('Location: ?A=home');
                 }
+                
             }
             // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
