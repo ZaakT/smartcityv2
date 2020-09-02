@@ -3,6 +3,7 @@
 //require_once('model/model.php');
 
 
+
 function dashboards($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     $devises = getListDevises();
@@ -3467,6 +3468,9 @@ function getWeightedScores2($fin_score,$soc_score,$capexList){
 function prereq_dashboards(){
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
+        echo "
+        
+        <script>prereq_dashboards();</script>";
     }
 }
 
