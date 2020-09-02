@@ -4,7 +4,7 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
 
-{% block title %}{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Input {% endblock %}
+{% block title %}{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %}Input {% endblock %}
 
 {% block sidebar %}{{ sidebar.sidebar(sideBarName,projID,ucID) }}{% endblock %}
 
@@ -25,7 +25,7 @@
 {#-------------- corps --------------#}
 
 
-<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and sideBarName == "input_project_common") %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Input </span><span style="font-weight: 400;"></span></h2>
+<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Input </span><span style="font-weight: 400;"></span></h2>
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
         <p class="text-justify">{{lorem|nl2br}}</p>

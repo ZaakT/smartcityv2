@@ -4,7 +4,7 @@
         <form id="createXpex-form" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel3">Please enter the new {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif type =="deployment_costs"%}deployment and set-up{% endif %} item informations</h5>
+                <h5 class="modal-title" id="exampleModalLabel3">Please enter the new {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif (type =="deployment_costs" and isSup) %}deployment and set-up{% elseif type =="deployment_costs" %}implmentation{% endif %} item informations</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -49,13 +49,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} item deleting confirmation</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} item deleting confirmation</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Do you want to delete this {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif type =="deployment_costs"%}deployment and set-up{% endif %} item ({{ nameXpex }}) ?
+                Do you want to delete this {% if type == "capex" %}capex{% elseif type =="opex" %}opex{% elseif (type =="deployment_costs" and isSup) %}deployment and set-up{% elseif type =="deployment_costs" %}implmentation{% endif %} item ({{ nameXpex }}) ?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -69,7 +69,7 @@
 
 
 
-{% macro delete_selection(projID=0,ucID=0, sideBarName) %}
+{% macro delete_selection(projID=0,ucID=0, type, sideBarName) %}
 <div class="modal fade" id="deleteSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -84,9 +84,39 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_selection&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_selection_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>
 </div>
 {% endmacro %}
+
+
+
+{% macro ask_fill(projID=0,ucID=0, type, sideBarName) %}
+    {% if type == "capex" %}{% set next = "deployment_costs" %}
+    {% elseif type == "deployment_costs" %}{% set next = "opex" %}
+    {% elseif type == "opex" %}{% set next = "revenues" %}
+    {% endif %}
+
+    <div class="modal fade" id="askFillXpex" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Access to {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Selection Page</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to fill this part ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Yes</button>
+                    <a href="?A={{sideBarName}}&amp;A2={{next}}&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-secondary">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+

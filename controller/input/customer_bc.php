@@ -383,3 +383,28 @@ function xpex_inputed($post, $sideBarName){
         throw new Exception("There is no data input !");
     }
 }
+
+
+function delete_selection_xpex($projID=0,$ucID=0, $type, $sideBarName){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0 and $ucID!=0){
+        if(getProjByID($projID,$user[0]) and getUCByID($ucID)){
+            if($type == "capex"){
+                deleteAllSelCapex($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=deployment_costs&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "opex"){
+                deleteAllSelOpex($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "deployment_costs"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }else{
+                throw new Exception("Wrong type !");
+            }
+        } else {
+            header('Location: ?A='.$sideBarName.'&A2=project');
+        }
+    } else {
+        throw new Exception("There is no project or use case selected !");
+    }
+}

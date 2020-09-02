@@ -905,7 +905,7 @@ try{
                         }
                     
                     // --- CAPEX ---
-                    }elseif($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
+                    }elseif(isSup() and ( $_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs")){
                         if(isset($_GET['ucID']) and $_GET['ucID']!=0 and isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
@@ -928,6 +928,8 @@ try{
                                         else{
                                             header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
                                         }
+                                    }elseif($_GET['A3']=="delete_selection_xpex"){
+                                        delete_selection_xpex($_SESSION['projID'],$_GET['ucID'],$_GET['A2'], $_GET['A'] );
                                     }
                                 }else {
                                     xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']);
@@ -939,8 +941,8 @@ try{
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$projID);
                             }
                     }
-                    
-                    /* elseif($_GET['A2']=="capex"){
+                    // -*-*
+                    elseif($_GET['A2']=="capex"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
@@ -1259,9 +1261,9 @@ try{
                         //var_dump($_POST);
                         opex_inputed($_POST);
 
-                    
+                    // -*-*
                         // --- REVENUES ---
-                    }*/ elseif($_GET['A2']=="revenues"){
+                    }elseif($_GET['A2']=="revenues"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
                                 if(isset($_GET['ucID'])){
