@@ -782,7 +782,7 @@ try{
                         }
                         
                     } else if($_GET['A2']=="deal_criteria_input") {
-                        deal_criteria_input_nogo_target($_POST);
+                        deal_criteria_input_nogo_target($_POST, $_GET['A3']);
                     }
                 } else {  
                     \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
