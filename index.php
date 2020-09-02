@@ -893,8 +893,8 @@ try{
             // ---------- INPUT USE CASE (SUPPLIER !!) ----------
             elseif($_GET['A']=='input_use_case_supplier') {
                 if(isset($_GET['A2'])) { 
-                    if($_GET['A2']=="project_cb"){
-                        \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "cost_benefits");
+                    if($_GET['A2']=="project_selection"){
+                        \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "input_use_case_supplier");
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
@@ -905,7 +905,7 @@ try{
                     } elseif($_GET['A2']=="use_case_cb"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
-                                \general\use_case_selection($twig,$is_connected,'?A=cost_benefits&A2=uc_selected&projID='.$_SESSION['projID'],$_GET['A'],$_SESSION['projID']);
+                                \general\use_case_selection($twig,$is_connected,'?A=input_use_case_supplier&A2=uc_selected&projID='.$_SESSION['projID'],$_GET['A'],$_SESSION['projID']);
                             }
                             else {
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
@@ -920,7 +920,7 @@ try{
                                 if(isset($_POST['radio_uc'])){
                                     $ucID = intval($_POST['radio_uc']);
                                     $_SESSION['ucID']=$ucID;
-                                    header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                                    header('Location: ?A='.$_GET['A'].'&A2=schedule&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                 }
                                 else {
                                     header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
@@ -933,10 +933,14 @@ try{
                         else {
                             header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
                         }
-                    } elseif($_GET['A2']=="schedule"){
+                    } elseif($_GET['A2']=="schedule") {
+                        use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } elseif($_GET['A2']=="equipment_revenues"){
+                        use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } elseif($_GET['A2']=="deployment_revenues"){
+                        use_case_deployment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } elseif($_GET['A2']=="operating_revenues"){
+                        use_case_operating($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } 
                 } else {
                     input_use_case_supplier($twig,$is_connected);

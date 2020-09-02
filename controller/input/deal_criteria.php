@@ -51,6 +51,7 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 throw new Exception("There is an error with the input fields !");
             }
         } elseif ($side == "supplier") {
+            //Supplier BC SIDE
             throw new Exception("Not yet implemented !");
         }
     } else {
