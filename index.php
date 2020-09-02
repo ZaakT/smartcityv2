@@ -649,30 +649,30 @@ try{
                          if($_GET['A2']=="schedule") {
                             supplier_schedule($twig,$is_connected,$_SESSION['projID'], $_GET['ucID']); 
                         } elseif($_GET['A2']=="capex" or $_GET['A2']=="opex") { 
-                            if(isset($_GET['A3'])) {
+                            if(isset($_GET['A3'])){
                                 if($_GET['A3']=="selection"){
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']); 
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']); 
                                 }elseif($_GET['A3']=="selected"){
-                                    xpex_selected($twig,$is_connected, $_POST,  $_GET['A2']); 
+                                    xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
                                 }elseif($_GET['A3']=="create_xpex"){
-                                    create_xpex($twig,$is_connected, $_POST,  $_GET['A2']); 
+                                    create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
                                 }elseif($_GET['A3']=="delete_xpex"){
                                     if(isset($_GET['id'])){
-                                        delete_xpex_user($_GET['id'],$_GET['A2']); 
+                                        delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
                                     }else{
                                         header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
                                     }
                                     
-                                } elseif($_GET['A3']=="inputed"){
+                                }elseif($_GET['A3']=="inputed"){
                                     if(isset($_POST)){
-                                        xpex_inputed($_POST);
+                                        xpex_inputed($_POST, $_GET['A']);
                                     }
                                     else{
                                         header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
                                     }
                                 }
                             }else {
-                                xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'], $_GET['A2']);
+                                xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']);
                             }
                         }
                      }  
