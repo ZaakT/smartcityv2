@@ -9,7 +9,7 @@ function page2Imgs(where){
             onrendered: function(canvas) {
                 var imgData = canvas.toDataURL('image/png');
                 //list_content[id] = imgData;
-                console.log(imgData);
+                //console.log(imgData);
                 list_content.push(imgData);
             },
         });

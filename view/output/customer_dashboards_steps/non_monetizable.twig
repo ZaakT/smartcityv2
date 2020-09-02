@@ -5,6 +5,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/customer_dashboards/macro_option.twig" as option %}
+{% import "/templates/customer_dashboards/macro_table.twig" as table %}
 
 
 {% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
@@ -12,6 +13,9 @@
 {% block title %}Dashbords - Non monetizable{% endblock %}
 
 {% block content %}
+
+{% set colNames = ["Items"]|merge(years) %}
+{% set lineName = [[]] %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
@@ -23,6 +27,8 @@
 </div>
 
 {{ option.option(selScope, ucs) }}
+
+{{ table.table(lineNames, colNames, selDevSym)}}
 
 {% endblock %}
 

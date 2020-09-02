@@ -246,7 +246,8 @@ function dashboards_use_case_details($twig,$is_connected, $projID){
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);  
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope);    
             //print_r($ucsData);   
-            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
+            echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
+            'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
             prereq_dashbords();
         }
     }
@@ -262,11 +263,15 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]);
+            $scope = getListSelScope($projID);
             $ucs = getListUCs();
             $selScope = getListSelScope($projID);
+            $schedules = getListSelDates($projID);
+            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
             echo $twig->render('/output/customer_dashboards_steps/non_monetizable.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
             'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
-            'selScope'=>$selScope, 'ucs'=>$ucs)); 
+            'selScope'=>$selScope, 'ucs'=>$ucs, 'years'=>$projectYears)); 
             prereq_dashbords();
         }
     }
