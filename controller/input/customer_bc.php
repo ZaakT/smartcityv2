@@ -10,7 +10,7 @@ function prereq_ipc($nb){
 }
 
 
-function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTaken=false){
+function xpex_selection($twig,$is_connected,$projID, $ucID, $sideBarName, $type="capex",$isTaken=false){
     //Permet d'afficher la page de séléction des capex ou opex. Le paramètre "$type" permet de choisir si il s'agit d'opex ou de capex.
     $user = getUser($_SESSION['username']);
     if($projID!=0){
@@ -63,8 +63,9 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
                     'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,
                     "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
                     "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
-                    'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'ucID'=>$ucID, 'projID'=>$projID));
+                    'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'ucID'=>$ucID, 'projID'=>$projID, "sideBarName"=>$sideBarName));
                     prereq_ipc(1);
+                    prereq_CostBenefits();
                 } else {
                     throw new Exception("This Use Case doesn't exist !");
                 }
@@ -79,7 +80,7 @@ function xpex_selection($twig,$is_connected,$projID, $ucID, $type="capex",$isTak
     }
 }
 
-function xpex_selected($twig,$is_connected,$post, $type){
+function xpex_selected($twig,$is_connected,$post, $type, $sideBarName){
     if($post){
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
@@ -123,7 +124,7 @@ function xpex_selected($twig,$is_connected,$post, $type){
                 }
                 update_ModifDate_proj($projID);
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                xpex_input($twig,$is_connected,$projID,$ucID, $type);
+                xpex_input($twig,$is_connected,$projID,$ucID, $type, $sideBarName);
                 //updateCB($projID,0);
             } else {
                 throw new Exception("There is no UC selected !");
@@ -137,7 +138,7 @@ function xpex_selected($twig,$is_connected,$post, $type){
 }
 
 
-function xpex_input($twig,$is_connected,$projID=0,$ucID=0, $type="capex"){
+function xpex_input($twig,$is_connected,$projID=0,$ucID=0, $type="capex", $sideBarName){
     /* 
     INPUT:  ID du projet, et id du UC
     OUTPUT: capex_input.twig
@@ -226,8 +227,9 @@ function xpex_input($twig,$is_connected,$projID=0,$ucID=0, $type="capex"){
                 "selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,'selXpex'=>$list_selXpex, 
                 "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
                 "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
-                'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc, 'type'=>$type));
+                'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName));
                 prereq_ipc(1);
+                prereq_CostBenefits();
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }
@@ -236,7 +238,7 @@ function xpex_input($twig,$is_connected,$projID=0,$ucID=0, $type="capex"){
         }
     }
 
-function create_xpex($twig,$is_connected, $post,  $type) {
+function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
         if(isset($_SESSION['ucID'])){
@@ -245,13 +247,14 @@ function create_xpex($twig,$is_connected, $post,  $type) {
             $description = isset($post['description']) ? $post['description'] : "";
             $origine = $post['origine'];
             $xpex_infos = ["name"=>$name,"description"=>$description];
+            //echo $origine;
 
             //var_dump(getCapexUserItem($projID,$ucID,$name));
             if($name==''){
                 throw new Exception("Incorrect name.");
             }
             if(!empty(getCapexUserItem($projID,$ucID,$name)) or !empty(getOpexUserItem($projID,$ucID,$name)) or !empty(getImplemUserItem($projID,$ucID,$name))){
-                header('Location: ?A=input_project_common&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
+                header('Location: ?A='.$sideBarName.'&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
                 if($type=="capex"){
                     insertCapexUser($projID,$ucID,$xpex_infos, $origine);
@@ -262,7 +265,7 @@ function create_xpex($twig,$is_connected, $post,  $type) {
                 }else{
                     throw new Exception("Wrong type !");
                 }
-                header('Location: ?A=input_project_common&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
             }
         } else {
             throw new Exception("There is no UC selected !");
@@ -272,7 +275,7 @@ function create_xpex($twig,$is_connected, $post,  $type) {
     }
 }
 
-function delete_xpex_user($idXpex, $type){
+function delete_xpex_user($idXpex, $type, $sideBarName){
     //var_dump(intval($idCapex));
     echo $idXpex;
     if(isset($_GET['projID'])){
@@ -288,7 +291,7 @@ function delete_xpex_user($idXpex, $type){
             }else{
                 throw new Exception("Wrong type !");
             }
-            header('Location: ?A=input_project_common&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+            header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
         } else {
             throw new Exception("There is no UC selected !");
         }
@@ -298,7 +301,7 @@ function delete_xpex_user($idXpex, $type){
 }
 
 
-function xpex_inputed($post){
+function xpex_inputed($post, $sideBarName){
     if($post){
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
@@ -354,9 +357,21 @@ function xpex_inputed($post){
                     throw new Exception("Wrong type !");
                 }
                 update_ModifDate_proj($projID);
-                //updateCB($projID,0);
-                //echo "<script>alert('ok');</script>";
-                header('Location: ?A=input_project_common&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+                if($sideBarName=="input_project_common"){
+
+                    header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+                }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
+                    if ($type == "capex"){
+                        header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
+                    }
+                    elseif($type == "deployment_costs"){
+                        header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
+                    }elseif($type == "opex"){
+                        header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID); 
+                    }
+                }
+
+                
                 
             } else {
                 throw new Exception("There is no UC selected !");
