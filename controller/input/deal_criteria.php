@@ -1,6 +1,6 @@
 <?php
 
-function deal_criteria($twig,$is_connected, $projID){
+function deal_criteria($twig,$is_connected, $projID, $side){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -13,7 +13,7 @@ function deal_criteria($twig,$is_connected, $projID){
 
             
             $inputNogoTarget = getDealCriteriaInputNogoTarget($projID);
-            echo $twig->render('/input/deal_criteria_steps/deal_criteria.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects, 'input'=>$inputNogoTarget)); 
+            echo $twig->render('/input/deal_criteria_steps/deal_criteria.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects, 'input'=>$inputNogoTarget, 'side'=>$side)); 
 
         }
     }
