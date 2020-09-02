@@ -620,22 +620,64 @@ try{
             // ---------- Input Project Common SUPPLIER ----------
             elseif($_GET['A']=='input_project_common_supplier'){
                 verifIsSup();
-                if(isset($_GET['A2'])){
+                if(isset($_GET['A2'])) {
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=input_project_common_supplier&A2=proj_selected',  'input_project_common_supplier');
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=input_project_common_supplier&A2=schedule&projID='.$projID);
+                            header('Location: ?A=input_project_common_supplier&A2=use_case_selection&projID='.$projID);
                         }
                     } elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
-                        if($_GET['A2']=="schedule"){
-                            supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
+                        //Le projet est choisi
+                        if($_GET['A2']=="use_case_selection"){
+                            \general\use_case_selection($twig,$is_connected,'?A=input_project_common_supplier&A2=use_case_selected&projID='.$_SESSION['projID'],'input_project_common_supplier',$_SESSION['projID']);                        
+                    } elseif($_GET['A2']=="use_case_selected"){
+                        if(isset($_POST['radio_uc'])){
+                            //var_dump($_POST);
+                            $ucID = intval($_POST['radio_uc']);
+                            $_SESSION['ucID']=$ucID;
+                            //var_dump($ucID);
+                            header('Location: ?A='.$_GET['A'].'&A2=schedule&A3=selection&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                         }
-                    }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=use_case_selection');
+                        }
+                     } elseif(isset($_GET['ucID']) and $_GET['ucID']!=0){ 
+                         //Le use case est choisi
+                         if($_GET['A2']=="schedule") {
+                            supplier_schedule($twig,$is_connected,$_SESSION['projID'], $_GET['ucID']); 
+                        } elseif($_GET['A2']=="capex" or $_GET['A2']=="opex") { 
+                            if(isset($_GET['A3'])){
+                                if($_GET['A3']=="selection"){
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']); 
+                                }elseif($_GET['A3']=="selected"){
+                                    xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                }elseif($_GET['A3']=="create_xpex"){
+                                    create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                }elseif($_GET['A3']=="delete_xpex"){
+                                    if(isset($_GET['id'])){
+                                        delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
+                                    }else{
+                                        header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                    }
+                                    
+                                }elseif($_GET['A3']=="inputed"){
+                                    if(isset($_POST)){
+                                        xpex_inputed($_POST, $_GET['A']);
+                                    }
+                                    else{
+                                        header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                    }
+                                }
+                            }else {
+                                xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']);
+                            }
+                        }
+                     }  
+                    }  
                 } else {  
-                    //input_project_common($twig,$is_connected);
                     \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
                 }
             }
@@ -660,7 +702,6 @@ try{
                         // --- USE CASE SELECTION ---
                         if($_GET['A2']=="use_case_selection"){
                                 \general\use_case_selection($twig,$is_connected,'?A=input_project_common&A2=use_case_selected&projID='.$_SESSION['projID'],'input_project_common',$_SESSION['projID']);                        
-
                         } elseif($_GET['A2']=="use_case_selected"){
                             if(isset($_POST['radio_uc'])){
                                 //var_dump($_POST);
@@ -724,27 +765,27 @@ try{
                 verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected', 'deal_criteria');
+                        \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
                     // --- SELECTED PROJECT ---
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID);
+                            header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID.'&A3='.$_GET['A3']);
                         }
-                    // --- DEAL CROTERIA ---
+                    // --- DEAL CRiTERIA ---
                     } elseif($_GET['A2']=="deal_criteria"){
                         if(isset($_SESSION['projID'])){
-                            deal_criteria($twig,$is_connected, $_SESSION['projID']);
+                            deal_criteria($twig,$is_connected, $_SESSION['projID'], $_GET['A3']);
                         }else{
-                            header('Location: ?A=deal_criteria&A2project_selection');
+                            header('Location: ?A=deal_criteria&A2project_selection&A3='.$_GET['A3']);
                         }
                         
                     } else if($_GET['A2']=="deal_criteria_input") {
-                        deal_criteria_input_nogo_target($_POST);
+                        deal_criteria_input_nogo_target($_POST, $_GET['A3']);
                     }
                 } else {  
-                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection', 'deal_criteria');
+                    \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
                 }
             }
             // ---------- Dashborads ----------
@@ -844,10 +885,54 @@ try{
                 }
             }
 
-            // ---------- INPUT USE CASE (SUPPLIER) ----------
+            // ---------- INPUT USE CASE (SUPPLIER !!) ----------
             elseif($_GET['A']=='input_use_case_supplier') {
                 if(isset($_GET['A2'])) { 
-                    
+                    if($_GET['A2']=="project_cb"){
+                        \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "cost_benefits");
+                    // --- SELECTED PROJECT ---
+                    } elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$projID);
+                        }
+                    } elseif($_GET['A2']=="use_case_cb"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                \general\use_case_selection($twig,$is_connected,'?A=cost_benefits&A2=uc_selected&projID='.$_SESSION['projID'],$_GET['A'],$_SESSION['projID']);
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                            }
+                        }
+                        else {
+                            use_case_cb($twig,$is_connected);
+                        }
+                    } elseif($_GET['A2']=="uc_selected"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                if(isset($_POST['radio_uc'])){
+                                    $ucID = intval($_POST['radio_uc']);
+                                    $_SESSION['ucID']=$ucID;
+                                    header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                                }
+                                else {
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                                }
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                            }
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                        }
+                    } elseif($_GET['A2']=="schedule"){
+                    } elseif($_GET['A2']=="equipment_revenues"){
+                    } elseif($_GET['A2']=="deployment_revenues"){
+                    } elseif($_GET['A2']=="operating_revenues"){
+                    } 
                 } else {
                     input_use_case_supplier($twig,$is_connected);
                 }

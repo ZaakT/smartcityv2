@@ -1,20 +1,20 @@
 {% set sideBarName = "deal_criteria" %}
 {% extends '/templates/common_page.twig' %}
-{% set sideBarName = "deal_criteria" %}
 
 {% import "/templates/navbar.twig" as navbar %}
-{% import "/templates/deal_criteria/macro.twig" as macros %}
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-
 {% import "/templates/second_bar.twig" as second_bar %}
-{% block sidebar %}{{ sidebar.sidebar("deal_criteria") }}{% endblock %}
 
-
+{% block sidebar %}{{ sidebar.sidebar("deal_criteria_" ~ side) }}{% endblock %}
 {% block title %}Deal Criteria{% endblock %}
 
-
+{% if side == "customer" or side == "" %}
+    {% import "/templates/deal_criteria/macro.twig" as macros %}
+{% else %}
+    {% import "/templates/deal_criteria/macro_supplier.twig" as macros %}
+{% endif %}
 
 {% block content %}
 
@@ -30,8 +30,8 @@
 
     <div class="dash-bg container-fluid m-1 mt-5 ml-2 p-4">
         <div class="dash-bg-light container-fluid p-3">
-            <h3 class="dash-title mb-3">Deal Criteria</h3>
-            {{ macros.input_target_nogo(selDevSym,input) }}
+            <h3 class="dash-title mb-3">Deal Criteria ({{side}})</h3>
+            {{ macros.input_target_nogo(selDevSym,input,side) }}
         </div>
     </div>
 {% endblock %}
