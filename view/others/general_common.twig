@@ -33,7 +33,7 @@
                 {% elseif sideBarName=='input_project_common' %}
                     Project Initialization (Customer)
                 {% elseif sideBarName=='input_project_common_supplier' %}
-                    Project Initialization (Supplier) 
+                    Project Initialization (Supplier)
                 {% endif %}
             {% endblock %}</h2>
         </div>
@@ -86,7 +86,7 @@
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
 
-{% elseif sideBarName =='input_project_common' %}
+{% elseif sideBarName =='input_project_common' or sideBarName =='input_project_common_supplier' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
 

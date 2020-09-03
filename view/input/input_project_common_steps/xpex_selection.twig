@@ -7,7 +7,7 @@
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 
 
-{% block title %}Project Initialsization{% endblock %}
+{% block title %}Project Initialisation{% endblock %}
 
 
 {% block content %}
@@ -24,7 +24,7 @@
     {% set lorem = 'Create and provide short description of Opex / running cost procured from NTT or from third parties.' %}
 {% endif %}
 
-<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Input </span><span style="font-weight: 400;"></span></h2>
+<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implementation{% endif %} Input </span><span style="font-weight: 400;"></span></h2>
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
         <p class="text-justify">{{lorem|nl2br}} </p>
@@ -74,7 +74,7 @@
     {{ modal.ask_fill(projID,ucID, type, sideBarName) }}
     {{ modal.delete_selection(projID,ucID, type, sideBarName) }}
 
-        {% if selXpex|length == 0 and xpex_user_from_ntt|length == 0  and xpex_user_from_outside_ntt|length == 0 and xpex_user_internal|length == 0 %}
+        {% if selXpex|length == 0 and xpex_user_from_ntt|length == 0 and xpex_user_from_outside_ntt|length == 0 and xpex_user_internal|length == 0 %}
         <script type="text/javascript">
             $('#askFillXpex').modal('show')
         </script>
