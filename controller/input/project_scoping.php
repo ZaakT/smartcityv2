@@ -46,6 +46,26 @@ function delete_proj($idProj){
     header('Location: ?A=project_scoping&A2=project');
 }
 
+function create_proj1($post){
+    $name = $post['name'];
+    $description = isset($post['description']) ? $post['description'] : "";
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $projInfos = [$name,$description,$idUser];
+    if(!empty(getProj($idUser,$name))){
+        header('Location: ?A=project_sdesign&A2=project&isTaken=true');
+    } else {
+        insertProj($projInfos);
+        header('Location: ?A=project_sdesign&A2=project');
+    }
+}
+
+function delete_proj1($idProj){
+    // var_dump($idProj);
+    deleteProj($idProj);
+    header('Location: ?A=project_sdesign&A2=project');
+}
+
 // ---------------------------------------- SCOPE ----------------------------------------
 
 function scope($twig,$is_connected,$projID=0){
