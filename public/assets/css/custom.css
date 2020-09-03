@@ -901,3 +901,50 @@ body { background-color: #cdcdcd;} */
 .w-80 {
     width: 80%;
 }
+
+.progress-bar-main {
+    background-color: #343a40!important;
+}
+
+.progress-bar-remaining {
+    background-color: rgb(212, 237, 218);
+    color:black;
+}
+
+.progress-bar-operations-1 {
+    background-color: rgb(255, 243, 205);
+    color:black;
+}
+
+.progress-bar-pricing-1 {
+    background-color: rgb(204, 229, 255);
+    color:black;
+}
+
+.progress-bar-revenues-1 {
+    background-color: gainsboro;
+    color:black;
+}
+
+.btn-set-dates {
+    background-color: #343a40;
+    color:white;
+}
+
+.progress-bar-revenues-2 {
+    background-color: rgb(209, 236, 241);
+    color:black;
+}
+
+.progress-bar-nothing {
+    background-color: ghostwhite;
+}
+
+div.progress {
+    height :32px!important;
+}
+
+div#dates_projet > p {
+    margin: auto;
+    display: inline-block;
+}
