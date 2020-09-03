@@ -649,7 +649,7 @@ try{
                             if($_GET['A2']=="schedule") {
                                 supplier_schedule($twig,$is_connected,$_SESSION['projID'], $_GET['ucID']); 
                             }  // --- CAPEX OR OPEX (XPEX) ---
-                            else if($_GET['A2']=="capex" or $_GET['A2']=="opex"){
+                            else if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2']); 
