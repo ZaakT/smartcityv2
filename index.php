@@ -875,18 +875,6 @@ try{
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
-                    }elseif($_GET['A2']=="non_monetizable"){
-                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_non_monetizable($twig,$is_connected, $_SESSION['projID']);
-                        }else{
-                            header('Location: ?A=supplier_dashboards&A2project_selection');
-                        }
-                    }elseif($_GET['A2']=="qualitative"){
-                        if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_qualitative($twig,$is_connected, $_SESSION['projID']);
-                        }else{
-                            header('Location: ?A=supplier_dashboards&A2project_selection');
-                        }
                     }
                 } else{
                     \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=project_selection', 'supplier_dashboards');

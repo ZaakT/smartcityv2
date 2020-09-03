@@ -44,6 +44,8 @@
     <div class="col text-center">
     {% if sideBarName=='customer_dashboards' %}
         Lorem ipsum ...
+    {% elseif sideBarName=='supplier_dashboards' %}
+        Lorem ipsum supplier ...
     {% elseif sideBarName=='project_scoping' %}
         Lorem ipsum ...
     {% elseif sideBarName=='deal_criteria_supplier' %}
@@ -64,7 +66,7 @@
 
 {% block scripts %}
 
-{% if sideBarName=='customer_dashboards' %}
+{% if sideBarName=='customer_dashboards' or sideBarName=='supplier_dashboards' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_dashbords.js"></script>
 
 
