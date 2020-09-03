@@ -231,193 +231,32 @@ function calcChartValue(projectScore, target, nogo) {
 
 ///////////// SOCIETAL BANKABILIY ///////////
 
-
-//récupérer les infos json
-var projectData = JSON.parse($('#bankability_data').html());
-var currency = $('#currency').html().replace('(','').replace(')',' ');
-update_bankability();
-
-
-  
-function update_bankability(){
-  //corrects si tous les input sont non nuls, des nombres, que target >= no go pour npv roi nqbr et l'inverse poru payback et rr
-
-  //quand on clique sur le bouton ok
-  //récupérer les input
-  // si tous les input ne sont pas corrects: afficher "please rentrer tout"
-  // sinon
-  //   mettre a jour project score
-  //   mettre a jour overal
-  //   mettre a jour graphs
-
-
-  //GET ALL THE INPUT DATA 
-  var input = {
-      'npv':{
-          'nogo':$('#npv_nogo').val(),
-          'target':$('#npv_target').val()
-      },
-      'roi':{
-          'nogo':$('#roi_nogo').val(),
-          'target':$('#roi_target').val()
-      },
-      'payback':{
-          'nogo':$('#payback_nogo').val(),
-          'target':$('#payback_target').val()
-      },
-      'rr':{
-          'nogo':$('#rr_nogo').val(),
-          'target':$('#rr_target').val()
-      },
-      'nqbr':{
-          'nogo':$('#nqbr_nogo').val(),
-          'target':$('#nqbr_target').val()
-      }
-  };
-  //console.log(input);
-
-  if (checkInput()) {
-      var score = projectScore(input);
-
-      updateCharts(input);
-  }
-}
-
-function checkInput(){
-  //GET ALL THE INPUT DATA 
-  var input = {
-      'npv':{
-          'nogo':$('#npv_nogo').val(),
-          'target':$('#npv_target').val()
-      },
-      'roi':{
-          'nogo':$('#roi_nogo').val(),
-          'target':$('#roi_target').val()
-      },
-      'payback':{
-          'nogo':$('#payback_nogo').val(),
-          'target':$('#payback_target').val()
-      },
-      'rr':{
-          'nogo':$('#rr_nogo').val(),
-          'target':$('#rr_target').val()
-      },
-      'nqbr':{
-          'nogo':$('#nqbr_nogo').val(),
-          'target':$('#nqbr_target').val()
-      }
-  };
-  //console.log(input);
-
-  function updateCharts(input) {
-    var financialChartData =  [
-        calcChartValue(
-            Number(projectData['fin_npv']), 
-            Number(input['npv']['target']), 
-            Number(input['npv']['nogo'])),
-        calcChartValue(
-            Number(projectData['fin_roi']), 
-            Number(input['roi']['target']), 
-            Number(input['roi']['nogo'])),
-        calcChartValue(
-            -Number(projectData['fin_payback']), 
-            -Number(input['payback']['target']), 
-            -Number(input['payback']['nogo'])),
-        calcChartValue(
-            -Number(projectData['rating_risks']), 
-            -Number(input['rr']['target']), 
-            -Number(input['rr']['nogo'])),
-        calcChartValue(
-            Number(projectData['rating_noncash']), 
-            Number(input['nqbr']['target']), 
-            Number(input['nqbr']['nogo'])),
-        ];
-    
-    var societalChartData =  [
-        calcChartValue(
-            Number(projectData['soc_npv']), 
-            Number(input['npv']['target']), 
-            Number(input['npv']['nogo'])),
-        calcChartValue(
-            Number(projectData['soc_roi']), 
-            Number(input['roi']['target']), 
-            Number(input['roi']['nogo'])),
-        calcChartValue(
-            -Number(projectData['soc_payback']), 
-            -Number(input['payback']['target']), 
-            -Number(input['payback']['nogo'])),
-        calcChartValue(
-            -Number(projectData['rating_risks']), 
-            -Number(input['rr']['target']), 
-            -Number(input['rr']['nogo'])),
-        calcChartValue(
-            Number(projectData['rating_noncash']), 
-            Number(input['nqbr']['target']), 
-            Number(input['nqbr']['nogo'])),
-        ];
-    console.log(financialChartData, societalChartData);
-
-    if (financialChart.data.datasets.length > 2) {
-        financialChart.data.datasets.pop();
-        societalChart.data.datasets.pop();
-    }
-
-    financialChart.data.datasets.push({
-        label: 'Project',
-        fill: true,
-        backgroundColor: "rgba(85, 216, 254, 0.2)",
-        borderColor: 'rgb(85, 216, 254)',
-        borderWidth: 2,
-        pointRadius: 2,
-        data: financialChartData
-      });
-      financialChart.update();
-
-      societalChart.data.datasets.push({
-        label: 'Project',
-        fill: true,
-        backgroundColor: "rgba(163, 160, 251, 0.2)",
-        borderColor: 'rgb(163, 160, 251)',
-        borderWidth: 2,
-        pointRadius: 2,
-        data: societalChartData
-      });
-      societalChart.update();  
-        
-}
-
-  var flagVerif = true;
-  for (var key in input) {
-      if (input[key]['nogo'] == "" || !input['target'] == "") { //vérifier que les entrées sont non nulles
-          flagVerif = false;
-          $('#errorInput').html("Error: make sure every input is completed");
-          break;
-      } else if ((key == 'npv' || key == 'roi' || key == 'nqbr') && Number(input[key]['nogo']) > Number(input[key]['target'])) { 
-          //que les relations d'ordres sont respectées
-          flagVerif = false;
-          $('#errorInput').html("Error: No go value has to be lower than Target value for Net Present Value, Return on Investment and Non Quantifiable Benefits Rating");
-          break;
-      } else if ((key == 'rr' || key == 'payback') && Number(input[key]['target']) > Number(input[key]['nogo'])) {
-          flagVerif = false;
-          $('#errorInput').html("Error: No go value has to be greater than Target value for Payback and Risk Rating");
-          break;
-      } else {
-          $('#errorInput').html("");
-      }
+function updateBankability(){
+  var data = $('#data').data("bankabilityTargetNogo").target;
+  var selDevSym = $("#selDevSym").text();
+  if(data.length==0){
+    $("#errorInput").text("Error: make sure Deal Criteria is completed.");
+  }else{
+    $("#display_payback").text(data.payback_target+" mounths");
+    $("#display_societalPayback").text(data.societal_payback_target+" mounths");
+    $("#display_roi").text(data.roi_target+" %");
+    $("#display_societalRoi").text(data.societal_roi_target+" %");
+    $("#display_npv").text(selDevSym+" "+data.npv_target);  
+    $("#display_societalNpv").text(selDevSym+" "+data.societal_npv_target);
+    $("#display_nqb").text(data.nqbr_target+"/10");
+    $("#display_risk").text(data.rr_target+"/10");
   }
 
-return flagVerif;
 }
+function projectScore() {
+  var data = $('#data').data("bankabilityTargetNogo");
+  var dataCalc = $('#data').data("bankabilityCalc");
+  console.log(dataCalc);
+  console.log(data);
+  console.log("coucou : " + dataCalc[2]);
+  console.log(dataCalc);
+  updateBankability();
 
-
-function projectScore(input) {
-
-  //AFFICHER TARGETS DANS LE TABLEAU PROJECT SCORE
-  $('#display_target_npv').html(input.npv.target ? input.npv.target+' '+currency : " - "); 
-  $('#display_target_roi').html(input.roi.target ? input.roi.target+' %' : " - ");
-  $('#display_target_payback').html(input.payback.target ? input.payback.target+' months' : " - ");
-  $('#display_target_rr').html(input.rr.target ? input.rr.target : " - ");
-  $('#display_target_nqbr').html(input.nqbr.target ? input.nqbr.target : " - ");
 
   //AFFICHAGE DES POUCES
   //pour chaque indicateur
@@ -425,48 +264,134 @@ function projectScore(input) {
   // si no go <= indicateur < target => resultat =2, on cache pouce en bas, on affiche pouche en haut et on el colorie en orange
   // si indicatuer < nogo => resultat = 3, on cache pouce en haut, on affiche pouce en bas
   score = {
-      'fin_npv': calcProjectScore(
-          Number(projectData['fin_npv']), 
-          Number(input['npv']['target']), 
-          Number(input['npv']['nogo']), 
-          '#fin_npv'),
-      'soc_npv': calcProjectScore(
-          Number(projectData['soc_npv']), 
-          Number(input['npv']['target']), 
-          Number(input['npv']['nogo']), 
-          '#soc_npv'),
-      'fin_roi': calcProjectScore(
-          Number(projectData['fin_roi']), 
-          Number(input['roi']['target']), 
-          Number(input['roi']['nogo']), 
-          '#fin_roi'),
-      'soc_roi': calcProjectScore(
-          Number(projectData['soc_roi']), 
-          Number(input['roi']['target']), 
-          Number(input['roi']['nogo']), 
-          '#soc_roi'),
-      'fin_payback': calcProjectScore(
-          -Number(projectData['fin_payback']), 
-          -Number(input['payback']['target']), 
-          -Number(input['payback']['nogo']), 
-          '#fin_payback'),
-      'soc_payback': calcProjectScore(
-          -Number(projectData['soc_payback']), 
-          -Number(input['payback']['target']), 
-          -Number(input['payback']['nogo']), 
-          '#soc_payback'),
-      'rr': calcProjectScore(
-          -Number(projectData['rating_risks']), 
-          -Number(input['rr']['target']), 
-          -Number(input['rr']['nogo']), 
-          '.rr'),
-      'nqbr': calcProjectScore(
-          Number(projectData['rating_noncash']), 
-          Number(input['nqbr']['target']), 
-          Number(input['nqbr']['nogo']), 
-          '.nqbr')
+    'fin_payback': calcProjectScore(
+        Number(dataCalc.fin_payback), 
+        Number(data.target.payback_target), 
+        Number(data.nogo.payback_nogo), 
+        '#fin_payback'),
+    'soc_payback': calcProjectScore(
+        Number(dataCalc.soc_payback), 
+        Number(data.target.payback_target), 
+        Number(data.nogo.payback_nogo), 
+        '#soc_payback'),
+    'fin_societal_payback': calcProjectScore(
+        Number(dataCalc.fin_societal_payback), 
+        Number(data.target.societal_payback_target), 
+        Number(data.nogo.societal_payback_nogo), 
+        '#fin_societalPayback'),
+    'soc_societal_payback': calcProjectScore(
+        Number(dataCalc.soc_societal_payback), 
+        Number(data.target.societal_payback_target), 
+        Number(data.nogo.societal_payback_nogo), 
+        '#soc_societalPayback'),
+    'fin_roi': calcProjectScore(
+        Number(dataCalc.fin_roi), 
+        Number(data.target.roi_target), 
+        Number(data.nogo.roi_nogo), 
+        '#fin_roi'),
+    'soc_roi': calcProjectScore(
+        Number(dataCalc.soc_roi), 
+        Number(data.target.roi_target), 
+        Number(data.nogo.roi_nogo), 
+        '#soc_roi'),
+    'fin_societal_roi': calcProjectScore(
+        Number(dataCalc.fin_roi), 
+        Number(data.target.societal_roi_target), 
+        Number(data.nogo.societal_roi_nogo), 
+        '#fin_societalRoi'),
+    'soc_societal_roi': calcProjectScore(
+          Number(dataCalc.soc_roi), 
+          Number(data.target.roi_target), 
+          Number(data.nogo.societal_roi_nogo), 
+          '#soc_societalRoi'),
+
+    'fin_npv': calcProjectScore(
+        Number(dataCalc.fin_npv), 
+        Number(data.target.npv_target), 
+        Number(data.nogo.npv_nogo), 
+        '#fin_npv'),
+    'soc_npv': calcProjectScore(
+        Number(dataCalc.soc_npv), 
+        Number(data.target.npv_target), 
+        Number(data.nogo.npv_nogo), 
+        '#soc_npv'),
+    'fin_societal_npv': calcProjectScore(
+        Number(dataCalc.fin_societal_npv), 
+        Number(data.target.societal_npv_target), 
+        Number(data.nogo.societal_npv_nogo), 
+        '#fin_societalNpv'),   
+    'soc_societal_npv': calcProjectScore(
+        Number(dataCalc.soc_societal_npv), 
+        Number(data.target.societal_npv_target), 
+        Number(data.nogo.societal_npv_nogo), 
+        '#soc_societalNpv'),
+
+    'fin_nqb': calcProjectScore(
+        Number(dataCalc.nqb), 
+        Number(data.target.nqbr_target), 
+        Number(data.nogo.nqbr_nogo), 
+        '#fin_nqb'),
+    'soc_nqb': calcProjectScore(
+        Number(dataCalc.nqb), 
+        Number(data.target.nqbr_target), 
+        Number(data.nogo.nqbr_nogo), 
+        '#soc_nqb'),
+    'fin_rating_risks': calcProjectScore(
+        Number(dataCalc.rating_risks), 
+        Number(data.target.rr_target), 
+        Number(data.nogo.rr_nogo), 
+        '#fin_risk'),
+    'soc_rating_risks': calcProjectScore(
+        Number(dataCalc.rating_risks), 
+        Number(data.target.rr_target), 
+        Number(data.nogo.rr_nogo), 
+        '#soc_risk')
+        
   };
   //console.log(score);
 
   return score;
 }
+function calcProjectScore(projectScore, target, nogo, idSelector) {
+  console.log(projectScore, target, nogo, idSelector);
+  var score = 0;
+  if(target>=nogo){
+    if (projectScore >= target) {
+        score = 1;
+        $(idSelector+'_thumb-down').attr('hidden', true);
+        $(idSelector+'_thumb-up').removeAttr('hidden');
+        $(idSelector+'_thumb-up').css("color", "green"); 
+    } else if ( projectScore >= nogo ) {
+        score = 2;
+        $(idSelector+'_thumb-down').attr('hidden', true);
+        $(idSelector+'_thumb-up').removeAttr('hidden');
+        $(idSelector+'_thumb-up').css("color", "orange"); 
+    } else {
+        score = 3;
+        $(idSelector+'_thumb-up').attr('hidden', true);
+        $(idSelector+'_thumb-down').removeAttr('hidden');          
+    }
+  }else{
+    if (projectScore <= target) {
+      score = 1;
+      $(idSelector+'_thumb-down').attr('hidden', true);
+      $(idSelector+'_thumb-up').removeAttr('hidden');
+      $(idSelector+'_thumb-up').css("color", "green"); 
+    } else if ( projectScore <= nogo ) {
+        score = 2;
+        $(idSelector+'_thumb-down').attr('hidden', true);
+        $(idSelector+'_thumb-up').removeAttr('hidden');
+        $(idSelector+'_thumb-up').css("color", "orange"); 
+    } else {
+        score = 3;
+        $(idSelector+'_thumb-up').attr('hidden', true);
+        $(idSelector+'_thumb-down').removeAttr('hidden');          
+    }
+  }
+  
+  //console.log(idSelector, projectScore, target, nogo, score  );
+  return score;
+}
+
+
+projectScore();

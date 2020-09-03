@@ -1620,7 +1620,9 @@ function bankability_new($twig,$is_connected,$projID,$post=[]){
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/output/dashboards_items/bankability_new.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$scope,'bankability_data'=>$bankability_data, 'input'=>$inputNogoTarget));
+            echo $twig->render('/output/dashboards_items/bankability_new.twig',array('is_connected'=>$is_connected,
+            'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
+            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'scope'=>$scope,'bankability_data'=>$bankability_data, 'input'=>$inputNogoTarget));
 
 
                 prereq_dashboards();

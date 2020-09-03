@@ -17,7 +17,9 @@ function dashboards_summary($twig,$is_connected, $projID){
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             try{
-                
+                $bankabilityData = array('target'=>getDealCriteriaInputNogoTarget($projID, "target"), 'nogo'=>getDealCriteriaInputNogoTarget($projID, "nogo"));
+
+
                 $proj = getProjByID($projID,$user[0]); 
                 $proj = getProjByID($projID,$user[0]);
                 $ucs = getListUCs();
@@ -42,6 +44,63 @@ function dashboards_summary($twig,$is_connected, $projID){
                 $cumulnetcashTot = $netcashTot[1]; 
                 $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
                 $cumulnetsoccashTot = $netsoccashTot[1];
+
+
+                foreach ($scope as $measID => $list_ucs) {
+                    foreach ($list_ucs as $ucID) {
+
+                        $implem = getTotImplemByUC($projID,$ucID);
+                        $implemSchedule = $schedules['implem'][$ucID];
+                        $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+                        $capex = getTotCapexByUC($projID,$ucID);
+                        $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
+                        $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
+                        $sum_capex_implem = add_arrays($capexPerMonth_new,$implemPerMonth_new);
+                    }
+                }
+
+                $dr_year = getListSelDiscountRate($projID);
+                $dr_month = pow(1+($dr_year/100),1/12)-1;
+                $npv2 = calcNPV($dr_month,$sum_capex_implem);
+                // npv
+                $fin_npv = calcNPV($dr_month,$netcashPerMonth[0]); 
+                $soc_npv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                $fin_societal_npv = 0;
+                $soc_societal_npv = 0;
+
+                
+                //roi
+                $fin_roi = calcROI($fin_npv,$npv2);     
+                $soc_roi = calcROI($soc_npv,$npv2);
+                $fin_societal_roi = 0;
+                $soc_societal_roi = 0;
+
+                //payback            
+                $fin_payback = calcPayback($netcashPerMonth)[1];
+                $soc_payback = calcPayback($netsoccashPerMonth)[1];
+                $fin_societal_payback = 0;
+                $soc_societal_payback = 0;
+
+                //
+                $nqb = calcRatingNonCash($projID, $scope);
+                $rating_risks = calcRatingRisks($projID, $scope);
+
+                $bankability_cacl = array(
+                    'fin_societal_npv'=>$fin_societal_npv,
+                    'soc_societal_npv'=>$soc_societal_npv,
+                    'fin_societal_roi'=>$fin_societal_roi,
+                    'soc_societal_roi'=>$soc_societal_roi,
+                    'fin_societal_payback'=>$fin_societal_payback,
+                    'soc_societal_payback'=>$soc_societal_payback,                    
+                    'fin_npv'=>$fin_npv,
+                    'soc_npv'=>$soc_npv,
+                    'fin_roi'=>$fin_roi,
+                    'soc_roi'=>$soc_roi,
+                    'fin_payback'=>$fin_payback,
+                    'soc_payback'=>$soc_payback,
+                    'nqb'=>$nqb,
+                    'rating_risks'=>$rating_risks                
+                );
             }
             catch(\Throwable $th){
                 header('?A=customer_dashboards');
@@ -52,7 +111,8 @@ function dashboards_summary($twig,$is_connected, $projID){
                 'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
-                'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot
+                'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot,
+                'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl
             ));
             prereq_dashbords();
             

@@ -49,7 +49,11 @@
                 {# # OF UC #}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
                 <h3 class="dash-title mb-3">Bankability</h3>
-                    {{ table.table(bankability_lineNames, bankabakity_colNames, selDevSym, "table", "", "") }}
+                    {{ macros.project_score(bankability_lineNames) }}
+                    {#{ table.table(bankability_lineNames, bankabakity_colNames, selDevSym, "table", "", "") }#}
+                        <div class="text-center">
+                            <span id="errorInput" style="color:red;"></span>
+                        </div>
                 </div>    
             </div>            
             
@@ -91,6 +95,9 @@
     </section>
 </div>
 
+
+<div id="data"  data-bankability-target-nogo="{{ bankability_target|json_encode }}" data-bankability-calc="{{bankability_cacl|json_encode}}"></div>
+<div id="selDevSym"  hidden>{{selDevSym}}</div>
 <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/summary.js"></script>
 {% endblock %}
 
