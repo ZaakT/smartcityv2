@@ -357,8 +357,7 @@ function xpex_inputed($post, $sideBarName){
                     throw new Exception("Wrong type !");
                 }
                 update_ModifDate_proj($projID);
-                if($sideBarName=="input_project_common"){
-
+                if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier"){
                     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
                 }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
                     if ($type == "capex"){

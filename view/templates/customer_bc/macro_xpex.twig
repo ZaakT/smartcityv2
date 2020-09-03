@@ -17,7 +17,7 @@
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 
 
-<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and sideBarName == "input_project_common") %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-lg table-bordered table-striped table-responsive-lg'>
