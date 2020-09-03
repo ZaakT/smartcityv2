@@ -70,29 +70,6 @@ function delete_ucm($idUCM){
     header('Location: ?A=project_design&A2=ucm');
 }
 
-// ---------------- Project Initialization ------------------
-
-function create_ucm1($post){
-    $name = $post['name'];
-    $description = isset($post['description']) ? $post['description'] : "";
-    $user = getUser($_SESSION['username']);
-    $idUser = $user[0];
-    $ucmInfos = [$name,$description,$idUser];
-    // var_dump(intval($post));
-    if(!empty(getUCM($idUser,$name))){
-        header('Location: ?A=project_design&A2=ucm&isTaken=true');
-    } else {
-        insertUCM($ucmInfos);
-        header('Location: ?A=project_sdesign&A2=ucm1');
-    }
-}
-
-function delete_ucm1($idUCM){
-    //var_dump(intval($idUCM));
-    deleteUCM(intval($idUCM));
-    header('Location: ?A=project_sdesign&A2=ucm1');
-}
-
 
 
 // ---------------------------------------- MEASURES ----------------------------------------

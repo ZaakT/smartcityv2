@@ -429,23 +429,15 @@ try{
             elseif($_GET['A']=='project_sdesign'){
                 verifIsSup();
                 if(isset($_GET['A2'])){
-                    if($_GET['A2']=="ucm1"){
-                        if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                            ucm1($twig,$is_connected,true);
-                        } else {
-                            ucm1($twig,$is_connected);
-                        }
+                    if($_GET['A2']=="project"){
+                        \general\project($twig,$is_connected,'?A=project_sdesign&A2=proj_selected','project_sdesign');
                     }
-                    // --------- Create UCM ----------
-                    elseif($_GET['A2']=="create_ucm1"){
-                        create_ucm1($_POST);
-                    }
-                    elseif($_GET['A2']=="delete_ucm1"){
-                        if(isset($_GET['id'])){
-                            delete_ucm1($_GET['id']);
-                        }
-                        else {
-                            header('Location: ?A=project_sdesign&A2=ucm1');
+                    elseif($_GET['A2']=="proj_selected"){
+                        if(isset($_POST['radio_proj'])){
+                            $projID = intval($_POST['radio_proj']);
+                            $_SESSION['projID']=$projID;
+                            //var_dump($projID);
+                            header('Location: ?A=project_scoping&A2=scope&projID='.$projID);
                         }
                     }
                     // --- SELECTED USE CASES MENU ---
