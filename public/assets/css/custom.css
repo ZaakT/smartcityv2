@@ -938,6 +938,7 @@ body { background-color: #cdcdcd;} */
 
 .progress-bar-nothing {
     background-color: ghostwhite;
+    color: black!important;
 }
 
 div.progress {
