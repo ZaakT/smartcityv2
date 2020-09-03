@@ -5,12 +5,25 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/customer_dashboards/macro_summary.twig" as macros %}
+{% import "/templates/customer_dashboards/macro_table.twig" as table %}
 
 {% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
 
 {% block title %}Dashbords - Summary{% endblock %}
 
 {% block content %}
+
+{% set bankability_lineNames = [
+    ["Payback", "payback", 1],
+    ["Societal Payback", "societalPayback", 1],
+    ["ROI", "roi", 1],
+    ["Societal ROI", "societalRoi", 1],
+    ["NPV", "npv", 1],
+    ["Societal NPV", "societalNpv", 1],
+    ["Non Quantifiable Benefits", "nqb", 1],
+    ["Risk", "risk", 1]
+] %}
+{% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
@@ -35,8 +48,8 @@
 
                 {# # OF UC #}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">Project Score</h3>
-                    {{ macros.project_score(selDevSym) }}
+                <h3 class="dash-title mb-3">Bankability</h3>
+                    {{ table.table(bankability_lineNames, bankabakity_colNames, selDevSym, "table", "", "") }}
                 </div>    
             </div>            
             

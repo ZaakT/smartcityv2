@@ -40,8 +40,7 @@ function checkInput(id){
     var opGoal = "nogo";
     if(idGoal == "nogo"){ opGoal = "target" ;}
 
-    if(val < 0. || (val>100. && ( idType=="roi" || idType=="societal_roi") )){
-        console.log("it's me 0 !");
+    if(val < 0. || (val>100. && ( idType=="roi" || idType=="societal_roi")) || (val>10. && (idType=="risks_rating" ||idType=="nqbr" ))){
         $("#"+id).css("background","salmon");
         $("#"+id).val("");
     } else if (temp.length==2 && temp[1].length>3){
