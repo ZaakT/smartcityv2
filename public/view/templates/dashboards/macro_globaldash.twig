@@ -1,0 +1,193 @@
+{% macro key_dates(scope,ucs,keydates_uc,uc_completed) %}
+
+<h3 class="dash-title">Key Dates</h3>
+<table id="keyDatesTable" class=" text-center table dashboard-table">
+    <tr>
+        <th width="30%">Uses Cases</th>
+        <th width="16%">Start Date</th>
+        <th width="16%">Implem. End Date</th>
+        <th width="16%">Project End Date</th>
+        <th width="22%"></th>
+    </tr>
+    {% for measID,list_ucs in scope %}
+        {% for ucID in list_ucs %}
+            <tr hidden>
+                <td class="uc" id="uc_{{ ucID }}" width="30%">{{ ucs[ucID]['name'] }}</td>
+                <td id="start_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['startdate']}}  </td>
+                <td id="imp_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['implem_enddate']}}  </td>
+                <td id="end_{{ ucID }}" width="17.5%">{{ keydates_uc[ucID]['enddate'] }}  </td>
+                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} months</td>
+            </tr>
+    {% endfor %}{% endfor %}
+</table>
+
+
+    <div class="container">
+        
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if uc_completed[ucID] == true %}
+                    <div class="arrows">
+                            <div class="arrow ucnamearrow">
+                            <span>{{ ucs[ucID]['name'] }}</span>
+                        </div>
+                        <div id="step1_{{ ucID }}" class="arrow step1">
+                            <span>{{keydates_uc[ucID]['startdate']}}</span>
+                        </div>
+                        <div id="step2_{{ ucID }}" class="arrow step2">
+                            <span>{{keydates_uc[ucID]['implem_enddate']}}</span>
+                        </div>
+                        <div id="step3_{{ ucID }}" class="arrow step3">
+                            <span>{{ keydates_uc[ucID]['enddate'] }}</span>
+                        </div>
+                        <div class="arrow duration">
+                            <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} months</span>
+                        </div> 
+                    </div>
+                {% else %}
+                    <div class="arrows">
+                            <div class="arrow ucnamearrow">
+                            <span>{{ ucs[ucID]['name'] }}</span>
+                        </div>
+                        <div id="step1_{{ ucID }}" class="arrow step1">
+                            <span>NA</span>
+                        </div>
+                        <div id="step2_{{ ucID }}" class="arrow step2">
+                            <span>NA</span>
+                        </div>
+                        <div id="step3_{{ ucID }}" class="arrow step3">
+                            <span>NA</span>
+                        </div>
+                        <div class="arrow duration">
+                            <span>NA</span>
+                        </div> 
+                    </div>
+                {% endif %}
+
+            {% endfor %}{% endfor %}
+       
+    </div>
+
+{% endmacro %}
+
+{% macro number_uc(scope,measures,ucs,volumes) %}
+
+<h3 class="dash-title mb-3">Number of use case items</h3>
+
+<div hidden>
+    {% for measID,list_ucs in scope %}
+    <table>
+        <tr>
+            <td class="measureName">{{ measures[measID]['name'] }}</td>
+        </tr>
+        {% for ucID in list_ucs %}
+        <tr>
+            <td class="ucName">{{ucs[ucID]['name']}}</td>
+            <td class="ucQuantity">{{volumes[ucID]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+</div>
+<canvas id="numberOfItems" height="150px"/> 
+
+{% endmacro %}
+
+{% macro budget(baselineOpCost, netProjectCost, OBYI, years) %}
+
+<h3 class="dash-title">Budget</h3>
+<div hidden>
+    <table>
+        <tr>
+            <td>Year</td>
+            <td class="budgetLabel">Baseline Operating Cost</td>
+            <td class="budgetLabel">Net Project Cost</td>
+            <td class="budgetLabel">Operating Budget Impact</td>
+        </tr>
+        {% for year in years %}
+        <tr>
+            <td class="yearBudget">{{ year }}</td>
+            <td class="BOC">{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+            <td class="NPC">{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+            <td class="OPI">{{OBYI[year]|number_format(2, '.', ',')}}</td>
+        </tr> 
+        {% endfor %}
+    </table>
+</div>
+<canvas id="budgetGraph" height="200px"></canvas>
+
+{% endmacro %}
+
+{% macro financial_bankability(selDevSym, input_nogo_target, bankability_data) %}
+<h3 class="dash-title">Financial Bankability</h3>
+
+    <span class="d-none" id='input_nogo_target'>{{ input_nogo_target }}</span>
+    <span class="d-none" id='bankability_data'>{{ bankability_data }}</span>
+    <span class="bankability_error" style="display:none;">Please click here to input your bankability criteria.</span>
+
+<canvas id="financialBankabilityChart"></canvas>
+{% endmacro %}
+
+{% macro societal_bankability() %}
+<h3 class="dash-title">Societal Bankability</h3>
+<span class="bankability_error" style="display:none;">Please click here to input your bankability criteria.</span>
+<canvas id="societalBankabilityChart"></canvas>
+{% endmacro %}
+
+{% macro kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) %}
+
+<h3 class="dash-title">KPI</h3>
+    <table id="kpiTable" class="table dashboard-table" style="border-collapse: collapse; ">
+        <tr>
+            <th>Total Investment</th>
+            <td>{{ selDevSym }}&nbsp;{{ (implemTot['tot'] + capexTot['tot'])|number_format(0, '.', ',') }}</td>
+        </tr>
+        <tr>
+            <th class="kpi-border">Net Present Value (NPV)</th>
+            <td class="kpi-border">{{ selDevSym }}&nbsp; {{ npv|number_format(0,'.',',') }}</td>
+        </tr>
+        <tr>
+            <th>Societal NPV</th>
+            <td>{{ selDevSym }}&nbsp; {{ socnpv|number_format(0,'.',',') }}</td>
+        </tr>
+        <tr>
+            <th class="kpi-border">Breakeven</th>
+            <td class="kpi-border">{{ breakeven ? breakeven : "NA" }}</td>
+        </tr>
+        <tr>
+            <th>Societal Breakeven</th>
+            <td>{{ soc_breakeven ? soc_breakeven : "NA" }}</td>
+        </tr>
+        <tr>
+            <th class="kpi-border">Non Cash Benefits Rating</th>
+            <td class="kpi-border">{{ ratingNonCash != -1 ? (ratingNonCash)|number_format(2, '.', ',') : "NA"}} / 10</td>
+        </tr>
+        <tr>
+            <th>Risks Rating</th>
+            <td>{{ ratingRisks != -1 ? (ratingRisks)|number_format(2, '.', ',') : "NA"}} / 10</td>
+        </tr>
+    </table>
+
+{% endmacro %}
+
+{% macro costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) %}
+
+            <h3 class="dash-title">Cumulated Net Cash</h3>
+                <div hidden>
+                    <table>
+                        <tr>
+                            <td>Year</td>
+                            <td class="cbLabel">Cumulated Net Cash</td>
+                            <td class="cbLabel">Cumulated Net Societal Cash</td>
+                        </tr>
+                        {% for year in years %}
+                        <tr>
+                            <td class="yearCB">{{ year }}</td>
+                            <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', '') }}</td>
+                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', '') }}</td>
+                        {% endfor %}
+                    </table>
+                </div>
+                <canvas id="costbenefitsGraph"></canvas>
+
+{% endmacro %}

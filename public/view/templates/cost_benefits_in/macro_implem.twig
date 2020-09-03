@@ -1,0 +1,159 @@
+{% macro list_implem(implem,selImplem=[]) %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Implementation Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id,item in implem %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedImplem(form_implem);" id='{{ id }}' name="{{ id }}" {{id in selImplem|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_implem_user(implem_user,projID=0,ucID=0,selImplem=[]) %}
+{% import "/templates/cost_benefits_in/modal_implem.twig" as modal %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Implementation Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in implem_user %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedImplem(form_implem);" id='{{ id }}' name="{{ id }}" {{id in selImplem|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                    <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteImplem_{{ id }}"></span></a></td>
+                    {{ modal.delete_implem(id,item['name'],projID,ucID) }}
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_implem_guid(selDevSym,implem_advice,implem_user,selImplem,compo,ratio) %}
+<div class="m-1 mt-5 row text-center guideline-table">
+    <div class="list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th scope="col">Implementation Component</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Ratio per Use Case</th> {# {{compo['name']}} #}
+                    <th scope="col">Range of the Unit Cost (&nbsp;in {{selDevSym}}&nbsp;)</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_implem,data in selImplem %}
+                {% if id_implem in implem_advice|keys %}
+                <tr id = "tr_{{ id_implem }}" scope="row">
+                    <td scope="col">{{ implem_advice[id_implem]['name'] }}</td>
+                    <td scope="col">{{ implem_advice[id_implem]['unit'] != "" ? implem_advice[id_implem]['unit'] : "-" }}</td>
+                    <td scope="col">{{ ratio[id_implem]['val'] >= 0 ? ratio[id_implem]['val'] : "-"  }}</td>
+                    {% if implem_advice[id_implem]['range_max'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ implem_advice[id_implem]['range_min'] }} - {{ implem_advice[id_implem]['range_max'] }}</td>
+                    {% endif %}
+                </tr>   
+                {% endif %}      
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro list_implem_input(selDevSym,implem_advice,implem_user,selImplem,ratio,nb_uc) %}
+<div class="row m-4 text-center">
+    <div class="col mt-2 list-table">
+        <table id="implem_input" class='table table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">Implementation Component</th>
+                    <th scope="col">Ratio per Use Case</th>
+                    <th scope="col">Volume</th>
+                    <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_implem,data in selImplem %}
+                <tr id = "tr_{{ id_implem }}" scope="row">
+                    {% if id_implem in implem_advice|keys %}
+                    <td scope="col">{{ implem_advice[id_implem]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ implem_user[id_implem]['name'] }}</td>
+                    {% endif %}
+                    
+                    <td scope="col"><input id="rat_{{id_implem}}" name="rat_{{id_implem}}" class="text-center ratio p-1" type="number" min=0 step=1 required oninput="checkImplemInput(rat_{{id_implem}});" placeholder="{{ratio[id_implem]['val']}}"></td> 
+
+                    <td scope="col"><input id="vol_{{id_implem}}" name="vol_{{id_implem}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkImplemInput(vol_{{id_implem}});" value="{{ selImplem[id_implem]['volume'] }}" placeholder="{{ratio[id_implem]['val'] * nb_uc}}"></td> 
+
+                    <td scope="col"><input id="cost_{{id_implem}}" name="cost_{{id_implem}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkImplemInput(cost_{{id_implem}});" value="{{selImplem[id_implem]['unit_cost']}}" placeholder="{{ (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+{% macro list_implem_total(selDevSym,implem_advice,implem_user,selImplem) %}
+<div class="row ml-5 mr-5 pl-5 pr-5 text-center">
+    <div class="col list-table">
+        <table id="tot_table_implem" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Implementation Component</th>
+                    <th scope="col">Total Implementation ( in {{selDevSym}} )</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_implem,data in selImplem %}
+                <tr id = "tr_{{ id_implem }}" scope="row">
+                    {% if id_implem in implem_advice|keys %}
+                    <td scope="col">{{ implem_advice[id_implem]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ implem_user[id_implem]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col" id="tot_{{id_implem}}">-</td>
+                </tr> 
+            {% endfor %}
+                <tr>
+                    <th class="bg-light text-dark">Total</th>
+                    <td class="font-weight-bold" scope="col" id="tot">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

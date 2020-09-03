@@ -1,0 +1,58 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_projdash.twig" as macros %}
+
+{% block title %}Dashboards - Project Dashboard{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="row mt-5 mb-0 text-center text-uppercase">
+    <h4 class="text-dark col">Project Scope</h4>
+</div>
+{{ macros.project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('project_scope_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
+
+<div class="row mt-5 mb-0 text-center text-uppercase">
+    <h4 class="text-dark col">Budget Impact</h4>
+</div>
+{{ macros.budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('budget_all_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
+
+<div class="row mt-5 mb-0 text-center text-uppercase">
+    <h4 class="text-dark col">Cost Benefits</h4>
+</div>
+{{ macros.cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback,selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="projdash2csv('cost_benefits_table','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
+
+<div class="row mt-5 mb-0 text-center text-uppercase">
+    <h4 class="text-dark col">Bankability</h4>
+</div>
+{{ macros.bankability(scores,selDevSym) }}
+
+
+<button type="button" id="getPDF">getPDF</button>
+{% endblock %}

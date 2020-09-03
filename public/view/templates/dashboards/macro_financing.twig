@@ -1,0 +1,613 @@
+{% macro sel_buttons(listScen) %}
+<div class="row mt-2 mb-5 mx-5 text-center">
+    <div class="offset-4 col-4">
+        <select name="scenario" class="selectpicker " data-style="btn-dark" dropupAuto="false" title="Select a scenario" required>
+            {% for scenID,scen in listScen %}
+                <option value={{scenID}}>{{scen['name']}}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+
+
+{% macro output_LB(dates,years,FS,list_selLB,list_FS_noentity_LB,sourceRef,cashInflow,reimb,netDebt,interest,total,selDevSym) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table financing_table">
+        <table id="financing_table_{{sourceRef}}" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    {% for year in years %}
+                        <th class="years" scope="col">{{year}}</th>
+                    {% endfor %}
+                    <th rowspan=1></th>
+                    {% for date in dates %}
+                        <th class="dates" scope="col">{{date}}</th class="years">
+                    {% endfor %}
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for entityID,entity in list_selLB[sourceRef] %}
+                    <tr>
+                        <td class="item text-left" colspan={{years|length + 1}}>{{entity['name']}}</td>
+                        <td class="item" rowspan=1></td>
+                        <td class="item" colspan={{dates|length}}></td>
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Cash Inflow</td class="item">
+                        {% for year in years %}
+                            <td>{{selDevSym}}&nbsp;{{cashInflow[sourceRef][entityID][year] != 0 ? cashInflow[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{cashInflow[sourceRef][entityID][date] != 0 ?cashInflow[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Reimbursements</td class="sub_item">
+                        {% for year in years %}
+                            <td>{{selDevSym}}&nbsp;{{reimb[sourceRef][entityID][year] != 0 ? reimb[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{reimb[sourceRef][entityID][date] != 0 ? reimb[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Net Debt</td class="sub_item">
+                            {% for year in years %}
+                                <td>-</td>
+                            {% endfor %}
+                            <td class="item" rowspan=1></td>
+                            {% for date in dates %}
+                                <td>{{selDevSym}}&nbsp;{{netDebt[sourceRef][entityID][date] != 0 ? netDebt[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                    </tr>
+                    <tr>
+                        <td class="sub_item">Interest</td class="sub_item">
+                            {% for year in years %}
+                                <td>{{selDevSym}}&nbsp;{{interest[sourceRef][entityID][year] != 0 ? interest[sourceRef][entityID][year]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                            <td class="item" rowspan=1></td>
+                            {% for date in dates %}
+                                <td>{{selDevSym}}&nbsp;{{interest[sourceRef][entityID][date] != 0 ? interest[sourceRef][entityID][date]|number_format(2,'.',',') : 0}}</td>
+                            {% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td class="item text-left text-uppercase" colspan={{years|length + 1}}>Total</td>
+                    <td class="item" rowspan=1></td>
+                    <td class="item" colspan={{dates|length}}></td>
+                </tr>
+                <tr>
+                    <td class="sub_item">Cash Inflow</td class="item">
+                        {% for year in years %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][year]['cashInflow'] != 0 ? total[sourceRef][year]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][date]['cashInflow'] != 0 ? total[sourceRef][date]['cashInflow']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Reimbursements</td class="sub_item">
+                        {% for year in years %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][year]['reimb'] != 0 ? total[sourceRef][year]['reimb']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][date]['reimb'] != 0 ? total[sourceRef][date]['reimb']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Net Debt</td class="sub_item">
+                        {% for year in years %}
+                            <td>-</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][date]['netDebt'] != 0 ? total[sourceRef][date]['netDebt']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                </tr>
+                <tr>
+                    <td class="sub_item">Interest</td class="sub_item">
+                        {% for year in years %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][year]['interest'] != 0 ? total[sourceRef][year]['interest']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                        <td class="item" rowspan=1></td>
+                        {% for date in dates %}
+                            <td>{{selDevSym}}&nbsp;{{total[sourceRef][date]['interest'] != 0 ? total[sourceRef][date]['interest']|number_format(2,'.',',') : 0}}</td>
+                        {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+
+{% macro output_recap(FS_cat,FS,selFS,entities,funding_target,keydates,labels,selDevSym) %}
+<div class="mt-3 row text-center">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingOptChart"></canvas>
+        <iframe src=null hidden
+        onload="showFinancingOptChart({{labels}});"></iframe>
+    </div>
+</div>
+<div class="mt-5 row text-center">
+    <div class="offset-2 col-8 list-table financing_table_2">
+        <table id="financing_table_2" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Funding Sources</th>
+                    <th scope="col">{{selDevSym}}</th>
+                    <th scope="col">%</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan=5></td></tr>
+                {% for id_cat,cat in FS_cat if cat != FS_cat|last %}
+                <tr class="font-weight-bold">
+                    <td class="item sourceCat" id="cat_{{id_cat}}">{{cat['name']}}</td>
+                    <td id="val_{{id_cat}}"></td>
+                    <td id="share_{{id_cat}}"></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                    {% for sourceID,source in selFS if FS[sourceID]['id_cat']==id_cat%}
+                        <tr>
+                            <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                            <td>{{selDevSym}}&nbsp;{{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td hidden class="sourceValues" id="val_{{id_cat}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
+                            <td>{{source['share']|number_format(2,'.',',')}} %</td>
+                            <td hidden class="sourceValues" id="share_{{id_cat}}_{{sourceID}}">{{source['share']}}</td>
+                            <td>{{keydates[sourceID]['startdate'] ? keydates[sourceID]['startdate'] : "-"}}</td>
+                            <td>{{keydates[sourceID]['maturitydate'] ? keydates[sourceID]['maturitydate'] : "-"}}</td>
+                        </tr>
+                        {% for entityID,entity in entities[sourceID] %}
+                        <tr class="sub_item">
+                            <td class="text-right col_items" style="background-color: #f5f5f5;">{{entity['name']}}</td>
+                            <td>{{selDevSym}}&nbsp;{{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{entity['share']|number_format(2,'.',',')}} %</td>
+                            <td>{{keydates[sourceID][entityID]['startdate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
+                            <td>{{keydates[sourceID][entityID]['maturitydate'] ? keydates[sourceID][entityID]['startdate'] : "-"}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    <tr><td colspan=5></td></tr>
+                {% endfor %}
+                <tr class="font-weight-bold">
+                    <td class="item sourceCat" id="cat_{{FS_cat|keys|last}}">{{FS_cat|last['name']}}</td>
+                    <td id="val_{{FS_cat|keys|last}}"></td>
+                    <td id="share_{{FS_cat|keys|last}}"></td>
+                    <td>-</td>
+                    <td>-</td>
+                </tr>
+                    {% for sourceID,source in selFS if FS[sourceID]['id_cat']==FS_cat|keys|last%}
+                        <tr>
+                            <td class="item text-left" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                            <td>{{selDevSym}}&nbsp;{{(source['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td hidden class="sourceValues" id="val_{{FS_cat|keys|last}}_{{sourceID}}">{{(source['share']*funding_target/100)}}</td>
+                            <td>{{source['share']|number_format(2,'.',',')}} %</td>
+                            <td hidden class="sourceValues" id="share_{{FS_cat|keys|last}}_{{sourceID}}">{{source['share']}}</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        {% for entityID,entity in entities[sourceID] %}
+                        <tr class="sub_item">
+                            <td class="text-right col_items" style="background-color: #f5f5f5;">{{entity['name']}}</td>
+                            <td>{{selDevSym}}&nbsp;{{(entity['share']*funding_target/100)|number_format(2,'.',',')}}</td>
+                            <td>{{entity['share']|number_format(2,'.',',')}} %</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) %}
+<div class="mt-3 row text-center">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingBenefChart"></canvas>
+        <iframe src=null hidden
+        onload="showFinancingBenefChart({{benefNames}},{{benefShare}});"></iframe>
+    </div>
+</div>
+<div class="mt-5 row text-center">
+    <div class="offset-2 col-8 list-table financing_table_3">
+        <table id="financing_table_3" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Beneficiary</th>
+                    <th scope="col">Share of Funding in {{selDevSym}}&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for benefID,benef in benefs %}
+                    <tr>
+                        <td>{{benef['name']}}</td>
+                        <td>{{selDevSym}}&nbsp;{{(funding_target*benef['share']/100)|number_format(2,'.',',')}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro output_cashflows(selDevSym,years,capexTot,implemTot,opexTot,revenuesTot,cashreleasingTot,interestTerm,interestRev,reimbTerm,reimbRev,FS_cat,FS,selFS,entities,funding_ressources,funding_target,funding_ressources) %}
+<div class="mt-5 row text-center">
+    <div class="offset-1 col-10 list-table financing_table_5">
+        <table id="financing_table_5" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col item col_items" id=""></th>
+                    {% for i,year in years %}
+                        <th scope="col" class="col_others years">{{year}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="" colspan={{1+years|length}}></td>
+                </tr>
+
+                <tr>
+                    <td class="text-left item col_items" colspan={{1+years|length}}>Funding requirements<br>(I = A + B + C + D)</td>
+                </tr>
+                {% set Total_FundingReq = [] %}
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">Investment & Implementation<br>(A = a + b)</td>
+                    {% set investTot = [] %}
+                    {% for i,year in years %}
+                        {% set investTot = investTot|merge([capexTot[year]+implemTot[year]]) %} {% set Total_FundingReq = Total_FundingReq|merge([investTot[i]]) %}
+
+                        <td>{{investTot[year]}}{{selDevSym}}&nbsp;{{investTot[i]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">a. Capex</td>
+                    {% for i,year in years %}
+                        <td>{{selDevSym}}&nbsp;{{capexTot[year]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">b. Implementation</td>
+                    {% for i,year in years %}
+                        <td>{{selDevSym}}&nbsp;{{implemTot[year]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">Cash Flow from operations<br>(B = d - e - f)</td>
+                    {% set cashFlowTot = [] %}
+                    {% set Total_FundingReq2 = [] %}
+                    {% for i,year in years %}
+                        {% set cashFlowTot = cashFlowTot|merge([opexTot[year]-revenuesTot[year]-cashreleasingTot[year]]) %}
+                        {% set temp = Total_FundingReq[i] + cashFlowTot[i]%}
+                        {% set Total_FundingReq2 = Total_FundingReq2|merge([temp]) %}  
+                        <td>{{cashFlowTot[year]}}{{selDevSym}}&nbsp;{{cashFlowTot[i]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;" style="background-color: #f5f5f5;">d. Opex</td>
+                    {% for i,year in years %}
+                        <td>{{selDevSym}}&nbsp;{{opexTot[year]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">e. Revenues</td class="text-right col_items" style="background-color: #f5f5f5;">
+                    {% for i,year in years %}
+                        <td>{{selDevSym}}&nbsp;{{revenuesTot[year]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">f. Cash Releasing Benefits</td>
+                    {% for i,year in years %}
+                        <td>{{selDevSym}}&nbsp;{{cashreleasingTot[year]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">Financial Interest<br>(C = g + h + i + j)</td>
+                    {% set Total_FundingReq3 = [] %}
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = 0 %}
+                        {% else %}
+                            {% set TermLoanValue = interestTerm[5][year] %}
+                            {% for idEnt,val in interestTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set RevLoanValue = interestRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in interestRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set AmortBondValue = interestTerm[5][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in interestTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in interestRev[8] %}
+                            {% set BulletBondValue = interestRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in interestRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        
+
+                        {% set FinInt = TermLoanValue + RevLoanValue + AmortBondValue + BulletBondValue %}  
+                        {% set temp = Total_FundingReq2[i] + FinInt%}
+                        {% set Total_FundingReq3 = Total_FundingReq3|merge([temp]) %}                    
+                        <td>{{selDevSym}}&nbsp;{{FinInt|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">g. Term Loan</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = interestTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in interestTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <td>{{selDevSym}}&nbsp;{{TermLoanValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">h. Revolving Loan</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestRev[6] %}
+                            {% set RevLoanValue = interestRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in interestRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <td>{{selDevSym}}&nbsp;{{RevLoanValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">i. Amortizing Bond</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestTerm[7] %}
+                            {% set AmortBondValue = interestTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in interestTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <td>{{selDevSym}}&nbsp;{{AmortBondValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item" >
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">j. Bullet Bond</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestRev[8] %}
+                            {% set BulletBondValue = interestRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in interestRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        <td>{{selDevSym}}&nbsp;{{BulletBondValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">Reimbursements<br>(D = k + l + m + n)</td>
+                    {% set Total_FundingReq4 = [] %}
+                    {% for i,year in years %}
+                        {% if 'All Years' in reimbTerm[5] %}
+                            {% set TermLoanValue = reimbTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in reimbTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbRev[6] %}
+                            {% set RevLoanValue = reimbRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in reimbRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbTerm[7] %}
+                            {% set AmortBondValue = reimbTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in reimbTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if 'All Years' in reimbRev[8] %}
+                            {% set BulletBondValue = reimbRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in reimbRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+
+                        {% set Reimb = TermLoanValue + RevLoanValue + AmortBondValue + BulletBondValue %}  
+                        {% set temp = Total_FundingReq3[i] + Reimb%}
+                        {% set Total_FundingReq4 = Total_FundingReq4|merge([temp]) %}                 
+                        <td>{{selDevSym}}&nbsp;{{Reimb|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">k. Term Loan</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in interestTerm[5] %}
+                            {% set TermLoanValue = reimbTerm[5][year] %}
+                        {% else %}
+                            {% set TermLoanValue = 0 %}
+                            {% for idEnt,val in reimbTerm[5] %}
+                                {% set TermLoanValue = TermLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        <td>{{selDevSym}}&nbsp;{{TermLoanValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">l. Revolving Loan</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in reimbRev[6] %}
+                            {% set RevLoanValue = reimbRev[6][year] %}
+                        {% else %}
+                            {% set RevLoanValue = 0 %}
+                            {% for idEnt,val in reimbRev[6] %}
+                                {% set RevLoanValue = RevLoanValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        <td>{{selDevSym}}&nbsp;{{RevLoanValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">m. Amortizing Bond</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in reimbTerm[7] %}
+                            {% set AmortBondValue = reimbTerm[7][year] %}
+                        {% else %}
+                            {% set AmortBondValue = 0 %}
+                            {% for idEnt,val in reimbTerm[7] %}
+                                {% set AmortBondValue = AmortBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        <td>{{selDevSym}}&nbsp;{{AmortBondValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="sub_item">
+                    <td class="text-right col_items" style="background-color: #f5f5f5;">n. Bullet Bond</td>
+                    {% for i,year in years %}
+                        {% if 'All Years' in reimbRev[8] %}
+                            {% set BulletBondValue = reimbRev[8][year] %}
+                        {% else %}
+                            {% set BulletBondValue = 0 %}
+                            {% for idEnt,val in reimbRev[8] %}
+                                {% set BulletBondValue = BulletBondValue + val[year] %}
+                            {% endfor %}
+                        {% endif %}
+                        <td>{{selDevSym}}&nbsp;{{BulletBondValue|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">TOTAL</td>
+                    
+                    {% for i,year in years %}
+                        <td id="tot_I_{{i}}">{{selDevSym}}&nbsp;{{Total_FundingReq4[i]|number_format(2,'.',',')}}</td>
+                    {% endfor %}
+                </tr>
+
+
+
+
+                <tr>
+                    <td  colspan={{1+years|length}}></td>
+                </tr>
+
+                
+
+
+                <tr>
+                    <td class="text-left item col_items" colspan={{1+years|length}}>Funding ressources<br>(II = E + F + G + H + I + J)</td>
+                </tr>
+                {% for id_cat,cat in FS_cat %}
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items sourceCat" id="cat_{{id_cat}}" style="background-color: #f5f5f5;">{{cat['name']}}</td>
+                    {% for i,year in years %}
+                        <td id="val_{{id_cat}}_{{i}}">{{selDevSym}}&nbsp;0</td>
+                    {% endfor %}
+                </tr>
+                    {% for sourceID,source in selFS if FS[sourceID]['id_cat']==id_cat%}
+                    <tr class="sub_item">
+                        <td class="text-right col_items" style="background-color: #f5f5f5;">{{FS[sourceID]['name']}}</td>
+                        {% for i,year in years %}
+                            <td>{{selDevSym}}&nbsp;{{funding_ressources[sourceID][year]|number_format(2,'.',',')}}</td>
+                            <td hidden class="sourceValues" id="val_{{id_cat}}_{{sourceID}}_{{i}}">{{funding_ressources[sourceID][year]}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+                
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items" style="background-color: #f5f5f5;">TOTAL</td>
+                    
+                    {% for i,year in years %}
+                        <td id="tot_II_{{i}}">{{selDevSym}}&nbsp;0</td>
+                    {% endfor %}
+                </tr>
+
+
+
+
+                <tr>
+                    <td colspan={{1+years|length}}></td>
+                </tr>
+
+                
+
+
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td class="text-left item col_items">Net Cash<br>(= II - I)</td>
+                    {% for i,year in years %}
+                        <td id="netcash_{{i}}">{{selDevSym}}&nbsp;0</td>
+                    {% endfor %}
+                </tr>
+
+                <tr class="font-weight-bold" style="background-color: #f5f5f5;">
+                    <td  class="text-left item col_items">Cash Balance<br>(= Cash Balance[n-1] + Net Cash[n])</td>
+                    {% for i,year in years %}
+                        <td id="cashbalance_{{i}}">{{selDevSym}}&nbsp;0</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="mt-3 row text-center">
+    <div class="offset-2 col-8">
+        <canvas id="FinancingCashBalanceChart"></canvas>
+        <iframe src=null hidden
+        onload=" showFinancingCashBalanceChart();"></iframe>
+    </div>
+</div>
+{% endmacro %}

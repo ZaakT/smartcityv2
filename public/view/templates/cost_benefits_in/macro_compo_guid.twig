@@ -1,0 +1,38 @@
+{# {% macro compo_guid(uc_name,compo,nb_compo=0,nb_uc=0) %}
+<div class="mt-4 row text-center guideline-table">
+    <div class="offset-2 col-8 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th scope="col">Nb total of {{compo['name']}}</th>
+                    <th scope="col">Nb total of {{uc_name}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="col">{{nb_compo}}</td>
+                    <td scope="col">{{nb_uc}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %} #}
+
+{% macro compo_guid(uc_name,compo,nb_compo=0,nb_uc=0) %}
+<div class="mt-4 row text-center guideline-table">
+    <div class="offset-2 col-8 list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <tbody class="thead-light text-center">
+                <tr>
+                    <th scope="col">Nb total of {{compo['name']}}</th>          
+                    <td scope="col">{{nb_compo}}</td>
+                </tr>
+                <tr>
+                    <th scope="col">Nb total of {{uc_name}}</th>  
+                    <td scope="col" id="nb_uc">{{nb_uc}}</td>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

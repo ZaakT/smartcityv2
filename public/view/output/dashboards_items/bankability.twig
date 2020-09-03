@@ -1,0 +1,38 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_bankability.twig" as macros %}
+
+{% block title %}Dashboards - Bankability{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+<form name="form_bankUC" id="form_bankUC" action="?A=dashboards&amp;A2=bankability&amp;A3=output&amp;projID={{projID}}" method="post" onsubmit="return countChecked_bankUC('form_bankUC');">
+    {{ macros.selUCS(scope,ucs,measures) }}
+    
+    <div class="row mt-4 mb-0 text-center">
+        <span id="countUCSelectBankUC" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+    </div>
+    <div class="row text-center mt-3">
+        <h6 id="help_BankUC" class="col text-danger font-weight-bold text-center" hidden>Please select at least one Use Case !</h6>
+    </div>
+
+    <div class="row m-3 text-center text-dark">
+        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick=""></button>
+    </div>
+</form>
+
+
+
+{% endblock %}
+{% endblock %}

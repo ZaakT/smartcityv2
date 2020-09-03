@@ -1,0 +1,39 @@
+{% extends '/others/general_common.twig' %}
+{% set sideBarName = 'project_scoping' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/project_scoping/macro_schedules.twig" as schedules %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_scoping",projID) }}{% endblock %}
+
+{% block title %}Project Scoping - Schedule{% endblock %}
+
+{% block content %}
+
+{% if projID==0 %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+<div class="row jumbotron text-light mx-5 m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col container-fluid" name="form_schedule" id="form_schedule" action="?A=project_scoping&amp;A2=schedules_selected" method="post" onsubmit="return fullCheckValidity();">
+            {{ schedules.schedule_implem(scope,meas,ucs,list_sel["implem"]) }}
+            {{ schedules.schedule_opex(scope,meas,ucs,list_sel["opex"]) }}
+            {{ schedules.schedule_revenues(scope,meas,ucs,list_sel["revenues"]) }}
+
+            <div class="row my-0 text-center text-dark">
+                <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+            </div>
+        </form>
+</div>
+
+{% endif %}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_globaldash.twig" as macros %}
+
+{% block title %}Dashboards - Project Dashboard{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">Project Dashboard : </span><span style="font-weight: 400;"></span>{{ selected }}</h2>
+
+<div hidden class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-6 px-0">
+            {# SCOPE #}
+            <div class="dash-bg container-fluid m-1 ml-2 p-4">
+                {# KEY DATES #}
+                <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.key_dates(scope,ucs,keydates_uc,uc_completed) }}
+                </div>
+
+                {# # OF UC #}
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                    {{ macros.number_uc(scope,measures,ucs,volumes) }}
+                </div>    
+            </div>            
+            
+            {# BUGDET #}
+            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                <a id="budget_all" class="dash-link" href="?A=dashboards&amp;A2=budget&amp;projID={{ projID }}">
+                    <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }}
+                    </div>
+                </a> 
+            </div>
+
+        </div>
+
+
+        {# CB + KPI #}
+        <div class="col-6">
+            <div class="dash-bg container-fluid m-1 ml-2 p-4">
+                <a id="cost_benefits_all" class="dash-link" href="?A=dashboards&amp;A2=cost_benefits&amp;projID={{ projID }}">
+                    <div class="dash-bg-light container-fluid p-3">
+                        {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
+                    </div>
+                    <div class="dash-bg-light container-fluid p-3 mt-4">
+                        {{ macros.kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) }}
+                    </div>
+                </a>
+            </div>
+
+            {# BANKABIKITY #}
+            <section class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                <a id="bankability" class="dash-link" href="?A=dashboards&amp;A2=bankability&amp;projID={{ projID }}">
+                <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.financial_bankability(selDevSym, input_nogo_target, bankability_data) }}
+                </div>
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                    {{ macros.societal_bankability() }}
+                </div>
+                <a/>
+            </section>
+
+        </div>
+        
+    </div>
+
+    </section>
+</div>
+
+
+<script type="text/javascript" src="../../public/assets/js/custom/dashboards/globalDashboards.js"></script>
+{% endblock %}

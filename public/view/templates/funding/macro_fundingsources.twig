@@ -1,0 +1,230 @@
+{% macro funding_sources_table(FS_cat,FS,entities,scenID,listSel,funding_target) %}
+{% import "/templates/funding/modals_entities.twig" as modal %}
+<div class="row text-center">
+    <div class=" offset-1 col-10 list-table funding_sources_table">
+        <input type="number" value="{{funding_target}}" hidden id="funding_target">
+        <table id="funding_sources_table" class='table table-bordered table-responsive-lg text-center'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col" colspan=2 style="width:25%;">Funding Sources</th>
+                    <th scope="col" style="width:20%;">Share of total funding<br>( in %)</th>
+                    <th scope="col" colspan=3 style="width:40%;">Entities</th>
+                    <th scope="col" colspan=1 style="width:15%;">Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id_cat,cat in FS_cat %}
+                    <tr>
+                        <td colspan=7 class="text-left font-weight-bold font-italic text-uppercase"> > {{cat['name']}}</td>
+                    </tr>
+                    {% for id_source,source in FS %}
+                        <tr>
+                            {% if source['id_cat']==id_cat %}
+                                <td class="check-col align-middle"><input type="checkbox" onclick="checkSelFS();" class="" id='{{id_source}}' name="{{id_source}}" {{listSel[id_source]['share'] ? "checked" : ""}}></td>
+                                <td class="text-left" colspan=1>{{source['name']}}</td>
+                                <td colspan=1><input class="text-center" id="share_{{id_source}}" name="share_{{id_source}}" type="number" min=0 max=100 step=0.1 oninput="checkTotFS();" style="width:80%;" value={{listSel[id_source]['share'] ? listSel[id_source]['share'] : ""}}><span> %</span></td>
+                                {% if source['hasEntities'] %}
+                                    <td class="align-text-top entities_{{id_source}}">
+                                        {% for id_entity,entity in entities[id_source]|slice(start,last-1) %}
+                                            {{entity['name']}} /
+                                        {% endfor %}
+                                        {{entities[id_source]|last['name']}}
+                                    </td>
+                                    <td style="width:5%;" class="entities_{{id_source}}"><a href="#"><span style="font-size:12px;" class="oi oi-plus" title="plus" aria-hidden="true" data-toggle="modal" data-target="#askCreateEntity_{{id_source}}"></span></a></td>
+                                    <td style="width:5%;" class="entities_{{id_source}}"><a href="#"><span style="font-size:12px;" class="oi oi-minus" title="minus" aria-hidden="true" data-toggle="modal" data-target="#askDeleteEntity_{{id_source}}"></span></a></td>
+                                {% else %}
+                                    <td colspan=3 class="font-italic">No entity can be added for City Category</td>
+                                {% endif %}
+                                <td id="output_{{id_source}}"></td>
+                            {% endif %}
+                            {{ modal.create_entity(scenID,id_source) }}
+                            {{ modal.delete_entity(scenID,id_source,entities[id_source]) }}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro input_entities(FS_cat,FS,entities,listSel,funding_target) %}
+{% import "/templates/funding/modals_entities.twig" as modal %}
+{% set test_empty = 0 %}
+{% for id_source,source in FS if test_empty == 0 %}
+    {% if id_source in listSel|keys and source['id_type']==1 %}
+        {% set test_empty = 1 %}
+    {% endif %}
+{% endfor %}
+{% if test_empty %}
+<div class="row text-center mt-3">
+    <div class=" offset-1 col-10 list-table entities_table">
+        <input type="number" value="{{funding_target}}" hidden id="funding_target1">
+        <table id="entities_table" class='table table-bordered table-responsive-lg text-center'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col" colspan=1 style="width:20%;">City Funding</th>
+                    <th scope="col" colspan=1 style="width:20%;">Entities</th>
+                    <th scope="col" colspan=2 style="width:25%;">Funding ( in %)</th>
+                    <th scope="col" colspan=1 style="width:20%;">Funding Date</th>
+                    <th scope="col" colspan=1 style="width:15%;">Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id_cat,cat in FS_cat %}
+                    {% set test = 0 %}
+                    {% for id_source,source in FS if test == 0 %}
+                        {% if source['id_cat']==id_cat and id_source in listSel|keys and source['id_type']==1 %}
+                            {% set test = 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if test %}
+                    <tr>
+                        <td colspan=6 class="text-left font-weight-bold font-italic text-uppercase"> > {{cat['name']}}</td>
+                    </tr>
+                    {% for id_source,source in FS %}
+                        {% if source['id_cat']==id_cat and id_source in listSel|keys and source['id_type']==1 %}
+                        <tr>
+                            <td class="text-center item" rowspan={{entities[id_source]|length != 0 ? entities[id_source]|length : 1 }} colspan={{entities[id_source]|length != 0 ? 1 : 2 }}>{{source['name']}}</td>
+                            {% if entities[id_source]|length != 0 %}
+                                <td class="align-text-top entities_{{id_source}}">
+                                    {{entities[id_source]|first['name']}} tycvuibon
+                                </td>
+                                <td rowspan={{entities[id_source]|length != 0 ? entities[id_source]|length : 1 }} colspan=1 id="shareFS_{{id_source}}">{{listSel[id_source]['share']}} %</td>
+                                <td colspan=1 style="width:15%;"><input class="text-center" id="share_{{id_source}}_{{entities[id_source]|keys|first}}" name="share_{{id_source}}_{{entities[id_source]|keys|first}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entities[id_source]|first['share']}}"><span>&nbsp;%</span>
+                                </td>
+                                <td><div class="input-append date" id="date_{{id_source}}_{{entities[id_source]|keys|first}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                    <input id="input_date_{{id_source}}_{{entities[id_source]|keys|first}}" name="input_date_{{id_source}}_{{entities[id_source]|keys|first}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entities[id_source]|first['start_date']}}" data-date-start-date="06/2012" data-date-end-date="07/2012">
+                                    <span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false" aria-hidden="true"></span>
+                                </div></td>
+                                <td id="output_{{id_source}}_{{entities[id_source]|keys|first}}" colspan=1>to calculate</td>     
+                        </tr>
+                        {% for id_entity, entity in entities[id_source]|slice(start+1,last,true) %}
+                        <tr>
+                            <td class="align-text-top entities_{{id_source}}">
+                                {{entity['name']}}
+                                <td colspan=1><input class="text-center" id="share_{{id_source}}_{{id_entity}}" name="share_{{id_source}}_{{id_entity}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities();" style="width:80%;" value="{{entity['share']}}"><span>&nbsp;%</span></td>
+
+                                <td><div class="input-append date" id="date_{{id_source}}_{{id_entity}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                    <input id="input_date_{{id_source}}_{{id_entity}}" name="input_date_{{id_source}}_{{id_entity}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entity['start_date']}}"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                </div></td>
+                                <td id="output_{{id_source}}_{{id_entity}}" colspan=1>to calculate</td id="output_{{id_entity}}">    
+                            </td>
+                        </tr>
+                        {% endfor %}
+                                {% else %}
+                            {#<td colspan=1 class="font-italic">No entity !</td>#}
+                            <td id="shareFS_{{id_source}}" class="shareFS" rowspan=1 colspan=2>{{listSel[id_source]['share']}} %</td>      
+                            <input type="number" value="{{listSel[id_source]['share']}}" hidden id="shareFS_{{id_source}}" name="shareFS_{{id_source}}"> 
+                            <td><div class="input-append date" id="date_{{id_source}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input id="input_date_{{id_source}}" name="input_date_{{id_source}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{listSel[id_source]['start_date']}}"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                            </div></td>
+                            <td id="output_{{id_source}}" colspan=1>to calculate</td>   
+                        </tr>
+                                {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro input_entities2(FS_cat,FS,entities,listSel,funding_target) %}
+{% import "/templates/funding/modals_entities.twig" as modal %}
+{% set test_empty = 0 %}
+{% for id_source,source in FS if test_empty == 0 %}
+    {% if id_source in listSel|keys and source['id_type']==2 %}
+        {% set test_empty = 1 %}
+    {% endif %}
+{% endfor %}
+{% if test_empty %}
+<div class="row text-center mt-5">
+    <div class=" offset-1 col-10 list-table entities_table_2">
+        <input type="number" value="{{funding_target}}" hidden id="funding_target2">
+        <table id="entities_table_2" class='table table-bordered table-responsive-lg text-center'>
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th scope="col" colspan=1 style="width:12.5%;">City Funding</th>
+                    <th scope="col" colspan=1 style="width:12.5%;">Entities</th>
+                    <th scope="col" colspan=2 style="width:22.5%;">Funding ( in %)</th>
+                    <th scope="col" colspan=1 style="width:20%;">Start Date</th>
+                    <th scope="col" colspan=1 style="width:20%;">Maturity Date</th>
+                    <th scope="col" colspan=1 style="width:2.5%;">Interest Rate ( in %)</th>
+                    <th scope="col" colspan=1 style="width:10%;">Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for id_cat,cat in FS_cat %}
+                    {% set test = 0 %}
+                    {% for id_source,source in FS if test == 0 %}
+                        {% if source['id_cat']==id_cat and id_source in listSel|keys and source['id_type']==2 %}
+                            {% set test = 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if test %}
+                    <tr>
+                        <td colspan=8 class="text-left font-weight-bold font-italic text-uppercase"> > {{cat['name']}}</td>
+                    </tr>
+                    {% endif %}
+                    {% for id_source,source in FS %}
+                        {% if source['id_cat']==id_cat and id_source in listSel|keys and source['id_type']==2 %}
+                        <tr>
+                                <td class="item" rowspan={{entities[id_source]|length != 0 ? entities[id_source]|length : 1 }} colspan={{entities[id_source]|length != 0 ? 1 : 2 }}>{{source['name']}}</td>
+                                {% if entities[id_source]|length != 0 %}
+                                    <td class="align-text-top entities_{{id_source}}">
+                                        {{entities[id_source]|first['name']}}
+                                    </td>
+                                    <td class="" rowspan={{entities[id_source]|length != 0 ? entities[id_source]|length : 1 }} colspan=1 id="shareFS_{{id_source}}">{{listSel[id_source]['share']}} %</td>
+                                    <td colspan=1 style="width:15%;"><input class="text-center" id="share_{{id_source}}_{{entities[id_source]|keys|first}}" name="share_{{id_source}}_{{entities[id_source]|keys|first}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities2();" style="width:80%;" value="{{entities[id_source]|first['share']}}"><span> %</span>
+                                    </td>
+                                    <td><div class="input-append date" id="startdate_{{id_source}}_{{entities[id_source]|keys|first}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                        <input id="input_startdate_{{id_source}}_{{entities[id_source]|keys|first}}" name="input_startdate_{{id_source}}_{{entities[id_source]|keys|first}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entities[id_source]|first['start_date']}}" style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    </div></td> 
+                                    <td><div class="input-append date" id="maturitydate_{{id_source}}_{{entities[id_source]|keys|first}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                        <input id="input_maturitydate_{{id_source}}_{{entities[id_source]|keys|first}}" name="input_maturitydate_{{id_source}}_{{entities[id_source]|keys|first}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entities[id_source]|first['maturity_date']}}" style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                                    </div></td> 
+                                    <td><input class="text-center" id="interest_{{id_source}}_{{entities[id_source]|keys|first}}" name="interest_{{id_source}}_{{entities[id_source]|keys|first}}" type="number" min=0 step=0.01 oninput="checkInputEntities2();" value="{{entities[id_source]|first['interest']}}"></td>   
+                                    <td id="output_{{id_source}}_{{entities[id_source]|keys|first}}">to calculate</td>    
+                        </tr>
+                        {% for id_entity, entity in entities[id_source]|slice(start+1,last,true) %}
+                            <td class="align-text-top entities_{{id_source}}">{{entity['name']}}</td>
+                            <td colspan=1><input class="text-center" id="share_{{id_source}}_{{id_entity}}" name="share_{{id_source}}_{{id_entity}}" type="number" min=0 max=100 step=0.1 oninput="checkInputEntities2();" style="width:80%;" value="{{entity['share']}}"><span> %</span></td>
+                            <td><div class="input-append date" id="startdate_{{id_source}}_{{id_entity}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input id="input_startdate_{{id_source}}_{{id_entity}}" name="input_startdate_{{id_source}}_{{id_entity}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entity['start_date']}}" style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                            </div></td>  
+                            <td><div class="input-append date" id="maturitydate_{{id_source}}_{{id_entity}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input id="input_maturitydate_{{id_source}}_{{id_entity}}" name="input_maturitydate_{{id_source}}_{{id_entity}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{entity['maturity_date']}}" style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                            </div></td>  
+                            <td><input class="text-center" id="interest_{{id_source}}_{{id_entity}}" type="number" min=0 step=0.01 name="interest_{{id_source}}_{{id_entity}}" oninput="checkInputEntities2();" value="{{entity['interest']}}"></td>   
+                            <td id="output_{{id_source}}_{{id_entity}}">to calculate</td>         
+                        {% endfor %}
+                        <tr>
+                        </tr>
+                                {% else %}
+                            {#<td class="font-italic">No entity !</td>#}
+                            <td id="shareFS_{{id_source}}" class="shareFS" colspan=2>{{listSel[id_source]['share']}} % </td>      
+                            <input type="number" value="{{listSel[id_source]['share']}}" hidden id="shareFS_{{id_source}}" name="shareFS_{{id_source}}"> 
+                            <td><div class="input-append date" id="startdate_{{id_source}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input id="input_startdate_{{id_source}}" name="input_startdate_{{id_source}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{listSel[id_source]['start_date']}}"  style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                            </div></td>
+                            <td><div class="input-append date" id="maturitydate_{{id_source}}" data-date="" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                <input id="input_maturitydate_{{id_source}}" name="input_maturitydate_{{id_source}}" class="date_input" size="10px" type="text" readonly onchange="" placeholder="{{listSel[id_source]['maturity_date']}}" style="width:60%;"><span class="mx-2 add-on oi oi-calendar" title="calendar" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
+                            </div></td>
+                            <td><input class="text-center" id="interest_{{id_source}}" name="interest_{{id_source}}" type="number" min=0 step=0.01 oninput="checkInputEntities2();" value="{{listSel[id_source]['interest']}}"></td>   
+                            <td id="output_{{id_source}}">to calculate</td>
+                        </tr>
+                                {% endif %}
+                                
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endmacro %}

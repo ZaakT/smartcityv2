@@ -1,0 +1,55 @@
+{% extends '/others/general_common.twig' %}
+{% set sideBarName = 'project_scoping' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar("project_scoping",projID) }}{% endblock %}
+
+{% block title %}Project Scoping - Discount Rate{% endblock %}
+
+{% block content %}
+
+{% if projID==0 %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{{ redirect.choose_ucm() }}
+
+{% else %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+<div class="row jumbotron text-light mx-5 m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="row">
+    <form class="col container-fluid" name="form_discountrate" id="form_discountrate" action="?A=project_scoping&amp;A2=discount_rate_selected" method="post" onsubmit="return checkRate();">
+        <div class="offset-2 row text-center">
+            <div class="col-8 mt-5 mx-5 list-table">
+                <table class='table table-lg table-bordered table-responsive-lg'>
+                    <thead class="thead-dark text-center">
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Annual Rate</th>
+                            <th scope="col">Guideline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="bg-dark text-white" scope="col">Discount Rate (%)</th>
+                            <td scope="col"><input class="text-center" id="discount_rate_input" name="discount_rate_input" type="number" min=0 step="any" required value="{{discount_rate_sel}}" oninput="checkRate();"> %</td>
+                            <td scope="col">3.5 %</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row mt-5 text-center text-dark">
+            <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+        </div>
+    </form>
+</div>
+
+{% endif %}
+{% endblock %}

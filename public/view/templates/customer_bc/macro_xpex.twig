@@ -1,0 +1,157 @@
+{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false ) %}
+{% import "/templates/customer_bc/modal_xpex.twig" as modal %}
+{% for id,item in xpex %}
+    <tr id = "tr_{{ id }}" scope="row">
+        <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ id }}" {{id in selXpex|keys ? "checked" : ""}}></td>
+        <td scope="col">{{ item['name'] }}</td>
+        <td scope="col">{{ item['description'] }}</td>  
+        {% if userMode %}                  
+            <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
+            {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
+        {% endif %}
+    </tr>         
+{% endfor %}
+{% endmacro %}
+
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false) %}
+{% import "/templates/customer_bc/macro_xpex.twig" as macro %}
+
+
+<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    {{userMode ? "<th scope='col'></th>" }}
+                </tr>
+            </thead>
+            {% if xpex_from_ntt %}
+                <td colspan="{{userMode ? 4 : 3 }}"> <strong>Procured From NTT </strong></td>
+                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
+            {% endif %}
+            {% if xpex_from_outside_ntt %}
+                <td colspan="{{userMode ? 4 : 3 }}"><strong>Procured From Outside NTT </strong></td>
+                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
+            {% endif %}
+            {% if xpex_internal %}
+                <td colspan="{{userMode ? 4 : 3 }}"><strong> Internal </strong></td>
+                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, userMode) }}
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+
+
+{% macro list_xpex_guid(selDevSym,xpex_advice,xpex_user,selXpex,compo,ratio) %}
+<div class="m-1 mt-5 row text-center guideline-table">
+    <div class="list-table">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">Unit</th>
+                    <th scope="col">Ratio per Use Case</th> {# {{compo['name']}} #}
+                    <th scope="col">Range of the Unit Cost ( in {{selDevSym}} )</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_xpex,data in selXpex %}
+                {% if id_xpex in xpex_advice|keys %}
+                <tr id = "tr_{{ id_xpex }}" scope="row">
+                    <td scope="col">{{ xpex_advice[id_xpex]['name'] }}</td>
+                    <td scope="col">{{ xpex_advice[id_xpex]['unit'] != "" ? xpex_advice[id_xpex]['unit'] : "-" }}</td>
+                    <td scope="col">{{ ratio[id_xpex]['val'] >= 0 ? ratio[id_xpex]['val'] : "-"  }}</td>
+                    {% if xpex_advice[id_xpex]['range_max'] == 0 %}
+                    <td scope="col">-</td>
+                    {% else %}
+                    <td scope="col">{{ xpex_advice[id_xpex]['range_min'] }} - {{ xpex_advice[id_xpex]['range_max'] }}</td>
+                    {% endif %}
+                </tr>   
+                {% endif %}      
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro list_xpex_input(selDevSym,xpex_advice,xpex_user,ratio,selXpex,nb_uc) %}
+<div class="row m-4 text-center">
+    <div class="col mt-2 list-table">
+        <table id="xpex_input" class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">Ratio per Use Case</th>
+                    <th scope="col">Volume</th>
+                    <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
+                    <th scope="col">Amortization Period ( in years)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_xpex,data in selXpex %}
+                <tr id = "tr_{{ id_xpex }}" scope="row">
+                    {% if id_xpex in xpex_advice|keys %}
+                    <td scope="col">{{ xpex_advice[id_xpex]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ xpex_user[id_xpex]['name'] }}</td>
+                    {% endif %}
+
+                    <td scope="col"><input id="rat_{{id_xpex}}" name="rat_{{id_xpex}}" class="text-center ratio pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(rat_{{id_xpex}});" placeholder="{{ratio[id_xpex]['val']}}" ></td> 
+
+                    <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
+
+                    <td scope="col"><input id="cost_{{id_xpex}}" name="cost_{{id_xpex}}" class="text-center unit_cost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkXpexInput(cost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost'] }}" placeholder="{{ (xpex_advice[id_xpex]['range_min'] + xpex_advice[id_xpex]['range_max']) / 2 }}"></td> 
+
+                    <td scope="col"><input class="text-center period pt-1 pb-1" id="period_{{id_xpex}}" name="period_{{id_xpex}}" min=1 step=1 type="number" oninput="checkXpexInput(period_{{id_xpex}});" required value="{{ selXpex[id_xpex]['period'] ? selXpex[id_xpex]['period'] : "" }}"></td>
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+
+{% macro list_xpex_total(selDevSym,xpex_advice,xpex_user,selXpex) %}
+<div class="row ml-5 mr-5 pl-5 pr-5 text-center">
+    <div class="col list-table">
+        <table id="tot_table_xpex" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">Total {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} ( in {{selDevSym}} )</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id_xpex,data in selXpex %}
+                <tr id = "tr_{{ id_xpex }}" scope="row">
+                    {% if id_xpex in xpex_advice|keys %}
+                    <td scope="col">{{ xpex_advice[id_xpex]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ xpex_user[id_xpex]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col" id="tot_{{id_xpex}}">-</td>
+                </tr> 
+            {% endfor %}
+                <tr>
+                    <th class="bg-light text-dark">Total</th>
+                    <td class="font-weight-bold" scope="col" id="tot">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

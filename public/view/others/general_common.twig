@@ -1,0 +1,112 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+
+{% block sidebar %}{{ sidebar.sidebar(sideBarName, projID, ucID) }}{% endblock %}
+
+
+
+{% block content %}
+<div class="">
+    <div class="row m-5 align-items-center">
+        <div class="col-lg-6 text-center">
+            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+        </div>
+        <div class="col-lg-5">
+            <h2 class="text-center text-uppercase">
+            {% block title %}
+                {% if sideBarName=='customer_dashboards' %}
+                    Customer Dashboards
+                {% elseif sideBarName=='supplier_dashboards' %}
+                    Supplier Dashboards
+                {% elseif sideBarName=='project_scoping' %}
+                    Project Scoping
+                {% elseif sideBarName=='scope1' %}
+                    Project Initialization
+                {% elseif sideBarName=='deal_criteria_customer' %}
+                    Deal Criteria (Customer)
+                {% elseif sideBarName=='deal_criteria_supplier' %}
+                    Deal Criteria (Supplier)
+                {% elseif sideBarName=='input_project_common' %}
+                    Project Initialization (Customer)
+                {% elseif sideBarName=='input_project_common_supplier' %}
+                    Project Initialization (Supplier)
+                {% endif %}
+            {% endblock %}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+    {% if sideBarName=='customer_dashboards' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='supplier_dashboards' %}
+        Lorem ipsum supplier ...
+    {% elseif sideBarName=='project_scoping' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='deal_criteria_supplier' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='deal_criteria_customer' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='input_project_common' %}
+        Lorem ipsum ...
+    {% elseif sideBarName=='input_project_common_supplier' %}
+        Lorem ipsum !
+    {% endif %}
+    </div>
+</div>
+<div class="row text-center text-dark">
+    <a href={{nextPage}} class="offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size: 50px;" aria-hidden="true"></a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+{% if sideBarName=='customer_dashboards' or sideBarName=='supplier_dashboards' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_dashbords.js"></script>
+
+
+{% elseif sideBarName=='project_scoping' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/zonesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/sizeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/prereq_projectScoping.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/volumesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
+
+{% elseif sideBarName=='scope1' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/zonesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/sizeForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/prereq_projectScoping.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/volumesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/schedulesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
+
+{% elseif sideBarName =='input_project_common' or sideBarName =='input_project_common_supplier' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
+
+{% elseif sideBarName == "cost_benefits" %}
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/prereq_costBenefits.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/capexForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/implemForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/opexForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/revenuesForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/cashreleasingForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/widercashForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/quantifiableForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/noncashForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/cost_benefits_in/risksForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
+
+{% elseif sideBarName =='deal_criteria' %}
+    <script type="text/javascript" src="../../public/assets/js/custom/deal_criteria/form.js"></script>
+
+{% endif %}
+{% endblock %}

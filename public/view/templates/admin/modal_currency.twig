@@ -1,0 +1,33 @@
+{% macro modal_change_rate(id, symbol) %}
+
+<div class="modal fade" id="changeRate_{{id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="changeRate-form" action="?A=admin&amp;A2=manage_db&amp;A3=change_rate" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new rate {{symbol}} to GBP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-4 col-form-label">New Rate</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" step=0.000001 name="newrate" id="newrate" aria-describedby="newrateHelp"  required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <input type="hidden" name="id" id="id" value="{{id}}"  required>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Update</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+
+{% endmacro %}

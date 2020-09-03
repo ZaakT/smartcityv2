@@ -353,7 +353,6 @@ function projectScore() {
   return score;
 }
 function calcProjectScore(projectScore, target, nogo, idSelector) {
-  console.log(projectScore, target, nogo, idSelector);
   var score = 0;
   if(target>=nogo){
     if (projectScore >= target) {

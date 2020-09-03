@@ -1,0 +1,57 @@
+{% extends '/others/general_common.twig' %}
+{% set sideBarName = "customer_dashboards" %}
+
+{% import "/templates/choose_redirect.twig" as redirect %}
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_cb.twig" as macros %}
+{% import "/templates/customer_dashboards/macro_table.twig" as table %}
+
+{% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
+
+{% block title %}Dashbords - Project Details{% endblock %}
+
+{% block content %}
+
+
+
+{% set lineNames = [
+    ["Cash-Out", "cashOut", 1],
+    ["Capex", "cashOut_capex", 2],
+    ["supplier", "cashOut_capex_supplier", 3],
+    ["other supplier", "cashOut_capex_otherSupplier", 3],
+    ["Deployment", "cashOut_deployment", 2],
+    ["supplier","cashOut_deployment_supplier", 3 ],
+    ["other supplier", "cashOut_deployment_otherSupplier", 3],
+    ["internal", "cashOut_deployment_internal", 3],
+    ["Opex", "cashOut_opex", 2],
+    ["supplier", "cashOut_opex_opex", 3],
+    ["other supplier", "cashOut_opex_otherSupplier", 3],
+    ["internal", "cashOut_opex_internal", 3],
+    ["Cash-In Revenues", "cashInRevenues", 1],
+    ["UC Revenues", "cashInRevenues_ucRevenues", 2],
+    ["Cash Realeasing Benefits", "cashInRevenues_cashRealeasingBenefits", 2],
+    ["Wider Cash Benefits", "cashInRevenues_widerCashBenefits", 2],
+    ["Net Cash", "netCash", 1],
+    ["Cummulated Net Cash", "cummulatedNetCash", 1],
+    ["Net Societal Cash", "netSocietalCash", 1],
+    ["Cummulated Net Societal Cash", "cummulatedNetSocietalCash", 1]
+] %}
+{% set colNames = [""]|merge(years) %}
+
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class="col text-center">
+        <p>Dashboard of Project Cash-Out and Cash-In items (annual / monthly scheduling).</p>
+
+    </div>
+</div>
+{{ table.table(lineNames, colNames, selDevSym) }}
+
+
+<div id="data"  data-to-show="{{ data|json_encode }}"></div>
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
+{% endblock %}
+

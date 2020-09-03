@@ -1,0 +1,41 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/second_bar.twig" as second_bar %}
+
+{% block sidebar %}{{ sidebar.sidebar("input_use_case_supplier") }}{% endblock %}
+{% block title %}Project schedule{% endblock %}
+
+{% block content %}
+
+{% if projID==0 %}
+    {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+    {{ redirect.choose_ucm() }}
+
+{% else %}
+    {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+<div class="row jumbotron text-light mx-5 bg-dark p-3" style="margin-top: 2rem;">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amettt, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+{#  ZONE DE CONTENU #}
+
+<h1>equipment revenue</h1>
+
+{#  FIN DU CONTENU #}
+
+<div class="row m-3 text-center text-dark">
+        <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('supplier_schedule');"></button>
+    </div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+   <script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/schedule_form.js"></script>
+{% endblock %}

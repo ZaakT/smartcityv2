@@ -1,0 +1,34 @@
+{% macro list_users(users, isTaken = false) %}
+{% import "/templates/admin/modal_users.twig" as modal %}
+
+<div class="row text-center">
+    <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
+</div>
+<div class="row text-center">
+    <div class="col m-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">ID</<th>
+                    <th scope="col">Username</<th>
+                    <th scope="col">Admin</th>
+                    <th scope="col">Creation Date</th>
+                    <th scope="col">Profile</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            {% for user in users %}
+                <tr id = "user_{{ user[0] }}" scope="row">
+                    <td class="check-col">{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[2] ? "Yes" : "No" }}</td>
+                    <td>{{ user[3]|date("d/m/Y") }}</td>
+                    <td>{{ user[4] == "d" ? "Project Developper" : "Supplier" }}</td>
+                    <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteUser_{{ user[0] }}"></span></a></td>
+                    {{ modal.delete_user(user[0],user[1]) }}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endmacro %}

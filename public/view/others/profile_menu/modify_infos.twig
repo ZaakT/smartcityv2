@@ -1,0 +1,50 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("profile") }}{% endblock %}
+
+{% block title %}Modify Informations{% endblock %}
+
+
+{% block content %}
+<div class="">
+    <div class="row text-center">
+        <div class="col">
+            <h1 class="m-5"><span class="font-weight-bold">{{username}}</span> ({{ is_admin ? "admin" : "common" }})</h1>
+            <h3 class="m-5">Modify Informations</h3>
+        </div>
+    </div>
+    <div class="row m-5">
+        <form class="col" id="createUser-form" action="?A=profile&amp;A2=save_infos" method='post' oninput="pwConfirm()" >
+            <div class="form-group row">
+                <label for="username" class="col-lg-3 col-form-label">New Username</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter a new username" value="{{ username}}" required>
+                    <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-lg-3 col-form-label">New Password</label>
+                <div class="col-lg-9">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="Enter a new password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="passwordConfirmation" class="col-lg-3 col-form-label">Confirm Password</label>
+                <div class="col-lg-9">
+                    <input type="password" class="form-control" name="passwordConfirmation" id="passwordConfirmation" placeholder="Confirm password">
+                    <small id="pwMatch" class="text-danger" hidden></small>
+                </div>
+            </div>
+            <div class="form-group row">
+                <button type="submit" class="mt-3 btn btn-dark offset-sm-4 col-sm-4">Save</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

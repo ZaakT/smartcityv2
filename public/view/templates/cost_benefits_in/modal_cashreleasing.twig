@@ -1,0 +1,102 @@
+{% macro create_cashreleasing(projID=0,ucID=0) %}
+<div class="modal fade" id="createNewCashReleasingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createCashReleasing-form" action="?A=cost_benefits&amp;A2=create_cashreleasing&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel3">Please enter the new Cash Releasing item informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>    
+{% endmacro %}
+
+
+{% macro delete_cashreleasing(idCashReleasing,nameCashReleasing,projID=0,ucID=0) %}
+<div class="modal fade" id="askDeleteCashReleasing_{{ idCashReleasing}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cash Releasing item deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this Cash Releasing item ({{ nameCashReleasing }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=cost_benefits&amp;A2=delete_cashreleasing&amp;projID={{projID}}&amp;ucID={{ucID}}&amp;id={{ idCashReleasing }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}
+
+
+{% macro ask_fill(projID=0,ucID=0) %}
+<div class="modal fade" id="askFillCashReleasing" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Access to Cash Releasing Selection Page</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to fill this part ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Yes</button>
+                <a href="?A=cost_benefits&amp;A2=widercash&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-secondary">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro delete_selection(projID=0,ucID=0) %}
+<div class="modal fade" id="deleteSelectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Selection Deleting Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete the selection and skip this part ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=cost_benefits&amp;A2=delete_selection_cashreleasing&amp;projID={{projID}}&amp;ucID={{ucID}}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}

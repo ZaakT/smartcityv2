@@ -1,0 +1,100 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}
+	{{ navbar.navbar(is_connected,is_admin,devises) }}
+{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/second_bar.twig" as second_bar %}
+
+{% block sidebar %}
+	{{ sidebar.sidebar("input_use_case_supplier") }}
+{% endblock %}
+{% block title %}Project schedule
+{% endblock %}
+
+{% block content %}
+
+	{% if projID==0 %}
+		{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+		{{ redirect.choose_ucm() }}
+
+	{% else %}
+		{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+		<div class="row jumbotron text-light mx-5 bg-dark p-3" style="margin-top: 2rem;">
+			<div class="col text-center">
+				<p class="text-justify">Lorem ipsum dolor sit amettt, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem.
+				</p>
+			</div>
+		</div>
+
+		{#  CONTENU #}
+		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=capex&amp;A3=selection&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
+			<div id="dates_projet">
+				<p>
+					<span class="oi oi-caret-bottom"></span>
+					avr-20</p>
+				<p>avr-23
+					<span class="oi oi-caret-bottom"></span>
+				</p>
+			</div>
+			<div class="progress">
+				<div class="progress-bar progress-bar-main active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+					Project schedule
+				</div>
+			</div>
+			<p>UC Operations Schedule</p>
+            <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapse_uc_operations" aria-expanded="false" aria-controls="collapseExample">
+                Set dates
+            </button>
+			<div class="form-group">
+				<div id="collapse_uc_operations" class="row collapse">
+					<div class="col">
+						<label>Deployment start</label>
+						<input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+					</div>
+					<div class="col">
+						<label>Deployment > Production</label>
+						<input type="date" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+					</div>
+				</div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-operations-1 progress-bar-striped" style="width: 20%">Deployment
+					</div>
+					<div class="progress-bar progress-bar-remaining progress-bar-striped" style="width: 80%">Production
+					</div>
+				</div>
+				<p>UC Pricing Schedule</p>
+				<div class="progress">
+					<div class="progress-bar progress-bar-nothing progress-bar-striped" style="width: 20%"></div>
+					<div class="progress-bar progress-bar-pricing-1 progress-bar-striped" style="width: 40%">POC
+					</div>
+					<div class="progress-bar progress-bar-remaining progress-bar-striped" style="width: 40%">Run
+					</div>
+				</div>
+				<p>UC Revenues Schedule</p>
+				<div class="progress">
+					<div class="progress-bar progress-bar-nothing progress-bar-striped" style="width: 20%"></div>
+					<div class="progress-bar progress-bar-revenues-1 progress-bar-striped" style="width: 25%">Lag
+					</div>
+					<div class="progress-bar progress-bar-revenues-2 progress-bar-striped" style="width: 25%">Ramp-up
+					</div>
+					<div class="progress-bar progress-bar-remaining progress-bar-striped" style="width: 30%">Run
+					</div>
+				</div>
+			</form>
+
+
+			{#  FIN DU CONTENU #}
+
+			<div class="row m-3 text-center text-dark">
+				<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('supplier_schedule');"></button>
+			</div>
+		{% endif %}
+	{% endblock %}
+
+	{% block scripts %}
+		<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/schedule_form.js"></script>
+	{% endblock %}

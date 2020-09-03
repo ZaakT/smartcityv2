@@ -1,0 +1,121 @@
+{% macro list_noncash(noncash,selNonCash=[]) %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Non Cash Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in noncash %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedNonCash(form_noncash);" id='{{ id }}' name="{{ id }}" {{id in selNonCash|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_noncash_user(noncash_user,projID=0,ucID=0,selNonCash=[]) %}
+{% import "/templates/cost_benefits_in/modal_noncash.twig" as modal %}
+<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Non Cash Items</h3>
+<div class="row text-center">
+    <div class="col mx-5 mb-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col"></th>
+                </tr>
+                
+            </thead>
+            <tbody>
+            {% for id,item in noncash_user %}
+                <tr id = "tr_{{ id }}" scope="row">
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedNonCash(form_noncash);" id='{{ id }}' name="{{ id }}" {{id in selNonCash|keys ? "checked" : ""}}></td>
+                    <td scope="col">{{ item['name'] }}</td>
+                    <td scope="col">{{ item['description'] }}</td>
+                    <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteNonCash_{{ id }}"></span></a></td>
+                    {{ modal.delete_noncash(id,item['name'],projID,ucID) }}
+                </tr>         
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_noncash_input(noncash_advice,noncash_user,selNonCash) %}
+<div class="row m-4 text-center">
+    <div class="col mt-2 list-table">
+        <table id="noncash_input" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">Non Cash Component</th>
+                    <th scope="col">Expected Impact<br>(1 - 10)</th>
+                    <th scope="col">Probability<br>( in %)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_noncash,data in selNonCash %}
+                <tr id = "tr_{{ id_noncash }}" scope="row">
+                    {% if id_noncash in noncash_advice|keys %}
+                    <td scope="col">{{ noncash_advice[id_noncash]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ noncash_user[id_noncash]['name'] }}</td>
+                    {% endif %}
+
+                    <td scope="col"><input id="impact_{{id_noncash}}" name="impact_{{id_noncash}}" class="text-center impact" type="number" min=1 max=10 step=1 required oninput="checkNonCashInput();" value="{{selNonCash[id_noncash]['exp_impact']}}"></td>
+
+                    <td scope="col"><input id="prob_{{id_noncash}}" name="prob_{{id_noncash}}" class="text-center prob" type="number" min=0 max=100 step=10 required oninput="checkNonCashInput();" value="{{selNonCash[id_noncash]['prob']}}" style="max-width:80%;"><span> %</span></td> 
+                    
+                </tr> 
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro list_noncash_total(noncash_advice,noncash_user,selNonCash) %}
+<div class="row ml-5 mr-5 pl-5 pr-5 text-center">
+    <div class="col list-table">
+        <table id="tot_table_noncash" class='table table-lg table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col">Non Cash Component</th>
+                    <th scope="col">Weighted Impact</th>
+
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_noncash,data in selNonCash %}
+                <tr id = "tr_{{ id_noncash }}" scope="row">
+                    {% if id_noncash in noncash_advice|keys %}
+                    <td scope="col">{{ noncash_advice[id_noncash]['name'] }}</td>
+                    {% else %}
+                    <td scope="col">{{ noncash_user[id_noncash]['name'] }}</td>
+                    {% endif %}
+                    <td scope="col" id="weighted_{{id_noncash}}">-</td>
+                </tr> 
+            {% endfor %}
+                <tr>
+                    <th class="bg-light text-dark">Total</th>
+                    <td class="font-weight-bold" scope="col" id="tot">-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

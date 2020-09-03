@@ -1,0 +1,32 @@
+{% macro list_uc_cat(cat, isTaken = false, nbUC = []) %}
+{% import "/templates/admin/modal_uc_cat.twig" as modal %}
+
+<div class="row text-center">
+    <h6 id="createCategoryHelp" class="col text-danger font-italic">{{ isTaken ? "name already taken" : "" }}</h6>
+</div>
+<div class="row  m-5  text-center">
+    <div class="offset-1 col-10 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" style="width: 10%;">id</<th>
+                    <th scope="col" style="width: 25%;">Name</<th>
+                    <th scope="col" style="width: 35%;">Description</<th>
+                    <th scope="col" style="width: 20%;">Nb of Use Cases</<th>
+                    <th scope="col" style="width: 10%;"></th>
+                </tr>
+            </thead>
+            {% for id_cat,category in cat %}
+                <tr id = "category_{{ id_cat }}" scope="row">
+                    <td class="check-col">{{ id_cat }}</td>
+                    <td>{{ category['name'] }}</td>
+                    <td>{{ category['description'] }}</td>
+                    <td>{{ nbUC[id_cat] }}</td>
+                    <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteCategory_{{ id_cat }}"></span></a></td>
+                    {{ modal.delete_category(id_cat,category['name']) }}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endmacro %}

@@ -1,0 +1,183 @@
+{% macro project_scope(measures,ucs,scope,volumes,keydates_uc,selDevSym) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table project_scope_table">
+        <table id="project_scope_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="" scope="col" rowspan=2 style="min-width: 15vw; width: 15vw;max-width: 15vw;">Use Cases List</th>
+                    {% for measID,list_ucs in scope %}
+                        <th class="" scope="col" colspan={{list_ucs|length}}>{{measures[measID]['name']}}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <th class="" scope="col" colspan=1>{{ucs[ucID]['name']}}</th>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr>
+                    <td class="item" scope="col" colspan=1># service items</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{volumes[ucID]|number_format(0,'.',',')}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Start Date</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates_uc[ucID]['startdate']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Implementation<br>End Date</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates_uc[ucID]['implem_enddate']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item" scope="col" colspan=1>Project Duration</td>
+                    {% for measID,list_ucs in scope %}
+                        {% for ucID in list_ucs %}
+                            <td class="" scope="col" colspan=1>{{keydates_uc[ucID]['project_duration']}}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro budget_impact(years,baselineOpCost,netProjectCost,budgetCost,OBYI,CRV) %}
+<div class="row text-center ">
+    <div class="col mt-2 mx-5 list-table budget_all_table">
+        <table id="budget_all_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+                <tr>
+                    <th class="text-uppercase" scope="col" style="min-width: 10vw;width: 10vw;max-width: 10vw;">Budget Impact</th>
+                    <th scope="col">Current</th>
+                    {% for year in years %}
+                        <th scope="col">{{year}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item text-left"><strong>Budget Cost</strong><br>(I + II)</td>
+                    <td>{{selDevSym}}&nbsp;{{budgetCost['current']|number_format(2, '.', ',')}}</td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{budgetCost[year]|number_format(2, '.', ',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>I. Baseline Operating Cost</strong></td>
+                    <td>{{selDevSym}}&nbsp;{{baselineOpCost['current']|number_format(2, '.', ',')}}</td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{baselineOpCost[year]|number_format(2, '.', ',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>II. Net Project Cost</strong><br>(a + b - c + d)</td>
+                    <td></td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{netProjectCost[year]|number_format(2, '.', ',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="">
+                    <td class="item text-left"><strong>Operating Budget<br>Yearly Impact</strong></td>
+                    <td></td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{OBYI[year]|number_format(2, '.', ',')}}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="item text-left"><strong>Capex Residual Value</strong></td>
+                    <td></td>
+                    {% for year in years %}
+                        <td>{{selDevSym}}&nbsp;{{CRV[year]|number_format(2, '.', ',')}}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro cost_benefits(capex,noncash,risk,netcash,netsoccash,npv,socnpv,ROI,SOCROI,payback,socpayback) %}
+<div class="row text-center">
+    <div class=" offset-4 col-4 mt-2 list-table cost_benefits_table1">
+        <table id="cost_benefits_table1" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item">Capex</td>
+                    <td>{{selDevSym}}&nbsp; {{capex|number_format(2,'.',',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item">Non Cash Benefits</td>
+                    <td>{{noncash|number_format(1,'.',',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item">Risk</td>
+                    <td>{{risk|number_format(1,'.',',')}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row text-center ">
+    <div class="offset-2 col-8 mt-2 list-table cost_benefits_table2">
+        <table id="cost_benefits_table2" class='table table-lg table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-light text-center">
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="item">Net Cash</td>
+                    <td>{{selDevSym}}&nbsp; {{netcash|number_format(2,'.',',')}}</td>
+                    <td class="item">Net Societal Cash</td>
+                    <td>{{selDevSym}}&nbsp; {{netsoccash|number_format(2,'.',',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item">NPV</td>
+                    <td>{{selDevSym}}&nbsp; {{npv|number_format(2,'.',',')}}</td>
+                    <td class="item">Societal NPV</td>
+                    <td>{{selDevSym}}&nbsp; {{socnpv|number_format(2,'.',',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item">ROI</td>
+                    <td>{{selDevSym}}&nbsp; {{ROI|number_format(2,'.',',')}}</td>
+                    <td class="item">Societal ROI</td>
+                    <td>{{selDevSym}}&nbsp; {{SOCROI|number_format(2,'.',',')}}</td>
+                </tr>
+                <tr>
+                    <td class="item">Payback</td>
+                    <td>{{payback}} months</td>
+                    <td class="item">Societal Payback</td>
+                    <td>{{socpayback}} months</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro bankability(scores) %}
+<div class="row mb-5 text-center ">    
+    <div class="offset-2 col-8">
+            <canvas id="BankDefineChart"></canvas>
+            {# <iframe src=null hidden
+            onload="showBankDefineChart([1,1,2]);"></iframe> #}
+            <iframe src=null hidden
+            onload="showBankDefineChart({{scores}});"></iframe>
+        </div>
+</div>
+{% endmacro %}

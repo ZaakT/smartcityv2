@@ -1,0 +1,189 @@
+{% macro list_proj(projects) %}
+<div class="row text-center">
+    <div class="col mt-5 mx-5 list-table">
+        <table class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" class="check-col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Last Modif.</th>
+                    <th scope="col">Scoping</th>
+                    <th scope="col">Cost Benefits</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_proj,proj in projects %}
+                <tr id = "tr_{{ id_proj }}" scope="row" class="{{proj['scoping'] and proj['cb'] ? "" : "text-danger font-italic"}}" >
+                    <td class="check-col align-middle"><input {{proj['scoping'] and proj['cb'] ? "" : "disabled"}} type="checkbox" onclick="countChecked_selProj('form_proj');" class="proj" id='proj_{{ id_proj }}' name="proj_{{ id_proj }}"></td>
+                    <td class="font-weight-bold">{{ proj['name'] }}</td>
+                    <td>{{ proj['description'] }}</td>
+                    <td>{{ proj['modif_date'] }}</td>
+                    {# <td><span title={{proj['scoping'] ? "check" : "x"}} class="oi oi-{{proj['scoping'] ? "check" : "x"}} text-{{proj['scoping'] ? "success" : "danger"}}"></span></td>
+                    <td><span title={{proj['cb'] ? "check" : "x"}} class="oi oi-{{proj['cb'] ? "check" : "x"}} text-{{proj['cb'] ? "success" : "danger"}}"></span></td> #}
+                    <td><img width=20 height=20 id="{{ proj['scoping'] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj['scoping'] ? "full_circle" : "empty_circle" }}.png"/></td>
+                    <td><img width=20 height=20 id="{{ proj['cb'] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj['cb'] ? "full_circle" : "empty_circle" }}.png"/></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro summary_projects(projects,projectsData,measures,ucs) %}
+<div class="row text-center">
+    <div class="col mt-5 mx-5 list-table summary_projects">
+        <table class='table table-sm table-bordered table-responsive-lg'>
+            <thead class="thead-light text-center sticky-top">
+                <tr>
+                    <th scope="col" rowspan=2 style="width: 30%;">Name</th>
+                    <th scope="col" colspan=2 style="width: 50%;">SCOPE</th>
+                    <th scope="col" rowspan=2 style="width: 10%;">Start Date</th>
+                    <th scope="col" rowspan=2 style="width: 10%;">Duration</th>
+                </tr>
+                <tr>
+                    <th scope="col" style="width: 20%;">Measures</th>
+                    <th scope="col" style="width: 30%;">Use Cases</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_proj,proj in projects if id_proj in projectsData|keys %}
+                <tr height="25px" style="background-color: #f5f5f5;">
+                    <td colspan=5></td>
+                </tr>
+                <tr id = "tr_{{ id_proj }}" scope="row">
+                    <td class="font-weight-bold" rowspan={{projectsData[id_proj]['scope']|length}}>{{ proj['name'] }}</td>
+                    {% set idMeas = projectsData[id_proj]['scope']|keys|first %}
+                    <td>{{measures[idMeas]['name']}}</td>
+                    <td class="text-left">
+                        <ul>
+                            {% for id_uc in projectsData[id_proj]['scope'][idMeas] %}
+                            <li>{{ucs[id_uc]['name']}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td rowspan={{projectsData[id_proj]['scope']|length}}>{{ projectsData[id_proj]['start_date'] }}</td>
+                    <td rowspan={{projectsData[id_proj]['scope']|length}}>{{ projectsData[id_proj]['duration_Y'] }}{{ projectsData[id_proj]['duration_Y'] > 0 ? "Y" : "" }}&nbsp;{{ projectsData[id_proj]['duration_M'] }}M</td>
+                </tr>
+                {% for id_meas in projectsData[id_proj]['scope']|keys|slice(1,last) %}
+                <tr >
+                    <td>Meas 2</td>
+                    <td class="text-left">
+                        <ul>
+                            {% for id_uc in projectsData[id_proj]['scope'][id_meas] %}
+                            <li>{{ucs[id_uc]['name']}}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+                
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+{% macro sel_compo(list_compo,compoData,projects,function) %}
+<div class="row text-center">
+    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+        <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" colspan=2>Components</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_compo,compo in list_compo %}
+                <tr id = "tr_{{ id_compo }}" scope="row" class="" >
+                    <td class="check-col align-middle"><input type="checkbox" onclick="{{function}}('{{compo}}');" class="compo" id='compo_{{ id_compo }}' name="compo_{{ compo }}" checked></td>
+                    {% set name_compo = compo %}
+                    {% if compo=="payback" %}
+                        {% set name_compo = "payback / project duration" %}
+                    {% else %}
+                        {% if compo=="societal payback" %}
+                            {% set name_compo = "societal payback / project duration" %}
+                        {% else %}
+                            {% if compo=="npv" %}
+                                {% set name_compo = "NPV" %}
+                            {% else %}
+                                {% if compo=="societal npv" %}
+                                    {% set name_compo = "societal NPV" %}
+                                {% endif %}         
+                            {% endif %}        
+                        {% endif %}
+                    {% endif %}
+                    
+                    <td class="text-capitalize">{{ name_compo }}</td>
+                    
+                    {% for projID,data in compoData %}
+                    <td hidden>
+                        <input type="text" hidden class="proj" id="proj_{{projID}}" name="proj_{{projID}}" value="{{projects[projID]['name']}}">
+                        {% for compo,value in data %}
+                            <input type="number" hidden class="val" id="val_{{projID}}_{{compo}}" name="val_{{projID}}_{{compo}}" value="{{value}}">
+                        {% endfor %}
+                        
+                    </td>
+                    {% endfor %}
+                </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro sel_compo_OP(list_compo,compoData,projects,function) %}
+<div class="row text-center">
+    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+        <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" colspan=2>Components</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_compo,compo in list_compo %}
+                <tr id = "tr_{{ id_compo }}" scope="row" class="" >
+                    <td class="check-col align-middle"><input type="checkbox" onclick="{{function}}('{{compo}}');" class="compo" id='compo_{{ id_compo }}' name="compo_{{ compo }}" checked></td>
+                    {% set name_compo = compo %}
+                    {% if compo=="payback" %}
+                        {% set name_compo = "payback / project duration" %}
+                    {% else %}
+                        {% if compo=="societal payback" %}
+                            {% set name_compo = "societal payback / project duration" %}
+                        {% else %}
+                            {% if compo=="npv" %}
+                                {% set name_compo = "NPV" %}
+                            {% else %}
+                                {% if compo=="societal npv" %}
+                                    {% set name_compo = "societal NPV" %}
+                                {% endif %}         
+                            {% endif %}        
+                        {% endif %}
+                    {% endif %}
+                    
+                    <td class="text-capitalize">{{ name_compo }}</td>
+                    
+                    {% for projID,data in compoData %}
+                    <td hidden>
+                        <input type="text" hidden class="proj" id="proj_{{projID}}" name="proj_{{projID}}" value="{{projects[projID]['name']}}">
+                        {% for compo,list_dates in data %}
+                            {% for date,value in list_dates %}
+                                <input type="number" hidden class="val" id="val_{{projID}}_{{compo}}_{{date}}" name="val_{{projID}}_{{compo}}_{{date}}" value="{{value}}">
+                            {% endfor %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endmacro %}

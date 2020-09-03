@@ -1,0 +1,17 @@
+{% macro list_critCategories(categories,ucmID) %}
+{# {% set color = ['bg-danger','bg-primary','bg-success'] %} #}
+{% set color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88'] %}
+
+<div class="col btn-group-lg w-100" role="group" aria-label="Basic example">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+        {% for category in categories %}
+            <button id="cat_{{category[0]}}" onclick="toogleButton({{category[0]}});" type="button" class=" mx-2 col-2 btn active categ-button" style="background:{{ color[category[0]-1] }};">{{category[1]}}</button> 
+        {% endfor %}
+        </div>
+    </div>
+    <div class="m-1 text-center">
+    You can discard Criteria Categories by clicking on each category above once.
+    </div>
+</div>
+{% endmacro %}

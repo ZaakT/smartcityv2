@@ -1,0 +1,42 @@
+{% extends '/others/admin_menu/manage_db.twig' %}
+
+{% block title %}Manage Exchange Rates{% endblock %}
+
+{% import "/templates/admin/modal_currency.twig" as modal %}
+
+{% block content %}
+{# <h1>List of users</h1> #}
+{#{% set users = [[1,"Toto","5454545","Yes"],[2,"Tata","fdfd2424","No"]] %}#}
+
+<div class="row text-center">
+    <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
+</div>
+<div class="row text-center">
+    <div class="col m-5 list-table">
+        <table class='table table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col">ID</<th>
+                    <th scope="col">Currency code</<th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">rate to GBP</th>
+                    <th></th>
+                </tr>
+            </thead>
+            {% for id,currency in list_currency %}
+                <tr id = "currency_{{id}}" scope="row">
+                    <td class="check-col">{{id}}</td>
+                    <td>{{ currency['name'] }}</td>
+                    <td>{{ currency['symbol'] }}</td>
+                    <td>{{ currency['rateToGBP'] }}</td>
+                    <td><a href="#"><span class="oi oi-pencil text-dark" title="edit" aria-hidden="true" data-toggle="modal" data-target="#changeRate_{{ id }}"></span></a></td>
+                    {{ modal.modal_change_rate(id, currency['symbol']) }}   
+
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+

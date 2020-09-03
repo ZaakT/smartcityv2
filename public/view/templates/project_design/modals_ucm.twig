@@ -1,0 +1,113 @@
+{% macro create_ucm() %}
+<div class="modal fade" id="createNewUCMModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createUCM-form" action="?A=project_design&amp;A2=create_ucm" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Use Cases Menu informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>    
+{% endmacro %}
+
+{% macro delete_ucm(idUCM,nameUCM) %}
+<div class="modal fade" id="askDeleteUCM_{{ idUCM }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">UCM deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this UCM ({{ nameUCM }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=project_design&amp;A2=delete_ucm&amp;id={{ idUCM }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}
+
+{% macro create_ucm1() %}
+<div class="modal fade" id="createNewUCMModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createUCM-form" action="?A=project_sdesign&amp;A2=create_ucm1" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Use Cases Menu informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>    
+{% endmacro %}
+
+{% macro delete_ucm1(idUCM,nameUCM) %}
+<div class="modal fade" id="askDeleteUCM_{{ idUCM }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">UCM deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this UCM ({{ nameUCM }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=project_sdesign&amp;A2=delete_ucm1&amp;id={{ idUCM }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}

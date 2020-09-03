@@ -1,0 +1,25 @@
+{% extends '/templates/common_page.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("profile") }}{% endblock %}
+
+{% block title %}Profile Page{% endblock %}
+
+
+{% block content %}
+<div class="">
+    <div class="row my-5 text-center">
+        <div class="col">
+            <h1><span class="font-weight-bold">{{username}}</span> ({{ is_admin ? "admin" : "common" }})</h1>
+        </div>
+    </div>
+    <div class="row my-5 text-center">
+        <div class="col">
+            <h3>Récap ...</h3>
+        </div>
+    </div>
+</div>
+{% endblock %}

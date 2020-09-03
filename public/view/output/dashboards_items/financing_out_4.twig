@@ -1,0 +1,34 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_financing.twig" as macros %}
+
+{% block title %}Dashboards - Financing{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
+
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}&nbsp; {{funding_target|number_format(2,'.',',')}}</h5>
+</div>
+{{ macros.output_benef(benefs,funding_target,benefNames,benefShare,selDevSym) }}
+<div class="row mt-3 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="fin2csv('financing_table_3','{{selected}}','{{selected2}}','','','{{selDevSym}}');">Export to CSV</button>
+    </div>
+</div>
+
+<div class="row m-3 text-center text-dark">
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=dashboards&amp;A2=project_dashboard&amp;projID={{projID}}');"></button>
+</div>
+{% endblock %}

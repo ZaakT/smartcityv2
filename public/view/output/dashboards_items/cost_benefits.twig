@@ -1,0 +1,119 @@
+{% extends '/output/dashboards.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/dashboards/macro_cb.twig" as macros %}
+{#% import "/templates/customer_dashboards/macro_project_details.twig" as table %#}
+
+{% block title %}Dashboards - Project Dashboard{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("dashboards",projID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
+
+{% set title = ["Capex", "Implementation", "Total Investment", "Opex", "Revenues", "Cash Releasing Benefits", "Wider Benefits", "Cumulated \nNet Cash excl. WB", "Net Societal Cash", "Cumulated\Net Societal Cash"] %}
+{% set subtitle = ["(A)", "(B)", "(A + B)", "(C)", "(D)", "(E)", "(F)", "(E + D - A - B - C)", "","(F + E + D - A - B - C)", ""] %}
+{% set ident = ["capex", "implem", "invest", "opex", "revenues","cashreleasing",  "widercash", "netcash","cumnetcash","netsoccash", "cumnetsoccash"] %}
+
+<h2 class="ml-5 mt-5" style="font-weight: 600;">Cost Benefits Dashboard</h2>
+
+<div class="container-fluid">
+    <div class="row">
+        {# SELECTION #}
+        <div class="col-6 px-0">
+            <div class="container-fluid dash-bg m-3 p-3 row">
+                {# UC #}
+                <div class="col-5 container-fluid dash-bg-light p-3">
+                    <h3 class="dash-title mb-3">Use Case Selection</h3>
+                    <div class="selection-list">
+                        {% for measID,list_ucs in scope %}
+                            {% for ucID in list_ucs %}
+                                <div>
+                                    {% if uc_completed[ucID] == true %}
+                                    <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
+                                            checked="true" onclick="update()">
+                                    <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
+                                    {% else %}
+                                    <input type="checkbox" id="select_uc_{{ ucID }}" name="select_uc_{{ ucID }}"
+                                             disabled>
+                                    <label for="select_uc_{{ ucID }}">{{ ucs[ucID]['name'] }}</label>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {# ZONES #}
+                <div class="col-6 container-fluid dash-bg-light p-3">
+                    <h3 class="dash-title mb-3">Zone Selection</h3>
+                    <div class="selection-list">
+                        {% for idZone,zone in list_sel %}
+                            {% if zone['hasChildren'] == false %}
+                                <div>
+                                    <input type="checkbox" id="select_zone_{{ idZone }}" name="select_zone_{{ idZone }}"
+                                            checked="true" onclick="update()">
+                                    <label for="select_zone_{{ idZone }}">
+                                    {% if list_sel[zone['parent']]['parent'] != 0 %}
+                                        {{ list_sel[list_sel[zone['parent']]['parent']]['name'] }} / {% endif %}
+                                    {{ list_sel[zone['parent']]['name'] }} / {{ zone['name'] }}</label>
+                                </div>
+                                {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span id="ratio_zones" hidden>{{ ratio_zones }}</span>
+                </div>    
+            </div>
+
+            {# KEY DATES #}
+            <div class="container-fluid dash-bg m-3 row">
+                    <div class="container-fluid dash-bg-light m-3 p-3">
+                    {{ macros.key_dates(scope,ucs,keydates_uc) }}
+                    </div>
+            </div>
+
+        </div>
+    
+
+
+        <div class="col-6">
+            {# KPI #}
+            <div class="container-fluid dash-bg m-3 row">
+                <div class="container-fluid dash-bg-light m-3 p-3">
+                <span class="d-none" id="json_kpi">{{json_kpi}}</span>
+                {{ macros.kpi(selDevSym,scope,implem,capex,npv,socnpv,breakeven,soc_breakeven,noncash_rating,risks_rating) }}
+                </div>
+            </div>
+            
+            {#GRAPH #}
+            <div class="container-fluid dash-bg m-3 row">
+                <div class="container-fluid dash-bg-light m-3 p-3">
+                    <h3 class="dash-title">Cumulated Net Cash</h3>
+                    {{ macros.graph(scope,cumulnetcashTot,cumulnetsoccashTot,ucs,years) }}
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="row">
+    {# BIG DATA TABLE#}
+        <div class="container-fluid dash-bg m-3 row">
+            <div class="container-fluid dash-bg-light m-3 p-3">
+            <h3 class="dash-title">Cost-benefits output</h3>
+                {#}{{ table.data_table(scope, years, projectDates, title, subtitle, ident, selDevSym) }}
+               {#}  {{ macros.data_table(scope, years, projectDates, capex, capexMonth, implem, implemMonth, opex, opexMonth, revenues, revenuesMonth, cashreleasing, cashreleasingMonth, widercash, widercashMonth, netcash, netcashPerMonth, cumulnetcashTot, cumulnetcashPerMonth, netsoccash, netsoccashPerMonth, cumulnetsoccashTot, cumulnetsoccashPerMonth,selDevSym) }}
+                 <div class="row mt-2 mb-5 text-center">
+                    <div class="col">
+                        <button class="btn btn-sm btn-primary" onclick="cballuc2csv('cost_benefits_data','{{selected}}','{{selDevSym}}');">Export to CSV</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="../../public/assets/js/custom/dashboards/cost_benefits.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/dashboards/prereq_dashboards.js"></script>
+<script>prereq_dashboards();</script>
+{% endblock %}

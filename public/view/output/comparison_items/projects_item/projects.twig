@@ -1,0 +1,41 @@
+{% extends '/output/comparison_items/comp_projects.twig' %}
+
+{% import "/templates/navbar.twig" as navbar %}
+{% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
+
+{% import "/templates/sidebar.twig" as sidebar %}
+{% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
+
+{% import "/templates/comparison/macro_projects.twig" as macro %}
+
+{% block title %}Compare Projects - Projects{% endblock %}
+
+{% block content %}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. </p>
+</div>
+
+
+<div class="row">
+    {% if projects|length < 2 %}
+    <div class="col">
+        <h4 class="text-danger text-center font-italic">Please create at least 2 projects in <a class="text-danger font-weight-bold" href="?A=project_design&amp;A2=ucm">"Project Scoping"</a>.</h4>
+    </div>
+    {% else %}    
+        <form class="col container-fluid" name="form_proj" id="form_proj" onsubmit="return countChecked_selProj('form_proj');" action="?A=comp_projects&amp;A2=projects_selected" method="post">
+            {{ macro.list_proj(projects) }}
+            
+            <div class="row mt-4 mb-0 text-center">
+                <span id="countProjSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
+            </div>
+            <div class="row text-center mt-3">
+                <h6 id="help_proj" class="col text-danger font-weight-bold text-center" hidden>Please select at least 2 projects !</h6>
+            </div>
+
+            <div class="row my-0 text-center text-dark">
+                <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+            </div>
+        </form>
+    {% endif %}
+</div>
+{% endblock %}

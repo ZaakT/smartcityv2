@@ -1,0 +1,77 @@
+{% macro create_usecase(measures,cat) %}
+<div class="modal fade" id="createNewUseCaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="createUseCase-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_usecase" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new usecase informations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" aria-describedby="descriptionHelp" placeholder="Enter a description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="related_measure" class="col-sm-6 col-form-label">Related Measure</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="related_measure" id="related_measure">
+                                {% for id_meas,measure in measures %}
+                                    <option name="{{id_meas}}" id="{{id_meas}}" value="{{id_meas}}">{{measure['name']}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="related_category" class="col-sm-6 col-form-label">Related Category</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="related_category" id="related_category">
+                                {% for id_cat,category in cat %}
+                                    <option name="{{id_cat}}" id="{{id_cat}}" value="{{id_cat}}">{{category['name']}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Create</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro delete_usecase(idUseCase,nameUseCase) %}
+<div class="modal fade" id="askDeleteUseCase_{{ idUseCase }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">UseCase deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete this UseCase ({{ nameUseCase }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A=admin&amp;A2=manage_db&amp;A3=delete_usecase&amp;id={{ idUseCase }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}

@@ -1,0 +1,67 @@
+{% extends '/input/cost_benefits_in.twig' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/cost_benefits_in/macro_risks.twig" as list %}
+{% import "/templates/cost_benefits_in/macro_compo_guid.twig" as guid %}
+{% import "/templates/cost_benefits_in/modal_risks.twig" as modal %}
+
+{% block title %}Project Scoping - Risks - INPUT{% endblock %}
+
+{% block sidebar %}{{ sidebar.sidebar("cost_benefits",projID,ucID) }}{% endblock %}
+
+{% block content %}
+
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
+
+{#-------------- corps --------------#}
+{% if selRisks %}
+
+<div class="container-fluid">
+    <section class="row">
+        <div class="col-lg-8 text-left">
+
+            <h2 class="ml-5 mt-5">Risks</h2>
+            {#-------------- jumbotron --------------#}
+
+                {% if isDev %}
+                    {% set lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. " %}
+                {% else %}
+                    {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Risk items, and select % probability of occurrence to calculate Risk impact." %}
+                {% endif %}
+
+                <div class="row jumbotron text-light m-5 bg-dark p-3">
+                    <div class="col text-center">
+                        <p class="text-justify">{{lorem|nl2br}}</p>
+                    </div>
+                </div>
+
+
+            <form id="form_risks_input" name="form_risks_input" action="?A=cost_benefits&amp;A2=risks_inputed" method="post" onsubmit="return checkRisksPeriod() && checkRisksInput();">
+            {#-------------- tab input et total --------------#}
+            {{ list.list_risks_input(risks_advice,risks_user,selRisks) }}
+
+            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+            {{ list.list_risks_total(risks_advice,risks_user,selRisks) }}
+
+            {#-------------- bouton flèche --------------#}
+            <div class="row m-3 text-center text-dark">
+                <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_risks');"></button>
+            </div>
+            </form>
+        </div>
+        {#-------------- tab guide --------------#}
+        <div class="col-lg-4 guideline">
+        <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
+        {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
+        </div>
+    </section>
+</div>
+
+{% else %}
+<h2 class="text-center">There is no Risk item, please contact an administrator</h2>
+{% endif %}
+
+{% endblock %}
+
+

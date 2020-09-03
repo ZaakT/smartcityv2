@@ -1,0 +1,143 @@
+{# {% extends '/input/project_sdesign.twig' %} ------------------ Use Cases Menu ---------------------
+
+{% block title %}Project Design - Use Cases Menu{% endblock %}
+
+{% import "/templates/project_design/macro_ucm.twig" as list %}
+{% import "/templates/project_design/modals_ucm.twig" as modal %}
+{% import "/templates/second_bar.twig" as second_bar %}
+
+{% block content %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">Select or create a new <b>project</b>.</p>
+    </div>
+</div>
+<div class="row m-3">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUCMModal" role="button">Create a new project</button>
+</div>
+<div class="row mt-3 text-center">
+    <h6 id="createUCMHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
+</div>
+
+<form action="?A=project_sdesign&amp;A2=scope1" method="post">
+{% if ucms %}
+{{ list.list_ucms(ucms) }}
+{% else %}
+<h2 class="text-center m-5">You have no Use Cases Menu !</h2>
+{% endif %}
+<div class="row m-3 text-center text-dark">
+    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button {{ucms ? "" : "disabled"}}" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+</div>
+</form>
+
+{{ modal.create_ucm1(1) }}
+
+
+{% endblock %} #}
+
+{# ---------- Project Selection ---------- #}
+
+{% block title %}Project Initialization{% endblock %}
+
+{# default parametres #}
+    {% set deleteMode = true %}
+    {% set scopeMode = true %}
+    {% set veriScopefMode = false %}
+    {% set createMode = true %}
+    {% set costBenefitsMode = false %}
+    {% set  verifCostBenefits = false %}
+    {% set commonPage = '/others/general_common.twig' %}
+    {% set lorem = 'Select or create a new Project.' %}
+
+{% if sideBarName =="project_scoping" %}
+    {% set scopeMode = false %}
+
+{% elseif sideBarName =="deal_criteria" %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+    {% set lorem = 'Select Project for Deal Criteria set up.' %}
+
+{% elseif sideBarName =="customer_dashboards" or sideBarName =="supplier_dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+    {% set lorem = 'Select a project to obtain dashboard.' %}
+
+{% elseif sideBarName =="cost_benefits" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set commonPage = '/input/cost_benefits_in.twig' %}
+
+{% elseif sideBarName =="dashboards" %}
+    {% set deleteMode = false %}
+    {% set veriScopefMode = true %}
+    {% set createMode = false %}
+    {% set costBenefitsMode = true %}
+    {% set  verifCostBenefits = true %}
+    {% set commonPage = '/output/dashboards.twig' %}
+
+{% elseif sideBarName =="input_project_common" %}
+    {% set scopeMode = false %}
+    {% set createMode = true %}
+
+{% elseif sideBarName =="project_sdesign" %}
+    {% set deleteMode = false %}
+    {% set scopeMode = false %}
+    {% set createMode = true %}
+    {% set commonPage = '/others/general_common.twig' %}
+
+{% endif %}
+
+
+
+
+
+
+{% extends commonPage %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/general/macro_projects.twig" as list %}
+{% import "/templates/general/modals_proj.twig" as modal %}
+
+
+
+
+
+{% block content %}
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,"None") }}
+{% if lorem != '' %}
+<div class="row jumbotron text-light m-5 bg-dark p-3">
+    <div class="col text-center">
+        <p class="text-justify">{{lorem|nl2br}} </p>
+    </div>
+</div>
+{% endif %}
+
+{% if createMode %}
+<div class="row m-3">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewProjModal" role="button">Create a new project</button>
+</div>
+<div class="row mt-3 text-center">
+    <h6 id="createProjHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
+</div>
+{% endif %}
+
+<form action={{nextPage}} method="post">
+{% if projects %}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits) }}
+{% else %}
+<h2 class="text-center m-5">You have no Project !</h2>
+{% endif %}
+
+<div class="row m-3 text-center text-dark">
+    <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button {{projects ? "" : "disabled"}}" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+</div>
+</form>
+
+{% if createMode %}{{ modal.create_proj(1) }}{% endif %}
+
+{% endblock %}
