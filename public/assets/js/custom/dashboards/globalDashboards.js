@@ -41,7 +41,8 @@ var donutColors = colors;
 for (var key in donutColors){
   donutColors[key] += '1)';
 }
-//console.log(ucQuantity);
+console.log(ucName);
+console.log(ucQuantity);
 
 //DISPLAY GRAPH
 var numberOfItems = new Chart($('#numberOfItems'), {

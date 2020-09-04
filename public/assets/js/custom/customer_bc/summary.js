@@ -394,3 +394,62 @@ function calcProjectScore(projectScore, target, nogo, idSelector) {
 
 
 projectScore();
+
+//--- Torus Graph ---
+var space = '                   ';
+var donutColors = colors;
+for (var key in donutColors){
+  donutColors[key] += '1)';
+}
+var torusNames = $('#data').data("repartitionOfBenefits").titles;
+var torusData = $('#data').data("repartitionOfBenefits").data;
+var repartitionOfBenefits = new Chart($('#repartitionOfBenefits'), {
+  type: 'doughnut',
+  data: {
+    labels: torusNames, //data
+    datasets: [
+      {
+        label: "# of items",
+        backgroundColor: donutColors,
+        data: torusData, //data
+        borderWidth : 0
+      }
+    ]
+  },
+  options: {
+    responsive:true,
+    legend: {
+      display: true,
+      position: "right",
+      labels: {
+         boxWidth: 20,
+         align: "center",
+         fontSize: 15
+      }
+    },
+    layout: {
+      padding: {
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0
+      }
+    },
+    plugins: {
+    datalabels: {
+      display: true,
+      formatter: (value, ctx) => {
+                      let sum = 0;
+                      let dataArr = ctx.chart.data.datasets[0].data;
+                      dataArr.map(data => {
+                          sum += data;
+                      });
+                      let percentage = (value*100 / sum).toFixed(2)+"%";
+                      return percentage;
+                  },
+              }
+    }
+  }
+});
+
+
