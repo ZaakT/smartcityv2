@@ -1,0 +1,71 @@
+{% extends '/others/general_common.twig' %}
+{% set sideBarName = 'project_sdesign' %}
+
+{% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/sidebar.twig" as sidebar %}
+{% import "/templates/project_scoping/macro_zones.twig" as list %}
+
+{% block sidebar %}
+	{{ sidebar.sidebar("project_sdesign",projID) }}
+{% endblock %}
+
+{% block title %}Project Initialization - Perimeter
+{% endblock %}
+
+{% block content %}
+
+	{# ------------- Perimeter ---------------- #}
+
+
+	<div class="row jumbotron text-light mx-5 mt-5 mb-5 bg-dark p-3">
+		<div class="col-md-8 mx-auto text-center">
+			<p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. <br>Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem.
+			</p>
+		</div>
+	</div>
+
+	<div class="row pt-5 mx-auto">
+
+		<form class="col container-fluid" id="form_zones" name="form_zones" action="?A=input_project_common_supplier" method="post" onsubmit="return countChecked_zones('form_zones');">
+			<div class="form-row justify-content-center">
+				<h3 class="col-md-12 mx-auto">Project Location </h3>
+				<div class="form-group col-md-4">
+					<label for="inputCountry">Country</label>
+					<input type="text" class="form-control" id="inputCountry">
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputCity">City</label>
+					<input type="text" class="form-control" id="inputCity">
+				</div>
+			</div>
+			<div class="form-row justify-content-center"> 
+				<div class="form-group col-md-4">
+					<h3>About Customer </h3>
+					<label for="inputName">Name</label>
+					<input type="text" class="form-control" id="inputName">
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputDepartment">Department</label>
+					<input type="text" class="form-control" id="inputDepartment">
+				</div>
+			</div>
+			<div class="form-row justify-content-center">
+				<div class="form-group col-md-4">
+					<h3>About Supplier </h3>
+					<label for="inputCompany">Company</label>
+					<input type="text" class="form-control" id="inputCompany">
+				</div>
+				<div class="form-group col-md-4">
+					<label for="inputTeam">Team</label>
+					<input type="text" class="form-control" id="inputTeam">
+				</div>
+			</div>
+
+			<div class="row m-3 text-center text-dark">
+				<button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
+			</div>
+		</form>
+
+	</div>
+
+{% endblock %}

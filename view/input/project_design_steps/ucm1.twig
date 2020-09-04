@@ -38,7 +38,6 @@
 
 {# ---------- Project Selection ---------- #}
 
-{% block title %}Project Iniiitialization{% endblock %}
 
 {# default parametres #}
     {% set deleteMode = true %}
@@ -104,7 +103,7 @@
 {% import "/templates/general/modals_proj.twig" as modal %}
 
 
-
+{% block title %}Project Iniiitialization{% endblock %}
 
 
 {% block content %}
@@ -128,7 +127,7 @@
 
 <form action={{nextPage}} method="post">
 {% if projects %}
-{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits) }}
+{{ list.list_projects(projects, deleteMode) }}
 {% else %}
 <h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}
