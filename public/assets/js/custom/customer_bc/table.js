@@ -12,23 +12,42 @@ function getUcSelected(){
     
 }
 
-
-function updateData(){
-    var data = $('#data').data("toShow");
-    var ucSeleted = getUcSelected();
-    var tableRef = document.getElementById('cball_table').getElementsByTagName('tbody')[0];
+function delAllRows(tableRef){
     while (tableRef.rows.length > 1) {
         tableRef.deleteRow(1);
       } 
-    data[ucSeleted].forEach(row => {
+}
+
+function updateTable(tableRef,ucData ){
+    delAllRows(tableRef);
+    ucData.forEach(item => {
         var newRow   = tableRef.insertRow();
         var i=0
-        row.forEach(element => {
+        item.forEach(element => {
             var newCell  = newRow.insertCell(i);
             i++;
             newCell.appendChild(document.createTextNode(element));
         });
     });
+}
+
+
+
+function updateGraph(ucData){
+    ucData.forEach(item => {
+        
+    });
+
+    
+}
+function updateData(){
+    var data = $('#data').data("toShow");
+    var ucSeleted = getUcSelected();
+    var tableRef = document.getElementById('cball_table').getElementsByTagName('tbody')[0];
+    updateTable(tableRef,data[ucSeleted] );
+    updateGraph(data[ucSeleted]);
+
+
 }
 
 updateData();
