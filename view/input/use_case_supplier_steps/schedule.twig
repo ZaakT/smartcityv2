@@ -31,12 +31,13 @@
 		</div>
 
 		{#  CONTENU #}
-		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=equipment_revenues&amp;A3=selection&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
+		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_use_case_supplier&amp;A2=equipment_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
 			<div id="dates_projet">
 				<p id="project-start">
 					<span class="oi oi-caret-bottom"></span>
-					avr-11</p>
-				<p id="project-end" style="float: right;">mai-30
+					04/09/2020</p>
+				<p id="project-end" style="float: right;">
+					21/02/2021
 					<span class="oi oi-caret-bottom"></span>
 				</p>
 			</div>
@@ -53,11 +54,11 @@
 				<div id="collapse_uc_operations" class="row collapse mb-2">
 					<div class="col">
 						<label>Deployment Start</label>
-						<input type="date" class="form-control" id="ucop_1" oninput="update_chart(event.target)">
+						<input type="date" class="start-date form-control" id="ucop_1" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Deployment > Production</label>
-						<input type="date" class="form-control" id="ucop_2">
+						<input type="date" class="form-control" id="ucop_2" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
@@ -73,11 +74,11 @@
 				<div id="collapse_uc_pricing" class="row collapse mb-2">
 					<div class="col">
 						<label>POC Start</label>
-						<input type="date" class="form-control" id="ucpri_1">
+						<input type="date" class="start-date form-control" id="ucpri_1" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>POC > Run</label>
-						<input type="date" class="form-control" id="ucpri_2">
+						<input type="date" class="form-control" id="ucpri_2" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
@@ -95,15 +96,15 @@
 				<div id="collapse_uc_revenue" class="row collapse mb-2">
 					<div class="col">
 						<label>Lag Start</label>
-						<input type="date" class="form-control" id="ucrev_1">
+						<input type="date" class="start-date form-control" id="ucrev_1" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Lag > Ramp-up</label>
-						<input type="date" class="form-control" id="ucrev_2">
+						<input type="date" class="form-control" id="ucrev_2" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Ramp-up > Production</label>
-						<input type="date" class="form-control" id="ucrev_3">
+						<input type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
