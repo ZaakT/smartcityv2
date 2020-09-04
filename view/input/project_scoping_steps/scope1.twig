@@ -5,7 +5,7 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/project_scoping/macro_scope.twig" as list %}
 
-{% block sidebar %}{{ sidebar.sidebar("scope1",projID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("project_sdesign",projID) }}{% endblock %}
 
 {% block title %}Project Initialization{% endblock %}
 
@@ -61,7 +61,7 @@
     
 <div class ="row">
     {% if measures and ucs %} 
-        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action="?A=project_scoping&amp;A2=scope_selected" method="post">
+        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action="?A=project_sdesign&amp;A2=perimeter1" method="post">
             <div class="container-fluid">
                 <section class="row"> 
                     {# colonne measures #}

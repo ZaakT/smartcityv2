@@ -437,7 +437,7 @@ try{
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
                             //var_dump($projID);
-                            header('Location: ?A=project_scoping&A2=scope&projID='.$projID);
+                            header('Location: ?A=project_sdesign&A2=scope1&projID='.$projID);
                         }
                     }
                     // --- SELECTED USE CASES MENU ---
@@ -447,6 +447,19 @@ try{
                             $_SESSION['ucmID']=$ucmID;
                             //var_dump($ucmID);
                             header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
+                        }
+                    }
+                    elseif($_GET['A2']=="perimeter1"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                perimeter1($twig,$is_connected,$_SESSION['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_sdesign&A2=perimeter1');
+                            }
+                        }
+                        else {
+                            perimeter1($twig,$is_connected);
                         }
                     }
                     elseif($_GET['A2']=="scope1"){

@@ -216,6 +216,36 @@ function perimeter($twig,$is_connected,$projID=0){
     }
 }
 
+function perimeter1($twig,$is_connected,$projID=0){
+    $user = getUser($_SESSION['username']);
+    if($projID!=0){
+        if(getProjByID($projID,$user[0])){
+            $proj = getProjByID($projID,$user[0]);
+            $list_zones = getListZones();
+            $repart_zones = sort_zones($list_zones);
+            //var_dump($list_zones);
+            //var_dump($repart_zones[2]);
+            $listSelZones = getListSelZones($projID);
+            //var_dump($listSelZones);
+            $devises = getListDevises();
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            
+            echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
+            prereq_ProjectScoping();
+        } else {
+            header('Location: ?A=project_sdesign&A2=perimeter1');
+        }
+    } else {
+        $devises = getListDevises();
+        $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+        $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+        
+        echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
+        prereq_ProjectScoping();
+    }
+}
+
 function sort_zones($list){
     $res = [[0=>[]]];
     $copy = [];
