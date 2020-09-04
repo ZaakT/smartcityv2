@@ -19,6 +19,7 @@ function showCompGraphInvest(compo,show){
     
     var title = toCapitalizeSentence(compo);
     var ctx = $('#comp_graph_'+compo).get(0).getContext('2d');
+    console.log(getDataByComp(projects_data,compo));
     var chart = new Chart(ctx, {
         type: 'bar',
         data: {

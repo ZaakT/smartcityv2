@@ -361,10 +361,24 @@ function dashboards_qualitative($twig,$is_connected, $projID){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]); 
             $selScope = getListSelScope($projID);
-            $ucs = getListUCs();         
+            $ucs = getListUCs();    
+            
+            $data = array(
+                "1"=>[
+                    ["item 5", 10],
+                    ["item 3", 1],
+                    ["item 7", 3],
+                    ["item 42", 5]
+                ],
+                "3"=>[
+                    ["item 2",1],
+                    ["item 13", 6]
+                ]);
+
             echo $twig->render('/output/customer_dashboards_steps/qualitative.twig',array('is_connected'=>$is_connected,
             'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
-            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects, "selScope"=>$selScope,"ucs"=>$ucs )); 
+            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects, "selScope"=>$selScope,"ucs"=>$ucs,
+            'data'=>$data )); 
             prereq_dashbords();
         }
     }

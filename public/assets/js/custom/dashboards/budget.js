@@ -84,7 +84,7 @@ function update_budget(){
         OBI.push(sumUCData['OBYI'][year]);
     });
     //console.log(BOC,NPC,OBI);
-
+    console.log(data);
     window.budgetGraph = new Chart($('#budgetGraph'), {
         type: 'bar',
         data: {
