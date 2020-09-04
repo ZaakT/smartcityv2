@@ -15,7 +15,6 @@
 {% block content %}
 
 {% set colNames = ["Items"]|merge(years) %}
-{% set lineName = [[]] %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
@@ -28,7 +27,10 @@
 
 {{ option.option(selScope, ucs) }}
 
-{{ table.table(lineNames, colNames, selDevSym)}}
+{{ table.table([], colNames, selDevSym)}}
+
+<div id="data"  data-to-show="{{ data|json_encode }}" ></div>
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
 
 {% endblock %}
 
