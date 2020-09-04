@@ -1,17 +1,13 @@
 function submitForm(formName){
-    $("#"+formName).submit();
-}
+    var validate_form = true
+    let inputs = ["#dstart", "#dduration", "#pstart", "#pduration"]
+    inputs.forEach(i => {
+        if($(i).val() == "") {
+            $('.alert').addClass("show");
+            validate_form = false;
+        }
+    })
 
-function unlock_sidebar(nb=0){
-    var parts_cond0 = ["use_case_selection", "schedule"];
-    var parts_cond1 = ["equipment_revenues", "deployment_revenues", "operating_revenues"];
-    parts_cond0.forEach(part => {
-        $("#"+part).removeClass("disabled");
-    });
-    if(nb>0){
-        parts_cond1.forEach(part => {
-            $("#"+part).removeClass("disabled");
-        });
-    }
-
+    if(validate_form)
+        $("#"+formName).submit();
 }

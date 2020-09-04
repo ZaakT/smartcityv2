@@ -32,21 +32,29 @@
 
 		{#  CONTENU #}
 
-		<div class="justify-content-center row m-5 text-center text-dark">
+		<div class="alert alert-danger alert-dismissible fade" role="alert">
+			<strong>Some fields are missing.</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="justify-content-center row m-2 text-center text-dark">
 			<form id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=capex&amp;A3=selection&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
-				<div class="form-group">
-					<h3>Project Key Dates</h3>
-					<label for="fname">Project Start Date</label>
-					<input class="form-control" type="date" id="pstart">
-					<label for="lname">Project Duration (in months)</label>
-					<input class="form-control" type="text" id="pduration" placeholder="36">
-				</div>
-				<div class="form-group">
-					<h3>Project Deployment Key Dates</h3>
-					<label for="fname">Deployment Start Date</label>
-					<input class="form-control" type="date" id="dstart">
-					<label for="lname">Deployment Duration (in months)</label>
-					<input class="form-control" type="text" id="dduration" placeholder="6">
+				<div class="">
+					<div class="form-group col">
+						<h3>Project Key Dates</h3>
+						<label for="fname">Project Start Date</label>
+						<input class="form-control" type="date" id="pstart">
+						<label for="lname">Project Duration (in months)</label>
+						<input class="form-control" type="text" id="pduration" placeholder="36">
+					</div>
+					<div class="form-group col">
+						<h3>Project Deployment Key Dates</h3>
+						<label for="fname">Deployment Start Date</label>
+						<input class="form-control" type="date" id="dstart">
+						<label for="lname">Deployment Duration (in months)</label>
+						<input class="form-control" type="text" id="dduration" placeholder="6">
+					</div>
 				</div>
 			</form>
 		</div>
@@ -61,4 +69,5 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/schedule_form.js"></script>
+	<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
 {% endblock %}

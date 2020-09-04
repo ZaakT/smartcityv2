@@ -9,6 +9,7 @@ function supplier_schedule($twig,$is_connected, $projID, $ucID){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
     echo $twig->render('/input/supplier_schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
+    prereq_ipc(0);
 }
 
 function use_case_schedule($twig,$is_connected, $projID, $ucID){
