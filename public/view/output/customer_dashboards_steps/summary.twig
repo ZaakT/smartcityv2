@@ -6,6 +6,7 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/customer_dashboards/macro_summary.twig" as macros %}
 {% import "/templates/customer_dashboards/macro_table.twig" as table %}
+{% import "/templates/customer_dashboards/macro_torus.twig" as torus %}
 
 {% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
 
@@ -58,11 +59,7 @@
             </div>            
             
             {# BUGDET #}
-            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                    <div class="dash-bg-light container-fluid p-3">
-                    {#{ macros.budget(baselineOpCost, netProjectCost, OBYI, years) }#}
-                    </div>
-            </div>
+
 
         </div>
 
@@ -73,20 +70,15 @@
                     <div class="dash-bg-light container-fluid p-3">
                         {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
                     </div>
-                    <div class="dash-bg-light container-fluid p-3 mt-4">
-                        {#{ macros.kpi(selDevSym,implemTot,capexTot,npv,socnpv,breakeven,soc_breakeven,ratingNonCash,ratingRisks) }#}
+            </div>            
+            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                    <div class="dash-bg-light container-fluid p-3">
+                        <h3 class="dash-title mb-3">Repartition of benefits</h3>
+                        <canvas id="repartitionOfBenefits" height="150px"/> 
                     </div>
             </div>
 
-            {# BANKABIKITY #}
-            <section class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                <div class="dash-bg-light container-fluid p-3">
-                    {#{ macros.financial_bankability(selDevSym, input_nogo_target, bankability_data) }#}
-                </div>
-                <div class="dash-bg-light container-fluid p-3 mt-4">
-                    {#{ macros.societal_bankability() }#}
-                </div>
-            </section>
+
 
         </div>
         
@@ -96,7 +88,7 @@
 </div>
 
 
-<div id="data"  data-bankability-target-nogo="{{ bankability_target|json_encode }}" data-bankability-calc="{{bankability_cacl|json_encode}}"></div>
+<div id="data"  data-bankability-target-nogo="{{ bankability_target|json_encode }}" data-bankability-calc="{{bankability_cacl|json_encode}}" data-repartition-of-benefits = "{{repartition_of_benefits|json_encode}}"></div>
 <div id="selDevSym"  hidden>{{selDevSym}}</div>
 <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/summary.js"></script>
 {% endblock %}

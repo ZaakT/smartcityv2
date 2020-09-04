@@ -174,7 +174,19 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
-                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_proj'=>$keydates_proj,'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth,'ratio_zones'=>$ratioByVolume, 'uc_completed'=>$uc_check_completed));
+                echo $twig->render('/output/dashboards_items/cost_benefits.twig',array('is_connected'=>$is_connected,
+                'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
+                'part'=>"Project",'part2'=>"Use Case",'projID'=>$projID,"selected"=>$proj[1],"years"=>$projectYears,
+                'projectDates'=>$projectDates,'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,
+                'list_sel'=>$listSelZones,'capex'=>$capexTot,'implem'=>$implemTot,'opex'=>$opexTot2,
+                'revenues'=>$revenuesTot2,'cashreleasing'=>$cashreleasingTot2,'widercash'=>$widercashTot2,
+                'netcash'=>$netcashTot,'netsoccash'=>$netsoccashTot,'ratio_zones'=>$ratioByVolume,'keydates_proj'=>$keydates_proj,
+                'breakeven'=>$breakeven,'soc_breakeven'=>$soc_breakeven,'noncash_rating'=>$ratingNonCash,'npv'=>$npv,
+                'socnpv'=>$socnpv,'risks_rating'=>$ratingRisks,'cumulnetcashTot'=>$cumultNetCash,'cumulnetsoccashTot'=>$cumulNetSocCash,
+                'capexMonth'=>$capexPerMonth,'implemMonth'=>$implemPerMonth,'opexMonth'=>$opexPerMonth,'revenuesMonth'=>$revenuesPerMonth,
+                'cashreleasingMonth'=>$cashreleasingValuesMonth, 'widercashMonth'=>$widercashValuesMonth,'netcashPerMonth'=>$netcashPerMonth,
+                'netsoccashPerMonth'=>$netsoccashPerMonth,'netsoccashTot'=>$netsoccashTot,'cumulnetcashPerMonth'=>$cumulnetcashPerMonth,
+                'cumulnetsoccashPerMonth'=>$cumulnetsoccashPerMonth,'ratio_zones'=>$ratioByVolume, 'uc_completed'=>$uc_check_completed));
                 prereq_dashboards();
             } else {
                 throw new Exception("This project doesn't exist !");

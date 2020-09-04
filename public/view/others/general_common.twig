@@ -69,7 +69,6 @@
 {% if sideBarName=='customer_dashboards' or sideBarName=='supplier_dashboards' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_dashbords.js"></script>
 
-
 {% elseif sideBarName=='project_scoping' %}
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/scopeForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/zonesForm.js"></script>
@@ -90,6 +89,9 @@
 
 {% elseif sideBarName =='input_project_common' or sideBarName =='input_project_common_supplier' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
+
+{% elseif sideBarName =='input_use_case_supplier' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
 
 {% elseif sideBarName == "cost_benefits" %}

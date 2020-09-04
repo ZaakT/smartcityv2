@@ -25,11 +25,14 @@
     </div>
 </div>
 
+
 {{ option.option(selScope, ucs) }}
 
 {{ table.table([], colNames, selDevSym)}}
-
-<div id="data"  data-to-show="{{ data|json_encode }}" ></div>
+<div id="graph ">
+</div>
+<div id="data"  data-to-show="{{ data|json_encode }}" data-years="{{years|json_encode}}"></div>
+<div id="currency" hidden>{{selDevSym}}</div>
 <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
 
 {% endblock %}

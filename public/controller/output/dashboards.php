@@ -3340,13 +3340,13 @@ function project_dashboard($twig,$is_connected,$projID=0){
                     $capexAmort_all = add_arrays($capexAmort_all,$capexAmortization);
 
                     $baseline_crb = getBaselineCRB($projID,$ucID);
-                    $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot_new,$revenuesTot_new,$capexAmortization);
+                    $netProjectCost_old = calcNetProjectCost($projectYears,$implemTot,$opexTot_new,$revenuesTot_new,$capexAmortization['perYear']);
                     $netProjectCost = add_arrays($netProjectCost,$netProjectCost_old);
                     $baselineOpCost_old = calcBaselineOpCost($projectYears,$baseline_crb,$cashreleasingTot_new);
                     $baselineOpCost = add_arrays($baselineOpCost,$baselineOpCost_old);
                     
 
-                    $CRV_old = getCRV($projectYears,$capexTot,$capexAmortization);
+                    $CRV_old = getCRV($projectYears,$capexTot,$capexAmortization["perYear"]);
                     $CRV = add_arrays($CRV,$CRV_old);
 
                     $ratingNonCash_new = getNonCashRating($projID,$ucID);

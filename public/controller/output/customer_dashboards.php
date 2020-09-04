@@ -105,6 +105,8 @@ function dashboards_summary($twig,$is_connected, $projID){
             catch(\Throwable $th){
                 header('?A=customer_dashboards');
             }
+            $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], "data"=>[10, 17, 21]);
+
 
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
@@ -112,7 +114,7 @@ function dashboards_summary($twig,$is_connected, $projID){
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
                 'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot,
-                'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl
+                'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl, 'repartition_of_benefits'=> $repartition_of_benefits
             ));
             prereq_dashbords();
             
@@ -329,9 +331,20 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             $schedules = getListSelDates($projID);
             $keydates_proj = getKeyDatesProj($schedules,$scope);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
+            $data = array(
+                "1"=>[
+                    ["item 5", 10, 5, 7, 8],
+                    ["item 3", 123, 154, 144, 130],
+                    ["item 7", 3, 14, 15, 9]
+                ],
+                "3"=>[
+                    ["item 2",1024, 512, 256, 128],
+                    ["item 13", 169, 12, 15, 0]
+                ]);
+
             echo $twig->render('/output/customer_dashboards_steps/non_monetizable.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
             'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
-            'selScope'=>$selScope, 'ucs'=>$ucs, 'years'=>$projectYears)); 
+            'selScope'=>$selScope, 'ucs'=>$ucs, 'years'=>$projectYears, 'data'=>$data)); 
             prereq_dashbords();
         }
     }
