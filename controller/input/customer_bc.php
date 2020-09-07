@@ -361,7 +361,7 @@ function xpex_inputed($post, $sideBarName){
                     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
                 }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
                     if ($type == "capex"){
-                        header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
+                        header('Location: ?A='.$sideBarName.'&A2=deployment_costs&projID='.$projID.'&ucID='.$ucID); 
                     }
                     elseif($type == "deployment_costs"){
                         header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
