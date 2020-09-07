@@ -903,7 +903,8 @@ body { background-color: #cdcdcd;} */
 }
 
 .progress-bar-main {
-    background-color: #343a40!important;
+    background-color: rgb(212, 237, 218);
+    color:black;
 }
 
 .progress-bar-remaining {
