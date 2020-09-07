@@ -1,19 +1,21 @@
-{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false ) %}
+{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, userMode = false ) %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
-{% for id,item in xpex %}
-    <tr id = "tr_{{ id }}" scope="row">
-        <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ id }}" {{id in selXpex|keys ? "checked" : ""}}></td>
-        <td scope="col">{{ item['name'] }}</td>
-        <td scope="col">{{ item['description'] }}</td>  
-        {% if userMode %}                  
-            <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
-            {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
-        {% endif %}
-    </tr>         
+{% for ucID in listUcID %}
+    {% for id,item in xpex[ucID] %}
+        <tr id = "tr_{{ id }}" scope="row">
+            <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ id }}" {{id in selXpex|keys ? "checked" : ""}}></td>
+            <td scope="col">{{ item['name'] }}</td>
+            <td scope="col">{{ item['description'] }}</td>  
+            {% if userMode %}                  
+                <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
+                {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
+            {% endif %}
+        </tr>         
+    {% endfor %}
 {% endfor %}
 {% endmacro %}
 
-{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, userMode = false) %}
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName,listUcID, userMode = false) %}
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 
 
@@ -31,15 +33,15 @@
             </thead>
             {% if xpex_from_ntt %}
                 <td colspan="{{userMode ? 4 : 3 }}"> <strong>Procured From NTT </strong></td>
-                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID, userMode) }}
             {% endif %}
             {% if xpex_from_outside_ntt %}
                 <td colspan="{{userMode ? 4 : 3 }}"><strong>Procured From Outside NTT </strong></td>
-                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID, userMode) }}
             {% endif %}
             {% if xpex_internal %}
                 <td colspan="{{userMode ? 4 : 3 }}"><strong> Internal </strong></td>
-                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID, userMode) }}
             {% endif %}
         </table>
     </div>
