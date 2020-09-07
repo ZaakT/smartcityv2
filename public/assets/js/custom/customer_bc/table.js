@@ -109,9 +109,17 @@ function createDiv(idFather, idDiv){
     father.appendChild(div);
     return div;
 }
+
+function removeGraphs(){
+  var containers = document.querySelectorAll('[id ^= "container_"]');
+  containers.forEach(item => {
+    item.remove();
+  })
+}
 function updateGraph(ucData, years){
     var currency = $("#currency").text();
     var i=0
+    removeGraphs();
     ucData.forEach(item => {
         console.log(item[0], item.slice(1), years, currency);
         var div = createDiv("graph", "container_"+i);
