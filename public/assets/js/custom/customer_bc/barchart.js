@@ -1,4 +1,3 @@
-
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
     var color = '#';
@@ -17,19 +16,20 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function getColorsArray(ref, size = 2){
+function getColorsArray(size){
     var list = [];
-    for (const i in ref) {
-        if (ref.hasOwnProperty(i)) {
-            //const proj_name = ref[i];
-            var color_hex = getRandomColor();
-            var color_rgb = hexToRgb(color_hex);
-            for(j in new Range(0, size)){
-                list.push(['rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+0.2+')']);
-            }
-        }
+    var list2 = [];
+    console.log("coucou 2");
+    for (const i in range(0,size)) {
+        console.log("coucou");
+        //const proj_name = ref[i];
+        var color_hex = getRandomColor();
+        var color_rgb = hexToRgb(color_hex);
+        list.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+0.2+')');
+        list2.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+1+')');
+
     }
-    return list;
+    return [list,list2];
 }
 
 
@@ -41,6 +41,7 @@ function toCapitalizeSentence(string){
     }
     return res;
 }
+
 
 
 
@@ -68,8 +69,8 @@ function updateBarChart(ucData, idCanvas){
         data.push(element[1]);
         names.push(element[0]);
     });
-    colors = getColorsArray("re", data.length);
-    console.log(data);
+    colors = getColorsArray(data.length);
+    //console.log(data);
     var chart = new Chart(idCanvas, {
         type: 'bar',
         data: {
@@ -104,6 +105,7 @@ function updateData(){
     $("#barchart").remove();
     $('#graph-container').append('<canvas id="barchart"><canvas>');
     updateBarChart(data[getUcSelected()], "barchart");
+    console.log("coucou 3");
 }
 
 updateData();
