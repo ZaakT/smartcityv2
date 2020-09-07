@@ -1,3 +1,5 @@
+//TODO liaison avec la bdd et import des dates du projet
+
 function update_chart(event) {
     let debut_projet = new Date(2020, 1, 1)
     let fin_projet = new Date(2020, 12, 31)
@@ -56,3 +58,17 @@ function pre_fill_starts() {
 }
 
 pre_fill_starts()
+
+function check_form() {
+    var validate_form = true
+    let inputs = ["#ucop_2", "#ucpri_3", "#ucpri_4", "#ucrev_2", "#ucrev_3", "#ucrev_4"]
+    inputs.forEach(i => {
+        if($(i).val() == "") {
+            $('.alert').addClass("show");
+            validate_form = false;
+        }
+    })
+
+    if(validate_form)
+        $("#supplier_schedule").submit();
+}

@@ -31,6 +31,12 @@
 		</div>
 
 		{#  CONTENU #}
+		<div class="alert alert-danger alert-dismissible fade" role="alert">
+			<strong>Some fields are missing.</strong>
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
 		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_use_case_supplier&amp;A2=equipment_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
 			<div id="dates_projet">
 				<p id="project-start">
@@ -120,7 +126,7 @@
 		{#  FIN DU CONTENU #}
 
 		<div class="row m-3 text-center text-dark">
-			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('supplier_schedule');"></button>
+			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="check_form();"></button>
 		</div>
 	{% endif %}
 {% endblock %}
