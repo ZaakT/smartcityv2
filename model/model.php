@@ -843,6 +843,7 @@ function update_ModifDate_proj($projID){
     return $req->execute(array($projID));
 }
 
+
 function getListUCs(){
     $db = dbConnect();
     $req = $db->prepare('SELECT use_case.id, use_case.name, use_case.description, id_meas, measure.name, id_cat, use_case_cat.name
