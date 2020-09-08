@@ -13,7 +13,9 @@ function getListUcID($_ucID, $projID){
     if($_ucID==0){
         $listUcID=[];
         $listUcs = getListSelScope($projID);
+        
         foreach ($listUcs as  $meas) {
+            
             foreach ($meas as $ucID) {
                 array_push($listUcID, $ucID);
             }
@@ -24,12 +26,23 @@ function getListUcID($_ucID, $projID){
     return $listUcID;
 }
 
+function getUcsName($listUcID){
+    $listUcs=getListUCs();
+    $listUcsName = [];
+    foreach ($listUcID as $ucID) {
+        $listUcsName[$ucID]=$listUcs[$ucID]['name'];
+    }
+    return $listUcsName;
+}
+
 function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type="capex",$isTaken=false){
     //Permet d'afficher la page de séléction des capex ou opex. Le paramètre "$type" permet de choisir si il s'agit d'opex ou de capex.
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $listUcID=getListUcID($_ucID, $projID);
+            $listUcsName = getUcsName($listUcID);
+
             $list_xpex_advice_from_ntt = [];
             $list_xpex_advice_from_outside_ntt = [];
             $list_xpex_advice_internal = [];
@@ -85,13 +98,13 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-
+            //print_r($list_xpex_advice_from_outside_ntt);
             echo $twig->render('/input/input_project_common_steps/xpex_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
             'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
             'projID'=>$projID,
             "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
             "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
-            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID));
+            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName ));
             prereq_ipc(1);
             prereq_CostBenefits();
 
