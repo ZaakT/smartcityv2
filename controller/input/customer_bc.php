@@ -37,6 +37,7 @@ function getUcsName($listUcID){
 
 function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type="capex",$isTaken=false){
     //Permet d'afficher la page de séléction des capex ou opex. Le paramètre "$type" permet de choisir si il s'agit d'opex ou de capex.
+    //If ucID == 0 => we are locking ALL the UC of the project.
     $user = getUser($_SESSION['username']);
     $_SESSION['_ucID']= $_ucID;
     if($projID!=0){
