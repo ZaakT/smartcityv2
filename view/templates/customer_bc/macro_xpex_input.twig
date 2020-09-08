@@ -6,18 +6,18 @@
 
     {% if listUcsName|length > 1 %}<td scope="col">{{ listUcsName[ucID] }}</td>{% endif %}
 
-    <td scope="col"><input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(unitCost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}" ></td> 
+    <td scope="col"><input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(unitCost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}" ></td> 
 
-    <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
+    <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}_{{ucID}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
 
     {% if type =="opex" %}
 
-    <td scope="col"><input id="anVarVol_{{id_xpex}}" name="anVarVol_{{id_xpex}}" class="text-center anVarVol p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarVol_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"><span> %</span></td> 
-    <td scope="col"><input id="anVarCost_{{id_xpex}}" name="anVarCost_{{id_xpex}}" class="text-center anVarCost p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarCost_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"><span> %</span></td> 
+    <td scope="col"><input id="anVarVol_{{id_xpex}}" name="anVarVol_{{id_xpex}}_{{ucID}}" class="text-center anVarVol p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarVol_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"><span> %</span></td> 
+    <td scope="col"><input id="anVarCost_{{id_xpex}}" name="anVarCost_{{id_xpex}}_{{ucID}}" class="text-center anVarCost p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarCost_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"><span> %</span></td> 
     
     {% elseif type == "capex" %}
 
-    <td scope="col"><input id="period_{{id_xpex}}" name="period_{{id_xpex}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(period_{{id_xpex}});" value="{{ selXpex[id_xpex]['period'] ? selXpex[id_xpex]['period'] : "" }}"></td>
+    <td scope="col"><input id="period_{{id_xpex}}" name="period_{{id_xpex}}_{{ucID}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(period_{{id_xpex}});" value="{{ selXpex[id_xpex]['period'] ? selXpex[id_xpex]['period'] : "" }}"></td>
 
     {% endif %}
 

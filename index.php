@@ -671,7 +671,7 @@ try{
                                         
                                     }elseif($_GET['A3']=="inputed"){
                                         if(isset($_POST)){
-                                            xpex_inputed($_POST, $_GET['A']);
+                                            xpex_inputed($_POST, $_GET['A'], $_GET['A2']);
                                         }
                                         else{
                                             header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
@@ -727,7 +727,7 @@ try{
                                         
                                     }elseif($_GET['A3']=="inputed"){
                                         if(isset($_POST)){
-                                            xpex_inputed($_POST, $_GET['A']);
+                                            xpex_inputed($_POST, $_GET['A'], $_GET['A2']);
                                         }
                                         else{
                                             header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID']);
@@ -999,7 +999,7 @@ try{
                                         
                                     }elseif($_GET['A3']=="inputed"){
                                         if(isset($_POST)){
-                                            xpex_inputed($_POST, $_GET['A']);
+                                            xpex_inputed($_POST, $_GET['A'], $_GET['A2']);
                                         }
                                         else{
                                             header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);

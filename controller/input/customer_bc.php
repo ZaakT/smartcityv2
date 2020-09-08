@@ -375,14 +375,33 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
 }
 
 
-function xpex_inputed($post, $sideBarName){
+function xpex_inputed($post, $sideBarName, $type){
     if($post){
+        print_r($post);
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
-            if(isset($_SESSION['ucID'])){
-                $ucID = $_SESSION['ucID'];
+            if(isset($post['useCase'])){ //Input porject common
+                $_ucID = $post['useCase'];
+            }
+            elseif(isset($_SESSION['_ucID'])){//When a Use Case has been selected in a menu
+                $_ucID = $_SESSION['_ucID'];
+            }else{
+                throw new Exception("Please select a Use Case", 1);
+            }
+            $info= [];
+            $listUcID=getListUcID($_ucID, $projID);
+            foreach ($listUcID as $ucID){//initalization of $selXpex
+                $info[$ucID]=[];
+            }
+            foreach ($post as $id => $value) {
+                $id=explode('_', $id);
+                $info[$id[2]]["$id[0]_$id[1]"]=$value;
+            }
+            
+            foreach ($listUcID as $ucID) {
                 $list = [];
-                foreach ($post as $key => $value) {
+                echo "<br> info[$ucID] :";print_r($info[$ucID]);
+                foreach ($info[$ucID] as $key => $value) {
                     $temp = explode('_',$key);
                     $type=$_GET['A2'];
                     if($temp[0]=="vol"){
@@ -419,7 +438,6 @@ function xpex_inputed($post, $sideBarName){
                         throw new Exception("Error !");
                     }
                 }
-                //print_r($list);
 
                 if($type=="capex"){
                     insertCapexInputed($projID,$ucID,$list);
@@ -430,25 +448,24 @@ function xpex_inputed($post, $sideBarName){
                 }else{
                     throw new Exception("Wrong type !");
                 }
-                update_ModifDate_proj($projID);
-                if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier"){
-                    header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
-                }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
-                    if ($type == "capex"){
-                        header('Location: ?A='.$sideBarName.'&A2=deployment_costs&projID='.$projID.'&ucID='.$ucID); 
-                    }
-                    elseif($type == "deployment_costs"){
-                        header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
-                    }elseif($type == "opex"){
-                        header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID); 
-                    }
+            }
+            update_ModifDate_proj($projID);
+            if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier"){
+                header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+            }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
+                if ($type == "capex"){
+                    header('Location: ?A='.$sideBarName.'&A2=deployment_costs&projID='.$projID.'&ucID='.$ucID); 
                 }
+                elseif($type == "deployment_costs"){
+                    header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
+                }elseif($type == "opex"){
+                    header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID); 
+                }
+            }
 
                 
                 
-            } else {
-                throw new Exception("There is no UC selected !");
-            }
+
         } else {
             throw new Exception("There is no Project selected !");
         }
