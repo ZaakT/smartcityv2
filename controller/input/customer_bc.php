@@ -302,35 +302,39 @@ function xpex_input($twig,$is_connected,$projID=0,$_ucID=0, $type="capex", $side
 function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
-        if(isset($_SESSION['ucID'])){
-            $ucID = $_SESSION['ucID'];
-            $name = $post['name'];
-            $description = isset($post['description']) ? $post['description'] : "";
-            $origine = $post['origine'];
-            $xpex_infos = ["name"=>$name,"description"=>$description];
-            //echo $origine;
-
-            //var_dump(getCapexUserItem($projID,$ucID,$name));
-            if($name==''){
-                throw new Exception("Incorrect name.");
-            }
-            if(!empty(getCapexUserItem($projID,$ucID,$name)) or !empty(getOpexUserItem($projID,$ucID,$name)) or !empty(getImplemUserItem($projID,$ucID,$name))){
-                header('Location: ?A='.$sideBarName.'&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
-            } else {
-                if($type=="capex"){
-                    insertCapexUser($projID,$ucID,$xpex_infos, $origine);
-                }elseif($type=="opex"){
-                    insertOpexUser($projID,$ucID,$xpex_infos, $origine);
-                }elseif($type=='deployment_costs'){
-                    insertImplemUser($projID,$ucID,$xpex_infos, $origine);
-                }else{
-                    throw new Exception("Wrong type !");
-                }
-                header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
-            }
-        } else {
-            throw new Exception("There is no UC selected !");
+        if(isset($post['useCase'])){ //Input porject common
+            $ucID = $post['useCase'];
         }
+        elseif(isset($_SESSION['ucID'])){//When a Use Case has been selected in a menu
+            $ucID = $_SESSION['ucID'];
+        }else{
+            throw new Exception("Please select a Use Case", 1);
+        }
+        $name = $post['name'];
+        $description = isset($post['description']) ? $post['description'] : "";
+        $origine = $post['origine'];
+        $xpex_infos = ["name"=>$name,"description"=>$description];
+        //echo $origine;
+
+        //var_dump(getCapexUserItem($projID,$ucID,$name));
+        if($name==''){
+            throw new Exception("Incorrect name.");
+        }
+        if(!empty(getCapexUserItem($projID,$ucID,$name)) or !empty(getOpexUserItem($projID,$ucID,$name)) or !empty(getImplemUserItem($projID,$ucID,$name))){
+            header('Location: ?A='.$sideBarName.'&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
+        } else {
+            if($type=="capex"){
+                insertCapexUser($projID,$ucID,$xpex_infos, $origine);
+            }elseif($type=="opex"){
+                insertOpexUser($projID,$ucID,$xpex_infos, $origine);
+            }elseif($type=='deployment_costs'){
+                insertImplemUser($projID,$ucID,$xpex_infos, $origine);
+            }else{
+                throw new Exception("Wrong type !");
+            }
+            header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+        }
+        
     } else {
         throw new Exception("There is no Project selected !");
     }
