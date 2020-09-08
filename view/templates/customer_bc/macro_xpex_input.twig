@@ -1,4 +1,4 @@
-{% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc) %}
+{% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc, listUcsName, ucID) %}
 
 <tr id = "tr_{{ id_xpex }}" scope="row">
     
@@ -24,22 +24,27 @@
 {% endmacro %}
 
 
-{% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID) %}
+{% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName) %}
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
-{% if xpex %}
+{% if _xpex %}
     {% set show = false %}
-    {% for id_xpex,data in selXpex %}
-        {% if (id_xpex in xpex|keys)  %}
-            {% set show = true %}
-        {% endif %}
+    {% for ucID in listUcID %}
+    
+        {% for id_xpex,data in selXpex %}
+            {% if (id_xpex in _xpex|keys)  %}
+                {% set show = true %}
+            {% endif %}
+        {% endfor %}
     {% endfor %}
     {% if show %}
         <tr><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
-        {% for id_xpex,data in selXpex %}
-            {% for xpex in _xpex %}
-                {% if id_xpex in xpex|keys %}
-                    {{ list.sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc) }}
-                {% endif %}
+        {% for ucID in listUcID %}
+            {% for id_xpex,data in selXpex %}
+                {% for xpex in _xpex[ucID] %}
+                    {% if id_xpex in xpex|keys %}
+                        {{ list.sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc,listUcsName, ucID ) }}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         {% endfor %}
     {% endif %}
@@ -47,14 +52,12 @@
 {% endmacro %}
 
 
-{% macro list_xpex(selDevSym,xpex_from_ntt,xpex_from_outside_ntt, xpex_internal ,ratio,selXpex,nb_uc, type,listUcID, fromNTT = true) %}
+{% macro list_xpex(selDevSym,xpex_from_ntt,xpex_from_outside_ntt, xpex_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, fromNTT = true) %}
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
-
 {% set size = 4 %}
 {% if type == "opex" %} {% set size = 6 %}
 {% elseif type == "capex" %}{% set size = 5 %}
 {% endif %}
-
 <h3 class="text-center mt-5 mb-3 text-uppercase">{{ fromNTT ? "Suggested" : "Custom"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
@@ -62,6 +65,7 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col">Item</th>
+                    {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
                     <th scope="col">Volume</th>
                     {% if type == "opex" %}
@@ -75,9 +79,9 @@
             </thead>
             <tbody>
             
-            {{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID) }}
-            {{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID )}}
-            {{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID )}}
+            {{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID,listUcsName) }}
+            {{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID,listUcsName )}}
+            {{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName )}}
             </tbody>
         </table>
     </div>
