@@ -62,10 +62,21 @@ pre_fill_starts()
 function check_form() {
     var validate_form = true
     let inputs = ["#ucop_2", "#ucpri_3", "#ucpri_4", "#ucrev_2", "#ucrev_3", "#ucrev_4"]
+    let changed_buttons = []
     inputs.forEach(i => {
+        let btn = i.substring(0, i.indexOf("_"))
         if($(i).val() == "") {
             $('.alert').addClass("show");
             validate_form = false;
+
+            $(btn).removeClass("btn-dark")
+            $(btn).addClass("btn-danger")
+            changed_buttons.push(btn)
+        } else {
+            if(!changed_buttons.includes(btn)) {
+                $(btn).removeClass("btn-danger")
+                $(btn).addClass("btn-dark")
+            }
         }
     })
 

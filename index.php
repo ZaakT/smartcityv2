@@ -883,7 +883,6 @@ try{
                     }
                 } else{
                     \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=project_selection', 'supplier_dashboards');
-
                 }
             }
 
@@ -2178,7 +2177,7 @@ try{
                 if(isset($_GET['A2'])){
                     //progression
                 } else {  
-                    scenario_settings($twig,$is_connected); 
+                    \general\commonPage($twig,$is_connected, '?A=scenario_settings', 'scenario_settings');
                 }            
             }
 
