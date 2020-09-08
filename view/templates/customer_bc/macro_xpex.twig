@@ -40,7 +40,7 @@
             </thead>
             {% set print = false %}
             {% for item in xpex_from_ntt %}
-                {% if item|length > 1 %}{% set print = true %}{% endif %}
+                {% if item|length > 0 %}{% set print = true %}{% endif %}
             {% endfor %}
 
             {% if print  %}
@@ -50,7 +50,7 @@
 
             {% set print = false %}
             {% for item in xpex_from_outside_ntt %}
-                {% if item|length > 1 %}{% set print = true %}{% endif %}
+                {% if item|length > 0 %}{% set print = true %}{% endif %}
             {% endfor %}
 
             {% if print  %}
@@ -60,7 +60,7 @@
 
             {% set print = false %}
             {% for item in xpex_internal %}
-                {% if item|length > 1 %}{% set print = true %}{% endif %}
+                {% if item|length > 0 %}{% set print = true %}{% endif %}
             {% endfor %}
 
             {% if print  %}
