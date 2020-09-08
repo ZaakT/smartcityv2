@@ -950,3 +950,7 @@ div#dates_projet > p {
     margin: auto;
     display: inline-block;
 }
+
+div.col.text-center > p.text-justify {
+    margin-bottom: 0px!important;
+}
