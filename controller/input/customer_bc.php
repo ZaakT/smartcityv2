@@ -95,14 +95,18 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                     throw new Exception("This Use Case doesn't exist !");
                 }
             }
-
+            if(count($listUcID)>1){
+                $ucID = 0;
+            }else{
+                $ucID = $listUcID[0];
+            }
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             //print_r($list_xpex_advice_from_outside_ntt);
             echo $twig->render('/input/input_project_common_steps/xpex_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
             'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
-            'projID'=>$projID,
+            'projID'=>$projID, 'ucID'=>$ucID,
             "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
             "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
             'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName ));
@@ -221,6 +225,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $list_xpex_user_from_ntt  = [];    
                 $list_xpex_user_from_outside_ntt  = [];
                 $list_xpex_user_internal  = [];
+            
 
 
                 $list_selXpex = [];
@@ -289,6 +294,11 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 }
                 $devises = getListDevises();
 
+                if(count($listUcID)>1){
+                    $ucID = 0;
+                }else{
+                    $ucID = $listUcID[0];
+                }
                
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
