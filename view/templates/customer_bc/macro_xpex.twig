@@ -5,7 +5,7 @@
 {% for ucID in listUcID %}
     {% for id,item in xpex[ucID] %}
         <tr id = "tr_{{ id }} ucID_{{ucID}}" scope="row">
-            <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ id }}" {{id in selXpex|keys ? "checked" : ""}}></td>
+            <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }} !' name="{{ucID}}_{{ id }}" {{id in selXpex[ucID]|keys ? "checked" : ""}}></td>
             <td scope="col">{{ item['name'] }}</td>
             <td scope="col">{{ item['description'] }}</td>  
             

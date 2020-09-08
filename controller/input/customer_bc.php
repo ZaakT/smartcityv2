@@ -129,29 +129,36 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName){
             $listUcID=getListUcID($_ucID, $projID);
 
             $selXpex = [];
-            foreach ($post as $id => $value) {
-                array_push($selXpex,$id);
+            
+            foreach ($listUcID as $ucID){//initalization of $selXpex
+                $selXpex[$ucID]=[];
             }
-
+            foreach ($post as $id => $value) {
+                $id=explode('_', $id);
+                array_push($selXpex[$id[0]],$id[1]);
+            }
             foreach ($listUcID as $ucID) {
 
                 if($type=="capex"){
                     $selXpex_old = getListSelCapex($projID,$ucID);
+                    
                 }elseif($type=="opex"){
                     $selXpex_old = getListSelOpex($projID,$ucID);
                 }elseif($type=="deployment_costs"){
                     $selXpex_old = getListSelImplem($projID,$ucID);
                 }
                 $selXpex_old_id = getKeys($selXpex_old);
-                $selXpex_diff_rm = array_diff($selXpex_old_id,$selXpex);
-                $selXpex_diff_add = array_diff($selXpex,$selXpex_old_id);
+                $selXpex_diff_rm = array_diff($selXpex_old_id,$selXpex[$ucID]);
+
+                $selXpex_diff_add = array_diff($selXpex[$ucID],$selXpex_old_id);
+
                 if(empty($selXpex_old)){
                     if($type=="capex"){
-                        insertSelCapex($projID,$ucID,$selXpex);
+                        insertSelCapex($projID,$ucID,$selXpex[$ucID]);
                     }elseif($type=="opex"){
-                        insertSelOpex($projID,$ucID,$selXpex);
+                        insertSelOpex($projID,$ucID,$selXpex[$ucID]);
                     }elseif($type=="deployment_costs"){
-                        insertSelImplem($projID,$ucID,$selXpex);
+                        insertSelImplem($projID,$ucID,$selXpex[$ucID]);
                     }
                 } elseif (!empty($selXpex_old)) {
                     if($type=="capex"){
@@ -221,9 +228,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $list_sel_xpex_advice = [];
                 foreach ($listUcID as $ucID) {
                     $uc = getUCByID($ucID);
-                    echo "coucou : ";
-                    print_r(getListCapexAdvice($ucID, "from_ntt"));
-                    echo "<br>";
                     if($type=="capex"){
                             
                         $list_xpex_advice[$ucID] = getListCapexAdvice($ucID); 
@@ -287,7 +291,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-                print_r($list_xpex_user_from_ntt);
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
                 'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",
                 "selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,'selXpex'=>$list_selXpex, 
