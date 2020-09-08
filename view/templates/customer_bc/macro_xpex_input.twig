@@ -4,6 +4,8 @@
     
     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
 
+    {% if listUcsName|length > 1 %}<td scope="col">{{ listUcsName[ucID] }}</td>{% endif %}
+
     <td scope="col"><input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(unitCost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}" ></td> 
 
     <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
@@ -20,11 +22,14 @@
     {% endif %}
 
     <td scope="col" id='cost_{{id_xpex}}' > - </td> 
+
 </tr>
+
 {% endmacro %}
 
 
 {% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName) %}
+
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
 {% if _xpex %}
     {% set show = false %}
@@ -39,12 +44,10 @@
     {% if show %}
         <tr><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
         {% for ucID in listUcID %}
-            {% for id_xpex,data in selXpex %}
-                {% for xpex in _xpex[ucID] %}
-                    {% if id_xpex in xpex|keys %}
-                        {{ list.sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc,listUcsName, ucID ) }}
+            {% for id_xpex,data in selXpex[ucID] %}
+                    {% if id_xpex in _xpex[ucID]|keys %}
+                        {{ list.sub_list_xpex(id_xpex, _xpex[ucID], type, selXpex[ucID], nb_uc[ucID],listUcsName, ucID ) }}
                     {% endif %}
-                {% endfor %}
             {% endfor %}
         {% endfor %}
     {% endif %}
@@ -57,6 +60,8 @@
 {% set size = 4 %}
 {% if type == "opex" %} {% set size = 6 %}
 {% elseif type == "capex" %}{% set size = 5 %}
+{% endif %}
+{% if listUcsName|length > 1 %} {% set size = size + 1 %}
 {% endif %}
 <h3 class="text-center mt-5 mb-3 text-uppercase">{{ fromNTT ? "Suggested" : "Custom"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
 <div class="row text-center">

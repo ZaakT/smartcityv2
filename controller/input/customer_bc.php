@@ -288,7 +288,8 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                         //var_dump($list_ratio);
                 }
                 $devises = getListDevises();
-                
+
+               
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
