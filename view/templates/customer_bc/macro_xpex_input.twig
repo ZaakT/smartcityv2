@@ -31,7 +31,13 @@
 {% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName) %}
 
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
-{% if _xpex %}
+{% set show = false %}
+{% for xpex in _xpex %}
+    {% if xpex|length > 0 %}
+        {% set show = true %}
+    {% endif %}
+{% endfor %}
+{% if _xpex and show %}
     {% set show = false %}
     {% for ucID in listUcID %}
     
@@ -83,7 +89,7 @@
                 </tr>
             </thead>
             <tbody>
-            
+
             {{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID,listUcsName) }}
             {{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID,listUcsName )}}
             {{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName )}}
