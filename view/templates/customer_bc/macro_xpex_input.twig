@@ -31,13 +31,8 @@
 {% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName) %}
 
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
-{% set show = false %}
-{% for xpex in _xpex %}
-    {% if xpex|length > 0 %}
-        {% set show = true %}
-    {% endif %}
-{% endfor %}
-{% if _xpex and show %}
+
+{% if _xpex %}
     {% set show = false %}
     {% for ucID in listUcID %}
     
@@ -63,38 +58,61 @@
 
 {% macro list_xpex(selDevSym,xpex_from_ntt,xpex_from_outside_ntt, xpex_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, fromNTT = true) %}
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
-{% set size = 4 %}
-{% if type == "opex" %} {% set size = 6 %}
-{% elseif type == "capex" %}{% set size = 5 %}
-{% endif %}
-{% if listUcsName|length > 1 %} {% set size = size + 1 %}
-{% endif %}
-<h3 class="text-center mt-5 mb-3 text-uppercase">{{ fromNTT ? "Suggested" : "Custom"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
-<div class="row text-center">
-    <div class="col mx-5 mb-5 list-table">
-        <table id="xpex_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
-            <thead class="thead-dark text-center sticky-top">
-                <tr>
-                    <th scope="col">Item</th>
-                    {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
-                    <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
-                    <th scope="col">Volume</th>
-                    {% if type == "opex" %}
-                    <th scope="col">Annual unit cost variation</th>
-                    <th scope="col">Annual volume variation</th>
-                    {% elseif type == "capex" %}
-                    <th scope="col">Amortization Period ( in years )</th>
-                    {% endif %}
-                    <th scope="col">Cost ( in {{selDevSym}} )</th>
-                </tr>
-            </thead>
-            <tbody>
+{% set show1 = false %}
+{% set show2 = false %}
+{% set show3 = false %}
 
-            {{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID,listUcsName) }}
-            {{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID,listUcsName )}}
-            {{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName )}}
-            </tbody>
-        </table>
+{% for ucID in listUcID %}
+    {% for id_xpex,data in selXpex[ucID] %}
+        {% if id_xpex in xpex_from_ntt[ucID]|keys %}
+            {% set show1 = true %}
+        {% endif %}
+        {% if id_xpex in xpex_from_outside_ntt[ucID]|keys %}
+            {% set show2 = true %}
+        {% endif %}
+        {% if id_xpex in xpex_internal[ucID]|keys %}
+            {% set show3 = true %}
+        {% endif %}
+    {% endfor %} 
+{% endfor %}
+
+
+
+
+{% if show1 or show2 or show3 %}
+    {% set size = 4 %}
+    {% if type == "opex" %} {% set size = 6 %}
+    {% elseif type == "capex" %}{% set size = 5 %}
+    {% endif %}
+    {% if listUcsName|length > 1 %} {% set size = size + 1 %}
+    {% endif %}
+    <h3 class="text-center mt-5 mb-3 text-uppercase">{{ fromNTT ? "Suggested" : "Custom"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
+    <div class="row text-center">
+        <div class="col mx-5 mb-5 list-table">
+            <table id="xpex_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
+                <thead class="thead-dark text-center sticky-top">
+                    <tr>
+                        <th scope="col">Item</th>
+                        {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
+                        <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
+                        <th scope="col">Volume</th>
+                        {% if type == "opex" %}
+                        <th scope="col">Annual unit cost variation</th>
+                        <th scope="col">Annual volume variation</th>
+                        {% elseif type == "capex" %}
+                        <th scope="col">Amortization Period ( in years )</th>
+                        {% endif %}
+                        <th scope="col">Cost ( in {{selDevSym}} )</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID,listUcsName) }}{% endif %}
+                {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID,listUcsName )}}{% endif %}
+                {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName )}}{% endif %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
+{% endif %}
 {% endmacro %}
