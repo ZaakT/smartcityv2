@@ -31,31 +31,13 @@
         <p class="text-justify">{{lorem|nl2br}}</p>
     </div>
 </div>
-
-
 {% if xpex_advice_from_ntt or xpex_advice_from_outside_ntt or xpex_advice_internal or  xpex_user_from_ntt or xpex_user_from_outside_ntt or xpex_user_internal %}
     <form id="form_xpex_input" name="form_xpex_input" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=inputed&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return checkCapexPeriod() && checkCapexInput();">
-    
-    {% set show = false %}
-    {% for id_xpex,data in selXpex %}
-        {% if ((id_xpex in xpex_advice_from_ntt|keys) or (id_xpex in xpex_advice_from_outside_ntt|keys) or (id_xpex in xpex_advice_internal|keys))  %}
-            {% set show = true %}
-        {% endif %}
-    {% endfor %}
-    {% if show %}
-    {{ list.list_xpex(selDevSym,xpex_advice_from_ntt,xpex_advice_from_outside_ntt, xpex_advice_internal ,ratio,selXpex,nb_uc, type) }}
-    {% endif %}
 
-    {% set show = false %}
-    {% for id_xpex,data in selXpex %}
-        {% if ((id_xpex in xpex_user_from_ntt|keys) or (id_xpex in xpex_user_from_outside_ntt|keys) or (id_xpex in xpex_user_internal|keys))  %}
-            {% set show = true %}
-        {% endif %}
-    {% endfor %}
+    {{ list.list_xpex(selDevSym,xpex_advice_from_ntt,xpex_advice_from_outside_ntt, xpex_advice_internal ,ratio,selXpex,nb_uc, type,listUcID, listUcsName) }}
 
-    {% if show %}
-    {{ list.list_xpex(selDevSym,xpex_user_from_ntt,xpex_user_from_outside_ntt, xpex_user_internal ,ratio,selXpex,nb_uc, type, false) }}
-    {% endif %}
+    {{ list.list_xpex(selDevSym,xpex_user_from_ntt,xpex_user_from_outside_ntt, xpex_user_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, false) }}
+
 
 
 

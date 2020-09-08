@@ -1,4 +1,4 @@
-{% macro create_xpex(projID=0,ucID=0, type="capex", sideBarName) %}
+{% macro create_xpex(projID=0,ucID=0, type="capex", sideBarName, listUcID, listUcsName) %}
 <div class="modal fade" id="createNewXpexModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createXpex-form" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=create_xpex&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
@@ -31,6 +31,18 @@
                                 {{ (type!="capex" and isSup ) ? '<option value = "internal"> Internal </option>' }}
                             </select>
                         </div>
+                    </div>
+                    {% if listUcsName|length > 1 %}
+                    <div class="form-group row">
+                        <label for="origine" class="col-sm-3 col-form-label">Use Case</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="useCase" id="useCase" required>
+                            {% for ucID in listUcID %}
+                                <option value = {{ucID}} selected> {{listUcsName[ucID]}} </option>
+                            {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
                     </div>
                 </div>
             <div class="modal-footer">

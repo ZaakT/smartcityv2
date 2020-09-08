@@ -2,7 +2,7 @@
 
 require_once('model/model.php');
 
-function supplier_schedule($twig,$is_connected, $projID, $ucID){
+function supplier_schedule($twig,$is_connected, $projID){
     $user = getUser($_SESSION['username']);
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
