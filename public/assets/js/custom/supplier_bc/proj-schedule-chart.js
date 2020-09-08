@@ -70,11 +70,11 @@ function check_form() {
             validate_form = false;
 
             $(btn).removeClass("btn-dark")
-            $(btn).addClass("btn-danger")
+            $(btn).addClass("btn-warning")
             changed_buttons.push(btn)
         } else {
             if(!changed_buttons.includes(btn)) {
-                $(btn).removeClass("btn-danger")
+                $(btn).removeClass("btn-warning")
                 $(btn).addClass("btn-dark")
             }
         }

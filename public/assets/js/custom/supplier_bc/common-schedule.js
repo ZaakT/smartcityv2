@@ -9,10 +9,12 @@ function submitForm(formName){
             validate_form = false;
 
             $(i).addClass("bg-warning")
+            $(i).addClass("text-white")
             colored_inputs.push(i)
         } else {
             if(!colored_inputs.includes(i)) {
                 $(i).removeClass("bg-warning")
+                $(i).removeClass("text-white")
             }
         }
     })

@@ -17,15 +17,23 @@
             <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
-            <h2 class="text-center">{% block title %}Cost Benefits - Input{% endblock %}</h2>
+            <h2 class="text-center">{% block title %}
+            {% if sideBarName == "input_project_common_supplier" %}
+                Supplier BC - IPC
+            {% elseif sideBarName == "input_project_common" %}
+                Customer BC - IPC
+            {% elseif sideBarName == "input_use_case" %}
+                Customer BC - IUC
+            {% else %}
+                Cost Benefits - Input
+            {% endif %}
+            {% endblock %}</h2>
         </div>
     </div>
 </div>
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
-        <p>Lorep ipsum</p>
-        <p>..............</p>
-        <p>In this section, the Toolkit ...</p>
+        Lorem ipsum spécifique
     </div>
 </div>
 <div class="row text-center text-dark">

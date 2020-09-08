@@ -954,3 +954,7 @@ div#dates_projet > p {
 div.col.text-center > p.text-justify {
     margin-bottom: 0px!important;
 }
+
+.text-white::placeholder { 
+    color: white!important;
+  }
