@@ -20,7 +20,8 @@ function updateData(){
     var data = $('#data').data("toShow");
     var uc = getUcSelected();
     var ucData = [];
-    
+    var deviseName = $('#deviseName').text();
+
     console.log(uc, data);
     for(let i =0; i< data.length; i++){       
         if(data[i][0]==uc){
@@ -30,7 +31,13 @@ function updateData(){
     
     for(let i = 0; i < ucData[0].length; i++){
         for(let j = 0; j < ucData.length; j++){
-            $("#"+i+"_"+j).text(Math.round(ucData[j][i]));
+            $("#"+i+"_"+j).text(Math.round(ucData[j][i]).toLocaleString("en-UK",
+            {
+                style:"currency", 
+                currency:deviseName,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+            }));
             
         }
     }

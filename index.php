@@ -1013,11 +1013,11 @@ try{
                                         }
                                         else {
                                             if(isset($_GET['isTaken']) && $_GET['isTaken']){
-                                                xpex_selection($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'], 'cost_benefits', "capex", true);
-                                                //capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
+                                                //xpex_selection($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'], 'cost_benefits', "capex", true);
+                                                capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'],true);
                                             } else {
-                                                xpex_selection($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'], 'cost_benefits', "capex");
-                                                //capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
+                                                //xpex_selection($twig,$is_connected,$_SESSION['projID'],$_GET['ucID'], 'cost_benefits', "capex");
+                                                capex($twig,$is_connected,$_SESSION['projID'],$_GET['ucID']);
                                             }
                                         }
                                     }
