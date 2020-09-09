@@ -958,3 +958,7 @@ div.col.text-center > p.text-justify {
 .text-white::placeholder { 
     color: white!important;
   }
+
+  input.bg-warning {
+      background-color: #fff3cd!important;
+  }

@@ -1,5 +1,5 @@
 function submitForm(formName){
-    var validate_form = true
+    var validate_form = true;
     let inputs = ["#dstart", "#dduration", "#pstart", "#pduration"]
     var colored_inputs = []
 
@@ -8,16 +8,14 @@ function submitForm(formName){
             $('.alert').addClass("show");
             validate_form = false;
 
-            $(i).addClass("bg-warning")
-            $(i).addClass("text-white")
-            colored_inputs.push(i)
+            $(i).addClass("bg-warning");
+            colored_inputs.push(i);
         } else {
             if(!colored_inputs.includes(i)) {
-                $(i).removeClass("bg-warning")
-                $(i).removeClass("text-white")
+                $(i).removeClass("bg-warning");
             }
         }
-    })
+    });
 
     if(validate_form)
         $("#"+formName).submit();
