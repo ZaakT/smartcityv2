@@ -11,9 +11,9 @@
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 
 {% block sidebar %}
-	{{ sidebar.sidebar("input_use_case_supplier") }}
+	{{ sidebar.sidebar("input_use_case_supplier", projID, ucID) }}
 {% endblock %}
-{% block title %}Equipment revenue{% endblock %}
+{% block title %}Equipment revenues{% endblock %}
 
 {% block content %}
 
