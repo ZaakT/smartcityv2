@@ -13,11 +13,11 @@
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
 {% if type == "capex" %}
-    {% set lorem = "Input Project Investment / Fixed asset items' Unit cost and Volumes procured from NTT and outside of NTT." %}
+    {% set lorem = "Input Project Investment / Fixed asset items' Unit cost and Volumes procured from #{companyName} and outside of #{companyName}." %}
 {% elseif type == "deployment_costs" %}
-    {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from NTT and outside of NTT." %}
+    {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from #{companyName} and outside of #{companyName}." %}
 {% elseif type == "opex" %}
-    {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from NTT and outside of NTT." %}
+    {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from #{companyName} and outside of #{companyName}." %}
 {% endif %}
 
 

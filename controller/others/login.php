@@ -87,3 +87,7 @@ function verifIsSup(){
         header('Location: ?A=home');
     }
 }
+
+function companyName(){
+    return "MyNTT";
+}

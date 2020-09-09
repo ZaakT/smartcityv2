@@ -107,8 +107,8 @@
                 </thead>
                 <tbody>
 
-                {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From NTT", size, listUcID,listUcsName) }}{% endif %}
-                {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside NTT", size,listUcID,listUcsName )}}{% endif %}
+                {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From #{companyName}", size, listUcID,listUcsName) }}{% endif %}
+                {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside #{companyName}", size,listUcID,listUcsName )}}{% endif %}
                 {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName )}}{% endif %}
                 </tbody>
             </table>

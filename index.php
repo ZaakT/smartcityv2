@@ -35,6 +35,7 @@ $twig = new Environment($loader);
 $twig->addGlobal('userRole', getUserRole());
 $twig->addGlobal('isDev', isDev());
 $twig->addGlobal('isSup', isSup());
+$twig->addGlobal('companyName', companyName());
 
 $is_connected = isConnected();
 
