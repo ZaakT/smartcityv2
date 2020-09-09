@@ -9,7 +9,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 
 {% block sidebar %}
-	{{ sidebar.sidebar("input_use_case_supplier") }}
+	{{ sidebar.sidebar("input_use_case_supplier", projID, ucID) }}
 {% endblock %}
 {% block title %}Project schedule
 {% endblock %}

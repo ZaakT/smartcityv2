@@ -1,4 +1,4 @@
-//TODO liaison avec la bdd et import des dates du projet
+//TODO import des dates du projet de la bdd et envoi des données entrées
 
 function update_chart(event) {
     let debut_projet = new Date(2020, 1, 1)
@@ -82,4 +82,8 @@ function check_form() {
 
     if(validate_form)
         $("#supplier_schedule").submit();
+}
+
+function check_form_debug() {
+    $("#supplier_schedule").submit();
 }

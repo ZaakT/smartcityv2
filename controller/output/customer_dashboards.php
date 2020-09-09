@@ -7,7 +7,7 @@ function prereq_dashbords(){
         <script>prereq_dashbords();</script>";
     }
 }
-function dashboards_summary($twig,$is_connected, $projID){
+function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -103,14 +103,14 @@ function dashboards_summary($twig,$is_connected, $projID){
                 );
             }
             catch(\Throwable $th){
-                header('?A=customer_dashboards');
+                header('?A=' + $sidebarname);
             }
             $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], "data"=>[10, 17, 21]);
 
 
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
-                'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
+                'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1], 'sideBarName'=>$sidebarname,
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
                 'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot,
@@ -123,10 +123,6 @@ function dashboards_summary($twig,$is_connected, $projID){
 }
 
 // --- Project Details
-
-
-
-
 function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
     if($projID!=0){
         $user = getUser($_SESSION['username']);

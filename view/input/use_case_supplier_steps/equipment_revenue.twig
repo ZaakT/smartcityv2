@@ -11,10 +11,9 @@
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 
 {% block sidebar %}
-	{{ sidebar.sidebar("input_use_case_supplier") }}
+	{{ sidebar.sidebar("input_use_case_supplier", projID, ucID) }}
 {% endblock %}
-{% block title %}Project schedule
-{% endblock %}
+{% block title %}Equipment revenues{% endblock %}
 
 {% block content %}
 
@@ -33,17 +32,36 @@
 		</div>
 
 		{#  CONTENU #}
+		<!-- TODO CHARGER LES REVENUES ET PERMETTRE D'EN CREER -->
 		<form id="equipment_revenue" name="equipment_revenue" action="?A=input_use_case_supplier&amp;A2=deployment_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
-			<h3>Equipment revenue</h3>
-		</form>
-		<form id="form_xpex" name="form_xpex" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedXpex(form_xpex);">
-			{% if xpex_advice_from_ntt or  xpex_advice_from_outside_ntt or xpex_advice_internal %}
-				{{ list.list_xpex(xpex_advice_from_ntt, xpex_advice_from_outside_ntt, xpex_advice_internal, projID,ucID,selXpex, type, sideBarName) }}
-			{% endif %}
-
-			{% if xpex_user_from_ntt or  xpex_user_from_outside_ntt or xpex_user_internal %}
-				{{ list.list_xpex(xpex_user_from_ntt, xpex_user_from_outside_ntt, xpex_user_internal, projID,ucID,selXpex, type, sideBarName, true) }}
-			{% endif %}
+			<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Equipment Revenues Items</h3>
+			<div class="row text-center">
+				<div class="col mx-5 mb-5 list-table">
+					<table class='table table-lg table-bordered table-striped table-responsive-lg'>
+						<thead class="thead-dark text-center sticky-top">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Name</th>
+								<th scope="col">Description</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+			<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Suggested Equipment Revenues Items</h3>
+			<div class="row text-center">
+				<div class="col mx-5 mb-5 list-table">
+					<table class='table table-lg table-bordered table-striped table-responsive-lg'>
+						<thead class="thead-dark text-center sticky-top">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Name</th>
+								<th scope="col">Description</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</form>
 
 
@@ -56,9 +74,9 @@
 {% endblock %}
 
 {% block scripts %}
-	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/proj-schedule-chart.js"></script>
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/sidebar-supplier-iuc.js"></script>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
 	<script>
 		déverouiller_sidebar();
 	</script>
