@@ -237,8 +237,8 @@ function updateBankability(){
   if(data.length==0){
     $("#errorInput").text("Error: make sure Deal Criteria is completed.");
   }else{
-    $("#display_payback").text(data.payback_target+" mounths");
-    $("#display_societalPayback").text(data.societal_payback_target+" mounths");
+    $("#display_payback").text(data.payback_target+" months");
+    $("#display_societalPayback").text(data.societal_payback_target+" months");
     $("#display_roi").text(data.roi_target+" %");
     $("#display_societalRoi").text(data.societal_roi_target+" %");
     $("#display_npv").text(selDevSym+" "+data.npv_target);  
