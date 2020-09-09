@@ -14,29 +14,51 @@
 {% block content %}
 
 
-
+{% set lineNames = [
+    ["Cash-Out", 1, 1],
+    ["Capex", 2, 2],
+    ["supplier", 3, 3],
+    ["other supplier", 4, 3],
+    ["Deployment", 5, 2],
+    ["supplier",6, 3 ],
+    ["other supplier", 7, 3],
+    ["internal", 8, 3],
+    ["Opex", 9, 2],
+    ["supplier", 10, 3],
+    ["other supplier", 11, 3],
+    ["internal", 12, 3],
+    ["Cash-In Revenues", 13, 1],
+    ["UC Revenues", 14, 2],
+    ["Cash Realeasing Benefits",15, 2],
+    ["Wider Cash Benefits", 16, 2],
+    ["Net Cash", 18, 1],
+    ["Cummulated Net Cash", 19, 1],
+    ["Net Societal Cash", 20, 1],
+    ["Cummulated Net Societal Cash", 21, 1]
+] %}
 {% set lineNames = [
     ["Cash-Out", "cashOut", 1],
-    ["Capex", "cashOut_capex", 2],
-    ["supplier", "cashOut_capex_supplier", 3],
-    ["other supplier", "cashOut_capex_otherSupplier", 3],
-    ["Deployment", "cashOut_deployment", 2],
-    ["supplier","cashOut_deployment_supplier", 3 ],
-    ["other supplier", "cashOut_deployment_otherSupplier", 3],
-    ["internal", "cashOut_deployment_internal", 3],
-    ["Opex", "cashOut_opex", 2],
-    ["supplier", "cashOut_opex_opex", 3],
-    ["other supplier", "cashOut_opex_otherSupplier", 3],
-    ["internal", "cashOut_opex_internal", 3],
+    ["Capex", "cashOutCapex", 2],
+    ["supplier", "cashOutCapexSupplier", 3],
+    ["other supplier", "cashOutCapexOtherSupplier", 3],
+    ["Deployment", "cashOutDeployment", 2],
+    ["supplier","cashOutDeploymentSupplier", 3 ],
+    ["other supplier", "cashOutDeploymentOtherSupplier", 3],
+    ["internal", "cashOutDeploymentInternal", 3],
+    ["Opex", "cashOutOpex", 2],
+    ["supplier", "cashOutOpexSupplier", 3],
+    ["other supplier", "cashOutOpexOtherSupplier", 3],
+    ["internal", "cashOutOpexInternal", 3],
     ["Cash-In Revenues", "cashInRevenues", 1],
-    ["UC Revenues", "cashInRevenues_ucRevenues", 2],
-    ["Cash Realeasing Benefits", "cashInRevenues_cashRealeasingBenefits", 2],
-    ["Wider Cash Benefits", "cashInRevenues_widerCashBenefits", 2],
+    ["UC Revenues", "cashInRevenuesUcRevenues", 2],
+    ["Cash Realeasing Benefits", "cashInRevenuesCashRealeasingBenefits", 2],
+    ["Wider Cash Benefits", "cashInRevenuesWiderCashBenefits", 2],
     ["Net Cash", "netCash", 1],
     ["Cummulated Net Cash", "cummulatedNetCash", 1],
     ["Net Societal Cash", "netSocietalCash", 1],
     ["Cummulated Net Societal Cash", "cummulatedNetSocietalCash", 1]
 ] %}
+
 {% set colNames = [""]|merge(years) %}
 
 

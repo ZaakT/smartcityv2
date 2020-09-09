@@ -1,3 +1,13 @@
+
+var tr_id = [];
+
+$("#cball_table tr").each(function() {
+    tr_id.push(this.id);
+});
+
+
+
+
 function getUcSelected(){
     //return -1 if we have to seletec all use cases else return the UC seleted.
 
@@ -45,3 +55,89 @@ function updateData(){
 }
 
 updateData();
+
+
+
+function getLevel(id){
+
+    return $("#"+id+"_level").text().split("\n")[0];
+}
+function findShowHide(id, showType=true){
+    var level = getLevel(id).split('.');
+    console.log(tr_id);
+    tr_id.forEach(tr => {
+        
+        var levelTr = getLevel(tr).split('.');
+        //console.log(tr);
+        //console.log(levelTr, level);
+        if(tr!=id){
+            if(level[0]==levelTr[0] && (level[1]==0 || (level[1]==levelTr[1] && level[2]==0) )){
+                if(showType){
+                    show(tr);
+                }else{
+                    hide(tr);
+                }
+            }
+        }
+    });
+}
+
+
+
+function turnArrow(id){
+    try{ 
+        if( $("#"+id+"_left")[0].hasAttribute("hidden") ){
+            $('#'+id+'_bottom').attr('hidden', true);
+            $('#'+id+'_left').removeAttr('hidden');
+        }else if( $("#"+id+"_bottom")[0].hasAttribute("hidden") ){
+            $('#'+id+'_left').attr('hidden', true);
+            $('#'+id+'_bottom').removeAttr('hidden');
+
+        }
+
+    }catch(error){}
+}
+function show(id){
+    //console.log("I show :"+id);
+    try{ 
+        
+            turnArrow(id);
+            
+        }catch(error){};
+    $('#'+id).removeAttr('hidden');
+
+
+
+}
+
+function hide(id){
+    //console.log("I hide :"+id);    if(test)
+    try{ 
+        if( !($('#'+id+'_bottom')[0].hasAttribute("hidden"))){
+            turnArrow(id);
+            $('#'+id).attr('hidden', true);
+        }
+
+    }catch(error){
+        turnArrow(id);
+        $('#'+id).attr('hidden', true);
+    }
+
+}
+
+function show_hide_tab(id){
+    if ( $("#"+id+"_left")[0].hasAttribute("hidden") ){
+        turnArrow(id);
+        findShowHide(id, false);
+    } else {
+        turnArrow(id);
+        findShowHide(id, true);
+    }
+
+}
+
+
+
+
+
+

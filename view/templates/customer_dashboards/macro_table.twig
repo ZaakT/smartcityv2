@@ -81,23 +81,42 @@
 </div>
 {% endmacro %#}
 
+{% macro addArrow(id) %}
+<span id="{{id}}_bottom" class="oi oi-chevron-bottom" title="oi-chevron-bottom" aria-hidden="true"></span><span hidden id="{{id}}_left" class="oi oi-chevron-left" title="oi-chevron-left" aria-hidden="true"></span>
+{% endmacro %}
+
+{% macro level(l0, l1, l2) %}
+{{l0}}.{{l1}}.{{l2}}{% endmacro %}
 
 {% macro table(ligneNames, colNames, selDevSym, classTable = 'table table-lg table-bordered table-striped table-responsive-lg', classThead = "thead-light text-center sticky-top", classTd = "item") %}
+{% import "/templates/customer_dashboards/macro_table.twig" as table %}
+{% set levelID0 = 0 %}
+{% set levelID1 = 0 %}
+{% set levelID2 = 0 %}
 <div class="row text-center">
      <div class="col mt-2 mx-5 list-table cball_table">
         <table id="cball_table" class="{{classTable}}" data-fixed-columns="true" data-fixed-number="4">
             <thead class="{{classThead}}">
             <tr>
+            {% set first = true %}
                 {% for colName in colNames %}
-                    <th scope="col">{{colName|nl2br}}</th>
+                    <th scope="col" {{first ? 'style="width: 15vw;"'}}>{{colName|nl2br}}</th>
+                    {% set first = false %}
                 {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                <tr>
                 {% if ligneNames %}
                     {% for i  in 0..ligneNames|length-1 %}
-                        <td class="{{classTd}} {{ligneNames[i][1]}}" {{ligneNames[i][2]==3 ? "style='font-size:13px'"}}>{{ligneNames[i][2]==1 ? "<strong>"}}{% for _ in range(0, (ligneNames[i][2]-1)*4) %}&nbsp;{% endfor %}{{ligneNames[i][0]|nl2br}}{{ligneNames[i][2]==1 ? "</strong>"}} </td>
+                    {% set level = ligneNames[i][2] %}
+                    {% set id = ligneNames[i][1] %}
+                    {% if level == 1 %}{% set levelID0 = levelID0 + 1 %}{% set levelID1 = 0 %}{% set levelID2 = 0 %}
+                    {% elseif level == 2 %}{% set levelID1 = 1 + levelID1 %}{% set levelID2 = 0 %}
+                    {% elseif level == 3 %}{% set levelID2 = 1 + levelID2 %}
+                    {% endif %}
+
+                    <tr {{level !=1 ? 'class="sub_item"'}} id="{{id}}"><div  id="{{id}}_level" hidden>{{table.level(levelID0, levelID1, levelID2)}}</dic>
+                        <td onclick="show_hide_tab('{{id}}')" class="item {{classTd}} {{level ==1 ? 'text-left'}}{{level !=1 ? 'text-right'}}">{{i < ligneNames|length and ligneNames[i+1][2] > level ? table.addArrow(id)}}{{level !=3 ? "<strong>"}}{{ligneNames[i][0]|nl2br}}{{level !=2 ? "</strong>"}} </td>
                         {% for j in 0..colNames|length-2 %}
                             <td id="{{i}}_{{j}}">-</td>
                         {% endfor %}
@@ -108,6 +127,7 @@
         </table>
     </div>
 </div>
+
 
 
 
