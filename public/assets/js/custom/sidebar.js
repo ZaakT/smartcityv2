@@ -1,5 +1,5 @@
 function colorActive(){
-    $("input[type=radio]").first().prop("checked", true);
+    $("input[type=radio]:enabled").first().prop("checked", true);
     var CheminComplet = document.location.href;
     var CheminRepertoire  = CheminComplet.substring( 0 ,CheminComplet.lastIndexOf( "/" ) );
     var NomDuFichier     = CheminComplet.substring(CheminComplet.lastIndexOf( "/" )+1 );

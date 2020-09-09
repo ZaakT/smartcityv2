@@ -1,4 +1,4 @@
-//TODO liaison avec la bdd et import des dates du projet
+//TODO import des dates du projet de la bdd et envoi des données entrées
 
 function update_chart(event) {
     let debut_projet = new Date(2020, 1, 1)

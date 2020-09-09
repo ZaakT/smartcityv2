@@ -1,5 +1,4 @@
 {% extends '/others/general_common.twig' %}
-{% set sideBarName = "customer_dashboards" %}
 
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
@@ -8,23 +7,33 @@
 {% import "/templates/customer_dashboards/macro_table.twig" as table %}
 {% import "/templates/customer_dashboards/macro_torus.twig" as torus %}
 
-{% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName, projID) }}{% endblock %}
 
-{% block title %}Dashbords - Summary{% endblock %}
+{% block title %}Dashboards - Summary{% endblock %}
 
 {% block content %}
 
-{% set bankability_lineNames = [
-    ["Payback", "payback", 1],
-    ["Societal Payback", "societalPayback", 1],
-    ["ROI", "roi", 1],
-    ["Societal ROI", "societalRoi", 1],
-    ["NPV", "npv", 1],
-    ["Societal NPV", "societalNpv", 1],
-    ["Non Quantifiable Benefits", "nqb", 1],
-    ["Risk", "risk", 1]
-] %}
-{% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
+{% if sideBarName == "supplier_dashboards" %}
+    {% set bankability_lineNames = [
+        ["Operating Margin", "operatingMargin", 1],
+        ["Payback", "payback", 1],
+        ["ROI", "roi", 1],
+        ["NPV", "npv", 1]
+    ] %}
+    {% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
+{% elseif sideBarName == "customer_dashboards" %}
+    {% set bankability_lineNames = [
+            ["Payback", "payback", 1],
+            ["Societal Payback", "societalPayback", 1],
+            ["ROI", "roi", 1],
+            ["Societal ROI", "societalRoi", 1],
+            ["NPV", "npv", 1],
+            ["Societal NPV", "societalNpv", 1],
+            ["Non Quantifiable Benefits", "nqb", 1],
+            ["Risk", "risk", 1]
+        ] %}
+    {% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
+{% endif %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}

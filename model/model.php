@@ -5069,3 +5069,14 @@ function deleteItem($catItem,$itemID) {
         break;
     } 
 }
+
+
+/////////////////////  REVENUES
+
+function insert_revenue_items($type) {
+    //TODO gestion BDD revenues
+}
+
+function list_revenues_items($type) {
+
+}

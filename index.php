@@ -781,7 +781,7 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
@@ -829,7 +829,7 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
