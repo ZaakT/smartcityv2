@@ -20,3 +20,7 @@ function submitForm(formName){
     if(validate_form)
         $("#"+formName).submit();
 }
+
+function submitForm_debug(formName){
+    $("#"+formName).submit();
+}

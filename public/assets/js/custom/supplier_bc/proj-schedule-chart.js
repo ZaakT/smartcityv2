@@ -83,3 +83,7 @@ function check_form() {
     if(validate_form)
         $("#supplier_schedule").submit();
 }
+
+function check_form_debug() {
+    $("#supplier_schedule").submit();
+}

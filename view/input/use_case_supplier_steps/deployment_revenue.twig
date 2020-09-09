@@ -7,12 +7,13 @@
 
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/second_bar.twig" as second_bar %}
+{% import "/templates/customer_bc/macro_xpex.twig" as list %}
+{% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 
 {% block sidebar %}
 	{{ sidebar.sidebar("input_use_case_supplier") }}
 {% endblock %}
-{% block title %}Project schedule
-{% endblock %}
+{% block title %}Deployment revenue{% endblock %}
 
 {% block content %}
 
@@ -31,23 +32,50 @@
 		</div>
 
 		{#  CONTENU #}
-		<form id="deployment_revenue" name="deployment_revenue" action="?A=input_use_case_supplier&amp;A2=operating_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
-			<h3>Deployment revenue</h3>
+		<form id="equipment_revenue" name="equipment_revenue" action="?A=input_use_case_supplier&amp;A2=operating_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
+			<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Deployment Revenues Items</h3>
+			<div class="row text-center">
+				<div class="col mx-5 mb-5 list-table">
+					<table class='table table-lg table-bordered table-striped table-responsive-lg'>
+						<thead class="thead-dark text-center sticky-top">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Name</th>
+								<th scope="col">Description</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+			<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Suggested Deployment Revenues Items</h3>
+			<div class="row text-center">
+				<div class="col mx-5 mb-5 list-table">
+					<table class='table table-lg table-bordered table-striped table-responsive-lg'>
+						<thead class="thead-dark text-center sticky-top">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Name</th>
+								<th scope="col">Description</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
 		</form>
 
 
 		{#  FIN DU CONTENU #}
 
 		<div class="row m-3 text-center text-dark">
-			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('deployment_revenue');"></button>
+			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('equipment_revenue');"></button>
 		</div>
 	{% endif %}
 {% endblock %}
 
 {% block scripts %}
-	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/proj-schedule-chart.js"></script>
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/sidebar-supplier-iuc.js"></script>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
 	<script>
 		déverouiller_sidebar();
 	</script>

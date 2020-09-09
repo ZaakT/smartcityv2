@@ -16,7 +16,7 @@
                     <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedCapex(form_capex);" id='{{ id }}' name="{{ id }}" {{id in selCapex|keys ? "checked" : ""}}></td>
                     <td scope="col">{{ item['name'] }}</td>
                     <td scope="col">{{ item['description'] }}</td>
-                </tr>         
+                </tr>
             {% endfor %}
             </tbody>
         </table>
