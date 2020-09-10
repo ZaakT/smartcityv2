@@ -2217,6 +2217,13 @@ function deleteAllSelOpex($projID,$ucID){
 
 // ---------------------------------------- REVENUES----------------------------------------
 
+function getEquipmentRevenues($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT * FROM revenues_item");
+    $req->execute(array($projID,$ucID));
+    return $req->fetchAll();
+}
+
 function getRevenuesUserItem($projID,$ucID,$name){
     $db = dbConnect();
     $req = $db->prepare("SELECT *
@@ -2293,7 +2300,6 @@ function getListRevenuesItems($ucID){
             $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
         }
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -4574,7 +4580,7 @@ function getAllItem1Advice($catItem){
         break;
 
         case "revenues":
-            $req = $db->prepare("SELECT * FROM revnues_item_advice INNER JOIN revenues_item
+            $req = $db->prepare("SELECT * FROM revenues_item_advice INNER JOIN revenues_item
                                         WHERE revenues_item.id = revenues_item_advice.id ORDER BY name");
             $req->execute();
         break;

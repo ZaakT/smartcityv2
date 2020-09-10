@@ -7,13 +7,13 @@
 
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/second_bar.twig" as second_bar %}
-{% import "/templates/customer_bc/macro_xpex.twig" as list %}
-{% import "/templates/customer_bc/modal_xpex.twig" as modal %}
+{% import "/templates/supplier_bc/macro_revenues.twig" as list %}
 
 {% block sidebar %}
 	{{ sidebar.sidebar("input_use_case_supplier", projID, ucID) }}
 {% endblock %}
-{% block title %}Equipment revenues{% endblock %}
+{% block title %}Equipment revenues
+{% endblock %}
 
 {% block content %}
 
@@ -49,20 +49,12 @@
 				</div>
 			</div>
 			<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Suggested Equipment Revenues Items</h3>
-			<div class="row text-center">
-				<div class="col mx-5 mb-5 list-table">
-					<table class='table table-lg table-bordered table-striped table-responsive-lg'>
-						<thead class="thead-dark text-center sticky-top">
-							<tr>
-								<th scope="col"></th>
-								<th scope="col">Name</th>
-								<th scope="col">Description</th>
-							</tr>
-						</thead>
-					</table>
-				</div>
-			</div>
+				{{ list.list_revenues(revenues_items, projID,ucID, type, sideBarName, listUcID) }}
 		</form>
+
+		<div class="row my-5">
+			<button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewXpexModal" role="button">Create a custom item</button>
+		</div>
 
 
 		{#  FIN DU CONTENU #}
