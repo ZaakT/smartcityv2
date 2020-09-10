@@ -12,18 +12,15 @@ require __DIR__ . '/vendor/autoload.php';
 foreach (glob("controller/*") as $dir){
     foreach (glob("$dir/*.php") as $filename){
         require($filename);
-        //var_dump($filename);
     }
     foreach (glob("$dir/*") as $dir2){
         foreach (glob("$dir2/*.php") as $filename){
             require($filename);
-            //var_dump($filename);
         }
     }
 }
 foreach (glob("controller/*.php") as $filename){
     require($filename);
-    //var_dump($filename);
 }
 
 use Twig\Environment;
@@ -225,8 +222,7 @@ try{
             // ---------- PROJECT DESIGN ---------- 
             elseif($_GET['A']=='project_design'){
                 verifIsDev();
-                /* var_dump($_POST); */
-                // ??? IN THE CASE WHERE AN ACTION2 (A2) IS GIVEN ???
+                
                 if(isset($_GET['A2'])){
                     // --- USE CASES MENU ---
                     if($_GET['A2']=="ucm"){
@@ -252,7 +248,6 @@ try{
                         if(isset($_POST['radio_ucm'])){
                             $ucmID = intval($_POST['radio_ucm']);
                             $_SESSION['ucmID']=$ucmID;
-                            //var_dump($ucmID);
                             header('Location: ?A=project_design&A2=measures&ucmID='.$ucmID);
                         }
                     }

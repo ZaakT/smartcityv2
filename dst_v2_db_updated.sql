@@ -2672,7 +2672,7 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`) VALUES
 (2, 'revenues item 2', ''),
 (3, 'revenues item', ''),
 (4, 'revenues item', ''),
-(5, 'FREZD', ''),
+(5, 'revenues item 5', ''),
 (6, 'rvenues', ''),
 (7, 'rev', '');
 

@@ -1,60 +1,27 @@
+{% macro list_revenues(revenues_items, projID=0,ucID=0, type="equipment", sideBarName,listUcID=[]) %}
 
-{% macro list_revenues(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName,listUcID,listUcsName, userMode = false) %}{% import "/templates/customer_bc/macro_xpex.twig" as macro %}{% set size = 3 %}{% if userMode %}{% set size = 4 %}{% endif %}{% if listUcsName|length >1 %}{% set size = size + 1 %}{% endif %}<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}}{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %}Items</h3><div class="row text-center"><div class="col mx-5 mb-5 list-table">
-<table class='table table-lg table-bordered table-striped table-responsive-lg'>
-	<thead class="thead-dark text-center sticky-top">
-		<tr>
-			<th scope="col"></th>
-			<th scope="col">Name</th>
-			<th scope="col">Description</th>
-			{{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
-			{{userMode ? "<th scope='col'></th>" }}
+	<h3 class="text-center mt-5 mb-3 text-uppercase">
+		{% if type == "equipment" %}equipment
+			{% elseif type =="opex" %}Opex
+			{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up
+			{% elseif type =="deployment_costs" %}Implmentation
+		{% endif %}Items</h3>
+	<div class="row text-center">
+		<div class="col mx-5 mb-5 list-table">
+			<table class='table table-lg table-bordered table-striped table-responsive-lg'>
+				<thead class="thead-dark text-center sticky-top">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Name</th>
+						<th scope="col">Description</th>
+					</tr>
+				</thead>
+				{% for id, item in revenues_items %}
+					<tr id="" scope="row"></tr>
+					<td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);"></td>
+					<td scope="col">{{ item['name'] }}</td>
+					<td scope="col">{{ item['description'] }}</td>
+				</tr>
 		</tr>
-	</thead>
-	{% set print = false %}
-	{% for item in xpex_from_ntt %}
-		{% if item|length > 0 %}
-			{% set print = true %}
-		{% endif %}
 	{% endfor %}
-
-	{% if print  %}
-		<td colspan="{{size}}">
-			<strong>Procured From
-				{{companyName}}
-			</strong>
-		</td>
-		{{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
-	{% endif %}
-
-	{% set print = false %}
-	{% for item in xpex_from_outside_ntt %}
-		{% if item|length > 0 %}
-			{% set print = true %}
-		{% endif %}
-	{% endfor %}
-
-	{% if print  %}
-		<td colspan="{{size}}">
-			<strong>Procured From Outside
-				{{companyName}}
-			</strong>
-		</td>
-		{{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
-	{% endif %}
-
-	{% set print = false %}
-	{% for item in xpex_internal %}
-		{% if item|length > 0 %}
-			{% set print = true %}
-		{% endif %}
-	{% endfor %}
-
-	{% if print  %}
-		<td colspan="{{size}}">
-			<strong>
-				Internal
-			</strong>
-		</td>
-		{{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
-	{% endif %}
 </table></div></div>{% endmacro %}
