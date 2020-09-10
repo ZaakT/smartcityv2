@@ -4574,7 +4574,7 @@ function getAllItem1Advice($catItem){
         break;
 
         case "revenues":
-            $req = $db->prepare("SELECT * FROM revnues_item_advice INNER JOIN revenues_item
+            $req = $db->prepare("SELECT * FROM revenues_item_advice INNER JOIN revenues_item
                                         WHERE revenues_item.id = revenues_item_advice.id ORDER BY name");
             $req->execute();
         break;
