@@ -43,7 +43,7 @@
         {% endfor %}
     {% endfor %}
     {% if show %}
-        <tr><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
+        <tr class="table-primary"><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
         {% for ucID in listUcID %}
             {% for id_xpex,data in selXpex[ucID] %}
                     {% if id_xpex in _xpex[ucID]|keys %}

@@ -258,7 +258,10 @@ function getDataYear($projID, $ucID, $year,  $capex_from_nttTot, $capex_from_out
     $capexTot = $capex_from_nttTot[$year] + $capex_from_outside_nttTot[$year];
     $implemTot =  $implem_from_nttTot[$year]+$implem_from_outside_nttTot[$year]+$implem_internalTot[$year];
     $opexTot =  $opex_from_nttTot[$year]+$opex_from_outside_nttTot[$year]+$opex_internalTot[$year];
+
+    $cash_in = 0 /*+ $UC_revenues[$year]+ $CRB[$year] + $WCB[$year]*/;
     $cash_out = $capexTot + $opexTot + $implemTot ;
+    $netCash = $cash_in-$cash_out;
     
     return [
         $cash_out, 
@@ -277,7 +280,7 @@ function getDataYear($projID, $ucID, $year,  $capex_from_nttTot, $capex_from_out
             30, 
             40, 
             50, 
-        60, 
+        $netCash, 
         70, 
         80, 
         90

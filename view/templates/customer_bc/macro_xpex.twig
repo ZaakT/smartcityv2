@@ -44,7 +44,7 @@
             {% endfor %}
 
             {% if print  %}
-                <td colspan="{{size}}"> <strong>Procured From {{companyName}} </strong></td>
+                <tr class="table-primary"><td colspan="{{size}}"> <strong>Procured From {{companyName}} </strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
             {% endif %}
 
@@ -54,7 +54,7 @@
             {% endfor %}
 
             {% if print  %}
-                <td colspan="{{size}}"><strong>Procured From Outside {{companyName}} </strong></td>
+                <tr class="table-primary"><td colspan="{{size}}"><strong>Procured From Outside {{companyName}} </strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
             {% endif %}
 
@@ -64,7 +64,7 @@
             {% endfor %}
 
             {% if print  %}
-                <td colspan="{{size}}"><strong> Internal </strong></td>
+                <tr class="table-primary"><td colspan="{{size}}"><strong> Internal </strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
             {% endif %}
         </table>

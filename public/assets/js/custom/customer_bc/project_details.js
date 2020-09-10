@@ -99,11 +99,7 @@ function turnArrow(id){
 }
 function show(id){
     //console.log("I show :"+id);
-    try{ 
-        
-            turnArrow(id);
-            
-        }catch(error){};
+    turnArrow(id);       
     $('#'+id).removeAttr('hidden');
 
 
@@ -112,16 +108,9 @@ function show(id){
 
 function hide(id){
     //console.log("I hide :"+id);    if(test)
-    try{ 
-        if( !($('#'+id+'_bottom')[0].hasAttribute("hidden"))){
-            turnArrow(id);
-            $('#'+id).attr('hidden', true);
-        }
-
-    }catch(error){
-        turnArrow(id);
-        $('#'+id).attr('hidden', true);
-    }
+    turnArrow(id);
+    $('#'+id).attr('hidden', true);
+        
 
 }
 

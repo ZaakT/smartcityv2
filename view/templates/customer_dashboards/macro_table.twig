@@ -115,10 +115,15 @@
                     {% elseif level == 3 %}{% set levelID2 = 1 + levelID2 %}
                     {% endif %}
 
-                    <tr {{level !=1 ? 'class="sub_item"'}} id="{{id}}"><div  id="{{id}}_level" hidden>{{table.level(levelID0, levelID1, levelID2)}}</dic>
-                        <td onclick="show_hide_tab('{{id}}')" class="item {{classTd}} {{level ==1 ? 'text-left'}}{{level !=1 ? 'text-right'}}">{{i < ligneNames|length and ligneNames[i+1][2] > level ? table.addArrow(id)}}{{level !=3 ? "<strong>"}}{{ligneNames[i][0]|nl2br}}{{level !=2 ? "</strong>"}} </td>
+                    <tr  id="{{id}}" {{level == 1 ? 'class="font-weight-bold"' }}{{level == 3 ? 'class="font-weight-light"' }}>
+                        <td onclick="show_hide_tab('{{id}}')" class="{{classTd}} text-left pl-{{(level * 2 - 1)}} {{level !=1 ? 'sub_item'}} " >
+                            {{level == 2 ? "<h6>" }}
+                                {{ligneNames[i][0]|nl2br}}  {{i < ligneNames|length and ligneNames[i+1][2] > level ? table.addArrow(id)}}
+                            {{level == 2 ? "</h6>" }}
+                        </td>
+                        <div  id="{{id}}_level" hidden>{{table.level(levelID0, levelID1, levelID2)}}</div>
                         {% for j in 0..colNames|length-2 %}
-                            <td id="{{i}}_{{j}}">-</td>
+                            <td id="{{i}}_{{j}}" class ="text-right" >-</td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
