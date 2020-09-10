@@ -122,6 +122,7 @@ function cb_output_v2($twig,$is_connected,$projID,$post=[]){
     
                     $cashreleasingValues = getCashReleasingValues($projID,$ucID);
                     $cashreleasingValuesMonth[$ucID] = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+                    //$cashreleasingTot2[$ucID] = getCashInYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits");
                     $cashreleasingTot2[$ucID] = calcCashReleasingTot($cashreleasingValuesMonth[$ucID],$projectYears); //ok
                     
                     $widercashValues = getWiderCashValues($projID,$ucID);

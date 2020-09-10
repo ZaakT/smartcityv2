@@ -186,30 +186,42 @@ function getUcsData($projID,$selScope, $projectYears, $scope){
     return $list;
 }
 
-function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine, $projectDates=[], $schedules=[]){
-    
+function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine, $projectDates=[], $schedules=[], $periode = "year"){
+    if($periode != "year" and $periode!="month"){
+        throw new Exception("Wrong perdiode !");
+    }
     if($type == "capex"){
         $xpex =  getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine);
         $capexPerMonth = calcCapexPerMonth($implemRepart,$xpex);
+        if($periode == "month"){
+            return $capexPerMonth;
+        }
         return calcCapexTot($capexPerMonth,$projectYears);
     }elseif($type == "opex"){
         $opexSchedule = $schedules['opex'][$ucID];
         $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
         $opexValues =getOpexValuesOrigine($projID,$ucID, $origine);
         $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+        if($periode == "month"){
+            return $opexPerMonth;
+        }
         return calcOpexTot($opexPerMonth,$projectYears);
     }elseif($type=="implem"){
         $xpex =  getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine);
         $implemPerMonth = calcImplemPerMonth($implemRepart,$xpex);
+        if($periode == "month"){
+            return $implemPerMonth;
+        }
         return calcImplemTot($implemPerMonth,$projectYears);
     }
     
 }
 
-function getUcData($projID, $ucID, $projectYears, $scope){
-    // return the data needed for the table Use Case Details for the ucID passed in argument.
-    $list = [$ucID];
 
+function getCashOutYear($projID, $ucID, $projectYears, $scope, $origine, $item, $periode = "year"){
+    if($periode != "year" and $periode!="month"){
+        throw new Exception("Wrong perdiode !");
+    }
     $schedules = getListSelDates($projID);
     $keydates_proj = getKeyDatesProj($schedules,$scope);
     $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
@@ -218,50 +230,141 @@ function getUcData($projID, $ucID, $projectYears, $scope){
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
     $implemSchedule = $schedules['implem'][$ucID];
     $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+
+    if($item == "capex" or $item == "implem"){
+        return xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $item, $origine, $projectDates, $periode);
+    }elseif($item == "opex"){
+        $opexSchedule = $schedules['opex'][$ucID];
+        $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+        $opexValues = getOpexValues($projID,$ucID);
+        $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
+        if($periode == "month"){
+            return $opexPerMonth;
+        }
+        $opexTot = calcOpexTot($opexPerMonth,$projectYears);
+
+        return xpexSubTot($projID,$ucID, $opexRepart, $projectYears, $item , $origine, $projectDates, $schedules);
+    }
+}
+
+function  getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item, $periode="year"){
+    if($periode != "year" and $periode!="month"){
+        throw new Exception("Wrong perdiode !");
+    }
+
+    $schedules = getListSelDates($projID);
+    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
+    $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
+    $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
+    $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+    if($item == "revenues"){
+        
+        $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
+        if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+            $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+            $revenuesValues = getRevenuesValues($projID,$ucID);
+            $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
+        } else {
+            $revenuesPerMonth = array_fill_keys($projectDates,0);
+        }
+        if($periode == "month"){
+            return $revenuesPerMonth;
+        }
+        return calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
+
+    }elseif($item == "cash_realeasing_benefits"){
+        
+        $opexSchedule = $schedules['opex'][$ucID];
+        $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+        $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+        $cashreleasingValuesMonth = calcCashReleasingPerMonth2($opexRepart,$cashreleasingValues);
+        if($periode == "month"){
+            return $cashreleasingValuesMonth;
+        }
+        return calcCashReleasingTot($cashreleasingValuesMonth,$projectYears); //ok
+    }elseif($item == "wider_cash_benefits"){
+
+        $opexSchedule = $schedules['opex'][$ucID];
+        $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
+        $cashreleasingValues = getCashReleasingValues($projID,$ucID);
+
+        $widercashValues = getWiderCashValues($projID,$ucID);
+        $widercashValuesMonth = calcWiderCashPerMonth2($opexRepart,$widercashValues);
+        if($periode == "month"){
+            return $widercashValuesMonth;
+        }
+        return calcWiderCashTot($widercashValuesMonth,$projectYears);
+    }
+}
+function getUcData($projID, $ucID, $projectYears, $scope){
+    // return the data needed for the table Use Case Details for the ucID passed in argument.
+    $list = [$ucID];
+
     // Cash-out Capex
-
-
-
-    $capex_from_nttTot = xpexSubTot($projID,$ucID, $implemRepart, $projectYears, "capex", "from_ntt", $projectDates);
-    $capex_from_outside_nttTot = xpexSubTot($projID,$ucID, $implemRepart, $projectYears, "capex", "from_outside_ntt", $projectDates);
+    $capex_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","capex");
+    $capex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","capex");
+    
 
     //Cash-out Opex
-    $opexSchedule = $schedules['opex'][$ucID];
-    $opexRepart = getRepartPercOpex($opexSchedule,$projectDates);
-    $opexValues = getOpexValues($projID,$ucID);
-    $opexPerMonth = calcOpexPerMonth2($opexRepart,$opexValues);
-    $opexTot = calcOpexTot($opexPerMonth,$projectYears);
 
-    $opex_from_nttTot = xpexSubTot($projID,$ucID, $opexRepart, $projectYears, "opex", "from_ntt", $projectDates, $schedules);
-    $opex_from_outside_nttTot = xpexSubTot($projID,$ucID, $opexRepart, $projectYears, "opex", "from_outside_ntt", $projectDates, $schedules);
-    $opex_internalTot = xpexSubTot($projID,$ucID, $opexRepart, $projectYears, "opex", "internal", $projectDates, $schedules);
+    $opex_from_nttTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex");
+    $opex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex");
+    $opex_internalTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex");
+    
 
     //Cash-out Deployment 
 
 
-    $implem_from_nttTot = xpexSubTot($projID,$ucID, $implemRepart, $projectYears, "implem", "from_ntt", $projectDates);
-    $implem_from_outside_nttTot = xpexSubTot($projID,$ucID, $implemRepart, $projectYears, "implem", "from_outside_ntt", $projectDates);
-    $implem_internalTot = xpexSubTot($projID,$ucID, $implemRepart, $projectYears, "implem", "internal", $projectDates);
+    $implem_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","implem");
+    $implem_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","implem");
+    $implem_internalTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","implem");
+
+    //Cash-in : Revenues
+    $revenues = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues");
+
+    //Cash-in : Cash Realeasing Benefits
+    $cash_realeasing_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits");
+
+    //Cash-in : Cash Realeasing Benefits
+    $wider_cash_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits");
 
 
     for ($i = 0; $i<count($projectYears); $i++){
         array_push($list, getDataYear($projID, $ucID, $projectYears[$i],  $capex_from_nttTot, $capex_from_outside_nttTot, 
         $implem_from_nttTot,  $implem_from_outside_nttTot,  $implem_internalTot, 
-        $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot));
+        $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot, 
+        $revenues, $cash_realeasing_benefits, $wider_cash_benefits));
     }
     return $list;
 
 }
 
-function getDataYear($projID, $ucID, $year,  $capex_from_nttTot, $capex_from_outside_nttTot, $implem_from_nttTot,  $implem_from_outside_nttTot,  $implem_internalTot,  $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot){
+function getDataYear($projID, $ucID, $year,  $capex_from_nttTot, $capex_from_outside_nttTot, $implem_from_nttTot,  
+$implem_from_outside_nttTot,  $implem_internalTot,  $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot, 
+$UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits){
     //return the data for the uc corresponding to the year.
     $capexTot = $capex_from_nttTot[$year] + $capex_from_outside_nttTot[$year];
     $implemTot =  $implem_from_nttTot[$year]+$implem_from_outside_nttTot[$year]+$implem_internalTot[$year];
     $opexTot =  $opex_from_nttTot[$year]+$opex_from_outside_nttTot[$year]+$opex_internalTot[$year];
 
-    $cash_in = 0 /*+ $UC_revenues[$year]+ $CRB[$year] + $WCB[$year]*/;
+
+    $cash_in =  $UC_revenues[$year]+ $cash_realeasing_benefits[$year] + $wider_cash_benefits[$year];
     $cash_out = $capexTot + $opexTot + $implemTot ;
     $netCash = $cash_in-$cash_out;
+
+    $net_societal_cash = $wider_cash_benefits[$year] + $netCash;
+
+    $net_cumulated_cash = $netCash;
+    $wider_cumulated_cash_benefits = $wider_cash_benefits[$year];
+    foreach ($implem_from_nttTot as $yearKey => $value) {
+        if($year>$yearKey && $yearKey!="tot"){
+            $net_cumulated_cash += $UC_revenues[$yearKey]+ $cash_realeasing_benefits[$year] + $wider_cash_benefits[$year] - ($capex_from_nttTot[$yearKey] + $capex_from_outside_nttTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey]+$implem_internalTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]+$opex_internalTot[$yearKey]); 
+        
+            $wider_cumulated_cash_benefits += $wider_cash_benefits[$yearKey];
+        }
+    }
+    $net_cumulated_societal_cash = $net_cumulated_cash + $wider_cumulated_cash_benefits;
     
     return [
         $cash_out, 
@@ -276,14 +379,14 @@ function getDataYear($projID, $ucID, $year,  $capex_from_nttTot, $capex_from_out
                 $opex_from_nttTot[$year], 
                 $opex_from_outside_nttTot[$year], 
                 $opex_internalTot[$year],  
-        20, 
-            30, 
-            40, 
-            50, 
+        $cash_in, 
+            $UC_revenues[$year], 
+            $cash_realeasing_benefits[$year], 
+            $wider_cash_benefits[$year], 
         $netCash, 
-        70, 
-        80, 
-        90
+        $net_cumulated_cash, 
+        $net_societal_cash, 
+        $net_cumulated_societal_cash
     ];
 
 }
