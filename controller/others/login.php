@@ -51,13 +51,13 @@ function isConnected(){
 }
 
 function isDev(){
-    //return true;
+    return true;
     return getUserRole()=="project_developper";
 }
 
 function isSup(){
     
-    //return true;
+    return true;
     return getUserRole()=="supplier";
 }
 
@@ -69,7 +69,7 @@ function getUserRole(){
         }else if($_SESSION['profile'] == "s" ){
             return "supplier";
         }
-        throw new Exception("Wrong profile ! : ");
+        throw new Exception("Wrong profile ! ");
     }
 }
 
