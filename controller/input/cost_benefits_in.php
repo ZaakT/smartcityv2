@@ -786,7 +786,6 @@ function create_revenues($twig,$is_connected,$post){
             $name = $post['name'];
             $description = isset($post['description']) ? $post['description'] : "";
             $revenues_infos = ["name"=>$name,"description"=>$description];
-            //var_dump(getRevenuesUserItem($projID,$ucID,$name));
             if(!empty(getRevenuesUserItem($projID,$ucID,$name))){
                 header('Location: ?A=cost_benefits&A2=revenues&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
             } else {
