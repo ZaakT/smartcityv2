@@ -7,6 +7,8 @@
 						<th scope="col"></th>
 						<th scope="col">Name</th>
 						<th scope="col">Description</th>
+						<th scope="col">Cost per unit</th>
+						<th scope="col">Number of units</th>
 					</tr>
 				</thead>
 				{% for id, item in revenues_items %}
@@ -14,6 +16,8 @@
 						<td class="check-col align-middle"><input type="checkbox" onclick=""></td>
 						<td scope="col">{{ item['name'] }}</td>
 						<td scope="col">{{ item['description'] }}</td>
+						<td scope="col">{{ item['price_per_unit'] }}</td>
+						<td scope="col">{{ item['nb_units'] }}</td>
 					</tr>
 				{% endfor %}
 			</table>

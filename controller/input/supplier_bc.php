@@ -36,6 +36,12 @@ function use_case_equipment($twig,$is_connected, $projID, $ucID){
     }
 }
 
+function insert_equiprev_data($twig, $is_connected, $projID, $ucID, $post=[]) {
+    if($post) {
+        createEquipmentRevenue($projID, $ucID, $post[0], $post[1], $post[2]);
+    }
+}
+
 function use_case_deployment($twig,$is_connected, $projID, $ucID){
     $user = getUser($_SESSION['username']);
     $devises = getListDevises();

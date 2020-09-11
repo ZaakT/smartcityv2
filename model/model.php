@@ -2219,9 +2219,20 @@ function deleteAllSelOpex($projID,$ucID){
 
 function getEquipmentRevenues($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT * FROM revenues_item");
+    $req = $db->prepare("SELECT * FROM equipment_revenues");
     $req->execute(array($projID,$ucID));
     return $req->fetchAll();
+}
+
+function createEquipmentRevenue($projID, $ucID, $name, $cost_per_unit, $nb_units) {
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO equipment_revenues
+                            (name, price_per_unit, nb_units)
+                            VALUES (?,?,?)");
+    $ret = $req->execute(array($name, $cost_per_unit, $nb_units));
+    
+    return $ret;
 }
 
 function getRevenuesUserItem($projID,$ucID,$name){
@@ -2328,7 +2339,6 @@ function getListRevenuesUser($projID,$ucID){
             $list[$id_item] = ['name'=>$name,'description'=>$description];
         }
     }
-    //var_dump($list);
     return $list;
 
 }
