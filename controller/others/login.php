@@ -51,13 +51,13 @@ function isConnected(){
 }
 
 function isDev(){
-    return true;
+    //return true;
     return getUserRole()=="project_developper";
 }
 
 function isSup(){
     
-    return true;
+    //return true;
     return getUserRole()=="supplier";
 }
 
