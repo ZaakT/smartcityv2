@@ -308,6 +308,8 @@ function  getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item, $peri
             return $widercashValuesMonth;
         }
         return calcWiderCashTot($widercashValuesMonth,$projectYears);
+    }elseif($item == "qualitative"){
+
     }
 }
 function getUcData($projID, $ucID, $projectYears, $scope){
@@ -430,6 +432,69 @@ function dashboards_use_case_details($twig,$is_connected, $projID){
     }
 }
 
+function difMounthsBounds($d1, $d2){
+    return (explode("/",$d1)[1]-explode("/",$d2)[1])*12+explode("/",$d1)[0]-explode("/",$d2)[0];
+}
+
+function getDateProportion($implemSchedule, $year){
+    $before = $implemSchedule["startdate"];
+    $after;
+    $i=0;
+    foreach($implemSchedule as $key=>$date){
+        
+        if(!isset($after)){
+            if(explode("/", $date)[1]>=$year){// we found the first date after the year selected
+                $after = $key;
+            }else{
+                $before = $key;
+            }
+        }else{
+            $i++;
+        }
+
+    }
+    if(!isset($after)){
+        return 1;
+    }
+    else{
+        if($after == "startdate"){
+            return 0;
+        }else{
+            $difMounthsBounds = difMounthsBounds($implemSchedule[$after], $implemSchedule[$before]);
+            $difMounthsBeforeYear = difMounthsBounds("01/$year", $implemSchedule[$before]);
+            return $i/count($implemSchedule)+$difMounthsBeforeYear/$difMounthsBounds;
+        }
+    }
+}
+
+function getQualitativeYearEvolution($projID,$ucID){
+
+    $QuantifiableItemList = getListSelQuantifiable($projID,$ucID);
+    $scope = getListSelScope($projID);
+    $schedules = getListSelDates($projID);
+    $keydates_proj = getKeyDatesProj($schedules,$scope);
+
+    
+    
+    $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
+
+    $implemSchedule=$schedules["implem"][$ucID];
+    $QualitativeYearEvolution=[];
+    foreach($QuantifiableItemList as $key=>$item){
+        $QualitativeYearEvolution[$key]=[];
+        if(count($item)>0){
+            $startYear = explode("/",$implemSchedule['startdate'])[1];
+            $volume = $item["volume"];
+            $anVarVol = $item["anVarVol"]/100;
+            $vol_red = -$item["vol_red"]/100;
+            foreach($projectYears as $year){
+                $QualitativeYearEvolution[$key][$year] =pow(1+$anVarVol, intval($year)-intval($startYear))*(1+getDateProportion($implemSchedule, $year)*$vol_red)*$volume;
+            }
+        }
+    }
+    return $QualitativeYearEvolution;
+}
+
 function dashboards_non_monetizable($twig,$is_connected, $projID){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -446,6 +511,26 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             $schedules = getListSelDates($projID);
             $keydates_proj = getKeyDatesProj($schedules,$scope);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
+
+            foreach ($selScope as $measID => $list_ucs) {
+                foreach ($list_ucs as $ucID) {
+                    $QualitativeYearEvolution = getQualitativeYearEvolution($projID,$ucID);
+                    $QuantifiableItemList = getListSelQuantifiable($projID,$ucID);
+                    $nonQuantifiableNames = getListQuantifiableItems($ucID);
+                    $data[$ucID] = [];
+                    foreach($QuantifiableItemList as $key=>$item){
+                        if($nonQuantifiableNames[$key]['unit']!=""){
+                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']." (".$nonQuantifiableNames[$key]['unit'].")"], $QualitativeYearEvolution[$key]));
+                        }
+                        else{
+                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']], $QualitativeYearEvolution[$key]));
+                        
+                        }
+                        
+                    }
+                }
+            }
+            /*
             $data = array(
                 "1"=>[
                     ["item 5", 10, 5, 7, 8],
@@ -455,7 +540,7 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
                 "3"=>[
                     ["item 2",1024, 512, 256, 128],
                     ["item 13", 169, 12, 15, 0]
-                ]);
+                ]);*/
 
             echo $twig->render('/output/customer_dashboards_steps/non_monetizable.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
             'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,

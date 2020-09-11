@@ -13,8 +13,8 @@ function getUcSelected(){
 }
 
 function delAllRows(tableRef){
-    while (tableRef.rows.length > 1) {
-        tableRef.deleteRow(1);
+    while (tableRef.rows.length > 0) {
+        tableRef.deleteRow(0);
       } 
 }
 
@@ -135,8 +135,20 @@ function updateData(){
     var years = $('#data').data("years");
     var ucSeleted = getUcSelected();
     var tableRef = document.getElementById('cball_table').getElementsByTagName('tbody')[0];
-    updateTable(tableRef,data[ucSeleted] );
-    updateGraph(data[ucSeleted], years);
+    console.log(data[getUcSelected()]);
+    console.log("coucou");
+    if(data[getUcSelected()].length==0){
+      $("#errorInput").text("Error: Any Item selected for this Use Case, please go to the Input Use Case section.");
+      removeGraphs();
+      updateTable(tableRef,data[ucSeleted] );
+      $("#cball_table").attr('hidden', true);
+
+    }else{
+      $("#errorInput").text("");
+      $("#cball_table").removeAttr('hidden');
+      updateTable(tableRef,data[ucSeleted] );
+      updateGraph(data[ucSeleted], years);
+    }
 
 
 }

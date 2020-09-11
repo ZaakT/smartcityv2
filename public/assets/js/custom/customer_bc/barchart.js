@@ -115,5 +115,3 @@ function updateData(){
 
 
 updateData();
-updateData();
-updateData();

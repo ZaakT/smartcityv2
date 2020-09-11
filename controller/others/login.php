@@ -69,7 +69,7 @@ function getUserRole(){
         }else if($_SESSION['profile'] == "s" ){
             return "supplier";
         }
-        throw new Exception("Wrong profile ! : ");
+        throw new Exception("Wrong profile ! ");
     }
 }
 
