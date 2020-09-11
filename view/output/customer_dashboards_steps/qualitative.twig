@@ -24,11 +24,15 @@
 
 {{ option.option(selScope, ucs) }}
 <div class="col-7  px-0">
-    {# SCOPE #}
+
     <div class="dash-bg container-fluid m-1 ml-2 p-4">
-        {# KEY DATES #}
+
         <div class="dash-bg-light container-fluid p-3" id = "graph-container">
             <canvas id="barchart"></cancvs>
+        </div>
+        
+        <div class="text-center">
+            <span id="errorInput" style="color:red;"></span>
         </div>
     </div>
 </div>

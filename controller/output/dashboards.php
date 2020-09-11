@@ -1159,8 +1159,6 @@ function add_arrays($a,$b){
         return $b;
     } else if (empty($b)){
         return $a;
-    } else if (empty($a)&&empty($b)){
-        return [];
     } else {
         foreach ($a as $key => $value) {
             if(isset($b[$key])){

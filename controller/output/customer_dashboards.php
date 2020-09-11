@@ -46,6 +46,9 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
                 $cumulnetsoccashTot = $netsoccashTot[1];
 
 
+                $revenueSum = 0;
+                $cash_realeasing_benefitsSum = 0;
+                $wider_cash_benefitsSum = 0;
                 foreach ($scope as $measID => $list_ucs) {
                     foreach ($list_ucs as $ucID) {
 
@@ -56,6 +59,9 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
                         $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
                         $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
                         $sum_capex_implem = add_arrays($capexPerMonth_new,$implemPerMonth_new);
+                        $revenueSum+=array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues"));
+                        $cash_realeasing_benefitsSum+=array_sum( getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits"));
+                        $wider_cash_benefitsSum += array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits"));
                     }
                 }
 
@@ -105,7 +111,14 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
             catch(\Throwable $th){
                 header('?A=' + $sidebarname);
             }
-            $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], "data"=>[10, 17, 21]);
+
+            
+
+            $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], 
+            "data"=>[
+                $revenueSum,
+                $cash_realeasing_benefitsSum,
+                $wider_cash_benefitsSum]);
 
 
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
@@ -463,9 +476,28 @@ function dashboards_qualitative($twig,$is_connected, $projID){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]); 
             $selScope = getListSelScope($projID);
+            $data = [];
             $ucs = getListUCs();    
-            
-            $data = array(
+            foreach ($selScope as $measID => $list_ucs) {
+                foreach ($list_ucs as $ucID) {
+                    $nonCashItemList = getListSelNonCash($projID,$ucID);
+                    $nonCashItemNames = getListNoncashItems($ucID);
+                    $data[$ucID] = [];
+                    $nonCashMean = 0;
+                    $nbNonCash = 0;
+                    foreach($nonCashItemList as $key=>$item){
+                        $nbNonCash++;
+                        $value = $item["exp_impact"]*$item["prob"]/100;
+                        array_push($data[$ucID], [$nonCashItemNames[$key]['name'], $value]);
+                        $nonCashMean += $value;
+                    }
+                    if($nbNonCash>0){
+                        $nonCashMean = $nonCashMean/$nbNonCash;
+                        array_push($data[$ucID], ["Mean", $nonCashMean]);
+                    }
+                }
+            }
+            /*$data = array(
                 "1"=>[
                     ["item 5", 10],
                     ["item 3", 1],
@@ -475,7 +507,7 @@ function dashboards_qualitative($twig,$is_connected, $projID){
                 "3"=>[
                     ["item 2",1],
                     ["item 13", 6]
-                ]);
+                ]);*/
 
             echo $twig->render('/output/customer_dashboards_steps/qualitative.twig',array('is_connected'=>$is_connected,
             'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],

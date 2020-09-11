@@ -16,18 +16,17 @@ function hexToRgb(hex) {
     } : null;
 }
 
-function getColorsArray(size){
+function getColorsArray(ref){
     var list = [];
     var list2 = [];
-    console.log("coucou 2");
-    for (const i in range(0,size)) {
-        console.log("coucou");
-        //const proj_name = ref[i];
-        var color_hex = getRandomColor();
-        var color_rgb = hexToRgb(color_hex);
-        list.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+0.2+')');
-        list2.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+1+')');
-
+    for (const i in ref) {
+        if (ref.hasOwnProperty(i)) {
+            //const proj_name = ref[i];
+            var color_hex = getRandomColor();
+            var color_rgb = hexToRgb(color_hex);
+            list.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+0.2+')');
+            list2.push('rgb('+color_rgb['r']+','+color_rgb['g']+','+color_rgb['b']+','+1+')');
+        }
     }
     return [list,list2];
 }
@@ -41,6 +40,7 @@ function toCapitalizeSentence(string){
     }
     return res;
 }
+
 
 
 
@@ -103,9 +103,17 @@ function updateBarChart(ucData, idCanvas){
 function updateData(){ 
     var data = $('#data').data("toShow");
     $("#barchart").remove();
-    $('#graph-container').append('<canvas id="barchart"><canvas>');
-    updateBarChart(data[getUcSelected()], "barchart");
-    console.log("coucou 3");
+    console.log(data[getUcSelected()]);
+    if(data[getUcSelected()].length==0){
+        $("#errorInput").text("Error: Any Item selected for this Use Case, please go to the Input Use Case section.");
+      }else{
+        $("#errorInput").text("");
+        $('#graph-container').append('<canvas id="barchart"><canvas>');
+        updateBarChart(data[getUcSelected()], "barchart");
+      }
 }
 
+
+updateData();
+updateData();
 updateData();
