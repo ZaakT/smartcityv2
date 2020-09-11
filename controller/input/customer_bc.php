@@ -96,7 +96,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                     throw new Exception("This Use Case doesn't exist !");
                 }
             }
-            if(count($listUcID)>1){
+            if(count($listUcID)!=1){
                 $ucID = 0;
             }else{
                 $ucID = $listUcID[0];

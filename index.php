@@ -437,6 +437,7 @@ try{
                     elseif($_GET['A2']=="perimeter1"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
+                                updateScoping($_SESSION['projID'],1);
                                 perimeter1($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
