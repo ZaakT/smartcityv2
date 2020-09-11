@@ -2226,6 +2226,7 @@ function getEquipmentRevenues($projID,$ucID){
 
 function createEquipmentRevenue($projID, $ucID, $name, $cost_per_unit, $nb_units) {
     $db = dbConnect();
+    throw new Exception('not implemented');
     $ret = false;
     $req = $db->prepare("INSERT INTO equipment_revenues
                             (name, price_per_unit, nb_units)

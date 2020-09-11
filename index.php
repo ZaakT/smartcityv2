@@ -875,7 +875,13 @@ try{
                     } elseif($_GET['A2']=="schedule") {
                         use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } elseif($_GET['A2']=="equipment_revenues"){
-                        use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        if(isset($_GET['A3'])) {
+                            if($_GET['A3'] == "create_revenue") {
+                                createEquipmentRevenue($_GET['projID'],  $_GET['ucID'], $_POST['name'], $_POST['cost_per_unit'], $_POST['number_of_units']);
+                            }
+                        } else {
+                            use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        }
                     } elseif($_GET['A2']=="deployment_revenues"){
                         use_case_deployment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                     } elseif($_GET['A2']=="operating_revenues"){
