@@ -271,11 +271,9 @@ try{
                         foreach ($_POST as $key => $value) {
                             if(isset($key)){
                                 $measID = intval($key);
-                                //var_dump($measID);
                                 array_push($list_measID,$measID);
                             }
                         }
-                        //var_dump($list_measID);
                         measures_selected($list_measID);
                     }
                     // --- CRITERIA ---
@@ -298,12 +296,9 @@ try{
                         foreach ($_POST as $key => $value) {
                             if(isset($key)){
                                 $critID = intval($key);
-                                //var_dump($list_critID);
                                 array_push($list_critID,$critID);
                             }
                         }
-                        //var_dump("list_critID :");
-                        //var_dump($list_critID);
                         criteria_selected($list_critID);
                     }
                     // --- GEOGRAPHY ---
@@ -326,11 +321,9 @@ try{
                         foreach ($_POST as $key => $value) {
                             if(isset($key)){
                                 $idDLT = intval($key);
-                                //var_dump($list_idDLT);
                                 array_push($list_idDLT,$idDLT);
                             }
                         }
-                        //var_dump($list_idDLT);
                         geo_selected($list_idDLT);
                     }
                     // --- USE CASES ---
@@ -343,11 +336,9 @@ try{
                                         foreach ($_POST as $key => $value) {
                                             if(isset($key)){
                                                 $idUC = intval($key);
-                                                //var_dump($list_idUC);
                                                 array_push($list_idUC,$idUC);
                                             }
                                         }
-                                        //var_dump($list_idUC);
                                         uc_selected($twig,$is_connected,$list_idUC);
                                     }
                                     else {
@@ -432,7 +423,6 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            //var_dump($projID);
                             header('Location: ?A=project_sdesign&A2=scope1&projID='.$projID);
                         }
                     }
@@ -441,7 +431,6 @@ try{
                         if(isset($_POST['radio_ucm'])){
                             $ucmID = intval($_POST['radio_ucm']);
                             $_SESSION['ucmID']=$ucmID;
-                            //var_dump($ucmID);
                             header('Location: ?A=project_sdesign&A2=scope&ucmID='.$ucmID);
                         }
                     }
@@ -500,7 +489,6 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            //var_dump($projID);
                             header('Location: ?A=project_scoping&A2=scope&projID='.$projID);
                         }
                     }
@@ -518,7 +506,6 @@ try{
                         }
                     // --- SELECTED SCOPE ---
                     } elseif($_GET['A2']=="scope_selected"){
-                        //var_dump($_POST);
                         scope_selected($_POST);
                     // --- PERIMETER ---
                     } elseif($_GET['A2']=="perimeter"){
@@ -535,7 +522,6 @@ try{
                         }
                     // --- SELECTED PERIMETER ---
                     } elseif($_GET['A2']=="perimeter_selected"){
-                        //var_dump($_POST);
                         perimeter_selected($_POST);
                     // --- SIZE ---
                     } elseif($_GET['A2']=="size"){
@@ -552,7 +538,6 @@ try{
                         }
                     // --- SELECTED SIZE ---
                     } elseif($_GET['A2']=="size_selected"){
-                        //var_dump($_POST);
                         size_selected($_POST);
                     // --- VOLUMES ---
                     } elseif($_GET['A2']=="volumes"){
@@ -569,7 +554,6 @@ try{
                         }
                     // --- SELECTED VOLUMES ---
                     } elseif($_GET['A2']=="volumes_selected"){
-                        //var_dump($_POST);
                         volumes_selected($_POST);
                     // --- SCHEDULE ---
                     } elseif($_GET['A2']=="schedule"){
@@ -586,7 +570,6 @@ try{
                         }
                     // --- SELECTED SCHEDULES ---
                     } elseif($_GET['A2']=="schedules_selected"){
-                        //var_dump($_POST);
                         schedules_selected($_POST);
                     // --- DISCOUNT RATE ---
                     } elseif($_GET['A2']=="discount_rate"){
@@ -603,7 +586,6 @@ try{
                         }
                     // --- SELECTED DISCOUNT RATE ---
                     } elseif($_GET['A2']=="discount_rate_selected"){
-                        //var_dump($_POST);
                         discount_rate_selected($_POST);
                     } else {
                         header('Location: ?A='.$_GET['A']);
@@ -916,7 +898,6 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            //var_dump($projID);
                             header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$projID);
                         }
                     // --- USE CASES ---
@@ -937,10 +918,8 @@ try{
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
                                 if(isset($_POST['radio_uc'])){
-                                    //var_dump($_POST);
                                     $ucID = intval($_POST['radio_uc']);
                                     $_SESSION['ucID']=$ucID;
-                                    //var_dump($ucID);
                                     header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
                                 }
                                 else {
@@ -1097,7 +1076,6 @@ try{
                         }
                     // --- INPUTED CAPEX ---
                     } elseif($_GET['A2']=="capex_inputed"){
-                        //var_dump($_POST);
                         capex_inputed($_POST);
 
                     // --- IMPLEM ---
@@ -1203,7 +1181,6 @@ try{
                         }
                     // --- INPUTED IMPLEM ---
                     } elseif($_GET['A2']=="implem_inputed"){
-                        //var_dump($_POST);
                         implem_inputed($_POST);
 
                     // --- OPEX ---
@@ -1309,7 +1286,6 @@ try{
                         }
                     // --- INPUTED OPEX ---
                     } elseif($_GET['A2']=="opex_inputed"){
-                        //var_dump($_POST);
                         opex_inputed($_POST);
 
                     // -*-*
@@ -1416,7 +1392,6 @@ try{
                         }
                     // --- INPUTED REVENUES ---
                     } elseif($_GET['A2']=="revenues_inputed"){
-                        //var_dump($_POST);
                         revenues_inputed($_POST);
 
                     // --- CASH RELEASING ---
@@ -1522,7 +1497,6 @@ try{
                         }
                     // --- INPUTED CASH RELEASING ---
                     } elseif($_GET['A2']=="cashreleasing_inputed"){
-                        //var_dump($_POST);
                         cashreleasing_inputed($_POST);
                     
                     // --- WIDER CASH ---
@@ -1628,7 +1602,6 @@ try{
                         }
                     // --- INPUTED WIDER CASH ---
                     } elseif($_GET['A2']=="widercash_inputed"){
-                        //var_dump($_POST);
                         widercash_inputed($_POST);
                     
                     // --- QUANTIFIABLE NON MONETIZABLE BENEFITS ---
@@ -1734,7 +1707,6 @@ try{
                         }
                     // --- INPUTED QUANTIFIABLE ---
                     } elseif($_GET['A2']=="quantifiable_inputed"){
-                        //var_dump($_POST);
                         quantifiable_inputed($_POST);
                     
                     // --- NON CASH ---
@@ -1840,7 +1812,6 @@ try{
                         }
                     // --- INPUTED NON CASH ---
                     } elseif($_GET['A2']=="noncash_inputed"){
-                        //var_dump($_POST);
                         noncash_inputed($_POST);
                     
                     // --- RISKS ---
@@ -1946,7 +1917,6 @@ try{
                         }
                     // --- INPUTED RISKS ---
                     } elseif($_GET['A2']=="risks_inputed"){
-                        //var_dump($_POST);
                         risks_inputed($_POST);
 
                     // --- SUMMARY ---
@@ -2050,11 +2020,9 @@ try{
                         if(isset($_POST['radio_scen'])){
                             $scenID = intval($_POST['radio_scen']);
                             $_SESSION['scenID']=$scenID;
-                            //var_dump($scenID);
                             header('Location: ?A=funding&A2=work_cap_req&scenID='.$scenID);
                         }
                     } elseif($_GET['A2']=="create_scen"){
-                        //var_dump($_POST);
                         create_scen($twig,$is_connected,$_POST);
                     }
                     elseif($_GET['A2']=="delete_scen"){
@@ -2153,7 +2121,6 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            //var_dump($projID);
                             header('Location: ?A=dashboards&A2=global_dashboard&projID='.$projID);
                         }
                     } elseif($_GET['A2']=="cost_benefits_uc"){

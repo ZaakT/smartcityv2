@@ -38,7 +38,6 @@ function use_case_selection($twig,$is_connected, $nextPage, $sideBarName, $projI
             $list_measures = getListMeasures();
             $list_ucs = getListUCs();
             $selScope = getListSelScope($projID);
-            //var_dump($list_ucs);
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];

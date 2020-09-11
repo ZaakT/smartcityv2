@@ -20,7 +20,6 @@ function project_bm($twig,$is_connected){
     if(isset($_SESSION['projID'])){
         unset($_SESSION['projID']);
     }
-    //var_dump($list_projects);
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -49,14 +48,10 @@ function business_model_interactive($twig,$is_connected,$projID=0){
             foreach ($listInvestCap as $id_investcap => $investcap){
                 foreach ($listPaybackConst as $id_payconst => $payconst){
                     foreach ($listBusinessModelPref as $id_bmpref => $bmpref){
-                        //var_dump($id_investcap,$id_payconst,$id_bmpref);
                         $recoJSON[$id_investcap][$id_payconst][$id_bmpref] = getBMReco($id_investcap,$id_payconst,$id_bmpref);
                     }
                 }
             }
-            //var_dump($recoJSON[]);
-            
-
             
             // BANKABILITY
             $calcBank = calcBank($projID);
@@ -65,7 +60,6 @@ function business_model_interactive($twig,$is_connected,$projID=0){
             $proj_qualif = ['proj_bank'=>$listBMBank[$bank],'soc_bm'=>$listBMSocBank[$soc_bank]];
             
             $funding_opt = ['City'=>0,'Grants'=>0,'Equity investors'=>0,'Impact Investors'=>0,'Bank Debt'=>0,'Green Debt'=>0,'Suppliers'=>0,'Alternative'=>0]; 
-            //var_dump($proj_qualif);
 
             $funding_options_JSON = [];
             for ($id_bm = 1; $id_bm <= 3; $id_bm++){
@@ -186,7 +180,6 @@ function reco($twig,$is_connected,$projID=0){
 
             $funding_opt = getFundingOpt($id_bm,$id_investcap,$bank,$soc_bank);
             /* $funding_opt = ['City'=>0,'Grants'=>0,'Equity investors'=>0,'Impact Investors'=>0,'Bank Debt'=>0,'Green Debt'=>0,'Suppliers'=>0,'Alternative'=>0]; */
-            //var_dump($proj_qualif);
 
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -229,7 +222,6 @@ function calcBank($projID){
     $keydates_proj = getKeyDatesProj($schedules,$scope);
     $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
-    //var_dump($keydates_proj);
     $keydates_uc = [];
     $volumes = [];
 
