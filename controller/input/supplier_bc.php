@@ -38,10 +38,12 @@ function use_case_equipment($twig,$is_connected, $projID, $ucID){
 
 function insert_equiprev_data($twig, $is_connected, $projID, $ucID, $post=[]) {
     if($post) {
-        createEquipmentRevenue($projID, $ucID, $post[0], $post[1], $post[2]);
+        createEquipmentRevenue($projID, $ucID, $_POST['name'], $_POST['cost_per_unit'], $_POST['number_of_units']);
     } else {
         throw new Exception("No data was entered.");
     }
+
+    header('Location: /?A=input_use_case_supplier&A2=equipment_revenues&projID='. $projID .'&ucID='. $ucID);
 }
 
 function use_case_deployment($twig,$is_connected, $projID, $ucID){

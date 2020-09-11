@@ -437,6 +437,7 @@ try{
                     elseif($_GET['A2']=="perimeter1"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
+                                updateScoping($_SESSION['projID'],1);
                                 perimeter1($twig,$is_connected,$_SESSION['projID']);
                             }
                             else {
@@ -877,7 +878,7 @@ try{
                     } elseif($_GET['A2']=="equipment_revenues"){
                         if(isset($_GET['A3'])) {
                             if($_GET['A3'] == "create_revenue") {
-                                createEquipmentRevenue($_GET['projID'],  $_GET['ucID'], $_POST['name'], $_POST['cost_per_unit'], $_POST['number_of_units']);
+                                insert_equiprev_data($twig,$is_connected, $_GET['projID'],  $_GET['ucID'], $_POST);
                             }
                         } else {
                             use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
