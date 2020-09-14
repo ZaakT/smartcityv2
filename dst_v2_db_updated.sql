@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 14 sep. 2020 à 13:50
+-- Généré le : lun. 14 sep. 2020 à 15:21
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -2311,6 +2311,32 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `project_schedule`
+--
+
+DROP TABLE IF EXISTS `project_schedule`;
+CREATE TABLE IF NOT EXISTS `project_schedule` (
+  `id_project` int NOT NULL,
+  `id_uc` int NOT NULL,
+  `deploy_prod` date NOT NULL,
+  `poc_start` date NOT NULL,
+  `poc_run` date NOT NULL,
+  `lag_start` date NOT NULL,
+  `lag_ramp` date NOT NULL,
+  `ramp_run` date NOT NULL,
+  PRIMARY KEY (`id_project`,`id_uc`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `project_schedule`
+--
+
+INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_prod`, `poc_start`, `poc_run`, `lag_start`, `lag_ramp`, `ramp_run`) VALUES
+(3, 3, '2020-12-14', '2020-09-14', '2021-05-12', '2020-09-21', '2020-12-15', '2021-05-21');
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `project_size`
 --
 
@@ -3562,7 +3588,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
 INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
 (1, 'Wi-Fi', '', 1, 1),
 (2, 'Electric Vehicule Charger', '', 1, 1),
-(3, 'Parking Management', '', 1, 2),
+(3, 'Parking Management', 'Le project schedule est pré-rempli', 1, 2),
 (6, 'Pole Replacement', 'description', 2, 3),
 (5, 'LED Upgrade', '', 1, 2),
 (7, '5G', '', 1, 1),
