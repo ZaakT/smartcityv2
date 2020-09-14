@@ -33,11 +33,10 @@
 		</div>
 
 		{#  CONTENU #}
-		<!-- TODO CHARGER LES REVENUES ET PERMETTRE D'EN CREER -->
 		<form id="equipment_revenue" name="equipment_revenue" action="?A=input_use_case_supplier&amp;A2=deployment_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
 			<h3 class="text-center mt-5 mb-3 text-uppercase">Suggested Equipment Revenues Items</h3>
 				{{ list.list_revenues(revenues_items, projID,ucID, type, sideBarName, listUcID) }}
-			<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Suggested Equipment Revenues Items</h3>
+			<h3 class="text-center mt-5 mb-3 text-uppercase">Custom Equipment Revenues Items</h3>
 				{{ list.list_revenues(revenues_items, projID,ucID, type, sideBarName, listUcID) }}
 		</form>
 

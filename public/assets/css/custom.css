@@ -1,6 +1,6 @@
-#wrapper{
+#wrapper {
     min-height: 100vh;
-    height:100%;
+    height: 100%;
 }
 
 /* .sidebar{
@@ -11,11 +11,13 @@
     width: 20%;
 } */
 
-.sidebar a, h4{
-    color:white;
+.sidebar a,
+h4 {
+    color: white;
 }
 
-.h4, h4 {
+.h4,
+h4 {
     font-size: 1.4rem;
 }
 
@@ -24,38 +26,38 @@
 
 } */
 
-.navbar-brand{
+.navbar-brand {
     font-size: 0.8em;
     text-transform: uppercase;
 }
 
-#login-form{
+#login-form {
     border-radius: 50px;
 }
 
-.list-table{
+.list-table {
     /*max-height: 100vh;*/
     overflow-y: auto;
 }
 
-th{
+th {
     vertical-align: middle !important;
 }
 
-.next-button{
-    color:inherit;
-    font-size:50px;
+.next-button {
+    color: inherit;
+    font-size: 50px;
 }
 
-.next-button:hover{
+.next-button:hover {
     text-decoration: none;
     color: black;
 }
 
-.infos-bar{
+.infos-bar {
     height: 7vh;
     background-color: #6d6d6d;
-    color:white;
+    color: white;
 }
 
 .thead2 th {
@@ -63,57 +65,65 @@ th{
     max-width: 200px;
 }
 
-th, td{
+th,
+td {
     vertical-align: middle !important;
 }
 
-.ucs-table{
+.ucs-table {
     max-height: 65vh;
 }
 
-.ucs-table th, .ucs-table td{
+.ucs-table th,
+.ucs-table td {
     text-align: center;
     min-width: 200px;
     max-width: 200px;
 }
 
-.rate-table th, .rate-table td{
+.rate-table th,
+.rate-table td {
     vertical-align: middle !important;
     text-align: center;
     min-width: 200px;
     max-width: 200px;
 }
 
-.rate-table{
+.rate-table {
     max-height: 65vh;
 }
 
-.img_guid{
+.img_guid {
     max-width: 300px;
     height: auto;
 }
 
-.popover{
+.popover {
     max-width: 100%;
 }
 
-.UC_cat{
+.UC_cat {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     text-transform: uppercase;
 }
 
-#size_table th, #size_table select {
+#size_table th,
+#size_table select {
     vertical-align: middle !important;
     text-align: center;
 }
 
-.volumes_table th, .ratio_table th,.volumes_table input, .ratio_table input {
+.volumes_table th,
+.ratio_table th,
+.volumes_table input,
+.ratio_table input {
     vertical-align: middle !important;
     text-align: center;
 }
-.volumes_table th{
+
+.volumes_table th {
     max-heigth: 100px;
 }
 
@@ -122,17 +132,17 @@ th, td{
     overflow-y: auto;
 }
 
-.date_input{
+.date_input {
     text-align: center;
-    color:black;
+    color: black;
 }
 
-.copy-dates{
-    font-size:30px;
+.copy-dates {
+    font-size: 30px;
     vertical-align: middle !important;
 }
 
-.erase-dates{
+.erase-dates {
     font-size: 20px;
     vertical-align: middle !important;
 }
@@ -159,27 +169,29 @@ th, td{
     max-height: 100vh;
 }
 
-.cbuc_table .item{
+.cbuc_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
 
-.keydates_table .item{
-    color: #495057;
-    background-color: #e9ecef;
-    border-color: #dee2e6;
-    font-weight: bold;
-}
-
-.keyratios_table .item{
+.keydates_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.budget_uc_table .item, .budget_all_table .item, .budget_table .item {
+.keyratios_table .item {
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+    font-weight: bold;
+}
+
+.budget_uc_table .item,
+.budget_all_table .item,
+.budget_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -188,11 +200,14 @@ th, td{
 
 .budget_table .thead-light th {
     color: #495057;
-    background-color: #e9ecef;;
+    background-color: #e9ecef;
+    ;
     border-color: #dee2e6;
 }
 
-.budget_uc_table .sub_item, .budget_all_table .sub_item, .budget_table .sub_item{
+.budget_uc_table .sub_item,
+.budget_all_table .sub_item,
+.budget_table .sub_item {
     font-size: smaller;
 }
 
@@ -204,19 +219,24 @@ th, td{
 .cball_table {
     background-color: #ffffff;
 }
-.cball_table .item{
+
+.cball_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
 }
-.cball_table .table-striped tbody tr:nth-of-type(2n+1),.budget_table .table-striped tbody tr:nth-of-type(2n+1) {
+
+.cball_table .table-striped tbody tr:nth-of-type(2n+1),
+.budget_table .table-striped tbody tr:nth-of-type(2n+1) {
     background-color: #F4F5F9;
 }
-.cball_table .table-striped tbody tr:hover, .budget_table .table-striped tbody tr:hover {
+
+.cball_table .table-striped tbody tr:hover,
+.budget_table .table-striped tbody tr:hover {
     background-color: #e9ecefbb;
 }
 
-.financial_bank .item{
+.financial_bank .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -231,12 +251,12 @@ th, td{
     max-height: 100vh;
 }
 
-.financial_bank th{
+.financial_bank th {
     min-width: 8vw;
     max-width: 8vw;
 }
 
-.societal_bank .item{
+.societal_bank .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -251,41 +271,41 @@ th, td{
     max-height: 100vh;
 }
 
-.societal_bank th{
+.societal_bank th {
     min-width: 8vw;
     max-width: 8vw;
 }
 
-.budget_uc_table{
+.budget_uc_table {
     max-height: 100vh;
 }
 
-.budget_all_table{
+.budget_all_table {
     max-height: 100vh;
 }
 
-.project_scope_table .item{
+.project_scope_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.budget_impact_table .item{
+.budget_impact_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.cost_benefits_table .item{
+.cost_benefits_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.bankability_table .item{
+.bankability_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -300,7 +320,7 @@ th, td{
     width: 60%;
 }
 
-.cost_benefits_table1 .item{
+.cost_benefits_table1 .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -308,96 +328,98 @@ th, td{
     width: 50%;
 }
 
-.cost_benefits_table2 .item{
+.cost_benefits_table2 .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
-.cost_benefits_table2 td{
+
+.cost_benefits_table2 td {
     width: 25%;
 }
 
-.funding_sources_table{
-    max-height: 150vh;    
+.funding_sources_table {
+    max-height: 150vh;
 }
 
-.funding_sources_table .check-col{
-    width: 5%; 
+.funding_sources_table .check-col {
+    width: 5%;
 }
 
-.funding_sources_table a{
-    color : black;
+.funding_sources_table a {
+    color: black;
 }
 
-.funding_sources_table a:hover{
-    color : gray;
+.funding_sources_table a:hover {
+    color: gray;
 }
 
-.funding_sources_table a:active{
-    color : darkgray;
+.funding_sources_table a:active {
+    color: darkgray;
 }
 
-.entities_table .item{
+.entities_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.entities_table{
-    max-height: 150vh;    
+.entities_table {
+    max-height: 150vh;
 }
 
-.entities_table_2 .item{
+.entities_table_2 .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.entities_table_2{
-    max-height: 150vh;    
+.entities_table_2 {
+    max-height: 150vh;
 }
 
-.benef_table{
-    max-height: 150vh;    
+.benef_table {
+    max-height: 150vh;
 }
 
-.benef_table .check-col{
-    width: 5%; 
+.benef_table .check-col {
+    width: 5%;
 }
 
-.benef_table a{
-    color : white;
+.benef_table a {
+    color: white;
 }
 
-.benef_table a:hover{
-    color : darkgray;
+.benef_table a:hover {
+    color: darkgray;
 }
 
-.benef_table a:active{
-    color : gray;
+.benef_table a:active {
+    color: gray;
 }
 
 
-.financing_table .years, .financing_table .dates{
+.financing_table .years,
+.financing_table .dates {
     min-width: 7vw;
 }
 
-.financing_table .separation_dates{
+.financing_table .separation_dates {
     min-width: 4vw;
     max-width: 4vw;
 }
 
-.financing_table .item{
+.financing_table .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.financing_table .sub_item{
+.financing_table .sub_item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
@@ -406,26 +428,26 @@ th, td{
     text-align: right;
 }
 
-.financing_table_2 .item{
+.financing_table_2 .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.financing_table_2 .sub_item{
+.financing_table_2 .sub_item {
     font-size: smaller;
 }
 
-.financing_table_2 .sub_item .item{
+.financing_table_2 .sub_item .item {
     background-color: #f5f5f5;
 }
 
-.financing_table_2{
-    max-height: 80vh;    
+.financing_table_2 {
+    max-height: 80vh;
 }
 
-.reco_table .item{
+.reco_table .item {
     /* color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6; */
@@ -438,7 +460,7 @@ th, td{
     font-weight: bold;
 }
 
-.infos_table .item{
+.infos_table .item {
     /* color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6; */
@@ -451,11 +473,17 @@ th, td{
     text-transform: uppercase;
 }
 
-.infos_table th, .proj_qualif_table th, .reco_table th, .funding_opt_table th, #reco_bestfit, #reco_second, #reco_notreco {
+.infos_table th,
+.proj_qualif_table th,
+.reco_table th,
+.funding_opt_table th,
+#reco_bestfit,
+#reco_second,
+#reco_notreco {
     border-radius: 7px;
 }
 
-.proj_qualif_table .item{
+.proj_qualif_table .item {
     /* color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6; */
@@ -468,15 +496,15 @@ th, td{
     text-transform: uppercase;
 }
 
-.funding_opt_table .item{
+.funding_opt_table .item {
     /* color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6; */
     font-weight: bold;
 }
 
-.funding_opt_table{
-    max-height: 80vh;    
+.funding_opt_table {
+    max-height: 80vh;
 }
 
 
@@ -484,110 +512,110 @@ th, td{
     max-height: 70vh;  
 } */
 
-.financing_table_5 .item{
+.financing_table_5 .item {
     color: #495057;
     background-color: #e9ecef;
     border-color: #dee2e6;
     font-weight: bold;
 }
 
-.financing_table_5 .sub_item{
+.financing_table_5 .sub_item {
     font-size: smaller;
 }
 
-.financing_table_5 .sub_item .item{
+.financing_table_5 .sub_item .item {
     background-color: #f5f5f5;
 }
 
-.financing_table_5 .col_others{
+.financing_table_5 .col_others {
     min-width: 5vw;
     width: auto;
     max-width: none;
 }
 
-.financing_table_5 .col_items{
-    min-width: 15vw; 
-    min-width: 15vw; 
+.financing_table_5 .col_items {
+    min-width: 15vw;
+    min-width: 15vw;
 }
 
-.summary_projects{
-    max-height: 80vh; 
+.summary_projects {
+    max-height: 80vh;
 }
 
-.check-col{
+.check-col {
     min-width: 25px;
     max-width: 25px;
     text-align: center;
 }
 
-.guideline{
+.guideline {
     background-color: #DEE2E6;
     /*background-color: white;*/
-    border-left: hidden #DEE2E6 1px ;
+    border-left: hidden #DEE2E6 1px;
     font-size: .875rem;
 }
 
-input{
+input {
     border-radius: 4px;
     border-style: hidden;
 }
 
-th{
+th {
     font-weight: normal;
 }
 
 /* tests*/
-.guideline-table th{
+.guideline-table th {
     background: #DEE2E6 no-repeat padding-box;
     border: 1px solid #707070;
     opacity: 1;
 }
 
-.guideline h1{
+.guideline h1 {
     font-size: 1.75rem;
 }
 
-.guideline h2{
+.guideline h2 {
     font-size: 1.25rem;
 }
 
-.guideline h3{
+.guideline h3 {
     font-size: 1rem;
 }
 
-.guideline-table .table-bordered{
+.guideline-table .table-bordered {
     border: 1px solid #707070;
 }
 
-.guideline-table tbody{
+.guideline-table tbody {
     background-color: white;
 }
 
 .sticky-guideline {
-    position:sticky;
-    right:0;
-    top:100px;
+    position: sticky;
+    right: 0;
+    top: 100px;
 }
 
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }
 
-#separatorrow{
+#separatorrow {
     border-left: hidden;
     border-right: hidden;
 }
 
-.table-striped td{
+.table-striped td {
     border-top: hidden;
 }
 
@@ -614,22 +642,23 @@ h3.dash-title {
 
 .dashboard-table th,
 .dashboard-table td {
-  padding: 0.2rem;
-  vertical-align: top;
+    padding: 0.2rem;
+    vertical-align: top;
 }
 
 .table th,
 .table td {
-  border-top: hidden;
+    border-top: hidden;
 }
 
 #kpiTable th,
 #kpiTable td {
-  border-top: hidden;
-  padding: 0.2rem;
+    border-top: hidden;
+    padding: 0.2rem;
 }
 
-#keyDatesTable th, #keyDatesTable td {
+#keyDatesTable th,
+#keyDatesTable td {
     font-size: .9rem;
     padding-left: 0rem;
     padding-right: 0rem;
@@ -637,7 +666,8 @@ h3.dash-title {
     padding-bottom: 0.40rem;
 }
 
-#keyDatesTable, #kpiTable {
+#keyDatesTable,
+#kpiTable {
     margin-bottom: 0rem;
 }
 
@@ -667,43 +697,45 @@ h3.dash-title {
 }
 
 
-#cost_benefits_data td, #budget_table td {
+#cost_benefits_data td,
+#budget_table td {
     white-space: nowrap;
 }
 
 @media (min-width: 768px) {
     .modal-xl {
-      width: 90%;
-     max-width:1500px;
+        width: 90%;
+        max-width: 1500px;
     }
-  }
+}
 
 /* Base layout
 body { background-color: #cdcdcd;} */
 
 .container {
-	width: 100%;
+    width: 100%;
     margin: 20px 0;
     padding: 0 0;
 }
 
 .arrows {
-	display: block;
-	width: 100%;
-	margin: 0 auto;
-	overflow: hidden; /* forces this div to 'contain' it's floated children */
-	padding: 2px 0;
-	position: relative;
+    display: block;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    /* forces this div to 'contain' it's floated children */
+    padding: 2px 0;
+    position: relative;
 }
 
 
 /* Arrows - i.e. the box and the wedge */
 .arrow {
-	float: left;
-	margin: 0;
-	width: 17.5%;
-	padding: 5px 3px;
-	position: relative;
+    float: left;
+    margin: 0;
+    width: 17.5%;
+    padding: 5px 3px;
+    position: relative;
     text-align: center;
     font-size: .9em;
 }
@@ -713,26 +745,30 @@ body { background-color: #cdcdcd;} */
 }
 
 .arrow:after {
-	border-top: 16px solid transparent; /* positionnement vertical des flèches*/
-	border-bottom: 16px solid transparent;
-	border-left: 8px solid transparent; /* unnecessary here... it's only for reference. */
-	content: "";
-	height: 0;
-	position: absolute;
-	right: -12px; /* positionnement horizontal des fleches */
-	top: 0;
-	width: 0;
-	z-index: 2;
+    border-top: 16px solid transparent;
+    /* positionnement vertical des flèches*/
+    border-bottom: 16px solid transparent;
+    border-left: 8px solid transparent;
+    /* unnecessary here... it's only for reference. */
+    content: "";
+    height: 0;
+    position: absolute;
+    right: -12px;
+    /* positionnement horizontal des fleches */
+    top: 0;
+    width: 0;
+    z-index: 2;
 }
 
 .arrow:last-child:after {
-	border: none;
-	right: 0;
+    border: none;
+    right: 0;
 }
 
 
 /* Colour each section */
-.ucnamearrow, .duration {
+.ucnamearrow,
+.duration {
     background-color: white;
 }
 
@@ -742,7 +778,9 @@ body { background-color: #cdcdcd;} */
     border-bottom-left-radius: 5px;
 }
 
-.step2 {background-color: #C4261E;}
+.step2 {
+    background-color: #C4261E;
+}
 
 .step3 {
     background-color: #681010;
@@ -752,63 +790,74 @@ body { background-color: #cdcdcd;} */
 
 
 /* Colour the wedge to match it's associated box */
-.arrow.step1:after { border-left: 12px solid #E5461C; }  /* largeur des flèches */
+.arrow.step1:after {
+    border-left: 12px solid #E5461C;
+}
 
-.arrow.step2:after { border-left: 12px solid #C4261E; }
+/* largeur des flèches */
+
+.arrow.step2:after {
+    border-left: 12px solid #C4261E;
+}
 
 
 /* Typography */
 .arrow span {
-	position: relative;
+    position: relative;
 }
 
-.step1 span, .step2 span, .step3 span {
-	color: #484e53;
+.step1 span,
+.step2 span,
+.step3 span {
+    color: #484e53;
 }
 
 
 @media only screen and (max-width: 1440px) {
-	.arrow { width: 31.5%;}
+    .arrow {
+        width: 31.5%;
+    }
 }
 
 @media only screen and (max-width: 1000px) {
-	/*.arrows {overflow: visible;}*/ /* May be needed for some browsers. Need to test. */
-	
-	.arrow {
-		float: none;
-		padding: 25px 30px;
-		text-align: left;
-		width: 100%;
-	}
-	
-	.arrow:first-child {
-		border-radius: 6px 6px 0 0;
-	}
-	
-	.arrow:last-child {
-		border-radius: 0 0 6px 6px;
-	}
-	
-	.arrow:after {
-		top: auto;
-		bottom: -23px;
-		left: 30px;
-		background-color: transparent;
-		border-top: 15px solid transparent;
-		border-right: 15px solid transparent;
-		border-bottom: 10px solid transparent;
-		border-left: 17px solid transparent;
-	}
-	
-	.arrow.step1:after {
-		border-top-color: #E5461C;
-		border-left-color: transparent
-	}
-	
-	.arrow.step2:after {
-		border-top-color: #C4261E;
-		border-left-color: transparent;
-	}
+    /*.arrows {overflow: visible;}*/
+    /* May be needed for some browsers. Need to test. */
+
+    .arrow {
+        float: none;
+        padding: 25px 30px;
+        text-align: left;
+        width: 100%;
+    }
+
+    .arrow:first-child {
+        border-radius: 6px 6px 0 0;
+    }
+
+    .arrow:last-child {
+        border-radius: 0 0 6px 6px;
+    }
+
+    .arrow:after {
+        top: auto;
+        bottom: -23px;
+        left: 30px;
+        background-color: transparent;
+        border-top: 15px solid transparent;
+        border-right: 15px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-left: 17px solid transparent;
+    }
+
+    .arrow.step1:after {
+        border-top-color: #E5461C;
+        border-left-color: transparent
+    }
+
+    .arrow.step2:after {
+        border-top-color: #C4261E;
+        border-left-color: transparent;
+    }
 }
 
 
@@ -816,14 +865,15 @@ body { background-color: #cdcdcd;} */
 .form-control-inline {
     min-width: 0;
     max-width: 60%;
-    width : auto;
+    width: auto;
 }
 
 #input_target_nogo td {
-    white-space : nowrap;
+    white-space: nowrap;
 }
 
-#input_target_nogo th, #project_score_table th {
+#input_target_nogo th,
+#project_score_table th {
     font-weight: 600;
 }
 
@@ -836,7 +886,8 @@ body { background-color: #cdcdcd;} */
     width: 100%;
 }
 
-#project_score_table td, #project_score_table thead th {
+#project_score_table td,
+#project_score_table thead th {
     text-align: center;
 }
 
@@ -860,19 +911,20 @@ body { background-color: #cdcdcd;} */
 
 
 #traffic-light {
-  /*main traffic light
+    /*main traffic light
   position: absolute;
   display:block;
   left: 50%;
   top: 50%;   
   margin-top: -160px;*/
-  background-color:#333;
-  /*width:320px;
+    background-color: #333;
+    /*width:320px;
    height:320px; */
-  border-radius:20px;
-  text-align: center;
-  padding: 1% 0;
+    border-radius: 20px;
+    text-align: center;
+    padding: 1% 0;
 }
+
 #traffic-light span {
     font-size: 70px;
 }
@@ -904,61 +956,65 @@ body { background-color: #cdcdcd;} */
 
 .progress-bar-main {
     background-color: rgb(212, 237, 218);
-    color:black;
+    color: black;
 }
 
 .progress-bar-remaining {
     background-color: rgb(212, 237, 218);
-    color:black;
+    color: black;
 }
 
 .progress-bar-operations-1 {
     background-color: rgb(255, 243, 205);
-    color:black;
+    color: black;
 }
 
 .progress-bar-pricing-1 {
     background-color: rgb(204, 229, 255);
-    color:black;
+    color: black;
 }
 
 .progress-bar-revenues-1 {
     background-color: gainsboro;
-    color:black;
+    color: black;
 }
 
 .btn-set-dates {
     background-color: #343a40;
-    color:white;
+    color: white;
 }
 
 .progress-bar-revenues-2 {
     background-color: rgb(209, 236, 241);
-    color:black;
+    color: black;
 }
 
 .progress-bar-nothing {
     background-color: ghostwhite;
-    color: black!important;
+    color: black !important;
 }
 
 div.progress {
-    height :32px!important;
+    height: 32px !important;
 }
 
-div#dates_projet > p {
+div#dates_projet>p {
     margin: auto;
     display: inline-block;
 }
 
-div.col.text-center > p.text-justify {
-    margin-bottom: 0px!important;
+div.col.text-center>p.text-justify {
+    margin-bottom: 0px !important;
 }
 
-.text-white::placeholder { 
-    color: white!important;
-  }
+.text-white::placeholder {
+    color: white !important;
+}
 
-  input.bg-warning {
-      background-color: #fff3cd!important;
-  }
+input.bg-warning {
+    background-color: #fff3cd !important;
+}
+
+input.bg-prefilled {
+    background-color: #cff6cf;
+}

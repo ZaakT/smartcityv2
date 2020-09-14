@@ -1325,7 +1325,6 @@ function insertSelDates($projID,$list){
     $req_revenue = $db->prepare("INSERT INTO revenue_schedule
                             (id_proj,id_uc,start_date,25_rampup,50_rampup,75_rampup,100_rampup,end_date)
                             VALUES (?,?,?,?,?,?,?,?)");
-    //var_dump($list['implem'], $list['opex'], $list['revenues']);
     foreach ($list['implem'] as $id_uc => $data) {
         $ret = $req_implem->execute(array($projID,$id_uc,$data['startdate'],$data['25date'],$data['50date'],$data['75date'],$data['100date']));
     }
@@ -1521,7 +1520,6 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
             $list[$id_item] = ['name'=>$name,'description'=>$description];
         }
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -2211,6 +2209,25 @@ function deleteAllSelOpex($projID,$ucID){
     $db = dbConnect();
     $req = $db->prepare("DELETE FROM input_opex WHERE id_proj = ? and id_uc = ?");
     $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
+// ------------------------------------ PROJECR KEY DATES (COMMON SCHEDULE) ------------------
+function getProjetKeyDates($projID) {
+    $db = dbConnect();
+    $req = $db->prepare("SELECT * FROM project_dates WHERE id_project = ?");
+    $req->execute(array($projID));
+    return $req->fetchAll();
+}
+
+function insertProjetKeyDates($projID, $startDate, $duration, $deployStartDate, $deployDuration) {
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO project_dates
+                            (id_project, start_date, duration, deploy_start_date, deploy_duration)
+                            VALUES (?,?,?,?,?)");
+    $ret = $req->execute(array($projID, $startDate, $duration, $deployStartDate, $deployDuration));
+    
     return $ret;
 }
 
@@ -5084,15 +5101,4 @@ function deleteItem($catItem,$itemID) {
             return $req->execute(array($itemID));
         break;
     } 
-}
-
-
-/////////////////////  REVENUES
-
-function insert_revenue_items($type) {
-    //TODO gestion BDD revenues
-}
-
-function list_revenues_items($type) {
-
 }
