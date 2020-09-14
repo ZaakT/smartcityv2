@@ -27,9 +27,12 @@ function submitForm_debug(formName){
 }
 
 function highlight_db_values() {
+    var prefilled = false
+
     inputs.forEach(i => {
         if($(i).val() != "") {
             $(i).addClass("bg-prefilled");
+            prefilled = true
         }
     });
 }

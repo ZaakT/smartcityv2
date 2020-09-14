@@ -2231,6 +2231,19 @@ function insertProjetKeyDates($projID, $startDate, $duration, $deployStartDate, 
     return $ret;
 }
 
+function alterProjetKeyDates($projID, $startDate, $duration, $deployStartDate, $deployDuration) {
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE project_dates
+                            SET start_date = ?,
+                            duration = ?,
+                            deploy_start_date = ?,
+                            deploy_duration = ?
+                            WHERE id_project = ?");
+    $ret = $req->execute(array($startDate, $duration, $deployStartDate, $deployDuration, $projID));
+    
+    return $ret;
+}
 
 // ---------------------------------------- REVENUES----------------------------------------
 

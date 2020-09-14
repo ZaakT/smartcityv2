@@ -632,7 +632,13 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3'] == "save"){
                                         if($_POST) {
-                                            insertProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
+                                            $keyDates = getProjetKeyDates($_SESSION['projID']);
+                                            if(empty($keyDates)) {
+                                                insertProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
+                                            } else {
+                                                alterProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
+                                            }
+
                                             header('Location: ?A=input_project_common_supplier&A2=capex&projID='.$projID);
                                         } else {
                                             throw new Exception("There was an error with the form.");
