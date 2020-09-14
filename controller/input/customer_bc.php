@@ -40,6 +40,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
     //If ucID == 0 => we are locking ALL the UC of the project.
     $user = getUser($_SESSION['username']);
     $_SESSION['_ucID']= $_ucID;
+    if($_ucID==-1){$_SESSION['ucID'] = $_ucID;}
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $listUcID=getListUcID($_ucID, $projID);

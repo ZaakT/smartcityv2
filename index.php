@@ -706,7 +706,7 @@ try{
                                         }
                                     }
                                 }else {
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A'], $_GET['A2']);
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2']);
                                 }
 
                             }                             
