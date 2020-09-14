@@ -634,7 +634,7 @@ try{
                             else if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
-                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A'], $_GET['A2']); 
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2']); 
                                     }elseif($_GET['A3']=="selected"){
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
                                     }elseif($_GET['A3']=="create_xpex"){
