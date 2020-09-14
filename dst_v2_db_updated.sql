@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 14 sep. 2020 à 10:06
+-- Généré le : lun. 14 sep. 2020 à 12:14
 -- Version du serveur :  8.0.21
 -- Version de PHP : 7.3.21
 
@@ -2206,7 +2206,8 @@ CREATE TABLE IF NOT EXISTS `project_dates` (
 --
 
 INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_start_date`, `deploy_duration`) VALUES
-(4, '2020-09-06', 3, '2020-09-20', 4);
+(4, '2020-09-06', 12, '2020-09-20', 4),
+(3, '2020-09-11', 12, '2020-09-23', 5);
 
 -- --------------------------------------------------------
 
