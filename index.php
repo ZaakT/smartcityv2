@@ -629,7 +629,18 @@ try{
                     } elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                         //Le projet est choisi
                             if($_GET['A2']=="schedule") {
-                                supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
+                                if(isset($_GET['A3'])){
+                                    if($_GET['A3'] == "save"){
+                                        if($_POST) {
+                                            insertProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
+                                            header('Location: ?A=input_project_common_supplier&A2=capex&projID='.$projID);
+                                        } else {
+                                            throw new Exception("There was an error with the form.");
+                                        }
+                                    }
+                                } else {
+                                    supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
+                                }
                             }  // --- CAPEX OR OPEX (XPEX) ---
                             else if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
