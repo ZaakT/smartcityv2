@@ -81,6 +81,8 @@ function scope($twig,$is_connected,$projID=0){
                 }
             }
             //var_dump($list_measures_user,$user);
+            //print_r($list_measures_user);
+            if(isset($list_measures_user[0])){unset($list_measures_user[0]);} // On retire Project Common car il est ajouté par défaut*/
             $list_cat = getListUCsCat();
             if(isset($list_cat[0])){unset($list_cat[0]);} // On retire Project Common car il est ajouté par défaut
             $list_ucs = getListUCs();
