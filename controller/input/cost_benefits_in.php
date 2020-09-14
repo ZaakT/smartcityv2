@@ -98,7 +98,7 @@ function capex($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     echo $twig->render('/input/cost_benefits_steps/capex.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"capex_advice"=>$list_capex_advice,"capex_user"=>$list_capex_user,'isTaken'=>$isTaken,'selCapex'=>$list_selCapex));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -335,7 +335,7 @@ function implem($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     echo $twig->render('/input/cost_benefits_steps/implem.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"implem_advice"=>$list_implem_advice,"implem_user"=>$list_implem_user,'isTaken'=>$isTaken,'selImplem'=>$list_selImplem));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -537,7 +537,7 @@ function opex($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     echo $twig->render('/input/cost_benefits_steps/opex.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"opex_advice"=>$list_opex_advice,"opex_user"=>$list_opex_user,'isTaken'=>$isTaken,'selOpex'=>$list_selOpex));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -765,7 +765,7 @@ function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                         header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
                     }
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -980,7 +980,7 @@ function cashreleasing($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     echo $twig->render('/input/cost_benefits_steps/cashreleasing.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"cashreleasing_advice"=>$list_cashreleasing_advice,"cashreleasing_user"=>$list_cashreleasing_user,'isTaken'=>$isTaken,'selCashReleasing'=>$list_selCashReleasing));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -1218,7 +1218,7 @@ function widercash($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     echo $twig->render('/input/cost_benefits_steps/widercash.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"widercash_advice"=>$list_widercash_advice,"widercash_user"=>$list_widercash_user,'isTaken'=>$isTaken,'selWiderCash'=>$list_selWiderCash));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -1455,7 +1455,7 @@ function quantifiableBenefits($twig,$is_connected,$projID=0,$ucID=0,$isTaken=fal
     echo $twig->render('/input/cost_benefits_steps/quantifiable.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"quantifiable_advice"=>$list_quantifiable_advice,"quantifiable_user"=>$list_quantifiable_user,'isTaken'=>$isTaken,'selQuantifiable'=>$list_selQuantifiable));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -1691,7 +1691,7 @@ function noncash($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     echo $twig->render('/input/cost_benefits_steps/noncash.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"noncash_advice"=>$list_noncash_advice,"noncash_user"=>$list_noncash_user,'isTaken'=>$isTaken,'selNonCash'=>$list_selNonCash));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
@@ -1897,7 +1897,7 @@ function risks($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
     echo $twig->render('/input/cost_benefits_steps/risks.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"risks_advice"=>$list_risks_advice,"risks_user"=>$list_risks_user,'isTaken'=>$isTaken,'selRisks'=>$list_selRisks));
                     prereq_CostBenefits();
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             } else {
                 header('Location: ?A=cost_benefits&A2=use_case_cb');
