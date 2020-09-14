@@ -48,11 +48,27 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 insertInputDealCriteria($societal_npv_nogo, $societal_npv_target, $societal_roi_nogo, $societal_roi_target, $societal_payback_nogo, $societal_payback_target, $npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target, $rr_nogo, $rr_target, $nqbr_nogo, $nqbr_target, $projID);
                 header('Location: ?A=deal_criteria&A2=deal_criteria&projID=' . $projID . '&A3=' . $side);
             } else {
+
                 throw new Exception("There is an error with the input fields !");
             }
         } elseif ($side == "supplier") {
             //Supplier BC SIDE
-            throw new Exception("Not yet implemented !");
+            if (isset($post['operating_margin_target']) && isset($post['operating_margin_nogo']) && isset($post['npv_nogo']) && isset($post['npv_target']) && isset($post['roi_nogo']) && isset($post['roi_target']) && isset($post['payback_nogo']) && isset($post['payback_target'])) {
+                
+                $npv_nogo = floatval($post['npv_nogo']);
+                $npv_target = floatval($post['npv_target']);
+                $roi_nogo = floatval($post['roi_nogo']);
+                $roi_target = floatval($post['roi_target']);
+                $payback_nogo = floatval($post['payback_nogo']);
+                $payback_target = floatval($post['payback_target']);
+                $operating_margin_target = floatval($post['operating_margin_target']);
+                $operating_margin_nogo = floatval($post['operating_margin_nogo']);
+
+                insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $projID);
+                header('Location: ?A=deal_criteria&A2=deal_criteria&projID=' . $projID . '&A3=' . $side);
+            }
+            echo "coucou";
+            //throw new Exception("Not yet implemented !");
         }
     } else {
         throw new Exception("There is no project selected !");
