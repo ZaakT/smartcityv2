@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 14 sep. 2020 à 10:56
--- Version du serveur :  8.0.18
--- Version de PHP :  7.3.12
+-- Généré le : lun. 14 sep. 2020 à 12:14
+-- Version du serveur :  8.0.21
+-- Version de PHP : 7.3.21
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -838,14 +838,18 @@ CREATE TABLE IF NOT EXISTS `equipment_revenues` (
   `price_per_unit` int(11) NOT NULL,
   `nb_units` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `equipment_revenues`
 --
 
 INSERT INTO `equipment_revenues` (`id`, `name`, `price_per_unit`, `nb_units`) VALUES
-(1, 'eq revenue 1', 10, 50);
+(1, 'Equipement 1', 10, 50),
+(2, 'Equipement 2', 100, 1),
+(3, 'Equipement 3', 1, 25),
+(4, 'Equipement 4', 50, 50),
+(5, 'Equipment 5', 22, 35);
 
 -- --------------------------------------------------------
 
@@ -2189,14 +2193,37 @@ CREATE TABLE IF NOT EXISTS `project` (
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
-(4, 'test', '28 02', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-09-02 14:25:18', 1, 1, 0),
-(3, 'TESTV2', '', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-14 11:48:00', 1, 1, 0),
-(5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
-(6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-04 13:43:27', 1, 1, 1),
+(4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-09-14 11:56:24', 1, 1, 0),
+(3, 'TESTV2', 'Description de ce projet', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-14 11:25:20', 1, 1, 0),
+(5, 'Projet nif', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-09-14 11:25:01', 1, 0, 0),
+(6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-14 11:25:08', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 12:54:56', 1, 0, 1),
-(9, 'pp', '', NULL, NULL, NULL, '2020-09-03 15:51:19', NULL, 1, 0, 0),
-(10, 'Sup Project', '', NULL, NULL, NULL, '2020-09-11 17:16:39', '2020-09-14 12:36:43', 1, 0, 0);
+(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-11 11:54:54', 1, 1, 1),
+(9, 'Projet 1', '', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 11:25:56', 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `project_dates`
+--
+
+DROP TABLE IF EXISTS `project_dates`;
+CREATE TABLE IF NOT EXISTS `project_dates` (
+  `id_project` int NOT NULL,
+  `start_date` date NOT NULL,
+  `duration` int NOT NULL,
+  `deploy_start_date` date NOT NULL,
+  `deploy_duration` int NOT NULL,
+  PRIMARY KEY (`id_project`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `project_dates`
+--
+
+INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_start_date`, `deploy_duration`) VALUES
+(4, '2020-09-06', 12, '2020-09-20', 4),
+(3, '2020-09-11', 12, '2020-09-23', 5);
 
 -- --------------------------------------------------------
 

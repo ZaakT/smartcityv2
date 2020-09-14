@@ -7,9 +7,15 @@ function supplier_schedule($twig,$is_connected, $projID){
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/input_project_common_steps/common_schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID));
-    prereq_ipc(0);
+
+    if($projID != 0) {
+        $keyDates = getProjetKeyDates($projID);
+
+        echo $twig->render('/input/input_project_common_steps/common_schedule.twig',array('key_dates'=>$keyDates, 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID));
+        prereq_ipc(0);
+    } else {
+        throw new Exception("Invalid project ID !");
+    }
 }
 
 function use_case_schedule($twig,$is_connected, $projID, $ucID){

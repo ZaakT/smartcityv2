@@ -39,7 +39,7 @@
 			</button>
 		</div>
 		<div class="justify-content-center row m-2 text-center text-dark">
-			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=capex&amp;A3=selection&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
+			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
 				<div>
 					<div class="form-group row">
 						<div class="col">
@@ -52,15 +52,15 @@
 					<div class="row">
 						<div class="form-group col">
 							<label for="fname">Project Start Date</label>
-							<input class="form-control" type="date" id="pstart">
+							<input class="form-control" type="date" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}">
 							<label for="lname">Project Duration (in months)</label>
-							<input class="form-control" type="text" id="pduration" placeholder="36">
+							<input class="form-control" type="text" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}">
 						</div>
 						<div class="form-group col">
 							<label for="fname">Deployment Start Date</label>
-							<input class="form-control" type="date" id="dstart">
+							<input class="form-control" type="date" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}">
 							<label for="lname">Deployment Duration (in months)</label>
-							<input class="form-control" type="text" id="dduration" placeholder="6">
+							<input class="form-control" type="text" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}">
 						</div>
 					</div>
 				</div>
@@ -77,4 +77,5 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
+	<script>highlight_db_values();</script>
 {% endblock %}
