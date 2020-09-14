@@ -437,8 +437,19 @@ try{
                     elseif($_GET['A2']=="perimeter1"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
-                                updateScoping($_SESSION['projID'],1);
                                 perimeter1($twig,$is_connected,$_SESSION['projID']);
+                            }
+                            else {
+                                header('Location: ?A=project_sdesign&A2=perimeter1');
+                            }
+                        }
+                        else {
+                            perimeter1($twig,$is_connected);
+                        }
+                    }elseif($_GET['A2']=="perimeter1_inputed"){
+                        if(isset($_SESSION['projID']) && isset($_POST)){
+                            if($_SESSION['projID']!=0){
+                                perimeter1_inputed($twig,$is_connected,$_SESSION['projID'], $_POST);
                             }
                             else {
                                 header('Location: ?A=project_sdesign&A2=perimeter1');
@@ -458,8 +469,10 @@ try{
                             }
                         }
                         else {
-                            scope1($twig,$is_connected);
+                            scope_selected($twig,$is_connected);
                         }
+                    } elseif($_GET['A2']=="scope_selected"){
+                        scope_selected($_POST);
                     }
                 } else {
                     project_sdesign($twig,$is_connected);

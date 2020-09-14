@@ -172,8 +172,13 @@ function scope_selected($post){
                 insertSelScope($projID,$list_scope);
             }
             //var_dump($listSelScope);
-            update_ModifDate_proj($projID);            
-            header('Location: ?A=project_scoping&A2=perimeter&projID='.$projID);
+            update_ModifDate_proj($projID);  
+            if(isSup()){
+
+                header('Location: ?A=project_sdesign&A2=perimeter1&projID='.$projID);
+            }else{
+                header('Location: ?A=project_scoping&A2=perimeter&projID='.$projID);
+            }       
 
         } else {
             throw new Exception("No Project selected !");
@@ -232,7 +237,9 @@ function perimeter1($twig,$is_connected,$projID=0){
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
             
-            echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
+            echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,
+            'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
+            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
             prereq_ProjectScoping();
         } else {
             header('Location: ?A=project_sdesign&A2=perimeter1');
@@ -245,6 +252,20 @@ function perimeter1($twig,$is_connected,$projID=0){
         echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
         prereq_ProjectScoping();
     }
+}
+
+function perimeter1_inputed($twig,$is_connected, $projID, $post){
+    if(isset($post) && $projID!=0){
+
+
+        update_ModifDate_proj($projID); 
+        updateScoping($projID,1);
+        header('Location: ?A=input_project_common_supplier');
+        
+    }else{
+        header('Location: ?A=project_sdesign&A2=perimeter1');
+    }
+
 }
 
 function sort_zones($list){

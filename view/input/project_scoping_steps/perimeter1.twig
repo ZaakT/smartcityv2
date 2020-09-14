@@ -14,6 +14,7 @@
 
 {% block content %}
 
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 	{# ------------- Perimeter ---------------- #}
 
 
@@ -26,7 +27,7 @@
 
 	<div class="row pt-5 mx-auto">
 
-		<form class="col container-fluid" id="form_zones" name="form_zones" action="?A=input_project_common_supplier" method="post" onsubmit="return countChecked_zones('form_zones');">
+		<form class="col container-fluid" id="form_zones" name="form_zones" action="?A=project_sdesign&amp;A2=perimeter1_inputed" method="post" onsubmit="return countChecked_zones('form_zones');">
 			<div class="form-row justify-content-center">
 				<h3 class="col-md-12 mx-auto">Project Location </h3>
 				<div class="form-group col-md-4">
