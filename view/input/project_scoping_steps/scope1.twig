@@ -1,5 +1,4 @@
 {% extends '/others/general_common.twig' %}
-{% set sideBarName = 'scope1' %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
@@ -7,7 +6,7 @@
 
 {% block sidebar %}{{ sidebar.sidebar("project_sdesign",projID) }}{% endblock %}
 
-{% block title %}Project Initialization{% endblock %}
+{% block title %}Project Initialization {% endblock %}
 
 {% block content %}
 

@@ -62,8 +62,9 @@ function isSup(){
 }
 
 function getUserRole(){
-    if(isset($_SESSION['profile'])){
-        setcookie('profile',$_SESSION['profile']);
+    if(isset($_SESSION['profile'])){            
+        //setcookie('profile',$_SESSION['profile']);
+
         if($_SESSION['profile'] == "d" ){
             return "project_developper";
         }else if($_SESSION['profile'] == "s" ){

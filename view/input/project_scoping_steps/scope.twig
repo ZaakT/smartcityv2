@@ -1,13 +1,12 @@
 {% extends '/others/general_common.twig' %}
-{% set sideBarName = 'project_scoping' %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/project_scoping/macro_scope.twig" as list %}
 
-{% block sidebar %}{{ sidebar.sidebar("project_scoping",projID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName,projID) }}{% endblock %}
 
-{% block title %}Project Scoping - Scope{% endblock %}
+{% block title %}{{sideBarName == "project_scoping" ? "Project Scoping - Scope"}}{{sideBarName == "project_sdesign" ? "Project Initialization"}}{% endblock %}
 
 {% block content %}
 
@@ -56,11 +55,10 @@
     {% endif %}
     </div>
     {% endif %} #}
-
     
 <div class ="row">
     {% if measures and ucs %} 
-        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action="?A=project_scoping&amp;A2=scope_selected" method="post">
+        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action={{sideBarName == "project_scoping" ? '"?A=project_scoping&amp;A2=scope_selected"'}}{{sideBarName == "project_sdesign" ? '"?A=project_sdesign&amp;A2=scope_selected"'}}"?A=project_scoping&amp;A2=scope_selected" method="post">
             <div class="container-fluid">
                 <section class="row"> 
                     {# colonne measures #}

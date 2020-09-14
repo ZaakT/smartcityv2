@@ -68,7 +68,7 @@ function delete_proj1($idProj){
 
 // ---------------------------------------- SCOPE ----------------------------------------
 
-function scope($twig,$is_connected,$projID=0){
+function scope($twig,$is_connected,$projID=0, $sideBarName){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -80,8 +80,7 @@ function scope($twig,$is_connected,$projID=0){
                     $list_measures_user[$id_measure] = $measure;
                 }
             }
-            //var_dump($list_measures_user,$user);
-            //print_r($list_measures_user);
+
             if(isset($list_measures_user[0])){unset($list_measures_user[0]);} // On retire Project Common car il est ajouté par défaut*/
             $list_cat = getListUCsCat();
             if(isset($list_cat[0])){unset($list_cat[0]);} // On retire Project Common car il est ajouté par défaut
@@ -94,13 +93,15 @@ function scope($twig,$is_connected,$projID=0){
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            if(isSup()){
-                echo $twig->render('/input/project_scoping_steps/scope1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'projID'=>$projID,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
-            }else{
-                echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+     
+            echo $twig->render('/input/project_scoping_steps/scope1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'projID'=>$projID,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope, "sideBarName"=> $sideBarName)); 
  
+            if(isSup()){
+                prereq_ProjectInitialisation(1);
             }
-            prereq_ProjectScoping();
+            if(isDev()){
+                prereq_ProjectScoping();
+            }
         } else {
             if(isSup()){
                 header('Location: ?A=project_sdesign&A2=scope1');
@@ -224,7 +225,10 @@ function perimeter1($twig,$is_connected,$projID=0){
             echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,
             'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
             'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
-            prereq_ProjectScoping();
+
+            prereq_ProjectInitialisation(1);
+
+
         } else {
             header('Location: ?A=project_sdesign&A2=perimeter1');
         }
@@ -725,6 +729,13 @@ function prereq_ProjectScoping(){
             updateScoping($projID,0);
         }
     }
+
+}
+
+function prereq_ProjectInitialisation($nb){
+
+    echo "<script>prereq_project_initialisation($nb);</script>";
+
 
 }
 

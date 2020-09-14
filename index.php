@@ -462,7 +462,7 @@ try{
                     elseif($_GET['A2']=="scope1"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                scope($twig,$is_connected,$_GET['projID']);
+                                scope($twig,$is_connected,$_GET['projID'], "project_sdesign");
                             }
                             else {
                                 header('Location: ?A=project_sdesign&A2=scope1');
@@ -509,14 +509,14 @@ try{
                     elseif($_GET['A2']=="scope"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
-                                scope($twig,$is_connected,$_SESSION['projID']);
+                                scope($twig,$is_connected,$_SESSION['projID'], "project_scoping");
                             }
                             else {
                                 header('Location: ?A=project_scoping&A2=scope');
                             }
                         }
                         else {
-                            scope($twig,$is_connected);
+                            scope($twig,$is_connected, 0, "project_scoping");
                         }
                     // --- SELECTED SCOPE ---
                     } elseif($_GET['A2']=="scope_selected"){
