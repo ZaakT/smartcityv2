@@ -1,9 +1,9 @@
-//TODO import des dates du projet de la bdd et envoi des données entrées
+//TODO envoi des données entrées
 
 function update_chart(event) {
-    let debut_projet = new Date(2020, 1, 1)
-    let fin_projet = new Date(2020, 12, 31)
-    var duree_projet = Math.round(fin_projet.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)
+    let debut_projet = new Date(document.querySelector("p#project-start").outerText)
+    let fin_projet = new Date(document.querySelector("p#project-end").outerText)
+    let duree_projet = Math.round(fin_projet.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)
 
     if(event.id.startsWith("ucpri")) { //UC Pricing Schedule (3 bars)
         let bar_void = "ucpri_1_bar"
