@@ -188,7 +188,7 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
 function getUcsData($projID,$selScope, $projectYears, $scope){
     //return a list of all data needed in Case Details
     $list = [] ;
-    for($i = 1; $i<=count($selScope); $i++ ){
+    foreach ($selScope as $i => $value) {
         for($j = 0; $j<count($selScope[$i]); $j++){
             $ucID = $selScope[$i][$j];
             array_push($list, getUcData($projID,$ucID, $projectYears, $scope));

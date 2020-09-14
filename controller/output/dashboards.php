@@ -515,25 +515,25 @@ function getRepartPercImplem($compo_dates,$proj_dates){
         for ($i=0; $i < $nb0 ; $i++) { 
             $list[$proj_dates[$i]] = 0;
         }
-        for ($i=$nb0; $i < $nb0+$nb25 ; $i++) { 
+        for ($i=$nb0; $i < $nb25 ; $i++) { 
             $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
         }
     } else {
         $list[$proj_dates[0]] = $ratio25;
-        for ($i=1; $i < $nb0+$nb25 ; $i++) { 
+        for ($i=1; $i < $nb25 ; $i++) { 
             $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
         }
     }
-    for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
+    for ($i=$nb25; $i < $nb50 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb0+$nb25+$nb50; $i < $nb0+$nb25+$nb50+$nb75 ; $i++) { 
+    for ($i=+$nb50; $i < $nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75; $i < $nb0+$nb25+$nb50+$nb75+$nb100 ; $i++) { 
+    for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < sizeof($proj_dates) ; $i++) { 
+    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
         $list[$proj_dates[$i]] = 0;
     }
     //var_dump($list);
@@ -628,22 +628,23 @@ function getRepartPercOpex($compo_dates,$proj_dates){
     }
     $list[$proj_dates[$nb0]] = $ratio25;
     for ($i=$nb0+1; $i < $nb0+$nb25 ; $i++) { 
+        
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
-    for ($i=$nb0+$nb25; $i < $nb0+$nb25+$nb50 ; $i++) { 
+    for ($i=$nb25; $i < $nb50 ; $i++) {  
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb0+$nb25+$nb50; $i < $nb0+$nb25+$nb50+$nb75 ; $i++) { 
+    for ($i=$nb50; $i < $nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75; $i < $nb0+$nb25+$nb50+$nb75+$nb100 ; $i++) { 
+    for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100; $i < $nb0+$nb25+$nb50+$nb75+$nb100+$nb_end; $i++) { 
-        $list[$proj_dates[$i]] = 100; //attention date diff 
+    for ($i=$nb100; $i < $nb_end ; $i++) { 
+        $list[$proj_dates[$i]] = 100;
     }
-    for ($i=$nb0+$nb25+$nb50+$nb75+$nb100+$nb_end; $i < sizeof($proj_dates) ; $i++) { 
-        $list[$proj_dates[$i]] = 0; //attention date diff 
+    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
+        $list[$proj_dates[$i]] = 0;
     }
     //var_dump($list);
     return $list;

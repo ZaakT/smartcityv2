@@ -82,17 +82,30 @@ function scope($twig,$is_connected,$projID=0){
             }
             //var_dump($list_measures_user,$user);
             $list_cat = getListUCsCat();
+            if(isset($list_cat[0])){unset($list_cat[0]);} // On retire Project Common car il est ajouté par défaut
             $list_ucs = getListUCs();
+            if(isset($list_ucs[0])){unset($list_ucs[0]);} // On retire Project Common car il est ajouté par défaut
             $listSelScope = getListSelScope($projID);
+            if(isset($listSelScope[0])){unset($listSelScope[0]);} // On retire Project Common car il est ajouté par défaut
             //var_dump($listSelScope);
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             
-            echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+            if(isSup()){
+                echo $twig->render('/input/project_scoping_steps/scope1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'projID'=>$projID,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+            }else{
+                echo $twig->render('/input/project_scoping_steps/scope.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
+ 
+            }
             prereq_ProjectScoping();
         } else {
-            header('Location: ?A=project_scoping&A2=scope');
+            if(isSup()){
+                header('Location: ?A=project_sdesign&A2=scope1');
+            }else{
+                
+            header('Location: ?A=project_scoping&A2=scope1');
+            }
         }
     } else {
         $devises = getListDevises();
@@ -104,41 +117,6 @@ function scope($twig,$is_connected,$projID=0){
     }
 }
 
-function scope1($twig,$is_connected,$projID=0){
-    $user = getUser($_SESSION['username']);
-    if($projID!=0){
-        if(getProjByID($projID,$user[0])){
-            $proj = getProjByID($projID,$user[0]);
-            $list_measures = getListMeasures();
-            $list_measures_user = [];
-            foreach ($list_measures as $id_measure => $measure){
-                if($measure['user'] == 0 or $measure['user'] == $user[0]){
-                    $list_measures_user[$id_measure] = $measure;
-                }
-            }
-            //var_dump($list_measures_user,$user);
-            $list_cat = getListUCsCat();
-            $list_ucs = getListUCs();
-            $listSelScope = getListSelScope($projID);
-            //var_dump($listSelScope);
-            $devises = getListDevises();
-            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-            
-            echo $twig->render('/input/project_scoping_steps/scope1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'projID'=>$projID,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project',"selected"=>$proj[1],'username'=>$user[1],'measures'=>$list_measures_user,'ucs'=>$list_ucs,'cat'=>$list_cat,'list_sel'=>$listSelScope)); 
-            prereq_ProjectScoping();
-        } else {
-            header('Location: ?A=project_sdesign&A2=scope1');
-        }
-    } else {
-        $devises = getListDevises();
-        $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-        $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-        
-        echo $twig->render('/input/project_scoping_steps/scope1.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'projID'=>$projID,'part'=>'Project','username'=>$user[1]));
-        prereq_ProjectScoping();
-    }
-}
 
 function scope_selected($post){
     if($post){
@@ -162,6 +140,10 @@ function scope_selected($post){
                     }
                 }
             }
+            
+            $list_scope[0]=[];
+            array_push($list_scope[0],-1);// On ajoute le UC Project Common 
+        
             //var_dump($list_scope);
             $listSelScope = getListSelScope($projID);
             //var_dump(empty($listSelScope));

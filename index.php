@@ -462,7 +462,7 @@ try{
                     elseif($_GET['A2']=="scope1"){
                         if(isset($_GET['projID'])){
                             if($_GET['projID']!=0){
-                                scope1($twig,$is_connected,$_GET['projID']);
+                                scope($twig,$is_connected,$_GET['projID']);
                             }
                             else {
                                 header('Location: ?A=project_sdesign&A2=scope1');
