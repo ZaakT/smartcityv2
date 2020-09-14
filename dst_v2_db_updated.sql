@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 14 sep. 2020 à 10:11
+-- Généré le :  lun. 14 sep. 2020 à 10:56
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt' COMMENT 'Used in supplier part',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -377,7 +377,8 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`) VALUES
 (25, 'euh', '', 'from_ntt'),
 (26, 'Water Sensor', '', 'from_ntt'),
 (27, 'Strange Sensor', '', 'from_outside_ntt'),
-(28, 'LED type 2', '', 'from_outside_ntt');
+(28, 'LED type 2', '', 'from_outside_ntt'),
+(29, 'capex general test', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -420,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -445,7 +446,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (25, 3),
 (26, 8),
 (27, 8),
-(28, 8);
+(28, 8),
+(29, 8);
 
 -- --------------------------------------------------------
 
@@ -487,7 +489,8 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (25, 3),
 (26, 11),
 (27, 11),
-(28, 5);
+(28, 5),
+(29, -1);
 
 -- --------------------------------------------------------
 
@@ -1344,7 +1347,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (8, 4, 3, 300, NULL, 50, 3, 5),
 (8, 5, 2, 30, NULL, 50, 1, 4),
 (8, 3, 2, 12, NULL, 200, 3, 5),
-(8, 6, 1, 1000, NULL, 15, 3, 1);
+(8, 6, 1, 1000, NULL, 15, 3, 1),
+(10, 7, -1, 1, NULL, 15000, 3, 0),
+(8, 8, -1, 1, NULL, 15000, 3, 0);
 
 -- --------------------------------------------------------
 
@@ -1808,7 +1813,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `user` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -1822,7 +1827,8 @@ INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
 (13, 'Project Management test1', '', 7),
 (14, 'Project Management test2', '', 8),
 (15, 'Project Management ZakSup', '', 10),
-(16, 'Project Management adminD', '', 11);
+(16, 'Project Management adminD', '', 11),
+(0, 'Project Common', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1946,7 +1952,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -1958,7 +1964,9 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`) VALUES
 (3, 'uc2 opex', '', 'from_ntt'),
 (4, 'TEST OPEX ITEM', '10H 10 MARS', 'from_ntt'),
 (5, 'OPEX', '', 'from_ntt'),
-(6, 'electricity', '', 'internal');
+(6, 'electricity', '', 'internal'),
+(7, 'Project Manager', '', 'from_ntt'),
+(8, 'Project Manager', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -1999,7 +2007,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2010,7 +2018,9 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (2, 1),
 (3, 4),
 (5, 4),
-(6, 8);
+(6, 8),
+(7, 10),
+(8, 8);
 
 -- --------------------------------------------------------
 
@@ -2085,7 +2095,9 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (3, 2),
 (4, 3),
 (5, 2),
-(6, 1);
+(6, 1),
+(7, -1),
+(8, -1);
 
 -- --------------------------------------------------------
 
@@ -2182,9 +2194,9 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (5, 'nifhrfr', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-03-19 11:38:45', 1, 0, 0),
 (6, 'projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-04 13:43:27', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-11 15:23:49', 1, 1, 1),
+(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 12:54:56', 1, 0, 1),
 (9, 'pp', '', NULL, NULL, NULL, '2020-09-03 15:51:19', NULL, 1, 0, 0),
-(10, 'Sup Project', '', NULL, NULL, NULL, '2020-09-11 17:16:39', '2020-09-14 11:49:19', 1, 1, 0);
+(10, 'Sup Project', '', NULL, NULL, NULL, '2020-09-11 17:16:39', '2020-09-14 12:36:43', 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2379,6 +2391,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (5, 1),
 (6, 1),
 (7, 1),
+(8, 0),
 (8, 1),
 (10, 1);
 
@@ -2401,6 +2414,7 @@ CREATE TABLE IF NOT EXISTS `proj_sel_usecase` (
 --
 
 INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
+(-1, 8),
 (1, 1),
 (1, 3),
 (1, 4),
@@ -3507,7 +3521,7 @@ INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
 (9, 'Photo Voltaic', '', 1, 1),
 (10, 'Public Information & advertising', '', 1, 2),
 (11, 'Water Level Sensor', NULL, 1, 2),
-(-1, 'Project Common', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 1, 1);
+(-1, 'Project Common', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3556,7 +3570,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case_cat`
@@ -3565,7 +3579,8 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
 INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (1, 'UC_cat_1', ''),
 (2, 'UC_cat_2', ''),
-(3, 'UC_cat_3', '');
+(3, 'UC_cat_3', ''),
+(0, 'Project Common', NULL);
 
 -- --------------------------------------------------------
 
