@@ -94,7 +94,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         throw new Exception("Wrong type.");
                     }
                 } else {
-                    throw new Exception("This Use Case doesn't exist !");
+                    throw new Exception("This use case doesn't exist !");
                 }
             }
             if(count($listUcID)!=1){

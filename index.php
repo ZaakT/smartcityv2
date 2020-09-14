@@ -639,7 +639,7 @@ try{
                                                 alterProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
                                             }
 
-                                            header('Location: ?A=input_project_common_supplier&A2=capex&projID='.$projID);
+                                            header('Location: ?A=input_project_common_supplier&A2=capex&projID='.$_SESSION['projID']);
                                         } else {
                                             throw new Exception("There was an error with the form.");
                                         }

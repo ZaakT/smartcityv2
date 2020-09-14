@@ -23,8 +23,20 @@ function use_case_schedule($twig,$is_connected, $projID, $ucID){
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
+
+    if($projID != 0 and $ucID != 0) {
+        $keyDates = getProjetKeyDates($projID);
+        $projectStart = $keyDates[0]['start_date'];
+        $duration = $keyDates[0]['duration'];
+        $projectEnd = new DateTime($projectStart);
+        $projectEnd->modify("+$duration months");
+        $projectEnd = $projectEnd->format('Y-m-d');
+
+        echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('project_start'=>$projectStart, 'project_end'=>$projectEnd, 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
+        prereq_ipc(0);
+    } else {
+        throw new Exception("Please select a project and use case first.");
+    }
 }
 
 function use_case_equipment($twig,$is_connected, $projID, $ucID){
