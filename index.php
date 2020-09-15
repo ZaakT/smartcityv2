@@ -1014,7 +1014,24 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
                         }
                     } elseif($_GET['A2']=="schedule") {
-                        use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        if(isset($_GET['A3'])) {
+                            if($_GET['A3'] == "save") {
+                                if($_POST) {
+                                    $keyDates = getProjetSchedule($_SESSION['projID'], $_SESSION['ucID']);
+                                    if(empty($keyDates)) {
+                                        insertProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_prod'], $_POST['poc_start'], $_POST['poc_run'], $_POST['lag_start'], $_POST['lag_ramp'], $_POST['ramp_run']);
+                                    } else {
+                                        alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_prod'], $_POST['poc_start'], $_POST['poc_run'], $_POST['lag_start'], $_POST['lag_ramp'], $_POST['ramp_run']);
+                                    }
+
+                                    header('Location: ?A=input_project_common_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);
+                                } else {
+                                    throw new Exception("There was an error with the form.");
+                                }
+                            }
+                        } else {
+                            use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        }
                     } elseif($_GET['A2']=="equipment_revenues"){
                         if(isset($_GET['A3'])) {
                             if($_GET['A3'] == "create_revenue") {

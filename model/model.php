@@ -2245,6 +2245,35 @@ function alterProjetKeyDates($projID, $startDate, $duration, $deployStartDate, $
     return $ret;
 }
 
+function getProjetSchedule($projID, $ucID) {
+    $db = dbConnect();
+    $req = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? AND id_uc = ?");
+    $req->execute(array($projID, $ucID));
+    return $req->fetchAll();
+}
+
+function insertProjectSchedule($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun) {
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO project_schedule
+                            (id_project, id_uc, deploy_prod, poc_start, poc_run, lag_start, lag_ramp, ramp_run)
+                            VALUES (?,?,?,?,?,?,?,?)");
+    $ret = $req->execute(array($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun));
+    
+    return $ret;
+}
+
+function alterProjectSchedule($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun) {
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE project_schedule 
+    SET id_project = ?, id_uc = ?, deploy_prod = ?, poc_start = ?, poc_run = ?, lag_start = ?, lag_ramp = ?, ramp_run = ?)
+                            VALUES (?,?,?,?,?,?,?,?)");
+    $ret = $req->execute(array($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun));
+    
+    return $ret;
+}
+
 // ---------------------------------------- REVENUES----------------------------------------
 
 function getEquipmentRevenues($projID,$ucID){
