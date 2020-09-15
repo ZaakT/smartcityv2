@@ -418,6 +418,21 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         \general\project($twig,$is_connected,'?A=project_sdesign&A2=proj_selected','project_sdesign');
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     }
                     elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
@@ -486,16 +501,21 @@ try{
                     if($_GET['A2']=="project"){
                         \general\project($twig,$is_connected,'?A=project_scoping&A2=proj_selected','project_scoping');
                     }
-                    
                     elseif($_GET['A2']=="create_proj"){
-                        create_proj($_POST);
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project');
+                        }
                     }
                     elseif($_GET['A2']=="delete_proj"){
                         if(isset($_GET['id'])){
-                            delete_proj($_GET['id']);
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project");
                         }
                         else {
-                            header('Location: ?A=project_scoping&A2=project');
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
                         }
                     }
                     // --- SELECTED PROJECT ---
@@ -620,7 +640,22 @@ try{
                 if(isset($_GET['A2'])) {
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=input_project_common_supplier&A2=proj_selected',  'input_project_common_supplier');
-                    } elseif($_GET['A2']=="proj_selected"){
+                    } elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
+                    }elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
@@ -690,6 +725,21 @@ try{
                         //project_ipc($twig,$is_connected);
 
                     // --- SELECTED PROJECT ---
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     }elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
@@ -751,6 +801,21 @@ try{
                         if($_GET['A2']=='project_selection'){
                             \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
                         // --- SELECTED PROJECT ---
+                        }elseif($_GET['A2']=="create_proj"){
+                            if(isset($_POST)){
+                                \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                            }
+                            else{
+                                
+                                header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                            }
+                        }elseif($_GET['A2']=="delete_proj"){
+                            if(isset($_GET['id'])){
+                                \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=project');
+                            }
                         } elseif($_GET['A2']=="proj_selected"){
                             if(isset($_POST['radio_proj'])){
                                 $projID = intval($_POST['radio_proj']);
@@ -782,6 +847,21 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards');
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
@@ -830,6 +910,21 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=supplier_dashboards&A2=proj_selected', 'supplier_dashboards');
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
@@ -866,6 +961,21 @@ try{
                     if($_GET['A2']=="project_selection"){
                         \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "input_use_case_supplier");
                     // --- SELECTED PROJECT ---
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_selection" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
@@ -931,7 +1041,22 @@ try{
                         //project_cb($twig,$is_connected);
                         \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "cost_benefits");
                     // --- SELECTED PROJECT ---
-                    } elseif($_GET['A2']=="proj_selected"){
+                    } elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project_cb" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project_cb');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project_cb");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
+                    }elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
@@ -2154,6 +2279,21 @@ try{
                     if($_GET['A2']=="project"){
                         \general\project($twig,$is_connected, "?A=dashboards&A2=proj_selected",'dashboards');
                     // --- SELECTED PROJECT ---
+                    }elseif($_GET['A2']=="create_proj"){
+                        if(isset($_POST)){
+                            \general\create_proj($_POST,$_GET['A'], "project" );
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project');
+                        }
+                    }elseif($_GET['A2']=="delete_proj"){
+                        if(isset($_GET['id'])){
+                            \general\delete_proj($_GET['id'], $_GET['A'], "project");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     } elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);

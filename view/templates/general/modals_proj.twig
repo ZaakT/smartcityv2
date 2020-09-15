@@ -1,7 +1,7 @@
-{% macro create_proj() %}
+{% macro create_proj(sideBarName) %}
 <div class="modal fade" id="createNewProjModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="createProj-form" action="?A=project_scoping&amp;A2=create_proj" method='post'>
+        <form id="createProj-form" action="?A={{sideBarName}}&amp;A2=create_proj" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Project informations</h5>
@@ -33,7 +33,7 @@
 </div>    
 {% endmacro %}
 
-{% macro delete_proj(idProj,nameProj) %}
+{% macro delete_proj(idProj,nameProj, sideBarName) %}
 <div class="modal fade" id="askDeleteProj_{{ idProj }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -48,7 +48,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A=project_scoping&amp;A2=delete_proj&amp;id={{ idProj }}"><button type="button" class="btn btn-dark">Yes</button></a>
+                <a href="?A={{sideBarName}}&amp;A2=delete_proj&amp;id={{ idProj }}"><button type="button" class="btn btn-dark">Yes</button></a>
             </div>
         </div>
     </div>

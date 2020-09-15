@@ -1,4 +1,4 @@
-{% macro list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits) %}
+{% macro list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName) %}
 {% import "/templates/general/modals_proj.twig" as modal %}
 
 <div class="row text-center">
@@ -29,7 +29,7 @@
                     {% if scopeMode %}<td><img width=20 height=20 id="{{ proj[9] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[9] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
                     {% if costBenefitsMode %}<td><img width=20 height=20 id="{{ proj[10] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[10] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
                     {% if deleteMode %}<td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteProj_{{ proj[0] }}"></span></a></td>{% endif %}
-                    {{ modal.delete_proj(proj[0],proj[1]) }}
+                    {{ modal.delete_proj(proj[0],proj[1], sideBarName) }}
                 </tr>
             {% endfor %}
             </tbody>

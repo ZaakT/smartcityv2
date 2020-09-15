@@ -16,6 +16,25 @@ function project($twig,$is_connected, $nextPage, $sideBarName){
     echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']))); 
 }
 
+function create_proj($post, $sideBarName, $A2){
+    $name = $post['name'];
+    $description = isset($post['description']) ? $post['description'] : "";
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $projInfos = [$name,$description,$idUser];
+    if(!empty(getProj($idUser,$name))){
+        header('Location: ?A='.$sideBarName.'&A2='.$A2.'t&isTaken=true');
+    } else {
+        insertProj($projInfos);
+        header('Location: ?A='.$sideBarName.'&A2='.$A2);
+    }
+}
+
+function delete_proj($idProj, $sideBarName, $A2){
+    // var_dump($idProj);
+    deleteProj($idProj);
+    header('Location: ?A='.$sideBarName.'&A2='.$A2);
+}
 
 
 function commonPage($twig,$is_connected, $nextPage, $sideBarName){
@@ -38,11 +57,19 @@ function use_case_selection($twig,$is_connected, $nextPage, $sideBarName, $projI
             $list_measures = getListMeasures();
             $list_ucs = getListUCs();
             $selScope = getListSelScope($projID);
+            //Suppression de project common car il ne peu être modifier que dans la partie project common
+            if(isset($list_measures[0])){unset($list_measures[0]);}
+            if(isset($list_ucs[-1])){unset($list_ucs[-1]);}
+            if(isset($selScope[0])){unset($selScope[0]);}
+
+
             $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-            
-            echo $twig->render('/others/general_steps/use_case_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'selScope'=>$selScope,'ucs'=>$list_ucs,'measures'=>$list_measures, 'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName));
+            $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+            $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+                
+            echo $twig->render('/others/general_steps/use_case_selection.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+            'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'selScope'=>$selScope,
+            'ucs'=>$list_ucs,'measures'=>$list_measures, 'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName));
             if($sideBarName=='input_project_common' or $sideBarName=='input_project_common_supplier'){
                 prereq_ipc(0);
             }
