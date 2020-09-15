@@ -37,7 +37,7 @@
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
-		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_use_case_supplier&amp;A2=equipment_revenues&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
+		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_use_case_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
 			<div id="dates_projet">
 				<p id="project-start">
 					<span class="oi oi-caret-bottom"></span>{{ project_start }}
@@ -59,7 +59,7 @@
 				<div id="collapse_uc_operations" class="row collapse mb-2">
 					<div class="col justify-content-center text-center">
 						<label>Deployment > Production</label>
-						<input type="date" class="w-25 form-control" style="margin: auto;" id="ucop_2" oninput="update_chart(event.target)">
+						<input name="deploy_prod" value="{{ schedule_dates[0]['deploy_prod'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_2" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
@@ -75,11 +75,11 @@
 				<div id="collapse_uc_pricing" class="row collapse mb-2">
 					<div class="col">
 						<label>POC Start</label>
-						<input type="date" class="start-date form-control" id="ucpri_2" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates[0]['poc_start'] }}" name="poc_start" type="date" class="start-date form-control" id="ucpri_2" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>POC > Run</label>
-						<input type="date" class="form-control" id="ucpri_3" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates[0]['poc_run'] }}" name="poc_run" type="date" class="form-control" id="ucpri_3" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
@@ -97,15 +97,15 @@
 				<div id="collapse_uc_revenue" class="row collapse mb-2">
 					<div class="col">
 						<label>Lag Start</label>
-						<input type="date" class="start-date form-control" id="ucrev_2" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates[0]['lag_start'] }}" name="lag_start" type="date" class="start-date form-control" id="ucrev_2" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Lag > Ramp-up</label>
-						<input type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates[0]['lag_ramp'] }}" name="lag_ramp" type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Ramp-up > Run</label>
-						<input type="date" class="form-control" id="ucrev_4" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates[0]['ramp_run'] }}" name="ramp_run" type="date" class="form-control" id="ucrev_4" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">
@@ -123,7 +123,7 @@
 		{#  FIN DU CONTENU #}
 
 		<div class="row m-3 text-center text-dark">
-			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="check_form_debug();"></button>
+			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="check_form();"></button>
 		</div>
 	{% endif %}
 {% endblock %}
@@ -134,5 +134,6 @@
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/sidebar-supplier-iuc.js"></script>
 	<script>
 		déverouiller_sidebar();
+		update_all_chart();
 	</script>
 {% endblock %}

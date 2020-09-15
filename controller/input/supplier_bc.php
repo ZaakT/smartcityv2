@@ -32,7 +32,9 @@ function use_case_schedule($twig,$is_connected, $projID, $ucID){
         $projectEnd->modify("+$duration months");
         $projectEnd = $projectEnd->format('Y-m-d');
 
-        echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('project_start'=>$projectStart, 'project_end'=>$projectEnd, 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
+        $scheduleDates = getProjetSchedule($projID, $ucID);
+
+        echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('schedule_dates'=>$scheduleDates, 'project_start'=>$projectStart, 'project_end'=>$projectEnd, 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
         prereq_ipc(0);
     } else {
         throw new Exception("Please select a project and use case first.");
@@ -70,8 +72,13 @@ function use_case_deployment($twig,$is_connected, $projID, $ucID){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/use_case_supplier_steps/deployment_revenue.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
-}
+    if($ucID != 0) {
+        $revenues_items = getEquipmentRevenues($projID, $ucID);
+        echo $twig->render('/input/use_case_supplier_steps/deployment_revenue.twig',array('revenues_items'=>$revenues_items, 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID));
+    } else {
+        throw new Exception("Error with use case identifier");
+    }
+    }
 
 function use_case_operating($twig,$is_connected, $projID, $ucID){
     $user = getUser($_SESSION['username']);

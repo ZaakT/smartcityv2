@@ -2267,9 +2267,9 @@ function alterProjectSchedule($projID, $ucID, $deployProd, $pocStart, $pocRun, $
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("UPDATE project_schedule 
-    SET id_project = ?, id_uc = ?, deploy_prod = ?, poc_start = ?, poc_run = ?, lag_start = ?, lag_ramp = ?, ramp_run = ?)
-                            VALUES (?,?,?,?,?,?,?,?)");
-    $ret = $req->execute(array($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun));
+    SET deploy_prod = ?, poc_start = ?, poc_run = ?, lag_start = ?, lag_ramp = ?, ramp_run = ?
+                            WHERE id_project = ? AND id_uc = ?");
+    $ret = $req->execute(array($deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun, $projID, $ucID));
     
     return $ret;
 }

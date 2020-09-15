@@ -1024,7 +1024,7 @@ try{
                                         alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_prod'], $_POST['poc_start'], $_POST['poc_run'], $_POST['lag_start'], $_POST['lag_ramp'], $_POST['ramp_run']);
                                     }
 
-                                    header('Location: ?A=input_project_common_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);
+                                    header('Location: ?A=input_use_case_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);
                                 } else {
                                     throw new Exception("There was an error with the form.");
                                 }
