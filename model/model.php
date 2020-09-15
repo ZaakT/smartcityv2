@@ -1217,100 +1217,175 @@ function deleteSelVolumes($projID){
 
 // ---------------------------------------- SCHEDULE ----------------------------------------
 
-function getListSelDates($projID){
-    $db = dbConnect();
-    $req_implem = $db->prepare("SELECT * FROM implem_schedule WHERE id_proj = ?");
-    $req_implem->execute(array($projID));
-    $req_opex = $db->prepare("SELECT * FROM opex_schedule WHERE id_proj = ?");
-    $req_opex->execute(array($projID));
-    $req_revenue = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ?");
-    $req_revenue->execute(array($projID));
+function addDateMounths($date, $mounths){
+    // $date is a date at the date format but $mounths is a number of mounths, so it's an integer. The goal of this function is basicly to return "$date+$mounth"
+    if($mounth == 0 ){ return $date ;}
+    if(count(explode("/", $date))>2){throw new Exception('Bad Date format, use the function dateWithoutDay($d)', 1);}
+    $dateMounth = explode("/", $date)[0];
+    $dateYear = explode("/", $date)[1];
+    
+    $dateYear += intdiv(($dateMounth + $mounth -1 ) , 12);
+    $dateMounth = ($dateMounth + $mounth -1 )%12 + 1;
+    return "$dateMounth/$dateMounth";
 
-    $list = [];
+}
 
-    while($row = $req_implem->fetch()){
-        $id_uc = intval($row['id_uc']);
-        $startdate = date_create($row['start_date'])->format('m/Y');
-        $date25 = date_create($row['25_completion'])->format('m/Y');
-        $date50 = date_create($row['50_completion'])->format('m/Y');
-        $date75 = date_create($row['75_completion'])->format('m/Y');
-        $date100 = date_create($row['100_completion'])->format('m/Y');
-        if(array_key_exists('implem',$list)){
-            $list['implem'][$id_uc] = [
-                'startdate'=>$startdate,
-                '25date'=>$date25,
-                '50date'=>$date50,
-                '75date'=>$date75,
-                '100date'=>$date100,
-                ];
-        } else {
-            $list['implem'] = [ $id_uc => [
-                                'startdate'=>$startdate,
-                                '25date'=>$date25,
-                                '50date'=>$date50,
-                                '75date'=>$date75,
-                                '100date'=>$date100,
-            ]];
-        }
+function  addScheduleElement($list, $key, $id_uc, $startdate, $enddate, $date100){
+    if($key!= "revenues" && $key != "implem" && $key != "opex" ){ throw new Exception("Wrong type !");}
+    $difDate = difMounthsBounds($date100, $startdate);
+    $date25 = addDateMounths($startdate, floor($difDate*0.25));
+    $date50 = addDateMounths($startdate, floor($difDate*0.5));
+    $date75 = addDateMounths($startdate, floor($difDate*0.75));
+    if(array_key_exists($key,$list)){
+        $list[$key][$id_uc] = [
+                            'startdate'=>$startdate,
+                            '25date'=>$date25,
+                            '50date'=>$date50,
+                            '75date'=>$date75,
+                            '100date'=>$date100,
+                            'enddate'=>$enddate,
+        ];
+    } else {
+        $list[$key] = [$id_uc => [
+                            'startdate'=>$startdate,
+                            '25date'=>$date25,
+                            '50date'=>$date50,
+                            '75date'=>$date75,
+                            '100date'=>$date100,
+                            'enddate'=>$enddate,
+        ]];
     }
-    while($row = $req_opex->fetch()){
-        $id_uc = intval($row['id_uc']);
-        $startdate = date_create($row['start_date'])->format('m/Y');
-        $date25 = date_create($row['25_rampup'])->format('m/Y');
-        $date50 = date_create($row['50_rampup'])->format('m/Y');
-        $date75 = date_create($row['75_rampup'])->format('m/Y');
-        $date100 = date_create($row['100_rampup'])->format('m/Y');
-        $enddate = date_create($row['end_date'])->format('m/Y');
-        if(array_key_exists('opex',$list)){
-            $list['opex'][$id_uc] = [
-                                'startdate'=>$startdate,
-                                '25date'=>$date25,
-                                '50date'=>$date50,
-                                '75date'=>$date75,
-                                '100date'=>$date100,
-                                'enddate'=>$enddate,
-            ];
-        } else {
-                $list['opex'] = [$id_uc => [
-                'startdate'=>$startdate,
-                '25date'=>$date25,
-                '50date'=>$date50,
-                '75date'=>$date75,
-                '100date'=>$date100,
-                'enddate'=>$enddate,
-            ]];
-        }
-    }
-    while($row = $req_revenue->fetch()){
-        $id_uc = intval($row['id_uc']);
-        $startdate = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
-        $date25 = $row['25_rampup'] ? date_create($row['25_rampup'])->format('m/Y') : null;
-        $date50 = $row['50_rampup'] ? date_create($row['50_rampup'])->format('m/Y') : null;
-        $date75 = $row['75_rampup'] ? date_create($row['75_rampup'])->format('m/Y') : null;
-        $date100 = $row['100_rampup'] ? date_create($row['100_rampup'])->format('m/Y') : null;
-        $enddate = $row['end_date'] ? date_create($row['end_date'])->format('m/Y') : null;
-        if(array_key_exists('revenues',$list)){
-            $list['revenues'][$id_uc] = [
-                                'startdate'=>$startdate,
-                                '25date'=>$date25,
-                                '50date'=>$date50,
-                                '75date'=>$date75,
-                                '100date'=>$date100,
-                                'enddate'=>$enddate,
-            ];
-        } else {
-            $list['revenues'] = [$id_uc => [
-                                'startdate'=>$startdate,
-                                '25date'=>$date25,
-                                '50date'=>$date50,
-                                '75date'=>$date75,
-                                '100date'=>$date100,
-                                'enddate'=>$enddate,
-            ]];
-        }
-    }
-    //var_dump($list);
     return $list;
+}
+function getListSelDates($projID){
+    if(isDev()){
+        $db = dbConnect();
+        $req_implem = $db->prepare("SELECT * FROM implem_schedule WHERE id_proj = ?");
+        $req_implem->execute(array($projID));
+        $req_opex = $db->prepare("SELECT * FROM opex_schedule WHERE id_proj = ?");
+        $req_opex->execute(array($projID));
+        $req_revenue = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ?");
+        $req_revenue->execute(array($projID));
+    
+        $list = [];
+    
+        while($row = $req_implem->fetch()){
+            $id_uc = intval($row['id_uc']);
+            $startdate = date_create($row['start_date'])->format('m/Y');
+            $date25 = date_create($row['25_completion'])->format('m/Y');
+            $date50 = date_create($row['50_completion'])->format('m/Y');
+            $date75 = date_create($row['75_completion'])->format('m/Y');
+            $date100 = date_create($row['100_completion'])->format('m/Y');
+            if(array_key_exists('implem',$list)){
+                $list['implem'][$id_uc] = [
+                    'startdate'=>$startdate,
+                    '25date'=>$date25,
+                    '50date'=>$date50,
+                    '75date'=>$date75,
+                    '100date'=>$date100,
+                    ];
+            } else {
+                $list['implem'] = [ $id_uc => [
+                                    'startdate'=>$startdate,
+                                    '25date'=>$date25,
+                                    '50date'=>$date50,
+                                    '75date'=>$date75,
+                                    '100date'=>$date100,
+                ]];
+            }
+        }
+        while($row = $req_opex->fetch()){
+            $id_uc = intval($row['id_uc']);
+            $startdate = date_create($row['start_date'])->format('m/Y');
+            $date25 = date_create($row['25_rampup'])->format('m/Y');
+            $date50 = date_create($row['50_rampup'])->format('m/Y');
+            $date75 = date_create($row['75_rampup'])->format('m/Y');
+            $date100 = date_create($row['100_rampup'])->format('m/Y');
+            $enddate = date_create($row['end_date'])->format('m/Y');
+            if(array_key_exists('opex',$list)){
+                $list['opex'][$id_uc] = [
+                                    'startdate'=>$startdate,
+                                    '25date'=>$date25,
+                                    '50date'=>$date50,
+                                    '75date'=>$date75,
+                                    '100date'=>$date100,
+                                    'enddate'=>$enddate,
+                ];
+            } else {
+                    $list['opex'] = [$id_uc => [
+                    'startdate'=>$startdate,
+                    '25date'=>$date25,
+                    '50date'=>$date50,
+                    '75date'=>$date75,
+                    '100date'=>$date100,
+                    'enddate'=>$enddate,
+                ]];
+            }
+        }
+        while($row = $req_revenue->fetch()){
+            $id_uc = intval($row['id_uc']);
+            $startdate = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
+            $date25 = $row['25_rampup'] ? date_create($row['25_rampup'])->format('m/Y') : null;
+            $date50 = $row['50_rampup'] ? date_create($row['50_rampup'])->format('m/Y') : null;
+            $date75 = $row['75_rampup'] ? date_create($row['75_rampup'])->format('m/Y') : null;
+            $date100 = $row['100_rampup'] ? date_create($row['100_rampup'])->format('m/Y') : null;
+            $enddate = $row['end_date'] ? date_create($row['end_date'])->format('m/Y') : null;
+            if(array_key_exists('revenues',$list)){
+                $list['revenues'][$id_uc] = [
+                                    'startdate'=>$startdate,
+                                    '25date'=>$date25,
+                                    '50date'=>$date50,
+                                    '75date'=>$date75,
+                                    '100date'=>$date100,
+                                    'enddate'=>$enddate,
+                ];
+            } else {
+                $list['revenues'] = [$id_uc => [
+                                    'startdate'=>$startdate,
+                                    '25date'=>$date25,
+                                    '50date'=>$date50,
+                                    '75date'=>$date75,
+                                    '100date'=>$date100,
+                                    'enddate'=>$enddate,
+                ]];
+            }
+        }
+        //var_dump($list);
+        return $list;
+    }elseif (isSup()) {
+        
+        $db = dbConnect();
+        $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ?");
+        $req_project_schedule->execute(array($projID));
+        $list = [];
+
+        $keyDates = getProjetKeyDates($projID);
+        $projectStart = $keyDates[0]['start_date'];
+        $projectStart=$projectStart->format('m/Y');
+        $duration = $keyDates[0]['duration'];
+        $projectEnd = new DateTime($projectStart);
+        $projectEnd->modify("+$duration months");
+        $projectEnd = $projectEnd->format('m/Y');
+        while($row = $req_project_schedule->fetch()){
+            $id_uc = intval($row['id_uc']);
+            $deploy_prod = $row['deploy_prod'] ? date_create($row['deploy_prod'])->format('m/Y') : null;
+            $poc_start = $row['poc_start'] ? date_create($row['poc_start'])->format('m/Y') : null;
+            $poc_run = $row['poc_run'] ? date_create($row['poc_run'])->format('m/Y') : null;
+            $lag_start = $row['lag_start'] ? date_create($row['lag_start'])->format('m/Y') : null;
+            $lag_ramp = $row['lag_ramp'] ? date_create($row['lag_ramp'])->format('m/Y') : null;
+            $ramp_run = $row['ramp_run'] ? date_create($row['ramp_run'])->format('m/Y') : null;
+            echo dateWithoutDay($ramp_run);
+
+            $list = addScheduleElement($list, "implem", $id_uc,  $projectStart, $projectEnd , $deploy_prod);
+            $list = addScheduleElement($list, "opex", $id_uc, $lag_ramp , $projectEnd , $ramp_run);
+            $list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
+
+        }
+        //var_dump($list);
+        return $list;
+        
+    }
+    
 }
 
 function insertSelDates($projID,$list){

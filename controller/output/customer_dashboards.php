@@ -29,6 +29,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
            
                 
                 $schedules = getListSelDates($projID);
+                print_r($schedules);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
 

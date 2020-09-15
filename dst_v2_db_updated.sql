@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 15 sep. 2020 à 10:13
+-- Généré le :  mar. 15 sep. 2020 à 13:36
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -759,7 +759,8 @@ CREATE TABLE IF NOT EXISTS `deal_criteria_input_nogo_target` (
 INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `societal_npv_target`, `societal_roi_nogo`, `societal_roi_target`, `societal_payback_nogo`, `societal_payback_target`, `npv_nogo`, `npv_target`, `roi_nogo`, `roi_target`, `payback_nogo`, `payback_target`, `risks_rating_nogo`, `risks_rating_target`, `nqbr_nogo`, `nqbr_target`, `operating_margin_nogo`, `operating_margin_target`) VALUES
 (6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0),
 (8, 0, 30000, 0, 20, 40, 12, 50000, 100000, 10, 30, 36, 12, 5, 1, 3, 9, 0, 0),
-(3, NULL, NULL, NULL, NULL, NULL, NULL, 15, 15, 15, 15, 5, 5, NULL, NULL, NULL, NULL, 5, 5);
+(3, NULL, NULL, NULL, NULL, NULL, NULL, 15, 15, 15, 15, 5, 5, NULL, NULL, NULL, NULL, 5, 5),
+(21, 4000, 150000, 5, 50, 36, 1, 5000, 150000, 5, 50, 26, 5, 6, 3, 4, 9, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1377,7 +1378,8 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (8, 6, 1, 1000, NULL, 15, 3, 1),
 (10, 7, -1, 1, NULL, 15000, 3, 0),
 (8, 8, -1, 1, NULL, 15000, 3, 0),
-(11, 10, -1, 250, NULL, 15, 15, 3);
+(11, 10, -1, 250, NULL, 15, 15, 3),
+(21, 11, -1, 200, NULL, 15, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -1841,7 +1843,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `user` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -1858,7 +1860,8 @@ INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
 (16, 'Project Management adminD', '', 11),
 (0, 'Project Common', NULL, 0),
 (18, 'Project Management ProjDeve', '', 13),
-(19, 'Project Management Supplier', '', 14);
+(19, 'Project Management Supplier', '', 14),
+(20, 'Project Management SupplierTest', '', 15);
 
 -- --------------------------------------------------------
 
@@ -1982,7 +1985,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -1998,7 +2001,8 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`) VALUES
 (7, 'Project Manager', '', 'from_ntt'),
 (8, 'Project Manager', '', 'from_ntt'),
 (9, 'Opex 1', '', 'internal'),
-(10, 'Opex common test', '', 'from_ntt');
+(10, 'Opex common test', '', 'from_ntt'),
+(11, 'opex common', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -2039,7 +2043,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2054,7 +2058,8 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (7, 10),
 (8, 8),
 (9, 3),
-(10, 11);
+(10, 11),
+(11, 21);
 
 -- --------------------------------------------------------
 
@@ -2134,7 +2139,8 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (7, -1),
 (8, -1),
 (9, -1),
-(10, -1);
+(10, -1),
+(11, -1);
 
 -- --------------------------------------------------------
 
@@ -2219,7 +2225,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -2233,7 +2239,8 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
-(11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0);
+(11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-15 15:20:02', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2259,7 +2266,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (4, '2020-09-06', 12, '2020-09-20', 4),
 (3, '2020-09-11', 12, '2020-09-23', 5),
 (10, '2020-09-14', 36, '2020-09-14', 6),
-(11, '2021-01-01', 48, '2021-05-01', 6);
+(11, '2021-01-01', 48, '2021-05-01', 6),
+(21, '2020-09-15', 48, '2020-09-15', 6);
 
 -- --------------------------------------------------------
 
@@ -2327,6 +2335,35 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (8, 5),
 (8, 6),
 (8, 7);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `project_schedule`
+--
+
+DROP TABLE IF EXISTS `project_schedule`;
+CREATE TABLE IF NOT EXISTS `project_schedule` (
+  `id_project` int(11) NOT NULL,
+  `id_uc` int(11) NOT NULL,
+  `deploy_prod` date NOT NULL,
+  `poc_start` date NOT NULL,
+  `poc_run` date NOT NULL,
+  `lag_start` date NOT NULL,
+  `lag_ramp` date NOT NULL,
+  `ramp_run` date NOT NULL,
+  PRIMARY KEY (`id_project`,`id_uc`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `project_schedule`
+--
+
+INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_prod`, `poc_start`, `poc_run`, `lag_start`, `lag_ramp`, `ramp_run`) VALUES
+(3, 3, '2020-12-14', '2020-09-14', '2021-05-12', '2020-09-21', '2020-12-15', '2021-05-21'),
+(21, 5, '2020-12-01', '2020-09-10', '2021-07-15', '2020-09-10', '2021-12-15', '2022-05-15'),
+(21, 1, '2020-09-15', '2021-01-22', '2021-08-15', '2020-09-10', '2020-12-24', '2021-12-15'),
+(21, 9, '2020-09-15', '2020-09-10', '2023-06-15', '2020-10-03', '2021-02-15', '2021-08-15');
 
 -- --------------------------------------------------------
 
@@ -2460,7 +2497,9 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (8, 1),
 (10, 1),
 (11, 0),
-(11, 1);
+(11, 1),
+(21, 0),
+(21, 1);
 
 -- --------------------------------------------------------
 
@@ -2485,6 +2524,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 4),
 (-1, 8),
 (-1, 11),
+(-1, 21),
 (1, 1),
 (1, 3),
 (1, 4),
@@ -2493,6 +2533,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (1, 8),
 (1, 10),
 (1, 11),
+(1, 21),
 (2, 1),
 (2, 3),
 (2, 4),
@@ -2509,6 +2550,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (5, 4),
 (5, 8),
 (5, 11),
+(5, 21),
 (7, 4),
 (7, 7),
 (7, 8),
@@ -2518,6 +2560,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (9, 8),
 (9, 10),
 (9, 11),
+(9, 21),
 (10, 4),
 (10, 8),
 (10, 10),
@@ -3527,20 +3570,21 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
 --
 
 INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 's'),
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd'),
 (2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
 (12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd'),
 (13, 'ProjDeve', NULL, NULL, NULL, '$2y$10$pzr45zxv7yM0jHFoOosweOs9ngQDAyCvdkyw.awDMwfFCZo/cgpwu', '7697641405f609379e18ed6.70056693', 1, NULL, '2020-09-15 12:12:10', 'd'),
-(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's');
+(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's'),
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's');
 
 -- --------------------------------------------------------
 

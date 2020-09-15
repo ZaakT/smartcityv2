@@ -13,7 +13,9 @@ function project($twig,$is_connected, $nextPage, $sideBarName){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
     
-    echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']))); 
+    echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
+    'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 
+    'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']))); 
 }
 
 function create_proj($post, $sideBarName, $A2){
