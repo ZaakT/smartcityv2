@@ -1,5 +1,3 @@
-//TODO envoi des données entrées
-
 function update_chart(event) {
     let debut_projet = new Date(document.querySelector("p#project-start").outerText)
     let fin_projet = new Date(document.querySelector("p#project-end").outerText)
