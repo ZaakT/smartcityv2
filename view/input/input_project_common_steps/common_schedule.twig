@@ -31,12 +31,8 @@
 		</div>
 
 		{#  CONTENU #}
-		<div id="alerts-div">
-			<div class="ml-5 mr-5 text-center alert alert-warning alert-dismissible fade" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
+		<div id="alerts_container">
+
 		</div>
 		<div class="justify-content-center row m-2 text-center text-dark">
 			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
@@ -77,5 +73,6 @@
 
 {% block scripts %}
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
-	<script>highlight_db_values();</script>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/alertCreator.js"></script>
+<script>highlight_db_values();</script>
 {% endblock %}

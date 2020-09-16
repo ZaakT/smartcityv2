@@ -11,14 +11,15 @@ function mounthDiff(d1, d2)
     return (year2-year1)*12 + mounth2-mounth1;
 }
 function submitForm(formName){
+    //clearAlerts();
     var validate_form = true;
-    var colored_inputs = []
+    var colored_inputs = [];
+    id = 0;
 
     inputs.forEach(i => {
         if($(i).val() == "") {
-            $('.alert').addClass("show");
-            
-            $('.alert').text("Some fields are missing.");
+            addAlert("Some fields are missing.", id);
+            id++;
             validate_form = false;
 
             $(i).addClass("bg-warning");
@@ -42,30 +43,30 @@ function submitForm(formName){
 
     if(valDDur<1){
         validate_form = false;
-        $('.alert').addClass("show");
-        $('.alert').text("Deployment Duration is to small.");
+        addAlert("Deployment Duration is to small.", id);
+        id++;
         $("#dduration").addClass("bg-warning");
         colored_inputs.push("#dduration");
     }
     if(valPDur<1 ){
         validate_form = false;
-        $('.alert').addClass("show");
-        $('.alert').text("Project Duration is to small.");
+        addAlert("Project Duration is to small.", id);
+        id++;
         $("#pduration").addClass("bg-warning");
         colored_inputs.push("#pduration");
     }
     if((valDDur - diffPD >valPDur)){
         validate_form = false;
-        $('.alert').addClass("show");
-        $('.alert').text("The Project Deployment can not end after the project.");
+        addAlert("The Project Deployment can not end after the project.", id);
+        id++;
         $("#dduration").addClass("bg-warning");
         colored_inputs.push("#pduration");
     }
 
     if(diffPD<0){
         validate_form = false;
-        $('.alert').addClass("show");
-        $('.alert').text("Project deployment start date is not valide.");
+        addAlert("Project deployment start date is not valide.", id);
+        id++;
         $("#dstart").addClass("bg-warning");
         colored_inputs.push("#pduration");
     }
