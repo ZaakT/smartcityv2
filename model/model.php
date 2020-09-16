@@ -1219,14 +1219,15 @@ function deleteSelVolumes($projID){
 
 function addDateMounths($date, $mounths){
     // $date is a date at the date format but $mounths is a number of mounths, so it's an integer. The goal of this function is basicly to return "$date+$mounth"
-    if($mounth == 0 ){ return $date ;}
+    if($mounths == 0 ){ return $date ;}
     if(count(explode("/", $date))>2){throw new Exception('Bad Date format, use the function dateWithoutDay($d)', 1);}
     $dateMounth = explode("/", $date)[0];
     $dateYear = explode("/", $date)[1];
     
-    $dateYear += intdiv(($dateMounth + $mounth -1 ) , 12);
-    $dateMounth = ($dateMounth + $mounth -1 )%12 + 1;
-    return "$dateMounth/$dateMounth";
+    $dateYear += intdiv(($dateMounth + $mounths -1 ) , 12);
+    $dateMounth = ($dateMounth + $mounths -1 )%12 + 1;
+    if($dateMounth<10){ $dateMounth="0$dateMounth";}
+    return "$dateMounth/$dateYear";
 
 }
 
@@ -1236,6 +1237,7 @@ function  addScheduleElement($list, $key, $id_uc, $startdate, $enddate, $date100
     $date25 = addDateMounths($startdate, floor($difDate*0.25));
     $date50 = addDateMounths($startdate, floor($difDate*0.5));
     $date75 = addDateMounths($startdate, floor($difDate*0.75));
+    //echo "difDate : $difDate, date25 : $date25, date50 : $date50, date75 : $date75, date100 : $date100, enddate : $enddate <br>";
     if(array_key_exists($key,$list)){
         $list[$key][$id_uc] = [
                             'startdate'=>$startdate,
@@ -1358,14 +1360,27 @@ function getListSelDates($projID){
         $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ?");
         $req_project_schedule->execute(array($projID));
         $list = [];
+        $list["implem"]=[];
+        $list["opex"]=[];
+        $list["revenues"]=[];
 
         $keyDates = getProjetKeyDates($projID);
-        $projectStart = $keyDates[0]['start_date'];
-        $projectStart=$projectStart->format('m/Y');
+        $projectStartComplete = $keyDates[0]['start_date'];
+        $projectStart=date_create($projectStartComplete)->format('m/Y');
         $duration = $keyDates[0]['duration'];
-        $projectEnd = new DateTime($projectStart);
+        $projectEnd = new DateTime($projectStartComplete);
+        //var_dump($projectEnd);
         $projectEnd->modify("+$duration months");
         $projectEnd = $projectEnd->format('m/Y');
+
+
+        $deployStartComplete = $keyDates[0]['deploy_start_date'];
+        $deployStart=date_create($deployStartComplete)->format('m/Y');
+        $duration = $keyDates[0]['deploy_duration'];
+        $deployEnd = new DateTime($deployStartComplete);
+        $deployEnd->modify("+$duration months");
+        $deployEnd = $deployEnd->format('m/Y');
+
         while($row = $req_project_schedule->fetch()){
             $id_uc = intval($row['id_uc']);
             $deploy_prod = $row['deploy_prod'] ? date_create($row['deploy_prod'])->format('m/Y') : null;
@@ -1374,12 +1389,28 @@ function getListSelDates($projID){
             $lag_start = $row['lag_start'] ? date_create($row['lag_start'])->format('m/Y') : null;
             $lag_ramp = $row['lag_ramp'] ? date_create($row['lag_ramp'])->format('m/Y') : null;
             $ramp_run = $row['ramp_run'] ? date_create($row['ramp_run'])->format('m/Y') : null;
-            echo dateWithoutDay($ramp_run);
+            //echo dateWithoutDay($ramp_run);
 
             $list = addScheduleElement($list, "implem", $id_uc,  $projectStart, $projectEnd , $deploy_prod);
             $list = addScheduleElement($list, "opex", $id_uc, $lag_ramp , $projectEnd , $ramp_run);
             $list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
 
+        }
+        
+        $scope = getListSelScope($projID);
+
+        foreach ($scope as $measID => $list_ucs) {
+            foreach ($list_ucs as $ucID) { // When there is no schedule
+                if(!array_key_exists($ucID, $list["implem"])){
+                    $list = addScheduleElement($list, "implem", $ucID,  $deployStart, $projectEnd , $deployEnd );
+                }
+                if(!array_key_exists($ucID, $list["opex"])){
+                    $list = addScheduleElement($list, "opex", $ucID,  $deployStart, $projectEnd , $deployEnd );
+                }
+                if(!array_key_exists($ucID, $list["revenues"])){
+                    $list = addScheduleElement($list, "revenues", $ucID,  $deployStart, $projectEnd , $deployEnd );
+                }
+            }
         }
         //var_dump($list);
         return $list;

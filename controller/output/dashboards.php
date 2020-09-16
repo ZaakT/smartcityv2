@@ -3600,7 +3600,6 @@ function get_keydates_uc($scope,$projID,$schedules) {
             $uc_stardate = $implemSchedule['startdate'];
             $uc_implem_enddate = $implemSchedule['100date'];
             $uc_enddate = $opexSchedule['enddate'];
-
             $startdate = explode('/',$uc_stardate);
             $startdate = new DateTime($startdate[1]."-".$startdate[0]."-01");
             $enddate = explode('/',$uc_enddate);

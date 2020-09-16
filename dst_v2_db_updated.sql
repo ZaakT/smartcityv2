@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 15 sep. 2020 à 13:36
+-- Généré le :  mer. 16 sep. 2020 à 08:56
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -530,7 +530,8 @@ INSERT INTO `cashreleasing_item` (`id`, `name`, `description`) VALUES
 (8, 'CRB 1', ''),
 (9, 'CRB 2', ''),
 (10, 'CRB 3', ''),
-(11, 'CRB 4', '');
+(11, 'CRB 4', ''),
+(12, 'cash item', '');
 
 -- --------------------------------------------------------
 
@@ -572,7 +573,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -588,7 +589,8 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (8, 8),
 (9, 8),
 (10, 8),
-(11, 8);
+(11, 8),
+(12, 21);
 
 -- --------------------------------------------------------
 
@@ -619,7 +621,8 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (8, 11),
 (9, 11),
 (10, 11),
-(11, 11);
+(11, 11),
+(12, 9);
 
 -- --------------------------------------------------------
 
@@ -1257,7 +1260,8 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (8, 8, 11, 'SI', 12, NULL, 100, 3, 5, 5, 3),
 (9, 8, 11, 'SI', 50, NULL, 200, 0, 10, 5, 1),
 (10, 8, 11, 'SI', 20, NULL, 1500, 30, 13, 5, 5),
-(11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3);
+(11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3),
+(12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1527,7 +1531,8 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (1, 6, 1, 'per example', 10, NULL, 20, 4, 5, 40, 2),
 (9, 8, 11, 'SI', 50, NULL, 12, 1, 2, 2, 1),
 (10, 8, 11, 'SI', 1200, NULL, 15, 50, 30, 4, 5),
-(11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2);
+(11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2),
+(12, 21, 9, 'test', 15, NULL, 10000, 5, 30, 6, 10);
 
 -- --------------------------------------------------------
 
@@ -2233,14 +2238,14 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-09-14 14:34:46', 1, 1, 0),
-(3, 'TESTV2', 'Pré-rempli avec des xpex supplier', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-14 18:11:27', 1, 0, 0),
+(3, 'TESTV2', 'Pré-rempli avec des xpex supplier', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-15 15:44:11', 1, 0, 0),
 (5, 'Projet nif', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-09-14 11:25:01', 1, 0, 0),
 (6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-14 11:25:08', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-15 15:20:02', 15, 1, 0);
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-16 10:55:47', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2362,8 +2367,8 @@ CREATE TABLE IF NOT EXISTS `project_schedule` (
 INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_prod`, `poc_start`, `poc_run`, `lag_start`, `lag_ramp`, `ramp_run`) VALUES
 (3, 3, '2020-12-14', '2020-09-14', '2021-05-12', '2020-09-21', '2020-12-15', '2021-05-21'),
 (21, 5, '2020-12-01', '2020-09-10', '2021-07-15', '2020-09-10', '2021-12-15', '2022-05-15'),
-(21, 1, '2020-09-15', '2021-01-22', '2021-08-15', '2020-09-10', '2020-12-24', '2021-12-15'),
-(21, 9, '2020-09-15', '2020-09-10', '2023-06-15', '2020-10-03', '2021-02-15', '2021-08-15');
+(21, 1, '2021-06-08', '2021-01-22', '2021-08-15', '2020-09-10', '2020-12-24', '2021-12-15'),
+(21, 9, '2020-12-27', '2020-09-10', '2023-06-15', '2020-10-03', '2021-02-15', '2022-07-14');
 
 -- --------------------------------------------------------
 
@@ -3577,7 +3582,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd'),
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 's'),
 (2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
@@ -3828,7 +3833,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item`
@@ -3843,7 +3848,8 @@ INSERT INTO `widercash_item` (`id`, `name`, `description`) VALUES
 (6, 'vfjbkdcn fbioe', ''),
 (9, 'WCB', ''),
 (10, 'WCB 1', ''),
-(11, 'WCB 2', '');
+(11, 'WCB 2', ''),
+(12, 'wcb', '');
 
 -- --------------------------------------------------------
 
@@ -3887,7 +3893,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_user`
@@ -3903,7 +3909,8 @@ INSERT INTO `widercash_item_user` (`id`, `id_proj`) VALUES
 (8, 4),
 (9, 8),
 (10, 8),
-(11, 8);
+(11, 8),
+(12, 21);
 
 -- --------------------------------------------------------
 
@@ -3934,7 +3941,8 @@ INSERT INTO `widercash_uc` (`id_item`, `id_uc`) VALUES
 (8, 7),
 (9, 11),
 (10, 11),
-(11, 11);
+(11, 11),
+(12, 9);
 
 -- --------------------------------------------------------
 

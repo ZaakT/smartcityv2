@@ -16,7 +16,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
-            try{
+            //try{
                 $bankabilityData = array('target'=>getDealCriteriaInputNogoTarget($projID, "target"), 'nogo'=>getDealCriteriaInputNogoTarget($projID, "nogo"));
 
 
@@ -29,7 +29,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
            
                 
                 $schedules = getListSelDates($projID);
-                print_r($schedules);
+                //print_r($schedules);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
 
@@ -108,10 +108,10 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
                     'nqb'=>$nqb,
                     'rating_risks'=>$rating_risks                
                 );
-            }
+            /*}
             catch(\Throwable $th){
-                header('?A=' + $sidebarname);
-            }
+                header('Location: ?A='.$sidebarname);
+            }*/
 
             
 

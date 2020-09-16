@@ -843,7 +843,7 @@ try{
             }
             // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
-                //verifIsSup();
+                verifIsSup();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=='project_selection'){
                         \general\project($twig,$is_connected, '?A=customer_dashboards&A2=proj_selected', 'customer_dashboards');
