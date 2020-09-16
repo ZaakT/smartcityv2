@@ -34,7 +34,6 @@ function checkInput(id){
     var idGoal = id.substr(id.lastIndexOf("_")+1);//nogo or target
     console.log(id, idType, idGoal, orderDict[idType]);
     var val = $("#"+id).val();
-    console.log(val);
     val = val ? parseFloat(val) : -1 ;        
     var temp = String(val).split(".");
     var opGoal = "nogo";
@@ -44,7 +43,6 @@ function checkInput(id){
         $("#"+id).css("background","salmon");
         $("#"+id).val("");
     } else if (temp.length==2 && temp[1].length>3){
-        console.log("it's me 1 !");
         $("#"+id).css("background","salmon");
     } else {
         $("#"+id).css("background","#C3E6CB");
