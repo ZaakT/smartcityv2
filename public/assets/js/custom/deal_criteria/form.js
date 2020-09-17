@@ -19,6 +19,7 @@ function isInf(idSup, idInf){
 
 function checkInput(id){
     var orderDict = {
+    "operating_margin" : true,
     "payback": false,
     "societal_payback": false,
     "roi" : true,  

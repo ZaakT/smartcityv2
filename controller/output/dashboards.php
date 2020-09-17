@@ -924,6 +924,14 @@ function calcNetCashTot($netcashPerMonth,$projectYears){
     return [$list,$list2];
 }
 
+function calcCashOut($opex, $capex, $implem){
+    $res = [];
+    foreach($opex as $year=>$value){
+        $res[$year] = $opex[$year] + $capex[$year] + $implem[$year];
+    }
+    return $res;
+}
+
 function calcNetSocCashPerMonth($dates,$A,$B,$C,$D,$E,$F){
     // F + E + D - A - B - C
     // A = capex, B = implem, C = opex, D = revenues, E = cash releasing, F = wider cash

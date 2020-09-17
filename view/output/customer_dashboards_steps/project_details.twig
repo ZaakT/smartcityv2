@@ -1,5 +1,4 @@
 {% extends '/others/general_common.twig' %}
-{% set sideBarName = "customer_dashboards" %}
 
 {% import "/templates/choose_redirect.twig" as redirect %}
 {% import "/templates/second_bar.twig" as second_bar %}
@@ -7,7 +6,7 @@
 {% import "/templates/dashboards/macro_cb.twig" as macros %}
 {% import "/templates/customer_dashboards/macro_table.twig" as table %}
 
-{% block sidebar %}{{ sidebar.sidebar("customer_dashboards", projID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName, projID) }}{% endblock %}
 
 {% block title %}Dashbords - Project Details{% endblock %}
 

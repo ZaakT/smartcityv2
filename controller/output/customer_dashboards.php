@@ -7,7 +7,7 @@ function prereq_dashbords(){
         <script>prereq_dashbords();</script>";
     }
 }
-function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
+function dashboards_summary($twig,$is_connected, $projID, $sideBarName){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -92,6 +92,10 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
                 $nqb = calcRatingNonCash($projID, $scope);
                 $rating_risks = calcRatingRisks($projID, $scope);
 
+                $cahsOutTot = calcCashOut($ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth']);
+                $fin_operating_margin =round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                $soc_operating_margin = round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
+
                 $bankability_cacl = array(
                     'fin_societal_npv'=>$fin_societal_npv,
                     'soc_societal_npv'=>$soc_societal_npv,
@@ -106,11 +110,13 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
                     'fin_payback'=>$fin_payback,
                     'soc_payback'=>$soc_payback,
                     'nqb'=>$nqb,
-                    'rating_risks'=>$rating_risks                
+                    'rating_risks'=>$rating_risks,
+                    'fin_operating_margin'=>$fin_operating_margin,
+                    'soc_operating_margin'=>$soc_operating_margin         
                 );
             /*}
             catch(\Throwable $th){
-                header('Location: ?A='.$sidebarname);
+                header('Location: ?A='.$sideBarName);
             }*/
 
             
@@ -124,7 +130,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
 
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
-                'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1], 'sideBarName'=>$sidebarname,
+                'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1], 'sideBarName'=>$sideBarName,
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
                 'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot,
@@ -137,7 +143,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sidebarname){
 }
 
 // --- Project Details
-function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
+function dashboards_project_details($twig,$is_connected, $projID, $sideBarName){
     if($projID!=0){
         $user = getUser($_SESSION['username']);
         if(getProjByID($projID,$user[0])){
@@ -171,7 +177,7 @@ function dashboards_project_details($twig,$is_connected, $projID,$post=[]){
             echo $twig->render('/output/customer_dashboards_steps/project_details.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
                 'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
-                'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"data"=>$projData,
+                'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"data"=>$projData, "sideBarName"=> $sideBarName,
 
                 'scope'=>$scope,"years"=>$projectYears)); 
                 
@@ -407,7 +413,7 @@ $UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits){
 
 }
 
-function dashboards_use_case_details($twig,$is_connected, $projID){
+function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -427,7 +433,8 @@ function dashboards_use_case_details($twig,$is_connected, $projID){
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope);    
             //print_r($ucsData);   
             echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
-            'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects)); 
+            'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 
+            'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects, "sideBarName"=>$sideBarName)); 
             prereq_dashbords();
         }
     }

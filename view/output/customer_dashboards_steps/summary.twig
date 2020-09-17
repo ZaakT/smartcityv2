@@ -20,7 +20,6 @@
         ["ROI", "roi", 1],
         ["NPV", "npv", 1]
     ] %}
-    {% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
 {% elseif sideBarName == "customer_dashboards" %}
     {% set bankability_lineNames = [
             ["Payback", "payback", 1],
@@ -32,8 +31,8 @@
             ["Non Quantifiable Benefits", "nqb", 1],
             ["Risk", "risk", 1]
         ] %}
-    {% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
 {% endif %}
+{% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}

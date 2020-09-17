@@ -234,11 +234,13 @@ function calcChartValue(projectScore, target, nogo) {
 function updateBankability(){
   var data = $('#data').data("bankabilityTargetNogo").target;
   var selDevSym = $("#selDevSym").text();
+  console.log(data);
   if(data.length==0){
     $("#errorInput").text("Error: make sure Deal Criteria is completed.");
   }else{
-    $("#display_payback").text(data.payback_target+" months");
-    $("#display_societalPayback").text(data.societal_payback_target+" months");
+    $("#display_operatingMargin").text(data.operating_margin_target+" %");
+    $("#display_payback").text(data.payback_target+" mounths");
+    $("#display_societalPayback").text(data.societal_payback_target+" mounths");
     $("#display_roi").text(data.roi_target+" %");
     $("#display_societalRoi").text(data.societal_roi_target+" %");
     $("#display_npv").text(selDevSym+" "+data.npv_target);  
@@ -345,7 +347,17 @@ function projectScore() {
         Number(dataCalc.rating_risks), 
         Number(data.target.rr_target), 
         Number(data.nogo.rr_nogo), 
-        '#soc_risk')
+        '#soc_risk'),
+    'fin_operating_margin': calcProjectScore(
+        Number(dataCalc.fin_operating_margin), 
+        Number(data.target.operating_margin_target),
+        Number(data.nogo.operating_margin_nogo),  
+        '#fin_operatingMargin'),
+    'soc_operating_margin': calcProjectScore(
+        Number(dataCalc.soc_operating_margin),  
+        Number(data.target.operating_margin_target), 
+        Number(data.nogo.operating_margin_nogo),
+        '#soc_operatingMargin')
         
   };
   //console.log(score);
