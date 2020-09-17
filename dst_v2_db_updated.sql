@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 16 sep. 2020 à 14:12
+-- Généré le :  mer. 16 sep. 2020 à 15:12
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -2245,7 +2245,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-16 14:52:51', 15, 1, 0);
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-16 17:00:43', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2563,6 +2563,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (7, 8),
 (7, 10),
 (7, 11),
+(7, 21),
 (9, 4),
 (9, 8),
 (9, 10),

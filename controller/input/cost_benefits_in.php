@@ -707,6 +707,7 @@ function opex_inputed($post){
                 
                 $revSchedule = getRevenuesSchedule($projID,$ucID);
                 $hasSchedule = !$revSchedule ? $revSchedule : true;
+                $hasSchedule = isSup() || $hasSchedule;
                 $next_page = $hasSchedule ? "revenues" : "cashreleasing";
                 header('Location: ?A=cost_benefits&A2='.$next_page.'&projID='.$projID.'&ucID='.$ucID);
             } else {
@@ -727,6 +728,8 @@ function delete_selection_opex($projID=0,$ucID=0){
             deleteAllSelOpex($projID,$ucID);
             $revSchedule = getRevenuesSchedule($projID,$ucID);
             $hasSchedule = !$revSchedule ? $revSchedule : true;
+            
+            $hasSchedule = isSup() || $hasSchedule;
             $next_page = $hasSchedule ? "revenues" : "cashreleasing";
             header('Location: ?A=cost_benefits&A2='.$next_page.'&projID='.$projID.'&ucID='.$ucID);
         } else {
@@ -2252,6 +2255,7 @@ function prereq_CostBenefits(){
             $ucID = $_SESSION['ucID'];
             $revSchedule = getRevenuesSchedule($projID,$ucID);
             $hasSchedule = !$revSchedule ? $revSchedule : true;
+            $hasSchedule = isSup() || $hasSchedule;
                 echo "<script>prereq_CostBenefits2(true,".$hasSchedule.");</script>";
         }
     }
