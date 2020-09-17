@@ -342,7 +342,7 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
             throw new Exception("Incorrect name.");
         }
         if(!empty(getCapexUserItem($projID,$ucID,$name)) or !empty(getOpexUserItem($projID,$ucID,$name)) or !empty(getImplemUserItem($projID,$ucID,$name))){
-            header('Location: ?A='.$sideBarName.'&A2=capex&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
+            header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
         } else {
             if($type=="capex"){
                 insertCapexUser($projID,$ucID,$xpex_infos, $origine);
