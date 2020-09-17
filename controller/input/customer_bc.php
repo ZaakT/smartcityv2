@@ -113,7 +113,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
             'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName ));
             prereq_ipc(1);
-            prereq_CostBenefits();
+            //prereq_CostBenefits();
 
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -311,7 +311,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
                 'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName));
                 prereq_ipc(1);
-                prereq_CostBenefits();
+                //prereq_CostBenefits();
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }
