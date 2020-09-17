@@ -43,7 +43,7 @@ function createCanvas(idDiv, idCanvas){
 }
 
 function createGraph(title, father, x, y, currency="£"){
-    console.log("id :"+father.id);
+    //console.log("id :"+father.id);
     var chart= new  Chart(father.id, {
         type: 'line',
         data: {
@@ -121,7 +121,7 @@ function updateGraph(ucData, years){
     var i=0
     removeGraphs();
     ucData.forEach(item => {
-        console.log(item[0], item.slice(1), years, currency);
+        //console.log(item[0], item.slice(1), years, currency);
         var div = createDiv("graph", "container_"+i);
         var canvas = createCanvas(div.id, "canevas_"+i);
         createGraph(item[0], canvas, item.slice(1), years, currency);
@@ -135,8 +135,8 @@ function updateData(){
     var years = $('#data').data("years");
     var ucSeleted = getUcSelected();
     var tableRef = document.getElementById('cball_table').getElementsByTagName('tbody')[0];
-    console.log(data[getUcSelected()]);
-    console.log("coucou");
+    //console.log(data[getUcSelected()]);
+    //console.log("coucou");
     if(data[getUcSelected()].length==0){
       $("#errorInput").text("Error: Any Item selected for This use case, please go to the Input Use Case section.");
       removeGraphs();

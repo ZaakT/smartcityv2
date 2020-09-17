@@ -490,6 +490,7 @@ function getQualitativeYearEvolution($projID,$ucID){
             $vol_red = -$item["vol_red"]/100;
             foreach($projectYears as $year){
                 $QualitativeYearEvolution[$key][$year] =pow(1+$anVarVol, intval($year)-intval($startYear))*(1+getDateProportion($implemSchedule, $year)*$vol_red)*$volume;
+                $QualitativeYearEvolution[$key][$year] = round($QualitativeYearEvolution[$key][$year], 2);
             }
         }
     }
@@ -521,7 +522,7 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
                     $data[$ucID] = [];
                     foreach($QuantifiableItemList as $key=>$item){
                         if($nonQuantifiableNames[$key]['unit']!=""){
-                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']." (".$nonQuantifiableNames[$key]['unit'].")"], $QualitativeYearEvolution[$key]));
+                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']." (".$nonQuantifiableNames[$key]['unit'].")"], $QualitativeYearEvolution[$key], 2));
                         }
                         else{
                             array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']], $QualitativeYearEvolution[$key]));
