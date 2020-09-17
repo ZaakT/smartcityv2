@@ -2624,11 +2624,43 @@ function insertRevenuesInputed($projID,$ucID,$list){
 }
 
 function getRevenuesSchedule($projID,$ucID){
-    $db = dbConnect();
-    $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
-    $req->execute(array($projID,$ucID));
-    $res = $req->fetch();
-    return $res;
+    if(isDev()){
+        $db = dbConnect();
+        $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
+        $req->execute(array($projID,$ucID));
+        $res = $req->fetch();
+        return $res;
+    }
+    if(isSup()){
+        $db = dbConnect();
+        $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? and id_uc = ?");
+        $req_project_schedule->execute(array($projID, $ucID));
+        $res = $req_project_schedule->fetch();
+
+        
+        $keyDates = getProjetKeyDates($projID);
+        $projectStartComplete = $keyDates[0]['start_date'];
+        $projectStart=date_create($projectStartComplete)->format('m/Y');
+        $duration = $keyDates[0]['duration'];
+        $projectEnd = new DateTime($projectStartComplete);
+
+
+        $lag_ramp = $res['lag_ramp'] ? date_create($res['lag_ramp'])->format('m/Y') : null;
+        $ramp_run = $res['ramp_run'] ? date_create($res['ramp_run'])->format('m/Y') : null;
+        //echo dateWithoutDay($ramp_run);
+
+        $difDate = difMounthsBounds($ramp_run ,$lag_ramp);
+
+        return ["id_uc" => $ucID,'id_proj','start_date'=>$lag_ramp  ,'25_rampup' => addDateMounths($lag_ramp, floor($difDate*0.25)),'50_rampup' => addDateMounths($lag_ramp, floor($difDate*0.5)),'75_rampup' => addDateMounths($lag_ramp, floor($difDate*0.75)),  '100_rampup' => $ramp_run , 'end_date' =>  $projectEnd ];
+
+
+        $db = dbConnect();
+        $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
+        $req->execute(array($projID,$ucID));
+        $res = $req->fetch();
+        return $res;
+    }
+
 }
 
 function deleteAllSelRevenues($projID,$ucID){

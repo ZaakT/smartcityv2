@@ -753,7 +753,7 @@ function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     $uc = getUCByID($ucID);
                     $revSchedule = getRevenuesSchedule($projID,$ucID);
                     $hasSchedule = !$revSchedule ? $revSchedule : true;
-                    if($hasSchedule){
+                    if($hasSchedule||isSup()){
                         $list_revenues_advice = getListRevenuesAdvice($ucID);   
                         $list_revenues_user = getListRevenuesUser($projID,$ucID);    
                         $list_selRevenues = getListSelRevenues($projID,$ucID);          
