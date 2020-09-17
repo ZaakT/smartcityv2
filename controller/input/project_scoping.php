@@ -220,11 +220,12 @@ function perimeter1($twig,$is_connected,$projID=0){
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+            $data = getPerimeterSupplier($projID);
 
             
             echo $twig->render('/input/project_scoping_steps/perimeter1.twig',array('is_connected'=>$is_connected,
             'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],
-            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones)); 
+            'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],"zones"=>$repart_zones,'list_sel'=>$listSelZones, "data"=>$data)); 
 
             prereq_ProjectInitialisation(1);
 
@@ -244,11 +245,12 @@ function perimeter1($twig,$is_connected,$projID=0){
 
 function perimeter1_inputed($twig,$is_connected, $projID, $post){
     if(isset($post) && $projID!=0){
-
+        
+        insert_perimeter_supplier($projID ,$post);
 
         update_ModifDate_proj($projID); 
         updateScoping($projID,1);
-        header('Location: ?A=input_project_common_supplier');
+        //header('Location: ?A=input_project_common_supplier');
         
     }else{
         header('Location: ?A=project_sdesign&A2=perimeter1');

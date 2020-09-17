@@ -90,5 +90,7 @@ function verifIsSup(){
 }
 
 function companyName(){
-    return "MyNTT";
+    $projID = isset($_GET['projID']) ? $_GET['projID'] : "";
+    $projID = isset($_SESSION['projID']) ? $_SESSION['projID'] : $projID ;
+    return getCompanyName($projID);
 }

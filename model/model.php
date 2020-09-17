@@ -1046,6 +1046,46 @@ function deleteSelZones($projID){
     return $req->execute(array($projID));
 }
 
+function insert_perimeter_supplier($projID ,$post){
+    var_dump($post);
+    $db = dbConnect();
+    $country = isset($post['inputCountry']) ? $post['inputCountry'] : "";
+    $city = isset($post['inputCity']) ? $post['inputCity'] : "";
+    $name = isset($post['inputName']) ? $post['inputName'] : "";
+    $department = isset($post['inputDepartment']) ? $post['inputDepartment'] : "";
+    $company = isset($post['inputCompany']) ? $post['inputCompany'] : "";
+    $team = isset($post['inputTeam']) ? $post['inputTeam'] : "";
+
+    $req = $db->prepare('DELETE FROM `supplier_perimeter` WHERE `supplier_perimeter`.`proj_id` =  ?');  
+    $req->execute(array($projID));
+
+
+    $req = $db->prepare("INSERT INTO supplier_perimeter
+                            (proj_id, country, city, name, department, company, team)
+                            VALUES (?,?,?,?,?,?,?)");
+    $ret = $req->execute(array($projID,$country, $city, $name , $department, $company , $team ));
+}
+
+function getPerimeterSupplier($projID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM `supplier_perimeter` WHERE `supplier_perimeter`.`proj_id` =  ?');  
+    $req->execute(array($projID));
+    return $req->fetch();
+}
+
+function getCompanyName($projID){
+    if($projID == ""){
+        return "NoName";
+    }
+    getPerimeterSupplier($projID);
+    $comp = getPerimeterSupplier($projID)['company'];
+
+    if($comp == ""){
+        return "NoName";
+    }
+    return $comp;
+}
+
 
 // ---------------------------------------- SIZE ----------------------------------------
 
