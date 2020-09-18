@@ -517,6 +517,7 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             $scope = getListSelScope($projID);
             $ucs = getListUCs();
             $selScope = getListSelScope($projID);
+            if(isset($selScope[0])){unset($selScope[0]); }
             $schedules = getListSelDates($projID);
             $keydates_proj = getKeyDatesProj($schedules,$scope);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
@@ -529,13 +530,17 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
                     $data[$ucID] = [];
                     foreach($QuantifiableItemList as $key=>$item){
                         if($nonQuantifiableNames[$key]['unit']!=""){
-                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']." (".$nonQuantifiableNames[$key]['unit'].")"], $QualitativeYearEvolution[$key], 2));
+                            array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']." (".$nonQuantifiableNames[$key]['unit'].")"], $QualitativeYearEvolution[$key]));
                         }
                         else{
                             array_push($data[$ucID], array_merge([$nonQuantifiableNames[$key]['name']], $QualitativeYearEvolution[$key]));
                         
                         }
+
                         
+                    }
+                    if(empty($data[$ucID])){
+                        $ucs[$ucID]['name'].=" (no data to show)";
                     }
                 }
             }
@@ -570,6 +575,7 @@ function dashboards_qualitative($twig,$is_connected, $projID){
         if(getProjByID($projID,$user[0])){
             $proj = getProjByID($projID,$user[0]); 
             $selScope = getListSelScope($projID);
+            if(isset($selScope[0])){unset($selScope[0]); }
             $data = [];
             $ucs = getListUCs();    
             foreach ($selScope as $measID => $list_ucs) {
@@ -588,7 +594,10 @@ function dashboards_qualitative($twig,$is_connected, $projID){
                     if($nbNonCash>0){
                         $nonCashMean = $nonCashMean/$nbNonCash;
                         array_push($data[$ucID], ["Mean", $nonCashMean]);
+                    }else{
+                        $ucs[$ucID]['name'].=" (no data to show)";
                     }
+                
                 }
             }
             /*$data = array(

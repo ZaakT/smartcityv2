@@ -1147,7 +1147,7 @@ try{
                                     }
                                 }else {
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'], $isTaken);
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'], $isTaken);
                                 }
         
                             }                             

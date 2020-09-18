@@ -2677,7 +2677,9 @@ function getRevenuesSchedule($projID,$ucID){
         $req_project_schedule->execute(array($projID, $ucID));
         $res = $req_project_schedule->fetch();
 
-        
+        if(empty($res)){
+            return [];
+        }
         $keyDates = getProjetKeyDates($projID);
         $projectStartComplete = $keyDates[0]['start_date'];
         $projectStart=date_create($projectStartComplete)->format('m/Y');
@@ -2694,11 +2696,7 @@ function getRevenuesSchedule($projID,$ucID){
         return ["id_uc" => $ucID,'id_proj','start_date'=>$lag_ramp  ,'25_rampup' => addDateMounths($lag_ramp, floor($difDate*0.25)),'50_rampup' => addDateMounths($lag_ramp, floor($difDate*0.5)),'75_rampup' => addDateMounths($lag_ramp, floor($difDate*0.75)),  '100_rampup' => $ramp_run , 'end_date' =>  $projectEnd ];
 
 
-        $db = dbConnect();
-        $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
-        $req->execute(array($projID,$ucID));
-        $res = $req->fetch();
-        return $res;
+
     }
 
 }
