@@ -63,8 +63,7 @@ function createGraph(title, father, x, y, currency="£"){
           scales: {
               yAxes: [{
                   scaleLabel: {
-                    display: true,
-                  labelString: 'Cash (in '+currency+')'
+                    display: true
                   },
                   ticks: {
                       callback: function(value, index, values) {

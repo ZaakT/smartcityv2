@@ -2287,13 +2287,7 @@ try{
             }
 
             // ---------- SCENARIO SETTINGS ----------
-            elseif($_GET['A']=='scenario_settings'){
-                if(isset($_GET['A2'])){
-                    //progression
-                } else {  
-                    \general\commonPage($twig,$is_connected, '?A=scenario_settings', 'scenario_settings');
-                }            
-            }
+
 
             // ---------- DASHBOARDS ----------
             elseif($_GET['A']=='dashboards'){
