@@ -312,7 +312,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,
                 'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName));
                 prereq_ipc(1);
-                //prereq_CostBenefits();
+                prereq_CostBenefits();
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }
@@ -364,7 +364,6 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
 
 function delete_xpex_user($idXpex, $type, $sideBarName){
     //var_dump(intval($idCapex));
-    echo $idXpex;
     if(isset($_GET['projID'])){
         $projID = $_GET['projID'];
         if(isset($_GET['ucID'])){
