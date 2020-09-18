@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 16 sep. 2020 à 15:12
+-- Généré le :  ven. 18 sep. 2020 à 08:36
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt' COMMENT 'Used in supplier part',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -381,7 +381,10 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`) VALUES
 (29, 'capex general test', '', 'from_ntt'),
 (30, 'capex common test ', '', 'from_ntt'),
 (31, 'Capex 1', 'description', 'from_ntt'),
-(32, 'Capex Common', '', 'from_ntt');
+(32, 'Capex Common', '', 'from_ntt'),
+(33, 'test', '', 'from_ntt'),
+(34, 'capex test', '', 'from_ntt'),
+(36, 'capex test 2', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -424,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -453,7 +456,11 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (29, 8),
 (30, 4),
 (31, 3),
-(32, 11);
+(32, 11),
+(33, 21),
+(34, 21),
+(35, 21),
+(36, 21);
 
 -- --------------------------------------------------------
 
@@ -499,7 +506,11 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (29, -1),
 (30, -1),
 (31, -1),
-(32, -1);
+(32, -1),
+(33, 7),
+(34, -1),
+(35, -1),
+(36, -1);
 
 -- --------------------------------------------------------
 
@@ -763,7 +774,7 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (6, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0, 0),
 (8, 0, 30000, 0, 20, 40, 12, 50000, 100000, 10, 30, 36, 12, 5, 1, 3, 9, 0, 0),
 (3, NULL, NULL, NULL, NULL, NULL, NULL, 15, 15, 15, 15, 5, 5, NULL, NULL, NULL, NULL, 5, 5),
-(21, 4000, 150000, 5, 50, 36, 1, 5000, 150000, 5, 50, 26, 5, 6, 3, 4, 9, NULL, NULL);
+(21, NULL, NULL, NULL, NULL, NULL, NULL, 5000, 150000, 5, 50, 26, 5, NULL, NULL, NULL, NULL, 0, 30);
 
 -- --------------------------------------------------------
 
@@ -994,7 +1005,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1013,7 +1024,10 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`) VALUES
 (14, 'Verification', '', 'from_outside_ntt'),
 (15, 'Construction ', '', 'from_ntt'),
 (16, 'Deployment', 'ffffffffffffffffff', 'from_outside_ntt'),
-(17, 'Deployment Common test', '', 'from_outside_ntt');
+(17, 'Deployment Common test', '', 'from_outside_ntt'),
+(18, 'dep test', '', 'from_outside_ntt'),
+(24, 'dep 2', '', 'from_ntt'),
+(25, 'dep tests', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -1053,7 +1067,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_user`
@@ -1073,7 +1087,15 @@ INSERT INTO `implem_item_user` (`id`, `id_proj`) VALUES
 (14, 8),
 (15, 8),
 (16, 3),
-(17, 11);
+(17, 11),
+(18, 21),
+(19, 21),
+(20, 21),
+(21, 21),
+(22, 21),
+(23, 21),
+(24, 21),
+(25, 21);
 
 -- --------------------------------------------------------
 
@@ -1156,7 +1178,15 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (14, 1),
 (15, 9),
 (16, -1),
-(17, -1);
+(17, -1),
+(18, 2),
+(19, -1),
+(20, -1),
+(21, -1),
+(22, -1),
+(23, -1),
+(24, -1),
+(25, -1);
 
 -- --------------------------------------------------------
 
@@ -1213,7 +1243,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (21, 8, 1, 5, 1500, 3),
 (30, 4, -1, 1500, 15, 3),
 (31, 3, -1, 0, 0, 1),
-(32, 11, -1, 1255, 15, 1);
+(32, 11, -1, 1255, 15, 1),
+(33, 21, 7, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1336,7 +1367,10 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (10, 6, 1, 5, 10),
 (11, 8, 11, 2, 60),
 (12, 8, 11, 1, 10),
-(13, 8, 11, 7, 50);
+(13, 8, 11, 7, 50),
+(14, 21, -1, 9, 30),
+(15, 21, -1, 5, 70),
+(16, 21, 7, 4, 50);
 
 -- --------------------------------------------------------
 
@@ -1414,7 +1448,10 @@ INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator
 (5, 8, 1, NULL, NULL, NULL, NULL),
 (6, 8, 1, 'personne', 750, 10, 5),
 (7, 8, 11, 'nb', 15000, 15, 10),
-(8, 3, 3, NULL, NULL, NULL, NULL);
+(8, 3, 3, NULL, NULL, NULL, NULL),
+(4, 21, -1, 'myUnit', 250, 15, 17),
+(1, 21, -1, 'myUnit2', 300, 5, 21),
+(4, 21, 7, 'per unit', 20, 12, 5);
 
 -- --------------------------------------------------------
 
@@ -1452,7 +1489,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (8, 9, 11, 50, NULL, 15000, 1, 3),
 (8, 10, 11, 100, NULL, 300, 2, 1),
 (8, 11, 11, 33, NULL, 20, 5, 3),
-(8, 8, 11, 35, NULL, 255, 0, 2);
+(8, 8, 11, 35, NULL, 255, 0, 2),
+(21, 12, 9, 15, NULL, 300, 3, 5);
 
 -- --------------------------------------------------------
 
@@ -1881,7 +1919,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -1900,7 +1938,10 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (10, 'non cash item', '', NULL),
 (11, 'NCB 1', '', NULL),
 (12, 'NCB 2', '', NULL),
-(13, 'NCB 3', '', NULL);
+(13, 'NCB 3', '', NULL),
+(14, 'nan cash item 0', '', NULL),
+(15, 'nan cash item 1', '', NULL),
+(16, 'non cash', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -1926,7 +1967,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -1942,7 +1983,10 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (10, 6),
 (11, 8),
 (12, 8),
-(13, 8);
+(13, 8),
+(14, 21),
+(15, 21),
+(16, 21);
 
 -- --------------------------------------------------------
 
@@ -1975,7 +2019,10 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (10, 1),
 (11, 11),
 (12, 11),
-(13, 11);
+(13, 11),
+(14, -1),
+(15, -1),
+(16, 7);
 
 -- --------------------------------------------------------
 
@@ -1990,7 +2037,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -2007,7 +2054,8 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`) VALUES
 (8, 'Project Manager', '', 'from_ntt'),
 (9, 'Opex 1', '', 'internal'),
 (10, 'Opex common test', '', 'from_ntt'),
-(11, 'opex common', '', 'from_ntt');
+(11, 'opex common', '', 'from_ntt'),
+(12, 'opex test', '', 'from_ntt');
 
 -- --------------------------------------------------------
 
@@ -2048,7 +2096,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2064,7 +2112,8 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (8, 8),
 (9, 3),
 (10, 11),
-(11, 21);
+(11, 21),
+(12, 21);
 
 -- --------------------------------------------------------
 
@@ -2145,7 +2194,8 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (8, -1),
 (9, -1),
 (10, -1),
-(11, -1);
+(11, -1),
+(12, -1);
 
 -- --------------------------------------------------------
 
@@ -2245,7 +2295,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-16 17:00:43', 15, 1, 0);
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-18 09:53:42', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2590,7 +2640,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2601,7 +2651,8 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (4, 'example quantifiable item', 'lorem ipsum'),
 (6, 'Enfants dans les parcs', ''),
 (7, 'Poissons dans l\'eau', ''),
-(8, 'test', '');
+(8, 'test', ''),
+(9, 'test item', '');
 
 -- --------------------------------------------------------
 
@@ -2641,7 +2692,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -2652,7 +2703,8 @@ INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
 (5, 8),
 (6, 8),
 (7, 8),
-(8, 3);
+(8, 3),
+(9, 21);
 
 -- --------------------------------------------------------
 
@@ -2680,7 +2732,8 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (5, 1),
 (6, 1),
 (7, 11),
-(8, 3);
+(8, 3),
+(9, -1);
 
 -- --------------------------------------------------------
 
@@ -2816,7 +2869,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -2832,7 +2885,8 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`) VALUES
 (8, 'test', ''),
 (9, 'rev 1', ''),
 (10, 'rev 2', ''),
-(11, 'rev 3', '');
+(11, 'rev 3', ''),
+(12, 'test', '');
 
 -- --------------------------------------------------------
 
@@ -2871,7 +2925,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_user`
@@ -2887,7 +2941,8 @@ INSERT INTO `revenues_item_user` (`id`, `id_proj`) VALUES
 (8, 8),
 (9, 8),
 (10, 8),
-(11, 8);
+(11, 8),
+(12, 21);
 
 -- --------------------------------------------------------
 
@@ -2918,7 +2973,8 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (8, 11),
 (9, 11),
 (10, 11),
-(11, 11);
+(11, 11),
+(12, 9);
 
 -- --------------------------------------------------------
 
@@ -3163,6 +3219,31 @@ CREATE TABLE IF NOT EXISTS `shared_ucm` (
   KEY `id_ucm` (`id_ucm`),
   KEY `id_group` (`id_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `supplier_perimeter`
+--
+
+DROP TABLE IF EXISTS `supplier_perimeter`;
+CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
+  `proj_id` int(10) UNSIGNED NOT NULL,
+  `country` varchar(256) NOT NULL,
+  `city` varchar(256) NOT NULL,
+  `name` varchar(256) NOT NULL,
+  `department` varchar(256) NOT NULL,
+  `company` varchar(256) NOT NULL,
+  `team` varchar(256) NOT NULL,
+  PRIMARY KEY (`proj_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_perimeter`
+--
+
+INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `department`, `company`, `team`) VALUES
+(21, 'a', 'Compiegne', 'Diego MEJIA', 'z', 'Google', 'team a');
 
 -- --------------------------------------------------------
 
@@ -3585,7 +3666,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 's'),
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd'),
 (2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
