@@ -1047,7 +1047,6 @@ function deleteSelZones($projID){
 }
 
 function insert_perimeter_supplier($projID ,$post){
-    var_dump($post);
     $db = dbConnect();
     $country = isset($post['inputCountry']) ? $post['inputCountry'] : "";
     $city = isset($post['inputCity']) ? $post['inputCity'] : "";

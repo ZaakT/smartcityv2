@@ -390,7 +390,6 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
 
 function xpex_inputed($post, $sideBarName, $type){
     if($post){
-        print_r($post);
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
             if(isset($post['useCase'])){ //Input porject common

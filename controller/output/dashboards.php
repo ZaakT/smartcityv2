@@ -1799,9 +1799,7 @@ function bankability_output($twig,$is_connected,$projID,$post=[]){
                 $fin_data = transformForChart($fin_data); //concerts to JSON
 
                 $soc_data = setSocData($selUCS,$soc_ROI,$soc_payback,$noncash,$risk,$soc_score);
-                var_dump($soc_data);
                 $soc_data = transformForChart($soc_data);
-                var_dump($soc_data);
 
                 $devises = getListDevises();
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];

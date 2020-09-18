@@ -173,7 +173,6 @@ function reco($twig,$is_connected,$projID=0){
             $calcBank = calcBank($projID);
             
             $bank = getBMBank($calcBank[0]);
-            var_dump($calcBank, $bank);
             $soc_bank = getBMSocBank($calcBank[1]);
             
             $proj_qualif = ['invest_cap'=>$listInvestCap[$id_investcap]['description'],'proj_bank'=>$listBMBank[$bank],'soc_bm'=>$listBMSocBank[$soc_bank]];
