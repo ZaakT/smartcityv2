@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `bankability_input_nogo_target` (
   `noncash_rating_nogo` int(11) DEFAULT NULL,
   `noncash_rating_target` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `bankability_input_nogo_target`
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `beneficiary` (
   `share` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_finScen` (`id_finScen`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `beneficiary`
@@ -224,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `bm_bankability` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `bm_bankability`
@@ -247,7 +247,7 @@ CREATE TABLE IF NOT EXISTS `bm_funding_opt_perc` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `bm_soc_bankability` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `bm_soc_bankability`
@@ -288,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `business_model` (
   KEY `id_investcap` (`id_investcap`),
   KEY `id_bmpref` (`id_bmpref`),
   KEY `id_payconst` (`id_payconst`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `business_model`
@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `business_model_pref` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `business_model_pref`
@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS `business_model_reco` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `business_model_reco`
@@ -357,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt' COMMENT 'Used in supplier part',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -400,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_advice`
@@ -427,7 +427,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -474,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `capex_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_uc`
@@ -524,7 +524,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -561,7 +561,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_advice`
@@ -584,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -615,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_uc`
@@ -648,7 +648,7 @@ CREATE TABLE IF NOT EXISTS `component` (
   `id_meas` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_meas` (`id_meas`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `component`
@@ -670,7 +670,7 @@ CREATE TABLE IF NOT EXISTS `comp_per_zone` (
   `number` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_zone`,`id_compo`),
   KEY `id_compo` (`id_compo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `comp_per_zone`
@@ -698,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `crit` (
   `id_cat` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `crit`
@@ -726,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `critcat` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `critcat`
@@ -764,7 +764,7 @@ CREATE TABLE IF NOT EXISTS `deal_criteria_input_nogo_target` (
   `operating_margin_nogo` int(11) DEFAULT NULL,
   `operating_margin_target` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `deal_criteria_input_nogo_target`
@@ -789,7 +789,7 @@ CREATE TABLE IF NOT EXISTS `devise` (
   `symbol` varchar(255) DEFAULT NULL,
   `rateToGBP` double DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `devise`
@@ -813,7 +813,7 @@ CREATE TABLE IF NOT EXISTS `dlt` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `dlt`
@@ -841,7 +841,7 @@ CREATE TABLE IF NOT EXISTS `entity` (
   PRIMARY KEY (`id`),
   KEY `id_source` (`id_source`),
   KEY `id_finScen` (`id_finScen`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `entity`
@@ -865,7 +865,7 @@ CREATE TABLE IF NOT EXISTS `equipment_revenues` (
   `price_per_unit` int(11) NOT NULL,
   `nb_units` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `equipment_revenues`
@@ -896,7 +896,7 @@ CREATE TABLE IF NOT EXISTS `financing_scenario` (
   `id_proj` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `financing_scenario`
@@ -925,7 +925,7 @@ CREATE TABLE IF NOT EXISTS `funding_source` (
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`),
   KEY `id_type` (`id_type`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `funding_source`
@@ -956,7 +956,7 @@ CREATE TABLE IF NOT EXISTS `funding_sources_category` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `funding_sources_category`
@@ -982,7 +982,7 @@ CREATE TABLE IF NOT EXISTS `funding_sources_type` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `funding_sources_type`
@@ -1005,7 +1005,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1043,7 +1043,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_advice` (
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_advice`
@@ -1067,7 +1067,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_user`
@@ -1114,7 +1114,7 @@ CREATE TABLE IF NOT EXISTS `implem_schedule` (
   `100_completion` date DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_proj`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_schedule`
@@ -1156,7 +1156,7 @@ CREATE TABLE IF NOT EXISTS `implem_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_uc`
@@ -1205,7 +1205,7 @@ CREATE TABLE IF NOT EXISTS `input_capex` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_capex`
@@ -1268,7 +1268,7 @@ CREATE TABLE IF NOT EXISTS `input_cashreleasing` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_cashreleasing`
@@ -1310,7 +1310,7 @@ CREATE TABLE IF NOT EXISTS `input_implem` (
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_implem`
@@ -1351,7 +1351,7 @@ CREATE TABLE IF NOT EXISTS `input_noncash` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_noncash`
@@ -1391,7 +1391,7 @@ CREATE TABLE IF NOT EXISTS `input_opex` (
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_opex`
@@ -1437,7 +1437,7 @@ CREATE TABLE IF NOT EXISTS `input_quantifiable` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_quantifiable`
@@ -1472,7 +1472,7 @@ CREATE TABLE IF NOT EXISTS `input_revenues` (
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_revenues`
@@ -1508,7 +1508,7 @@ CREATE TABLE IF NOT EXISTS `input_risk` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_risk`
@@ -1548,7 +1548,7 @@ CREATE TABLE IF NOT EXISTS `input_widercash` (
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `input_widercash`
@@ -1584,7 +1584,7 @@ CREATE TABLE IF NOT EXISTS `invest_capacity` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `invest_capacity`
@@ -1608,7 +1608,7 @@ CREATE TABLE IF NOT EXISTS `loans_and_bonds` (
   `maturity_date` date DEFAULT NULL,
   `interest` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `loans_and_bonds`
@@ -1633,7 +1633,7 @@ CREATE TABLE IF NOT EXISTS `magnitude` (
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `magnitude`
@@ -1660,7 +1660,7 @@ CREATE TABLE IF NOT EXISTS `matrix_bm_1` (
   PRIMARY KEY (`id_investcap`,`id_payconst`,`id_bmpref`),
   KEY `id_payconst` (`id_payconst`),
   KEY `id_bmpref` (`id_bmpref`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `matrix_bm_1`
@@ -1756,7 +1756,7 @@ CREATE TABLE IF NOT EXISTS `matrix_bm_2` (
   KEY `id_investcap` (`id_investcap`),
   KEY `id_bank` (`id_bank`),
   KEY `id_socbank` (`id_socbank`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `matrix_bm_2`
@@ -1886,7 +1886,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `user` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -1919,7 +1919,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -1953,7 +1953,7 @@ DROP TABLE IF EXISTS `noncash_item_advice`;
 CREATE TABLE IF NOT EXISTS `noncash_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1967,7 +1967,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -2000,7 +2000,7 @@ CREATE TABLE IF NOT EXISTS `noncash_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_uc`
@@ -2037,7 +2037,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `description` text,
   `origine` enum('from_ntt','from_outside_ntt','internal') NOT NULL DEFAULT 'from_ntt',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -2071,7 +2071,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_advice` (
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_advice`
@@ -2096,7 +2096,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2133,7 +2133,7 @@ CREATE TABLE IF NOT EXISTS `opex_schedule` (
   `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_proj`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_schedule`
@@ -2177,7 +2177,7 @@ CREATE TABLE IF NOT EXISTS `opex_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_uc`
@@ -2207,7 +2207,7 @@ DROP TABLE IF EXISTS `others`;
 CREATE TABLE IF NOT EXISTS `others` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `others`
@@ -2230,7 +2230,7 @@ CREATE TABLE IF NOT EXISTS `payback_constraints` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `payback_constraints`
@@ -2257,7 +2257,7 @@ CREATE TABLE IF NOT EXISTS `privileges` (
   PRIMARY KEY (`id_group`,`id_user`,`id_role`),
   KEY `id_user` (`id_user`),
   KEY `id_role` (`id_role`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2280,7 +2280,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -2311,7 +2311,7 @@ CREATE TABLE IF NOT EXISTS `project_dates` (
   `deploy_start_date` date NOT NULL,
   `deploy_duration` int(11) NOT NULL,
   PRIMARY KEY (`id_project`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `project_dates`
@@ -2337,7 +2337,7 @@ CREATE TABLE IF NOT EXISTS `project_group` (
   `description` varchar(255) DEFAULT NULL,
   `size` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2351,7 +2351,7 @@ CREATE TABLE IF NOT EXISTS `project_perimeter` (
   `id_zone` int(11) NOT NULL,
   PRIMARY KEY (`id_proj`,`id_zone`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project_perimeter`
@@ -2408,7 +2408,7 @@ CREATE TABLE IF NOT EXISTS `project_schedule` (
   `lag_ramp` date NOT NULL,
   `ramp_run` date NOT NULL,
   PRIMARY KEY (`id_project`,`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `project_schedule`
@@ -2437,7 +2437,7 @@ CREATE TABLE IF NOT EXISTS `project_size` (
   KEY `id_zone` (`id_zone`),
   KEY `id_mag` (`id_mag`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project_size`
@@ -2534,7 +2534,7 @@ CREATE TABLE IF NOT EXISTS `proj_sel_measure` (
   `id_meas` int(11) NOT NULL,
   PRIMARY KEY (`id_proj`,`id_meas`),
   KEY `id_meas` (`id_meas`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `proj_sel_measure`
@@ -2569,7 +2569,7 @@ CREATE TABLE IF NOT EXISTS `proj_sel_usecase` (
   `id_proj` int(11) NOT NULL,
   PRIMARY KEY (`id_uc`,`id_proj`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `proj_sel_usecase`
@@ -2640,7 +2640,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2668,7 +2668,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_advice` (
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_advice`
@@ -2692,7 +2692,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -2718,7 +2718,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_uc`
@@ -2748,7 +2748,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_capex` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ratio_comp_capex`
@@ -2773,7 +2773,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_cashreleasing` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2788,7 +2788,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_implem` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2803,7 +2803,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_opex` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2818,7 +2818,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_per_uc` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_compo`),
   KEY `id_compo` (`id_compo`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ratio_comp_per_uc`
@@ -2840,7 +2840,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_revenues` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2855,7 +2855,7 @@ CREATE TABLE IF NOT EXISTS `ratio_comp_widercash` (
   `val` double DEFAULT NULL,
   PRIMARY KEY (`id_compo`,`id_item`),
   KEY `id_item` (`id_item`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2869,7 +2869,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -2902,7 +2902,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_advice`
@@ -2925,7 +2925,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_user`
@@ -2956,7 +2956,7 @@ CREATE TABLE IF NOT EXISTS `revenues_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_uc`
@@ -2994,7 +2994,7 @@ CREATE TABLE IF NOT EXISTS `revenue_schedule` (
   `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_proj`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenue_schedule`
@@ -3039,7 +3039,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -3067,7 +3067,7 @@ DROP TABLE IF EXISTS `risk_item_advice`;
 CREATE TABLE IF NOT EXISTS `risk_item_advice` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3081,7 +3081,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -3111,7 +3111,7 @@ CREATE TABLE IF NOT EXISTS `risk_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_uc`
@@ -3141,7 +3141,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3159,7 +3159,7 @@ CREATE TABLE IF NOT EXISTS `sel_funding_source` (
   `maturity_date` date DEFAULT NULL,
   PRIMARY KEY (`id_finScen`,`id_source`),
   KEY `id_source` (`id_source`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `sel_funding_source`
@@ -3186,7 +3186,7 @@ CREATE TABLE IF NOT EXISTS `shared_financing_scen` (
   PRIMARY KEY (`id_group`,`id_finScen`,`id_user`),
   KEY `id_finScen` (`id_finScen`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3202,7 +3202,7 @@ CREATE TABLE IF NOT EXISTS `shared_project` (
   PRIMARY KEY (`id_user`,`id_proj`,`id_group`),
   KEY `id_proj` (`id_proj`),
   KEY `id_group` (`id_group`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3218,7 +3218,7 @@ CREATE TABLE IF NOT EXISTS `shared_ucm` (
   PRIMARY KEY (`id_user`,`id_ucm`,`id_group`),
   KEY `id_ucm` (`id_ucm`),
   KEY `id_group` (`id_group`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3236,7 +3236,7 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
   `company` varchar(256) NOT NULL,
   `team` varchar(256) NOT NULL,
   PRIMARY KEY (`proj_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_perimeter`
@@ -3257,7 +3257,7 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_crit` (
   `id_ucm` int(11) NOT NULL,
   PRIMARY KEY (`id_crit`,`id_ucm`),
   KEY `id_ucm` (`id_ucm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ucm_sel_crit`
@@ -3308,7 +3308,7 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_critcat` (
   `weight` double DEFAULT NULL,
   PRIMARY KEY (`id_critCat`,`id_ucm`),
   KEY `id_ucm` (`id_ucm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ucm_sel_critcat`
@@ -3338,7 +3338,7 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_dlt` (
   `id_dlt` int(11) NOT NULL,
   PRIMARY KEY (`id_ucm`,`id_dlt`),
   KEY `id_dlt` (`id_dlt`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ucm_sel_dlt`
@@ -3367,7 +3367,7 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_measure` (
   `id_ucm` int(11) NOT NULL,
   PRIMARY KEY (`id_meas`,`id_ucm`),
   KEY `id_ucm` (`id_ucm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ucm_sel_measure`
@@ -3397,7 +3397,7 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_uc` (
   `id_ucm` int(11) NOT NULL,
   PRIMARY KEY (`id_uc`,`id_ucm`),
   KEY `id_ucm` (`id_ucm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `ucm_sel_uc`
@@ -3448,7 +3448,7 @@ CREATE TABLE IF NOT EXISTS `uc_vs_crit` (
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_crit`),
   KEY `id_crit` (`id_crit`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3465,7 +3465,7 @@ CREATE TABLE IF NOT EXISTS `uc_vs_crit_input` (
   PRIMARY KEY (`id_uc`,`id_crit`,`id_ucm`),
   KEY `id_crit` (`id_crit`),
   KEY `id_ucm` (`id_ucm`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `uc_vs_crit_input`
@@ -3635,7 +3635,7 @@ CREATE TABLE IF NOT EXISTS `uc_vs_dlt` (
   `pertinence` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_dlt`),
   KEY `id_dlt` (`id_dlt`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3659,7 +3659,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
@@ -3687,7 +3687,7 @@ CREATE TABLE IF NOT EXISTS `user_measure` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id_meas`,`id_user`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3701,7 +3701,7 @@ CREATE TABLE IF NOT EXISTS `user_zone` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id_zone`,`id_user`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3719,7 +3719,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
   PRIMARY KEY (`id`),
   KEY `id_meas` (`id_meas`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case`
@@ -3753,7 +3753,7 @@ CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
@@ -3784,7 +3784,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case_cat`
@@ -3810,7 +3810,7 @@ CREATE TABLE IF NOT EXISTS `volumes` (
   `val` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_uc`,`id_zone`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -3829,7 +3829,7 @@ CREATE TABLE IF NOT EXISTS `volumes_input` (
   PRIMARY KEY (`id_uc`,`id_zone`,`id_proj`),
   KEY `id_zone` (`id_zone`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `volumes_input`
@@ -3917,7 +3917,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item`
@@ -3952,7 +3952,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_advice` (
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_advice`
@@ -3977,7 +3977,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_user`
@@ -4008,7 +4008,7 @@ CREATE TABLE IF NOT EXISTS `widercash_uc` (
   `id_uc` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_uc`),
   KEY `id_uc` (`id_uc`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_uc`
@@ -4042,7 +4042,7 @@ CREATE TABLE IF NOT EXISTS `zone` (
   `id_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `zone`
