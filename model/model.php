@@ -1895,7 +1895,7 @@ function getImplemUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListImplemAdvice($ucID, $origine = "all"){
+function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -1983,7 +1983,7 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser($projID,$ucID,  $origine = "all"){
+function getListImplemUser($projID,$ucID,  $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -2261,7 +2261,7 @@ function getListOpexItems($ucID){
     return $list;
 }
 
-function getListOpexUser($projID,$ucID, $origine = "all"){
+function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -2280,6 +2280,7 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
         $side_selection = "and opex_item.side = 'customer'";
     }elseif($side == "supplier"){
                $side_selection = "and opex_item.side = 'supplier'";
+    }
   
 
 
@@ -2292,6 +2293,7 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
                                         and opex_item_user.id_proj = ?
                                         and opex_item_user.id = opex_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
