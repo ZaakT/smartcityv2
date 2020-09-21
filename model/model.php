@@ -1678,7 +1678,7 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
                $side_selection = "and capex_item.side = 'supplier'";
     }
 
-    $req = $db->prepare("SELECT capex_item.id,name,description
+    $req = $db->prepare("SELECT capex_item.id,name,description, side
                             FROM capex_item_user
                             INNER JOIN capex_uc
                                 INNER JOIN capex_item
@@ -2005,7 +2005,7 @@ function getListImplemUser($projID,$ucID,  $origine = "all", $side="projDev"){
     }
 
 
-    $req = $db->prepare("SELECT implem_item.id,name,description
+    $req = $db->prepare("SELECT implem_item.id,name,description, side
                             FROM implem_item_user
                             INNER JOIN implem_uc
                                 INNER JOIN implem_item
@@ -2284,7 +2284,7 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
   
 
 
-    $req = $db->prepare("SELECT opex_item.id,name,description
+    $req = $db->prepare("SELECT opex_item.id,name,description, side
                             FROM opex_item_user
                             INNER JOIN opex_uc
                                 INNER JOIN opex_item
@@ -4102,6 +4102,22 @@ function getTotCapexByUC($projID,$ucID){
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
+}
+
+function getXpexSide($xpexID, $type){
+    if($type!="capex" && $type!="implem" && $type!="deployment_costs" && $type!="opex"){ throw new Exception("Wrong type !");}
+    $type= $type == "deployment_costs"? "implem" : $type;
+    $table=$type."_item";
+    $db = dbConnect();
+    $req = $db->prepare("SELECT side 
+                            FROM  $table
+                            WHERE id = ?");
+    
+    $req->execute(array($xpexID));
+    $res = $req->fetch()['side'];
+
+    return $res;
+
 }
 
 function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){

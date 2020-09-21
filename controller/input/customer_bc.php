@@ -165,10 +165,6 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                 }elseif($type=="deployment_costs"){
                     $selXpex_old = getListSelImplem($projID,$ucID);
                 }
-                $selXpex_old_id = getKeys($selXpex_old);
-                $selXpex_diff_rm = array_diff($selXpex_old_id,$selXpex[$ucID]);
-
-                $selXpex_diff_add = array_diff($selXpex[$ucID],$selXpex_old_id);
 
                 if(empty($selXpex_old)){
                     if($type=="capex"){
@@ -179,6 +175,21 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                         insertSelImplem($projID,$ucID,$selXpex[$ucID]);
                     }
                 } elseif (!empty($selXpex_old)) {
+                    $selXpexToKeep = [];
+                    //var_dump($selXpex[$ucID]);
+                    if($side=="supplier"||$side=="customer"){
+                        foreach($selXpex_old as $xpexID=>$value){
+                            if(getXpexSide($xpexID, $type)!=$side){
+                                array_push($selXpexToKeep, $xpexID);
+                            }
+                        }
+                    }
+
+                    $selXpex_old_id = getKeys($selXpex_old);
+                    $selXpex_diff_rm = array_diff($selXpex_old_id,array_merge($selXpex[$ucID], $selXpexToKeep));
+    
+                    $selXpex_diff_add = array_diff($selXpex[$ucID],$selXpex_old_id);
+
                     if($type=="capex"){
                         deleteSelCapex($projID,$ucID,$selXpex_diff_rm);
                         insertSelCapex($projID,$ucID,$selXpex_diff_add);
@@ -196,7 +207,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
             
             update_ModifDate_proj($projID);
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-            xpex_input($twig,$is_connected,$projID,$listUcID, $type, $sideBarName);
+            xpex_input($twig,$is_connected,$projID,$listUcID, $type, $sideBarName, $side);
             //updateCB($projID,0);
              
         } else {
@@ -208,7 +219,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
 }
 
 
-function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sideBarName){
+function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sideBarName, $side){
     /* 
     INPUT:  ID du projet, et id du UC
     OUTPUT: capex_input.twig
@@ -249,45 +260,45 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     $uc = getUCByID($ucID);
                     if($type=="capex"){
                             
-                        $list_xpex_advice[$ucID] = getListCapexAdvice($ucID); 
-                        $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID);    
+                        $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", $side); 
+                        $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
                         $list_selXpex[$ucID] = getListSelCapex($projID,$ucID);
 
-                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt"); 
-                        $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal"); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
+                        $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal", $side); 
 
-                        $list_xpex_user_from_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_ntt");    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_outside_ntt"); 
-                        $list_xpex_user_internal[$ucID] = getListCapexUser($projID,$ucID, "internal"); 
+                        $list_xpex_user_from_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_ntt", $side);    
+                        $list_xpex_user_from_outside_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_outside_ntt", $side); 
+                        $list_xpex_user_internal[$ucID] = getListCapexUser($projID,$ucID, "internal", $side); 
 
                         $list_selXpex[$ucID] = getListSelCapex($projID,$ucID); 
                     }elseif($type=="opex"){
-                        $list_xpex_advice[$ucID] = getListOpexAdvice($ucID); 
-                        $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID);    
+                        $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", $side); 
+                        $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
                         $list_selXpex[$ucID] = getListSelOpex($projID,$ucID); 
 
-                        $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt"); 
-                        $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal"); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
+                        $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal", $side); 
 
-                        $list_xpex_user_from_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_ntt");    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_outside_ntt"); 
-                        $list_xpex_user_internal[$ucID] = getListOpexUser($projID,$ucID, "internal"); 
+                        $list_xpex_user_from_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_ntt", $side);    
+                        $list_xpex_user_from_outside_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_outside_ntt", $side); 
+                        $list_xpex_user_internal[$ucID] = getListOpexUser($projID,$ucID, "internal", $side); 
 
                         $list_selXpex[$ucID] = getListSelOpex($projID,$ucID); 
                     }elseif($type=="deployment_costs"){
-                        $list_xpex_advice[$ucID] = getListImplemAdvice($ucID);
-                        $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID);     
+                        $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", $side);
+                        $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
                         $list_selXpex[$ucID] = getListSelImplem($projID,$ucID); 
 
-                        $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt"); 
-                        $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal"); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
+                        $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
 
-                        $list_xpex_user_from_ntt[$ucID]  = getListImplemUser($projID,$ucID, "from_ntt");    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListImplemUser($projID,$ucID, "from_outside_ntt"); 
-                        $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal"); 
+                        $list_xpex_user_from_ntt[$ucID]  = getListImplemUser($projID,$ucID, "from_ntt", $side);    
+                        $list_xpex_user_from_outside_ntt[$ucID] = getListImplemUser($projID,$ucID, "from_outside_ntt", $side); 
+                        $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
                         
                         
                         $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
