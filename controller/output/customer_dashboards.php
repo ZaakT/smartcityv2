@@ -52,9 +52,11 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $revenueSum = 0;
                 $cash_realeasing_benefitsSum = 0;
                 $wider_cash_benefitsSum = 0;
+                $ucsBenefits=[];
+                $titles=[];
                 foreach ($scope as $measID => $list_ucs) {
                     foreach ($list_ucs as $ucID) {
-
+                        array_push($titles,  $ucs[$ucID]['name']);
                         $implem = getTotImplemByUC($projID,$ucID, $side);
                         $implemSchedule = $schedules['implem'][$ucID];
                         $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
@@ -62,7 +64,8 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                         $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
                         $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
                         $sum_capex_implem = add_arrays($capexPerMonth_new,$implemPerMonth_new);
-                        $revenueSum+=array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side));
+                        array_push($ucsBenefits, array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)));
+                        $revenueSum+=$ucsBenefits[count($ucsBenefits)-1];
                         $cash_realeasing_benefitsSum+=array_sum( getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side));
                         $wider_cash_benefitsSum += array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side));
                     }
@@ -123,12 +126,17 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
 
             
             //Distinction de cas entre supp et cust !!!
-            $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], 
-            "data"=>[
-                $revenueSum,
-                $cash_realeasing_benefitsSum,
-                $wider_cash_benefitsSum]);
-
+            if($side == "customer"){
+                $repartition_of_benefits = array("titles"=>["Revenues", "Cash Releasing Benefits", "Wider Cash Benefits"], 
+                "data"=>[
+                    $revenueSum,
+                    $cash_realeasing_benefitsSum,
+                    $wider_cash_benefitsSum]);
+            }else{
+                $repartition_of_benefits = array("titles"=>$titles, 
+                "data"=>$ucsBenefits);
+            }
+            
 
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
