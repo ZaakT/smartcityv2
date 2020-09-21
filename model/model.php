@@ -1551,7 +1551,7 @@ function getCapexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListCapexAdvice($ucID, $origine = "all"){
+function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
 /* 
 CAPEX_ITEM_ADVICE
 id int(11)            id of the advice
@@ -1571,6 +1571,7 @@ description text
 */
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and capex_item.origine = 'from_ntt'";
@@ -1580,6 +1581,17 @@ description text
                $origine_selection = "and capex_item.origine = 'internal'";
     }
 
+    if($side=="projDev"){
+        $origine_selection = "and capex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and capex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and capex_item.side = 'supplier'";
+    }
+
+
+
+
     $req = $db->prepare("SELECT *
                             FROM capex_item_advice
                             INNER JOIN capex_uc
@@ -1588,6 +1600,7 @@ description text
                                         and capex_item.id = capex_uc.id_item
                                         and capex_item.id = capex_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1601,10 +1614,11 @@ description text
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -1644,9 +1658,10 @@ function getListCapexItems($ucID){
     return $list;
 }
 
-function getListCapexUser($projID,$ucID, $origine = "all"){
+function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and capex_item.origine = 'from_ntt'";
@@ -1654,6 +1669,13 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
         $origine_selection = "and capex_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
                $origine_selection = "and capex_item.origine = 'internal'";
+    }
+    if($side=="projDev"){
+        $origine_selection = "and capex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and capex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and capex_item.side = 'supplier'";
     }
 
     $req = $db->prepare("SELECT capex_item.id,name,description
@@ -1665,6 +1687,7 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
                                         and capex_item_user.id_proj = ?
                                         and capex_item_user.id = capex_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1674,10 +1697,11 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     return $list;
@@ -1874,6 +1898,7 @@ function getImplemUserItem($projID,$ucID,$name){
 function getListImplemAdvice($ucID, $origine = "all"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and implem_item.origine = 'from_ntt'";
@@ -1881,6 +1906,14 @@ function getListImplemAdvice($ucID, $origine = "all"){
         $origine_selection = "and implem_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
                $origine_selection = "and implem_item.origine = 'internal'";
+    }
+
+    if($side=="projDev"){
+        $side_selection = "and implem_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and implem_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and implem_item.side = 'supplier'";
     }
 
     
@@ -1892,6 +1925,7 @@ function getListImplemAdvice($ucID, $origine = "all"){
                                         and implem_item.id = implem_uc.id_item
                                         and implem_item.id = implem_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1905,10 +1939,11 @@ function getListImplemAdvice($ucID, $origine = "all"){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -1951,7 +1986,7 @@ function getListImplemItems($ucID){
 function getListImplemUser($projID,$ucID,  $origine = "all"){
     $db = dbConnect();
     $origine_selection = "";
-
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and implem_item.origine = 'from_ntt'";
@@ -1960,6 +1995,15 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
     }elseif($origine == "internal"){
                $origine_selection = "and implem_item.origine = 'internal'";
     }
+
+    if($side=="projDev"){
+        $side_selection = "and implem_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and implem_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and implem_item.side = 'supplier'";
+    }
+
 
     $req = $db->prepare("SELECT implem_item.id,name,description
                             FROM implem_item_user
@@ -1970,6 +2014,7 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
                                         and implem_item_user.id_proj = ?
                                         and implem_item_user.id = implem_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1979,10 +2024,11 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -2128,9 +2174,10 @@ function getOpexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListOpexAdvice($ucID, $origine = "all"){
+function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and opex_item.origine = 'from_ntt'";
@@ -2138,6 +2185,14 @@ function getListOpexAdvice($ucID, $origine = "all"){
         $origine_selection = "and opex_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
                $origine_selection = "and opex_item.origine = 'internal'";
+    }
+
+    if($side=="projDev"){
+        $side_selection = "and opex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and opex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and opex_item.side = 'supplier'";
     }
 
     $req = $db->prepare("SELECT *
@@ -2148,6 +2203,7 @@ function getListOpexAdvice($ucID, $origine = "all"){
                                         and opex_item.id = opex_uc.id_item
                                         and opex_item.id = opex_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -2161,10 +2217,11 @@ function getListOpexAdvice($ucID, $origine = "all"){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -2207,6 +2264,7 @@ function getListOpexItems($ucID){
 function getListOpexUser($projID,$ucID, $origine = "all"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and opex_item.origine = 'from_ntt'";
@@ -2215,6 +2273,14 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
     }elseif($origine == "internal"){
                $origine_selection = "and opex_item.origine = 'internal'";
     }
+
+    if($side=="projDev"){
+        $side_selection = "and opex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and opex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and opex_item.side = 'supplier'";
+  
 
 
     $req = $db->prepare("SELECT opex_item.id,name,description
@@ -2235,10 +2301,11 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     //var_dump($list);
