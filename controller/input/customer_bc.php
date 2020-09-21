@@ -35,12 +35,11 @@ function getUcsName($listUcID){
     return $listUcsName;
 }
 
-function sideFilter($xpexList, $side){
+function sideFilter($xpexList, $side, $type){
     $res = [];
-    foreach ($xpexList as $key => $xpex) {
-        var_dump($xpex);
-        if($xpex['side']==$side){
-            $res[$key]=$xpex;
+    foreach ($xpexList as $xpexID => $xpex) {
+        if(getXpexSide($xpexID, $type)==$type){
+            $res[$xpexID]=$xpex;
         }
     }
     return $res;

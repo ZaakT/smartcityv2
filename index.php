@@ -874,19 +874,19 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="project_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="use_case_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
@@ -937,19 +937,19 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="project_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="use_case_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }

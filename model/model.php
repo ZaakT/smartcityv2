@@ -4096,12 +4096,15 @@ function getTotCapexFromProj($projID){
     return convertGBPToDev($tot);
 }
 
-function getTotCapexByUC($projID,$ucID){
+function getTotCapexByUC($projID,$ucID, $side = "projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_capex
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN capex_item 
+                            ON capex_item.id = input_capex.id_item
+                            WHERE input_capex.id_proj = ? and input_capex.id_uc = ? and capex_item.side = ?' );
+    $req->execute(array($projID,$ucID, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
@@ -4123,7 +4126,7 @@ function getXpexSide($xpexID, $type){
 
 }
 
-function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){
+function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine, $side = "projDev"){
     //not valable for opex
     if($xpex!="capex" and $xpex!="implem"){
         throw new Exception("Wrong xpex (this function is not valable for opex) ! ");
@@ -4134,13 +4137,15 @@ function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){
     if($origine=="internal" and $xpex=="capex" ){
         throw new Exception ("Capex can't be internal.");
     }
+    
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_'.$xpex.' 
                             JOIN '.$xpex.'_item 
                             ON id_item=id
-                            WHERE id_proj = ? and id_uc = ? and origine = ?');
-    $req->execute(array($projID,$ucID, $origine));
+                            WHERE id_proj = ? and id_uc = ? and origine = ? and side = ?');
+    $req->execute(array($projID,$ucID, $origine, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
@@ -4172,12 +4177,15 @@ function getTotImplemFromProj($projID){
     return convertGBPToDev($tot);
 }
 
-function getTotImplemByUC($projID,$ucID){
+function getTotImplemByUC($projID,$ucID, $side="projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_implem
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN implem_item 
+                            ON implem_item.id = input_implem.id_item
+                            WHERE id_proj = ? and id_uc = ? and implem_item.side = ?');
+    $req->execute(array($projID,$ucID, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
@@ -4198,14 +4206,16 @@ function getNbUC($projID,$ucID){
     return $list;
 }
 
-function getOpexValuesOrigine($projID,$ucID, $origine){
+function getOpexValuesOrigine($projID,$ucID, $origine, $side){
+    
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
                             FROM input_opex
                             JOIN opex_item
                             ON id = id_item
-                            WHERE id_proj = ? and id_uc = ? and origine = ?');
-    $req->execute(array($projID,$ucID, $origine));
+                            WHERE id_proj = ? and id_uc = ? and origine = ? and side = ?');
+    $req->execute(array($projID,$ucID, $origine, $side));
     $list = [];
     while($res = $req->fetch()){
         $id_item = intval($res['id_item']);
@@ -4220,12 +4230,15 @@ function getOpexValuesOrigine($projID,$ucID, $origine){
     //var_dump($list);
     return $list;
 }
-function getOpexValues($projID,$ucID){
+function getOpexValues($projID,$ucID, $side = "projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
                             FROM input_opex
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN opex_item 
+                            ON opex_item.id = input_opex.id_item
+                            WHERE id_proj = ? and id_uc = ? and opex_item.side = ?');
+    $req->execute(array($projID,$ucID, $side));
     $list = [];
     while($res = $req->fetch()){
         $id_item = intval($res['id_item']);
