@@ -1,0 +1,2 @@
+SQLSTATE[HY000]: General error: 1726 Storage engine 'MyISAM' does not support system tables. [mysql.user]                  --->               alter table mysql.user ENGINE=InnoDB;
+SQLSTATE[HY000]: General error: 1805 Column count of mysql.user is wrong. Expected 51, found 11. The table is probably corrupted                  --->               copie de la table mysql.user de wamp.

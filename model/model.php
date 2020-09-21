@@ -19,6 +19,7 @@ function dbConnect()
 {
     try{
     $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
         return $db;
     } catch(Exception $e){ 
         try {
