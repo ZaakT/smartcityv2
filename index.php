@@ -691,7 +691,7 @@ try{
                                     }elseif($_GET['A3']=="selected"){
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -759,7 +759,7 @@ try{
                                     }elseif($_GET['A3']=="selected"){
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -1129,7 +1129,8 @@ try{
                                         $side = isDev() ? "projDev" : "customer";
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        $side = isDev() ? "projDev" : "customer";
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 

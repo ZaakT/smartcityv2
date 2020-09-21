@@ -343,7 +343,8 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
         }
     }
 
-function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
+function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     if(isset($_SESSION['projID'])){
         $projID = $_SESSION['projID'];
         if(isset($post['useCase'])){ //Input porject common
@@ -368,11 +369,11 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName) {
             header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID.'&isTaken=true');
         } else {
             if($type=="capex"){
-                insertCapexUser($projID,$ucID,$xpex_infos, $origine);
+                insertCapexUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=="opex"){
-                insertOpexUser($projID,$ucID,$xpex_infos, $origine);
+                insertOpexUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=='deployment_costs'){
-                insertImplemUser($projID,$ucID,$xpex_infos, $origine);
+                insertImplemUser($projID,$ucID,$xpex_infos, $origine, $side);
             }else{
                 throw new Exception("Wrong type !");
             }
