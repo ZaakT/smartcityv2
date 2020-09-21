@@ -1734,7 +1734,7 @@ function getListSelCapex($projID,$ucID){
 }
 
 
-function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL", $side="projDev"){
+function insertCapexUser($projID,$ucID,$capex_data, $origine="from_ntt", $side="projDev"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
@@ -2062,7 +2062,7 @@ function getListSelImplem($projID,$ucID){
     return $list;
 }
 
-function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL", $side="projDev"){
+function insertImplemUser($projID,$ucID,$implem_data, $origine="from_ntt", $side="projDev"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_implem`;');
@@ -2085,7 +2085,7 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL", $side="pr
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_implem(?,?,?,?,?);');
+    $req = $db->prepare('CALL add_implem(?,?,?,?,?,?);');
     $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine, $side));
     return $ret;
 }
@@ -2345,7 +2345,7 @@ function getListSelOpex($projID,$ucID){
 }
 
 
-function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL", $side="projDev"){
+function insertOpexUser($projID,$ucID,$opex_data, $origine="from_ntt", $side="projDev"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_opex`;');
@@ -2354,7 +2354,7 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL", $side="projDe
                             IN opex_desc VARCHAR(255),
                             IN idUC INT,
                             IN idProj INT,
-                            IN origine VARCHAR(255)^,
+                            IN origine VARCHAR(255),
                             IN side VARCHAR(255)
                             )
                             BEGIN
@@ -2369,7 +2369,7 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL", $side="projDe
                             END
                                 ');
     //var_dump($projID,$ucID,$opex_data);
-    $req = $db->prepare('CALL add_opex(?,?,?,?, ?,?);');
+    $req = $db->prepare('CALL add_opex(?,?,?,?,?,?);');
     $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine, $side));
     return $ret;
 }
