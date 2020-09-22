@@ -1734,18 +1734,7 @@ function getListSelCapex($projID,$ucID){
 }
 
 
-<<<<<<< HEAD
-/*function insertProj($proj){
-    $db = dbConnect();
-    $req = $db->prepare('INSERT INTO project (name,description,id_user) VALUES (?,?,?)');
-    return $req->execute(array($proj[0],$proj[1],$proj[2]));
-}*/
-
-
-function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL"){
-=======
 function insertCapexUser($projID,$ucID,$capex_data, $origine="from_ntt", $side="projDev"){
->>>>>>> 6b77d7dc1d03e5bd9792896a36968289c10b8f88
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
