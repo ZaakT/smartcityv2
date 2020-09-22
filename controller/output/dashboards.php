@@ -1037,7 +1037,7 @@ function cost_benefits_all($twig,$is_connected,$projID){
     }
 }
 
-function calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears) {
+function calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears, $side="projDev") {
             // For each UC
             // -> get schedules
             // -> calc repartitions (% / month)
@@ -1071,14 +1071,14 @@ function calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $
                     $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
 
                     /////   CAPEX
-                    $capex = getTotCapexByUC($projID,$ucID);
+                    $capex = getTotCapexByUC($projID,$ucID, $side);
                     $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
                     $capexTot_new = calcCapexTot($capexPerMonth_new,$projectYears);
                     $ItemsPerMonthAndTot['capex']['perMonth'] = add_arrays($ItemsPerMonthAndTot['capex']['perMonth'],$capexPerMonth_new);
                     $ItemsPerMonthAndTot['capex']['tot'] = add_arrays($ItemsPerMonthAndTot['capex']['tot'],$capexTot_new);
 
                     /////   IMPLEM
-                    $implem = getTotImplemByUC($projID,$ucID);
+                    $implem = getTotImplemByUC($projID,$ucID, $side);
                     $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
                     $implemTot_new = calcImplemTot($implemPerMonth_new,$projectYears);
                     $ItemsPerMonthAndTot['implem']['perMonth'] = add_arrays($ItemsPerMonthAndTot['implem']['perMonth'],$implemPerMonth_new);

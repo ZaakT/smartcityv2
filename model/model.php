@@ -19,6 +19,7 @@ function dbConnect()
 {
     try{
     $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        
         return $db;
     } catch(Exception $e){ 
         try {
@@ -1550,7 +1551,7 @@ function getCapexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListCapexAdvice($ucID, $origine = "all"){
+function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
 /* 
 CAPEX_ITEM_ADVICE
 id int(11)            id of the advice
@@ -1570,6 +1571,7 @@ description text
 */
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and capex_item.origine = 'from_ntt'";
@@ -1579,6 +1581,17 @@ description text
                $origine_selection = "and capex_item.origine = 'internal'";
     }
 
+    if($side=="projDev"){
+        $origine_selection = "and capex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and capex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and capex_item.side = 'supplier'";
+    }
+
+
+
+
     $req = $db->prepare("SELECT *
                             FROM capex_item_advice
                             INNER JOIN capex_uc
@@ -1587,6 +1600,7 @@ description text
                                         and capex_item.id = capex_uc.id_item
                                         and capex_item.id = capex_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1600,10 +1614,11 @@ description text
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -1643,9 +1658,10 @@ function getListCapexItems($ucID){
     return $list;
 }
 
-function getListCapexUser($projID,$ucID, $origine = "all"){
+function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and capex_item.origine = 'from_ntt'";
@@ -1654,8 +1670,15 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
     }elseif($origine == "internal"){
                $origine_selection = "and capex_item.origine = 'internal'";
     }
+    if($side=="projDev"){
+        $origine_selection = "and capex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and capex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and capex_item.side = 'supplier'";
+    }
 
-    $req = $db->prepare("SELECT capex_item.id,name,description
+    $req = $db->prepare("SELECT capex_item.id,name,description, side
                             FROM capex_item_user
                             INNER JOIN capex_uc
                                 INNER JOIN capex_item
@@ -1664,6 +1687,7 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
                                         and capex_item_user.id_proj = ?
                                         and capex_item_user.id = capex_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1673,10 +1697,11 @@ function getListCapexUser($projID,$ucID, $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     return $list;
@@ -1709,6 +1734,7 @@ function getListSelCapex($projID,$ucID){
 }
 
 
+<<<<<<< HEAD
 /*function insertProj($proj){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO project (name,description,id_user) VALUES (?,?,?)');
@@ -1717,6 +1743,9 @@ function getListSelCapex($projID,$ucID){
 
 
 function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL"){
+=======
+function insertCapexUser($projID,$ucID,$capex_data, $origine="from_ntt", $side="projDev"){
+>>>>>>> 6b77d7dc1d03e5bd9792896a36968289c10b8f88
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_capex`;');
@@ -1725,12 +1754,13 @@ function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL"){
                             IN capex_desc VARCHAR(255),
                             IN idUC INT,
                             IN idProj INT,
-                            IN origine VARCHAR(255)
+                            IN origine VARCHAR(255),
+                            IN side VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO capex_item (name,description, origine)
-                                    VALUES (capex_name,capex_desc, origine);
+                                INSERT INTO capex_item (name,description, origine, side)
+                                    VALUES (capex_name,capex_desc, origine, side);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO capex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -1738,8 +1768,8 @@ function insertCapexUser($projID,$ucID,$capex_data, $origine="NULL"){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_capex(?,?,?,?, ?);');
-    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID, $origine));
+    $req = $db->prepare('CALL add_capex(?,?,?,?, ?, ?);');
+    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID, $origine, $side));
     return $ret;
     
 }
@@ -1878,9 +1908,10 @@ function getImplemUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListImplemAdvice($ucID, $origine = "all"){
+function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and implem_item.origine = 'from_ntt'";
@@ -1888,6 +1919,14 @@ function getListImplemAdvice($ucID, $origine = "all"){
         $origine_selection = "and implem_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
                $origine_selection = "and implem_item.origine = 'internal'";
+    }
+
+    if($side=="projDev"){
+        $side_selection = "and implem_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and implem_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and implem_item.side = 'supplier'";
     }
 
     
@@ -1899,6 +1938,7 @@ function getListImplemAdvice($ucID, $origine = "all"){
                                         and implem_item.id = implem_uc.id_item
                                         and implem_item.id = implem_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -1912,10 +1952,11 @@ function getListImplemAdvice($ucID, $origine = "all"){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -1955,10 +1996,10 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser($projID,$ucID,  $origine = "all"){
+function getListImplemUser($projID,$ucID,  $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
-
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and implem_item.origine = 'from_ntt'";
@@ -1968,7 +2009,16 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
                $origine_selection = "and implem_item.origine = 'internal'";
     }
 
-    $req = $db->prepare("SELECT implem_item.id,name,description
+    if($side=="projDev"){
+        $side_selection = "and implem_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and implem_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and implem_item.side = 'supplier'";
+    }
+
+
+    $req = $db->prepare("SELECT implem_item.id,name,description, side
                             FROM implem_item_user
                             INNER JOIN implem_uc
                                 INNER JOIN implem_item
@@ -1977,6 +2027,7 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
                                         and implem_item_user.id_proj = ?
                                         and implem_item_user.id = implem_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -1986,10 +2037,11 @@ function getListImplemUser($projID,$ucID,  $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -2022,7 +2074,7 @@ function getListSelImplem($projID,$ucID){
     return $list;
 }
 
-function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL"){
+function insertImplemUser($projID,$ucID,$implem_data, $origine="from_ntt", $side="projDev"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_implem`;');
@@ -2031,12 +2083,13 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL"){
                             IN implem_desc VARCHAR(255),
                             IN idUC INT,
                             IN idProj INT,
-                            IN origine VARCHAR(255)
+                            IN origine VARCHAR(255),
+                            IN side VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO implem_item (name,description, origine)
-                                    VALUES (implem_name,implem_desc, origine);
+                                INSERT INTO implem_item (name,description, origine, side)
+                                    VALUES (implem_name,implem_desc, origine, side);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO implem_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2044,8 +2097,8 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="NULL"){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_implem(?,?,?,?,?);');
-    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine));
+    $req = $db->prepare('CALL add_implem(?,?,?,?,?,?);');
+    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine, $side));
     return $ret;
 }
 
@@ -2135,9 +2188,10 @@ function getOpexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListOpexAdvice($ucID, $origine = "all"){
+function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and opex_item.origine = 'from_ntt'";
@@ -2145,6 +2199,14 @@ function getListOpexAdvice($ucID, $origine = "all"){
         $origine_selection = "and opex_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
                $origine_selection = "and opex_item.origine = 'internal'";
+    }
+
+    if($side=="projDev"){
+        $side_selection = "and opex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and opex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and opex_item.side = 'supplier'";
     }
 
     $req = $db->prepare("SELECT *
@@ -2155,6 +2217,7 @@ function getListOpexAdvice($ucID, $origine = "all"){
                                         and opex_item.id = opex_uc.id_item
                                         and opex_item.id = opex_item_advice.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID));
@@ -2168,10 +2231,11 @@ function getListOpexAdvice($ucID, $origine = "all"){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -2211,9 +2275,10 @@ function getListOpexItems($ucID){
     return $list;
 }
 
-function getListOpexUser($projID,$ucID, $origine = "all"){
+function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
+    $side_selection = "";
 
     if($origine=="from_ntt"){
         $origine_selection = "and opex_item.origine = 'from_ntt'";
@@ -2223,8 +2288,17 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
                $origine_selection = "and opex_item.origine = 'internal'";
     }
 
+    if($side=="projDev"){
+        $side_selection = "and opex_item.side = 'projDev'";
+    }elseif($side == "customer"){
+        $side_selection = "and opex_item.side = 'customer'";
+    }elseif($side == "supplier"){
+               $side_selection = "and opex_item.side = 'supplier'";
+    }
+  
 
-    $req = $db->prepare("SELECT opex_item.id,name,description
+
+    $req = $db->prepare("SELECT opex_item.id,name,description, side
                             FROM opex_item_user
                             INNER JOIN opex_uc
                                 INNER JOIN opex_item
@@ -2233,6 +2307,7 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
                                         and opex_item_user.id_proj = ?
                                         and opex_item_user.id = opex_item.id
                                         $origine_selection
+                                        $side_selection
                             ORDER BY name
                             ");
     $req->execute(array($ucID,$projID));
@@ -2242,10 +2317,11 @@ function getListOpexUser($projID,$ucID, $origine = "all"){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $side = $row['side'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
         }
     }
     //var_dump($list);
@@ -2281,7 +2357,7 @@ function getListSelOpex($projID,$ucID){
 }
 
 
-function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL"){
+function insertOpexUser($projID,$ucID,$opex_data, $origine="from_ntt", $side="projDev"){
     $db = dbConnect();
     $ret = false;
     $db->exec('DROP PROCEDURE IF EXISTS `add_opex`;');
@@ -2290,12 +2366,13 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL"){
                             IN opex_desc VARCHAR(255),
                             IN idUC INT,
                             IN idProj INT,
-                            IN origine VARCHAR(255)
+                            IN origine VARCHAR(255),
+                            IN side VARCHAR(255)
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO opex_item (name,description, origine)
-                                    VALUES (opex_name,opex_desc, origine);
+                                INSERT INTO opex_item (name,description, origine, side)
+                                    VALUES (opex_name,opex_desc, origine, side);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO opex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2304,8 +2381,8 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="NULL"){
                             END
                                 ');
     //var_dump($projID,$ucID,$opex_data);
-    $req = $db->prepare('CALL add_opex(?,?,?,?, ?);');
-    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine));
+    $req = $db->prepare('CALL add_opex(?,?,?,?,?,?);');
+    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine, $side));
     return $ret;
 }
 
@@ -4031,18 +4108,37 @@ function getTotCapexFromProj($projID){
     return convertGBPToDev($tot);
 }
 
-function getTotCapexByUC($projID,$ucID){
+function getTotCapexByUC($projID,$ucID, $side = "projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_capex
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN capex_item 
+                            ON capex_item.id = input_capex.id_item
+                            WHERE input_capex.id_proj = ? and input_capex.id_uc = ? and capex_item.side = ?' );
+    $req->execute(array($projID,$ucID, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
 }
 
-function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){
+function getXpexSide($xpexID, $type){
+    if($type!="capex" && $type!="implem" && $type!="deployment_costs" && $type!="opex"){ throw new Exception("Wrong type !");}
+    $type= $type == "deployment_costs"? "implem" : $type;
+    $table=$type."_item";
+    $db = dbConnect();
+    $req = $db->prepare("SELECT side 
+                            FROM  $table
+                            WHERE id = ?");
+    
+    $req->execute(array($xpexID));
+    $res = $req->fetch()['side'];
+
+    return $res;
+
+}
+
+function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine, $side = "projDev"){
     //not valable for opex
     if($xpex!="capex" and $xpex!="implem"){
         throw new Exception("Wrong xpex (this function is not valable for opex) ! ");
@@ -4053,13 +4149,15 @@ function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine){
     if($origine=="internal" and $xpex=="capex" ){
         throw new Exception ("Capex can't be internal.");
     }
+    
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_'.$xpex.' 
                             JOIN '.$xpex.'_item 
                             ON id_item=id
-                            WHERE id_proj = ? and id_uc = ? and origine = ?');
-    $req->execute(array($projID,$ucID, $origine));
+                            WHERE id_proj = ? and id_uc = ? and origine = ? and side = ?');
+    $req->execute(array($projID,$ucID, $origine, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
@@ -4091,12 +4189,15 @@ function getTotImplemFromProj($projID){
     return convertGBPToDev($tot);
 }
 
-function getTotImplemByUC($projID,$ucID){
+function getTotImplemByUC($projID,$ucID, $side="projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT SUM(volume*unit_cost) AS tot
                             FROM input_implem
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN implem_item 
+                            ON implem_item.id = input_implem.id_item
+                            WHERE id_proj = ? and id_uc = ? and implem_item.side = ?');
+    $req->execute(array($projID,$ucID, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
     return convertGBPToDev($tot);
@@ -4117,14 +4218,16 @@ function getNbUC($projID,$ucID){
     return $list;
 }
 
-function getOpexValuesOrigine($projID,$ucID, $origine){
+function getOpexValuesOrigine($projID,$ucID, $origine, $side){
+    
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
                             FROM input_opex
                             JOIN opex_item
                             ON id = id_item
-                            WHERE id_proj = ? and id_uc = ? and origine = ?');
-    $req->execute(array($projID,$ucID, $origine));
+                            WHERE id_proj = ? and id_uc = ? and origine = ? and side = ?');
+    $req->execute(array($projID,$ucID, $origine, $side));
     $list = [];
     while($res = $req->fetch()){
         $id_item = intval($res['id_item']);
@@ -4139,12 +4242,15 @@ function getOpexValuesOrigine($projID,$ucID, $origine){
     //var_dump($list);
     return $list;
 }
-function getOpexValues($projID,$ucID){
+function getOpexValues($projID,$ucID, $side = "projDev"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
                             FROM input_opex
-                            WHERE id_proj = ? and id_uc = ?');
-    $req->execute(array($projID,$ucID));
+                            JOIN opex_item 
+                            ON opex_item.id = input_opex.id_item
+                            WHERE id_proj = ? and id_uc = ? and opex_item.side = ?');
+    $req->execute(array($projID,$ucID, $side));
     $list = [];
     while($res = $req->fetch()){
         $id_item = intval($res['id_item']);

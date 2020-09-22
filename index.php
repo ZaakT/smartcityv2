@@ -687,11 +687,11 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'], $isTaken); 
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"supplier", $isTaken); 
                                     }elseif($_GET['A3']=="selected"){
-                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -709,7 +709,7 @@ try{
                                     }
                                 }else {
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'], $isTaken);
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"supplier", $isTaken);
                                 }
                         }  
                     }  
@@ -755,11 +755,11 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'], $isTaken);
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"customer", $isTaken);
                                     }elseif($_GET['A3']=="selected"){
-                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -777,7 +777,7 @@ try{
                                     }
                                 }else {
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'], $isTaken);
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"customer",  $isTaken);
                                 }
 
                             }                             
@@ -874,19 +874,19 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="project_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="use_case_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
@@ -937,19 +937,19 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="project_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_project_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
                     }elseif($_GET['A2']=="use_case_details"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A']);
+                            dashboards_use_case_details($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
@@ -1123,11 +1123,14 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'], $isTaken); 
+                                        $side = isDev() ? "projDev" : "customer";
+                                        xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],$side, $isTaken); 
                                     }elseif($_GET['A3']=="selected"){
-                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        $side = isDev() ? "projDev" : "customer";
+                                        xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A']); 
+                                        $side = isDev() ? "projDev" : "customer";
+                                        create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -1147,7 +1150,8 @@ try{
                                     }
                                 }else {
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'], $isTaken);
+                                    $side = isDev() ? "projDev" : "customer";
+                                    xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],$side, $isTaken);
                                 }
         
                             }                             
