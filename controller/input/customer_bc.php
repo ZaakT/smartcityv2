@@ -411,7 +411,6 @@ function xpex_inputed($post, $sideBarName, $type){
             
             foreach ($listUcID as $ucID) {
                 $list = [];
-                echo "<br> info[$ucID] :";print_r($info[$ucID]);
                 foreach ($info[$ucID] as $key => $value) {
                     $temp = explode('_',$key);
                     $type=$_GET['A2'];
