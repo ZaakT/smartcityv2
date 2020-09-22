@@ -31,7 +31,7 @@ function project_out($twig,$is_connected){
     prereq_dashboards();
 }
 
-// ------------------------------- COST BENEFITS -------------------------------
+// ---------------------------------------- COST BENEFITS ----------------------------------------
 
 function cb_output_v2($twig,$is_connected,$projID,$post=[]){
 
@@ -212,7 +212,7 @@ function check_if_UC_is_completed($projID,$selScope) {
     }
     return $uc_completed;
 }
-// ------------------------------- COST BENEFITS PER USE CASE -------------------------------
+// ---------------------------------------- COST BENEFITS PER USE CASE ----------------------------------------
 
 function cost_benefits_uc($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
@@ -510,19 +510,22 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $ratio75 = 25/$nb75;
     $nb100 = intval($date100->diff($date75)->y*12 + $date100->diff($date75)->m);
     $ratio100 = 25/$nb100;
+
+    $nb25+=$nb0;
+    $nb50 +=$nb25;
+    $nb75+=$nb50;
+    $nb100+=$nb75;
     
     if($nb0!=0){
         for ($i=0; $i < $nb0 ; $i++) { 
             $list[$proj_dates[$i]] = 0;
         }
-        for ($i=$nb0; $i < $nb25 ; $i++) { 
-            $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
-        }
     } else {
         $list[$proj_dates[0]] = $ratio25;
-        for ($i=1; $i < $nb25 ; $i++) { 
-            $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
-        }
+        $nb0++;
+    }
+    for ($i=$nb0; $i < $nb25 ; $i++) { 
+        $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
     for ($i=$nb25; $i < $nb50 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
@@ -534,9 +537,8 @@ function getRepartPercImplem($compo_dates,$proj_dates){
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
     for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
-        $list[$proj_dates[$i]] = 0;
+        $list[$proj_dates[$i]] = 100;
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -623,18 +625,30 @@ function getRepartPercOpex($compo_dates,$proj_dates){
     $ratio100 = 25/$nb100;
     $nb_end = intval($enddate->diff($date100,true)->y*12 + $enddate->diff($date100,true)->m);
     
-    for ($i=0; $i < $nb0 ; $i++) { 
-        $list[$proj_dates[$i]] = 0;
+
+
+    $nb25+=$nb0;
+    $nb50 +=$nb25;
+    $nb75+=$nb50;
+    $nb100+=$nb75;
+    $nb_end+=$nb100;
+
+
+    if($nb0!=0){
+        for ($i=0; $i < $nb0 ; $i++) { 
+            $list[$proj_dates[$i]] = 0;
+        }
+    } else {
+        $list[$proj_dates[0]] = $ratio25;
+        $nb0++;
     }
-    $list[$proj_dates[$nb0]] = $ratio25;
-    for ($i=$nb0+1; $i < $nb0+$nb25 ; $i++) { 
-        
+    for ($i=$nb0; $i < $nb25 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
     }
-    for ($i=$nb25; $i < $nb50 ; $i++) {  
+    for ($i=$nb25; $i < $nb50 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
     }
-    for ($i=$nb50; $i < $nb75 ; $i++) { 
+    for ($i=+$nb50; $i < $nb75 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
     }
     for ($i=$nb75; $i < $nb100 ; $i++) { 
@@ -976,7 +990,7 @@ function calcNetSocCashTot($netsoccashPerMonth,$projectYears){
 }
 
 
-// ------------------------------- COST BENEFITS ALL USE CASES -------------------------------
+// ---------------------------------------- COST BENEFITS ALL USE CASES ----------------------------------------
 
 function cost_benefits_all($twig,$is_connected,$projID){
     if($projID!=0){
@@ -1284,7 +1298,7 @@ function budget_output($twig,$is_connected,$projID,$post=[]){
 
 
 
-// ------------------------------- BUDGET PER USE CASE -------------------------------
+// ---------------------------------------- BUDGET PER USE CASE ----------------------------------------
 
 function budget_uc($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
@@ -1479,7 +1493,7 @@ function calcBaselineOpCost($years,$baseline_crb,$crb){
 
 
 
-// ------------------------------- BUDGET ALL USE CASES -------------------------------
+// ---------------------------------------- BUDGET ALL USE CASES ----------------------------------------
 
 function budget_all($twig,$is_connected,$projID){
     if($projID!=0){
@@ -1580,7 +1594,7 @@ function budget_all($twig,$is_connected,$projID){
 }
 
 
-// ------------------------------- BANKABILITY -------------------------------
+// ---------------------------------------- BANKABILITY ----------------------------------------
 
 function bankability_new($twig,$is_connected,$projID,$post=[]){
     $user = getUser($_SESSION['username']);
@@ -2152,7 +2166,7 @@ function getWeightedScores($fin_score,$soc_score,$capexList){
     return $ret;
 }
 
-// ----------------------------------- FINANCING -----------------------------------
+// ---------------------------------------- FINANCING ----------------------------------------
 
 function financing_out($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
@@ -3208,7 +3222,7 @@ function financing_out_4($twig,$is_connected,$projID,$post=[]){
         throw new Exception("No Scenario selected !");
     }
 }
-// ------------------------------- PROJECT DASHBOARD -------------------------------
+// ---------------------------------------- PROJECT DASHBOARD ----------------------------------------
 
 function project_dashboard($twig,$is_connected,$projID=0){
     $user = getUser($_SESSION['username']);
