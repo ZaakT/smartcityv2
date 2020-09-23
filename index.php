@@ -1038,11 +1038,19 @@ try{
                         }
                     } elseif($_GET['A2']=="equipment_revenues"){
                         if(isset($_GET['A3'])) {
-                            if($_GET['A3'] == "create_revenue") {
-                                insert_equiprev_data($twig,$is_connected, $_GET['projID'],  $_GET['ucID'], $_POST);
+                            if($_GET['A3']=="create_xpex"){
+                                create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
+                            }elseif($_GET['A3']=="delete_xpex"){
+                                if(isset($_GET['id'])){
+                                    delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
+                                }else{
+                                    header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID']);
+                                }
                             }
                         } else {
-                            use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                            $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
+                            xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],"supplier", $isTaken); 
+                            //use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                         }
                     } elseif($_GET['A2']=="deployment_revenues"){
                         use_case_deployment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);

@@ -357,10 +357,10 @@ function getCatByCrit($idCrit){
 
 function getListCrit(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT crit.id, crit.name, crit.description, crit.scoring_guidance, critCat.id as id_cat
+    $req = $db->prepare('SELECT crit.id, crit.name, crit.description, crit.scoring_guidance, critcat.id as id_cat
                     FROM crit
-                    INNER JOIN critCat
-                    WHERE crit.id_cat = critCat.id
+                    INNER JOIN critcat
+                    WHERE crit.id_cat = critcat.id
                     ORDER BY name');
     $req->execute();
     $list = [];
@@ -378,7 +378,7 @@ function getListCrit(){
 
 function getListCritCat(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id,name FROM critCat ORDER BY name');
+    $req = $db->prepare('SELECT id,name FROM critcat ORDER BY name');
     $req->execute();
     $list = [];
     while ($row = $req->fetch()){
@@ -405,10 +405,10 @@ function getListSelCrit($ucmID){
 
 function getListSelCritCat($ucmID){
     $db = dbConnect();
-    $req = $db->prepare('SELECT critCat.id, name
-                        FROM critCat
+    $req = $db->prepare('SELECT critcat.id, name
+                        FROM critcat
                         INNER JOIN ucm_sel_critcat
-                        WHERE (ucm_sel_critcat.id_critCat = critCat.id)
+                        WHERE (ucm_sel_critcat.id_critCat = critcat.id)
                             AND (ucm_sel_critcat.id_ucm = ?)
                         ORDER BY name');
     $req->execute(array($ucmID));
@@ -472,7 +472,7 @@ function getNbsCritCat($listCat){
 function getCritCat($nameCat){
     $db = dbConnect();
     $req = $db->prepare('SELECT *
-                        FROM critCat
+                        FROM critcat
                         WHERE name = ?');
     $req->execute(array($nameCat));
     return $req->fetch();
@@ -480,13 +480,13 @@ function getCritCat($nameCat){
 
 function insertCritCat($category){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO critCat (name) VALUES (?)');
+    $req = $db->prepare('INSERT INTO critcat (name) VALUES (?)');
     return $req->execute(array($category[0]));
 }
 
 function deleteCritCat($catID){
     $db = dbConnect();
-    $req = $db->prepare('DELETE FROM critCat WHERE id = ?');
+    $req = $db->prepare('DELETE FROM critcat WHERE id = ?');
     return $req->execute(array($catID));
 }
 
@@ -1878,9 +1878,131 @@ function deleteAllSelCapex($projID,$ucID){
 }
 
 
+// ---------------------------------------- SUPPLIER REVENUES ----------------------------------------
+function getListSupplierRevenuesAdvice($ucID, $equipmentType){
+    $db = dbConnect();
+    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("wonrg equipment type.");}
+
+    
+    $req = $db->prepare("SELECT *
+                        FROM supplier_revenues_item 
+                        INNER JOIN supplier_revenues_uc 
+                        WHERE supplier_revenues_uc.id_uc = ?
+                            and supplier_revenues_uc.id_revenue = supplier_revenues_item.item_id 
+                            and supplier_revenues_item.advice_user = 'advice'
+                            and supplier_revenues_item.type = ?
+                        ORDER BY name
+                            ;");
+    
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_revenue']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(!array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListSupplierRevenuesUser($ucID, $projID, $equipmentType){
+    $db = dbConnect();
+    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("wonrg equipment type.");}
+
+    
+    $req = $db->prepare("SELECT *
+                        FROM supplier_revenues_item 
+                        INNER JOIN supplier_revenues_uc 
+                        INNER JOIN supplier_revenues_user
+                        WHERE supplier_revenues_uc.id_uc = ?
+                            and supplier_revenues_uc.id_revenue = supplier_revenues_item.item_id 
+                            and supplier_revenues_item.advice_user = 'user'
+                            and supplier_revenues_item.type = ?
+                            and supplier_revenues_user.id_revenue = supplier_revenues_item.item_id 
+                            and supplier_revenues_user.id_proj = ?
+                        ORDER BY name
+                            ;");
+    $req->execute(array($ucID, $equipmentType, $projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_revenue']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
 
 
-// ---------------------------------------- IMPLEM----------------------------------------
+function getListSelSupplierRevenues($projID,$ucID, $equipmentType, $adviceCustom){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,unit_cost,volume
+                            FROM input_implem
+                            INNER JOIN implem_item
+                                WHERE  input_implem.id_uc = ? and id_proj = ? and id_item = implem_item.id
+                            ORDER BY implem_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        $volume = intval($row['volume']);
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        } else {
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $equipmentType){
+    $db = dbConnect();
+    $ret = false;
+    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("wonrg equipment type.");}
+    $db->exec('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;');
+    $db->exec(' CREATE PROCEDURE `add_supplier_revenue`(
+                            IN revenue_name VARCHAR(255),
+                            IN revenue_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT,
+                            IN type_value VARCHAR(255)
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO supplier_revenues_item (name,description, type, advice_user)
+                                    VALUES (revenue_name,revenue_desc, type_value, "user");
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO supplier_revenues_user (id_revenue,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_supplier_revenue(?,?,?,?,?);');
+    $ret = $req->execute(array($revenue_data['name'],$revenue_data['description'],$ucID,$projID, $equipmentType));
+    return $ret;
+}
+
+function deleteSupplierRevenueUser($id){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM supplier_revenues_item WHERE item_id = ?');
+    return $req->execute(array($id));
+}
+// ---------------------------------------- IMPLEM ----------------------------------------
 
 function getImplemUserItem($projID,$ucID,$name){
     $db = dbConnect();
@@ -1985,7 +2107,7 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser($projID,$ucID,  $origine = "all", $side="projDev"){
+function getListImplemUser($ucID, $projID,  $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";

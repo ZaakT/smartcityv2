@@ -1,4 +1,11 @@
-
+{% macro getType(type) %}
+    {% if type == "capex" %}Capex
+    {% elseif type =="opex" %}Opex
+    {% elseif type == "equipment_revenues" %} Equipement Revenue
+    {% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up
+    {% elseif type =="deployment_costs" %}Implementation
+    {% endif %}
+{% endmacro  %}
 
 {% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, listUcsName, userMode = false ) %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
@@ -25,7 +32,7 @@
 {% if userMode %}{% set size = 4 %}{% endif %}
 {% if listUcsName|length >1 %}{% set size = size + 1 %}{% endif %}
 
-<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif (type =="deployment_costs" and (sideBarName == "input_project_common" or sideBarName == "input_project_common_supplier")) %}Deployment and Set-up{% elseif type =="deployment_costs" %}Implmentation{% endif %} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {{ _self.getType(type) }} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -82,7 +89,7 @@
         <table class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-light text-center">
                 <tr>
-                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">{{ _self.getType(type) }} Component</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per Use Case</th> {# {{compo['name']}} #}
                     <th scope="col">Range of the Unit Cost ( in {{selDevSym}} )</th>
@@ -117,7 +124,7 @@
         <table id="xpex_input" class='table table-sm table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
+                    <th scope="col">{{ _self.getType(type) }} Component</th>
                     <th scope="col">Ratio per Use Case</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
@@ -156,8 +163,8 @@
         <table id="tot_table_xpex" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col">{% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} Component</th>
-                    <th scope="col">Total {% if type == "capex" %}Capex{% elseif type =="opex" %}Opex{% elseif type =="deployment_costs"%}Deployment and Set-up{% endif %} ( in {{selDevSym}} )</th>
+                    <th scope="col">{{ _self.getType(type) }} Component</th>
+                    <th scope="col">Total {{ _self.getType(type) }} ( in {{selDevSym}} )</th>
                 </tr>
                 
             </thead>

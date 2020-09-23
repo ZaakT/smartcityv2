@@ -5,3 +5,11 @@ function déverouiller_sidebar() {
         sidebar_elem = sidebar_elem.prev()
     }
 }
+
+function prereq_ipc_sup(){
+    var parts_cond = ["project_selection","use_case_cb","schedule","equipment_revenues","deployment_revenues","operating_revenues"];
+    parts_cond.forEach(part => {
+        $("#"+part).removeClass("disabled");
+    });
+    
+}

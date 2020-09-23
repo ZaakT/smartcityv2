@@ -9,6 +9,12 @@ function prereq_ipc($nb){
     }
 }
 
+function prereq_ipc_sup(){
+    if(isset($_GET['A2'])){
+        echo "<script>prereq_ipc_sup();</script>";
+    }
+}
+
 function getListUcID($_ucID, $projID){
     if($_ucID==0){
         $listUcID=[];
@@ -101,6 +107,16 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
                         
                         $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
+                    }elseif($type=="equipment_revenues"){
+                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
+                        $list_xpex_advice_from_outside_ntt[$ucID]  = [];
+                        $list_xpex_advice_internal[$ucID]  = [];
+
+                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");    
+                        $list_xpex_user_from_outside_ntt[$ucID]  = [];
+                        $list_xpex_user_internal[$ucID]  = [];; 
+                        
+                        $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
                     }else{
                         throw new Exception("Wrong type.");
                     }
@@ -113,6 +129,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             }else{
                 $ucID = $listUcID[0];
             }
+                        
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -125,6 +142,8 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName ));
             prereq_ipc(1);
             prereq_CostBenefits();
+            prereq_ipc_sup();
+
 
         } else {
             throw new Exception("This Project doesn't exist !");
@@ -334,6 +353,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName));
                 prereq_ipc(1);
                 prereq_CostBenefits();
+                prereq_ipc_sup();
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }
@@ -373,6 +393,8 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
                 insertOpexUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=='deployment_costs'){
                 insertImplemUser($projID,$ucID,$xpex_infos, $origine, $side);
+            }elseif($type=='equipment_revenues'){
+                insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "equipment");
             }else{
                 throw new Exception("Wrong type !");
             }
@@ -396,6 +418,8 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
                 deleteOpexUser(intval($idXpex));
             }elseif($type=='deployment_costs'){
                 deleteImplemUser(intval($idXpex));
+            }elseif($type=='equipment_revenues'){
+                deleteSupplierRevenueUser(intval($idXpex));
             }else{
                 throw new Exception("Wrong type !");
             }
