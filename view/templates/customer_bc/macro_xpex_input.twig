@@ -104,14 +104,17 @@
                         {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
                         <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
                         <th scope="col">Volume</th>
+                        {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
+                        <th scope="col">Margin ( in % )</th>
+                        
+                        {% endif %}
                         {% if type == "opex" or type == "operating_revenues" %}
                         <th scope="col">Annual unit cost variation</th>
                         <th scope="col">Annual volume variation</th>
                         {% endif %}
                         {% if type == "capex" %}
                         <th scope="col">Amortization Period ( in years )</th>
-                        {% elseif type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
-                        <th scope="col">Margin ( in % )</th>
+
                         {% endif %}
                         <th scope="col">Cost ( in {{selDevSym}} )</th>
                     </tr>
