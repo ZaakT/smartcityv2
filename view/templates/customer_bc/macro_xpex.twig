@@ -1,7 +1,9 @@
 {% macro getType(type) %}
     {% if type == "capex" %}Capex
     {% elseif type =="opex" %}Opex
-    {% elseif type == "equipment_revenues" %} Equipement Revenue
+    {% elseif type == "equipment_revenues" %} Equipement Revenues
+    {% elseif type == "deployment_revenues" %} Deployment Revenues
+    {% elseif type == "operating_revenues" %} Operating Revenues
     {% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up
     {% elseif type =="deployment_costs" %}Implementation
     {% endif %}

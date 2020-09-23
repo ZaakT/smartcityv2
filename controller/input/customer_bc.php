@@ -107,18 +107,29 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
                         
                         $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
-                    }elseif($type=="equipment_revenues"){
-                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
+                    }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
+                        
                         $list_xpex_advice_from_outside_ntt[$ucID]  = [];
                         $list_xpex_advice_internal[$ucID]  = [];
-
-                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");    
+ 
                         $list_xpex_user_from_outside_ntt[$ucID]  = [];
-                        $list_xpex_user_internal[$ucID]  = [];; 
-                        
+                        $list_xpex_user_internal[$ucID]  = [];
+
                         $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
+
+                        if($type=="equipment_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");   
+                        }elseif($type=="deployment_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "deployment"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "deployment");   
+                        }elseif($type=="operating_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "operating"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "operating");   
+                        }
+                        
                     }else{
-                        throw new Exception("Wrong type.");
+                        throw new Exception("3 Wrong type.");
                     }
                 } else {
                     throw new Exception("This use case doesn't exist !");
@@ -177,11 +188,12 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
 
                 if($type=="capex"){
                     $selXpex_old = getListSelCapex($projID,$ucID);
-                    
                 }elseif($type=="opex"){
                     $selXpex_old = getListSelOpex($projID,$ucID);
                 }elseif($type=="deployment_costs"){
                     $selXpex_old = getListSelImplem($projID,$ucID);
+                }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                    $selXpex_old = getListSelSupplierRevenues($projID,$ucID, explode('_',$type)[0]);
                 }
 
                 if(empty($selXpex_old)){
@@ -191,17 +203,27 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                         insertSelOpex($projID,$ucID,$selXpex[$ucID]);
                     }elseif($type=="deployment_costs"){
                         insertSelImplem($projID,$ucID,$selXpex[$ucID]);
+                    }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                        insertSelSupplierRevenues($projID,$ucID,$selXpex[$ucID], explode('_',$type)[0]);
                     }
+
                 } elseif (!empty($selXpex_old)) {
                     $selXpexToKeep = [];
                     //var_dump($selXpex[$ucID]);
-                    if($side=="supplier"||$side=="customer"){
+                    if(($side=="supplier"||$side=="customer")&&($type=="capex"||$type=="opex"||$type=="deployment_costs")){
                         foreach($selXpex_old as $xpexID=>$value){
                             if(getXpexSide($xpexID, $type)!=$side){
                                 array_push($selXpexToKeep, $xpexID);
                             }
                         }
+                    }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                        foreach($selXpex_old as $xpexID=>$value){
+                            if(getSupplierRevenueType($xpexID)!=explode('_',$type)[0]){
+                                array_push($selXpexToKeep, $xpexID);
+                            }
+                        }
                     }
+
 
                     $selXpex_old_id = getKeys($selXpex_old);
                     $selXpex_diff_rm = array_diff($selXpex_old_id,array_merge($selXpex[$ucID], $selXpexToKeep));
@@ -217,9 +239,12 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                     }elseif($type=="deployment_costs"){
                         deleteSelImplem($projID,$ucID,$selXpex_diff_rm);
                         insertSelImplem($projID,$ucID,$selXpex_diff_add);
+                    }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                        deleteSelSupplierRevenues($projID,$ucID,$selXpex_diff_rm, explode('_',$type)[0]);
+                        insertSelSupplierRevenues($projID,$ucID,$selXpex_diff_add, explode('_',$type)[0]);
                     }
                 }else {
-                    throw new Exception("Wrong type.");
+                    throw new Exception("1 Wrong type.");
                 }
             }
             
@@ -320,8 +345,31 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                         
                         
                         $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
+                    }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
+                        
+                        $list_xpex_advice_from_outside_ntt[$ucID]  = [];
+                        $list_xpex_advice_internal[$ucID]  = [];
+ 
+                        $list_xpex_user_from_outside_ntt[$ucID]  = [];
+                        $list_xpex_user_internal[$ucID]  = [];
+
+                        $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
+
+                        if($type=="equipment_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");  
+                        }elseif($type=="deployment_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "deployment"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "deployment");   
+                        }elseif($type=="operating_revenues"){
+                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "operating"); 
+                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "operating");   
+                        }
+                        
+                        $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
+                        
                     }else{
-                        throw new Exception("Wrong type.");
+                        throw new Exception("2 Wrong type.");
                     }
 
 
@@ -395,6 +443,10 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
                 insertImplemUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=='equipment_revenues'){
                 insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "equipment");
+            }elseif($type=='deployment_revenues'){
+                insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "deployment");
+            }elseif($type=='operating_revenues'){
+                insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "operating");
             }else{
                 throw new Exception("Wrong type !");
             }
@@ -418,7 +470,7 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
                 deleteOpexUser(intval($idXpex));
             }elseif($type=='deployment_costs'){
                 deleteImplemUser(intval($idXpex));
-            }elseif($type=='equipment_revenues'){
+            }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
                 deleteSupplierRevenueUser(intval($idXpex));
             }else{
                 throw new Exception("Wrong type !");
