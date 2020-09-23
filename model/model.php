@@ -1960,7 +1960,7 @@ function getListSupplierRevenuesUser($ucID, $projID, $equipmentType){
 
 function getListSelSupplierRevenues($projID,$ucID, $equipmentType){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, margin, volume_an_var, unit_cost_an_var
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, margin, anVarVol, anVarCost
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -1976,13 +1976,13 @@ function getListSelSupplierRevenues($projID,$ucID, $equipmentType){
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         $margin = intval($row['margin']);
-        $volume_an_var = intval($row['volume_an_var']);
-        $unit_cost_an_var = intval($row['unit_cost_an_var']);
+        $anVarVol = intval($row['anVarVol']);
+        $anVarCost = intval($row['anVarCost']);
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'volume_an_var'=>$volume_an_var,'unit_cost_an_var'=>$unit_cost_an_var];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'volume_an_var'=>$volume_an_var,'unit_cost_an_var'=>$unit_cost_an_var];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         }
     }
     //var_dump($list);

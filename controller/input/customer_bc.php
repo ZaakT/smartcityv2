@@ -115,19 +115,12 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         $list_xpex_user_from_outside_ntt[$ucID]  = [];
                         $list_xpex_user_internal[$ucID]  = [];
 
-                        $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
 
-                        if($type=="equipment_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");   
-                        }elseif($type=="deployment_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "deployment"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "deployment");   
-                        }elseif($type=="operating_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "operating"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "operating");   
-                        }
+                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, explode('_',$type)[0]); 
+                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, explode('_',$type)[0]);   
+ 
                         
+                        $list_selXpex[$ucID]  = getListSelSupplierRevenues($projID,$ucID, explode('_',$type)[0]); 
                     }else{
                         throw new Exception("3 Wrong type.");
                     }
@@ -140,7 +133,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             }else{
                 $ucID = $listUcID[0];
             }
-                        
+                     
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -353,19 +346,11 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                         $list_xpex_user_from_outside_ntt[$ucID]  = [];
                         $list_xpex_user_internal[$ucID]  = [];
 
-                        $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID); 
+                        $list_selXpex[$ucID]  = getListSelSupplierRevenues($projID,$ucID,  explode('_',$type)[0]); 
 
-                        if($type=="equipment_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "equipment"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "equipment");  
-                        }elseif($type=="deployment_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "deployment"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "deployment");   
-                        }elseif($type=="operating_revenues"){
-                            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, "operating"); 
-                            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, "operating");   
-                        }
-                        
+                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, explode('_',$type)[0]); 
+                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, explode('_',$type)[0]);  
+
                         $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
                         
                     }else{
