@@ -60,6 +60,7 @@ function work_cap_req($twig,$is_connected,$scenID=0){
             $projID = $scen['id_proj'];
             $parent = array_merge(['id'=>$projID],$list_projects[$projID]);
             $scope = getListSelScope($projID);
+            if(isset($scope[0])){unset($scope[0]);}
 
             $selInvest = $scen['input_invest'];
             $selOp = $scen['input_op'];
