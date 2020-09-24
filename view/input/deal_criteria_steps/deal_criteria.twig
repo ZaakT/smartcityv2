@@ -12,8 +12,10 @@
 
 {% if side == "customer" or side == "" %}
     {% import "/templates/deal_criteria/macro.twig" as macros %}
+    {% set lorem = 'Define the Target level and "No Go" thresholds for the Deal across a selection of Financial, Societal & non monetisable impact metrics.' %}
 {% else %}
     {% import "/templates/deal_criteria/macro_supplier.twig" as macros %}
+    {% set lorem = 'Define the Target level and "No Go" thresholds for the project across a selection of Financial Metrics.' %}
 {% endif %}
 
 {% block content %}
@@ -23,7 +25,7 @@
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
-        Define the Target level and "No Go" thresholds for the Deal across a selection of Financial, Societal & non monetisable impact metrics.
+        {{lorem|nl2br}}
     </div>
 </div>
 

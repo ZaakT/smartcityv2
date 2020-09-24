@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 23 sep. 2020 à 09:50
+-- Généré le :  jeu. 24 sep. 2020 à 08:24
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -129,6 +129,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(2
                                 INSERT INTO risk_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
                                 INSERT INTO risk_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
+
+DROP PROCEDURE IF EXISTS `add_supplier_revenue`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_name` VARCHAR(255), IN `revenue_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `type_value` VARCHAR(255))  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO supplier_revenues_item (name,description, type, advice_user)
+                                    VALUES (revenue_name,revenue_desc, type_value, "user");
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO supplier_revenues_user (id_revenue,id_proj)
                                     VALUES (itemID,idProj);
                             END$$
 
@@ -1557,10 +1569,19 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
   `unit_cost` float NOT NULL,
   `volume` int(11) NOT NULL,
   `margin` float NOT NULL,
-  `volume_an_var` int(11) NOT NULL,
-  `unit_cost_an_var` int(11) NOT NULL,
+  `anVarVol` int(11) NOT NULL,
+  `anVarCost` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `input_supplier_revenues`
+--
+
+INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `margin`, `anVarVol`, `anVarCost`) VALUES
+(1, 21, 9, 0, 0, 0, 0, 0),
+(2, 21, 9, 0, 0, 0, 0, 0),
+(3, 21, 9, 0, 0, 10, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2335,7 +2356,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-23 11:15:17', 15, 1, 0);
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-09-24 10:22:46', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -3302,7 +3323,16 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `description` varchar(1023) NOT NULL,
   `advice_user` enum('advice','user') NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_revenues_item`
+--
+
+INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, `advice_user`) VALUES
+(1, 'rev 1', 'equipment', 'desc', 'user'),
+(2, 'dep 1', 'deployment', '', 'user'),
+(3, 'op 1', 'operating', '', 'user');
 
 -- --------------------------------------------------------
 
@@ -3317,6 +3347,15 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_uc` (
   PRIMARY KEY (`id_revenue`,`id_uc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Déchargement des données de la table `supplier_revenues_uc`
+--
+
+INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
+(1, 9),
+(2, 9),
+(3, 9);
+
 -- --------------------------------------------------------
 
 --
@@ -3329,6 +3368,15 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_user` (
   `id_proj` int(11) NOT NULL,
   PRIMARY KEY (`id_revenue`,`id_proj`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_revenues_user`
+--
+
+INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
+(1, 21),
+(2, 21),
+(3, 21);
 
 -- --------------------------------------------------------
 
