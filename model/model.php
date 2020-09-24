@@ -1879,6 +1879,51 @@ function deleteAllSelCapex($projID,$ucID){
 
 
 // ---------------------------------------- SUPPLIER REVENUES ----------------------------------------
+
+function getSupplierRevenuesValues($projID,$ucID, $revenueType){
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" && $revenueType != "revenues" ){ throw new Exception("1.1 wrong equipment type : $revenueType");}
+    $db = dbConnect();
+    if($revenueType != "revenues"){
+        $req = $db->prepare('SELECT volume*unit_cost*margin/100 AS revenues,
+        anVarVol,                        
+        anVarCost,
+        id_item
+        FROM input_supplier_revenues
+        JOIN supplier_revenues_item 
+        ON input_supplier_revenues.id_item = supplier_revenues_item.item_id
+        WHERE id_proj = ? and id_uc = ? and type =  ?');
+        $req->execute(array($projID,$ucID, $revenueType));
+    }
+    else{
+        $req = $db->prepare('SELECT volume*unit_cost*margin/100 AS revenues,
+        anVarVol,                        
+        anVarCost,
+        id_item
+        FROM input_supplier_revenues
+        WHERE id_proj = ? and id_uc = ?');
+        $req->execute(array($projID,$ucID));
+    }
+    
+    $list = [];
+    while($res = $req->fetch()){
+        $id_item = intval($res['id_item']);
+
+        $an_var_vol = floatval($res['anVarVol']);
+        $rate1 = pow(1+($an_var_vol/100),1/12);
+
+        $an_var_unitcost = floatval($res['anVarCost']);
+        $rate2 = pow(1+($an_var_unitcost/100),1/12);
+
+        $revenues = convertGBPToDev(floatval($res['revenues']));
+
+        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    if($list==[]){
+        return [0];
+    }
+    //var_dump($list);
+    return $list;
+}
 function getSupplierRevenueType($idItem){
     $db = dbConnect();
     $req = $db->prepare("SELECT type 
@@ -1892,9 +1937,9 @@ function getSupplierRevenueType($idItem){
 
 }
 
-function getListSupplierRevenuesAdvice($ucID, $equipmentType){
+function getListSupplierRevenuesAdvice($ucID, $revenueType){
     $db = dbConnect();
-    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("1 wrong equipment type.");}
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("1 wrong equipment type.");}
 
     
     $req = $db->prepare("SELECT *
@@ -1923,9 +1968,9 @@ function getListSupplierRevenuesAdvice($ucID, $equipmentType){
     return $list;
 }
 
-function getListSupplierRevenuesUser($ucID, $projID, $equipmentType){
+function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
     $db = dbConnect();
-    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("2 wrong equipment type.");}
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 wrong equipment type.");}
 
     
     $req = $db->prepare("SELECT *
@@ -1940,7 +1985,7 @@ function getListSupplierRevenuesUser($ucID, $projID, $equipmentType){
                             and supplier_revenues_user.id_proj = ?
                         ORDER BY name
                             ;");
-    $req->execute(array($ucID, $equipmentType, $projID));
+    $req->execute(array($ucID, $revenueType, $projID));
 
     $list = [];
     while($row = $req->fetch()){
@@ -1958,7 +2003,7 @@ function getListSupplierRevenuesUser($ucID, $projID, $equipmentType){
 }
 
 
-function getListSelSupplierRevenues($projID,$ucID, $equipmentType){
+function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item, unit_cost, volume, margin, anVarVol, anVarCost
                             FROM input_supplier_revenues
@@ -1989,8 +2034,8 @@ function getListSelSupplierRevenues($projID,$ucID, $equipmentType){
     return $list;
 }
 
-function insertSelSupplierRevenues($projID,$ucID,$list, $equipmentType){
-    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("3 wrong equipment type : $equipmentType");}
+function insertSelSupplierRevenues($projID,$ucID,$list, $revenueType){
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("3 wrong equipment type : $revenueType");}
 
     $db = dbConnect();
     $ret = false;
@@ -2012,10 +2057,10 @@ function deleteSelSupplierRevenues($projID,$ucID,$list){
     }
     return $ret;
 }
-function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $equipmentType){
+function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $revenueType){
     $db = dbConnect();
     $ret = false;
-    if($equipmentType!="equipment" && $equipmentType!="deployment" && $equipmentType!="operating" ){ throw new Exception("4 wrong equipment type.");}
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("4 wrong equipment type.");}
     $db->exec('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;');
     $db->exec(' CREATE PROCEDURE `add_supplier_revenue`(
                             IN revenue_name VARCHAR(255),
@@ -2036,7 +2081,7 @@ function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $equipmentType){
                             END
                                 ');
     $req = $db->prepare('CALL add_supplier_revenue(?,?,?,?,?);');
-    $ret = $req->execute(array($revenue_data['name'],$revenue_data['description'],$ucID,$projID, $equipmentType));
+    $ret = $req->execute(array($revenue_data['name'],$revenue_data['description'],$ucID,$projID, $revenueType));
     return $ret;
 }
 
