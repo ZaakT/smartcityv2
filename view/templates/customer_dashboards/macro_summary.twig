@@ -78,13 +78,17 @@
                         <tr>
                             <td>Year</td>
                             <td class="cbLabel">Cumulated Net Cash</td>
-                            <td class="cbLabel">Cumulated Net Societal Cash</td>
+                            {% if cumulnetsoccashTot|length > 0 %}
+                                <td class="cbLabel">Cumulated Net Societal Cash</td>
+                            {% endif %}
                         </tr>
                         {% for year in years %}
                         <tr>
                             <td class="yearCB">{{ year }}</td>
                             <td class="CNC">{{ (cumulnetcashTot[year])|number_format(2, '.', '') }}</td>
-                            <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', '') }}</td>
+                            {% if cumulnetsoccashTot|length > 0 %}
+                                <td class="CNSC">{{ (cumulnetsoccashTot[year])|number_format(2, '.', '') }}</td>
+                            {% endif %}
                         {% endfor %}
                     </table>
                 </div>

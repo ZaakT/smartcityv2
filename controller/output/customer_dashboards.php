@@ -41,12 +41,18 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
                 $ItemsPerMonthAndTot = calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears, $side);//PB
                 $netcashPerMonth = calcNetCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth']);
-                $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth'],$ItemsPerMonthAndTot['widercash']['perMonth']);
-                
+                if($side != "supplier"){
+                    $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth'],$ItemsPerMonthAndTot['widercash']['perMonth']);
+                }
+                                
                 $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
                 $cumulnetcashTot = $netcashTot[1]; 
-                $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
-                $cumulnetsoccashTot = $netsoccashTot[1];
+                if($side != "supplier"){
+                    $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
+                    $cumulnetsoccashTot = $netsoccashTot[1];
+                }else{
+                    $cumulnetsoccashTot=[];
+                }
 
 
                 $revenueSum = 0;
@@ -78,20 +84,26 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $npv2 = calcNPV($dr_month,$sum_capex_implem);
                 // npv
                 $fin_npv = calcNPV($dr_month,$netcashPerMonth[0]); 
-                $soc_npv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                if($side != "supplier"){
+                    $soc_npv = calcNPV($dr_month,$netsoccashPerMonth[0]);
+                }
                 $fin_societal_npv = 0;
                 $soc_societal_npv = 0;
 
                 
                 //roi
                 $fin_roi = calcROI($fin_npv,$npv2);     
-                $soc_roi = calcROI($soc_npv,$npv2);
+                if($side != "supplier"){
+                    $soc_roi = calcROI($soc_npv,$npv2);
+                }
                 $fin_societal_roi = 0;
                 $soc_societal_roi = 0;
 
                 //payback            
                 $fin_payback = calcPayback($netcashPerMonth)[1];
-                $soc_payback = calcPayback($netsoccashPerMonth)[1];
+                if($side != "supplier"){
+                    $soc_payback = calcPayback($netsoccashPerMonth)[1];
+                }
                 $fin_societal_payback = 0;
                 $soc_societal_payback = 0;
 
@@ -100,27 +112,44 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $rating_risks = calcRatingRisks($projID, $scope);
 
                 $cahsOutTot = calcCashOut($ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth']);
+                
+                if($side != "supplier"){
+                    $soc_operating_margin = round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                }
                 $fin_operating_margin =round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
-                $soc_operating_margin = round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
-
-                $bankability_cacl = array(
-                    'fin_societal_npv'=>$fin_societal_npv,
-                    'soc_societal_npv'=>$soc_societal_npv,
-                    'fin_societal_roi'=>$fin_societal_roi,
-                    'soc_societal_roi'=>$soc_societal_roi,
-                    'fin_societal_payback'=>$fin_societal_payback,
-                    'soc_societal_payback'=>$soc_societal_payback,                    
-                    'fin_npv'=>$fin_npv,
-                    'soc_npv'=>$soc_npv,
-                    'fin_roi'=>$fin_roi,
-                    'soc_roi'=>$soc_roi,
-                    'fin_payback'=>$fin_payback,
-                    'soc_payback'=>$soc_payback,
-                    'nqb'=>$nqb,
-                    'rating_risks'=>$rating_risks,
-                    'fin_operating_margin'=>$fin_operating_margin,
-                    'soc_operating_margin'=>$soc_operating_margin         
-                );
+                
+                if($side != "supplier"){
+                    $bankability_cacl = array(
+                        'fin_societal_npv'=>$fin_societal_npv,
+                        'soc_societal_npv'=>$soc_societal_npv,
+                        'fin_societal_roi'=>$fin_societal_roi,
+                        'soc_societal_roi'=>$soc_societal_roi,
+                        'fin_societal_payback'=>$fin_societal_payback,
+                        'soc_societal_payback'=>$soc_societal_payback,                    
+                        'fin_npv'=>$fin_npv,
+                        'soc_npv'=>$soc_npv,
+                        'fin_roi'=>$fin_roi,
+                        'soc_roi'=>$soc_roi,
+                        'fin_payback'=>$fin_payback,
+                        'soc_payback'=>$soc_payback,
+                        'nqb'=>$nqb,
+                        'rating_risks'=>$rating_risks       
+                    );
+                }else{
+                    $bankability_cacl = array(
+                        'fin_societal_npv'=>$fin_societal_npv,
+                        'fin_societal_roi'=>$fin_societal_roi,
+                        'fin_societal_payback'=>$fin_societal_payback,
+                        'soc_societal_payback'=>$soc_societal_payback,                    
+                        'fin_npv'=>$fin_npv,
+                        'fin_roi'=>$fin_roi,
+                        'fin_payback'=>$fin_payback,
+                        'nqb'=>$nqb,
+                        'rating_risks'=>$rating_risks,
+                        'fin_operating_margin'=>$fin_operating_margin        
+                    );
+                }
+                
             /*}
             catch(\Throwable $th){
                 header('Location: ?A='.$sideBarName);

@@ -49,53 +49,98 @@ $('.CNSC').each(function() {
 //console.log(cbLabel,yearCB,CNC,CNSC);
 
 
-new Chart(document.getElementById("costbenefitsGraph"), {
-  type: 'line',
-  data: {
-    labels: yearCB,
-    datasets: [{ 
-      data: CNSC,
-      label: cbLabel[1],
-      borderColor: "#55D8FE",
-      backgroundColor: "#55D8FE",
-      fill: false
-    },{ 
-        data: CNC,
-        label: cbLabel[0],
-        borderColor: "#A3A0FB",
-        backgroundColor: "#A3A0FB",
-        fill: false
-      } 
-    ]
-  },
-  options: {
-    scales: {
-      yAxes: [{
-          scaleLabel: {
-            display: true,
-          labelString: 'Cash (in '+currency+')'
-          },
-          ticks: {
-            callback: function(value, index, values) {
-                if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
-                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                } else {
-                    return value;
-                }
-            }
-        }           
-      }]
+
+if(CNSC.length>0){
+  chartCost = new Chart(document.getElementById("costbenefitsGraph"), {
+    type: 'line',
+    data: {
+      labels: yearCB,
+      datasets: [{ 
+          data: CNC,
+          label: cbLabel[0],
+          borderColor: "#A3A0FB",
+          backgroundColor: "#A3A0FB",
+          fill: false
+        } ,{ 
+          data: CNSC,
+          label: cbLabel[1],
+          borderColor: "#55D8FE",
+          backgroundColor: "#55D8FE",
+          fill: false
+        }
+      ]
     },
-    title: {
-      display: false
-    },
-    plugins: {
-      datalabels: {
+    options: {
+      scales: {
+        yAxes: [{
+            scaleLabel: {
+              display: true,
+            labelString: 'Cash (in '+currency+')'
+            },
+            ticks: {
+              callback: function(value, index, values) {
+                  if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  } else {
+                      return value;
+                  }
+              }
+          }           
+        }]
+      },
+      title: {
         display: false
+      },
+      plugins: {
+        datalabels: {
+          display: false
+        }
       }
     }
-  }
-});
+  });
+}else{
+  chartCost = new Chart(document.getElementById("costbenefitsGraph"), {
+    type: 'line',
+    data: {
+      labels: yearCB,
+      datasets: [{ 
+          data: CNC,
+          label: cbLabel[0],
+          borderColor: "#A3A0FB",
+          backgroundColor: "#A3A0FB",
+          fill: false
+        } 
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+            scaleLabel: {
+              display: true,
+            labelString: 'Cash (in '+currency+')'
+            },
+            ticks: {
+              callback: function(value, index, values) {
+                  if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                  } else {
+                      return value;
+                  }
+              }
+          }           
+        }]
+      },
+      title: {
+        display: false
+      },
+      plugins: {
+        datalabels: {
+          display: false
+        }
+      }
+    }
+  });
+}
 
 
 
