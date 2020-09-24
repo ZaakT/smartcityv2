@@ -1048,6 +1048,13 @@ try{
                                 }
                             }elseif($_GET['A3']=="selected"){
                                 xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
+                            }elseif($_GET['A3']=="inputed"){
+                                if(isset($_POST)){
+                                    xpex_inputed($_POST, $_GET['A'], $_GET['A2']);
+                                }
+                                else{
+                                    header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                }
                             }
                         } else {
                             $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;

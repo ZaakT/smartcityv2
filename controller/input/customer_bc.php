@@ -527,6 +527,12 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['anVarCost'=>$value];
                         }
+                    }else if($temp[0]=="margin"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['margin'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['margin'=>$value];
+                        }
                     }else{
                         throw new Exception("Error !");
                     }
@@ -538,12 +544,14 @@ function xpex_inputed($post, $sideBarName, $type){
                     insertOpexInputed($projID,$ucID,$list);
                 }elseif($type=="deployment_costs"){
                     insertImplemInputed($projID,$ucID,$list);
+                }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                    insertSupplierRevenuesInputed($projID,$ucID,$list);
                 }else{
                     throw new Exception("Wrong type !");
                 }
             }
             update_ModifDate_proj($projID);
-            if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier"){
+            if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier" or $sideBarName == "input_use_case_supplier"){
                 header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
             }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
                 if ($type == "capex"){

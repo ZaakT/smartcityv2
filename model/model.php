@@ -2045,6 +2045,24 @@ function deleteSupplierRevenueUser($id){
     $req = $db->prepare('DELETE FROM supplier_revenues_item WHERE item_id = ?');
     return $req->execute(array($id));
 }
+
+function insertSupplierRevenuesInputed($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $list['anVarVol'] = isset($list['anVarVol']) ? $list['anVarVol'] : 0;
+    $list['anVarCost'] = isset($list['anVarCost']) ? $list['anVarCost'] : 0;
+    $req = $db->prepare("UPDATE input_supplier_revenues
+                            SET volume = ?,
+                                unit_cost = ?,
+                                margin = ?,
+                                anVarVol = ?,
+                                anVarCost = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['margin'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+    }
+    return $ret;
+}
 // ---------------------------------------- IMPLEM ----------------------------------------
 
 function getImplemUserItem($projID,$ucID,$name){
