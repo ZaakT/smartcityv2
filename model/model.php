@@ -968,6 +968,9 @@ function getListSelScope($projID){
         array_unshift($list[$id_meas],$id_uc);
     }
     //var_dump($list);
+    if(isDev() && isset($list[0])){
+        unset($list[0]);
+    }
     return $list;
 }
 
