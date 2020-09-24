@@ -2107,8 +2107,13 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                                 anVarCost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['margin'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
-    }
+        try {
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['margin'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+
+        } catch (\Throwable $th) {
+            //do nothing;
+        }
+            }
     return $ret;
 }
 // ---------------------------------------- IMPLEM ----------------------------------------
@@ -2216,7 +2221,7 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser($ucID, $projID,  $origine = "all", $side="projDev"){
+function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";

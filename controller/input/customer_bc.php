@@ -536,6 +536,9 @@ function xpex_inputed($post, $sideBarName, $type){
                     }else{
                         throw new Exception("Error !");
                     }
+                    if($type=='equipment_revenues' ||$type=="deployment_revenues"){
+                        $list[$temp[1]] += ['anVarVol'=>0, 'anVarCost'=>0];
+                    }
                 }
 
                 if($type=="capex"){
