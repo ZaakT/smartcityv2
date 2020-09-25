@@ -273,8 +273,12 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     $list_item = [];
     $listUC = getListUCs();   
     foreach ($listUC as $id_uc => $UC){ 
-        $fun = 'getList'.ucwords($catName).'Items';
-        $list_tampon = $fun(intval($id_uc));
+        if($catName != 'equipment_revenue' && $catName != 'deployment_revenue' && $catName != 'operating_revenue'){
+            $fun = 'getList'.ucwords($catName).'Items';
+            $list_tampon = $fun(intval($id_uc));
+        }else{
+            $list_tampon = getListSupplierRevenuesItems(intval($id_uc), explode("_", $catName)[0]);
+        }
         foreach ($list_tampon as $id_item => $item){
             $list_item[$id_item] = $item;
             if (array_key_exists('UC',$list_item[$id_item])){
@@ -346,7 +350,11 @@ function create_item3($twig,$is_connected,$post,$catItem){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {
         insertItem($itemInfos,$catItem);
-        header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+        if($catItem != 'equipment_revenue' && $catItem != 'deployment_revenue' && $catItem != 'operating_revenue'){
+            header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+        }else{
+            header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem);
+        }
     }
 }
 
@@ -370,7 +378,11 @@ function create_quantifiable_item($twig,$is_connected,$post){
 
 function delete_item($catItem,$itemID){
     deleteItem($catItem, intval($itemID));
-    header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+    if($catItem != 'equipment_revenue' && $catItem != 'deployment_revenue' && $catItem != 'operating_revenue'){
+        header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem.'_item');
+    }else{
+        header('Location: ?A=admin&A2=manage_db&A3=manage_'.$catItem);
+    }
 }
 
 function manage_currency($twig,$is_connected,$isTaken=false) {

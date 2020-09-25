@@ -1,8 +1,14 @@
 {% extends '/others/admin_menu/manage_db.twig' %}
 
-{% if itemName == "equipement_revenue" %}
-    {% set itemShow = "Equipement" %}
-    {% set mode = "NewItem1" %}
+{% if itemName == "equipment_revenue" %}
+    {% set itemShow = "Equipement Revenues" %}
+    {% set mode = "NewItem3" %}
+{% elseif itemName == "deployment_revenue" %}
+    {% set itemShow = "Deployment Revenue" %}
+    {% set mode = "NewItem3" %}
+{% elseif itemName == "operating_revenue" %}
+    {% set itemShow = "Operating Revenue" %}
+    {% set mode = "NewItem3" %}
 {% elseif itemName == "capex" %}
     {% set itemShow = "Capex" %}
     {% set mode = "NewItem1" %}

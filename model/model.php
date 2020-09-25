@@ -1954,14 +1954,14 @@ function getListSupplierRevenuesAdvice($ucID, $revenueType){
                             and supplier_revenues_item.type = ?
                         ORDER BY name
                             ;");
-    
+    $req->execute(array($ucID, $revenueType));
 
     $list = [];
     while($row = $req->fetch()){
         $id_item = intval($row['id_revenue']);
         $name = $row['name'];
         $description = $row['description'];
-        if(!array_key_exists($id_item,$list)){
+        if(array_key_exists($id_item,$list)){
             $list[$id_item] += ['name'=>$name,'description'=>$description];
         } else {
             $list[$id_item] = ['name'=>$name,'description'=>$description];
@@ -2007,6 +2007,8 @@ function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
 
 
 function getListSelSupplierRevenues($projID,$ucID, $revenueType){
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 wrong equipment type.");}
+
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item, unit_cost, volume, margin, anVarVol, anVarCost
                             FROM input_supplier_revenues
@@ -2031,6 +2033,37 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
             $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         } else {
             $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
+
+function getListSupplierRevenuesItems($ucID, $revenueType){
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2.1 wrong equipment type.");}
+
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT supplier_revenues_item.item_id,supplier_revenues_item.name,supplier_revenues_item.description
+                            FROM supplier_revenues_item
+                            LEFT JOIN supplier_revenues_uc
+                                ON supplier_revenues_item.item_id = supplier_revenues_uc.id_revenue
+                                    
+                            WHERE supplier_revenues_uc.id_uc = ?
+                                AND supplier_revenues_item.type = ? 
+                                AND supplier_revenues_item.advice_user = 'advice'
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID, $revenueType));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['item_id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description];
         }
     }
     //var_dump($list);
@@ -5314,6 +5347,9 @@ function getItemByNameAndCat($itemName,$catItem){
     } else if ($catItem == 'risks'){
         $req = $db->prepare('SELECT * FROM risks_item WHERE name = ?');
         $req->execute(array($itemName));
+    }else if ($catItem == 'equipment_revenue' || $catItem == 'deployment_revenue' || $catItem == 'operating_revenue'){
+        $req = $db->prepare('SELECT * FROM supplier_revenues_item WHERE name = ? and type = ?');
+        $req->execute(array($itemName, explode("_", $catItem)[0]));
     }
     
     return $req->fetch();
@@ -5440,137 +5476,160 @@ function insertItem($item,$catItem){
             return $ret;
             break;
 
-            case 'cashreleasing':
-                $db->exec('DROP PROCEDURE IF EXISTS `add_cashreleasing`;');
-                $db->exec(' CREATE PROCEDURE `add_cashreleasing`(
-                                        IN cashreleasing_name VARCHAR(255),
-                                        IN cashreleasing_desc VARCHAR(255),
-                                        IN unit VARCHAR(255),
-                                        IN source VARCHAR(255),
-                                        IN unit_cost INT,
-                                        IN min_red_nb INT,
-                                        IN max_red_nb INT,
-                                        IN min_red_cost INt,
-                                        IN max_red_cost INT,
-                                        IN idUC INT
-                                        )
-                                        BEGIN
-                                            DECLARE itemID INT;
-                                            INSERT INTO cashreleasing_item (name,description)
-                                                VALUES (cashreleasing_name,cashreleasing_desc);
-                                            SET itemID = LAST_INSERT_ID();
-                                            INSERT INTO cashreleasing_uc (id_item,id_uc)
-                                                VALUES (itemID,idUC);
-                                            INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
-                                                VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
-                                        END
-                                            ');
-                $req = $db->prepare('CALL add_cashreleasing(?,?,?,?,?,?,?,?,?,?);');
-                $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
-            
-                return $ret;
-                break;
+        case 'cashreleasing':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_cashreleasing`;');
+            $db->exec(' CREATE PROCEDURE `add_cashreleasing`(
+                                    IN cashreleasing_name VARCHAR(255),
+                                    IN cashreleasing_desc VARCHAR(255),
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN unit_cost INT,
+                                    IN min_red_nb INT,
+                                    IN max_red_nb INT,
+                                    IN min_red_cost INt,
+                                    IN max_red_cost INT,
+                                    IN idUC INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO cashreleasing_item (name,description)
+                                            VALUES (cashreleasing_name,cashreleasing_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO cashreleasing_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                            VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_cashreleasing(?,?,?,?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
+        
+            return $ret;
+            break;
 
-                case 'widercash':
-                    $db->exec('DROP PROCEDURE IF EXISTS `add_widercash`;');
-                    $db->exec(' CREATE PROCEDURE `add_widercash`(
-                                            IN widercash_name VARCHAR(255),
-                                            IN widercash_desc VARCHAR(255),
-                                            IN unit VARCHAR(255),
-                                            IN source VARCHAR(255),
-                                            IN unit_cost INT,
-                                            IN min_red_nb INT,
-                                            IN max_red_nb INT,
-                                            IN min_red_cost INt,
-                                            IN max_red_cost INT,
-                                            IN idUC INT
-                                            )
-                                            BEGIN
-                                                DECLARE itemID INT;
-                                                INSERT INTO widercash_item (name,description)
-                                                    VALUES (widercash_name,widercash_desc);
-                                                SET itemID = LAST_INSERT_ID();
-                                                INSERT INTO widercash_uc (id_item,id_uc)
-                                                    VALUES (itemID,idUC);
-                                                INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
-                                                    VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
-                                            END
-                                                ');
-                    $req = $db->prepare('CALL add_widercash(?,?,?,?,?,?,?,?,?,?);');
-                    $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
-                
-                    return $ret;
-                    break;
+        case 'widercash':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_widercash`;');
+            $db->exec(' CREATE PROCEDURE `add_widercash`(
+                                    IN widercash_name VARCHAR(255),
+                                    IN widercash_desc VARCHAR(255),
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN unit_cost INT,
+                                    IN min_red_nb INT,
+                                    IN max_red_nb INT,
+                                    IN min_red_cost INt,
+                                    IN max_red_cost INT,
+                                    IN idUC INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO widercash_item (name,description)
+                                            VALUES (widercash_name,widercash_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO widercash_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                            VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_widercash(?,?,?,?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6]),intval($item[7]),intval($item[8]),intval($item[9])));
+        
+            return $ret;
+            break;
 
-                    case 'quantifiable':
-                        $db->exec('DROP PROCEDURE IF EXISTS `add_quantifiable`;');
-                        $db->exec(' CREATE PROCEDURE `add_quantifiable`(
-                                                IN quantifiable_name VARCHAR(255),
-                                                IN quantifiable_desc VARCHAR(255),
-                                                IN unit VARCHAR(255),
-                                                IN source VARCHAR(255),
-                                                IN min_red_nb INT,
-                                                IN max_red_nb INT,
-                                                IN idUC INT
-                                                )
-                                                BEGIN
-                                                    DECLARE itemID INT;
-                                                    INSERT INTO quantifiable_item (name,description)
-                                                        VALUES (quantifiable_name,quantifiable_desc);
-                                                    SET itemID = LAST_INSERT_ID();
-                                                    INSERT INTO quantifiable_uc (id_item,id_uc)
-                                                        VALUES (itemID,idUC);
-                                                    INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
-                                                        VALUES (itemID,unit,source,min_red_nb,max_red_nb);
-                                                END
-                                                    ');
-                        $req = $db->prepare('CALL add_quantifiable(?,?,?,?,?,?,?);');
-                        $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6])));
-                    
-                        return $ret;
-                        break;
+        case 'quantifiable':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_quantifiable`;');
+            $db->exec(' CREATE PROCEDURE `add_quantifiable`(
+                                    IN quantifiable_name VARCHAR(255),
+                                    IN quantifiable_desc VARCHAR(255),
+                                    IN unit VARCHAR(255),
+                                    IN source VARCHAR(255),
+                                    IN min_red_nb INT,
+                                    IN max_red_nb INT,
+                                    IN idUC INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO quantifiable_item (name,description)
+                                            VALUES (quantifiable_name,quantifiable_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO quantifiable_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
+                                            VALUES (itemID,unit,source,min_red_nb,max_red_nb);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_quantifiable(?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[6])));
+        
+            return $ret;
+            break;
 
-                    case 'noncash':
-                        $db->exec('DROP PROCEDURE IF EXISTS `add_noncash`;');
-                        $db->exec(' CREATE PROCEDURE `add_noncash`(
-                                                IN noncash_name VARCHAR(255),
-                                                IN noncash_desc VARCHAR(255),
-                                                IN idUC INT
-                                                )
-                                                BEGIN
-                                                    DECLARE itemID INT;
-                                                    INSERT INTO noncash_item (name,description) 
-                                                            VALUES (noncash_name,noncash_desc);
-                                                    SET itemID = LAST_INSERT_ID();
-                                                    INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
-                                                END
-                                                    ');
-                        $req = $db->prepare('CALL add_noncash(?,?,?);');
-                        $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
-                    
-                        return $ret;
-                        break;
+        case 'noncash':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_noncash`;');
+            $db->exec(' CREATE PROCEDURE `add_noncash`(
+                                    IN noncash_name VARCHAR(255),
+                                    IN noncash_desc VARCHAR(255),
+                                    IN idUC INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO noncash_item (name,description) 
+                                                VALUES (noncash_name,noncash_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_noncash(?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
+        
+            return $ret;
+            break;
 
-                        case 'risks':
-                            $db->exec('DROP PROCEDURE IF EXISTS `add_risks`;');
-                            $db->exec(' CREATE PROCEDURE `add_risks`(
-                                                    IN risks_name VARCHAR(255),
-                                                    IN risks_desc VARCHAR(255),
-                                                    IN idUC INT
-                                                    )
-                                                    BEGIN
-                                                        DECLARE itemID INT;
-                                                        INSERT INTO risks_item (name,description) 
-                                                                VALUES (risks_name,risks_desc);
-                                                        SET itemID = LAST_INSERT_ID();
-                                                        INSERT INTO risks_uc (id_item,id_uc) VALUES (itemID,idUC);
-                                                    END
-                                                        ');
-                            $req = $db->prepare('CALL add_risks(?,?,?);');
-                            $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
-                        
-                            return $ret;
-                            break;
+        case 'risks':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_risks`;');
+            $db->exec(' CREATE PROCEDURE `add_risks`(
+                                    IN risks_name VARCHAR(255),
+                                    IN risks_desc VARCHAR(255),
+                                    IN idUC INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO risks_item (name,description) 
+                                                VALUES (risks_name,risks_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO risks_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_risks(?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],intval($item[2])));
+        
+            return $ret;
+            break;
+    }
+    if($catItem == 'equipment_revenue' || $catItem == 'deployment_revenue' || $catItem == 'operating_revenue'){
+        $db = dbConnect();
+        $ret = false;
+        $db->exec('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;');
+        $db->exec(' CREATE PROCEDURE `add_supplier_revenue`(
+                                IN revenue_name VARCHAR(255),
+                                IN revenue_desc VARCHAR(255),
+                                IN idUC INT,
+                                IN type_value VARCHAR(255)
+                                )
+                                BEGIN
+                                    DECLARE itemID INT;
+                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user)
+                                        VALUES (revenue_name,revenue_desc, type_value, "advice");
+                                    SET itemID = LAST_INSERT_ID();
+                                    INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
+                                        VALUES (itemID,idUC);
+                                END
+                                    ');
+        $req = $db->prepare('CALL add_supplier_revenue(?,?,?,?);');
+        $ret = $req->execute(array($item[0],$item[1],intval($item[2]), explode("_",$catItem)[0]));
+        return $ret;
     }
 
     
@@ -5679,4 +5738,11 @@ function deleteItem($catItem,$itemID) {
             return $req->execute(array($itemID));
         break;
     } 
+    if($catItem == 'equipment_revenue' || $catItem == 'deployment_revenue' || $catItem == 'operating_revenue'){
+        
+        $req = $db->prepare('DELETE FROM supplier_revenues_item WHERE item_id = ?');
+        $req->execute(array($itemID));
+        $req = $db->prepare('DELETE FROM supplier_revenues_uc WHERE id_revenue = ?');
+        return $req->execute(array($itemID));
+    }
 }

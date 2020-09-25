@@ -68,11 +68,11 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_users');
                                 }
 
-                            } else if($_GET['A3']=='manage_currency'){
+                            } elseif($_GET['A3']=='manage_currency'){
                                 manage_currency($twig,$is_connected); 
                             } elseif($_GET['A3']=='change_rate'){
                                 change_currency_rate($twig,$is_connected,$_POST);
-                            } else if($_GET['A3']=='manage_measures'){
+                            } elseif($_GET['A3']=='manage_measures'){
                                 manage_measures($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_measure'){
                                 create_measure($twig,$is_connected,$_POST);
@@ -83,7 +83,7 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_measures');
                                 }
 
-                            } else if($_GET['A3']=='manage_uc_cat'){
+                            } elseif($_GET['A3']=='manage_uc_cat'){
                                 manage_uc_cat($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_uc_category'){
                                 create_uc_category($twig,$is_connected,$_POST);
@@ -94,7 +94,7 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_uc_cat');
                                 }
 
-                            } else if($_GET['A3']=='manage_usecases'){
+                            } elseif($_GET['A3']=='manage_usecases'){
                                 manage_usecases($twig,$is_connected);
                             } elseif($_GET['A3']=='create_usecase'){
                                 create_usecase($twig,$is_connected,$_POST);
@@ -106,7 +106,7 @@ try{
                                 }
 
 
-                            } else if($_GET['A3']=='manage_crit_cat'){
+                            } elseif($_GET['A3']=='manage_crit_cat'){
                                 manage_crit_cat($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_crit_category'){
                                 create_crit_category($twig,$is_connected,$_POST);
@@ -117,7 +117,7 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_crit_cat');
                                 }
 
-                            } else if($_GET['A3']=='manage_criteria'){
+                            } elseif($_GET['A3']=='manage_criteria'){
                                 manage_criteria($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_crit'){
                                 create_crit($twig,$is_connected,$_POST);
@@ -128,7 +128,7 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_criteria');
                                 }
 
-                            } else if($_GET['A3']=='manage_dlt'){
+                            } elseif($_GET['A3']=='manage_dlt'){
                                 manage_dlt($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_dlt'){
                                 create_dlt($twig,$is_connected,$_POST);
@@ -147,13 +147,13 @@ try{
                                     header('Location: ?A=admin&A2=manage_db&A3=manage_dlt');
                                 }
 
-                            } else if($_GET['A3']=='manage_capex_item'){
+                            } elseif($_GET['A3']=='manage_capex_item'){
                                 manage_item('capex',$twig,$is_connected); 
-                            } else if($_GET['A3']=='manage_opex_item'){
+                            } elseif($_GET['A3']=='manage_opex_item'){
                                 manage_item('opex',$twig,$is_connected); 
-                            } else if($_GET['A3']=='manage_implem_item'){
+                            } elseif($_GET['A3']=='manage_implem_item'){
                                 manage_item('implem',$twig,$is_connected); 
-                            } else if($_GET['A3']=='manage_revenues_item'){
+                            } elseif($_GET['A3']=='manage_revenues_item'){
                                 manage_item('revenues',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_item_1'){
                                 if(isset($_GET['cat'])){
@@ -161,9 +161,9 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db');
                                 }
-                            } else if($_GET['A3']=='manage_cashreleasing_item'){
+                            } elseif($_GET['A3']=='manage_cashreleasing_item'){
                                 manage_item('cashreleasing',$twig,$is_connected); 
-                            } else if($_GET['A3']=='manage_widercash_item'){
+                            } elseif($_GET['A3']=='manage_widercash_item'){
                                 manage_item('widercash',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_item_2'){
                                 if(isset($_GET['cat'])){
@@ -171,14 +171,20 @@ try{
                                 } else {
                                     header('Location: ?A=admin&A2=manage_db');
                                 }
-                            } else if($_GET['A3']=='manage_quantifiable_item'){
+                            } elseif($_GET['A3']=='manage_quantifiable_item'){
                                 manage_item('quantifiable',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_quantifiable_item'){
                                 create_quantifiable_item($twig,$is_connected,$_POST);
-                            } else if($_GET['A3']=='manage_noncash_item'){
+                            } elseif($_GET['A3']=='manage_noncash_item'){
                                 manage_item('noncash',$twig,$is_connected); 
-                            } else if($_GET['A3']=='manage_risks_item'){
+                            } elseif($_GET['A3']=='manage_risks_item'){
                                 manage_item('risks',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_equipment_revenue'){
+                                manage_item('equipment_revenue',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_deployment_revenue'){
+                                manage_item('deployment_revenue',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_operating_revenue'){
+                                manage_item('operating_revenue',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_item_3'){
                                 if(isset($_GET['cat'])){
                                     create_item3($twig,$is_connected,$_POST,$_GET['cat']);
@@ -683,7 +689,7 @@ try{
                                     supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
                                 }
                             }  // --- CAPEX OR OPEX (XPEX) ---
-                            else if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
+                            elseif($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
@@ -834,7 +840,7 @@ try{
                                 header('Location: ?A=deal_criteria&A2project_selection&A3='.$_GET['A3']);
                             }
                             
-                        } else if($_GET['A2']=="deal_criteria_input") {
+                        } elseif($_GET['A2']=="deal_criteria_input") {
                             deal_criteria_input_nogo_target($_POST, $_GET['A3']);
                         }
                     } else {  
@@ -2422,7 +2428,7 @@ try{
                         else {
                             header('Location: ?A=dashboards&A2=project');
                         }                    
-                    } else if($_GET['A2']=="bankability_input") {
+                    } elseif($_GET['A2']=="bankability_input") {
                         bankability_input_nogo_target($_POST);                    
                     } elseif($_GET['A2']=="bankability"){
                         if(isset($_SESSION['projID'])){
@@ -2466,11 +2472,11 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="output"){
                                         financing_general($twig,$is_connected,$_SESSION['projID'],$_POST);
-                                /*    } else if($_GET['A3']=="output2"){
+                                /*    } elseif($_GET['A3']=="output2"){
                                         financing_out_5($twig,$is_connected,$_SESSION['projID'],$_POST);
-                                    } else if($_GET['A3']=="output3"){
+                                    } elseif($_GET['A3']=="output3"){
                                         financing_out_3($twig,$is_connected,$_SESSION['projID'],$_POST);
-                                    } else if($_GET['A3']=="output4"){
+                                    } elseif($_GET['A3']=="output4"){
                                         financing_out_4($twig,$is_connected,$_SESSION['projID'],$_POST); */
                                     } else {
                                         header('Location: ?A=dashboards&A2=financing&projID='.$_SESSION['projID']);
@@ -2503,19 +2509,19 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="projects"){
                         projects($twig,$is_connected);
-                    } else if($_GET['A2']=="projects_selected"){
+                    } elseif($_GET['A2']=="projects_selected"){
                         projects_selected($_POST);
-                    } else if($_GET['A2']=="summary"){
+                    } elseif($_GET['A2']=="summary"){
                         projects_summary($twig,$is_connected);
-                    } else if($_GET['A2']=="invest"){
+                    } elseif($_GET['A2']=="invest"){
                         investment($twig,$is_connected);
-                    } else if($_GET['A2']=="op"){
+                    } elseif($_GET['A2']=="op"){
                         operations($twig,$is_connected);
-                    } else if($_GET['A2']=="cash_flows"){
+                    } elseif($_GET['A2']=="cash_flows"){
                         cash_flows($twig,$is_connected);
-                    } else if($_GET['A2']=="non_quant"){
+                    } elseif($_GET['A2']=="non_quant"){
                         non_quant($twig,$is_connected);
-                    } else if($_GET['A2']=="finsoc_comp"){
+                    } elseif($_GET['A2']=="finsoc_comp"){
                         finsoc_comp($twig,$is_connected);
                     } else {
                         header('Location: ?A='.$_GET['A']);
@@ -2529,11 +2535,11 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="scenarios"){
                         scenarios($twig,$is_connected);
-                    } else if($_GET['A2']=="scenarios_selected"){
+                    } elseif($_GET['A2']=="scenarios_selected"){
                         scenarios_selected($_POST);
-                    } else if($_GET['A2']=="fin_summary"){
+                    } elseif($_GET['A2']=="fin_summary"){
                         fin_summary($twig,$is_connected);
-                    } else if($_GET['A2']=="cash_flows"){
+                    } elseif($_GET['A2']=="cash_flows"){
                         cash_flows_comp($twig,$is_connected);
                     } else {
                         header('Location: ?A='.$_GET['A']);
