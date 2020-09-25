@@ -3656,20 +3656,43 @@ function global_dashboard($twig,$is_connected,$projID=0){
 
 function get_keydates_uc($scope,$projID,$schedules) {
     $keydates_uc = [];
+    $keyDates = getProjetKeyDates($projID);
     foreach ($scope as $measID => $list_ucs) {
         foreach ($list_ucs as $ucID) {
             $volumes[$ucID] = getListVolumesPerUC($projID,$ucID);
             $implemSchedule = $schedules['implem'][$ucID];
             $opexSchedule = $schedules['opex'][$ucID];
 
-            $uc_stardate = $implemSchedule['startdate'];
-            $uc_implem_enddate = $implemSchedule['100date'];
-            $uc_enddate = $opexSchedule['enddate'];
-            $startdate = explode('/',$uc_stardate);
-            $startdate = new DateTime($startdate[1]."-".$startdate[0]."-01");
-            $enddate = explode('/',$uc_enddate);
-            $enddate = new DateTime($enddate[1]."-".$enddate[0]."-01");
-            $duration = intval($enddate->diff($startdate)->y*12 + $enddate->diff($startdate)->m);
+            if($ucID == -1){
+                
+                $uc_stardate = $keyDates[0]['start_date'];
+                $duration = $keyDates[0]['duration'];
+                $uc_enddate = new DateTime($uc_stardate);
+                $uc_enddate->modify("+$duration months");
+                $uc_enddate =$uc_enddate->format('m/Y');
+
+                
+                $deployDuration = $keyDates[0]['deploy_duration'];
+                $uc_implem_startdate = $keyDates[0]['deploy_start_date'];
+                $uc_implem_enddate = new DateTime($uc_implem_startdate);
+                $uc_implem_enddate->modify("+$deployDuration months");
+                $uc_implem_enddate = $uc_implem_enddate->format('m/Y');
+
+                
+                $uc_stardate = new DateTime($keyDates[0]['start_date']);
+                $uc_stardate = $uc_stardate->format('m/Y');
+            }else{
+                $uc_stardate = $implemSchedule['startdate'] ;
+                $uc_implem_enddate = $implemSchedule['100date'];
+                $uc_enddate = $opexSchedule['enddate'];
+                $startdate = explode('/',$uc_stardate);
+                
+                $startdate = new DateTime($startdate[1]."-".$startdate[0]."-01");
+                $enddate = explode('/',$uc_enddate);
+                $enddate = new DateTime($enddate[1]."-".$enddate[0]."-01");
+                $duration = intval($enddate->diff($startdate)->y*12 + $enddate->diff($startdate)->m);                
+            }
+
             
             $keydates_uc[$ucID] = ["startdate"=>$uc_stardate,'implem_enddate'=>$uc_implem_enddate, "enddate"=>$uc_enddate,'project_duration'=>$duration];
         }
