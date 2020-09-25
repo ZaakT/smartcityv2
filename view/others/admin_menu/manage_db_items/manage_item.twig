@@ -1,20 +1,59 @@
 {% extends '/others/admin_menu/manage_db.twig' %}
 
 {% if itemName == "equipement_revenue" %}
-    {% set title = "Manage Equipement Revenue" %}
+    {% set itemShow = "Equipement" %}
+    {% set mode = "NewItem1" %}
+{% elseif itemName == "capex" %}
+    {% set itemShow = "Capex" %}
+    {% set mode = "NewItem1" %}
+{% elseif itemName == "opex" %}
+    {% set itemShow = "Opex" %}
+    {% set mode = "NewItem1" %}
+{% elseif itemName == "implem" %}
+    {% set itemShow = "Implementation" %}
+    {% set mode = "NewItem1" %}
+{% elseif itemName == "revenues" %}
+    {% set itemShow = "Revenues" %}
+    {% set mode = "NewItem1" %}
+{% elseif itemName == "cashreleasing" %}
+    {% set itemShow = "Cash Releasing Benefits" %}
+    {% set mode = "NewItem2" %}
+{% elseif itemName == "widercash" %}
+    {% set itemShow = "Wider Cash Benefits" %}
+    {% set mode = "NewItem2" %}
+{% elseif itemName == "quantifiable" %}
+    {% set itemShow = "Quantifiable Non Monetizable Benefits" %}
+    {% set mode = "Quantifiable" %}
+{% elseif itemName == "noncash" %}
+    {% set itemShow = "Non Cash Benefits" %}
+    {% set mode = "NewItem3" %}
+{% elseif itemName == "risks" %}
+    {% set itemShow = "Risks" %}
+    {% set mode = "NewItem3" %}
 {% endif %}
 
-{% block title %}{{title}}{% endblock %}
+{% block title %}Manage {{itemShow}} Revenue{% endblock %}
 
 {% import "/templates/admin/macro_item.twig" as list %}
 {% import "/templates/admin/modal_item.twig" as modal %}
 
 {% block content %}
 <div class="row mt-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewItem1Modal" role="button">Create a new Capex Item</button>
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#create{{mode}}Modal" role="button">Create a new {{itemShow}} Item</button>
 </div>
 
 
-{{ list.list_item1(listItem,catItemName,isTaken) }} 
-{{ modal.create_item1(catItemName,UC) }} 
+{% if mode == "NewItem1" %}
+    {{ list.list_item1(listItem,catItemName,isTaken) }} 
+    {{ modal.create_item1(catItemName,UC) }} 
+{% elseif mode == "NewItem2" %}
+    {{ list.list_item2(listItem,catItemName,isTaken) }} 
+    {{ modal.create_item2(catItemName,UC) }} 
+{% elseif mode == "Quantifiable" %}
+    {{ list.list_quantifiable(listItem,'quantifiable',isTaken) }} 
+    {{ modal.create_quantifiable(UC) }} 
+{% elseif mode == "NewItem3" %}
+    {{ list.list_item3(listItem,catItemName,isTaken) }} 
+    {{ modal.create_item3(catItemName,UC) }} 
+{% endif %}
 {% endblock %}

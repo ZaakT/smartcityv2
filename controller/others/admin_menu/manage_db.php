@@ -290,7 +290,9 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_'.$catName.'_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    //echo $twig->render('/others/admin_menu/manage_db_items/manage_'.$catName.'_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken));
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],
+    'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken, "itemName"=>$catName));
     
 }
 
