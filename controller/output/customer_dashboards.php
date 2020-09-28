@@ -8,6 +8,75 @@ function prereq_dashbords(){
     }
 }
 
+function getNetCumulatedCash($projID, $scope, $projectYears, $side){
+
+    
+    $lastYear = $projectYears[array_key_last($projectYears)];
+    foreach ($projectYears as $yearKey) {
+        if($yearKey!="tot"){
+            $net_cumulated_cash[$yearKey]=0;
+        }
+    }
+    foreach ($scope as $i => $value) {
+        for($j = 0; $j<count($scope[$i]); $j++){
+            $ucID = $scope[$i][$j];
+            // Cash-out Capex
+            $capex_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","capex", $side);
+            if($side == "customer"){
+                $capex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","capex", $side);
+            }
+
+            //Cash-out Opex
+
+            $opex_from_nttTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex", $side);
+            $opex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex", $side);
+            if($side == "customer"){
+                $opex_internalTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex", $side);
+            }
+
+            //Cash-out Deployment 
+
+
+            $implem_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","implem", $side);
+            $implem_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","implem", $side);
+            if($side == "customer"){
+                $implem_internalTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","implem", $side);
+            }
+            //Cash-in 
+            if($side == "customer"){
+                //Cash-in : Revenues
+                $revenues = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side);
+
+                //Cash-in : Cash Realeasing Benefits
+                $cash_realeasing_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side);
+
+                //Cash-in : Cash Realeasing Benefits
+                $wider_cash_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side);
+            }elseif($side == "supplier"){
+                $equipment = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "equipment", $side);
+                $deployment = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "deployment", $side);
+                $operating = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "operating", $side);
+            }
+
+
+            foreach ($projectYears as $yearKey) {
+                if($yearKey!="tot"){
+                    if($side !="supplier"){
+                        $net_cumulated_cash[$yearKey] += $revenues[$yearKey]+ $cash_realeasing_benefits[$yearKey] - ($capex_from_nttTot[$yearKey] + $capex_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]+$opex_internalTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey]+$implem_internalTot[$yearKey]); 
+                    }else{
+                        $net_cumulated_cash[$yearKey] += $equipment[$yearKey]+ $deployment[$yearKey] + $operating[$yearKey] - ($capex_from_nttTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]); 
+                    }
+                }
+            }
+        }
+    }
+    foreach($projectYears as $yearKey){
+        if($yearKey != $lastYear){
+            $net_cumulated_cash[$yearKey+1] += $net_cumulated_cash[$yearKey];
+        }
+    }
+    return $net_cumulated_cash;
+}
 
 function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
     $user = getUser($_SESSION['username']);
@@ -46,7 +115,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 }
                                 
                 $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
-                $cumulnetcashTot = $netcashTot[1]; 
+                $cumulnetcashTot = getNetCumulatedCash($projID, $scope, $projectYears, $side);//$netcashTot[1]; 
                 if($side != "supplier"){
                     $netsoccashTot = calcNetSocCashTot($netsoccashPerMonth[0],$projectYears);
                     $cumulnetsoccashTot = $netsoccashTot[1];
@@ -487,17 +556,17 @@ $UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits){
     $opexTot =  $opex_from_nttTot[$year]+$opex_from_outside_nttTot[$year]+$opex_internalTot[$year];
 
 
-    $cash_in =  $UC_revenues[$year]+ $cash_realeasing_benefits[$year] + $wider_cash_benefits[$year];
+    $cash_in =  $UC_revenues[$year]+ $cash_realeasing_benefits[$year] +  $wider_cash_benefits[$year];
     $cash_out = $capexTot + $opexTot + $implemTot ;
-    $netCash = $cash_in-$cash_out;
+    $netCash = $UC_revenues[$year]+ $cash_realeasing_benefits[$year]-$cash_out ;
 
     $net_societal_cash = $wider_cash_benefits[$year] + $netCash;
 
-    $net_cumulated_cash = $netCash;
-    $wider_cumulated_cash_benefits = $wider_cash_benefits[$year];
+    $net_cumulated_cash = 0;
+    $wider_cumulated_cash_benefits = 0;
     foreach ($projectYears as $yearKey) {
-        if($year>$yearKey && $yearKey!="tot"){
-            $net_cumulated_cash += $UC_revenues[$yearKey]+ $cash_realeasing_benefits[$yearKey] + $wider_cash_benefits[$yearKey] - ($capex_from_nttTot[$yearKey] + $capex_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]+$opex_internalTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey]+$implem_internalTot[$yearKey]); 
+        if($year>=$yearKey && $yearKey!="tot"){
+            $net_cumulated_cash += $UC_revenues[$yearKey]+ $cash_realeasing_benefits[$yearKey] - ($capex_from_nttTot[$yearKey] + $capex_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]+$opex_internalTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey]+$implem_internalTot[$yearKey]); 
             $wider_cumulated_cash_benefits += $wider_cash_benefits[$yearKey];
         }
     }
