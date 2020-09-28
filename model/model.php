@@ -295,6 +295,9 @@ function insertMeasure($measure){
 }
 
 function deleteMeasure($measID){
+    if($measID == 0){
+        throw new Exception("You can't delete this measure.");
+    }
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM measure WHERE id = ?');
     return $req->execute(array($measID));

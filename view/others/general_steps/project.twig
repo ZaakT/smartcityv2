@@ -7,6 +7,8 @@
     {% set verifCostBenefits = false %}
     {% set commonPage = '/others/general_common.twig' %}
     {% set lorem = 'Select or create a new project.' %}
+    {% set scheduleVerifMode = false %}
+    {% set scheduleVerifModeText = "" %}
 
 {% if sideBarName =="project_scoping" %}
     {% set scopeMode = false %}
@@ -20,6 +22,8 @@
     {% set deleteMode = false %}
     {% set veriScopefMode = true %}
     {% set createMode = false %}
+    {% set scheduleVerifMode = true %}
+    {% set scheduleVerifModeText = "Common Schedule" %}
     {% set lorem = 'Select a project to obtain dashboard.' %}
 
 {% elseif sideBarName =="cost_benefits" %}
@@ -40,6 +44,10 @@
 {% elseif sideBarName =="input_project_common" or sideBarName =="input_project_common_supplier" %}
     {% set scopeMode = false %}
     {% set createMode = true %}
+
+{% elseif sideBarName =="input_use_case_supplier" %}
+    {% set scheduleVerifMode = true %}
+    {% set scheduleVerifModeText = "Common Schedule" %}
 
 {% endif %}
 
@@ -79,7 +87,7 @@
 
 <form action={{nextPage}} method="post">
 {% if projects %}
-{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName) }}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText, scheduleVerif) }}
 {% else %}
 <h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}

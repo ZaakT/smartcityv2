@@ -106,6 +106,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
 
 
                 $keydates_proj = getKeyDatesProj($schedules,$scope);
+                
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
                 $ItemsPerMonthAndTot = calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears, $side);//PB
@@ -183,9 +184,9 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $cahsOutTot = calcCashOut($ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth']);
                 
                 if($side != "supplier"){
-                    $soc_operating_margin = round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                    $soc_operating_margin = $cahsOutTot == 0 ? 0 : round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
                 }
-                $fin_operating_margin =round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                $fin_operating_margin = $cahsOutTot == 0 ? 0 : round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
                 
                 if($side != "supplier"){
                     $bankability_cacl = array(
