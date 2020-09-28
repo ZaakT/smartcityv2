@@ -142,8 +142,8 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                         array_push($ucsBenefits, getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)['tot']);
                         $revenueSum+=$ucsBenefits[count($ucsBenefits)-1];
                         if($side != "supplier"){
-                            $cash_realeasing_benefitsSum+=array_sum( getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side));
-                            $wider_cash_benefitsSum += array_sum(getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side));
+                            $cash_realeasing_benefitsSum+= getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side)['tot'];
+                            $wider_cash_benefitsSum += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side)['tot'];
                         }
                     }
                 }
