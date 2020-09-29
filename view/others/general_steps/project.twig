@@ -87,7 +87,7 @@
 
 <form action={{nextPage}} method="post">
 {% if projects %}
-{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText, scheduleVerif) }}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText, scheduleVerif, sessionProj) }}
 {% else %}
 <h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}

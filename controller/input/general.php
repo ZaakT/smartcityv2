@@ -5,9 +5,7 @@ use general;
 function project($twig,$is_connected, $nextPage, $sideBarName){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
-    if(isset($_SESSION['projID'])){
-        unset($_SESSION['projID']);
-    }
+    $sessionProj = isset($_SESSION['projID']) ? $_SESSION['projID'] : "None";
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -18,7 +16,7 @@ function project($twig,$is_connected, $nextPage, $sideBarName){
     
     echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
     'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 
-    'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']))); 
+    'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']), "sessionProj"=>$sessionProj)); 
 }
 
 function create_proj($post, $sideBarName, $A2){

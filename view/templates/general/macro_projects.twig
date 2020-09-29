@@ -1,6 +1,5 @@
-{% macro list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText) %}
+{% macro list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText,  scheduleVerif,sessionProj) %}
 {% import "/templates/general/modals_proj.twig" as modal %}
-
 <div class="row text-center">
     <div class="col mx-5 list-table">
         <table class='table text-center table-striped table-responsive-lg'>
@@ -20,8 +19,9 @@
             </thead>
             <tbody>
             {% for proj in projects %}
+            {% set selectable = (proj[9] or not veriScopefMode)and (proj[10] or not verifCostBenefits) and (proj[11] or not scheduleVerifMode) %}
                 <tr id = "tr_{{ proj[0] }}" scope="row">
-                    <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" {{projects|length == 1 ? "checked" : ""}} {% if veriScopefMode or verifCostBenefits or scheduleVerifMode  %}{{(proj[9] or not veriScopefMode)and (proj[10] or not verifCostBenefits) and (proj[11] or not scheduleVerifMode)? "" : "disabled"}}{% endif %} required></td>
+                    <td class="check-col"><input type="radio" id='radio_proj' name="radio_proj" value="{{ proj[0] }}" {{((sessionProj == proj[0]) and selectable ) ? 'checked="checked"' : ""}} {{selectable ? "" : "disabled"}} required></td>
                     <td>{{ proj[1] }}</td>
                     <td>{{ proj[2] }}</td>
                     <td>{{ proj[7] }}</td>
