@@ -717,7 +717,12 @@ try{
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
                                     xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"supplier", $isTaken);
                                 }
-                        }  
+                        }elseif($_GET['A2']=="deal_criteria"){
+                            deal_criteria($twig,$is_connected, $_SESSION['projID'], "supplier", $_GET['A']);
+                         
+                    }  elseif($_GET['A2']=="deal_criteria_input") {
+                        deal_criteria_input_nogo_target($_POST, "supplier");
+                    } 
                     }  
                 } else {  
                     \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
@@ -786,7 +791,12 @@ try{
                                     xpex_selection($twig,$is_connected,$_SESSION['projID'], -1,$_GET['A'], $_GET['A2'],"customer",  $isTaken);
                                 }
 
-                            }                             
+                            }elseif($_GET['A2']=="deal_criteria"){
+                                deal_criteria($twig,$is_connected, $_SESSION['projID'], "customer", $_GET['A']);
+                             
+                        } elseif($_GET['A2']=="deal_criteria_input") {
+                            deal_criteria_input_nogo_target($_POST, "customer");
+                        }                            
                             else{  
                                 header('Location: ?A=input_project_common&A2=use_case_selection&projID='.$projID);
                             }
@@ -804,7 +814,7 @@ try{
             }
 
             // ---------- Deal Criteria ----------
-            elseif($_GET['A']=='deal_criteria'){
+            /*elseif($_GET['A']=='deal_criteria'){
                 verifIsSup();
                 if(isset($_GET['A3']) and ($_GET['A3']=="" or $_GET['A3']=="supplier" or $_GET['A3']=="customer")){
                     if(isset($_GET['A2'])){
@@ -850,7 +860,7 @@ try{
                     header('Location: ?A=home');
                 }
                 
-            }
+            }*/
             // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
                 verifIsSup();

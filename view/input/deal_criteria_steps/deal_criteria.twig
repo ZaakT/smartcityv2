@@ -1,5 +1,7 @@
-{% set sideBarName = "deal_criteria" %}
-{% extends '/templates/common_page.twig' %}
+
+
+
+{% extends '/others/general_common.twig' %}
 
 {% import "/templates/navbar.twig" as navbar %}
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
@@ -7,7 +9,7 @@
 {% import "/templates/sidebar.twig" as sidebar %}
 {% import "/templates/second_bar.twig" as second_bar %}
 
-{% block sidebar %}{{ sidebar.sidebar("deal_criteria_" ~ side) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName) }}{% endblock %}
 {% block title %}Deal Criteria{% endblock %}
 
 {% if side == "customer" or side == "" %}
@@ -20,8 +22,8 @@
 
 {% block content %}
 
-{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
+{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">

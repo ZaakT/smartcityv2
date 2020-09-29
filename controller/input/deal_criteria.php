@@ -1,6 +1,6 @@
 <?php
 
-function deal_criteria($twig, $is_connected, $projID, $side)
+function deal_criteria($twig, $is_connected, $projID, $side, $sideBarName)
 {
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -11,10 +11,13 @@ function deal_criteria($twig, $is_connected, $projID, $side)
     if ($projID != 0) {
         if (getProjByID($projID, $user[0])) {
             $proj = getProjByID($projID, $user[0]);
-
-
             $inputNogoTarget = getDealCriteriaInputNogoTarget($projID);
-            echo $twig->render('/input/deal_criteria_steps/deal_criteria.twig', array('is_connected' => $is_connected, 'devises' => $devises, 'selDevSym' => $selDevSym, 'selDevName' => $selDevName, 'is_admin' => $user[2], 'username' => $user[1], 'part' => "Project", 'projID' => $projID, "selected" => $proj[1], 'projects' => $list_projects, 'input' => $inputNogoTarget, 'side' => $side));
+            echo $twig->render('/input/deal_criteria_steps/deal_criteria.twig', array('is_connected' => $is_connected, 
+            'devises' => $devises, 'selDevSym' => $selDevSym, 'selDevName' => $selDevName, 'is_admin' => $user[2], 
+            'username' => $user[1], 'part' => "Project", 'projID' => $projID, "selected" => $proj[1], 'projects' => $list_projects, 
+            'input' => $inputNogoTarget, 'side' => $side, "sideBarName"=>$sideBarName));
+            prereq_ipc(1);
+            prereq_ipc_sup();
         }
     }
 }
@@ -46,7 +49,7 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 $nqbr_nogo = floatval($post['nqbr_nogo']);
                 $nqbr_target = floatval($post['nqbr_target']);
                 insertInputDealCriteria($societal_npv_nogo, $societal_npv_target, $societal_roi_nogo, $societal_roi_target, $societal_payback_nogo, $societal_payback_target, $npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target, $rr_nogo, $rr_target, $nqbr_nogo, $nqbr_target, $projID);
-                header('Location: ?A=deal_criteria&A2=deal_criteria&projID=' . $projID . '&A3=' . $side);
+                header('Location: ?A=input_project_common&A2=deal_criteria&projID='. $projID );
             } else {
 
                 throw new Exception("There is an error with the input fields !");
@@ -65,9 +68,8 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 $operating_margin_nogo = floatval($post['operating_margin_nogo']);
 
                 insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $projID);
-                header('Location: ?A=deal_criteria&A2=deal_criteria&projID=' . $projID . '&A3=' . $side);
+                header('Location: ?A=input_project_common_supplier&A2=deal_criteria&projID=' . $projID);
             }
-            echo "coucou";
             //throw new Exception("Not yet implemented !");
         }
     } else {
