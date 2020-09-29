@@ -338,7 +338,7 @@ function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine
         }
         return calcOpexTot($opexPerMonth,$projectYears);
     }elseif($type=="implem"){
-        $xpex =  getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine, $side);
+        $xpex =  getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine, $side); // for 1 mounth
         $implemPerMonth = calcImplemPerMonth($implemRepart,$xpex);
         if($periode == "month"){
             return $implemPerMonth;

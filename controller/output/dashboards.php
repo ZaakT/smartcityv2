@@ -478,6 +478,98 @@ function createProjectDates($startdate,$enddate){
     return $list;
 }
 
+/*
+
+function getRepartPercOpex($compo_dates,$proj_dates){
+    $list = [];
+
+    //var_dump($compo_dates);
+    $startdate_proj = explode('/',$proj_dates[0]);
+    $startdate_proj = date_create_from_format('d/m/Y','01/'.$startdate_proj[0].'/'.$startdate_proj[1]);
+
+    $startdate = explode('/',$compo_dates['startdate']);
+    $startdate = date_create_from_format('d/m/Y','01/'.$startdate[0].'/'.$startdate[1]);
+
+    $date25 = explode('/',$compo_dates['25date']);
+    $date25 = date_create_from_format('d/m/Y','01/'.$date25[0].'/'.$date25[1]);
+
+    $date50 = explode('/',$compo_dates['50date']);
+    $date50 = date_create_from_format('d/m/Y','01/'.$date50[0].'/'.$date50[1]);
+
+    $date75 = explode('/',$compo_dates['75date']);
+    $date75 = date_create_from_format('d/m/Y','01/'.$date75[0].'/'.$date75[1]);
+    
+    $date100 = explode('/',$compo_dates['100date']);
+    $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
+    
+    $enddate = explode('/',$compo_dates['enddate']);
+    $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
+
+    // ---
+    $nbRatio = 0;
+
+    $nb0 = intval($startdate->diff($startdate_proj)->y*12 + $startdate->diff($startdate_proj)->m);
+
+    $nb25 = intval($date25->diff($startdate)->y*12 + $date25->diff($startdate)->m)+1;
+    $nbRatio += $nb25!=0;
+    $nb50 = intval($date50->diff($date25)->y*12 + $date50->diff($date25)->m);
+    $nbRatio += $nb50!=0;
+    $nb75 = intval($date75->diff($date50)->y*12 + $date75->diff($date50)->m);
+    $nbRatio += $nb75!=0;
+    $nb100 = intval($date100->diff($date75)->y*12 + $date100->diff($date75)->m);
+    $nbRatio += $nb100!=0;
+    $nb_end = intval($enddate->diff($date100,true)->y*12 + $enddate->diff($date100,true)->m);
+
+    if($nbRatio!=0){
+        $ratio25 = $nb25!=0 ? 100/$nbRatio/$nb25 : 0;
+        $ratio50 = $nb50!=0 ? 100/$nbRatio/$nb50 : 0;
+        $ratio75 = $nb75!=0 ? 100/$nbRatio/$nb75 : 0;
+        $ratio100 = $nb100!=0 ? 100/$nbRatio/$nb100 : 0;
+    }
+
+
+    $nb25+=$nb0;
+    $nb50 +=$nb25;
+    $nb75+=$nb50;
+    $nb100+=$nb75;
+    $nb_end+=$nb100;
+    // ---
+   
+
+
+    if($nb0!=0){
+        for ($i=0; $i < $nb0 ; $i++) { 
+            $list[$proj_dates[$i]] = 0;
+        }
+    } else {
+        $list[$proj_dates[0]] = $ratio25;
+        $nb0++;
+    }
+    for ($i=$nb0; $i < $nb25 ; $i++) { 
+        $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio25;
+    }
+    for ($i=$nb25; $i < $nb50 ; $i++) { 
+        $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio50;
+    }
+    for ($i=+$nb50; $i < $nb75 ; $i++) { 
+        $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio75;
+    }
+    for ($i=$nb75; $i < $nb100 ; $i++) { 
+        $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
+    }
+    for ($i=$nb100; $i < $nb_end ; $i++) { 
+        $list[$proj_dates[$i]] = 100;
+    }
+    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
+        $list[$proj_dates[$i]] = 0;
+    }
+    //var_dump($list);
+    return $list;
+}
+
+*/
+
+
 function getRepartPercImplem($compo_dates,$proj_dates){
     $list = [];
     //var_dump($proj_dates);
@@ -499,6 +591,8 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $date100 = explode('/',$compo_dates['100date']);
     $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
 
+    $enddate = explode('/',$compo_dates['enddate']);
+    $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
     //var_dump($startdate, $startdate_proj);
 
     $nbRatio = 0;
@@ -513,6 +607,7 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $nbRatio += $nb75!=0;
     $nb100 = intval($date100->diff($date75)->y*12 + $date100->diff($date75)->m);
     $nbRatio += $nb100!=0;
+    $nb_end = intval($enddate->diff($date100,true)->y*12 + $enddate->diff($date100,true)->m);
 
     if($nbRatio!=0){
         $ratio25 = $nb25!=0 ? 100/$nbRatio/$nb25 : 0;
@@ -526,6 +621,7 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $nb50 +=$nb25;
     $nb75+=$nb50;
     $nb100+=$nb75;
+    $nb_end+=$nb100;
     
     if($nb0!=0){
         for ($i=0; $i < $nb0 ; $i++) { 
@@ -547,9 +643,13 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
+    for ($i=$nb100; $i < $nb_end ; $i++) { 
         $list[$proj_dates[$i]] = 100;
     }
+    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
+        $list[$proj_dates[$i]] = 0;
+    }
+
     return $list;
 }
 
@@ -579,7 +679,7 @@ function calcCapexTot($capexPerMonth,$projectYears){
 function calcImplemPerMonth($implemRepart,$implemTot){
     $list = [];
     foreach ($implemRepart as $date => $percent) {
-        $list[$date] = $percent!=0 ? $implemTot*$percent/100 - array_sum($list) : 0;
+        $list[$date] = $percent!=0 ? $implemTot*$percent/100 : 0;
     }
     return $list;
 }
@@ -677,11 +777,8 @@ function getRepartPercOpex($compo_dates,$proj_dates){
     for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb100; $i < $nb_end ; $i++) { 
+    for ($i=$nb100; $i <  sizeof($proj_dates); $i++) { 
         $list[$proj_dates[$i]] = 100;
-    }
-    for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
-        $list[$proj_dates[$i]] = 0;
     }
     //var_dump($list);
     return $list;
@@ -695,12 +792,12 @@ function calcOpexPerMonth2($opexRepart,$opexValues){
     
     foreach ($opexRepart as $date => $percent) {
         $opexTot = 0;
-        $i++;
         if($percent==100 and $prec_percent==100){
             $list[$date] = $list[$prec_date];
         } else {
             foreach ($opexValues as $id_item => $values) {
-                $opexTot += $values['cost']*pow($values['an_var_vol'],$i-1)*pow($values['an_var_unitcost'],$i-1);
+                $opexTot += $values['cost']*pow($values['an_var_vol'],$i/12)*pow($values['an_var_unitcost'],$i/12);
+                $i++;
             }
             $list[$date] = $opexTot*$percent/100;
         }
