@@ -18,6 +18,7 @@ function isInf(idSup, idInf){
 
 
 function checkInput(id){
+    console.log("hey hey hey");
     var orderDict = {
     "operating_margin" : true,
     "payback": false,
@@ -73,3 +74,5 @@ function checkInput(id){
 $("input").each(function(){
     checkInput(this);
 });
+
+

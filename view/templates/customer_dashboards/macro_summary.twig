@@ -97,15 +97,20 @@
 {% endmacro %}
 
 
-{% macro project_score(title) %}
+{% macro project_score(title, sideBarName) %}
 
 <table id="project_score_table" class="table">
 
     <thead>
         <th></th>
         <th>Target</th>
+        <th>Current</th>
+        {% if sideBarName == "supplier_dashboards" %}
+        <th>Bankability</th>
+        {% elseif sideBarName == "customer_dashboards" %}
         <th>Financial Bankability</th>
         <th>Societal Bankability</th>
+        {% endif %}
     </thead>
 
     <tbody>
@@ -113,14 +118,18 @@
         <tr>
             <th>{{line[0]}}</th>
             <td id="display_{{line[1]}}"> - </td>
+            <td id="current_{{line[1]}}"> - </td>
             <td>
                 <span hidden id="fin_{{line[1]}}_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span>
                 <span hidden id="fin_{{line[1]}}_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span>
             </td>
+            {% if sideBarName == "customer_dashboards" %}
             <td>
                 <span hidden id="soc_{{line[1]}}_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span>
                 <span hidden id="soc_{{line[1]}}_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span>
             </td>
+            {% endif %}
+
         </tr>
     {% endfor %}
     </tbody>

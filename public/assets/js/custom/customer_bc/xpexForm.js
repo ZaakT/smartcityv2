@@ -1,3 +1,4 @@
+
 ;!(function ($) {
     $.fn.classes = function (callback) {
         var classes = [];
@@ -89,10 +90,10 @@ function checkXpexInput(id){
             $("#"+id).css("background","#C3E6CB");
         }
     } else if(tab.includes("anVarCost") || tab.includes("anVarVol")){
-        val = val ? parseFloat(val) : -1 ;
+        val = val ? parseFloat(val) : 0 ;
 
         console.log(val);
-        if(val < 0 || val > 100){
+        if(val > 100){
             $("#"+id).css("background","salmon");
             $("#"+id).val("");
             ret = false;

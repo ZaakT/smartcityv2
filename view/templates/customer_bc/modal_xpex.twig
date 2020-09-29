@@ -22,14 +22,14 @@
                             <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
                         </div>
                     </div>
-                    {% if (type =="capex" or type =="opex" or type =="deployment_costs") and (sideBarName != "input_project_common_supplier" or type !="capex")%}
+                    {% if (type =="capex" or type =="opex" or type =="deployment_costs") and ((sideBarName != "input_project_common_supplier" and sideBarName != "input_use_case_supplier") or type !="capex")%}
                     <div class="form-group row">
                         <label for="origine" class="col-sm-3 col-form-label">Origine</label>
                         <div class="col-sm-9">
                             <select class="form-control" name="origine" id="origine" required>
                                 <option value = "from_ntt" selected> From {{companyName}} </option>
                                 <option value = "from_outside_ntt"> From Outside {{companyName}} </option>
-                                {{ (type != "capex" and isSup and sideBarName != "input_project_common_supplier") ? '<option value = "internal"> Internal </option>' }}
+                                {{ (type != "capex" and isSup and sideBarName != "input_project_common_supplier" and sideBarName != "input_use_case_supplier" ) ? '<option value = "internal"> Internal </option>' }}
                             </select>
                         </div>
                     </div>

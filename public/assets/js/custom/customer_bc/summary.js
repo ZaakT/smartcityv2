@@ -78,6 +78,7 @@ if(CNSC.length>0){
             labelString: 'Cash (in '+currency+')'
             },
             ticks: {
+              beginAtZero: true,
               callback: function(value, index, values) {
                   if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -120,6 +121,7 @@ if(CNSC.length>0){
             labelString: 'Cash (in '+currency+')'
             },
             ticks: {
+              beginAtZero: true,
               callback: function(value, index, values) {
                   if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -279,7 +281,10 @@ function calcChartValue(projectScore, target, nogo) {
 function updateBankability(){
   var data = $('#data').data("bankabilityTargetNogo").target;
   var selDevSym = $("#selDevSym").text();
-  console.log(data);
+
+  var current = $('#data').data("bankabilityCalc");
+  console.log("current");
+  console.log(current);
   if(data.length==0){
     $("#errorInput").text("Error: make sure Deal Criteria is completed.");
   }else{
@@ -292,6 +297,16 @@ function updateBankability(){
     $("#display_societalNpv").text(selDevSym+" "+data.societal_npv_target);
     $("#display_nqb").text(data.nqbr_target+"/10");
     $("#display_risk").text(data.rr_target+"/10");
+
+    $("#current_operatingMargin").text(current.fin_operating_margin+" %");
+    $("#current_payback").text(current.fin_payback+" mounths");
+    $("#current_societalPayback").text(current.fin_societal_payback+" mounths");
+    $("#current_roi").text(current.fin_roi+" %");
+    $("#current_societalRoi").text(current.fin_societal_roi+" %");
+    $("#current_npv").text(selDevSym+" "+Math.round(current.fin_npv));  
+    $("#current_societalNpv").text(selDevSym+" "+current.fin_societal_npv);
+    $("#current_nqb").text(current.nqb.toFixed(2)+"/10");
+    $("#current_risk").text(current.rating_risks.toFixed(2)+"/10");
   }
 
 }

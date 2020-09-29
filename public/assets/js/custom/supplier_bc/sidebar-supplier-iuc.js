@@ -7,7 +7,7 @@ function déverouiller_sidebar() {
 }
 
 function prereq_ipc_sup(){
-    var parts_cond = ["project_selection","use_case_cb","schedule","equipment_revenues","deployment_revenues","operating_revenues"];
+    var parts_cond = ["project_selection","use_case_cb","schedule","equipment_revenues","deployment_revenues","operating_revenues", "opex", "capex","deployment_costs" ];
     parts_cond.forEach(part => {
         $("#"+part).removeClass("disabled");
     });
