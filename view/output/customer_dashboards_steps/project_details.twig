@@ -55,7 +55,7 @@
     ] %}
 {% endif %}
 
-{% set colNames = ["","Total"]|merge(years) %}
+{% set colNames = ["","Total"]|merge(years)|merge(months) %}
 
 
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
