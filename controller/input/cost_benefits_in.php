@@ -744,6 +744,7 @@ function delete_selection_opex($projID=0,$ucID=0){
 // ---------------------------------------- REVENUES ----------------------------------------
 
 function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -965,6 +966,7 @@ function delete_selection_revenues($projID=0,$ucID=0){
 // ---------------------------------------- CASH RELEASING ----------------------------------------
 
 function cashreleasing($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -1203,6 +1205,7 @@ function delete_selection_cashreleasing($projID=0,$ucID=0){
 // ---------------------------------------- WIDER CASH ----------------------------------------
 
 function widercash($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -1440,6 +1443,7 @@ function delete_selection_widercash($projID=0,$ucID=0){
 // ---------------------------------------- QUANTIFIABLE NON MONETIZABLE BENEFITS ----------------------------------------
 
 function quantifiableBenefits($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -1676,6 +1680,7 @@ function delete_selection_quantifiable($projID=0,$ucID=0){
 // ---------------------------------------- NON CASH ----------------------------------------
 
 function noncash($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -1882,6 +1887,8 @@ function delete_selection_noncash($projID=0,$ucID=0){
 // ---------------------------------------- RISKS ----------------------------------------
 
 function risks($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
+    
+    if($ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){

@@ -1283,36 +1283,30 @@ function calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $
 }
 
 function calcRatingNonCash($projID, $scope) {
-    $ratingNonCash = -1;
+    $ratingNonCash = 0;
     $nbUCS = 0;
     foreach ($scope as $measID => $list_ucs) {
         foreach ($list_ucs as $ucID) {
             $ratingNonCash_new = getNonCashRating($projID,$ucID); //on récupère le noncashrating pour uc
             if($ratingNonCash_new != -1){ //s'il est différent de -1,càd s'il a été rempli
-                if($ratingNonCash == -1){ //si rating non cash vaut -1, on initialise à 0
-                    $ratingNonCash = 0;
-                }
                 $ratingNonCash += $ratingNonCash_new; // on somme le noncashrating
+                $nbUCS++;
             }
-            $nbUCS++;
         }
     }
     return $nbUCS != 0 ? $ratingNonCash/$nbUCS : -1;;
 }
 
 function calcRatingRisks($projID, $scope) {
-    $ratingRisks = -1;
+    $ratingRisks = 0;
     $nbUCS = 0;
     foreach ($scope as $measID => $list_ucs) {
         foreach ($list_ucs as $ucID) {
             $ratingRisks_new = getRisksRating($projID,$ucID);
             if($ratingRisks_new != -1){
-                if($ratingRisks == -1){
-                    $ratingRisks = 0;
-                }
                 $ratingRisks += $ratingRisks_new;
+                $nbUCS++;
             }
-            $nbUCS++;
         }
     }
     return $nbUCS != 0 ? $ratingRisks/$nbUCS : -1;;
