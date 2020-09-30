@@ -493,7 +493,7 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
     if($side ==  "customer"){
         $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }elseif($side == "supplier"){
-        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
 
     for ($i = 0; $i<count($projectYears); $i++){
