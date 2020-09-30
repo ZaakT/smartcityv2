@@ -1,4 +1,4 @@
-{% macro summary(meas,ucs,selScope,list_checks) %}
+{% macro summary(meas,ucs,selScope,list_checks, names) %}
 {% set symb = ["x","check","media-record"] %}
 {% set color = ["text-danger","text-success","text-warning"] %}
 
@@ -42,77 +42,16 @@
                 </tr>
             </thead>
             <tbody>
+                {% for name in names %}
                 <tr>
-                    <td class="item">Capex</td>
+                    <td class="item">{{name[0]}}</td>
                     {% for sel_meas,sel_ucs in selScope %} 
                         {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['capex']]}}" class="oi oi-{{symb[list_checks[uc]['capex']]}} {{color[list_checks[uc]['capex']]}}"></span></td>
+                        <td scope="col"><span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}"></span></td>
                         {% endfor %}
                     {% endfor %} 
                 </tr>
-                <tr>
-                    <td class="item">Implementation</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['implem']]}}" class="oi oi-{{symb[list_checks[uc]['implem']]}} {{color[list_checks[uc]['implem']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Opex</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['opex']]}}" class="oi oi-{{symb[list_checks[uc]['opex']]}} {{color[list_checks[uc]['opex']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Revenues</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}<td scope="col"><span title="{{symb[list_checks[uc]['revenues']]}}" class="oi oi-{{symb[list_checks[uc]['revenues']]}} {{color[list_checks[uc]['revenues']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Cash Releasing Benefits</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['cashreleasing']]}}" class="oi oi-{{symb[list_checks[uc]['cashreleasing']]}} {{color[list_checks[uc]['cashreleasing']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Wider Cash Benefits</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['widercash']]}}" class="oi oi-{{symb[list_checks[uc]['widercash']]}} {{color[list_checks[uc]['widercash']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Quantifiable Non Monetizable Benefits</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['quantifiable']]}}" class="oi oi-{{symb[list_checks[uc]['quantifiable']]}} {{color[list_checks[uc]['quantifiable']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>                
-                <tr>
-                    <td class="item">Non Cash Benefits</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['noncash']]}}" class="oi oi-{{symb[list_checks[uc]['noncash']]}} {{color[list_checks[uc]['noncash']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
-                <tr>
-                    <td class="item">Risks</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc]['risks']]}}" class="oi oi-{{symb[list_checks[uc]['risks']]}} {{color[list_checks[uc]['risks']]}}"></span></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

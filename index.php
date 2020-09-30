@@ -1077,7 +1077,11 @@ try{
                             xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],"supplier", $isTaken); 
                             //use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                         }
-                    } 
+                    } elseif(isset($_GET['confirm'])){
+                        summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm'],$_GET['A']);
+                    } else {
+                        summary($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A']);
+                    }
                 } else {
                     input_use_case_supplier($twig,$is_connected);
                 }

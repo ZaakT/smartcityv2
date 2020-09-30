@@ -46,7 +46,7 @@ function use_case_schedule($twig,$is_connected, $projID, $ucID){
         throw new Exception("Please select a project and use case first.");
     }
 }
-
+/*
 function use_case_equipment($twig,$is_connected, $projID, $ucID){
     $user = getUser($_SESSION['username']);
     $proj = getProjByID($projID,$user[0]);
@@ -107,5 +107,4 @@ function use_case_operating($twig,$is_connected, $projID, $ucID){
         throw new Exception("Error with use case identifier");
     }
     }
-
-?>
+*/

@@ -566,6 +566,9 @@ $equipment, $deployment, $operating){
             $net_cumulated_cash += $equipment[$yearKey]+ $deployment[$yearKey] + $operating[$yearKey] - ($capex_from_nttTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]); 
         
         }
+        if($year==$yearKey){
+        break;
+    }
     }
     
     return [

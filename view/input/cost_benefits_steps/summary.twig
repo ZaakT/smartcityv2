@@ -5,12 +5,38 @@
 {% import "/templates/cost_benefits_in/macro_summary.twig" as list %}
 {% import "/templates/cost_benefits_in/modal_summary.twig" as modal %}
 
+
+
+
+
 {% block title %}Project Scoping - Summary{% endblock %}
 
-{% block sidebar %}{{ sidebar.sidebar("cost_benefits",projID,ucID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarName,projID,ucID) }}{% endblock %}
 
 {% block content %}
 
+{% if sideBarName == "input_use_case_supplier" %}
+{% set names = [
+        ["Equipment Revenues", "equipment_revenues"],
+        ["Deployment Revenues", "deployment_revenues"],
+        ["Operating Revenues", "operating_revenues"],
+        ["Capex", "capex"],
+        ["Deployment & Set-Up", "implem"],
+        ["Opex", "opex"]
+    ] %}
+{% else %}
+    {% set names = [
+        ["Capex", "capex"],
+        ["Implementation", "implem"],
+        ["Opex", "opex"],
+        ["Revenues", "revenues"],
+        ["Cash Releasing Benefits", "cashreleasing"],
+        ["Wider Cash Benefits", "widercash"],
+        ["Quantifiable Non Monetizable Benefits", "quantifiable"],
+        ["Non Cash Benefits", "noncash"],
+        ["Risks", "risks"]
+    ] %}
+{% endif %}
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
 <div class="row jumbotron text-light m-5 bg-dark p-3">
@@ -19,15 +45,15 @@
     </div>
 </div>
 
-{{ list.summary(meas,ucs,selScope,list_checks)}}
+{{ list.summary(meas,ucs,selScope,list_checks, names)}}
 
 <div class="row" {{isValid ? "hidden" : ""}}>
     <h4 class="col text-center text-danger font-italic">Please make sure there are no errors for each Use Case.</h4>
 </div>
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">
-    <button class="col-2 btn btn-dark"  {{isValid ? "" : "disabled"}} onclick="window.location.assign('?A=cost_benefits&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');" >Confirm</button>
-    <button class="offset-1 col-2 btn btn-danger" onclick="window.location.assign('?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{projID}}');">Change</button>
+    <button class="col-2 btn btn-dark"  {{isValid ? "" : "disabled"}} onclick="window.location.assign('?A={{sideBarName}}&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');" >Confirm</button>
+    <button class="offset-1 col-2 btn btn-danger" onclick="window.location.assign('?A={{sideBarName}}&amp;A2=use_case_cb&amp;projID={{projID}}');">Change</button>
 </div>
 {{ modal.ask_redir(projID,ucID) }}
 

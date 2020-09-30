@@ -2087,8 +2087,33 @@ function delete_selection_risks($projID=0,$ucID=0){
 
 
 // ---------------------------------------- SUMMARY ----------------------------------------
+function keepUCNotEmpty($check, $selScope){
+    foreach($selScope as $measKey=>$UCsID){
+        foreach($UCsID as $key=>$UCID){
+            if(!empty($check[0][$UCID] )){
+                $keep = false;
+                foreach($check[0][$UCID] as $cheked){
+                    $keep = $cheked==1;
+                    if($keep){
+                    break;
+                    }
+                }
+                if(!$keep){
+                    unset($selScope[$measKey][$key]);
+                    unset($check[0][$UCID]);
 
-function summary($twig,$is_connected,$projID=0,$confirm=0){
+                }
+            }
+            if(count($selScope[$measKey])==0){
+                unset($selScope[$measKey]);
+            }
+        }
+    }
+    return [$selScope, $check];
+}
+
+
+function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_benefits"){
     $user = getUser($_SESSION['username']);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
@@ -2105,12 +2130,22 @@ function summary($twig,$is_connected,$projID=0,$confirm=0){
             if($confirm==1){
                 updateCB($projID,1);
             }
+
+            $selScope = keepUCNotEmpty($check, $selScope);
+            $check = $selScope[1];
+            $selScope = $selScope[0];
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid,'confirm'=>$confirm));
-            prereq_CostBenefits();
+    echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
+    'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
+    'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid,'confirm'=>$confirm,
+"sideBarName"=>$sideBarName));
+    /*if($sideBarName == "input_use_case_supplier"){
+        prereq_ipc_sup();
+    }else{*/
+        prereq_CostBenefits();
+    //}
         } else {
             throw new Exception("This Project doesn't exist !");
         }
@@ -2133,7 +2168,12 @@ function checkCBInputs($projID,$scope){
             $quantifiable = checkQuantifiable($projID,$ucID);
             $noncash = checkNonCash($projID,$ucID);
             $risks = checkRisks($projID,$ucID);
-            $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,'widercash'=>$widercash,'quantifiable'=>$quantifiable,'noncash'=>$noncash,'risks'=>$risks];
+            $equipment_revenues = checkSupplierRevenues($projID,$ucID, "equipment");
+            $deployment_revenues = checkSupplierRevenues($projID,$ucID, "deployment");
+            $operating_revenues = checkSupplierRevenues($projID,$ucID, "operating");
+            $list[$ucID] = ['capex'=>$capex,'implem'=>$implem,'opex'=>$opex,'revenues'=>$revenues,'cashreleasing'=>$cashreleasing,
+            'widercash'=>$widercash,'quantifiable'=>$quantifiable,'noncash'=>$noncash,'risks'=>$risks,
+            'equipment_revenues'=>$equipment_revenues, 'deployment_revenues'=>$deployment_revenues, 'operating_revenues'=>$operating_revenues];
             if(in_array(0,$list[$ucID])){
                 $ret = false;
             }
@@ -2144,6 +2184,16 @@ function checkCBInputs($projID,$scope){
 
 
 // ---------------------------------------- FILLING CHECKS ----------------------------------------
+function checkSupplierRevenues($projID,$ucID, $revenueType){
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating"){ throw new Exception("1.1 wrong equipment type : $revenueType");}
+    $listSel = getListSelSupplierRevenues($projID,$ucID, $revenueType);
+    if(!empty($listSel)){
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
 function checkCapex($projID,$ucID){
     $listSel = getListSelCapex($projID,$ucID);
     if(!empty($listSel)){
