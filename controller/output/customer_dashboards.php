@@ -312,7 +312,6 @@ function getUcsData($projID,$selScope, $projectYears, $scope, $side){
         }
     }
     
-
     return $list;
 }
 
@@ -491,6 +490,11 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
         $operating = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "operating", $side);
     }
 
+    if($side ==  "customer"){
+        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }elseif($side == "supplier"){
+        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
 
     for ($i = 0; $i<count($projectYears); $i++){
         if($side ==  "customer"){
@@ -503,6 +507,13 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
             $implem_from_nttTot,  $implem_from_outside_nttTot, 
             $opex_from_nttTot,  $opex_from_outside_nttTot, 
             $equipment, $deployment, $operating));
+        }
+    }
+    foreach ($list as $yearKey => $yearValues) {
+        if(gettype($yearValues)=="array"){
+            foreach ($yearValues as $itemKey => $value) {
+                $list[1][$itemKey]+=$value;
+            }
         }
     }
     return $list;
