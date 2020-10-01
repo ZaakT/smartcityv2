@@ -373,6 +373,7 @@ function getKeyDatesProj($schedules,$scope){
         foreach ($list_ucs as $ucID) {
             $implemSchedule = $schedules['implem'][$ucID];
             $opexSchedule = $schedules['opex'][$ucID];
+            $revenuesSchedule = $schedules['revenues'][$ucID];
             //var_dump($ucID,$implemSchedule,$opexSchedule);
 
             if(!isset($proj_startdate)){
@@ -404,16 +405,17 @@ function getKeyDatesProj($schedules,$scope){
             }
 
             if(!isset($proj_enddate)){
-                $proj_enddate = $opexSchedule['enddate'];
+                $proj_enddate = $revenuesSchedule['enddate'];
             } else{
-                $tab_new = explode('/',$opexSchedule['enddate']);
+                $tab_new = explode('/',$revenuesSchedule['enddate']);
                 $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
    
                 $tab_old = explode('/',$proj_enddate);
                 $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
-
+                //var_dump($date_new, $date_old);
                 if($date_new > $date_old){
                     $proj_enddate = $tab_new[0]."/".$tab_new[1];
+                    //var_dump($proj_enddate);
                 }
             }
         }
@@ -591,9 +593,11 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $date100 = explode('/',$compo_dates['100date']);
     $date100 = date_create_from_format('d/m/Y','01/'.$date100[0].'/'.$date100[1]);
 
-    $enddate = explode('/',$compo_dates['enddate']);
-    $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
-    //var_dump($startdate, $startdate_proj);
+    if(isSup()){
+        $enddate = explode('/',$compo_dates['enddate']);
+        $enddate = date_create_from_format('d/m/Y','01/'.$enddate[0].'/'.$enddate[1]);
+        //var_dump($startdate, $startdate_proj);
+    }
 
     $nbRatio = 0;
 
@@ -607,8 +611,9 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $nbRatio += $nb75!=0;
     $nb100 = intval($date100->diff($date75)->y*12 + $date100->diff($date75)->m);
     $nbRatio += $nb100!=0;
-    $nb_end = intval($enddate->diff($date100,true)->y*12 + $enddate->diff($date100,true)->m);
-
+    if(isSup()){
+        $nb_end = intval($enddate->diff($date100,true)->y*12 + $enddate->diff($date100,true)->m);
+    }
     if($nbRatio!=0){
         $ratio25 = $nb25!=0 ? 100/$nbRatio/$nb25 : 0;
         $ratio50 = $nb50!=0 ? 100/$nbRatio/$nb50 : 0;
@@ -621,7 +626,9 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     $nb50 +=$nb25;
     $nb75+=$nb50;
     $nb100+=$nb75;
-    $nb_end+=$nb100;
+    if(isSup()){
+        $nb_end+=$nb100;
+    }
     
     if($nb0!=0){
         for ($i=0; $i < $nb0 ; $i++) { 
@@ -643,8 +650,10 @@ function getRepartPercImplem($compo_dates,$proj_dates){
     for ($i=$nb75; $i < $nb100 ; $i++) { 
         $list[$proj_dates[$i]] = $list[$proj_dates[$i-1]] + $ratio100;
     }
-    for ($i=$nb100; $i < $nb_end ; $i++) { 
-        $list[$proj_dates[$i]] = 100;
+    if(isSup()){
+        for ($i=$nb100; $i < $nb_end ; $i++) { 
+            $list[$proj_dates[$i]] = 100;
+        }
     }
     for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
         $list[$proj_dates[$i]] = 0;
@@ -885,6 +894,8 @@ function getRepartPercRevenues($compo_dates,$proj_dates){
   $nb100+=$nb75;
   $nb_end+=$nb100;
   // ---;
+  //var_dump($proj_dates);
+  //var_dump($compo_dates);
     
   if($nb0!=0){
     for ($i=0; $i < $nb0 ; $i++) { 
@@ -3857,6 +3868,7 @@ function getBudgetGraphData($projectDates,$projectYears,$schedules,$scope,$projI
             $opexSchedule = $schedules['opex'][$ucID];
             $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
 
+            //var_dump($implemSchedule);
             $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
 
             $capex = getTotCapexByUC($projID,$ucID);

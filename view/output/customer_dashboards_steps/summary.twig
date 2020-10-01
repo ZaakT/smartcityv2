@@ -21,12 +21,14 @@
         ["NPV", "npv", 1]
     ] %}
 {% elseif sideBarName == "customer_dashboards" %}
-    {% set bankability_lineNames = [
+    {% set bankability_lineNames1 = [
             ["Payback", "payback", 1],
-            ["Societal Payback", "societalPayback", 1],
             ["ROI", "roi", 1],
+            ["NPV", "npv", 1]
+        ] %}
+    {% set bankability_lineNames2 = [
+            ["Societal Payback", "societalPayback", 1],
             ["Societal ROI", "societalRoi", 1],
-            ["NPV", "npv", 1],
             ["Societal NPV", "societalNpv", 1],
             ["Non Quantifiable Benefits", "nqb", 1],
             ["Risk", "risk", 1]
@@ -56,6 +58,7 @@
                 </div>
 
                 {# # OF UC #}
+                {% if sideBarName == "supplier_dashboards" %}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
                 <h3 class="dash-title mb-3">Bankability</h3>
                     {{ macros.project_score(bankability_lineNames, sideBarName) }}
@@ -63,7 +66,20 @@
                         <div class="text-center">
                             <span id="errorInput" style="color:red;"></span>
                         </div>
-                </div>    
+                </div> 
+                {% elseif sideBarName == "customer_dashboards" %}
+                <div class="dash-bg-light container-fluid p-3 mt-4">
+                <h3 class="dash-title mb-3">Financial Bankability</h3>
+                    {{ macros.project_score(bankability_lineNames1, sideBarName) }}
+                </div> 
+                                <div class="dash-bg-light container-fluid p-3 mt-4">
+                <h3 class="dash-title mb-3">Societal Bankability</h3>
+                    {{ macros.project_score(bankability_lineNames2, sideBarName) }}
+                        <div class="text-center">
+                            <span id="errorInput" style="color:red;"></span>
+                        </div>
+                </div> 
+                {% endif %}   
             </div>            
             
             {# BUGDET #}
