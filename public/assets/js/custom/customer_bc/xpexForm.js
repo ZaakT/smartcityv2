@@ -52,11 +52,11 @@ function countSelectedXpex(oForm) {
 function checkXpexInput(id){
     var ret = true;
     id = id.getAttribute('id');
-    console.log(id);
     var val = $("#"+id).val();
     //console.log(val);
     var tab = $("#"+id).classes();
     if(tab.includes("volume")){
+        //console.log(tab);
         val = val ? parseInt(val) : -1 ;
         //console.log(val);
         if(val < 0){
@@ -101,6 +101,10 @@ function checkXpexInput(id){
             //$("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         } 
+    }else if(tab.includes("unit")){
+
+        $("#"+id).css("background","#C3E6CB");
+
     }
 
     calcTotXpex();

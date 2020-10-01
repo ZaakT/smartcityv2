@@ -300,7 +300,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                             
                         $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", $side); 
                         $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
-                        $list_selXpex[$ucID] = getListSelCapex($projID,$ucID);
 
                         $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", $side); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
@@ -314,7 +313,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     }elseif($type=="opex"){
                         $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", $side); 
                         $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
-                        $list_selXpex[$ucID] = getListSelOpex($projID,$ucID); 
 
                         $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", $side); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
@@ -328,8 +326,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     }elseif($type=="deployment_costs"){
                         $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", $side);
                         $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
-                        $list_selXpex[$ucID] = getListSelImplem($projID,$ucID); 
-
+                        
                         $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", $side); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
@@ -377,7 +374,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 }else{
                     $ucID = $listUcID[0];
                 }
-               
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
@@ -505,35 +501,41 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['volume'=>$value];
                         }
-                    } else if($temp[0]=="unitCost"){
+                    } elseif($temp[0]=="unitCost"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['unit_cost'=>$value];
                         } else {
                             $list[$temp[1]] = ['unit_cost'=>$value];
                         }
-                    } else if($temp[0]=="period"){
+                    } elseif($temp[0]=="period"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['period'=>$value];
                         } else {
                             $list[$temp[1]] = ['period'=>$value];
                         }
-                    } else if($temp[0]=="anVarVol"){
+                    } elseif($temp[0]=="anVarVol"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['anVarVol'=>$value];
                         } else {
                             $list[$temp[1]] = ['anVarVol'=>$value];
                         }
-                    } else if($temp[0]=="anVarCost"){
+                    } elseif($temp[0]=="anVarCost"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['anVarCost'=>$value];
                         } else {
                             $list[$temp[1]] = ['anVarCost'=>$value];
                         }
-                    }else if($temp[0]=="margin"){
+                    }elseif($temp[0]=="margin"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['margin'=>$value];
                         } else {
                             $list[$temp[1]] = ['margin'=>$value];
+                        }
+                    }elseif($temp[0]=="unit"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit'=>$value];
                         }
                     }else{
                         throw new Exception("Error !");
@@ -556,6 +558,7 @@ function xpex_inputed($post, $sideBarName, $type){
                 }
             }
             update_ModifDate_proj($projID);
+            
             if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier" or $sideBarName == "input_use_case_supplier"){
                 header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
             }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
