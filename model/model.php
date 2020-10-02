@@ -1513,6 +1513,14 @@ function deleteSelDates($projID){
 }
 
 
+function hasSchedule($projID, $ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *  FROM project_schedule WHERE id_project = ? AND id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    return !!$req->fetch();
+
+}
+
 // ---------------------------------------- DISCOUNT RATE ----------------------------------------
 
 function getListSelDiscountRate($projID){

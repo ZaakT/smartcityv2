@@ -661,9 +661,18 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             $keydates_proj = getKeyDatesProj($schedules,$scope);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);  
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope, $side);    
+            
+
+            foreach ($selScope as $measID => $listUcs) {
+                foreach ($listUcs as $ucID) {
+                    if(hasSchedule($projID, $ucID)){
+                        $list_ucs[$ucID]['name'].= " (no Data)";
+
+                    }
+                }
+            }
             //print_r($ucsData);   
             
-            //var_dump($ucsData);
             $months = getMonthsProj($projID, $scope);
             echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
             'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 
