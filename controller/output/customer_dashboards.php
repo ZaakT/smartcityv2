@@ -283,7 +283,6 @@ function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, 
                     }
                 }
             }
-            //var_dump($projData);
             $months = getMonthsProj($projID, $scope);
             echo $twig->render('/output/customer_dashboards_steps/project_details.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
@@ -664,6 +663,7 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope, $side);    
             //print_r($ucsData);   
             
+            var_dump($ucsData);
             $months = getMonthsProj($projID, $scope);
             echo $twig->render('/output/customer_dashboards_steps/use_case_details.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
             'years'=>$projectYears, 'selDevSym'=>$selDevSym, "data"=>$ucsData,'selScope'=>$selScope,'selDevName'=>$selDevName,'ucs'=>$list_ucs, 

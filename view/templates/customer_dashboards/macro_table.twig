@@ -99,9 +99,11 @@
             <thead class="{{classThead}}">
             <tr>
             {% set first = true %}
+                {% set jID = -1 %}
                 {% for colName in colNames %}
-                    <th scope="col" {{first ? 'style="width: 15vw;"'}}>{{colName|nl2br}}</th>
+                    <th scope="col" id = "{{jID}}">{{colName|nl2br}}</th>
                     {% set first = false %}
+                    {% set jID = jID + 1 %}
                 {% endfor %}
                 </tr>
             </thead>
@@ -116,9 +118,9 @@
                     {% endif %}
 
                     <tr  id="{{id}}" {{level == 1 ? 'class="font-weight-bold"' }}{{level == 3 ? 'class="font-weight-light"' }}>
-                        <td onclick="show_hide_tab('{{id}}')" class="{{classTd}} text-left pl-{{(level * 2 - 1)}} {{level !=1 ? 'sub_item'}} " >
+                        <td onclick="show_hide_tab('{{id}}')"  class="{{classTd}} text-left pl-{{(level * 2 - 1)}} {{level !=1 ? 'sub_item'}} " >
                             {{level == 2 ? "<h6>" }}
-                                {{ligneNames[i][0]|nl2br}}  {{i < ligneNames|length and ligneNames[i+1][2] > level ? table.addArrow(id)}}
+                                <div id="lineName_{{i}}">{{ligneNames[i][0]|nl2br}}</div>  {{i < ligneNames|length and ligneNames[i+1][2] > level ? table.addArrow(id)}}
                             {{level == 2 ? "</h6>" }}
                         </td>
                         <div  id="{{id}}_level" hidden>{{table.level(levelID0, levelID1, levelID2)}}</div>
@@ -136,4 +138,19 @@
 
 
 
+{% endmacro %}
+
+{% macro simpleTable(iMax, jMax, id, tableClass) %}
+hhhhhhhhhhheeeeeeeeeeeeeeyyyyyyyyyyyyy
+    <table id="cball_table" class = {{tableClass}}>
+        <tbody>
+            {% for i in 0..iMax %}
+                <tr>
+                    {% for j in 0..jMax %}
+                        <td id="{{id}}_{{i}}_{{j}}" class ="text-right" >00</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endmacro %}
