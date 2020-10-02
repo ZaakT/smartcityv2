@@ -32,7 +32,7 @@ function updateDataPD(){
     var ucData = [];
     var deviseName = $('#deviseName').text();
 
-    //console.log(uc, data);
+    console.log(uc, data);
     for(let i =0; i< data.length; i++){       
         if(data[i][0]==uc){
             ucData = data[i].slice(1, data[i].length);
@@ -51,7 +51,7 @@ function updateDataPD(){
             
         }
     }
-    //drawCharts();
+    drawCharts();
 }
 
 updateDataPD();
