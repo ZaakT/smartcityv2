@@ -68,16 +68,24 @@
 </div>
 
 
-{{ option.option(selScope, ucs) }}
+{{ option.option(selScope, ucs, "updateDataPD") }}
 
-
+<div class="row my-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" id="month_details" role="button" onclick="changeMonths()">Month Details</button>
+</div>
 
 {{ table.table(lineNames, colNames,  selDevSym) }}
 
-<div id="data"  data-to-show="{{ data|json_encode }}"></div>
-<div id="deviseName" hidden>{{selDevName}}</div>
-<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
 
+<div id="graph">
+</div>
+
+
+
+<div id="data"  data-to-show="{{ data|json_encode }}" data-months = "{{ months|json_encode }}" data-years = "{{ years|json_encode }}" ></div>
+<div id="deviseName" hidden>{{selDevName}}</div>
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
 
 
 {% endblock %}

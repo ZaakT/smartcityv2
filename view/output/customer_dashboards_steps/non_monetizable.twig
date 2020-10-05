@@ -33,9 +33,9 @@
 {{ table.table([], colNames, selDevSym)}}
 <div id="graph">
 </div>
-<div id="data"  data-to-show="{{ data|json_encode }}" data-years="{{years|json_encode}}"></div>
+<div id="data"  data-to-show="{{ data|json_encode }}" data-months = "{{ months|json_encode }}" data-years="{{years|json_encode}}"></div>
 <div id="currency" hidden>{{selDevSym}}</div>
 <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
-
+<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
 {% endblock %}
 

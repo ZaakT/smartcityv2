@@ -35,9 +35,9 @@ function createCanvas(idDiv, idCanvas){
     canvas = document.createElement('canvas');
     div = document.getElementById(idDiv);
     canvas.id     = idCanvas;  
-    canvas.style.width='100%';
+    /*canvas.style.width='100%';
     canvas.style.height='100%';
-    canvas.style = "height: 100%; width: 100%;";     
+    canvas.style = "height: 100%; width: 100%;";     */
     div.appendChild(canvas);
     return canvas;
 }
@@ -134,7 +134,8 @@ function updateData(){
     var years = $('#data').data("years");
     var ucSeleted = getUcSelected();
     var tableRef = document.getElementById('cball_table').getElementsByTagName('tbody')[0];
-    //console.log(data[getUcSelected()]);
+    console.log("my coucou");
+    console.log(data);
     //console.log("coucou");
     if(data[getUcSelected()].length==0){
       $("#errorInput").text("Error: Any Item selected for This use case, please go to the Input Use Case section.");
@@ -151,5 +152,3 @@ function updateData(){
 
 
 }
-
-updateData();

@@ -1,4 +1,4 @@
-{% macro option(selScope, ucs) %}
+{% macro option(selScope, ucs, js = "updateData") %}
 <div class="dash-bg container-fluid m-1 ml-2 p-4">
     <div class="dash-bg-light container-fluid p-3">
         <table> 
@@ -6,7 +6,7 @@
                 <td> Select Use Case : </td> 
                 <td> 
                     <div class="col text-center">
-                        <select id="uc" name="uc" class="form-control" onchange="updateData()">
+                        <select id="uc" name="uc" class="form-control" onchange="{{js}}()">
                         {% set i = true  %}
                         {% for meas,list_ucs in selScope %}
                             {% for uc in list_ucs %}
