@@ -1890,7 +1890,7 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" && $revenueType != "revenues" ){ throw new Exception("1.1 wrong equipment type : $revenueType");}
     $db = dbConnect();
     if($revenueType != "revenues"){
-        $req = $db->prepare('SELECT volume*unit_cost*margin/100 AS revenues,
+        $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
         id_item
@@ -1901,7 +1901,7 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
         $req->execute(array($projID,$ucID, $revenueType));
     }
     else{
-        $req = $db->prepare('SELECT volume*unit_cost*margin/100 AS revenues,
+        $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
         id_item
@@ -2013,7 +2013,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, margin, anVarVol, anVarCost
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -2028,14 +2028,13 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
-        $margin = intval($row['margin']);
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'margin'=>$margin,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         }
     }
     //var_dump($list);
@@ -2138,13 +2137,12 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
     $req = $db->prepare("UPDATE input_supplier_revenues
                             SET volume = ?,
                                 unit_cost = ?,
-                                margin = ?,
                                 anVarVol = ?,
                                 anVarCost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
         try {
-            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['margin'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
 
         } catch (\Throwable $th) {
             //do nothing;

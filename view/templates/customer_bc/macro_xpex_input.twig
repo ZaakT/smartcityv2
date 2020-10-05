@@ -10,10 +10,10 @@
 
     <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}_{{ucID}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(vol_{{id_xpex}});" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}"></td> 
     
-    {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
+    {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
 
     <td scope="col"><input id="margin_{{id_xpex}}" name="margin_{{id_xpex}}_{{ucID}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(margin_{{id_xpex}});" value="{{ selXpex[id_xpex]['margin'] ? selXpex[id_xpex]['margin'] : "" }}"></td>
-    {% endif %}
+    {% endif %#}
 
     {% if type =="opex" or type == "operating_revenues"  %}
 
@@ -89,8 +89,8 @@
     {% set size = 4 %}
     {% if type == "opex" %} {% set size = 6 %}
     {% elseif type == "capex" %}{% set size = 5 %}
-    {% elseif type == "equipment_revenues" or  type == "deployment_revenues"  %}{% set size = 5 %}
-    {% elseif type == "operating_revenues"  %}{% set size = 7 %}
+    {#% elseif type == "equipment_revenues" or  type == "deployment_revenues"  %}{% set size = 5 %#}
+    {% elseif type == "operating_revenues"  %}{% set size = 6 %}
     {% endif %}
     {% if listUcsName|length > 1 %} {% set size = size + 1 %}
     {% endif %}
@@ -104,10 +104,10 @@
                         {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
                         <th scope="col">Unit Cost ( in {{selDevSym}}/mounth )</th>
                         <th scope="col">Volume/mounth</th>
-                        {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
+                        {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
                         <th scope="col">Margin ( in % )</th>
                         
-                        {% endif %}
+                        {% endif %#}
                         {% if type == "opex" or type == "operating_revenues" %}
                         <th scope="col">Annual unit cost variation</th>
                         <th scope="col">Annual volume variation</th>

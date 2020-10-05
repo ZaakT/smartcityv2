@@ -529,12 +529,6 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['anVarCost'=>$value];
                         }
-                    }else if($temp[0]=="margin"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['margin'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['margin'=>$value];
-                        }
                     }else{
                         throw new Exception("Error !");
                     }

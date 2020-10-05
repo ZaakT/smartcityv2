@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 01 oct. 2020 à 09:54
+-- Généré le :  lun. 05 oct. 2020 à 07:53
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -1630,7 +1630,6 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
   `id_uc` int(10) UNSIGNED NOT NULL,
   `unit_cost` float NOT NULL,
   `volume` int(11) NOT NULL,
-  `margin` float NOT NULL,
   `anVarVol` int(11) NOT NULL,
   `anVarCost` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`)
@@ -1640,14 +1639,14 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
 -- Déchargement des données de la table `input_supplier_revenues`
 --
 
-INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `margin`, `anVarVol`, `anVarCost`) VALUES
-(1, 21, 9, 1500, 150, 30, 0, 0),
-(2, 21, 9, 1500, 50, 50, 0, 0),
-(3, 21, 9, 15, 300, 10, 5, 3),
-(4, 21, 7, 1500, 300, 15, 0, 0),
-(5, 23, 3, 100, 100, 10, 0, 0),
-(6, 23, 3, 150, 10, 10, 0, 0),
-(7, 23, 3, 3500, 1, 10, 0, 5);
+INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `anVarVol`, `anVarCost`) VALUES
+(1, 21, 9, 1500, 150, 0, 0),
+(2, 21, 9, 1500, 50, 0, 0),
+(3, 21, 9, 15, 300, 5, 3),
+(4, 21, 7, 1500, 300, 0, 0),
+(5, 23, 3, 100, 100, 0, 0),
+(6, 23, 3, 150, 10, 0, 0),
+(7, 23, 3, 3500, 1, 0, 5);
 
 -- --------------------------------------------------------
 
@@ -2432,14 +2431,14 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (3, 'TESTV2', 'Pré-rempli avec des xpex supplier', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-24 10:36:31', 1, 0, 0),
-(4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-10-01 11:50:04', 1, 1, 0),
+(4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-10-02 15:56:26', 1, 1, 0),
 (5, 'Projet nif', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-09-14 11:25:01', 1, 0, 0),
 (6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-14 11:25:08', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-01 11:11:20', 15, 1, 1),
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-05 09:52:24', 15, 1, 1),
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1);
 
