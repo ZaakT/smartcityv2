@@ -33,7 +33,6 @@
     {% endif %}
 
 
-    <td scope="col" id='cost_{{id_xpex}}' > - </td> 
 
 </tr>
 
@@ -111,7 +110,7 @@
                         <th scope="col">Unit</th>
                         {% endif %}
                         <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
-                        <th scope="col">Volume/mounth</th>
+                        <th scope="col">#Units</th>
                         {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
                         <th scope="col">Margin ( in % )</th>
                         
@@ -123,7 +122,6 @@
                         {% if type == "capex" %}
                         <th scope="col">Amortization Period ( in years )</th>
                         {% endif %}
-                        <th scope="col">Cost ( in {{selDevSym}} )</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -2138,10 +2138,10 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
                 updateCB($projID,1);
             }
 
-            $selScope = keepUCNotEmpty($check, $selScope);
-            $check = $selScope[1];
+            /*$selScope = keepUCNotEmpty($check, $selScope);
+            //$check = $selScope[1];
             $selScope = $selScope[0];
-            $devises = getListDevises();
+            */$devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,

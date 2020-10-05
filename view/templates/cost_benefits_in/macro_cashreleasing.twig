@@ -183,18 +183,16 @@
         <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col" style="width:20%" rowspan=2>Cash Releasing Component</th>
-                    <th scope="col"></th>
-                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
-                    <th scope="col" colspan=2 class="text-uppercase">Reduction Target</th>
-
+                    <th scope="col" colspan=2 class="text-uppercase">Components</th>
+                    <th scope="col" colspan=4 class="text-uppercase">Baseline</th>
                 </tr>
                 <tr>
-                    <th scope="col" style="width:16%">Unit Indicator</th>
-                    <th scope="col" style="width:16%">Volume per month</th>
+                    <th scope="col" style="width:16%">Item</th>
+                    <th scope="col" style="width:16%">Unit</th>
+                    <th scope="col" style="width:16%">Volume / month</th>
                     <th scope="col" style="width:16%">Unit Cost ( in {{selDevSym}} )</th>
-                    <th scope="col" style="width:16%">Volume Reduction</th>
-                    <th scope="col" style="width:16%">Unit Cost Reduction</th>
+                    <th scope="col" style="width:16%">Evolution Volume / Year</th>
+                    <th scope="col" style="width:16%">Evolution cost per unit / Year</th>
                 </tr>
             </thead>
             <tbody>
@@ -235,11 +233,12 @@
         <table id="cashreleasing_input" class='table table-lg table-bordered table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th rowspan=2 scope="col">Cash Releasing Component</th>
+                    <th scope="col" class="text-uppercase">Components</th>
                     <th scope="col" colspan=2 class="text-uppercase">Project Impact</th>
                     <th scope="col" colspan=3 class="text-uppercase text-dark"  style="background-color:#e9ecef"></th>
                 </tr>
                 <tr>
+                    <th scope="col">Item</th>
                     <th scope="col">Volume Variation<br>( in % per year)</th>
                     <th scope="col">Unit Cost Variation<br>( in % per year)</th>
                     {# <th scope="col" class="text-dark" style="background-color:#e9ecef">Variation of Volumes<br>(per month)</th>

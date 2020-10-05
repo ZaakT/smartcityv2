@@ -2434,8 +2434,14 @@ function insertImplemInputed($projID,$ucID,$list){
                             SET volume = ?,
                                 unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE implem_item
+                            SET unit = ? 
+                            WHERE id = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));        
+        if(isset($data['unit'])){
+            $ret = $req2->execute(array( $data['unit'], $id_item));
+        }
     }
     return $ret;
     $req = $db->prepare("UPDATE implem_item
@@ -2729,8 +2735,15 @@ function insertOpexInputed($projID,$ucID,$list){
                                 annual_variation_volume = ?,
                                 annual_variation_unitcost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE opex_item
+                            SET unit = ? 
+                            WHERE id = ?");
+
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        if(isset($data['unit'])){
+            $ret = $req2->execute(array( $data['unit'], $id_item));
+        }
     }
     return $ret;
     $req = $db->prepare("UPDATE opex_item

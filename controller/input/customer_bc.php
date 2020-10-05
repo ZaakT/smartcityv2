@@ -360,7 +360,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     $compo = getCompoByUC($ucID);
         
    
-        
                     $nb_uc[$ucID] = getNbTotalUC($projID,$ucID);
                         //var_dump($nb_uc);
                     $list_ratio[$ucID] = getRatioCompoCapex($list_sel_xpex_advice[$ucID],$compo['id']);
