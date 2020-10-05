@@ -1,0 +1,1 @@
+$("#radio_proj_checked").prop("checked", true);
