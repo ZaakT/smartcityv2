@@ -335,8 +335,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                         $list_xpex_user_from_outside_ntt[$ucID] = getListImplemUser($projID,$ucID, "from_outside_ntt", $side); 
                         $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
                         
-                        
-                        $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
+                        $list_selXpex[$ucID] = getListSelImplem($projID,$ucID); 
                     }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
                         
                         $list_xpex_advice_from_outside_ntt[$ucID]  = [];

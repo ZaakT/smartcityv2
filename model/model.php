@@ -1844,7 +1844,7 @@ function getRatioCompoCapex($list_item,$compoID){
 }
 
 function insertCapexInputed($projID,$ucID,$list){
-    var_dump($list);
+    //var_dump($list);
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("UPDATE input_capex
