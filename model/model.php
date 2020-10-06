@@ -4500,6 +4500,20 @@ function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine, $side = "projD
     $req->execute(array($projID,$ucID, $origine, $side));
     $res = $req->fetch()['tot'];
     $tot = floatval($res);
+    //var_dump("before ");
+    //var_dump($tot);
+    if($side == "customer" && $origine == "from_ntt" && ($xpex == "capex" || $xpex == "implem")){
+        if($xpex == "capex"){
+            $rev = getSupplierRevenuesValues($projID,$ucID, "equipment");
+        }elseif($xpex == "implem"){
+            $rev = getSupplierRevenuesValues($projID,$ucID, "deployment");
+        }
+        foreach($rev as $revItem){
+            $tot+=$revItem["revenues"];
+        }
+    }
+    //var_dump("after ");
+    //var_dump($tot);
     return convertGBPToDev($tot);
 }
 
@@ -4562,7 +4576,7 @@ function getOpexValuesOrigine($projID,$ucID, $origine, $side){
     
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol,                                    annual_variation_unitcost as an_var_unitcost, id_item
+    $req = $db->prepare('SELECT volume*unit_cost AS cost, annual_variation_volume as an_var_vol, annual_variation_unitcost as an_var_unitcost, id_item
                             FROM input_opex
                             JOIN opex_item
                             ON id = id_item
@@ -4578,6 +4592,16 @@ function getOpexValuesOrigine($projID,$ucID, $origine, $side){
         $cost = convertGBPToDev(floatval($res['cost']));
 
         $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+    }
+    if($side == "customer"){
+        $rev = getSupplierRevenuesValues($projID,$ucID, "operating");
+        if($rev!=[0]){
+            foreach($rev as $id=>$itemData){
+                $rev[$id]['cost']=$rev[$id]['revenues'];
+                unset($rev[$id]['revenues']);
+            }
+            $list+=$rev;
+        }
     }
     //var_dump($list);
     return $list;
@@ -4746,6 +4770,36 @@ function getListVolumesPerUC($projID,$ucID){
     
 }
 
+function getConfirmedUseCases($userID, $projID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT meas_id,  uc_id
+                            FROM uc_confirmed
+                            WHERE user_id = ? and proj_id = ?");
+    $req->execute(array($userID,$projID));
+    $list = [];
+    while($res = $req->fetch()){
+        $list[$res['meas_id']."_".$res['uc_id']] = true;
+    }
+    return $list;
+}
+
+function dropUseCasConfirmation($userID, $projID){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM uc_confirmed 
+    WHERE user_id = ? and proj_id = ?');
+    $req->execute(array($userID,$projID));
+
+}
+
+function insertNewUseCaseConfirmation($userID, $projID, $uc_id, $meas_id ){
+    $db = dbConnect();
+
+    $req = $db->prepare('INSERT INTO uc_confirmed (user_id, proj_id, uc_id, meas_id ) VALUES (?, ?, ?,?)');
+
+    $req->execute(array($userID, $projID, $uc_id, $meas_id));
+
+
+}
 
 // ---------------------------------------- FUNDING SOURCES ----------------------------------------
 

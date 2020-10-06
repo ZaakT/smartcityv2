@@ -2122,6 +2122,7 @@ function keepUCNotEmpty($check, $selScope){
 
 function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_benefits"){
     $user = getUser($_SESSION['username']);
+    //var_dump($user);
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             if(isset($_SESSION['ucID'])){
@@ -2137,7 +2138,12 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
             if($confirm==1){
                 updateCB($projID,1);
             }
-
+            $temp = getConfirmedUseCases($user[0], $projID);
+            foreach ($selScope as $measID => $listUcs) {
+                foreach ($listUcs as $ucID) {
+                    $confirmedUC[$measID."_".$ucID]=isset($temp[$measID."_".$ucID]);
+                }
+            }
             /*$selScope = keepUCNotEmpty($check, $selScope);
             //$check = $selScope[1];
             $selScope = $selScope[0];
@@ -2147,7 +2153,7 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
     echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
     'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
     'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid,'confirm'=>$confirm,
-"sideBarName"=>$sideBarName));
+"sideBarName"=>$sideBarName, "confirmedUC"=>$confirmedUC));
     /*if($sideBarName == "input_use_case_supplier"){
         prereq_ipc_sup();
     }else{*/
@@ -2159,6 +2165,17 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
     } else {
         header('Location: ?A=cost_benefits&A2=use_case_cb');
     }
+}
+
+function summary_inputed($twig,$is_connected,$projID, $post, $sideBarName){
+
+    $user = getUser($_SESSION['username']);
+    dropUseCasConfirmation($user[0], $projID);
+    foreach($post as $key=>$value){
+        $key = explode("_", $key);
+        insertNewUseCaseConfirmation($user[0], $projID, $key[1], $key[0]);
+    }
+    header("Location: ?A=$sideBarName&A2=summary&projID=$projID&confirm=1");
 }
 
 function checkCBInputs($projID,$scope){

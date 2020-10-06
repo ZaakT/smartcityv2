@@ -51,14 +51,18 @@
         <p class="text-justify">{{lorem|nl2br}}</p>
     </div>
 </div>
-
-{{ list.summary(meas,ucs,selScope,list_checks, names)}}
+{% if isSup %}
+    <form id="form_summary" name="form_summary" action="?A={{sideBarName}}&amp;A2=summary_inputed&amp;projID={{projID}}" method="post">
+{% endif %}
+{{ list.summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC)}}
 
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">
-    <button class="col-2 btn btn-dark"  {{isValid ? "" : "disabled"}} onclick="window.location.assign('?A={{sideBarName}}&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');" >Confirm</button>
+    <button class="col-2 btn btn-dark" {{isSup ?  "type = submit"}}  {{isValid ? "" : "disabled"}} {% if isDev %} onclick="window.location.assign('?A={{sideBarName}}&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');"{% endif %} >Confirm</button>
     <button class="offset-1 col-2 btn btn-danger" onclick="window.location.assign('?A={{sideBarName}}&amp;A2=use_case_cb&amp;projID={{projID}}');">Change</button>
 </div>
+{{isSup ?  "<form>"}}
+
 {{ modal.ask_redir(projID,ucID) }}
 
     {% if confirm == 1 %}

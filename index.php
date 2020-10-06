@@ -2159,6 +2159,23 @@ try{
                             header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                         
+                    }elseif($_GET['A2']=="summary_inputed"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                if(isset($_POST)){
+                                    summary_inputed($twig,$is_connected,$_SESSION['projID'], $_POST, $_GET['A']);
+                                }else{
+                                    header('Location: ?A='.$_GET['A'].'&A2=summary&projID='.$_SESSION['projID']);
+                                }
+                            }
+                            else { 
+                                header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                            }
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                        }
+                        
                     } else {
                         header('Location: ?A='.$_GET['A']);
                     }

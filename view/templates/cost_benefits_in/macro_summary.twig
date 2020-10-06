@@ -1,5 +1,6 @@
-{% macro summary(meas,ucs,selScope,list_checks, names) %}
-{% set symb = ["x","check","media-record"] %}
+{% macro summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC) %}
+{#}{% set symb = ["x","check","media-record"] %}{#}
+{% set symb = ["x","check",""] %}
 {% set color = ["text-danger","text-success","text-warning"] %}
 
 <div class="row m-5 text-center">
@@ -52,6 +53,16 @@
                     {% endfor %} 
                 </tr>
                 {% endfor %}
+                {% if isSup %}
+                <tr class="table-primary">
+                    <td>Validation</td>
+                    {% for sel_meas,sel_ucs in selScope %} 
+                        {% for uc in sel_ucs %}
+                        <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>
+                        {% endfor %}
+                    {% endfor %} 
+                </tr>
+                {% endif %}
             </tbody>
         </table>
     </div>
