@@ -2028,7 +2028,7 @@ function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
 
 
 function getListSelSupplierRevenues($projID,$ucID, $revenueType){
-    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 wrong equipment type.");}
+    if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 : wrong equipment type.");}
 
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost

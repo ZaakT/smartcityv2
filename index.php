@@ -680,7 +680,7 @@ try{
                                                 alterProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
                                             }
 
-                                            header('Location: ?A=input_project_common_supplier&A2=capex&projID='.$_SESSION['projID']);
+                                            header('Location: ?A=input_project_common_supplier&A2=equipment_revenues&projID='.$_SESSION['projID']);
                                         } else {
                                             throw new Exception("There was an error with the form.");
                                         }
@@ -689,7 +689,7 @@ try{
                                     supplier_schedule($twig,$is_connected,$_SESSION['projID']); 
                                 }
                             }  // --- CAPEX OR OPEX (XPEX) ---
-                            elseif($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
+                            elseif($_GET['A2']=="equipment_revenues" || $_GET['A2']=="deployment_revenues" || $_GET['A2']=="operating_revenues" ||  $_GET['A2']=="capex" || $_GET['A2']=="opex" || $_GET['A2']=="deployment_costs"){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;

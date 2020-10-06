@@ -58,7 +58,6 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
     $user = getUser($_SESSION['username']);
     $_SESSION['_ucID']= $_ucID;
     if($_ucID==-1){$_SESSION['ucID'] = $_ucID;}
-    if(($type != "capex" && $type != "opex" && $type != "deployment_costs") && $_ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
     if($projID!=0){
         if(getProjByID($projID,$user[0])){
             $listUcID=getListUcID($_ucID, $projID);
@@ -167,7 +166,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
             }else{
                 $_ucID = 0;
             }
-            if(($type != "capex" && $type != "opex" && $type != "deployment_costs") && $_ucID==-1){throw new Exception ("You can't use the porject common as a use case here !");}
+            
             $listUcID=getListUcID($_ucID, $projID);
 
             $selXpex = [];
@@ -289,7 +288,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $list_xpex_user_from_outside_ntt  = [];
                 $list_xpex_user_internal  = [];
             
-
 
                 $list_selXpex = [];
 
