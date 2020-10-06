@@ -79,6 +79,7 @@ function getNetCumulatedCash($projID, $scope, $projectYears, $side){
 }
 
 function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
+    $GLOBALS['useFiltre']= true;
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -251,10 +252,12 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
             
         }
     }
+    unset($GLOBALS['useFiltre']);
 }
 
 // --- Project Details
 function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, $side){
+    $GLOBALS['useFiltre']= true;
     if($projID!=0){
         $user = getUser($_SESSION['username']);
         if(getProjByID($projID,$user[0])){
@@ -299,6 +302,7 @@ function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, 
     } else {
         throw new Exception("No Project selected !");
     }
+    unset($GLOBALS['useFiltre']);
 }
 
 function getUcsData($projID,$selScope, $projectYears, $scope, $side){
@@ -645,6 +649,7 @@ $UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits){
 }
 
 function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName, $side){
+    $GLOBALS['useFiltre']= true;
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -682,6 +687,7 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             prereq_dashbords();
         }
     }
+    unset($GLOBALS['useFiltre']);
 }
 
 function difMounthsBounds($d1, $d2){
@@ -749,6 +755,7 @@ function getQualitativeYearEvolution($projID,$ucID){
 }
 
 function dashboards_non_monetizable($twig,$is_connected, $projID){
+    $GLOBALS['useFiltre']= true;
     $side="customer";
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -807,9 +814,11 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             prereq_dashbords();
         }
     }
+    unset($GLOBALS['useFiltre']);
 }
 
 function dashboards_qualitative($twig,$is_connected, $projID){
+    $GLOBALS['useFiltre']= true;
     $side="customer";
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -865,5 +874,6 @@ function dashboards_qualitative($twig,$is_connected, $projID){
             prereq_dashbords();
         }
     }
+    unset($GLOBALS['useFiltre']);
 }
 

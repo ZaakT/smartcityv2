@@ -968,12 +968,28 @@ function getListSelScope($projID){
     while ($row = $req2->fetch()){
         $id_uc = intval($row['id_uc']);
         $id_meas = intval($row['id_meas']);
-        array_unshift($list[$id_meas],$id_uc);
+
+        // We check if we want to use a filter to keep only the selected UC
+        if(isset($GLOBALS["useFiltre"])){
+            if($GLOBALS["useFiltre"]){
+                $user = getUser($_SESSION['username']);
+                $confirmedUC = getConfirmedUseCases($user[0], $projID);
+                if(isset($confirmedUC[$id_meas."_".$id_uc])){
+                    array_unshift($list[$id_meas],$id_uc);
+                    
+                }
+            }else{
+                array_unshift($list[$id_meas],$id_uc);
+            }
+        }else{
+            array_unshift($list[$id_meas],$id_uc);
+        }
     }
     //var_dump($list);
     if(isDev() && isset($list[0])){
         unset($list[0]);
     }
+
     return $list;
 }
 
