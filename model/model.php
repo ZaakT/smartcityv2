@@ -1721,7 +1721,8 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
     return $list;
 }
 
-function getListSelCapex($projID,$ucID){
+function getListSelCapex($projID,$ucID, $side = "supplier"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item,unit_cost,volume,period, unit
                             FROM input_capex
@@ -1744,7 +1745,10 @@ function getListSelCapex($projID,$ucID){
             $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit];
         }
     }
-    //var_dump($list);
+    if($side == "customer"){
+        //We need here to select the revenues of the supplier and transform it in xpex
+        $list = $list+getListSelSupplierRevenues($projID,$ucID, "equipment"); 
+    }
     return $list;
 }
 
@@ -2326,7 +2330,8 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
 
 }
 
-function getListSelImplem($projID,$ucID){
+function getListSelImplem($projID,$ucID, $side = "supplier"){
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item,unit_cost,volume, unit
                             FROM input_implem
@@ -2348,7 +2353,10 @@ function getListSelImplem($projID,$ucID){
             $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit];
         }
     }
-    //var_dump($list);
+    if($side == "customer"){
+        //We need here to select the revenues of the supplier and transform it in xpex
+        $list = $list+getListSelSupplierRevenues($projID,$ucID, "deployment"); 
+    }
     return $list;
 }
 
@@ -2621,7 +2629,9 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
 
 }
 
-function getListSelOpex($projID,$ucID){
+function getListSelOpex($projID,$ucID, $side = "supplier"){
+    
+    if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
     $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost, unit
                             FROM input_opex
@@ -2645,7 +2655,10 @@ function getListSelOpex($projID,$ucID){
             $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit];
         }
     }
-    //var_dump($list);
+    if($side == "customer"){
+        //We need here to select the revenues of the supplier and transform it in xpex
+        $list = $list+getListSelSupplierRevenues($projID,$ucID, "operating"); 
+    }
     return $list;
 }
 
@@ -2764,6 +2777,25 @@ function deleteAllSelOpex($projID,$ucID){
     return $ret;
 }
 
+
+function getListXpexSupplier($ucID, $projID, $list_selXpex, $xpexType){
+    if($xpexType == "deployment"){
+        $revenueType = "deployment";
+    }elseif($xpexType == "opex"){
+        $revenueType = "operating";
+    }elseif($xpexType == "capex"){
+        $revenueType = "equipment";
+    }else{
+        throw new Excpetion(" 3.1 : wrong xpex type !");
+    }
+    $list =getListSupplierRevenuesUser($ucID, $projID, $revenueType);  
+    foreach($list as $xpexID=>$xpexData){
+        if(!isset($list_selXpex[$xpexID])){
+            unset($list[$xpexID]);
+        }
+    }
+    return $list;
+}
 // ------------------------------------ PROJECR KEY DATES (COMMON SCHEDULE) ------------------
 function getProjetKeyDates($projID) {
     $db = dbConnect();
