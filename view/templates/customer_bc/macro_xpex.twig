@@ -9,17 +9,17 @@
     {% endif %}
 {% endmacro  %}
 
-{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, listUcsName, userMode = false ) %}
+{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, listUcsName, Mode = "suggested" ) %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 {% for ucID in listUcID %}
     {% for id,item in xpex[ucID] %}
         <tr id = "tr_{{ id }} ucID_{{ucID}}" scope="row">
-            <td class="check-col align-middle"><input type="checkbox" onclick="countSelectedXpex(form_xpex);" id='{{ id }} !' name="{{ucID}}_{{ id }}" {{id in selXpex[ucID]|keys ? "checked" : ""}}></td>
+            <td class="check-col align-middle"><input type="checkbox" {{Mode == "supplier" ? "checked disabled"}}  onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ucID}}_{{ id }}" {{id in selXpex[ucID]|keys ? "checked" : ""}}></td>
             <td scope="col">{{ item['name'] }}</td>
             <td scope="col">{{ item['description'] }}</td>  
             
             {% if listUcsName|length > 1 %} <td scope='col'>{{ listUcsName[ucID] }}</td>  {% endif %}
-            {% if userMode %}                  
+            {% if Mode == "custom" %}                  
                 <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
                 {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
             {% endif %}
@@ -28,13 +28,13 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName,listUcID,listUcsName, userMode = false) %}
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName,listUcID,listUcsName, Mode = "suggested") %}
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 {% set size = 3 %}
-{% if userMode %}{% set size = 4 %}{% endif %}
+{% if Mode == "custom" %}{% set size = 4 %}{% endif %}
 {% if listUcsName|length >1 %}{% set size = size + 1 %}{% endif %}
 
-<h3 class="text-center mt-5 mb-3 text-uppercase">{{userMode ? "Custom" : "Suggested"}} {{ _self.getType(type) }} Items</h3>
+<h3 class="text-center mt-5 mb-3 text-uppercase">{{Mode}} {{ _self.getType(type) }} Items</h3>
 <div class="row text-center">
     <div class="col mx-5 mb-5 list-table">
         <table class='table table-lg table-bordered table-striped table-responsive-lg'>
@@ -44,7 +44,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                     {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
-                    {{userMode ? "<th scope='col'></th>" }}
+                    {{Mode == "custom" ? "<th scope='col'></th>" }}
                 </tr>
             </thead>
             {% set print = false %}
@@ -54,7 +54,7 @@
 
             {% if print  %}
                 <tr class="table-primary"><td colspan="{{size}}"> <strong>Procured From {{companyName}} </strong></td></tr>
-                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
             {% set print = false %}
@@ -64,7 +64,7 @@
 
             {% if print  %}
                 <tr class="table-primary"><td colspan="{{size}}"><strong>Procured From Outside {{companyName}} </strong></td></tr>
-                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
             {% set print = false %}
@@ -74,7 +74,7 @@
 
             {% if print  %}
                 <tr class="table-primary"><td colspan="{{size}}"><strong> Internal </strong></td></tr>
-                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, userMode) }}
+                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
         </table>
     </div>
