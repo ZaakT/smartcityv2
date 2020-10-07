@@ -220,7 +220,16 @@ function addRow(table, jMax){
 
 
 
-
+function addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months){
+    addRow(table, 2);
+    var div = createDiv("graphCell_"+i+"_0", "container_"+i*2);
+    var canvas = createCanvas(div.id, "canevas_"+i*2);
+    graphYears = createGraph(lineName , canvas, yearsData, years);
+    var div = createDiv("graphCell_"+i+"_1", "container_"+i*2+1);
+    var canvas = createCanvas(div.id, "canevas_"+i*2+1);
+    graphMonths = createGraph(lineName, canvas, monthsData, months);
+    return [graphYears, graphMonths];
+}
 
 function drawCharts(){
     var data = $('#data').data("toShow");
@@ -240,14 +249,12 @@ function drawCharts(){
     jMax = ucData.length;
     table = createTable(0, 2, "graph", "graphCell");
     removeGraphs();
-    yearLevelData = [];
-    monthLevelData = []
+    k=0;
     for(let i = 0; i < iMax; i++){
         var yearsData = [];
         var monthsData = [];
         var lineName = $("#"+"lineName_"+i).text();
         var levelTr = getLevel(tr_id[i+1]).split('.');
-        console.log(levelTr);
         for(let j = 0; j < jMax; j++){
             //console.log(document.getElementById(j).textContent);
             if(isMonth(j)){
@@ -257,66 +264,51 @@ function drawCharts(){
             }
 
         }
-        addRow(table, 2);
-        var div = createDiv("graphCell_"+i+"_0", "container_"+i*2);
-        var canvas = createCanvas(div.id, "canevas_"+i*2);
-        createGraph(lineName + " Years ", canvas, yearsData, years);
-        var div = createDiv("graphCell_"+i+"_1", "container_"+i*2+1);
-        var canvas = createCanvas(div.id, "canevas_"+i*2+1);
-        createGraph(lineName + " Months ", canvas, monthsData, months);
-        /*if(yearLevelData.length>0){
-            if(levelTr[1] == 0 && levelTr[0]>1){
-                addRow(table, 2);
-                var div = createDiv("graphCell_"+i+"_0", "container_summary_1_"+i*2);
-                var canvas = createCanvas(div.id, "canevas_summary_1_"+i*2);
-                graphYear = createGraph(lineName + "", canvas, years);
-                yearLevelData.forEach(element => {
-                    if(element[2][2]== 0 && element[2][0]==levelTr[0]-1){
-                        addDataset(graphYear, element[0], element[1]);
-                    }
-                });
+        console.log(levelTr);
+        //addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months);
+        if((levelTr[1]==0||Lv2hasLv3Child(i)) && levelTr[2]==0 ){
+            graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months);
+            k++;
 
-                var div = createDiv("graphCell_"+i+"_1", "container_summary_1_"+i*2+1);
-                var canvas = createCanvas(div.id, "canevas_summary_1_"+i*2+1);
-                graphMonth = createGraph(lineName + "", canvas,[], months);
-                monthLevelData.forEach(element => {
-                    if(element[2][2]== 0 && element[2][0]==levelTr[0]-1){
-                        addDataset(graphMonth, element[0], element[1]);
+            for(let l = i+1; l<iMax; l++){
+                levelTrL = getLevel(tr_id[l+1]).split('.');
+                if((levelTrL[0]==levelTr[0])&&((levelTr[1]==0 && levelTrL[2]==0) || (levelTr[1]==levelTrL[1]))){
+                    console.log(levelTr + " - " + levelTrL + ": " + (levelTr[1]==0 && levelTrL[2]==0)  + " / "+(levelTr[1]==levelTrL[1]));
+                    var lineNameL = $("#"+"lineName_"+l).text();
+                    yearsData = [];
+                    monthsData = [];
+                    for(let j = 0; j < jMax; j++){
+                        if(isMonth(j)){
+                            monthsData.push(ucData[j][l]);
+                        }else if($("#"+j).text()!="Total"){
+                            yearsData.push(ucData[j][l]);
+                        }
+            
                     }
-                });
-            }else if(levelTr[2] == 0){
-                addRow(table, 2);
-                var div = createDiv("graphCell_"+i+"_0", "container_summary_2_"+i*2);
-                var canvas = createCanvas(div.id, "canevas_summary_2_"+i*2);
-                graphYear = createGraph(lineName + " Summary Years ", canvas, yearLevelData[0][0], years);
-                yearLevelData.forEach(element => {
-                    if(element[2][2]!= 0 && element[2][1]==levelTr[1]-1 && element[2][0]==levelTr[0]-1){
-                        addDataset(graphYear, element[0], element[1]);
-                    }
-                });
-                var div = createDiv("graphCell_"+i+"_1", "container_summary_2_"+i*2+1);
-                var canvas = createCanvas(div.id, "canevas_summary_2_"+i*2+1);
-                graphMonth = createGraph(lineName + " Summary Months ", canvas, monthLevelData[0][0], months);
-                monthLevelData.forEach(element => {
-                    if(element[2][2]!= 0 && element[2][1]==levelTr[1]-1 && element[2][0]==levelTr[0]-1){
-                        addDataset(graphMonth, element[0], element[1]);
-                    }
-                });
+                    addDataset(graphs[0], yearsData, lineName + ": "+lineNameL);
+                    addDataset(graphs[1], monthsData, lineName + ": "+lineNameL);
+                }
             }
-
-        }*/
+        }
         
-        yearLevelData.push([yearsData, lineName,levelTr] );
-        monthLevelData.push([monthsData, lineName,levelTr] );
     }
 
 }
 
+function Lv2hasLv3Child(id){
+    levelTr1 = getLevel(tr_id[id+2]).split('.');
+    return levelTr1[2]!=0;
+
+}
 
 function addDataset(graph, data, label){
+    colors = getColorsArray(data);
     var newDataset = {
         label: label,
-        data: data
+        data: data,
+        borderColor: colors[0],
+        backgroundColor: colors[0]/*,
+        fill: false*/
     };
     graph.config.data.datasets.push(newDataset);
 }
@@ -325,8 +317,6 @@ function addDataset(graph, data, label){
 function table2csv(name,devSym){
 
     var data = $('#data').data("toShow");
-    var years = $('#data').data("years");
-    var months = $('#data').data("months");
     var uc = getUcSelected();
 
     for(let i =0; i< data.length; i++){       
