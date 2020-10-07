@@ -688,7 +688,7 @@ function calcCapexTot($capexPerMonth,$projectYears){
 function calcImplemPerMonth($implemRepart,$implemTot){
     $list = [];
     foreach ($implemRepart as $date => $percent) {
-        $list[$date] = $percent!=0 ? $implemTot*$percent/100 : 0;
+        $list[$date] = $percent!=0 ? $implemTot*$percent/100  - array_sum($list): 0;
     }
     return $list;
 }
@@ -801,12 +801,12 @@ function calcOpexPerMonth2($opexRepart,$opexValues){
     
     foreach ($opexRepart as $date => $percent) {
         $opexTot = 0;
+        $i++;
         if($percent==100 and $prec_percent==100){
             $list[$date] = $list[$prec_date];
         } else {
             foreach ($opexValues as $id_item => $values) {
                 $opexTot += $values['cost']*pow($values['an_var_vol'],$i/12)*pow($values['an_var_unitcost'],$i/12);
-                $i++;
             }
             $list[$date] = $opexTot*$percent/100;
         }
@@ -920,7 +920,7 @@ for ($i=$nb75; $i < $nb100 ; $i++) {
 for ($i=$nb100; $i < $nb_end ; $i++) { 
     $list[$proj_dates[$i]] = 100;
 }
-for ($i=$nb100; $i < sizeof($proj_dates) ; $i++) { 
+for ($i=$nb_end; $i < sizeof($proj_dates) ; $i++) { 
     $list[$proj_dates[$i]] = 0;
 }
     //var_dump($list);

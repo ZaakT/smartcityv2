@@ -37,8 +37,12 @@ function use_case_schedule($twig,$is_connected, $projID, $ucID){
         $projectEnd = $projectEnd->format('Y-m-d');
 
         $scheduleDates = getProjetSchedule($projID, $ucID);
-
-        echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('schedule_dates'=>$scheduleDates, 'project_start'=>$projectStart, 'project_end'=>$projectEnd, 
+        $project_dep_start = $keyDates[0]['deploy_start_date'];
+        $duration = $keyDates[0]['deploy_duration'];
+        $project_dep_end = new DateTime($project_dep_start);
+        $project_dep_end->modify("+$duration months");
+        $project_dep_end = $project_dep_end->format('Y-m-d');
+        echo $twig->render('/input/use_case_supplier_steps/project_schedule.twig',array('schedule_dates'=>$scheduleDates, 'project_start'=>$projectStart, 'project_end'=>$projectEnd, "project_dep_end"=>$project_dep_end, "project_dep_start"=>$project_dep_start,
         'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID, 'ucID'=>$ucID,'part'=>"Project","selected"=>$proj[1],
         'username'=>$user[1], 'part2'=>"Use Case",'selected2'=>$uc[1]));
         prereq_ipc(0);

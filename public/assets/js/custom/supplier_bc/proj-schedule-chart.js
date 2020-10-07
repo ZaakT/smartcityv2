@@ -38,7 +38,7 @@ function update_chart(event) {
         $("#" + bar_lag).css("width", duree_lag + "%")
         $("#" + bar_ramp).css("width", duree_ramp + "%")
         $("#" + bar_run).css("width", duree_run + "%")
-    } else if (!event.id.endsWith("_1")) { //reste des cas
+    }else if (!event.id.endsWith("_1")) { //reste des cas
         let bar = event.id + "_bar";
         let bar_precedente = event.id.split("_")[0] + "_" + (parseInt(event.id.slice(-1)) - 1) + "_bar";
 
@@ -61,6 +61,13 @@ function update_all_chart() {
     let debut_projet = new Date(document.querySelector("p#project-start").outerText)
     let fin_projet = new Date(document.querySelector("p#project-end").outerText)
     let duree_projet = Math.round(fin_projet.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)
+
+
+
+    
+
+
+
 
     //UC Pricing Schedule (3 bars)
     let bar_void = "ucpri_1_bar"
@@ -114,4 +121,20 @@ function update_all_chart() {
         $("#" + bar).css("width", duree_depuis_fin + "%")
         $("#" + bar_precedente).css("width", duree_depuis_debut + "%")
     }
+    var bar_void_p = "proj_1_bar";
+    var bar_dep_p= "proj_2_bar"
+    var bar_run_p = "proj_3_bar"
+
+    var project_dep_start_p = new Date($("#project_dep_start").val())
+    var project_dep_end_p = new Date($("#project_dep_end").val())
+
+
+    var duree_void_p = Math.round((Math.round(project_dep_start_p.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)) / duree_projet * 100)
+    var duree_dep_p = Math.round((Math.round(project_dep_end_p.getTime() - project_dep_start_p.getTime()) / (1000 * 60 * 60 * 24)) / duree_projet * 100)
+    var duree_run_p = Math.round((Math.round(fin_projet.getTime() - project_dep_end_p.getTime()) / (1000 * 60 * 60 * 24)) / duree_projet * 100)
+
+    $("#" + bar_void_p).css("width", duree_void_p + "%")
+    $("#" + bar_dep_p).css("width", duree_dep_p + "%")
+    $("#" + bar_run_p).css("width", duree_run_p + "%")
+
 }

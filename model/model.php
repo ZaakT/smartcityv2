@@ -4494,6 +4494,17 @@ function getXpexSide($xpexID, $type){
 
 }
 
+
+function getTotSupplierRevenuesByUC($projID,$ucID, $revenueType){
+    $tot = 0;
+    $rev = getSupplierRevenuesValues($projID,$ucID, $revenueType);
+    foreach($rev as $revItem){
+        $tot+=$revItem["revenues"];
+    }
+    return convertGBPToDev($tot);
+}
+
+
 function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine, $side = "projDev"){
     //not valable for opex
     if($xpex!="capex" and $xpex!="implem"){
@@ -4609,7 +4620,7 @@ function getOpexValuesOrigine($projID,$ucID, $origine, $side){
 
         $list[$id_item] = ['cost'=>$cost,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
     }
-    if($side == "customer"){
+    if($side == "customer" && $origine =="from_ntt"){
         $rev = getSupplierRevenuesValues($projID,$ucID, "operating");
         if($rev!=[0]){
             foreach($rev as $id=>$itemData){

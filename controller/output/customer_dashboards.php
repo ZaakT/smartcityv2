@@ -450,7 +450,13 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
         if($item == "equipment" || $item== "deployment" || $item== "operating" || $item == "revenues"){
 
             $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
-            if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+            if($item == "equipment" || $item== "deployment"){$implemSchedule = $schedules['implem'][$ucID];
+                $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
+                $revenuesTot = getTotSupplierRevenuesByUC($projID,$ucID, $item);
+                $revenuesPerMonth = calcCapexPerMonth($implemRepart,$revenuesTot);
+
+            }elseif(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+
                 $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
                 $revenuesValues = getSupplierRevenuesValues($projID,$ucID, $item);
                 $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
