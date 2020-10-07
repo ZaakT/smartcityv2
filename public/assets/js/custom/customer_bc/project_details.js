@@ -228,6 +228,7 @@ function drawCharts(){
     var months = $('#data').data("months");
     var uc = getUcSelected();
     var ucData = [];
+    console.log(data);
 
     for(let i =0; i< data.length; i++){       
         if(data[i][0]==uc){
@@ -320,6 +321,41 @@ function addDataset(graph, data, label){
     graph.config.data.datasets.push(newDataset);
 }
 
+
+function table2csv(name,devSym){
+
+    var data = $('#data').data("toShow");
+    var years = $('#data').data("years");
+    var months = $('#data').data("months");
+    var uc = getUcSelected();
+
+    for(let i =0; i< data.length; i++){       
+        if(data[i][0]==uc){
+            ucData = data[i].slice(1, data[i].length);
+        }
+    }
+
+    iMax = ucData[0].length;
+    jMax = ucData.length;
+    csv = ";";
+    for(let j = 0; j < jMax; j++){
+        csv += $("#"+j).text() + ";";
+    }
+    csv += "\n";
+    for(let i = 0; i < iMax; i++){
+        var lineName = $("#"+"lineName_"+i).text() 
+        csv += lineName +";";
+        for(let j = 0; j < jMax; j++){
+            csv += ucData[j][i] + ";";
+        }
+        csv += "\n";
+    }
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = name+'.csv';
+    hiddenElement.click(); 
+}
 
 
 

@@ -73,6 +73,11 @@
 
 
 {{ table.table(lineNames, colNames, selDevSym) }}
+<div class="row mt-2 mb-5 text-center">
+    <div class="col">
+        <button class="btn btn-sm btn-primary" onclick="table2csv('{{selected}}','{{selDevSym}}');">Export to CSV  </button>
+    </div>
+</div>
 
 <div id="graph">
 </div>
@@ -81,7 +86,11 @@
 
 <div id="data"  data-to-show="{{ data|json_encode }}" data-months = "{{ months|json_encode }}" data-years = "{{ years|json_encode }}" ></div>
 <div id="deviseName" hidden>{{selDevName}}</div>
-<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
-<script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/table.js"></script>
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/project_details.js"></script>
+    <script> changeMonths() </script>
 {% endblock %}
 
