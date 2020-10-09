@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 06 oct. 2020 à 09:14
+-- Généré le :  ven. 09 oct. 2020 à 11:14
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -404,7 +404,9 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (39, 'Cables', '', 'from_outside_ntt', 'customer', NULL),
 (40, 'A', 'B', 'from_ntt', 'customer', NULL),
 (41, 'capex test 1', '', 'from_ntt', 'customer', NULL),
-(42, 'hjhjhj', '', 'from_ntt', 'projDev', NULL);
+(42, 'hjhjhj', '', 'from_ntt', 'projDev', NULL),
+(44, 'myCap 2', '', 'from_ntt', 'customer', NULL),
+(45, 'my 1st cap', '', 'from_ntt', 'supplier', 'unit');
 
 -- --------------------------------------------------------
 
@@ -447,7 +449,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -485,8 +487,11 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (37, 21),
 (38, 21),
 (41, 21),
+(43, 21),
+(44, 21),
 (39, 23),
-(40, 23);
+(40, 23),
+(45, 24);
 
 -- --------------------------------------------------------
 
@@ -517,6 +522,9 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (37, -1),
 (38, -1),
 (39, -1),
+(43, -1),
+(44, -1),
+(45, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -941,7 +949,7 @@ CREATE TABLE IF NOT EXISTS `financing_scenario` (
 INSERT INTO `financing_scenario` (`id`, `name`, `description`, `input_invest`, `input_op`, `creation_date`, `modif_date`, `id_proj`) VALUES
 (1, 'scenar1', '', -1, -1, '2020-02-11 14:55:35', NULL, 0),
 (2, 'scnear', '', -1, -1, '2020-02-11 14:55:41', NULL, 0),
-(3, 'scenar1', 'scenar test du 2 mars', 136632.5, 345, '2020-03-02 14:01:30', '2020-04-28 11:59:10', 4),
+(3, 'scenar1', 'scenar test du 2 mars', 136632.5, 345, '2020-03-02 14:01:30', '2020-10-08 13:17:43', 4),
 (4, 'scenario test', 'test', 136632.5, 3456, '2020-04-28 12:04:44', '2020-05-29 10:03:29', 4);
 
 -- --------------------------------------------------------
@@ -1319,7 +1327,10 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (39, 23, -1, 10, 200, 10),
 (40, 23, 3, 10, 100, 5),
 (41, 21, 9, NULL, NULL, NULL),
-(42, 4, 11, NULL, NULL, NULL);
+(42, 4, 11, NULL, NULL, NULL),
+(43, 21, -1, NULL, NULL, NULL),
+(44, 21, -1, NULL, NULL, NULL),
+(45, 24, -1, 0, 0, 5);
 
 -- --------------------------------------------------------
 
@@ -1633,6 +1644,8 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
   `margin` float NOT NULL,
   `anVarVol` int(11) NOT NULL,
   `anVarCost` int(11) NOT NULL,
+  `revenue_start_date` date NOT NULL,
+  `ramp_up_duration` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1640,19 +1653,27 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
 -- Déchargement des données de la table `input_supplier_revenues`
 --
 
-INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `margin`, `anVarVol`, `anVarCost`) VALUES
-(2, 21, 9, 1500, 50, 50, 0, 0),
-(3, 21, 9, 15, 300, 10, 5, 3),
-(4, 21, 7, 1500, 300, 15, 0, 0),
-(5, 23, 3, 100, 100, 10, 0, 0),
-(6, 23, 3, 150, 10, 10, 0, 0),
-(7, 23, 3, 3500, 1, 10, 0, 5),
-(8, 21, 0, 0, 0, 0, 0, 0),
-(9, 21, 0, 0, 0, 0, 0, 0),
-(10, 21, 0, 0, 0, 0, 0, 0),
-(11, 21, 0, 0, 0, 0, 0, 0),
-(12, 21, 0, 0, 0, 0, 0, 0),
-(13, 21, -1, 0, 0, 0, 0, 0);
+INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `margin`, `anVarVol`, `anVarCost`, `revenue_start_date`, `ramp_up_duration`) VALUES
+(1, 21, 9, 15, 25, 0, 0, 0, '0000-00-00', 0),
+(2, 21, 9, 1500, 50, 50, 0, 0, '0000-00-00', 0),
+(3, 21, 9, 15, 0, 10, 5, 3, '0000-00-00', 0),
+(4, 21, 7, 1500, 300, 15, 0, 0, '0000-00-00', 0),
+(5, 23, 3, 100, 100, 10, 0, 0, '0000-00-00', 0),
+(6, 23, 3, 150, 10, 10, 0, 0, '0000-00-00', 0),
+(7, 23, 3, 3500, 1, 10, 0, 5, '0000-00-00', 0),
+(8, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(9, 21, -1, 5, 10, 0, 0, 0, '0000-00-00', 0),
+(9, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(10, 21, -1, 10, 5, 0, 1, 2, '0000-00-00', 0),
+(10, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(11, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(12, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(13, 21, -1, 20, 300, 0, 0, 0, '0000-00-00', 0),
+(14, 21, -1, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(15, 24, 9, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(16, 24, -1, 10, 200, 0, 0, 0, '0000-00-00', 0),
+(17, 24, -1, 20, 20, 0, 0, 0, '0000-00-00', 0),
+(18, 24, -1, 30, 10, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2429,7 +2450,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -2439,14 +2460,15 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (3, 'TESTV2', 'Pré-rempli avec des xpex supplier', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-24 10:36:31', 1, 0, 0),
 (4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-10-01 11:50:04', 1, 1, 0),
 (5, 'Projet nif', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-09-14 11:25:01', 1, 0, 0),
-(6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-09-14 11:25:08', 1, 1, 1),
+(6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-10-08 13:07:57', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-06 11:13:37', 15, 1, 1),
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-09 11:36:24', 15, 1, 1),
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
-(23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1);
+(23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
+(24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -2474,7 +2496,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (10, '2020-09-14', 36, '2020-09-14', 6),
 (11, '2021-01-01', 48, '2021-05-01', 6),
 (21, '2020-09-15', 36, '2021-02-01', 6),
-(23, '2021-01-04', 36, '2021-01-04', 6);
+(23, '2021-01-04', 36, '2021-01-04', 6),
+(24, '2017-01-01', 52, '2017-04-01', 6);
 
 -- --------------------------------------------------------
 
@@ -2573,7 +2596,8 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_prod`, `poc_start
 (21, 5, '2020-12-01', '2020-09-10', '2021-07-15', '2020-09-10', '2021-12-15', '2022-05-15'),
 (21, 7, '2020-10-08', '2020-12-24', '2021-04-24', '2021-02-24', '2021-08-24', '2021-10-24'),
 (21, 9, '2020-12-27', '2021-01-10', '2023-06-15', '2021-01-03', '2021-02-15', '2022-07-14'),
-(23, 3, '2021-07-01', '2021-07-01', '2021-10-01', '2021-10-01', '2021-10-01', '2022-03-01');
+(23, 3, '2021-07-01', '2021-07-01', '2021-10-01', '2021-10-01', '2021-10-01', '2022-03-01'),
+(24, 9, '2017-05-07', '2017-07-07', '2017-07-07', '2017-07-07', '2017-07-07', '2017-07-07');
 
 -- --------------------------------------------------------
 
@@ -2697,11 +2721,13 @@ CREATE TABLE IF NOT EXISTS `proj_sel_measure` (
 INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (3, 0),
 (4, 0),
+(6, 0),
 (8, 0),
 (11, 0),
 (21, 0),
 (22, 0),
 (23, 0),
+(24, 0),
 (1, 1),
 (3, 1),
 (4, 1),
@@ -2713,7 +2739,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (11, 1),
 (21, 1),
 (22, 1),
-(23, 1);
+(23, 1),
+(24, 1);
 
 -- --------------------------------------------------------
 
@@ -2751,6 +2778,7 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (11, 4),
 (1, 5),
 (2, 5),
+(-1, 6),
 (1, 6),
 (3, 6),
 (7, 7),
@@ -2792,7 +2820,12 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 23),
 (1, 23),
 (3, 23),
-(5, 23);
+(5, 23),
+(-1, 24),
+(1, 24),
+(2, 24),
+(7, 24),
+(9, 24);
 
 -- --------------------------------------------------------
 
@@ -3423,7 +3456,8 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
 INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `department`, `company`, `team`) VALUES
 (21, 'a', 'Compiegne', 'Diego MEJIA', 'z', 'Google', 'team a'),
 (22, '', '', '', '', '', ''),
-(23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a');
+(23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
+(24, '', '', '', '', 'verifDash', '');
 
 -- --------------------------------------------------------
 
@@ -3439,7 +3473,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `description` varchar(1023) NOT NULL,
   `advice_user` enum('advice','user') NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -3455,7 +3489,12 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (7, 'sells of data analytics', 'operating', '', 'user'),
 (9, 'dep 001', 'deployment', '', 'user'),
 (10, 'rec 01', 'operating', '', 'user'),
-(13, 'rev 001', 'equipment', '', 'user');
+(13, 'rev 001', 'equipment', '', 'user'),
+(14, 'rev 002', 'equipment', '', 'user'),
+(15, 'my 1st eq', 'equipment', '', 'user'),
+(16, 'my 2nd eq', 'equipment', '', 'user'),
+(17, 'dep 1st', 'deployment', '', 'user'),
+(18, '1st rec', 'operating', '', 'user');
 
 -- --------------------------------------------------------
 
@@ -3487,7 +3526,12 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (10, -1),
 (11, -1),
 (12, -1),
-(13, -1);
+(13, -1),
+(14, -1),
+(15, 9),
+(16, -1),
+(17, -1),
+(18, -1);
 
 -- --------------------------------------------------------
 
@@ -3519,7 +3563,12 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (10, 21),
 (11, 21),
 (12, 21),
-(13, 21);
+(13, 21),
+(14, 21),
+(15, 24),
+(16, 24),
+(17, 24),
+(18, 24);
 
 -- --------------------------------------------------------
 
@@ -3591,12 +3640,12 @@ CREATE TABLE IF NOT EXISTS `ucm_sel_critcat` (
 --
 
 INSERT INTO `ucm_sel_critcat` (`id_critCat`, `id_ucm`, `weight`) VALUES
-(1, 1, NULL),
+(1, 1, 50),
 (1, 4, 85),
 (1, 6, NULL),
 (1, 7, 50),
 (1, 9, 50),
-(2, 1, NULL),
+(2, 1, 50),
 (2, 4, 15),
 (2, 6, NULL),
 (2, 7, 50),
@@ -3708,6 +3757,35 @@ INSERT INTO `ucm_sel_uc` (`id_uc`, `id_ucm`) VALUES
 (9, 9),
 (10, 9),
 (11, 9);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `uc_confirmed`
+--
+
+DROP TABLE IF EXISTS `uc_confirmed`;
+CREATE TABLE IF NOT EXISTS `uc_confirmed` (
+  `user_id` int(11) NOT NULL,
+  `proj_id` int(11) NOT NULL,
+  `meas_id` int(11) NOT NULL,
+  `uc_id` int(11) NOT NULL,
+  PRIMARY KEY (`user_id`,`proj_id`,`meas_id`,`uc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `uc_confirmed`
+--
+
+INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`) VALUES
+(15, 21, 0, -1),
+(15, 21, 1, 1),
+(15, 21, 1, 2),
+(15, 21, 1, 5),
+(15, 21, 1, 7),
+(15, 21, 1, 9),
+(15, 24, 0, -1),
+(15, 24, 1, 9);
 
 -- --------------------------------------------------------
 
