@@ -23,7 +23,12 @@
 
     <td scope="col"><input id="anVarVol_{{id_xpex}}" name="anVarVol_{{id_xpex}}_{{ucID}}" class="text-center anVarVol p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarVol_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"{{Mode == "supplier" ? "disabled"}}><span> %</span></td> 
     <td scope="col"><input id="anVarCost_{{id_xpex}}" name="anVarCost_{{id_xpex}}_{{ucID}}" class="text-center anVarCost p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarCost_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"{{Mode == "supplier" ? "disabled"}}><span> %</span></td> 
-    
+    {% endif %}
+    {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
+
+    <td scope="col"><input id="revenueStart_{{id_xpex}}" name="revenueStart_{{id_xpex}}_{{ucID}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"{{Mode == "supplier" ? "disabled"}}></td> 
+    <td scope="col"><input id="rampUpDurationt_{{id_xpex}}" name="rampUpDurationt_{{id_xpex}}_{{ucID}}" class="text-center rampUpDurationt p-1" type="date" required oninput="checkXpexInput(rampUpDurationt_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"{{Mode == "supplier" ? "disabled"}}></td> 
+
     {% elseif type == "capex" %}
 
     <td scope="col"><input id="period_{{id_xpex}}" name="period_{{id_xpex}}_{{ucID}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(period_{{id_xpex}});" value="{{ selXpex[id_xpex]['period'] ? selXpex[id_xpex]['period'] : "0" }}"{{Mode == "supplier" ? "disabled"}}></td>
@@ -93,8 +98,8 @@
     {% set size = 5 %}
     {% if type == "opex" %} {% set size = 7 %}
     {% elseif type == "capex" %}{% set size = 6 %}
-    {#% elseif type == "equipment_revenues" or  type == "deployment_revenues"  %}{% set size = 5 %#}
-    {% elseif type == "operating_revenues"  %}{% set size = 6 %}
+    {% elseif type == "equipment_revenues" or  type == "deployment_revenues"  %}{% set size = 7 %}
+    {% elseif type == "operating_revenues"  %}{% set size = 8 %}
     {% endif %}
     {% if listUcsName|length > 1 %} {% set size = size + 1 %}
     {% endif %}
@@ -118,6 +123,10 @@
                         {% if type == "opex" or type == "operating_revenues" %}
                         <th scope="col">Annual unit cost variation</th>
                         <th scope="col">Annual volume variation</th>
+                        {% endif %}
+                        {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
+                        <th scope="col">Start of Revenues</th>
+                        <th scope="col">Ramp-up Duration</th>
                         {% endif %}
                         {% if type == "capex" %}
                         <th scope="col">Amortization Period ( in years )</th>

@@ -1,14 +1,14 @@
 let inputs = ["#dstart", "#dduration", "#pstart", "#pduration"]
 
 
-function mounthDiff(d1, d2)
+function monthDiff(d1, d2)
 {
-    mounth1 = parseInt(d1.split("-")[1]);
+    month1 = parseInt(d1.split("-")[1]);
     year1 = parseInt(d1.split("-")[0]);
 
-    mounth2 = parseInt(d2.split("-")[1]);
+    month2 = parseInt(d2.split("-")[1]);
     year2 = parseInt(d2.split("-")[0]);
-    return (year2-year1)*12 + mounth2-mounth1;
+    return (year2-year1)*12 + month2-month1;
 }
 function submitForm(formName){
     //clearAlerts();
@@ -39,7 +39,7 @@ function submitForm(formName){
 
     var valDStart = $("#dstart").val();
     var valPStart = $("#pstart").val();
-    var diffPD =mounthDiff(valPStart, valDStart);
+    var diffPD =monthDiff(valPStart, valDStart);
 
     if(valDDur<1){
         validate_form = false;

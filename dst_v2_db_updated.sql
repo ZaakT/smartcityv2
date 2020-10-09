@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 09 oct. 2020 à 11:14
+-- Généré le :  ven. 09 oct. 2020 à 12:06
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -2576,12 +2576,11 @@ DROP TABLE IF EXISTS `project_schedule`;
 CREATE TABLE IF NOT EXISTS `project_schedule` (
   `id_project` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
-  `deploy_prod` date NOT NULL,
-  `poc_start` date NOT NULL,
-  `poc_run` date NOT NULL,
-  `lag_start` date NOT NULL,
-  `lag_ramp` date NOT NULL,
-  `ramp_run` date NOT NULL,
+  `deploy_start` date NOT NULL,
+  `deployment_duration` int(11) NOT NULL,
+  `uc_end` date NOT NULL,
+  `pricing_start` date NOT NULL,
+  `poc_duration` int(11) NOT NULL,
   PRIMARY KEY (`id_project`,`id_uc`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -2589,15 +2588,15 @@ CREATE TABLE IF NOT EXISTS `project_schedule` (
 -- Déchargement des données de la table `project_schedule`
 --
 
-INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_prod`, `poc_start`, `poc_run`, `lag_start`, `lag_ramp`, `ramp_run`) VALUES
-(3, 3, '2020-12-14', '2020-09-14', '2021-05-12', '2020-09-21', '2020-12-15', '2021-05-21'),
-(21, 1, '2021-06-08', '2021-01-22', '2021-08-15', '2020-09-10', '2020-12-24', '2021-12-15'),
-(21, 2, '2021-01-16', '2021-02-16', '2021-08-16', '2021-12-16', '2022-07-16', '2023-06-16'),
-(21, 5, '2020-12-01', '2020-09-10', '2021-07-15', '2020-09-10', '2021-12-15', '2022-05-15'),
-(21, 7, '2020-10-08', '2020-12-24', '2021-04-24', '2021-02-24', '2021-08-24', '2021-10-24'),
-(21, 9, '2020-12-27', '2021-01-10', '2023-06-15', '2021-01-03', '2021-02-15', '2022-07-14'),
-(23, 3, '2021-07-01', '2021-07-01', '2021-10-01', '2021-10-01', '2021-10-01', '2022-03-01'),
-(24, 9, '2017-05-07', '2017-07-07', '2017-07-07', '2017-07-07', '2017-07-07', '2017-07-07');
+INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployment_duration`, `uc_end`, `pricing_start`, `poc_duration`) VALUES
+(3, 3, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(21, 1, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(21, 2, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(21, 5, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(21, 7, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(21, 9, '2021-03-01', 3, '2023-06-01', '2021-05-01', 4),
+(23, 3, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0);
 
 -- --------------------------------------------------------
 

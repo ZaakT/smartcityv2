@@ -696,7 +696,7 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
     unset($GLOBALS['useFiltre']);
 }
 
-function difMounthsBounds($d1, $d2){
+function difMonthsBounds($d1, $d2){
     return (explode("/",$d1)[1]-explode("/",$d2)[1])*12+explode("/",$d1)[0]-explode("/",$d2)[0];
 }
 
@@ -724,9 +724,9 @@ function getDateProportion($implemSchedule, $year){
         if($after == "startdate"){
             return 0;
         }else{
-            $difMounthsBounds = difMounthsBounds($implemSchedule[$after], $implemSchedule[$before]);
-            $difMounthsBeforeYear = difMounthsBounds("01/$year", $implemSchedule[$before]);
-            return $i/count($implemSchedule)+$difMounthsBeforeYear/$difMounthsBounds;
+            $difMonthsBounds = difMonthsBounds($implemSchedule[$after], $implemSchedule[$before]);
+            $difMonthsBeforeYear = difMonthsBounds("01/$year", $implemSchedule[$before]);
+            return $i/count($implemSchedule)+$difMonthsBeforeYear/$difMonthsBounds;
         }
     }
 }

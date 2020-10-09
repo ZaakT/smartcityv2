@@ -1293,26 +1293,26 @@ function deleteSelVolumes($projID){
 
 // ---------------------------------------- SCHEDULE ----------------------------------------
 
-function addDateMounths($date, $mounths){
-    // $date is a date at the date format but $mounths is a number of mounths, so it's an integer. The goal of this function is basicly to return "$date+$mounth"
-    if($mounths == 0 ){ return $date ;}
+function addDateMonths($date, $months){
+    // $date is a date at the date format but $months is a number of months, so it's an integer. The goal of this function is basicly to return "$date+$month"
+    if($months == 0 ){ return $date ;}
     if(count(explode("/", $date))>2){throw new Exception('Bad Date format, use the function dateWithoutDay($d)', 1);}
-    $dateMounth = explode("/", $date)[0];
+    $dateMonth = explode("/", $date)[0];
     $dateYear = explode("/", $date)[1];
     
-    $dateYear += intdiv(($dateMounth + $mounths -1 ) , 12);
-    $dateMounth = ($dateMounth + $mounths -1 )%12 + 1;
-    if($dateMounth<10){ $dateMounth="0$dateMounth";}
-    return "$dateMounth/$dateYear";
+    $dateYear += intdiv(($dateMonth + $months -1 ) , 12);
+    $dateMonth = ($dateMonth + $months -1 )%12 + 1;
+    if($dateMonth<10){ $dateMonth="0$dateMonth";}
+    return "$dateMonth/$dateYear";
 
 }
 
 function  addScheduleElement($list, $key, $id_uc, $startdate, $enddate, $date100){
     if($key!= "revenues" && $key != "implem" && $key != "opex" ){ throw new Exception("Wrong type !");}
-    $difDate = difMounthsBounds($date100, $startdate);
-    $date25 = addDateMounths($startdate, floor($difDate*0.25));
-    $date50 = addDateMounths($startdate, floor($difDate*0.5));
-    $date75 = addDateMounths($startdate, floor($difDate*0.75));
+    $difDate = difMonthsBounds($date100, $startdate);
+    $date25 = addDateMonths($startdate, floor($difDate*0.25));
+    $date50 = addDateMonths($startdate, floor($difDate*0.5));
+    $date75 = addDateMonths($startdate, floor($difDate*0.75));
     //echo "difDate : $difDate, date25 : $date25, date50 : $date50, date75 : $date75, date100 : $date100, enddate : $enddate <br>";
     if(array_key_exists($key,$list)){
         $list[$key][$id_uc] = [
@@ -1431,7 +1431,7 @@ function getListSelDates($projID){
         //var_dump($list);
         return $list;
     }elseif (isSup()) {
-        
+        // ok ???
         $db = dbConnect();
         $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ?");
         $req_project_schedule->execute(array($projID));
@@ -1459,17 +1459,21 @@ function getListSelDates($projID){
 
         while($row = $req_project_schedule->fetch()){
             $id_uc = intval($row['id_uc']);
-            $deploy_prod = $row['deploy_prod'] ? date_create($row['deploy_prod'])->format('m/Y') : null;
-            $poc_start = $row['poc_start'] ? date_create($row['poc_start'])->format('m/Y') : null;
-            $poc_run = $row['poc_run'] ? date_create($row['poc_run'])->format('m/Y') : null;
-            $lag_start = $row['lag_start'] ? date_create($row['lag_start'])->format('m/Y') : null;
-            $lag_ramp = $row['lag_ramp'] ? date_create($row['lag_ramp'])->format('m/Y') : null;
-            $ramp_run = $row['ramp_run'] ? date_create($row['ramp_run'])->format('m/Y') : null;
+            $deploy_start = $row['deploy_start'] ? date_create($row['deploy_start'])->format('m/Y') : null;
+            $deployment_duration = $row['deployment_duration'] ? inval($row['deployment_duration']) : null;
+
+            $deploy_prod = new DateTime($deploy_start);
+            $deploy_prod->modify("+$duradeployment_durationtion months");
+            $deploy_prod = $deploy_prod->format('m/Y');
+
+            $uc_end = $row['uc_end'] ? date_create($row['uc_end'])->format('m/Y') : null;
+            $lag_start = $row['pricing_start'] ? date_create($row['pricing_start'])->format('m/Y') : null;
+            $lag_ramp = $row['poc_duration'] ? date_create($row['poc_duration'])->format('m/Y') : null;
             //echo dateWithoutDay($ramp_run);
 
-            $list = addScheduleElement($list, "implem", $id_uc,  $projectStart, $projectEnd , $deploy_prod);
-            $list = addScheduleElement($list, "opex", $id_uc, $lag_ramp , $projectEnd , $ramp_run);
-            $list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
+            $list = addScheduleElement($list, "implem", $id_uc,  $deploy_start, $uc_end , $deploy_prod);
+            $list = addScheduleElement($list, "opex", $id_uc,  $deploy_start, $uc_end , $deploy_prod); // same as implem ? 
+            //$list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
 
         }
         
@@ -1530,6 +1534,7 @@ function deleteSelDates($projID){
 
 
 function hasSchedule($projID, $ucID){
+    //ok
     $db = dbConnect();
     $req = $db->prepare("SELECT *  FROM project_schedule WHERE id_project = ? AND id_uc = ?");
     $req->execute(array($projID,$ucID));
@@ -2846,30 +2851,33 @@ function alterProjetKeyDates($projID, $startDate, $duration, $deployStartDate, $
 }
 
 function getProjetSchedule($projID, $ucID) {
+    //ok
     $db = dbConnect();
     $req = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? AND id_uc = ?");
     $req->execute(array($projID, $ucID));
     return $req->fetchAll();
 }
 
-function insertProjectSchedule($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun) {
+function insertProjectSchedule($projID, $ucID, $deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration){
+    //ok
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("INSERT INTO project_schedule
-                            (id_project, id_uc, deploy_prod, poc_start, poc_run, lag_start, lag_ramp, ramp_run)
-                            VALUES (?,?,?,?,?,?,?,?)");
-    $ret = $req->execute(array($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun));
+                            (id_project, id_uc, deploy_start, deployment_duration, uc_end, pricing_start, poc_duration)
+                            VALUES (?,?,?,?,?,?)");
+    $ret = $req->execute(array($projID, $ucID, $deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration));
     
     return $ret;
 }
 
-function alterProjectSchedule($projID, $ucID, $deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun) {
+function alterProjectSchedule($projID, $ucID,$deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration) {
+    //ok
     $db = dbConnect();
     $ret = false;
     $req = $db->prepare("UPDATE project_schedule 
-    SET deploy_prod = ?, poc_start = ?, poc_run = ?, lag_start = ?, lag_ramp = ?, ramp_run = ?
+    SET deploy_start = ?, deployment_duration = ?, uc_end = ?, pricing_start = ?, poc_duration = ?
                             WHERE id_project = ? AND id_uc = ?");
-    $ret = $req->execute(array($deployProd, $pocStart, $pocRun, $lagStart, $lagRamp, $rampRun, $projID, $ucID));
+    $ret = $req->execute(array($deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration, $projID, $ucID));
     
     return $ret;
 }
@@ -3117,7 +3125,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
     return $ret;
 }
 
-function getRevenuesSchedule($projID,$ucID){
+function getRevenuesSchedule($projID,$ucID, $itemId = 0, $itemCat = "equipment"){
     if(isDev()){
         $db = dbConnect();
         $req = $db->prepare("SELECT * FROM revenue_schedule WHERE id_proj = ? and id_uc = ?");
@@ -3126,6 +3134,8 @@ function getRevenuesSchedule($projID,$ucID){
         return $res;
     }
     if(isSup()){
+        //PAS OK !!!
+        throw new nException("not implemented");
         $db = dbConnect();
         $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? and id_uc = ?");
         $req_project_schedule->execute(array($projID, $ucID));
@@ -3145,9 +3155,9 @@ function getRevenuesSchedule($projID,$ucID){
         $ramp_run = $res['ramp_run'] ? date_create($res['ramp_run'])->format('m/Y') : null;
         //echo dateWithoutDay($ramp_run);
 
-        $difDate = difMounthsBounds($ramp_run ,$lag_ramp);
+        $difDate = difMonthsBounds($ramp_run ,$lag_ramp);
 
-        return ["id_uc" => $ucID,'id_proj','start_date'=>$lag_ramp  ,'25_rampup' => addDateMounths($lag_ramp, floor($difDate*0.25)),'50_rampup' => addDateMounths($lag_ramp, floor($difDate*0.5)),'75_rampup' => addDateMounths($lag_ramp, floor($difDate*0.75)),  '100_rampup' => $ramp_run , 'end_date' =>  $projectEnd ];
+        return ["id_uc" => $ucID,'id_proj','start_date'=>$lag_ramp  ,'25_rampup' => addDateMonths($lag_ramp, floor($difDate*0.25)),'50_rampup' => addDateMonths($lag_ramp, floor($difDate*0.5)),'75_rampup' => addDateMonths($lag_ramp, floor($difDate*0.75)),  '100_rampup' => $ramp_run , 'end_date' =>  $projectEnd ];
 
 
 

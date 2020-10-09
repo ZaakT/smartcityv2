@@ -1039,9 +1039,9 @@ try{
                                 if($_POST) {
                                     $keyDates = getProjetSchedule($_SESSION['projID'], $_SESSION['ucID']);
                                     if(empty($keyDates)) {
-                                        insertProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_prod'], $_POST['poc_start'], $_POST['poc_run'], $_POST['lag_start'], $_POST['lag_ramp'], $_POST['ramp_run']);
+                                        insertProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
                                     } else {
-                                        alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_prod'], $_POST['poc_start'], $_POST['poc_run'], $_POST['lag_start'], $_POST['lag_ramp'], $_POST['ramp_run']);
+                                        alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
                                     }
 
                                     header('Location: ?A=input_use_case_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);

@@ -19,7 +19,7 @@
     <h5 class="text-dark col text-center"><strong class="mr-2">Funding Target :</strong> {{selDevSym}}&nbsp; {{funding_target|number_format(2,'.',',')}}</h5>
 </div>
 
-<form action="?A=funding&amp;A2=entities_inputed" method="post" onsubmit="return checkInputEntities() && checkInputEntities2();">
+<form action="?A=funding&amp;A2=entities_inputed" method="post"{#} onsubmit="return checkInputEntities() && checkInputEntities2();"{#}>
 {% if listSel %}
 {{table.input_entities(FS_cat,FS,entities,listSel,funding_target)}}
 {{table.input_entities2(FS_cat,FS,entities,listSel,funding_target)}}
