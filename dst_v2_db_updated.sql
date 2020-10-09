@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 09 oct. 2020 à 12:06
+-- Généré le :  ven. 09 oct. 2020 à 13:58
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -1351,6 +1351,8 @@ CREATE TABLE IF NOT EXISTS `input_cashreleasing` (
   `unit_cost_reduc` double DEFAULT NULL,
   `annual_var_volume` double DEFAULT NULL,
   `annual_var_unit_cost` double DEFAULT NULL,
+  `revenue_start_date` date NOT NULL,
+  `ramp_up_duration` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
@@ -1360,26 +1362,26 @@ CREATE TABLE IF NOT EXISTS `input_cashreleasing` (
 -- Déchargement des données de la table `input_cashreleasing`
 --
 
-INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `ratio`, `unit_cost`, `volume_reduc`, `unit_cost_reduc`, `annual_var_volume`, `annual_var_unit_cost`) VALUES
-(1, 1, 1, 'per example', 0, NULL, 0, 0, 0, 0, 0),
-(1, 4, 1, 'per example', 864, 54, 0, 0, 0, 0, 0),
-(1, 6, 1, 'per example', 20, NULL, 58, 2, 5, 2, 2),
-(1, 8, 1, 'per example', 1500, NULL, 500, 5, 0, 5, 5),
-(2, 6, 1, 'per example', 30, NULL, 4, 4, 2, 5, 5),
-(2, 8, 1, 'per example', 5, NULL, 12000, 10, 10, 5, 5),
-(3, 1, 1, 'per example', 0, NULL, 0, 0, 0, 0, 0),
-(3, 4, 1, 'per example', 4544, 284, 0, 0, 0, 0, 0),
-(3, 6, 1, 'per example', 10, NULL, 10, 1, 4, 5, 5),
-(3, 8, 1, 'per example', 10, NULL, 10, 5, 6, 5, 5),
-(4, 4, 2, 'EUIHV', 54, NULL, 5, 54, 5, 5, 5),
-(5, 4, 3, 'VUIG', 66, NULL, 12, 5, 19, 89, 78),
-(7, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 8, 11, 'SI', 12, NULL, 100, 3, 5, 5, 3),
-(9, 8, 11, 'SI', 50, NULL, 200, 0, 10, 5, 1),
-(10, 8, 11, 'SI', 20, NULL, 1500, 30, 13, 5, 5),
-(11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3),
-(12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1),
-(13, 23, 3, 'parking space', 5000, NULL, 100, 5, 0, 0, 0);
+INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `ratio`, `unit_cost`, `volume_reduc`, `unit_cost_reduc`, `annual_var_volume`, `annual_var_unit_cost`, `revenue_start_date`, `ramp_up_duration`) VALUES
+(1, 1, 1, 'per example', 0, NULL, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(1, 4, 1, 'per example', 864, 54, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(1, 6, 1, 'per example', 20, NULL, 58, 2, 5, 2, 2, '0000-00-00', 0),
+(1, 8, 1, 'per example', 1500, NULL, 500, 5, 0, 5, 5, '0000-00-00', 0),
+(2, 6, 1, 'per example', 30, NULL, 4, 4, 2, 5, 5, '0000-00-00', 0),
+(2, 8, 1, 'per example', 5, NULL, 12000, 10, 10, 5, 5, '0000-00-00', 0),
+(3, 1, 1, 'per example', 0, NULL, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(3, 4, 1, 'per example', 4544, 284, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(3, 6, 1, 'per example', 10, NULL, 10, 1, 4, 5, 5, '0000-00-00', 0),
+(3, 8, 1, 'per example', 10, NULL, 10, 5, 6, 5, 5, '0000-00-00', 0),
+(4, 4, 2, 'EUIHV', 54, NULL, 5, 54, 5, 5, 5, '0000-00-00', 0),
+(5, 4, 3, 'VUIG', 66, NULL, 12, 5, 19, 89, 78, '0000-00-00', 0),
+(7, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(8, 8, 11, 'SI', 12, NULL, 100, 3, 5, 5, 3, '0000-00-00', 0),
+(9, 8, 11, 'SI', 50, NULL, 200, 0, 10, 5, 1, '0000-00-00', 0),
+(10, 8, 11, 'SI', 20, NULL, 1500, 30, 13, 5, 5, '0000-00-00', 0),
+(11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3, '0000-00-00', 0),
+(12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1, '0000-00-00', 0),
+(13, 23, 3, 'parking space', 5000, NULL, 100, 5, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1568,6 +1570,8 @@ CREATE TABLE IF NOT EXISTS `input_revenues` (
   `revenues_per_unit` double DEFAULT NULL,
   `annual_variation_volume` double DEFAULT NULL,
   `annual_variation_unitcost` double DEFAULT NULL,
+  `revenue_start_date` date NOT NULL,
+  `ramp_up_duration` int(11) NOT NULL,
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
   KEY `id_uc` (`id_uc`)
@@ -1577,21 +1581,21 @@ CREATE TABLE IF NOT EXISTS `input_revenues` (
 -- Déchargement des données de la table `input_revenues`
 --
 
-INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `revenues_per_unit`, `annual_variation_volume`, `annual_variation_unitcost`) VALUES
-(1, 1, 1, 5, NULL, 2, 0, 0),
-(4, 1, 1, 16, 1, 0, 0, 0),
-(4, 3, 2, 453, NULL, 54, 54, 5),
-(4, 4, 3, 78, NULL, 2, 45, 12),
-(4, 6, 2, NULL, NULL, NULL, NULL, NULL),
-(4, 13, 11, NULL, NULL, NULL, NULL, NULL),
-(8, 1, 1, 5, NULL, 5, 5, 6),
-(8, 2, 1, 50, NULL, 1500, 3, 1),
-(8, 8, 11, 35, NULL, 255, 0, 2),
-(8, 9, 11, 50, NULL, 15000, 1, 3),
-(8, 10, 11, 100, NULL, 300, 2, 1),
-(8, 11, 11, 33, NULL, 20, 5, 3),
-(21, 12, 9, 15, NULL, 300, 3, 5),
-(23, 14, 3, 100, NULL, 30, 5, 5);
+INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `revenues_per_unit`, `annual_variation_volume`, `annual_variation_unitcost`, `revenue_start_date`, `ramp_up_duration`) VALUES
+(1, 1, 1, 5, NULL, 2, 0, 0, '0000-00-00', 0),
+(4, 1, 1, 16, 1, 0, 0, 0, '0000-00-00', 0),
+(4, 3, 2, 453, NULL, 54, 54, 5, '0000-00-00', 0),
+(4, 4, 3, 78, NULL, 2, 45, 12, '0000-00-00', 0),
+(4, 6, 2, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(4, 13, 11, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(8, 1, 1, 5, NULL, 5, 5, 6, '0000-00-00', 0),
+(8, 2, 1, 50, NULL, 1500, 3, 1, '0000-00-00', 0),
+(8, 8, 11, 35, NULL, 255, 0, 2, '0000-00-00', 0),
+(8, 9, 11, 50, NULL, 15000, 1, 3, '0000-00-00', 0),
+(8, 10, 11, 100, NULL, 300, 2, 1, '0000-00-00', 0),
+(8, 11, 11, 33, NULL, 20, 5, 3, '0000-00-00', 0),
+(21, 12, 9, 15, NULL, 300, 3, 5, '0000-00-00', 0),
+(23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1654,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
 --
 
 INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost`, `volume`, `margin`, `anVarVol`, `anVarCost`, `revenue_start_date`, `ramp_up_duration`) VALUES
-(1, 21, 9, 15, 25, 0, 0, 0, '0000-00-00', 0),
+(1, 21, 9, 0, 0, 0, 0, 0, '2021-12-09', 3),
 (2, 21, 9, 1500, 50, 50, 0, 0, '0000-00-00', 0),
 (3, 21, 9, 15, 0, 10, 5, 3, '0000-00-00', 0),
 (4, 21, 7, 1500, 300, 15, 0, 0, '0000-00-00', 0),
@@ -1668,8 +1672,8 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (10, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
 (11, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
 (12, 21, 0, 0, 0, 0, 0, 0, '0000-00-00', 0),
-(13, 21, -1, 20, 300, 0, 0, 0, '0000-00-00', 0),
-(14, 21, -1, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(13, 21, -1, 20, 300, 0, 0, 0, '2020-10-16', 1),
+(14, 21, -1, 0, 0, 0, 0, 0, '2020-10-14', 1),
 (15, 24, 9, 0, 0, 0, 0, 0, '0000-00-00', 0),
 (16, 24, -1, 10, 200, 0, 0, 0, '0000-00-00', 0),
 (17, 24, -1, 20, 20, 0, 0, 0, '0000-00-00', 0),
@@ -1694,6 +1698,8 @@ CREATE TABLE IF NOT EXISTS `input_widercash` (
   `unit_cost_reduc` double DEFAULT NULL,
   `annual_var_volume` double DEFAULT NULL,
   `annual_var_unit_cost` double DEFAULT NULL,
+  `revenue_start_date` date NOT NULL,
+  `ramp_up_duration` int(11) NOT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
@@ -1703,24 +1709,24 @@ CREATE TABLE IF NOT EXISTS `input_widercash` (
 -- Déchargement des données de la table `input_widercash`
 --
 
-INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `ratio`, `unit_cost`, `volume_reduc`, `unit_cost_reduc`, `annual_var_volume`, `annual_var_unit_cost`) VALUES
-(1, 1, 1, 'per blabla', 0, NULL, 0, 0, 0, 0, 0),
-(1, 4, 1, 'per example', 578, 36, 0, 0, 0, 0, 0),
-(1, 6, 1, 'per example', 10, NULL, 20, 4, 5, 40, 2),
-(1, 8, 1, 'per example', 5, NULL, 10, 1, 2, 4, 4),
-(2, 1, 1, 'per oiuhrf', 0, NULL, 0, 0, 0, 0, 0),
-(2, 4, 1, 'per example', 13, 1, 0, 0, 0, 0, 0),
-(2, 8, 1, 'per example', 500, NULL, 2, 2, 2, 7, 5),
-(3, 4, 3, 'per unit', 54, NULL, 43, 4, 32, 4, 4),
-(4, 4, 2, 'FTR', 54, NULL, 32, 35, 7, 65, 56),
-(5, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(6, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(8, 4, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(9, 8, 11, 'SI', 50, NULL, 12, 1, 2, 2, 1),
-(10, 8, 11, 'SI', 1200, NULL, 15, 50, 30, 4, 5),
-(11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2),
-(12, 21, 9, 'test', 15, NULL, 10000, 5, 30, 6, 10),
-(14, 23, 3, 'CO2', 1000, NULL, 1, 30, 0, 0, 0);
+INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, `volume`, `ratio`, `unit_cost`, `volume_reduc`, `unit_cost_reduc`, `annual_var_volume`, `annual_var_unit_cost`, `revenue_start_date`, `ramp_up_duration`) VALUES
+(1, 1, 1, 'per blabla', 0, NULL, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(1, 4, 1, 'per example', 578, 36, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(1, 6, 1, 'per example', 10, NULL, 20, 4, 5, 40, 2, '0000-00-00', 0),
+(1, 8, 1, 'per example', 5, NULL, 10, 1, 2, 4, 4, '0000-00-00', 0),
+(2, 1, 1, 'per oiuhrf', 0, NULL, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(2, 4, 1, 'per example', 13, 1, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(2, 8, 1, 'per example', 500, NULL, 2, 2, 2, 7, 5, '0000-00-00', 0),
+(3, 4, 3, 'per unit', 54, NULL, 43, 4, 32, 4, 4, '0000-00-00', 0),
+(4, 4, 2, 'FTR', 54, NULL, 32, 35, 7, 65, 56, '0000-00-00', 0),
+(5, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(6, 4, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(8, 4, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(9, 8, 11, 'SI', 50, NULL, 12, 1, 2, 2, 1, '0000-00-00', 0),
+(10, 8, 11, 'SI', 1200, NULL, 15, 50, 30, 4, 5, '0000-00-00', 0),
+(11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2, '0000-00-00', 0),
+(12, 21, 9, 'test', 15, NULL, 10000, 5, 30, 6, 10, '0000-00-00', 0),
+(14, 23, 3, 'CO2', 1000, NULL, 1, 30, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2465,7 +2471,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-09 11:36:24', 15, 1, 1),
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-09 15:49:46', 15, 1, 0),
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
 (24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1);

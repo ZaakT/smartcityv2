@@ -2190,7 +2190,7 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
         try {
-            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['revenueStart'], $data['rampUpDurationt'],$projID,$ucID,$id_item));
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
         } catch (\Throwable $th) {
             //do nothing;

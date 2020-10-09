@@ -472,6 +472,7 @@ function implem_inputed($post){
                 $list = [];
                 foreach ($post as $key => $value) {
                     $temp = explode('_',$key);
+                    
                     if($temp[0]=="vol"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['volume'=>$value];
@@ -924,6 +925,18 @@ function revenues_inputed($post){
                             $list[$temp[1]] = ['anVarVol'=>$value];
                         }
                     } else if($temp[0]=="anVarRev"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarRev'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarRev'=>$value];
+                        }
+                    }else if($temp[0]=="revenueStart"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarRev'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarRev'=>$value];
+                        }
+                    }else if($temp[0]=="rampUpDurationt"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['anVarRev'=>$value];
                         } else {

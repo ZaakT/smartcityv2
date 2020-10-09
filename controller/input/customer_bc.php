@@ -531,10 +531,62 @@ function xpex_inputed($post, $sideBarName, $type){
                 foreach ($info[$ucID] as $key => $value) {
                     $temp = explode('_',$key);
                     $type=$_GET['A2'];
-                    if(array_key_exists($temp[1],$list)){
-                        $list[$temp[1]] += [$temp[0]=>$value];
-                    } else {
-                        $list[$temp[1]] = [$temp[0]=>$value];
+                    if($temp[0]=="vol"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['volume'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['volume'=>$value];
+                        }
+                    } elseif($temp[0]=="unitCost"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit_cost'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit_cost'=>$value];
+                        }
+                    } elseif($temp[0]=="period"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['period'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['period'=>$value];
+                        }
+                    } elseif($temp[0]=="anVarVol"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarVol'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarVol'=>$value];
+                        }
+                    } elseif($temp[0]=="anVarCost"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarCost'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarCost'=>$value];
+                        }
+                    }elseif($temp[0]=="margin"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['margin'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['margin'=>$value];
+                        }
+                    }elseif($temp[0]=="unit"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit'=>$value];
+                        }
+                    }else if($temp[0]=="revenueStart"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['revenue_start_date'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['revenue_start_date'=>$value];
+                        }
+                    }else if($temp[0]=="rampUpDurationt"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['ramp_up_duration'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['ramp_up_duration'=>$value];
+                        }
+                    }else{
+                        throw new Exception("Error ! :".$temp[0]);
                     }
                     if($type=='equipment_revenues' ||$type=="deployment_revenues"){
                         $list[$temp[1]] += ['anVarVol'=>0, 'anVarCost'=>0];
