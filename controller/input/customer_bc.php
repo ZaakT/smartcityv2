@@ -121,7 +121,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID, $side); 
                         if($side == "customer"){
                             //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
+                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID],explode('_',$type)[0]);
                         }
                     }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
                         
@@ -409,8 +409,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 }
                 /*
                 var_dump($list_xpex_supplier);
-                var_dump($list_xpex_user_from_ntt);
-                var_dump($list_selXpex);*/
+                var_dump($list_xpex_user_from_ntt);*/
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
@@ -532,50 +531,10 @@ function xpex_inputed($post, $sideBarName, $type){
                 foreach ($info[$ucID] as $key => $value) {
                     $temp = explode('_',$key);
                     $type=$_GET['A2'];
-                    if($temp[0]=="vol"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['volume'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['volume'=>$value];
-                        }
-                    } elseif($temp[0]=="unitCost"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['unit_cost'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['unit_cost'=>$value];
-                        }
-                    } elseif($temp[0]=="period"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['period'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['period'=>$value];
-                        }
-                    } elseif($temp[0]=="anVarVol"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarVol'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['anVarVol'=>$value];
-                        }
-                    } elseif($temp[0]=="anVarCost"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarCost'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['anVarCost'=>$value];
-                        }
-                    }elseif($temp[0]=="margin"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['margin'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['margin'=>$value];
-                        }
-                    }elseif($temp[0]=="unit"){
-                        if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['unit'=>$value];
-                        } else {
-                            $list[$temp[1]] = ['unit'=>$value];
-                        }
-                    }else{
-                        throw new Exception("Error !");
+                    if(array_key_exists($temp[1],$list)){
+                        $list[$temp[1]] += [$temp[0]=>$value];
+                    } else {
+                        $list[$temp[1]] = [$temp[0]=>$value];
                     }
                     if($type=='equipment_revenues' ||$type=="deployment_revenues"){
                         $list[$temp[1]] += ['anVarVol'=>0, 'anVarCost'=>0];

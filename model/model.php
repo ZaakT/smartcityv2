@@ -2056,7 +2056,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 : wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, revenue_start_date, ramp_up_duration
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -2073,11 +2073,14 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
         $volume = intval($row['volume']);
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
+        $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
+        $ramp_up_duration = intval($row['ramp_up_duration']);
+
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost,'revenue_start_date'=>$revenue_start_date, 'ramp_up_duration'=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost,'revenue_start_date'=>$revenue_start_date, 'ramp_up_duration'=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -2181,11 +2184,13 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                             SET volume = ?,
                                 unit_cost = ?,
                                 anVarVol = ?,
-                                anVarCost = ?
+                                anVarCost = ?,
+                                revenue_start_date = ?, 
+                                ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
         try {
-            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['revenueStart'], $data['rampUpDurationt'],$projID,$ucID,$id_item));
 
         } catch (\Throwable $th) {
             //do nothing;
@@ -2807,7 +2812,7 @@ function getListXpexSupplier($ucID, $projID, $list_selXpex, $xpexType){
     }elseif($xpexType == "capex"){
         $revenueType = "equipment";
     }else{
-        throw new Excpetion(" 3.1 : wrong xpex type !");
+        throw new Exception(" 3.1 : wrong xpex type !");
     }
     $list =getListSupplierRevenuesUser($ucID, $projID, $revenueType);  
     foreach($list as $xpexID=>$xpexData){
@@ -3135,7 +3140,8 @@ function getRevenuesSchedule($projID,$ucID, $itemId = 0, $itemCat = "equipment")
     }
     if(isSup()){
         //PAS OK !!!
-        throw new nException("not implemented");
+        return true;
+        throw new Exception("not implemented");
         $db = dbConnect();
         $req_project_schedule = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? and id_uc = ?");
         $req_project_schedule->execute(array($projID, $ucID));

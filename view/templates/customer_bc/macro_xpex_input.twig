@@ -26,8 +26,8 @@
     {% endif %}
     {% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
 
-    <td scope="col"><input id="revenueStart_{{id_xpex}}" name="revenueStart_{{id_xpex}}_{{ucID}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"{{Mode == "supplier" ? "disabled"}}></td> 
-    <td scope="col"><input id="rampUpDurationt_{{id_xpex}}" name="rampUpDurationt_{{id_xpex}}_{{ucID}}" class="text-center rampUpDurationt p-1" type="date" required oninput="checkXpexInput(rampUpDurationt_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"{{Mode == "supplier" ? "disabled"}}></td> 
+    <td scope="col"><input id="revenueStart_{{id_xpex}}" name="revenueStart_{{id_xpex}}_{{ucID}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_xpex}});" value="{{selXpex[id_xpex]['revenue_start_date']}}"{{Mode == "supplier" ? "disabled"}}></td> 
+    <td scope="col"><input id="rampUpDurationt_{{id_xpex}}" name="rampUpDurationt_{{id_xpex}}_{{ucID}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkXpexInput(rampUpDurationt_{{id_xpex}});" value="{{selXpex[id_xpex]['ramp_up_duration']}}"{{Mode == "supplier" ? "disabled"}}></td> 
 
     {% elseif type == "capex" %}
 
