@@ -905,7 +905,6 @@ function revenues_inputed($post){
                 $list = [];
                 foreach ($post as $key => $value) {
                     $temp = explode('_',$key);
-                    //var_dump($temp);
                     if($temp[0]=="vol"){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['volume'=>$value];
@@ -932,17 +931,22 @@ function revenues_inputed($post){
                         }
                     }else if($temp[0]=="revenueStart"){
                         if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarRev'=>$value];
+                            $list[$temp[1]] += ['revenue_start_date'=>$value];
                         } else {
-                            $list[$temp[1]] = ['anVarRev'=>$value];
+                            $list[$temp[1]] = ['revenue_start_date'=>$value];
                         }
                     }else if($temp[0]=="rampUpDurationt"){
                         if(array_key_exists($temp[1],$list)){
-                            $list[$temp[1]] += ['anVarRev'=>$value];
+                            $list[$temp[1]] += ['ramp_up_duration'=>$value];
                         } else {
-                            $list[$temp[1]] = ['anVarRev'=>$value];
+                            $list[$temp[1]] = ['ramp_up_duration'=>$value];
                         }
                     }
+                }
+                foreach ($list as $itemID => $value) {
+                    
+                    $list[$itemID]["ramp_up_duration"] = isset($list[$itemID]["ramp_up_duration"] ) ? $list[$itemID]["ramp_up_duration"] : "NULL";
+                    $list[$itemID]["revenue_start_date"] = isset($list[$itemID]["revenue_start_date"] ) ? $list[$itemID]["revenue_start_date"] : "NULL";
                 }
                 insertRevenuesInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
@@ -1194,7 +1198,24 @@ function getListCashRelFromPost($post){
             } else {
                 $list[$temp[1]] = ['unit_cost'=>$value];
             }
+        }else if($temp[0]=="revenueStart"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['revenue_start_date'=>$value];
+            } else {
+                $list[$temp[1]] = ['revenue_start_date'=>$value];
+            }
+        }else if($temp[0]=="rampUpDurationt"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['ramp_up_duration'=>$value];
+            } else {
+                $list[$temp[1]] = ['ramp_up_duration'=>$value];
+            }
         }
+    }
+    foreach ($list as $itemID => $value) {
+        
+        $list[$itemID]["ramp_up_duration"] = isset($list[$itemID]["ramp_up_duration"] ) ? $list[$itemID]["ramp_up_duration"] : "NULL";
+        $list[$itemID]["revenue_start_date"] = isset($list[$itemID]["revenue_start_date"] ) ? $list[$itemID]["revenue_start_date"] : "NULL";
     }
     return $list;
 }
@@ -1433,7 +1454,24 @@ function getListWiderCashFromPost($post){
             } else {
                 $list[$temp[1]] = ['unit_cost'=>$value];
             }
+        }else if($temp[0]=="revenueStart"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['revenue_start_date'=>$value];
+            } else {
+                $list[$temp[1]] = ['revenue_start_date'=>$value];
+            }
+        }else if($temp[0]=="rampUpDurationt"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['ramp_up_duration'=>$value];
+            } else {
+                $list[$temp[1]] = ['ramp_up_duration'=>$value];
+            }
         }
+    }
+    foreach ($list as $itemID => $value) {
+        
+        $list[$itemID]["ramp_up_duration"] = isset($list[$itemID]["ramp_up_duration"] ) ? $list[$itemID]["ramp_up_duration"] : "NULL";
+        $list[$itemID]["revenue_start_date"] = isset($list[$itemID]["revenue_start_date"] ) ? $list[$itemID]["revenue_start_date"] : "NULL";
     }
     return $list;
 }

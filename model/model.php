@@ -3017,7 +3017,7 @@ function getListRevenuesUser($projID,$ucID){
 
 function getListSelRevenues($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost
+    $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost, revenue_start_date, ramp_up_duration
                             FROM input_revenues
                             INNER JOIN revenues_item
                                 WHERE  input_revenues.id_uc = ? and id_proj = ? and id_item = revenues_item.id
@@ -3032,10 +3032,13 @@ function getListSelRevenues($projID,$ucID){
         $volume = intval($row['volume']);
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarRev = floatval($row['annual_variation_unitcost']);
+        $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
+        $ramp_up_duration = intval($row['ramp_up_duration']);
+
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev];
+            $list[$id_item] += ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev];
+            $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -3122,10 +3125,12 @@ function insertRevenuesInputed($projID,$ucID,$list){
                             SET volume = ?,
                                 revenues_per_unit = ?,
                                 annual_variation_volume = ?,
-                                annual_variation_unitcost = ?
+                                annual_variation_unitcost = ?,
+                                revenue_start_date = ?,
+                                ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -3301,7 +3306,7 @@ function getListCashReleasingUser($projID,$ucID){
 
 function getListSelCashReleasing($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration
                             FROM input_cashreleasing
                             INNER JOIN cashreleasing_item
                                 WHERE  input_cashreleasing.id_uc = ? and id_proj = ? and id_item = cashreleasing_item.id
@@ -3319,10 +3324,12 @@ function getListSelCashReleasing($projID,$ucID){
         $unit_cost_red = floatval($row['unit_cost_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
         $anVarCost = floatval($row['annual_var_unit_cost']);
+        $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
+        $ramp_up_duration = intval($row['ramp_up_duration']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -3413,9 +3420,11 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             unit_cost_reduc = ?,
                             annual_var_volume = ?,
                             annual_var_unit_cost = ?
+                            revenue_start_date = ?,
+                            ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -3552,7 +3561,7 @@ function getListWiderCashUser($projID,$ucID){
 
 function getListSelWiderCash($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration
                             FROM input_widercash
                             INNER JOIN widercash_item
                                 WHERE  input_widercash.id_uc = ? and id_proj = ? and id_item = widercash_item.id
@@ -3570,10 +3579,12 @@ function getListSelWiderCash($projID,$ucID){
         $unit_cost_red = floatval($row['unit_cost_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
         $anVarCost = floatval($row['annual_var_unit_cost']);
+        $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
+        $ramp_up_duration = intval($row['ramp_up_duration']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -3663,10 +3674,12 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             volume_reduc = ?,
                             unit_cost_reduc = ?,
                             annual_var_volume = ?,
-                            annual_var_unit_cost = ?
+                            annual_var_unit_cost = ?,
+                            revenue_start_date = ?,
+                            ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;
