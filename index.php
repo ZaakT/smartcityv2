@@ -444,7 +444,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=project_sdesign&A2=scope1&projID='.$projID);
+                            header('Location: ?A=project_sdesign&A2=perimeter1&projID='.$projID);
                         }
                     }
                     // --- SELECTED USE CASES MENU ---
