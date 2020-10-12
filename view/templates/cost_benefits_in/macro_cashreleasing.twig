@@ -185,7 +185,7 @@
                 <tr>
                     <th scope="col" colspan=2 class="text-uppercase">Components</th>
                     <th scope="col" colspan=4 class="text-uppercase">Baseline</th>
-                    {% if isSup %}<th scope="col" colspan=2 class="text-uppercase">Schedule</th>{% endif %}
+                    {#% if isSup %}<th scope="col" colspan=2 class="text-uppercase">Schedule</th>{% endif %#}
                 </tr>
                 <tr>
                     <th scope="col" style="width:16%">Item</th>
@@ -194,10 +194,10 @@
                     <th scope="col" style="width:16%">Unit Cost ( in {{selDevSym}} )</th>
                     <th scope="col" style="width:16%">Evolution Volume / Year</th>
                     <th scope="col" style="width:16%">Evolution cost per unit / Year</th>
-                    {% if isSup %}
+                    {#% if isSup %}
                     <th scope="col">Start of Revenues</th>
                     <th scope="col">Ramp-up Duration</th>
-                    {% endif %}
+                    {% endif %#}
                 </tr>
             </thead>
             <tbody>
@@ -222,10 +222,10 @@
                     <td scope="col"><input id="volRed_{{id_cashreleasing}}" name="volRed_{{id_cashreleasing}}" class="text-center volRed pt-1 pb-1 w-80" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['vol_red']}}" placeholder="{{ (cashreleasing_advice['id_cashreleasing']['range_min_red_nb'] + cashreleasing_advice['id_cashreleasing']['range_max_red_nb']) / 2 }}"><span> %</span></td> 
 
                     <td scope="col"><input id="unitCostRed_{{id_cashreleasing}}" name="unitCostRed_{{id_cashreleasing}}" class="text-center unitCostRed pt-1 pb-1 w-80" type="number" min=0 step=0.001 required oninput="checkCashReleasingInput();" value="{{selCashReleasing[id_cashreleasing]['unit_cost_red']}}" placeholder="{{ (cashreleasing_advice['id_cashreleasing']['range_min_red_cost'] + cashreleasing_advice['id_cashreleasing']['range_max_red_cost']) / 2 }}"><span> %</span></td> 
-                    {% if isSup %}
+                    {#% if isSup %}
                     <td scope="col"><input id="revenueStart_{{id_cashreleasing}}" name="revenueStart_{{id_cashreleasing}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_cashreleasing}});" value="{{selCashReleasing[id_cashreleasing]['revenue_start_date']}}"></td> 
                     <td scope="col"><input id="rampUpDurationt_{{id_cashreleasing}}" name="rampUpDurationt_{{id_cashreleasing}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkXpexInput(rampUpDurationt_{{id_cashreleasing}});" value="{{selCashReleasing[id_cashreleasing]['ramp_up_duration']}}"></td> 
-                    {% endif %}
+                    {% endif %#}
                     
                 </tr> 
             {% endfor %}

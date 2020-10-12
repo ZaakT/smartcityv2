@@ -185,7 +185,7 @@
                 <tr>
                     <th scope="col" colspan=2 class="text-uppercase">Components</th>
                     <th scope="col" colspan=4 class="text-uppercase">Baseline</th>
-                    {% if isSup %}<th scope="col" colspan=2 class="text-uppercase">Schedule</th>{% endif %}
+                    {#% if isSup %}<th scope="col" colspan=2 class="text-uppercase">Schedule</th>{% endif %#}
                 </tr>
                 <tr>
                     <th scope="col" style="width:16%">Item</th>
@@ -194,10 +194,10 @@
                     <th scope="col" style="width:16%">Unit Cost ( in {{selDevSym}} )</th>
                     <th scope="col" style="width:16%">Evolution Volume / Year</th>
                     <th scope="col" style="width:16%">Evolution cost per unit / Year</th>
-                    {% if isSup %}
+                    {#% if isSup %}
                     <th scope="col">Start of Revenues</th>
                     <th scope="col">Ramp-up Duration</th>
-                    {% endif %}
+                    {% endif %#}
                 </tr>
             </thead>
             <tbody>
@@ -223,10 +223,10 @@
 
                     <td scope="col"><input id="unitCostRed_{{id_widercash}}" name="unitCostRed_{{id_widercash}}" class="text-center unitCostRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkWiderCashInput();" value="{{selWiderCash[id_widercash]['unit_cost_red']}}" placeholder="{{ (widercash_advice['id_widercash']['range_min_red_cost'] + widercash_advice['id_widercash']['range_max_red_cost']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
                     
-                    {% if isSup %}
+                    {#% if isSup %}
                     <td scope="col"><input id="revenueStart_{{id_widercash}}" name="revenueStart_{{id_widercash}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_widercash}});" value="{{selWiderCash[id_widercash]['revenue_start_date']}}"></td> 
                     <td scope="col"><input id="rampUpDurationt_{{id_widercash}}" name="rampUpDurationt_{{id_widercash}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkXpexInput(rampUpDurationt_{{id_widercash}});" value="{{selWiderCash[id_widercash]['ramp_up_duration']}}"></td> 
-                    {% endif %}
+                    {% endif %#}
                 </tr> 
             {% endfor %}
             </tbody>

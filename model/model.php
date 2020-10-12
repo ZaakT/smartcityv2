@@ -3432,7 +3432,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             volume_reduc = ?,
                             unit_cost_reduc = ?,
                             annual_var_volume = ?,
-                            annual_var_unit_cost = ?
+                            annual_var_unit_cost = ?,
                             revenue_start_date = ?,
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
