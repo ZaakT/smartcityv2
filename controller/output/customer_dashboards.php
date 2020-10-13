@@ -8,6 +8,61 @@ function prereq_dashbords(){
     }
 }
 
+function getItemMonthlyRevenues($itemData,$proj_start_date, $proj_end_date){
+
+}
+
+function getCutomserRevenueItemByMonth($projID,$ucID){
+    // return the list of the revenues by month of the items of a UC    
+    $keydates_proj = getKeyDatesProjSupplier($projID);
+    $list=[];
+    $revenues = getListSelRevenues($projID,$ucID);
+    $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
+
+    foreach ($revenues as $itemID => $revenue) {
+        $schedule = getProjetSchedule($projID,$ucID)[0];
+        $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
+        $rev_end = date_create($schedule['uc_end'])->format("m/Y");
+
+        
+        $ramp_up_end = new DateTime($revenue['revenue_start_date']);
+        $ramp_up_duration =$revenue['ramp_up_duration'];
+        $ramp_up_end->modify("+$ramp_up_duration months");
+        $ramp_up_end = $ramp_up_end->format('m/Y');
+        $revenueSchedule = getRevenueRepartition($keydates_proj[0], $rev_start, $ramp_up_end, $rev_end, $projectDates);
+        $i=0;
+        foreach ($revenueSchedule as $date => $prop) {
+            $list[$itemID][$date] = $prop *$revenue['unit_rev'] *$revenue['volume']*pow(1+$revenue['anVarVol'],$i/12)*pow(1+$revenue['anVarRev'],$i/12) ;
+            $i++;
+        }
+    }
+    return $list;
+    
+}
+
+function getRevenueRepartition($projStart,$rev_start, $ramp_up_end, $rev_end, $projectDates){
+    $repart=[];
+
+    $nb_lag = difMonthsBounds($rev_start, $projStart);
+    $nb_ramp_up = difMonthsBounds($ramp_up_end, $rev_start)+$nb_lag;
+    $nb_run = difMonthsBounds($rev_end, $ramp_up_end)+$nb_ramp_up;
+    //var_dump($projectDates);
+    for($i = 0; $i<$nb_lag; $i++){
+        $repart[$projectDates[$i]] = 0;
+    }
+    for($i = $nb_lag; $i<$nb_ramp_up; $i++){
+        $repart[$projectDates[$i]] = $i/$nb_ramp_up*1;
+    }
+    for($i = $nb_ramp_up;$i<$nb_run; $i++ ){
+        $repart[$projectDates[$i]] = 1;
+    }
+    for($i = $nb_run; $i<count($projectDates);$i++){
+        $repart[$projectDates[$i]]=0;
+    }
+    return $repart;
+
+}
+
 function getNetCumulatedCash($projID, $scope, $projectYears, $side){
 
     
@@ -45,7 +100,7 @@ function getNetCumulatedCash($projID, $scope, $projectYears, $side){
             //Cash-in 
             if($side == "customer"){
                 //Cash-in : Revenues
-                $revenues = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side);
+                $revenues = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side); // A CHANGER
 
                 //Cash-in : Cash Realeasing Benefits
                 $cash_realeasing_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side);
@@ -106,7 +161,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
 
 
-                $keydates_proj = getKeyDatesProj($schedules,$scope);
+                $keydates_proj = getKeyDatesProjSupplier($projID);
                 
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
@@ -115,7 +170,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 if($side != "supplier"){
                     $netsoccashPerMonth = calcNetSocCashPerMonth($projectDates,$ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth'],$ItemsPerMonthAndTot['revenues']['perMonth'],$ItemsPerMonthAndTot['cashreleasing']['perMonth'],$ItemsPerMonthAndTot['widercash']['perMonth']);
                 }
-                                
+                             
                 $netcashTot = calcNetCashTot($netcashPerMonth[0],$projectYears);
                 $cumulnetcashTot = getNetCumulatedCash($projID, $scope, $projectYears, $side);//$netcashTot[1]; 
                 if($side != "supplier"){
@@ -141,7 +196,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                         $capexPerMonth_new = calcCapexPerMonth($implemRepart,$capex);
                         $implemPerMonth_new = calcImplemPerMonth($implemRepart,$implem);
                         $sum_capex_implem = add_arrays($capexPerMonth_new,$implemPerMonth_new);
-                        array_push($ucsBenefits, getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)['tot']);
+                        array_push($ucsBenefits, getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)['tot']); // A CHANGER
                         $revenueSum+=$ucsBenefits[count($ucsBenefits)-1];
                         if($side != "supplier"){
                             $cash_realeasing_benefitsSum+= getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side)['tot'];
@@ -267,7 +322,7 @@ function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, 
             $list_ucs = getListUCs();
             $selScope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = getKeyDatesProjSupplier($projID);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
 
             $devises = getListDevises();
@@ -354,7 +409,7 @@ function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine
 function getMonthsProj($projID, $scope){
     
     $schedules = getListSelDates($projID);
-    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj = getKeyDatesProjSupplier($projID);
     $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
     $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
     $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
@@ -372,7 +427,7 @@ function getCashOutYear($projID, $ucID, $projectYears, $scope, $origine, $item, 
         throw new Exception("Wrong perdiode !");
     }
     $schedules = getListSelDates($projID);
-    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj = getKeyDatesProjSupplier($projID);
     $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
     $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
     $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
@@ -402,13 +457,13 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
     }
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $schedules = getListSelDates($projID);
-    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj = getKeyDatesProjSupplier($projID);
     $keydates_proj[0] = date_format(date_create_from_format('m/Y',$keydates_proj[0]), 'M/Y');
     $keydates_proj[1] = date_format(date_create_from_format('m/Y',$keydates_proj[1]), 'M/Y');
     $keydates_proj[2] = date_format(date_create_from_format('m/Y',$keydates_proj[2]), 'M/Y');
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
     if($side != "supplier"){
-        if($item == "revenues"){
+        if($item == "revenues" && $side == "projDev"){
         
             $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
             if(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
@@ -417,6 +472,19 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
                 $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
             } else {
                 $revenuesPerMonth = array_fill_keys($projectDates,0);
+            }
+            if($periode == "month"){
+                return $revenuesPerMonth;
+            }
+            return calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
+    
+        }elseif($item == "revenues" && $side == "customer"){
+            $ItemRevenuesPerMonth = getCutomserRevenueItemByMonth($projID,$ucID);
+            foreach ($projectDates as $date) {
+                $revenuesPerMonth[$date] = 0;
+                foreach ($ItemRevenuesPerMonth as $revenue) {
+                    $revenuesPerMonth[$date]+=$revenue[$date];
+                }
             }
             if($periode == "month"){
                 return $revenuesPerMonth;
@@ -451,6 +519,7 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
 
             $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
             if($item == "equipment" || $item== "deployment"){$implemSchedule = $schedules['implem'][$ucID];
+                //getSupplierRevenueItemByMonth($projID,$ucID, $item);
                 $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
                 $revenuesTot = getTotSupplierRevenuesByUC($projID,$ucID, $item);
                 $revenuesPerMonth = calcCapexPerMonth($implemRepart,$revenuesTot);
@@ -670,7 +739,7 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             $list_ucs = getListUCs();
             $selScope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = getKeyDatesProjSupplier($projID);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);  
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope, $side);    
             
@@ -736,7 +805,7 @@ function getQualitativeYearEvolution($projID,$ucID){
     $QuantifiableItemList = getListSelQuantifiable($projID,$ucID);
     $scope = getListSelScope($projID);
     $schedules = getListSelDates($projID);
-    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj = getKeyDatesProjSupplier($projID);
 
     
     
@@ -777,7 +846,7 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             $selScope = getListSelScope($projID);
             if(isset($selScope[0])){unset($selScope[0]); }
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = getKeyDatesProjSupplier($projID);
             $projectYears = getYears($keydates_proj[0],$keydates_proj[2]); 
 
             foreach ($selScope as $measID => $list_ucs) {

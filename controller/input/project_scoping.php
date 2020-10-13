@@ -249,7 +249,7 @@ function perimeter1_inputed($twig,$is_connected, $projID, $post){
 
         update_ModifDate_proj($projID); 
         updateScoping($projID,1);
-        header('Location: ?A=input_project_common_supplier');
+        header('Location: ?A=project_sdesign&A2=scope1');
         
     }else{
         header('Location: ?A=project_sdesign&A2=perimeter1');

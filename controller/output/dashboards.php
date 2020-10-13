@@ -369,58 +369,85 @@ function cbuc_output($twig,$is_connected,$projID,$post=[]){
 }
 
 function getKeyDatesProj($schedules,$scope){
-    foreach ($scope as $measID => $list_ucs) {
-        foreach ($list_ucs as $ucID) {
-            $implemSchedule = $schedules['implem'][$ucID];
-            $opexSchedule = $schedules['opex'][$ucID];
-            $revenuesSchedule = $schedules['revenues'][$ucID];
-            //var_dump($ucID,$implemSchedule,$opexSchedule);
-
-            if(!isset($proj_startdate)){
-                $proj_startdate = $implemSchedule['startdate'];
-            } else{
-                $tab_new = explode('/',$implemSchedule['startdate']);
-                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
-   
-                $tab_old = explode('/',$proj_startdate);
-                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
-
-                if($date_new < $date_old){
-                    $proj_startdate = $tab_new[0]."/".$tab_new[1];
+    if(isDev()){
+        foreach ($scope as $measID => $list_ucs) {
+            foreach ($list_ucs as $ucID) {
+                $implemSchedule = $schedules['implem'][$ucID];
+                $opexSchedule = $schedules['opex'][$ucID];
+                $revenuesSchedule = $schedules['revenues'][$ucID];
+                var_dump($ucID,$implemSchedule,$opexSchedule);
+    
+                if(!isset($proj_startdate)){
+                    $proj_startdate = $implemSchedule['startdate'];
+                } else{
+                    $tab_new = explode('/',$implemSchedule['startdate']);
+                    $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
+       
+                    $tab_old = explode('/',$proj_startdate);
+                    $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
+    
+                    if($date_new < $date_old){
+                        $proj_startdate = $tab_new[0]."/".$tab_new[1];
+                    }
                 }
-            }
-
-            if(!isset($proj_implem_enddate)){
-                $proj_implem_enddate = $implemSchedule['100date'];
-            } else{
-                $tab_new = explode('/',$implemSchedule['100date']);
-                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
-   
-                $tab_old = explode('/',$proj_implem_enddate);
-                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
-
-                if($date_new > $date_old){
-                    $proj_implem_enddate = $tab_new[0]."/".$tab_new[1];
+    
+                if(!isset($proj_implem_enddate)){
+                    $proj_implem_enddate = $implemSchedule['100date'];
+                } else{
+                    $tab_new = explode('/',$implemSchedule['100date']);
+                    $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
+       
+                    $tab_old = explode('/',$proj_implem_enddate);
+                    $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
+    
+                    if($date_new > $date_old){
+                        $proj_implem_enddate = $tab_new[0]."/".$tab_new[1];
+                    }
                 }
-            }
-
-            if(!isset($proj_enddate)){
-                $proj_enddate = $revenuesSchedule['enddate'];
-            } else{
-                $tab_new = explode('/',$revenuesSchedule['enddate']);
-                $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
-   
-                $tab_old = explode('/',$proj_enddate);
-                $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
-                //var_dump($date_new, $date_old);
-                if($date_new > $date_old){
-                    $proj_enddate = $tab_new[0]."/".$tab_new[1];
-                    //var_dump($proj_enddate);
+    
+                if(!isset($proj_enddate)){
+                    $proj_enddate = $revenuesSchedule['enddate'];
+                } else{
+                    $tab_new = explode('/',$revenuesSchedule['enddate']);
+                    $date_new = date_create_from_format('d/m/Y','01/'.$tab_new[0].'/'.$tab_new[1]);
+       
+                    $tab_old = explode('/',$proj_enddate);
+                    $date_old = date_create_from_format('d/m/Y','01/'.$tab_old[0].'/'.$tab_old[1]);
+                    //var_dump($date_new, $date_old);
+                    if($date_new > $date_old){
+                        $proj_enddate = $tab_new[0]."/".$tab_new[1];
+                        //var_dump($proj_enddate);
+                    }
                 }
             }
         }
+    }elseif(isSup()){
+       throw new Exception ("Don't use this function. The Supplier has to use : getKeyDatesProjSupplier");
     }
+    
     return [$proj_startdate,$proj_implem_enddate,$proj_enddate];
+}
+
+function getKeyDatesProjSupplier($projID){
+    if(isDev()){
+        throw new Exception ("Don't use this function. The Project Developper has to use : getKeyDatesProj");
+
+    }
+    $scheduleData = getProjetKeyDates($projID)[0];
+    $proj_startdate = date_create($scheduleData['start_date'])->format("m/Y");
+    $proj_duration = intval($scheduleData['duration']);
+    
+    $proj_enddate = new DateTime($scheduleData['start_date']);
+    $proj_enddate->modify("+$proj_duration months");
+    $proj_enddate = $proj_enddate->format('m/Y');
+
+    $proj_dep_startdate = date_create($scheduleData['deploy_start_date'])->format("m/Y");
+    $proj_dep_duration = intval($scheduleData['deploy_duration']);
+    
+    $proj_dep_enddate = new DateTime($scheduleData['deploy_start_date']);
+    $proj_dep_enddate->modify("+$proj_dep_duration months");
+    $proj_dep_enddate = $proj_dep_enddate->format('m/Y');
+    return [$proj_startdate,$proj_dep_enddate,$proj_enddate, $proj_dep_startdate];
 }
 
 function calcNPV($dr,$netcash){

@@ -1400,6 +1400,7 @@ function getListSelDates($projID){
                 ]];
             }
         }
+        
         while($row = $req_revenue->fetch()){
             $id_uc = intval($row['id_uc']);
             $startdate = $row['start_date'] ? date_create($row['start_date'])->format('m/Y') : null;
@@ -1428,6 +1429,8 @@ function getListSelDates($projID){
                 ]];
             }
         }
+
+        
         //var_dump($list);
         return $list;
     }elseif (isSup()) {
@@ -1456,24 +1459,26 @@ function getListSelDates($projID){
         $deployEnd = new DateTime($deployStartComplete);
         $deployEnd->modify("+$duration months");
         $deployEnd = $deployEnd->format('m/Y');
-
         while($row = $req_project_schedule->fetch()){
-            $id_uc = intval($row['id_uc']);
-            $deploy_start = $row['deploy_start'] ? date_create($row['deploy_start'])->format('m/Y') : null;
-            $deployment_duration = $row['deployment_duration'] ? inval($row['deployment_duration']) : null;
-
-            $deploy_prod = new DateTime($deploy_start);
-            $deploy_prod->modify("+$duradeployment_durationtion months");
-            $deploy_prod = $deploy_prod->format('m/Y');
-
-            $uc_end = $row['uc_end'] ? date_create($row['uc_end'])->format('m/Y') : null;
-            $lag_start = $row['pricing_start'] ? date_create($row['pricing_start'])->format('m/Y') : null;
-            $lag_ramp = $row['poc_duration'] ? date_create($row['poc_duration'])->format('m/Y') : null;
-            //echo dateWithoutDay($ramp_run);
-
-            $list = addScheduleElement($list, "implem", $id_uc,  $deploy_start, $uc_end , $deploy_prod);
-            $list = addScheduleElement($list, "opex", $id_uc,  $deploy_start, $uc_end , $deploy_prod); // same as implem ? 
-            //$list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
+            if($row['deploy_start'] != "0000-00-00"){
+                $id_uc = intval($row['id_uc']);
+                $deploy_start = $row['deploy_start'] ? date_create($row['deploy_start'])->format('m/Y') : null;
+                $deployment_duration = $row['deployment_duration'] ? intval($row['deployment_duration']) : null;
+    
+                $deploy_start_exp = explode('/',$deploy_start);
+                $deploy_prod = new DateTime($deploy_start_exp[1]."-".$deploy_start_exp[0]."-01");
+                $deploy_prod->modify("+$deployment_duration months");
+                $deploy_prod = $deploy_prod->format('m/Y');
+    
+                $uc_end = $row['uc_end'] ? date_create($row['uc_end'])->format('m/Y') : null;
+                $lag_start = $row['pricing_start'] ? date_create($row['pricing_start'])->format('m/Y') : null;
+                //$lag_ramp = $row['poc_duration'] ? date_create($row['poc_duration'])->format('m/Y') : null;
+                //echo dateWithoutDay($ramp_run);
+    
+                $list = addScheduleElement($list, "implem", $id_uc,  $deploy_start, $uc_end , $deploy_prod);
+                $list = addScheduleElement($list, "opex", $id_uc,  $deploy_start, $uc_end , $deploy_prod); // same as implem ? 
+                //$list = addScheduleElement($list, "revenues", $id_uc, $lag_ramp ,$projectEnd , $ramp_run);
+            }
 
         }
         
@@ -1487,9 +1492,9 @@ function getListSelDates($projID){
                 if(!array_key_exists($ucID, $list["opex"])){
                     $list = addScheduleElement($list, "opex", $ucID,  $deployStart, $projectEnd , $deployEnd );
                 }
-                if(!array_key_exists($ucID, $list["revenues"])){
+                /*if(!array_key_exists($ucID, $list["revenues"])){
                     $list = addScheduleElement($list, "revenues", $ucID,  $deployStart, $projectEnd , $deployEnd );
-                }
+                }*/
             }
         }
         //var_dump($list);
@@ -1538,7 +1543,7 @@ function hasSchedule($projID, $ucID){
     $db = dbConnect();
     $req = $db->prepare("SELECT *  FROM project_schedule WHERE id_project = ? AND id_uc = ?");
     $req->execute(array($projID,$ucID));
-    return !!$req->fetch();
+    return !!$req->fetch();// the "!!" is not a mistake
 
 }
 
@@ -1936,7 +1941,9 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
         $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
-        id_item
+        id_item, 
+        revenue_start_date, 
+        ramp_up_duration
         FROM input_supplier_revenues
         JOIN supplier_revenues_item 
         ON input_supplier_revenues.id_item = supplier_revenues_item.item_id
@@ -1947,7 +1954,9 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
         $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
-        id_item
+        id_item, 
+        revenue_start_date, 
+        ramp_up_duration
         FROM input_supplier_revenues
         WHERE id_proj = ? and id_uc = ?');
         $req->execute(array($projID,$ucID));
@@ -1965,7 +1974,11 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
 
         $revenues = convertGBPToDev(floatval($res['revenues']));
 
-        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2];
+        $revenue_start_date = date_create($res['revenue_start_date'])->format('m/Y');
+        $ramp_up_duration = intval($res['ramp_up_duration']);
+
+
+        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration ];
     }
     if($list==[]){
         return [0];
@@ -3419,7 +3432,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             volume_reduc = ?,
                             unit_cost_reduc = ?,
                             annual_var_volume = ?,
-                            annual_var_unit_cost = ?
+                            annual_var_unit_cost = ?,
                             revenue_start_date = ?,
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
