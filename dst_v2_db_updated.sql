@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 09 oct. 2020 à 13:58
+-- Généré le :  mer. 14 oct. 2020 à 07:20
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -1051,7 +1051,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1083,7 +1083,8 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (32, 'Engineering', 'Engineering ars', 'from_ntt', 'supplier', NULL),
 (33, 'DIg a hole', '', 'from_outside_ntt', 'customer', NULL),
 (34, 'internal', '', 'internal', 'customer', NULL),
-(35, 'B', '', 'internal', 'customer', NULL);
+(35, 'B', '', 'internal', 'customer', NULL),
+(36, 'my dep', '', 'from_ntt', 'supplier', NULL);
 
 -- --------------------------------------------------------
 
@@ -1123,7 +1124,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_user`
@@ -1158,6 +1159,7 @@ INSERT INTO `implem_item_user` (`id`, `id_proj`) VALUES
 (29, 21),
 (30, 21),
 (31, 21),
+(36, 21),
 (32, 23),
 (33, 23),
 (34, 23),
@@ -1262,7 +1264,8 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (28, 9),
 (29, 9),
 (30, 9),
-(31, 9);
+(31, 9),
+(36, 9);
 
 -- --------------------------------------------------------
 
@@ -1424,6 +1427,7 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (8, 15, 9, 13, 5000),
 (11, 17, -1, 200, 15),
 (21, 26, -1, 100, 15),
+(21, 36, 9, NULL, NULL),
 (23, 32, -1, 10, 200),
 (23, 33, -1, 10, 1000),
 (23, 34, -1, 10, 100),
@@ -1465,7 +1469,8 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (14, 21, -1, 9, 30),
 (15, 21, -1, 5, 70),
 (16, 21, 7, 4, 50),
-(17, 23, 3, 5, 100);
+(17, 23, 3, 5, 100),
+(18, 21, 9, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1514,6 +1519,7 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (11, 10, -1, 250, NULL, 15, 15, 3),
 (21, 11, -1, 200, NULL, 15, 3, 5),
 (21, 13, -1, 100, NULL, 15, 5, 3),
+(21, 18, 9, 30, NULL, 15, 3, -5),
 (23, 14, -1, 1, NULL, 3000, 5, 0),
 (23, 15, -1, 3, NULL, 100, 5, 0),
 (23, 16, -1, 50, NULL, 50, 5, 5),
@@ -1552,7 +1558,8 @@ INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator
 (6, 8, 1, 'personne', 750, 10, 5),
 (7, 8, 11, 'nb', 15000, 15, 10),
 (8, 3, 3, NULL, NULL, NULL, NULL),
-(10, 23, 3, 'accident', 10, 30, 5);
+(10, 23, 3, 'accident', 10, 30, 5),
+(11, 21, 9, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1594,7 +1601,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (8, 9, 11, 50, NULL, 15000, 1, 3, '0000-00-00', 0),
 (8, 10, 11, 100, NULL, 300, 2, 1, '0000-00-00', 0),
 (8, 11, 11, 33, NULL, 20, 5, 3, '0000-00-00', 0),
-(21, 12, 9, 15, NULL, 300, 3, 5, '0000-00-00', 0),
+(21, 12, -1, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(21, 12, 9, 15, NULL, 300, 3, 5, '2020-09-30', 2),
 (23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0);
 
 -- --------------------------------------------------------
@@ -1630,7 +1638,8 @@ INSERT INTO `input_risk` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `pro
 (8, 8, 11, 2, 10),
 (9, 8, 11, 5, 10),
 (10, 8, 11, 7, 40),
-(11, 23, 3, 9, 20);
+(11, 23, 3, 9, 20),
+(12, 21, 9, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2075,7 +2084,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -2098,7 +2107,8 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (14, 'nan cash item 0', '', NULL),
 (15, 'nan cash item 1', '', NULL),
 (16, 'non cash', '', NULL),
-(17, 'wellbeing', '', NULL);
+(17, 'wellbeing', '', NULL),
+(18, 'ncb', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2124,7 +2134,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -2144,6 +2154,7 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (14, 21),
 (15, 21),
 (16, 21),
+(18, 21),
 (17, 23);
 
 -- --------------------------------------------------------
@@ -2179,6 +2190,7 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (6, 5),
 (7, 5),
 (16, 7),
+(18, 9),
 (11, 11),
 (12, 11),
 (13, 11);
@@ -2198,7 +2210,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -2221,7 +2233,8 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`)
 (14, 'Data analytics', 'Analysis of traffic', 'from_ntt', 'supplier', NULL),
 (15, 'Support services', 'Maintenace of equipment', 'from_outside_ntt', 'supplier', NULL),
 (16, 'Maintenace', '', 'internal', 'customer', NULL),
-(17, 'C', '', 'from_ntt', 'customer', NULL);
+(17, 'C', '', 'from_ntt', 'customer', NULL),
+(18, 'op', '', 'from_ntt', 'supplier', 'test');
 
 -- --------------------------------------------------------
 
@@ -2262,7 +2275,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2281,6 +2294,7 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (11, 21),
 (12, 21),
 (13, 21),
+(18, 21),
 (14, 23),
 (15, 23),
 (16, 23),
@@ -2371,7 +2385,8 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (3, 2),
 (5, 2),
 (4, 3),
-(17, 3);
+(17, 3),
+(18, 9);
 
 -- --------------------------------------------------------
 
@@ -2471,7 +2486,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
 (9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
 (11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-09 15:49:46', 15, 1, 0),
+(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-13 16:34:41', 15, 1, 0),
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
 (24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1);
@@ -2814,10 +2829,11 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (11, 11),
 (-1, 21),
 (1, 21),
-(2, 21),
+(3, 21),
 (5, 21),
-(7, 21),
 (9, 21),
+(10, 21),
+(11, 21),
 (-1, 22),
 (1, 22),
 (2, 22),
@@ -2844,7 +2860,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2857,7 +2873,8 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (7, 'Poissons dans l\'eau', ''),
 (8, 'test', ''),
 (9, 'test item', ''),
-(10, 'number of accidents', '');
+(10, 'number of accidents', ''),
+(11, 'cvcv', '');
 
 -- --------------------------------------------------------
 
@@ -2897,7 +2914,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -2910,6 +2927,7 @@ INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
 (6, 8),
 (7, 8),
 (9, 21),
+(11, 21),
 (10, 23);
 
 -- --------------------------------------------------------
@@ -2940,6 +2958,7 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (3, 5),
 (1, 7),
 (4, 7),
+(11, 9),
 (7, 11);
 
 -- --------------------------------------------------------
@@ -3252,7 +3271,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -3269,7 +3288,8 @@ INSERT INTO `risk_item` (`id`, `name`, `description`, `sources`) VALUES
 (8, 'risk 1', '', NULL),
 (9, 'risk 2', '', NULL),
 (10, 'risk 3', '', NULL),
-(11, 'black', '', NULL);
+(11, 'black', '', NULL),
+(12, 'ri', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -3295,7 +3315,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -3312,6 +3332,7 @@ INSERT INTO `risk_item_user` (`id`, `id_proj`) VALUES
 (8, 8),
 (9, 8),
 (10, 8),
+(12, 21),
 (11, 23);
 
 -- --------------------------------------------------------
@@ -3341,6 +3362,7 @@ INSERT INTO `risk_uc` (`id_item`, `id_uc`) VALUES
 (5, 2),
 (4, 3),
 (11, 3),
+(12, 9),
 (8, 11),
 (9, 11),
 (10, 11);
@@ -3459,7 +3481,7 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
 --
 
 INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `department`, `company`, `team`) VALUES
-(21, 'a', 'Compiegne', 'Diego MEJIA', 'z', 'Google', 'team a'),
+(21, 'a', 'Compiegne', 'Diego MEJIA', '12', 'Google', 'team a'),
 (22, '', '', '', '', '', ''),
 (23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
 (24, '', '', '', '', 'verifDash', '');
@@ -4015,6 +4037,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `is_active` tinyint(1) DEFAULT NULL,
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `profile` enum('d','s') NOT NULL,
+  `logoName` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -4024,15 +4047,15 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd'),
-(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd'),
-(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd'),
-(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's'),
-(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd'),
-(13, 'ProjDeve', NULL, NULL, NULL, '$2y$10$pzr45zxv7yM0jHFoOosweOs9ngQDAyCvdkyw.awDMwfFCZo/cgpwu', '7697641405f609379e18ed6.70056693', 1, NULL, '2020-09-15 12:12:10', 'd'),
-(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's'),
-(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's');
+INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`, `logoName`) VALUES
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd', ''),
+(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd', ''),
+(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', ''),
+(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', ''),
+(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', ''),
+(13, 'ProjDeve', NULL, NULL, NULL, '$2y$10$pzr45zxv7yM0jHFoOosweOs9ngQDAyCvdkyw.awDMwfFCZo/cgpwu', '7697641405f609379e18ed6.70056693', 1, NULL, '2020-09-15 12:12:10', 'd', ''),
+(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', ''),
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '');
 
 -- --------------------------------------------------------
 
