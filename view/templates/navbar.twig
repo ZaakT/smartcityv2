@@ -9,7 +9,7 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href=".">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href=".">Home <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -27,7 +27,7 @@
           Output
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?A=dashboards">{{traduction.getText("dashboards")}}</a>
           <a class="dropdown-item" href="?A=comparison">Comparison</a>
         </div>
       </li>
@@ -100,6 +100,7 @@
 {# VERSION PROJECT DESIGN - CB - FINANCING #}
 
 {% macro navbar(is_connected=false,is_admin=false,devises=[]) %}
+{% import "/templates/traductions.twig" as traduction %}
   {% if is_connected %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,49 +109,49 @@
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" href=".">{{dicTraductions["navbar_home"][language]}} <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href=".">{{traduction.getText("home")}} <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
       {% if isDev %}
       <li class="nav-item">
-        <a class="nav-link" href="?A=project_design">Project Design <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="?A=project_design">{{traduction.getText("project_design")}} <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cost-Benefits </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("cost_benefits")}}</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=project_scoping">Input Project</a>
-          <a class="dropdown-item" href="?A=cost_benefits">Input Use Case</a>
-          <a class="dropdown-item" href="?A=dashboards">Dashboards</a>
-          <a class="dropdown-item" href="?A=comparison">Comparison</a>
+          <a class="dropdown-item" href="?A=project_scoping">{{traduction.getText("input_project")}}</a>
+          <a class="dropdown-item" href="?A=cost_benefits">{{traduction.getText("input_use_case")}}</a>
+          <a class="dropdown-item" href="?A=dashboards">{{traduction.getText("dashboards")}}</a>
+          <a class="dropdown-item" href="?A=comparison">{{traduction.getText("comparaison")}}</a>
         </div>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Financing </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("financing")}} </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=funding">Funding</a>
-          <a class="dropdown-item" href="?A=business_model">Business Model</a>
+          <a class="dropdown-item" href="?A=funding">{{traduction.getText("funding")}}</a>
+          <a class="dropdown-item" href="?A=business_model">{{traduction.getText("buisness_model")}}</a>
         </div>
       </li>
       {% endif %}
       {% if isSup %}
       {#                  SUPPLIERS BC              #}
       <li class="nav-item">
-        <a class="nav-link" href="?A=project_sdesign">Project Initialization <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="?A=project_sdesign">{{traduction.getText("project_initialization")}} <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_supplier" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Supplier BC </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_supplier" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("supplier_bc")}} </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=input_project_common_supplier">Input Project Overlay </a>
-          <a class="dropdown-item" href="?A=input_use_case_supplier">Input Use Case</a>
-          <a class="dropdown-item" href="?A=supplier_dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?A=input_project_common_supplier">{{traduction.getText("input_project_overlay")}} </a>
+          <a class="dropdown-item" href="?A=input_use_case_supplier">{{traduction.getText("input_use_case")}}</a>
+          <a class="dropdown-item" href="?A=supplier_dashboards">{{traduction.getText("dashboards")}}</a>
         </div>
       </li>
       {#                  CUSTOMERS BC              #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Customer BC </a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=input_project_common">Input Project Overlay </a>
-          <a class="dropdown-item" href="?A=input_use_case">Input Use Case</a>
-          <a class="dropdown-item" href="?A=customer_dashboards">Dashboards</a>
+          <a class="dropdown-item" href="?A=input_project_common">{{traduction.getText("input_project_overlay")}} </a>
+          <a class="dropdown-item" href="?A=input_use_case">{{traduction.getText("input_use_case")}}</a>
+          <a class="dropdown-item" href="?A=customer_dashboards">{{traduction.getText("dashboards")}}</a>
         </div>
       </li>
       {% endif %}
@@ -165,12 +166,12 @@
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Language</a>
+            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("language")}}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" id="language_en" href="?A=setLanguage&amp;language=en">English</a>
-              <a class="dropdown-item" id="language_fr" href="?A=setLanguage&amp;language=fr">French</a>
+              <a class="dropdown-item" id="language_en" href="?A=setLanguage&amp;language=en">{{traduction.getText("english")}}</a>
+              <a class="dropdown-item" id="language_fr" href="?A=setLanguage&amp;language=fr">{{traduction.getText("french")}}</a>
             </div>
-            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">Currency</a>
+            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("currency")}}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               {% if devises %}
                 {% for id_devise,devise in devises %}
@@ -178,7 +179,7 @@
                   <script type='text/javascript'>getPart({{id_devise}});</script>
                 {% endfor %}
               {% else %}                  
-              <span class="dropdown-item text-danger font-italic">There is no devise, please contact an administrator</>
+              <span class="dropdown-item text-danger font-italic">{{traduction.getText("navbar_no_devise")}}</>
               {% endif %}
             </div>
           </div>
@@ -191,7 +192,7 @@
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog disabled" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Language</a>
+            <a class="dropdown-item" href="#">{{traduction.getText("language")}}</a>
           </div>
       </li>
   </ul>
@@ -203,17 +204,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Logging out confirmation</h5>
+        <h5 class="modal-title" id="exampleModalLabel">{{traduction.getText("navbar_log_out_conf")}}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Do you want to log out ?
+      {{traduction.getText("navbar_log_out_?")}}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-        <a  href="?A=logout"><button type="button" class="btn btn-dark">Yes</button></a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{traduction.getText("no")}}</button>
+        <a  href="?A=logout"><button type="button" class="btn btn-dark">{{traduction.getText("yes")}}</button></a>
       </div>
     </div>
   </div>

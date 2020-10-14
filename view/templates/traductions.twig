@@ -1,3 +1,7 @@
 {% macro getText(id) %}
-    {{dicTraductions[id][language]}}
+    {% if language in dicTraductions[id]|keys %}
+        {{dicTraductions[id][language]}}
+    {% else %}
+        {{dicTraductions[id]["en"]}}
+    {% endif %}
 {% endmacro %}
