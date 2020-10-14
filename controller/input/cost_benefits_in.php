@@ -2344,9 +2344,11 @@ function checkNonCash($projID,$ucID){
     if(empty($listSel)){
         return 2;
     } else {
-        foreach ($listSel as $key => $value) {
-            if($value['exp_impact']==0){
-                return 0;
+        if(isDev()){
+            foreach ($listSel as $key => $value) {
+                if($value['exp_impact']==0){
+                    return 0;
+                }
             }
         }
         echo "<script>checkProgress('ncb');</script>";
@@ -2359,9 +2361,11 @@ function checkRisks($projID,$ucID){
     if(empty($listSel)){
         return 2;
     } else {
-        foreach ($listSel as $key => $value) {
-            if($value['exp_impact']==0){
-                return 0;
+        if(isDev()){
+            foreach ($listSel as $key => $value) {
+                if($value['exp_impact']==0){
+                    return 0;
+                }
             }
         }
         echo "<script>checkProgress('risks');</script>";

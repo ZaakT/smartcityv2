@@ -6,9 +6,8 @@
 
     {% if listUcsName|length > 1 %}<td scope="col">{{ listUcsName[ucID] }}/td>{% endif %}
     
-    {% if type == "opex" or  type == "capex" or type == "deployment_costs" %}
     <td scope="col"><input id="unit_{{id_xpex}}" name="unit_{{id_xpex}}_{{ucID}}" class="text-center unit pt-1 pb-1" type="text" oninput="checkXpexInput(unit_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit']}}" placeholder="Unit" {{Mode == "supplier" ? "disabled"}} ></td> 
-    {% endif %}
+
 
     <td scope="col"><input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0 step=1 required oninput="checkXpexInput(unitCost_{{id_xpex}});" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] * nb_uc }}" {{Mode == "supplier" ? "disabled"}}>{{selDevSym}}</td> 
 
@@ -95,12 +94,7 @@
 
 
 {% if show1 or show2 or show3 %}
-    {% set size = 5 %}
-    {% if type == "opex" %} {% set size = 7 %}
-    {% elseif type == "capex" %}{% set size = 6 %}
-    {% elseif type == "equipment_revenues" or  type == "deployment_revenues"  %}{% set size = 7 %}
-    {% elseif type == "operating_revenues"  %}{% set size = 8 %}
-    {% endif %}
+    {% set size = 4 %}
     {% if listUcsName|length > 1 %} {% set size = size + 1 %}
     {% endif %}
     <h3 class="text-center mt-5 mb-3 text-uppercase">{{Mode}} {{name.getType(type)}} Items</h3>
@@ -108,12 +102,17 @@
         <div class="col mx-5 mb-5 list-table">
             <table id="xpex_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
                 <thead class="thead-dark text-center sticky-top">
+                    {% if type == "opex" or type == "operating_revenues" %}
+                    <tr>
+                        <th scope="col" colspan=2 class="text-uppercase">Components</th>
+                        <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
+                        <th scope="col" colspan=2 class="text-uppercase">Growth</th>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <th scope="col">Item</th>
                         {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
-                        {% if type == "opex" or  type == "capex" or type == "deployment_costs" %}
                         <th scope="col">Unit</th>
-                        {% endif %}
                         <th scope="col">Unit Cost</th>
                         <th scope="col">#Units</th>
                         {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
@@ -123,6 +122,7 @@
                         {% if type == "opex" or type == "operating_revenues" %}
                         <th scope="col">Annual unit cost variation</th>
                         <th scope="col">Annual volume variation</th>
+                        {% set size = size + 2 %}
                         {% endif %}
                         {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
                         <th scope="col">Start of Revenues</th>
@@ -130,6 +130,7 @@
                         {% endif %#}
                         {% if type == "capex" %}
                         <th scope="col">Amortization Period ( in years )</th>
+                        {% set size = size + 1 %}
                         {% endif %}
                     </tr>
                 </thead>

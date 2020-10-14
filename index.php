@@ -8,7 +8,9 @@ Then, we will call functions (defined in the controllers) according to the value
 
 // importing files
 require __DIR__ . '/vendor/autoload.php';
-
+function prereq_navbar($side){
+    echo "<script>prereq_navbar('$side');</script>";
+}
 foreach (glob("controller/*") as $dir){
     foreach (glob("$dir/*.php") as $filename){
         require($filename);
@@ -33,6 +35,9 @@ $twig->addGlobal('userRole', getUserRole());
 $twig->addGlobal('isDev', isDev());
 $twig->addGlobal('isSup', isSup());
 $twig->addGlobal('companyName', companyName());
+$twig->addGlobal('language', getLanguage());
+$twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
+
 
 $is_connected = isConnected();
 
@@ -209,6 +214,17 @@ try{
                     }
                 } else {
                     admin($twig,$is_connected);
+                }
+            }
+            // ---------- LANGUAGE ---------- 
+            elseif($_GET['A']=='setLanguage'){
+                if(isset($_GET['language'])){
+                    if($_GET['language'] == "en" || $_GET['language'] == "fr"){
+                        setLanguage($_GET['language']);
+                    }
+                    header('Location: ?A=home');
+                }else{
+                    header('Location: ?A=home');
                 }
             }
             // ---------- PROFILE ---------- 
@@ -727,6 +743,7 @@ try{
                 } else {  
                     \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
                 }
+                prereq_navbar("supplier");
             }
 
             // ---------- Input Project Common CUSTOMER ----------
@@ -811,6 +828,7 @@ try{
                     //input_project_common($twig,$is_connected);
                     \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=project_selection", "input_project_common");
                 }
+                prereq_navbar("customer");
             }
 
             // ---------- Deal Criteria ----------
@@ -923,6 +941,7 @@ try{
                     \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=project_selection', 'customer_dashboards');
 
                 }
+                prereq_navbar("customer");
             }
 
             elseif($_GET['A']=='supplier_dashboards'){
@@ -973,10 +992,12 @@ try{
                 } else{
                     \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=project_selection', 'supplier_dashboards');
                 }
+                prereq_navbar("supplier");
             }
 
             // ---------- INPUT USE CASE (SUPPLIER !!) ----------
             elseif($_GET['A']=='input_use_case_supplier') {
+                verifIsSup();
                 if(isset($_GET['A2'])) { 
                     if($_GET['A2']=="project_selection"){
                         \general\project($twig,$is_connected, "?A=".$_GET['A']."&A2=proj_selected", "input_use_case_supplier");
@@ -1077,14 +1098,25 @@ try{
                             xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],"supplier", $isTaken); 
                             //use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                         }
-                    } elseif(isset($_GET['confirm'])){
-                        summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm'],$_GET['A']);
-                    } else {
-                        summary($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A']);
+                    }elseif($_GET['A2']=="summary"){
+                        if(isset($_GET['confirm'])){
+                            summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm'],$_GET['A']);
+                        } else {
+                            summary($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A']);
+                        }
+                    }elseif($_GET["A2"]=="summary_inputed"){
+                        if(isset($_POST)){
+                            summary_inputed($twig,$is_connected,$_SESSION['projID'], $_POST, $_GET['A']);
+                        }else{
+                            header('Location: ?A='.$_GET['A'].'&A2=summary&projID='.$_SESSION['projID']);
+                        }
+
                     }
+                    
                 } else {
                     input_use_case_supplier($twig,$is_connected);
                 }
+                prereq_navbar("supplier");
             }
 
             // ---------- COST BENEFITS ----------
@@ -2181,6 +2213,10 @@ try{
                     }
                 } else {  
                     cost_benefits($twig,$is_connected);
+                }
+            
+                if(isSup()){
+                    prereq_navbar("customer");
                 }
             }
 

@@ -189,7 +189,7 @@ function modifyUser($user){
                             salt = ?,
                             password = ?
                         WHERE id = ?');
-    return $req->execute(array($user[1],$user[2],$user[3],$user[0],$user[4]));
+    return $req->execute(array($user[1],$user[2],$user[3],$user[0]));
 }
 
 function deleteUser($userID){
@@ -1941,9 +1941,7 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
         $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
-        id_item, 
-        revenue_start_date, 
-        ramp_up_duration
+        id_item
         FROM input_supplier_revenues
         JOIN supplier_revenues_item 
         ON input_supplier_revenues.id_item = supplier_revenues_item.item_id
@@ -1954,9 +1952,7 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
         $req = $db->prepare('SELECT volume*unit_cost AS revenues,
         anVarVol,                        
         anVarCost,
-        id_item, 
-        revenue_start_date, 
-        ramp_up_duration
+        id_item
         FROM input_supplier_revenues
         WHERE id_proj = ? and id_uc = ?');
         $req->execute(array($projID,$ucID));
@@ -1974,11 +1970,8 @@ function getSupplierRevenuesValues($projID,$ucID, $revenueType){
 
         $revenues = convertGBPToDev(floatval($res['revenues']));
 
-        $revenue_start_date = date_create($res['revenue_start_date'])->format('m/Y');
-        $ramp_up_duration = intval($res['ramp_up_duration']);
 
-
-        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration ];
+        $list[$id_item] = ['revenues'=>$revenues,'an_var_vol'=>$rate1,'an_var_unitcost'=>$rate2 ];
     }
     if($list==[]){
         return [0];
@@ -2069,7 +2062,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 : wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, revenue_start_date, ramp_up_duration
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, unit
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -2086,14 +2079,13 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
         $volume = intval($row['volume']);
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
-        $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
-        $ramp_up_duration = intval($row['ramp_up_duration']);
+        $unit = $row['unit'];
 
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost,'revenue_start_date'=>$revenue_start_date, 'ramp_up_duration'=>$ramp_up_duration];
+            $list[$id_item] += ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost,'revenue_start_date'=>$revenue_start_date, 'ramp_up_duration'=>$ramp_up_duration];
+            $list[$id_item] = ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
         }
     }
     //var_dump($list);
@@ -2198,15 +2190,15 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                                 unit_cost = ?,
                                 anVarVol = ?,
                                 anVarCost = ?,
-                                revenue_start_date = ?, 
-                                ramp_up_duration = ?
+                                unit = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
         try {
-            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['unit'],$projID,$ucID,$id_item));
+            
 
         } catch (\Throwable $th) {
-            //do nothing;
+            // do nothing
         }
             }
     return $ret;

@@ -11,6 +11,7 @@ function login($twig,$username_in=true,$password_in=true){
 
     $_SESSION['devise_name'] = $selDevName;
     $_SESSION['devise_symbol'] = $selDevSym;
+    //setLanguage('en');
     
     echo $twig->render('/others/login.twig',array('username'=>$username,'username_in'=>$username_in,'password_in'=>$password_in)); 
     
@@ -93,4 +94,13 @@ function companyName(){
     $projID = isset($_GET['projID']) ? $_GET['projID'] : "";
     $projID = isset($_SESSION['projID']) ? $_SESSION['projID'] : $projID ;
     return getCompanyName($projID);
+}
+
+function setLanguage($lang='en'){
+    $_SESSION['language'] = $lang;
+    header('Location: ?A=home');
+}
+
+function getLanguage(){
+    return isset($_SESSION['language']) ? $_SESSION['language'] : 'en';
 }

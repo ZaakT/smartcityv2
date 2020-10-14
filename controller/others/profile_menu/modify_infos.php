@@ -3,7 +3,7 @@
 require_once('model/model.php');
 
 function modify_infos($twig,$is_connected,$isTaken=false){
-    $logoName = isset($_SESSION['logoName']) ? $_SESSION['logoName'] : "LogoUrbatis";
+    $logoName = isset($_SESSION['logoName']) ? $_SESSION['logoName'] : "LogoUrbatis.png";
     $user = getUser($_SESSION['username']);
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -28,10 +28,14 @@ function save_infos($twig,$is_connected,$post){
             $salt = $user[4];
             $hashed = $user[2];
         }
+        if(!empty($post['logoName'])){
+
+        }
+        var_dump($post['logoName']);
         $userInfos = [$id,$username_new,$salt,$hashed];
         modifyUser($userInfos);
         $_SESSION['username'] = $username_new;
         setcookie('username',$_SESSION['username']);
-        header('Location: ?A=profile');
+        //header('Location: ?A=profile');
     }
 }

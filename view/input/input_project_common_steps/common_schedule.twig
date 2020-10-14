@@ -1,4 +1,5 @@
-{% extends '/templates/common_page.twig' %}
+{% set sideBarName = "input_project_common_supplier" %}
+{% extends '/others/general_common.twig' %}
 
 {% import "/templates/navbar.twig" as navbar %}
 {% block navbar %}
@@ -9,7 +10,7 @@
 {% import "/templates/second_bar.twig" as second_bar %}
 
 {% block sidebar %}
-	{{ sidebar.sidebar("input_project_common_supplier") }}
+	{{ sidebar.sidebar(sideBarName) }}
 {% endblock %}
 
 {% block title %}Common Schedule{% endblock %}

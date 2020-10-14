@@ -57,7 +57,7 @@
 
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">
-    <button class="col-2 btn btn-dark" {{isSup ?  "type = submit"}}  {{isValid ? "" : "disabled"}} {% if isDev %} onclick="window.location.assign('?A={{sideBarName}}&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');"{% endif %} >Confirm</button>
+    <button class="col-2 btn btn-dark" {{isSup ?  "type = submit"}}  {{isValid or isSup ? "" : "disabled"}} {% if isDev %} onclick="window.location.assign('?A={{sideBarName}}&amp;A2=summary&amp;projID={{projID}}&amp;confirm=1');"{% endif %} >Confirm</button>
     <button class="offset-1 col-2 btn btn-danger" onclick="window.location.assign('?A={{sideBarName}}&amp;A2=use_case_cb&amp;projID={{projID}}');">Change</button>
 </div>
 {{isSup ?  "<form>"}}

@@ -2,6 +2,10 @@
 namespace general;
 use general;
 
+function prereq_navbar($side){
+    echo "<script>prereq_navbar($side);</script>";
+}
+
 function project($twig,$is_connected, $nextPage, $sideBarName){
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);

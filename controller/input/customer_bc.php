@@ -588,7 +588,7 @@ function xpex_inputed($post, $sideBarName, $type){
                     }else{
                         throw new Exception("Error ! :".$temp[0]);
                     }
-                    if($type=='equipment_revenues' ||$type=="deployment_revenues"){
+                    if($type=='equipment_revenues' || $type=="deployment_revenues"){
                         $list[$temp[1]] += ['anVarVol'=>0, 'anVarCost'=>0];
                     }
                 }
