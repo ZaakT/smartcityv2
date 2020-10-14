@@ -481,9 +481,9 @@ try{
                         }
                     }
                     elseif($_GET['A2']=="scope1"){
-                        if(isset($_GET['projID'])){
-                            if($_GET['projID']!=0){
-                                scope($twig,$is_connected,$_GET['projID'], "project_sdesign");
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                scope($twig,$is_connected,$_SESSION['projID'], "project_sdesign");
                             }
                             else {
                                 header('Location: ?A=project_sdesign&A2=scope1');

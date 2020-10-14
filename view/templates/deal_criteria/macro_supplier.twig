@@ -3,35 +3,38 @@
     <table id="input_target_nogo" class="table">
         <thead>
             <th></th>
-            <th>No Go</th>
-            <th>Order</th>
             <th>Target</th>
+            <th>No Go</th>
         </thead>
 
         <tbody>
             <tr>
                 <th>Payback</th>
-                <td><input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_nogo']}}" oninput="checkInput(payback_nogo);" >&nbsp;months</td>
-                <td> &ge; Greater Than or Equal To</td>
                 <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_target']}}" oninput="checkInput(payback_target);">&nbsp;months</td>
+                <td>Nogo if &ge;   
+                <input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_nogo']}}" oninput="checkInput(payback_nogo);" >&nbsp;months</td>
+                          
             </tr>
             <tr>
                 <th>Operating margin</th>
-                <td><input id="operating_margin_nogo" name="operating_margin_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_nogo']}}" oninput="checkInput(operating_margin_nogo);">&nbsp;%</td>
-                <td> &le; Less Than or Equal To</td>
                 <td><input id="operating_margin_target" name="operating_margin_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_target']}}" oninput="checkInput(operating_margin_target);">&nbsp;%</td>
+                <td> Nogo if &le;    
+                <input id="operating_margin_nogo" name="operating_margin_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_nogo']}}" oninput="checkInput(operating_margin_nogo);">&nbsp;%</td>
+        
             </tr>
             <tr>
                 <th>ROI</th>
-                <td><input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_nogo']}}" oninput="checkInput(roi_nogo);">&nbsp;%</td>
-                <td> &le; Less Than or Equal To</td>
                <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_target']}}" oninput="checkInput(roi_target);">&nbsp;%</td>
+                <td> Nogo if &le;    
+                <input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_nogo']}}" oninput="checkInput(roi_nogo);">&nbsp;%</td>
+       
             </tr>
             <tr>
                 <th>NPV</th>
-                <td><input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_nogo']}}" oninput="checkInput(npv_nogo);">&nbsp;{{selDevSym}}</td>
-                <td> &le; Less Than or Equal To</td>
                 <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_target']}}" oninput="checkInput(npv_target);">&nbsp;{{selDevSym}}</td>
+                <td> Nogo if &le;    
+                <input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_nogo']}}" oninput="checkInput(npv_nogo);">&nbsp;{{selDevSym}}</td>
+           
             </tr> 
         </tbody>
     </table>

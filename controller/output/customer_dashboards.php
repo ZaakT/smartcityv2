@@ -20,20 +20,23 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
     foreach ($revenues as $itemID => $revenue) {
-        $schedule = getProjetSchedule($projID,$ucID)[0];
-        $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
-        $rev_end = date_create($schedule['uc_end'])->format("m/Y");
-
-        
-        $ramp_up_end = new DateTime($revenue['revenue_start_date']);
-        $ramp_up_duration =$revenue['ramp_up_duration'];
-        $ramp_up_end->modify("+$ramp_up_duration months");
-        $ramp_up_end = $ramp_up_end->format('m/Y');
-        $revenueSchedule = getRevenueRepartition($keydates_proj[0], $rev_start, $ramp_up_end, $rev_end, $projectDates);
-        $i=0;
-        foreach ($revenueSchedule as $date => $prop) {
-            $list[$itemID][$date] = $prop *$revenue['unit_rev'] *$revenue['volume']*pow(1+$revenue['anVarVol'],$i/12)*pow(1+$revenue['anVarRev'],$i/12) ;
-            $i++;
+        $schedule = getProjetSchedule($projID,$ucID);
+        if(isset($schedule[0])){
+            $schedule = $schedule[0];
+            $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
+            $rev_end = date_create($schedule['uc_end'])->format("m/Y");
+    
+            
+            $ramp_up_end = new DateTime($revenue['revenue_start_date']);
+            $ramp_up_duration =$revenue['ramp_up_duration'];
+            $ramp_up_end->modify("+$ramp_up_duration months");
+            $ramp_up_end = $ramp_up_end->format('m/Y');
+            $revenueSchedule = getRevenueRepartition($keydates_proj[0], $rev_start, $ramp_up_end, $rev_end, $projectDates);
+            $i=0;
+            foreach ($revenueSchedule as $date => $prop) {
+                $list[$itemID][$date] = $prop *$revenue['unit_rev'] *$revenue['volume']*pow(1+$revenue['anVarVol'],$i/12)*pow(1+$revenue['anVarRev'],$i/12) ;
+                $i++;
+            }
         }
     }
     return $list;
@@ -611,7 +614,7 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
     if($side ==  "customer"){
         $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }elseif($side == "supplier"){
-        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
     $list = getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, "year", $list);
     foreach ($list as $yearKey => $yearValues) {
@@ -651,18 +654,14 @@ $equipment, $deployment, $operating){
     }
     
     return [
-        $cash_out, 
-            $capex_from_nttTot[$year], 
-            $implemTot, 
-                $implem_from_nttTot[$year], 
-                $implem_from_outside_nttTot[$year], 
-            $opexTot, 
-                $opex_from_nttTot[$year], 
-                $opex_from_outside_nttTot[$year], 
         $cash_in, 
             $equipment[$year], 
             $deployment[$year], 
             $operating[$year], 
+        $cash_out, 
+            $capex_from_nttTot[$year], 
+            $implemTot, 
+            $opexTot, 
         $netCash, 
         $net_cumulated_cash
     ];
@@ -744,14 +743,14 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope, $side);    
             
 
-            foreach ($selScope as $measID => $listUcs) {
+            /*foreach ($selScope as $measID => $listUcs) {
                 foreach ($listUcs as $ucID) {
-                    if(hasSchedule($projID, $ucID)){
+                    if(!hasSchedule($projID, $ucID)){
                         $list_ucs[$ucID]['name'].= " (no Data)";
 
                     }
                 }
-            }
+            }*/
             //print_r($ucsData);   
             
             $months = getMonthsProj($projID, $scope);

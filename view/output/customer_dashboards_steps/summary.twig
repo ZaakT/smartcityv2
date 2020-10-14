@@ -24,14 +24,14 @@
     {% set bankability_lineNames1 = [
             ["Payback", "payback", 1],
             ["ROI", "roi", 1],
-            ["NPV", "npv", 1]
+            ["NPV", "npv", 1],
+            ["Non Quantifiable Benefits", "nqb", 1],
+            ["Risk", "risk", 1]
         ] %}
     {% set bankability_lineNames2 = [
             ["Societal Payback", "societalPayback", 1],
             ["Societal ROI", "societalRoi", 1],
-            ["Societal NPV", "societalNpv", 1],
-            ["Non Quantifiable Benefits", "nqb", 1],
-            ["Risk", "risk", 1]
+            ["Societal NPV", "societalNpv", 1]
         ] %}
 {% endif %}
 {% set bankabakity_colNames =["", "Target", "Financial\nBankability", "Societal\nBankability"] %}
@@ -88,7 +88,6 @@
         </div>
 
 
-        {# CB + KPI #}
         <div class="col-6">
             <div class="dash-bg container-fluid m-1 ml-2 p-4">
                     <div class="dash-bg-light container-fluid p-3">
@@ -97,7 +96,7 @@
             </div>            
             <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
                     <div class="dash-bg-light container-fluid p-3">
-                        <h3 class="dash-title mb-3">{{sideBarName == "customer_dashboards" ? "Repartition of benefits" : "Cash-in"}}</h3>
+                        <h3 class="dash-title mb-3">{{sideBarName == "customer_dashboards" ? "Repartition of benefits" : "Cash-in"}} over Project Period</h3>
                         <canvas id="repartitionOfBenefits" height="150px"/> 
                     </div>
             </div>

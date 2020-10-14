@@ -49,10 +49,10 @@
                     {#-------------- tab input et total --------------#}
                     {{ list.list_cashreleasing_input(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing,nb_uc) }}
                     {{ list.list_cashreleasing_input_2(cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
-
-                    <h3 class="ml-5 mb-3" style="font-size: 1.5rem;">Output</h3>
-                    {{ list.list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
-
+                    {% if isDev %}
+                        <h3 class="ml-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+                        {{ list.list_cashreleasing_total(selDevSym,cashreleasing_advice,cashreleasing_user,selCashReleasing) }}
+                    {% endif %}
                     {#-------------- bouton flèche --------------#}
                     <div class="row m-3 text-center text-dark">
                         <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('form_cashreleasing');"></button>

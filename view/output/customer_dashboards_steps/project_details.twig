@@ -16,14 +16,14 @@
     {% set lineNames = [
         ["Cash-Out", "cashOut", 1],
         ["Capex", "cashOutCapex", 2],
-        ["supplier", "cashOutCapexSupplier", 3],
+        ["#{companyName}", "cashOutCapexSupplier", 3],
         ["other supplier", "cashOutCapexOtherSupplier", 3],
         ["Deployment", "cashOutDeployment", 2],
-        ["supplier","cashOutDeploymentSupplier", 3 ],
+        ["#{companyName}","cashOutDeploymentSupplier", 3 ],
         ["other supplier", "cashOutDeploymentOtherSupplier", 3],
         ["internal", "cashOutDeploymentInternal", 3],
         ["Opex", "cashOutOpex", 2],
-        ["supplier", "cashOutOpexSupplier", 3],
+        ["#{companyName}", "cashOutOpexSupplier", 3],
         ["other supplier", "cashOutOpexOtherSupplier", 3],
         ["internal", "cashOutOpexInternal", 3],
         ["Cash-In", "cashIn", 1],
@@ -37,18 +37,14 @@
     ] %}
 {% elseif side == "supplier" %}
     {% set lineNames = [
-        ["Cash-Out", "cashOut", 1],
-        ["Capex", "cashOutCapex", 2],
-        ["Deployment", "cashOutDeployment", 2],
-        ["intern", "cashOutDeploymentIntern", 3],
-        ["extern","cashOutDeploymentExtern", 3 ],
-        ["Opex", "cashOutOpex", 2],
-        ["intern", "cashOutOpexIntern", 3],
-        ["extern","cashOutOpexExtern", 3 ],
         ["Cash-In", "cashIn", 1],
         ["Equipment", "cashInEquipment", 2],
         ["Deplmoyment ", "cashInDeplmoyment", 2],
         ["Operating", "cashInOperating", 2],
+        ["Cash-Out", "cashOut", 1],
+        ["Capex", "cashOutCapex", 2],
+        ["Deployment", "cashOutDeployment", 2],
+        ["Opex", "cashOutOpex", 2],
         ["Net Cash", "netCash", 1],
         ["Cummulated Net Cash", "cummulatedNetCash", 1]
     ] %}

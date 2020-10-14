@@ -22,7 +22,7 @@
                             <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description">
                         </div>
                     </div>
-                    {% if (type =="capex" or type =="opex" or type =="deployment_costs") and ((sideBarName != "input_project_common_supplier" and sideBarName != "input_use_case_supplier") or type !="capex")%}
+                    {% if (type =="capex" or type =="opex" or type =="deployment_costs") and (sideBarName != "input_project_common_supplier" and sideBarName != "input_use_case_supplier")%}
                     <div class="form-group row">
                         <label for="origine" class="col-sm-3 col-form-label">Origine</label>
                         <div class="col-sm-9">

@@ -34,25 +34,17 @@
 		<div id="alerts_container">
 
 		</div>
-		<div class="justify-content-center row m-2 text-center text-dark">
+		<div class="justify-content-center col m-2 text-center text-dark">
 			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
 				<div>
-					<div class="form-group row">
-						<div class="col">
-							<h3>Project Key Dates</h3>
-						</div>
-						<div class="col">
-							<h3>Project Deployment Key Dates</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col">
+					<div class="col-6 px-0">
+						<div class="form-group row">
 							<label for="fname">Project Start Date</label>
 							<input class="form-control" type="date" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}">
 							<label for="lname">Project Duration (in months)</label>
 							<input class="form-control" type="text" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}">
 						</div>
-						<div class="form-group col">
+						<div class="form-group row">
 							<label for="fname">Deployment Start Date</label>
 							<input class="form-control" type="date" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}">
 							<label for="lname">Deployment Duration (in months)</label>

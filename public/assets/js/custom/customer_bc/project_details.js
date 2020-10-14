@@ -48,9 +48,24 @@ function updateDataPD(){
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
             }));
+            if(ucData[j][i]<0){
+                $("#"+i+"_"+j).attr('style', "color:red");
+            }
             
         }
     }
+
+    $("#cball_table tr").each(function() {
+        if(this.id.includes("cashIn")){
+            console.log("coucou wesh");
+            if(uc==-1){
+                $("#"+this.id).attr("hidden", true);
+            }else{
+                $("#"+this.id).removeAttr("hidden");
+            }
+        }
+    });
+
     drawCharts();
 }
 

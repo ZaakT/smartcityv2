@@ -68,7 +68,7 @@
                 </tr>
                 <tr>
                     <th scope="col">Unit Indicator</th>
-                    <th scope="col">Range of<br>Volume Reduction</th>
+                    <th scope="col">Range of<br>Volume </th>
                 </tr>
             </thead>
             <tbody>
@@ -147,7 +147,9 @@
                 <tr>
                     <th scope="col" colspan=1 class="text-uppercase">Component</th>
                     <th scope="col" colspan=1 class="text-uppercase">Impact</th>
-                    <th scope="col" rowspan=2 class="text-dark" style="background-color:#e9ecef">Variation of Volumes<br>(per month)</th>                  
+                    {% if isDev %}
+                    <th scope="col" rowspan=2 class="text-dark" style="background-color:#e9ecef">Variation of Volumes<br>(per month)</th>           
+                    {% endif %}       
                 </tr>
                 <tr>
                     <th scope="col">Item</th>
@@ -164,7 +166,9 @@
                     <td scope="col">{{ quantifiable_user[id_quantifiable]['name'] }}</td>
                     {% endif %}
                     <td scope="col"><input id="anVarVol_{{id_quantifiable}}" name="anVarVol_{{id_quantifiable}}" class="text-center anVarVol pt-1 pb-1 w-90" type="number" min=0 step=0.001 required oninput="checkQuantifiableInput();" value="{{selQuantifiable[id_quantifiable]['anVarVol']}}"><span> %</span></td> 
-                    <td scope="col" class="output" id="tot_varvol_{{id_quantifiable}}">-</td>                  
+                    {% if isDev %}
+                    <td scope="col" class="output" id="tot_varvol_{{id_quantifiable}}">-</td> 
+                    {% endif %}                 
                 </tr> 
             {% endfor %}
             </tbody>

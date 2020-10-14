@@ -71,8 +71,8 @@
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Ratio per {{compo['name']}}</th>
                     <th scope="col">Unit Cost<br>( in {{selDevSym}}  per month)</th>
-                    <th scope="col">Range of<br>Volume Reduction</th>
-                    <th scope="col">Range of<br>Unit Cost Reduction</th>
+                    <th scope="col">Range of<br>Volume </th>
+                    <th scope="col">Range of<br>Unit Cost </th>
                 </tr>
             </thead>
             <tbody>
@@ -184,7 +184,8 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col" colspan=2 class="text-uppercase">Components</th>
-                    <th scope="col" colspan=4 class="text-uppercase">Baseline</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
+                    <th scope="col" colspan=2 class="text-uppercase">Growth</th>
                     {#% if isSup %}<th scope="col" colspan=2 class="text-uppercase">Schedule</th>{% endif %#}
                 </tr>
                 <tr>
@@ -322,13 +323,17 @@
                 <tr>
                     <th scope="col" class="text-uppercase">Components</th>
                     <th scope="col" colspan=2 class="text-uppercase">Project Impact</th>
+                    {% if isDev %}
                     <th scope="col" colspan=3 class="text-uppercase text-dark"  style="background-color:#e9ecef"></th>
+                    {% endif %}  
                 </tr>
                 <tr>
                     <th scope="col">Item</th>
-                    <th scope="col">Volume Variation<br>( in % per year)</th>
-                    <th scope="col">Unit Cost Variation<br>( in % per year)</th>
-                     <th scope="col" class="text-dark" style="background-color:#e9ecef">Combined Variation<br>(per month)</th>               
+                    <th scope="col">Volume</th>
+                    <th scope="col">Unit Cost</th>
+                    {% if isDev %}
+                    <th scope="col" class="text-dark" style="background-color:#e9ecef">Combined Variation<br>(per month)</th>
+                    {% endif %}             
                     </tr>
                 
             </thead>
@@ -346,7 +351,9 @@
                     <td scope="col" class="output" id="tot_varcost_{{id_widercash}}">-</td> #}
 
 
-                    <td scope="col" class="output" id="tot_combvar_{{id_widercash}}">-</td>                    
+                    {% if isDev %}
+                    <td scope="col" class="output" id="tot_combvar_{{id_widercash}}">-</td>     
+                    {% endif %}                            
                 </tr> 
             {% endfor %}
             </tbody>

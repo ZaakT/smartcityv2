@@ -49,10 +49,12 @@
             </form>
         </div>
         {#-------------- tab guide --------------#}
+        {% if isDev %}
         <div class="col-lg-4 guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
         </div>
+        {% endif %}
     </section>
 </div>
 

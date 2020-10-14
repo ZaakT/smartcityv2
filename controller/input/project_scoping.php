@@ -159,7 +159,7 @@ function scope_selected($post){
             update_ModifDate_proj($projID);  
             if(isSup()){
 
-                header('Location: ?A=project_sdesign&A2=perimeter1&projID='.$projID);
+                header('Location: ?A=project_sdesign&A2=scope1&projID='.$projID);
             }else{
                 header('Location: ?A=project_scoping&A2=perimeter&projID='.$projID);
             }       
@@ -244,7 +244,6 @@ function perimeter1($twig,$is_connected,$projID=0){
 
 function perimeter1_inputed($twig,$is_connected, $projID, $post){
     if(isset($post) && $projID!=0){
-        
         insert_perimeter_supplier($projID ,$post);
 
         update_ModifDate_proj($projID); 

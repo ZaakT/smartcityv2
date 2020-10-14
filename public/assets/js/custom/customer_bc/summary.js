@@ -289,8 +289,8 @@ function updateBankability(){
     $("#errorInput").text("Error: make sure Deal Criteria is completed.");
   }else{
     $("#display_operatingMargin").text(data.operating_margin_target+" %");
-    $("#display_payback").text(data.payback_target+" mounths");
-    $("#display_societalPayback").text(data.societal_payback_target+" mounths");
+    $("#display_payback").text(data.payback_target+" months");
+    $("#display_societalPayback").text(data.societal_payback_target+" months");
     $("#display_roi").text(data.roi_target+" %");
     $("#display_societalRoi").text(data.societal_roi_target+" %");
     $("#display_npv").text(selDevSym+" "+data.npv_target);  
@@ -299,8 +299,8 @@ function updateBankability(){
     $("#display_risk").text(data.rr_target+"/10");
 
     $("#current_operatingMargin").text(current.fin_operating_margin+" %");
-    $("#current_payback").text(current.fin_payback+" mounths");
-    $("#current_societalPayback").text(current.fin_societal_payback+" mounths");
+    $("#current_payback").text(current.fin_payback+" months");
+    $("#current_societalPayback").text(current.fin_societal_payback+" months");
     $("#current_roi").text(current.fin_roi+" %");
     $("#current_societalRoi").text(current.fin_societal_roi+" %");
     $("#current_npv").text(selDevSym+" "+Math.round(current.fin_npv));  

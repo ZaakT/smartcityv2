@@ -103,26 +103,25 @@
 
     <thead>
         <th></th>
+        <th>Project</th>
         <th>Target</th>
-        <th>Current</th>
-        {#% if sideBarName == "supplier_dashboards" %#}
+        {% if sideBarName == "supplier_dashboards" %}
         <th>Bankability</th>
-        {#% elseif sideBarName == "customer_dashboards" %}
-        <th>Financial Bankability</th>
-        <th>Societal Bankability</th>
-        {% endif %#}
+        {% endif %}
     </thead>
 
     <tbody>
     {% for line in title %}
         <tr>
             <th>{{line[0]}}</th>
-            <td id="display_{{line[1]}}"> - </td>
             <td id="current_{{line[1]}}"> - </td>
+            <td id="display_{{line[1]}}"> - </td>
+        {% if sideBarName == "supplier_dashboards" %}
             <td>
                 <span hidden id="fin_{{line[1]}}_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span>
                 <span hidden id="fin_{{line[1]}}_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span>
             </td>
+        {% endif %}
             {#% if sideBarName == "customer_dashboards" %}
             <td>
                 <span hidden id="soc_{{line[1]}}_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span>
