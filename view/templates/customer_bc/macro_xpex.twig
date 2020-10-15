@@ -1,11 +1,7 @@
 {% macro getType(type) %}
-    {% if type == "capex" %}Capex
-    {% elseif type =="opex" %}Opex
-    {% elseif type == "equipment_revenues" %} Equipement Revenues
-    {% elseif type == "deployment_revenues" %} Deployment Revenues
-    {% elseif type == "operating_revenues" %} Recurring Revenues
-    {% elseif (type =="deployment_costs" and isSup) %}Deployment and Set-up
-    {% elseif type =="deployment_costs" %}Implementation
+{% import "/templates/traductions.twig" as traduction %}
+    {% if type =="deployment_costs" and isDev %}{{traduction.getText("implementation")}}
+    {% else %} {{traduction.getText(type)}}
     {% endif %}
 {% endmacro  %}
 
@@ -28,7 +24,8 @@
 {% endfor %}
 {% endmacro %}
 
-{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID=0,ucID=0,selXpex=[], type="capex", sideBarName,listUcID,listUcsName, Mode = "suggested") %}
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID = 0, ucID = 0, selXpex = [], type = "capex", sideBarName,listUcID,listUcsName, Mode = "suggested") %}
+{% import "/templates/traductions.twig" as traduction %}
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 {% set size = 3 %}
 {% if Mode == "custom" %}{% set size = 4 %}{% endif %}
@@ -41,8 +38,8 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
+                    <th scope="col">{{traduction.getText("name")}}</th>
+                    <th scope="col">{{traduction.getText("description")}}</th>
                     {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
                     {{Mode == "custom" ? "<th scope='col'></th>" }}
                 </tr>
@@ -53,7 +50,7 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"> <strong>Procured From {{companyName}} </strong></td></tr>
+                <tr class="table-primary"><td colspan="{{size}}"> <strong>{{traduction.getText("procured_from")}}{{companyName}} </strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
@@ -63,7 +60,7 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"><strong>Procured From Outside {{companyName}} </strong></td></tr>
+                <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("procured_from_outside")}}{{companyName}} </strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
@@ -73,7 +70,7 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"><strong> Internal </strong></td></tr>
+                <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("internal")}}</strong></td></tr>
                 {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
         </table>

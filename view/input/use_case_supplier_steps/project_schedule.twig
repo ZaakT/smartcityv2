@@ -1,6 +1,7 @@
 {% extends '/templates/common_page.twig' %}
 
 {% import "/templates/navbar.twig" as navbar %}
+{% import "/templates/traductions.twig" as traduction %}
 {% block navbar %}
 	{{ navbar.navbar(is_connected,is_admin,devises) }}
 {% endblock %}
@@ -24,7 +25,7 @@
 		{{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 		<div class="row jumbotron text-light mx-5 bg-dark p-3" style="margin-top: 2rem;">
 			<div class="col text-center">
-				<p class="text-justify"> For the selected Use Case, please input the detailed Schedule, in relation to the full operational cycle beginning-to-end, in relation to the applicable pricing – during potential Proof of Concept (POC) and Full Run phases – and in relation to potential Revenues, including during potential ‘Lag’, ‘Ramp up’ and Full Run phases.
+				<p class="text-justify"> {{traduction.getText("project_schedule_lorem")}}
 				</p>
 			</div>
 		</div>
@@ -63,9 +64,9 @@
 					<div class="col justify-content-center text-center">
 						<div class="row">
 							<div class="form-group col">
-								<label for="fname">Deployment Start</label>
+								<label for="fname">{{traduction.getText("deployment_start")}}</label>
 								<input name="deploy_start" value="{{ schedule_dates[0]['deploy_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_deploy_start" oninput="update_chart(event.target)" required>
-								<label for="lname">Deployment Duration (in months)</label>
+								<label for="lname">{{traduction.getText("deployment_duration")}} ({{traduction.getText("months")}})</label>
 								<input class="form-control" type="number" min=0 id="ucop_deployment_duration" name="deployment_duration" placeholder="6" value="{{ schedule_dates[0]['deployment_duration'] }}" oninput="update_chart(event.target)"  required>
 							</div>
 							<div class="form-group col">
@@ -149,6 +150,8 @@
 			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="check_form();"></button>
 		</div>
 	{% endif %}
+
+
 {% endblock %}
 
 {% block scripts %}

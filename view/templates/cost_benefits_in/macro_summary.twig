@@ -48,7 +48,15 @@
                     <td class="item">{{name[0]}}</td>
                     {% for sel_meas,sel_ucs in selScope %} 
                         {% for uc in sel_ucs %}
-                        <td scope="col"><span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}"></span></td>
+                        {% set showNA = false %}
+                        {% if uc == -1 and (sideBarName == "input_use_case" or (isSup and sideBarName == "cost_benefits"))and (name[0] != "Capex" and name[0] != "Implementation" and name[0] != "Opex" ) %}
+                            {% set showNA = true %}
+                        {% endif %}
+                        <td scope="col">
+                        {% if showNA %} NA 
+                        {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}"></span>
+                        {% endif %}
+                        </td>
                         {% endfor %}
                     {% endfor %} 
                 </tr>

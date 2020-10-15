@@ -13,6 +13,12 @@ $GLOBALS['dicTrad']=[
     "home_urbatisName" => [
         "en"=>"URBATIS AI"
     ],
+    "home_1" => [
+        "en"=>"Value and Financial modelin"
+    ],
+    "home_2" => [
+        "en"=>"Make the case for Smart City projects"
+    ],
     // -------- navBar -------- 
     "navbar_no_devise" => [
         "en"=>"There is no devise, please contact an administrator"
@@ -93,7 +99,62 @@ $GLOBALS['dicTrad']=[
     "no" => [
         "en"=>"No",
         "fr"=>"Non"
+    ],    
+    "dst" => [
+        "en"=>"Decision Support Toolkit"
+    ],
+    "name" => [
+        "en"=>"Name"
+    ],
+    "description" => [
+        "en"=>"Description"
+    ],
+    # *** xPex ***
+    "capex" => [
+        "en"=>"Capex"
+    ],
+    "opex" => [
+        "en"=>"Opex"
+    ],
+    "equipment_revenues" => [
+        "en"=>"Equipement Revenues"
+    ],
+    "deployment_revenues" => [
+        "en"=>"Deployment Revenues"
+    ],
+    "operating_revenues" => [
+        "en"=>"Recurring Revenues"
+    ],
+    "deployment_costs" => [
+        "en"=>"Deployment and Set-up"
+    ],
+    "implementation" => [
+        "en"=>"Implementation"
+    ],
+    "procured_from" => [
+        "en"=>"Procured From "
+    ],
+    "procured_from_outside" => [
+        "en"=>"Procured From Outside "
+    ],
+    "internal" => [
+        "en"=>"Internal"
+    ],
+    // *** Scedule ***
+    "deployment_start" => [
+        "en"=>"Deployment Start"
+    ],    
+    "deployment_duration" => [
+        "en"=>"Deployment Duration"
+    ],
+    "months" => [
+        "en"=>"months Duration"
+    ],
+    // -------- Lorem -------- 
+    "project_schedule_lorem" => [
+        "en"=>"For the selected Use Case, please input the detailed Schedule, in relation to the full operational cycle beginning-to-end, in relation to the applicable pricing – during potential Proof of Concept (POC) and Full Run phases – and in relation to potential Revenues, including during potential ‘Lag’, ‘Ramp up’ and Full Run phases."
     ]
+
 
     ];
 
