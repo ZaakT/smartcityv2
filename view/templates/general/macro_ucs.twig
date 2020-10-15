@@ -1,4 +1,4 @@
-{% macro list_ucs(selScope,ucs,measures) %}
+{% macro list_ucs(selScope,ucs,measures, scheduleMode) %}
 
 <div class="row text-center">
     <div class="col mx-5 list-table">
@@ -9,6 +9,9 @@
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
                     <th scope="col">Measure</th>
+                    {% if scheduleMode %}
+                    <th scope="col">Schedule</th>
+                    {% endif %}
                 </tr>
                 
             </thead>
@@ -16,10 +19,13 @@
             {% for meas,list_ucs in selScope %}
                 {% for uc in list_ucs %}
                 <tr id = "tr_{{ uc }}" scope="row">
-                    <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} required></td>
+                    <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} {% if scheduleMode and not ucs[uc]["hasSchedule"] %}disabled {% endif %}required></td>
                     <td scope="col">{{ ucs[uc]['name'] }}</td>
                     <td scope="col">{{ ucs[uc]['description'] }}</td>
                     <td scope="col">{{measures[meas]['name']}}</td>
+                    {% if scheduleMode %}
+                        <td scope="col"><img width=20 height=20 src="../../../public/img/{{ ucs[uc]["hasSchedule"] ? "full_circle" : "empty_circle" }}.png"/></td>
+                    {% endif %}
                 </tr>                    
                 {% endfor %}
                 {% if meas != selScope|keys|last %}

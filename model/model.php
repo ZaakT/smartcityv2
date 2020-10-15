@@ -2863,9 +2863,9 @@ function alterProjetKeyDates($projID, $startDate, $duration, $deployStartDate, $
 function getProjetSchedule($projID, $ucID) {
     //ok
     $db = dbConnect();
-    $req = $db->prepare("SELECT * FROM project_schedule WHERE id_project = ? AND id_uc = ?");
-    $req->execute(array($projID, $ucID));
-    return $req->fetchAll();
+    $req = $db->prepare("SELECT *  FROM project_schedule WHERE id_project = ? AND id_uc = ?");
+    $req->execute(array($projID,$ucID));
+    return $req->fetch();
 }
 
 function insertProjectSchedule($projID, $ucID, $deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration){

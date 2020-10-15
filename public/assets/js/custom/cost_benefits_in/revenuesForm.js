@@ -19,8 +19,17 @@
     };
 })(jQuery);
 
-function submitForm(formName){
-    $("#"+formName).submit();
+function submitForm(formName){/*
+    var ret = true;
+    $("#revenues_input input").each(function(){
+        if(!checkRevenuesInput(this)){
+            ret = false;
+        }
+    });
+    if(ret){
+        console.log("we submit");
+        //$("#"+formName).submit();
+    }*/
 }
 
 function countSelectedRevenues(oForm) {
@@ -49,6 +58,12 @@ function countSelectedRevenues(oForm) {
 }
 
 function checkRevenuesInput(id){
+    clearAlerts();
+    var revenue_start = $("#pricing_start").text();
+    var uc_end = $("#uc_end").text();
+    var idAlert = 0;
+
+
     var ret = true;
     id = id.getAttribute('id');
     //console.log(id);
@@ -135,7 +150,41 @@ function checkRevenuesInput(id){
             $("#vol_"+id[1]).each(function(){
             });
         }
-    } 
+    } else if(tab.includes("revenueStart")){
+        if(val == "" || monthDiff(val, revenue_start)>0  || monthDiff(val, uc_end)<0){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+            if(val != ""){
+                addAlert("The start of revenue has to be beetwen "+revenue_start+" and "+uc_end+".", idAlert);
+                idAlert++;
+            }
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+
+    }else if(tab.includes("rampUpDurationt")){
+        if(val == ""){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if($("#revenueStart_"+id.split("_")[1]).val()!=""){
+            if(monthDiff( uc_end, $("#revenueStart_"+id.split("_")[1]).val())>-val){
+                $("#"+id).css("background","salmon");
+                $("#"+id).val("");
+                addAlert("Revenuses must end before the Use Case ("+uc_end+").", idAlert);
+                idAlert++;
+                ret = false;
+            }
+            else{
+                $("#"+id).css("background","#C3E6CB");
+            }
+        }else{
+            $("#"+id).css("background","#C3E6CB");
+        }
+
+    }
     calcTotRevenues();
     return ret;
 }

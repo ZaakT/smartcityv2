@@ -3,12 +3,16 @@
 {# default parametres #}
 {% set commonPage = '/others/general_common.twig' %}
 {% set lorem = 'Select a Use Case.'%}
+{% set scheduleMode = false %}
 
 
 {% if sideBarName =="input_project_common" or sideBarName =="input_project_common_supplier" or sideBarName == "input_use_case" %}
     {% set commonPage = '/input/cost_benefits_in.twig' %}
 {% endif %}
 
+{% if sideBarName == "cost_benefits" and isSup %}
+    {% set scheduleMode = true %}
+{% endif %}
 
 {% extends commonPage %}
 
@@ -35,7 +39,7 @@
 
 <form action={{nextPage}} method="post">
 {% if selScope %}
-{{ list.list_ucs(selScope,ucs,measures) }}
+{{ list.list_ucs(selScope,ucs,measures, scheduleMode) }}
 {% else %}
 <h2 class="text-center m-5">You have no Use Case !</h2>
 {% endif %}

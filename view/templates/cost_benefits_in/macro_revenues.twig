@@ -118,9 +118,9 @@
                     {% endif %}
 
                     {% if id_revenues in revenues_advice|keys %}
-                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic text-secondary pt-1 pb-1" type="text" required style="max-width:100%;" value="{{revenues_advice[id_revenues]['unit']}}" readonly></td>
+                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic text-secondary pt-1 pb-1" type="text" style="max-width:100%;" value="{{revenues_advice[id_revenues]['unit']}}" readonly></td>
                     {% else %}
-                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic pt-1 pb-1" type="text" required style="max-width:100%;" value="{{selRevenues[id_revenues]['unit_indic']}}"></td>
+                        <td scope="col"><input id="unitIndic_{{id_revenues}}" name="unitIndic_{{id_revenues}}" class="text-center unitIndic pt-1 pb-1" type="text" style="max-width:100%;" value="{{selRevenues[id_revenues]['unit_indic']}}"></td>
                     {% endif %}
 
                     {% if isDev %}<td scope="col"><input id="rat_{{id_revenues}}" name="rat_{{id_revenues}}" class="text-center ratio pt-1 pb-1" type="number" min=0 step=0.01 required oninput="checRevenuesInput(rat_{{id_revenues}});" placeholder="{{ratio[id_revenues]['val']}}"></td> {% endif %}
@@ -130,8 +130,8 @@
                     <td scope="col"><input id="rev_{{id_revenues}}" name="rev_{{id_revenues}}" class="text-center unit_rev" type="number" min=0 step=0.001 required oninput="checkRevenuesInput(rev_{{id_revenues}});" value="{{selRevenues[id_revenues]['unit_rev']}}" placeholder="{{( revenues_advice[id_revenues]['range_min'] + opex_advice[id_opex]['range_max']) / 2 }}"></td> 
                       
                     {% if isSup %}
-                    <td scope="col"><input id="revenueStart_{{id_revenues}}" name="revenueStart_{{id_revenues}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_revenues}});" value="{{selRevenues[id_revenues]['revenue_start_date']}}"></td> 
-                    <td scope="col"><input id="rampUpDurationt_{{id_revenues}}" name="rampUpDurationt_{{id_revenues}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkXpexInput(rampUpDurationt_{{id_revenues}});" value="{{selRevenues[id_revenues]['ramp_up_duration']}}"></td> 
+                    <td scope="col"><input id="revenueStart_{{id_revenues}}" name="revenueStart_{{id_revenues}}" class="text-center revenueStart p-1" type="date" required oninput="checkRevenuesInput(revenueStart_{{id_revenues}});" value="{{selRevenues[id_revenues]['revenue_start_date']}}"></td> 
+                    <td scope="col"><input id="rampUpDurationt_{{id_revenues}}" name="rampUpDurationt_{{id_revenues}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkRevenuesInput(rampUpDurationt_{{id_revenues}});" value="{{selRevenues[id_revenues]['ramp_up_duration']}}"></td> 
                     {% endif %}              
                 </tr> 
             {% endfor %}

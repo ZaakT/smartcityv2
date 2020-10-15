@@ -1,12 +1,13 @@
 {% macro key_dates(scope,ucs,keydates_uc,uc_completed) %}
+{% import "/templates/traductions.twig" as traduction %}
 
-<h3 class="dash-title">Key Dates</h3>
+<h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
 <table id="keyDatesTable" class=" text-center table dashboard-table">
     <tr>
-        <th width="30%">Uses Cases</th>
-        <th width="16%">Start Date</th>
-        <th width="16%">Implem. End Date</th>
-        <th width="16%">Project End Date</th>
+        <th width="30%">{{traduction.getText("uses_cases")}}</th>
+        <th width="16%">{{traduction.getText("start_date")}}</th>
+        <th width="16%">{{traduction.getText("dashboard_summary_2")}}</th>
+        <th width="16%">{{traduction.getText("dashboard_summary_3")}}</th>
         <th width="22%"></th>
     </tr>
     {% for measID,list_ucs in scope %}
@@ -16,7 +17,7 @@
                 <td id="start_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['startdate']}}  </td>
                 <td id="imp_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['implem_enddate']}}  </td>
                 <td id="end_{{ ucID }}" width="17.5%">{{ keydates_uc[ucID]['enddate'] }}  </td>
-                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} months</td>
+                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</td>
             </tr>
     {% endfor %}{% endfor %}
 </table>
@@ -41,7 +42,7 @@
                             <span>{{ keydates_uc[ucID]['enddate'] }}</span>
                         </div>
                         <div class="arrow duration">
-                            <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} months</span>
+                            <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</span>
                         </div> 
                     </div>
                 {% else %}
@@ -71,15 +72,16 @@
 {% endmacro %}
 
 {% macro costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) %}
+{% import "/templates/traductions.twig" as traduction %}
 
-            <h3 class="dash-title">Cumulated Net Cash</h3>
+            <h3 class="dash-title">{{traduction.getText("cumulated_net_cash")}}</h3>
                 <div hidden>
                     <table>
                         <tr>
-                            <td>Year</td>
-                            <td class="cbLabel">Cumulated Net Cash</td>
+                            <td>{{traduction.getText("year")}}</td>
+                            <td class="cbLabel">{{traduction.getText("cumulated_net_cash")}}</td>
                             {% if cumulnetsoccashTot|length > 0 %}
-                                <td class="cbLabel">Cumulated Net Societal Cash</td>
+                                <td class="cbLabel">{{traduction.getText("cumulated_net_societal_cash")}}</td>
                             {% endif %}
                         </tr>
                         {% for year in years %}
@@ -103,10 +105,10 @@
 
     <thead>
         <th></th>
-        <th>Project</th>
-        <th>Target</th>
+        <th>{{traduction.getText("project")}}</th>
+        <th>{{traduction.getText("target")}}</th>
         {% if sideBarName == "supplier_dashboards" %}
-        <th>Bankability</th>
+        <th>{{traduction.getText("bankability")}}</th>
         {% endif %}
     </thead>
 

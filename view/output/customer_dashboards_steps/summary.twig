@@ -6,6 +6,7 @@
 {% import "/templates/customer_dashboards/macro_summary.twig" as macros %}
 {% import "/templates/customer_dashboards/macro_table.twig" as table %}
 {% import "/templates/customer_dashboards/macro_torus.twig" as torus %}
+{% import "/templates/traductions.twig" as traduction %}
 
 {% block sidebar %}{{ sidebar.sidebar(sideBarName, projID) }}{% endblock %}
 
@@ -40,12 +41,12 @@
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected) }}
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
-        <p class="text-justify">Summary Dashboard of key project metrics across project life cycle. </p>
+        <p class="text-justify">{{traduction.getText("dashboard_supplier_summary_lorem")}} </p>
     </div>
 </div>
 
 
-<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">Financial: Summary - </span><span style="font-weight: 400;"></span>{{ selected }}</h2>
+<h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{{traduction.getText("financial")}}: {{traduction.getText("summary")}} - </span><span style="font-weight: 400;"></span>{{ selected }}</h2>
 
 <div class="container-fluid">
     <div class="row">
@@ -60,7 +61,7 @@
                 {# # OF UC #}
                 {% if sideBarName == "supplier_dashboards" %}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">Bankability</h3>
+                <h3 class="dash-title mb-3">{{traduction.getText("bankability")}}</h3>
                     {{ macros.project_score(bankability_lineNames, sideBarName) }}
                     {#{ table.table(bankability_lineNames, bankabakity_colNames, selDevSym, "table", "", "") }#}
                         <div class="text-center">
@@ -69,11 +70,11 @@
                 </div> 
                 {% elseif sideBarName == "customer_dashboards" %}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">Financial Bankability</h3>
+                <h3 class="dash-title mb-3">{{traduction.getText("financial_bankability")}}</h3>
                     {{ macros.project_score(bankability_lineNames1, sideBarName) }}
                 </div> 
                                 <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">Societal Bankability</h3>
+                <h3 class="dash-title mb-3">{{traduction.getText("societal_bankability")}}</h3>
                     {{ macros.project_score(bankability_lineNames2, sideBarName) }}
                         <div class="text-center">
                             <span id="errorInput" style="color:red;"></span>
@@ -96,7 +97,7 @@
             </div>            
             <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
                     <div class="dash-bg-light container-fluid p-3">
-                        <h3 class="dash-title mb-3">{{sideBarName == "customer_dashboards" ? "Repartition of benefits" : "Cash-in"}} over Project Period</h3>
+                        <h3 class="dash-title mb-3">{% if sideBarName == "customer_dashboards" %} {{traduction.getText("rep_of_benef")}} {% else %} {{traduction.getText("cash-in")}}  {% endif %} {{traduction.getText("dashboard_summary_1")}}</h3>
                         <canvas id="repartitionOfBenefits" height="150px"/> 
                     </div>
             </div>

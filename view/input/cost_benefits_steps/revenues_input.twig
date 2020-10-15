@@ -45,6 +45,7 @@
         </div>
 
         {#-------------- tab input et total --------------#}
+		<div id="alerts_container"></div>
         {{ list.list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues) }}
         {{ list.list_revenues_input_2(revenues_advice,revenues_user,selRevenues) }}
 
@@ -84,6 +85,11 @@
 {% endblock %}
 
 {% block scripts %}
+<div id="pricing_start"   hidden>{{list_limite_schedule["pricing_start"]}}</div>
+<div id="uc_end"   hidden>{{list_limite_schedule["uc_end"]}}</div>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/alertCreator.js"></script>
+
     {{ parent() }}
     <script type="text/javascript">setNewDeviseRevenues("{{selDevName}}");</script>
 {% endblock %}

@@ -34,7 +34,9 @@ function use_case_schedule($twig,$is_connected, $projID, $ucID){
         $duration = $keyDates[0]['duration'];
         $projectEnd = new DateTime($projectStart);
         $projectEnd->modify("+$duration months");
-        $projectEnd = $projectEnd->format('Y-m-d');
+        $projectEnd = $projectEnd->format('Y-m');
+        $projectStart = new DateTime($projectStart);
+        $projectStart = $projectStart->format('Y-m');
 
         $scheduleDates = getProjetSchedule($projID, $ucID);
         $project_dep_start = $keyDates[0]['deploy_start_date'];

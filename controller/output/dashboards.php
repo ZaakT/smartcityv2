@@ -375,7 +375,6 @@ function getKeyDatesProj($schedules,$scope){
                 $implemSchedule = $schedules['implem'][$ucID];
                 $opexSchedule = $schedules['opex'][$ucID];
                 $revenuesSchedule = $schedules['revenues'][$ucID];
-                var_dump($ucID,$implemSchedule,$opexSchedule);
     
                 if(!isset($proj_startdate)){
                     $proj_startdate = $implemSchedule['startdate'];

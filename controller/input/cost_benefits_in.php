@@ -755,14 +755,16 @@ function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                     $uc = getUCByID($ucID);
                     $revSchedule = getRevenuesSchedule($projID,$ucID);
                     $hasSchedule = !$revSchedule ? $revSchedule : true;
+
                     if($hasSchedule||isSup()){
                         $list_revenues_advice = getListRevenuesAdvice($ucID);   
                         $list_revenues_user = getListRevenuesUser($projID,$ucID);    
                         $list_selRevenues = getListSelRevenues($projID,$ucID);          
                         //var_dump($list_selRevenues);
                         $devises = getListDevises();
-    $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
-    $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+
+                        $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+                        $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
     echo $twig->render('/input/cost_benefits_steps/revenues.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,'isTaken'=>$isTaken,'selRevenues'=>$list_selRevenues));
                         prereq_CostBenefits();
@@ -872,7 +874,12 @@ function revenues_input($twig,$is_connected,$projID=0,$ucID=0){
             $compo = getCompoByUC($ucID);
             
             $nb_compo = 0;
-            $selectedZones = getListSelZones($projID);
+            $selectedZones = getListSelZones($projID);   
+            $list_limite_schedule = [];                     
+            if(isSup()){
+                $list_limite_schedule = getProjetSchedule($projID, $ucID);  
+            }
+            var_dump($list_selRevenues);
             foreach ($selectedZones as $key => $value) {
                 if (!hasChildren($key,$selectedZones)) {
                     $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);
@@ -886,7 +893,10 @@ function revenues_input($twig,$is_connected,$projID=0,$ucID=0){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/cost_benefits_steps/revenues_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,"selRevenues"=>$list_selRevenues,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+    echo $twig->render('/input/cost_benefits_steps/revenues_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
+    'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
+    'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,
+    "selRevenues"=>$list_selRevenues,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc, "list_limite_schedule"=>$list_limite_schedule));
             prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=project');

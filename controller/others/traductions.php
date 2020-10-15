@@ -149,14 +149,78 @@ $GLOBALS['dicTrad']=[
     ],
     "months" => [
         "en"=>"months Duration"
+    ], 
+    "financial" => [
+        "en"=>"Financial"
+    ],  
+    "summary" => [
+        "en"=>"Summary"
+    ],     
+    "bankability" => [
+        "en"=>"Bankability"
+    ],     
+    "financial_bankability" => [
+        "en"=>"Financial Bankability"
+    ],     
+    "societal_bankability" => [
+        "en"=>"Societal Bankability"
     ],
+    "cash-in" => [
+        "en"=>"Cash-in"
+    ],
+    "rep_of_benef" => [
+        "en"=>"Repartition of benefits"
+    ],
+    "key_dates" => [
+        "en"=>"Key Dates"
+    ],
+    "uses_cases" => [
+        "en"=>"Uses Cases"
+    ], 
+    "start_date" => [
+        "en"=>"Start Date"
+    ], 
+    "months_short"> [
+        "en"=>"months"
+    ],
+    "year"> [
+        "en"=>"Year"
+    ],
+    "target"> [
+        "en"=>"Target"
+    ],
+    "project"> [
+        "en"=>"Project"
+    ],
+
+    // -------- Dashboard Summary  -------- 
+    "dashboard_summary_1" => [
+        "en"=>" over Project Period"
+    ], 
+    "dashboard_summary_2" => [
+        "en"=>"Implem. End Date"
+    ], 
+    "dashboard_summary_3" => [
+        "en"=>" Project End Date"
+    ], 
+    "cumulated_net_cash" => [
+        "en"=>"Cumulated Net Cash"
+    ], 
+    "cumulated_net_societal_cash" => [
+        "en"=>"Cumulated Net Societal Cash"
+    ], 
+
+
     // -------- Lorem -------- 
     "project_schedule_lorem" => [
         "en"=>"For the selected Use Case, please input the detailed Schedule, in relation to the full operational cycle beginning-to-end, in relation to the applicable pricing – during potential Proof of Concept (POC) and Full Run phases – and in relation to potential Revenues, including during potential ‘Lag’, ‘Ramp up’ and Full Run phases."
-    ]
+    ],    
+    "dashboard_supplier_summary_lorem" => [
+        "en"=>"Summary Dashboard of key project metrics across project life cycle."
+    ],
 
 
     ];
 
 
-
+//{{traduction.getText("year")}}

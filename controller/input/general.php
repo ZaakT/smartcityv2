@@ -63,6 +63,11 @@ function use_case_selection($twig,$is_connected, $nextPage, $sideBarName, $projI
             $proj = getProjByID($projID,$user[0]);
             $list_measures = getListMeasures();
             $list_ucs = getListUCs();
+            if(isSup()){
+                foreach ($list_ucs as $ucID => $data) {
+                    $list_ucs[$ucID]["hasSchedule"]=hasSchedule($projID, $ucID);
+                }
+            }
             $selScope = getListSelScope($projID);
             //Suppression de project common car il ne peu être modifier que dans la partie project common
             if(isset($list_measures[0])){unset($list_measures[0]);}
