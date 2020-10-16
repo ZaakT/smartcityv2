@@ -233,7 +233,7 @@ try{
                     if($_GET['A2']=='modify_infos'){
                         modify_infos($twig,$is_connected);
                     } elseif($_GET['A2']=='save_infos'){
-                        save_infos($twig,$is_connected,$_POST);
+                        save_infos($twig,$is_connected,$_POST, $_FILES);
                     } else {
                         header('Location: ?A=profile');
                     }

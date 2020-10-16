@@ -11,7 +11,6 @@ function login($twig,$username_in=true,$password_in=true){
 
     $_SESSION['devise_name'] = $selDevName;
     $_SESSION['devise_symbol'] = $selDevSym;
-    //setLanguage('en');
     
     echo $twig->render('/others/login.twig',array('username'=>$username,'username_in'=>$username_in,'password_in'=>$password_in)); 
     
@@ -26,12 +25,14 @@ function connexion($twig,$post){
             $password_db = getUser($username)[2];
             $salt = getUser($username)[4];
             $profile = getUser($username)[5];
+            $logoName = getUser($username)[6];
             $isPasswordCorrect = password_verify($password_in.$salt,$password_db);
             if($isPasswordCorrect){
                 session_start();
                 $_SESSION['id'] = $id;
                 $_SESSION['username'] = $username;
                 $_SESSION['profile'] = $profile;
+                $_SESSION['logoName'] = $logoName;
                 setcookie('username',$_SESSION['username'],time()+3600*24*365);
                 setcookie('profile',$_SESSION['profile'],time()+3600*24*365);
                 header('Location: ?A=home');

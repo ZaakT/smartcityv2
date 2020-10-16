@@ -120,7 +120,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -131,7 +131,8 @@ function getUser($username){
         $userPassword = $res['password'];
         $salt = $res['salt'];
         $profile=$res["profile"];
-        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile];
+        $logoName = $res['logoName'];
+        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName];
     } else {
         $user = [];
     }
@@ -187,9 +188,10 @@ function modifyUser($user){
     $req = $db->prepare('UPDATE user
                         SET username = ?,
                             salt = ?,
-                            password = ?
+                            password = ?, 
+                            logoName = ?
                         WHERE id = ?');
-    return $req->execute(array($user[1],$user[2],$user[3],$user[0]));
+    return $req->execute(array($user[1],$user[2],$user[3],$user[4], $user[0]));
 }
 
 function deleteUser($userID){
