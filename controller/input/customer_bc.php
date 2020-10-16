@@ -89,6 +89,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                         $list_xpex_user_from_ntt[$ucID]   = getListCapexUser($projID,$ucID, "from_ntt", $side);  
                         $list_xpex_user_from_outside_ntt[$ucID]  = getListCapexUser($projID,$ucID, "from_outside_ntt", $side); 
                         $list_xpex_user_internal[$ucID]   = getListCapexUser($projID,$ucID, "internal", $side); 
+                        
  
                         $list_selXpex[$ucID] = getListSelCapex($projID,$ucID, $side);                         
                         if($side == "customer"){

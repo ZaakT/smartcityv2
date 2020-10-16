@@ -3,7 +3,12 @@
 require_once('model/model.php');
 
 function getLogoName(){
-    return isset($_SESSION['logoName']) ? $_SESSION['logoName'] : "LogoUrbatis.png";
+    if(isset($_SESSION['logoName'])){
+        if($_SESSION['logoName'] != ""){
+            return $_SESSION['logoName'];
+        }
+    }
+    return "LogoUrbatis.png";
 }
 
 

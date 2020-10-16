@@ -879,7 +879,6 @@ function revenues_input($twig,$is_connected,$projID=0,$ucID=0){
             if(isSup()){
                 $list_limite_schedule = getProjetSchedule($projID, $ucID);  
             }
-            var_dump($list_selRevenues);
             foreach ($selectedZones as $key => $value) {
                 if (!hasChildren($key,$selectedZones)) {
                     $nb_compo += getNbTotalCompoForSelectedZone($compo['id'], $key);

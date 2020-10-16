@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 14 oct. 2020 à 07:20
+-- Généré le :  ven. 16 oct. 2020 à 12:16
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -3499,6 +3499,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `type` enum('equipment','deployment','operating') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `description` varchar(1023) NOT NULL,
   `advice_user` enum('advice','user') NOT NULL,
+  `unit` varchar(256) NOT NULL,
   PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
@@ -3506,22 +3507,22 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
 -- Déchargement des données de la table `supplier_revenues_item`
 --
 
-INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, `advice_user`) VALUES
-(1, 'rev 1', 'equipment', 'desc', 'user'),
-(2, 'dep 1', 'deployment', '', 'user'),
-(3, 'op 1', 'operating', '', 'user'),
-(4, 'My rev', 'equipment', '', 'user'),
-(5, 'Sensor', 'equipment', '', 'user'),
-(6, 'project management', 'deployment', 'project', 'user'),
-(7, 'sells of data analytics', 'operating', '', 'user'),
-(9, 'dep 001', 'deployment', '', 'user'),
-(10, 'rec 01', 'operating', '', 'user'),
-(13, 'rev 001', 'equipment', '', 'user'),
-(14, 'rev 002', 'equipment', '', 'user'),
-(15, 'my 1st eq', 'equipment', '', 'user'),
-(16, 'my 2nd eq', 'equipment', '', 'user'),
-(17, 'dep 1st', 'deployment', '', 'user'),
-(18, '1st rec', 'operating', '', 'user');
+INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, `advice_user`, `unit`) VALUES
+(1, 'rev 1', 'equipment', 'desc', 'user', ''),
+(2, 'dep 1', 'deployment', '', 'user', ''),
+(3, 'op 1', 'operating', '', 'user', ''),
+(4, 'My rev', 'equipment', '', 'user', ''),
+(5, 'Sensor', 'equipment', '', 'user', ''),
+(6, 'project management', 'deployment', 'project', 'user', ''),
+(7, 'sells of data analytics', 'operating', '', 'user', ''),
+(9, 'dep 001', 'deployment', '', 'user', ''),
+(10, 'rec 01', 'operating', '', 'user', ''),
+(13, 'rev 001', 'equipment', '', 'user', ''),
+(14, 'rev 002', 'equipment', '', 'user', ''),
+(15, 'my 1st eq', 'equipment', '', 'user', ''),
+(16, 'my 2nd eq', 'equipment', '', 'user', ''),
+(17, 'dep 1st', 'deployment', '', 'user', ''),
+(18, '1st rec', 'operating', '', 'user', '');
 
 -- --------------------------------------------------------
 
