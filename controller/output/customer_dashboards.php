@@ -22,7 +22,7 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
     foreach ($revenues as $itemID => $revenue) {
         $schedule = getProjetSchedule($projID,$ucID);
         if(isset($schedule[0])){
-            $schedule = $schedule[0];
+            //$schedule = $schedule[0];
             $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
             $rev_end = date_create($schedule['uc_end'])->format("m/Y");
     
@@ -519,25 +519,41 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
         }
     }else{
         if($item == "equipment" || $item== "deployment" || $item== "operating" || $item == "revenues"){
+            //var_dump("dans le if :$item");
 
-            $revenuesSchedule = isset($schedules['revenues'][$ucID]) ? $schedules['revenues'][$ucID] : [];
-            if($item == "equipment" || $item== "deployment"){$implemSchedule = $schedules['implem'][$ucID];
+            $implemSchedule = $schedules['implem'][$ucID];
+            if($item == "equipment" || $item== "deployment"){
+                //var_dump("if 1");
                 //getSupplierRevenueItemByMonth($projID,$ucID, $item);
                 $implemRepart = getRepartPercImplem($implemSchedule,$projectDates);
                 $revenuesTot = getTotSupplierRevenuesByUC($projID,$ucID, $item);
                 $revenuesPerMonth = calcCapexPerMonth($implemRepart,$revenuesTot);
 
-            }elseif(scheduleFilled($revenuesSchedule) && !empty($revenuesSchedule)){
+            }elseif($item== "operating"){
+                //var_dump("if 2");
 
-                $revenuesRepart = getRepartPercRevenues($revenuesSchedule,$projectDates);
+                $revenuesRepart = getRepartPercRevenues($implemSchedule,$projectDates);
                 $revenuesValues = getSupplierRevenuesValues($projID,$ucID, $item);
                 $revenuesPerMonth = calcRevenuesPerMonth2($revenuesRepart,$revenuesValues);
-            } else {
+            }elseif($item== "revenues"){
+                //var_dump("if 2");
+
+                $deployment = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "deployment", $side, $periode);
+                $equipment = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "equipment", $side, $periode);
+                $operating = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "operating", $side, $periode);
+                $list = [];
+                foreach ($deployment as $date => $value) {
+                    $list[$date]=$deployment[$date]+$equipment[$date]+$operating[$date];
+                }
+                return $list;
+            }else {
+
                 $revenuesPerMonth = array_fill_keys($projectDates,0);
             }
             if($periode == "month"){
                 return $revenuesPerMonth;
             }
+            //var_dump(calcRevenuesTot($revenuesPerMonth,$projectYears));
             return calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
         }
     }

@@ -8,7 +8,11 @@ function prereq_ipc($nb){
         echo "<script>prereq_ipc($nb);</script>";
     }
 }
+function selectCashIn_Out($type){
 
+    echo "<script>selectCashIn_Out('$type');</script>";
+
+}
 function prereq_ipc_sup(){
     if(isset($_GET['A2'])){
         echo "<script>prereq_ipc_sup();</script>";
@@ -151,8 +155,8 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                 $ucID = $listUcID[0];
             }
             /*var_dump($list_xpex_supplier);
-            var_dump($list_xpex_user_from_ntt);
-            var_dump($list_selXpex);*/
+            //var_dump($list_xpex_user_from_ntt);
+            //var_dump($list_selXpex);*/
             $devises = getListDevises();
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -166,6 +170,11 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             prereq_ipc(1);
             prereq_CostBenefits();
             prereq_ipc_sup();
+            if( $type=="deployment_costs" || $type=="opex" || $type=="capex"){
+                selectCashIn_Out("out");
+            }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
+                selectCashIn_Out("in");
+            }
 
 
         } else {
@@ -409,8 +418,8 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     $ucID = $listUcID[0];
                 }
                 /*
-                var_dump($list_xpex_supplier);
-                var_dump($list_xpex_user_from_ntt);*/
+                //var_dump($list_xpex_supplier);
+                //var_dump($list_xpex_user_from_ntt);*/
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
@@ -601,6 +610,7 @@ function xpex_inputed($post, $sideBarName, $type){
                 }elseif($type=="deployment_costs"){
                     insertImplemInputed($projID,$ucID,$list);
                 }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
+                    var_dump($list);
                     insertSupplierRevenuesInputed($projID,$ucID,$list);
                 }else{
                     throw new Exception("Wrong type !");

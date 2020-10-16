@@ -496,7 +496,8 @@ var repartitionOfBenefits = new Chart($('#repartitionOfBenefits'), {
       labels: {
          boxWidth: 20,
          align: "center",
-         fontSize: 15
+         fontSize: 15,
+         useLineStyle: true
       }
     },
     layout: {

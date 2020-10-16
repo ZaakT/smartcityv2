@@ -32,7 +32,7 @@ function updateDataPD(){
     var ucData = [];
     var deviseName = $('#deviseName').text();
 
-    console.log(uc, data);
+    //console.log(uc, data);
     for(let i =0; i< data.length; i++){       
         if(data[i][0]==uc){
             ucData = data[i].slice(1, data[i].length);
@@ -50,6 +50,8 @@ function updateDataPD(){
             }));
             if(ucData[j][i]<0){
                 $("#"+i+"_"+j).attr('style', "color:red");
+            }else{
+                $("#"+i+"_"+j).removeAttr('style');
             }
             
         }
@@ -57,7 +59,6 @@ function updateDataPD(){
 
     $("#cball_table tr").each(function() {
         if(this.id.includes("cashIn")){
-            console.log("coucou wesh");
             if(uc==-1){
                 $("#"+this.id).attr("hidden", true);
             }else{
@@ -252,7 +253,7 @@ function drawCharts(){
     var months = $('#data').data("months");
     var uc = getUcSelected();
     var ucData = [];
-    console.log(data);
+    //console.log(data);
 
     for(let i =0; i< data.length; i++){       
         if(data[i][0]==uc){
@@ -279,7 +280,7 @@ function drawCharts(){
             }
 
         }
-        console.log(levelTr);
+        //console.log(levelTr);
         //addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months);
         if((levelTr[1]==0||Lv2hasLv3Child(i)) && levelTr[2]==0 ){
             graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months);
@@ -288,7 +289,7 @@ function drawCharts(){
             for(let l = i+1; l<iMax; l++){
                 levelTrL = getLevel(tr_id[l+1]).split('.');
                 if((levelTrL[0]==levelTr[0])&&((levelTr[1]==0 && levelTrL[2]==0) || (levelTr[1]==levelTrL[1]))){
-                    console.log(levelTr + " - " + levelTrL + ": " + (levelTr[1]==0 && levelTrL[2]==0)  + " / "+(levelTr[1]==levelTrL[1]));
+                    //console.log(levelTr + " - " + levelTrL + ": " + (levelTr[1]==0 && levelTrL[2]==0)  + " / "+(levelTr[1]==levelTrL[1]));
                     var lineNameL = $("#"+"lineName_"+l).text();
                     yearsData = [];
                     monthsData = [];

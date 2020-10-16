@@ -65,13 +65,13 @@
 						<div class="row">
 							<div class="form-group col">
 								<label for="fname">{{traduction.getText("deployment_start")}}</label>
-								<input name="deploy_start" value="{{ schedule_dates[0]['deploy_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_deploy_start" oninput="update_chart(event.target)" required>
+								<input name="deploy_start" value="{{ schedule_dates['deploy_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_deploy_start" oninput="update_chart(event.target)" required>
 								<label for="lname">{{traduction.getText("deployment_duration")}} ({{traduction.getText("months")}})</label>
-								<input class="form-control" type="number" min=0 id="ucop_deployment_duration" name="deployment_duration" placeholder="6" value="{{ schedule_dates[0]['deployment_duration'] }}" oninput="update_chart(event.target)"  required>
+								<input class="form-control" type="number" min=0 id="ucop_deployment_duration" name="deployment_duration" placeholder="6" value="{{ schedule_dates['deployment_duration'] }}" oninput="update_chart(event.target)"  required>
 							</div>
 							<div class="form-group col">
 								<label for="fname">UC End</label>
-								<input name="uc_end" value="{{ schedule_dates[0]['uc_end'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
+								<input name="uc_end" value="{{ schedule_dates['uc_end'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
 							</div>
 						</div>	
 					</div>
@@ -95,9 +95,9 @@
 						<div class="row">
 							<div class="form-group col">
 								<label>Start of pricing</label>
-								<input name="pricing_start" value="{{ schedule_dates[0]['pricing_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucpri_pricing_start" oninput="update_chart(event.target)" required>
+								<input name="pricing_start" value="{{ schedule_dates['pricing_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucpri_pricing_start" oninput="update_chart(event.target)" required>
 								<label>POC duration (in months)</label>
-								<input class="form-control" type="number" min="0" step ="1" id="ucpri_poc_duration" name="poc_duration" placeholder="6" value="{{ schedule_dates[0]['poc_duration'] }}" oninput="update_chart(event.target)"  required>
+								<input class="form-control" type="number" min="0" step ="1" id="ucpri_poc_duration" name="poc_duration" placeholder="6" value="{{ schedule_dates['poc_duration'] }}" oninput="update_chart(event.target)"  required>
 							</div>
 						</div>
 					</div>
@@ -120,15 +120,15 @@
 				<div id="collapse_uc_revenue" class="row collapse mb-2">
 					<div class="col">
 						<label>Lag Start</label>
-						<input value="{{ schedule_dates[0]['lag_start'] }}" name="lag_start" type="date" class="start-date form-control" id="ucrev_2" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates['lag_start'] }}" name="lag_start" type="date" class="start-date form-control" id="ucrev_2" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Lag > Ramp-up</label>
-						<input value="{{ schedule_dates[0]['lag_ramp'] }}" name="lag_ramp" type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates['lag_ramp'] }}" name="lag_ramp" type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
 					</div>
 					<div class="col">
 						<label>Ramp-up > Run</label>
-						<input value="{{ schedule_dates[0]['ramp_run'] }}" name="ramp_run" type="date" class="form-control" id="ucrev_4" oninput="update_chart(event.target)">
+						<input value="{{ schedule_dates['ramp_run'] }}" name="ramp_run" type="date" class="form-control" id="ucrev_4" oninput="update_chart(event.target)">
 					</div>
 				</div>
 				<div class="progress">

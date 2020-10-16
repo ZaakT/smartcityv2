@@ -2191,12 +2191,15 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                             SET volume = ?,
                                 unit_cost = ?,
                                 anVarVol = ?,
-                                anVarCost = ?,
-                                unit = ?
+                                anVarCost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $reqUnit = $db->prepare("UPDATE supplier_revenues_item
+                                SET unit = ?
+                                WHERE item_id = ?");
     foreach ($list as $id_item => $data) {
         try {
-            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'], $data['unit'],$projID,$ucID,$id_item));
+            $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
+            $ret = $reqUnit->execute(array($data['unit'],$id_item));
             
 
         } catch (\Throwable $th) {
@@ -2876,7 +2879,7 @@ function insertProjectSchedule($projID, $ucID, $deploy_start, $deployment_durati
     $ret = false;
     $req = $db->prepare("INSERT INTO project_schedule
                             (id_project, id_uc, deploy_start, deployment_duration, uc_end, pricing_start, poc_duration)
-                            VALUES (?,?,?,?,?,?)");
+                            VALUES (?,?,?,?,?,?, ?)");
     $ret = $req->execute(array($projID, $ucID, $deploy_start, $deployment_duration, $uc_end, $pricing_start, $poc_duration));
     
     return $ret;
