@@ -180,7 +180,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
 
                 $proj = getProjByID($projID,$user[0]); 
                 $ucs = getListUCs();
-                var_dump($ucs);
+                //var_dump($ucs);
                 $scope = getListSelScope($projID);
                 
 
@@ -189,14 +189,14 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $schedules = getListSelDates($projID);
                 //print_r($schedules);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
-                var_dump($keydates_uc);
-                var_dump($schedules);
+                //var_dump($keydates_uc);
+                //var_dump($schedules);
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
                 
 
 
                 $keydates_proj = getKeyDatesProjSupplier($projID);
-                var_dump($keydates_proj);
+                //var_dump($keydates_proj);
                 
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
