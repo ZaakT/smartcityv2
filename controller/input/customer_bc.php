@@ -615,7 +615,7 @@ function xpex_inputed($post, $sideBarName, $type){
                 }elseif($type=="deployment_costs"){
                     insertImplemInputed($projID,$ucID,$list);
                 }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
-                    var_dump($list);
+                    //var_dump($list);
                     insertSupplierRevenuesInputed($projID,$ucID,$list);
                 }else{
                     throw new Exception("Wrong type !");

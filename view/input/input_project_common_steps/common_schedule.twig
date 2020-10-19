@@ -35,26 +35,61 @@
 		<div id="alerts_container">
 
 		</div>
-		<div class="justify-content-center col m-2 text-center text-dark">
+		<div id="chart_schedule" hidden>
+			<div class="container" >
+				<div class = "progress dash-bg-light">
+					<div id="proj_start" style="width: 10%" class="text-left">
+						<span class="oi oi-caret-bottom"></span><div id="proj_start_text"></div>
+					</div>
+					<div id="dep_start" style="width: 20%" class="text-left">
+						<span class="oi oi-caret-bottom"></span><div id="dep_start_text"></div>
+					</div>
+					<div id="run_start" style="width: 35%" class="text-left">
+						<span class="oi oi-caret-bottom"></span><div id="run_starttext"></div>
+					</div>
+					<div id="project_end" style="width: 35%" class="text-right">
+						<div id="project_end_text"></div><span class="oi oi-caret-bottom"></span>
+					</div>
+				</div>
+
+				<div class="progress">
+					<div id="bar_1" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 10%"></div>
+					<div id="bar_2" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>		
+					<div id="bar_3" class="progress-bar progress-bar-main progress-bar-striped progress-bar-animated" style="width: 70%">Run</div>
+				</div>
+			</div>
+		</div>
+
+
+<div class="justify-content-center row m-2 text-center text-dark">
 			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
 				<div>
-					<div class="col-6 px-0">
-						<div class="form-group row">
-							<label for="fname">Project Start Date</label>
-							<input class="form-control" type="date" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}">
-							<label for="lname">Project Duration (in months)</label>
-							<input class="form-control" type="text" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}">
+					<div class="form-group row">
+						<div class="col">
+							<h3>Project Key Dates</h3>
 						</div>
-						<div class="form-group row">
+						<div class="col">
+							<h3>Project Deployment Key Dates</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col">
+							<label for="fname">Project Start Date</label>
+							<input class="form-control" type="date" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}" oninput="updateBar()">
+							<label for="lname">Project Duration (in months)</label>
+							<input class="form-control" type="text" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}" oninput="updateBar()">
+						</div>
+						<div class="form-group col">
 							<label for="fname">Deployment Start Date</label>
-							<input class="form-control" type="date" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}">
+							<input class="form-control" type="date" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}" oninput="updateBar()">
 							<label for="lname">Deployment Duration (in months)</label>
-							<input class="form-control" type="text" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}">
+							<input class="form-control" type="text" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}" oninput="updateBar()">
 						</div>
 					</div>
 				</div>
 			</form>
 		</div>
+
 
 		{#  FIN DU CONTENU #}
 
@@ -67,5 +102,5 @@
 {% block scripts %}
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/common-schedule.js"></script>
 	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/alertCreator.js"></script>
-<script>highlight_db_values();</script>
+<script>highlight_db_values();updateBar();</script>
 {% endblock %}
