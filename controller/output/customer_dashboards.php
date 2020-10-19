@@ -149,17 +149,47 @@ function getNetCumulatedCash($projID, $scope, $projectYears, $side){
     }
     return $net_cumulated_cash;
 }
-function getPropKeyDates($scope,$projID,$schedules, $keydates_uc, $keydates_proj){
+function getPropKeyDates($scope,$projID, $keydates_uc, $keydates_proj){
     $propKeyDates=[];
+    $projectStart = $keydates_proj[0];
+    $projEnd= $keydates_proj[2];
+    $projDuration = difMonthsBounds($projEnd, $projectStart);
     foreach ($scope as $measID => $list_ucs) {
         foreach ($list_ucs as $ucID) {
-            $projectStart = $keydates_proj[0];
-            $depStart = $keydates_uc["startdate"];
-            $depDuration =  $keydates_uc["implem_enddate"];
-            $projDuration = $keydates_uc["project_duration"];
+            if($ucID != -1){$scheduleDates = getProjetSchedule($projID, $ucID);
+                $uc_end = date_create($scheduleDates["uc_end"])->format("m/Y");
+                if($scheduleDates && $uc_end != "11/-0001"){
+                    $depDuration =  $scheduleDates["deployment_duration"];
+                    $depStart = $keydates_uc[$ucID]["startdate"];
+                    $propKeyDates[$ucID]["lagProp"] = difMonthsBounds($depStart, $projectStart)/$projDuration * 100;
+                    $propKeyDates[$ucID]["deploymentProp"] = $depDuration/$projDuration * 100;
+                    $propKeyDates[$ucID]["lag2Porp"] =  (difMonthsBounds($projEnd, $uc_end)) /$projDuration * 100;
+                    $propKeyDates[$ucID]["runProp"] =  100 - $propKeyDates[$ucID]["lagProp"] - $propKeyDates[$ucID]["deploymentProp"] - $propKeyDates[$ucID]["lag2Porp"];
+                    
+                    $exp = explode("/", $depStart);
+                    $dep_end = new DateTime($exp[1]."-".$exp[0]."-01");
+                    $dep_end->modify("+$depDuration months");
+                    $dep_end = $dep_end->format('m/Y');
+
+
+                    $propKeyDates[$ucID]["lag_end"]=$depStart;
+                    $propKeyDates[$ucID]["dep_end"]=$dep_end;
+                    $propKeyDates[$ucID]["uc_end"]=$uc_end;
+                }
+
+            }else{
+                $propKeyDates[$ucID]["lagProp"] = 0;
+                $propKeyDates[$ucID]["deploymentProp"] = difMonthsBounds($keydates_proj[1], $projectStart) / $projDuration * 100;
+                $propKeyDates[$ucID]["runProp"] = 100 - $propKeyDates[$ucID]["deploymentProp"];
+                $propKeyDates[$ucID]["lag2Porp"] = 0;
+                $propKeyDates[$ucID]["project_start"]=$projectStart;
+                $propKeyDates[$ucID]["dep_end"]=$keydates_proj[1];
+                $propKeyDates[$ucID]["projEnd"]=$projEnd;
+            }
+            
         }
     }
-
+    return $propKeyDates;
 
 }
 
@@ -180,7 +210,6 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
 
                 $proj = getProjByID($projID,$user[0]); 
                 $ucs = getListUCs();
-                //var_dump($ucs);
                 $scope = getListSelScope($projID);
                 
 
@@ -189,15 +218,12 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $schedules = getListSelDates($projID);
                 //print_r($schedules);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
-                //var_dump($keydates_uc);
-                //var_dump($schedules);
+                //var_dump($keydates_uc );
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
                 
 
 
                 $keydates_proj = getKeyDatesProjSupplier($projID);
-                //var_dump($keydates_proj);
-                
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
                 $ItemsPerMonthAndTot = calcCBItemsPerMonthAndTot($scope, $schedules, $projectDates, $projID, $projectYears, $side);//PB
@@ -328,14 +354,13 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $repartition_of_benefits = array("titles"=>$titles, 
                 "data"=>$ucsBenefits);
             }
-            //var_dump($ucsBenefits);
-
+            $propKeyDates = getPropKeyDates($scope,$projID, $keydates_uc, $keydates_proj);
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
                 'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1], 'sideBarName'=>$sideBarName,
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
-                'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot,
+                'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot, "propKeyDates"=>$propKeyDates,
                 'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl, 'repartition_of_benefits'=> $repartition_of_benefits
             ));
             prereq_dashbords();

@@ -11,7 +11,6 @@ function supplier_schedule($twig,$is_connected, $projID){
 
     if($projID != 0) {
         $keyDates = getProjetKeyDates($projID);
-
         echo $twig->render('/input/input_project_common_steps/common_schedule.twig',array('key_dates'=>$keyDates, 'is_connected'=>$is_connected,
         'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID,'part'=>"Project","selected"=>$proj[1], 'username'=>$user[1]));
         prereq_ipc(0);
