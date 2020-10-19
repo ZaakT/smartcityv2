@@ -46,10 +46,17 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
 function getRevenueRepartition($projStart,$rev_start, $ramp_up_end, $rev_end, $projectDates){
     $repart=[];
 
+    var_dump($projStart);
     $nb_lag = difMonthsBounds($rev_start, $projStart);
     $nb_ramp_up = difMonthsBounds($ramp_up_end, $rev_start)+$nb_lag;
     $nb_run = difMonthsBounds($rev_end, $ramp_up_end)+$nb_ramp_up;
-    //var_dump($projectDates);
+
+    var_dump($ramp_up_end);
+    var_dump($rev_start);
+
+    var_dump($nb_ramp_up);
+    var_dump($nb_run);
+    var_dump($projectDates);
     for($i = 0; $i<$nb_lag; $i++){
         $repart[$projectDates[$i]] = 0;
     }
@@ -57,6 +64,8 @@ function getRevenueRepartition($projStart,$rev_start, $ramp_up_end, $rev_end, $p
         $repart[$projectDates[$i]] = $i/$nb_ramp_up*1;
     }
     for($i = $nb_ramp_up;$i<$nb_run; $i++ ){
+        var_dump($projectDates[$i], $i);
+        var_dump($nb_ramp_up);
         $repart[$projectDates[$i]] = 1;
     }
     for($i = $nb_run; $i<count($projectDates);$i++){

@@ -2815,14 +2815,14 @@ function deleteAllSelOpex($projID,$ucID){
 
 
 function getListXpexSupplier($ucID, $projID, $list_selXpex, $xpexType){
-    if($xpexType == "deployment"){
+    if($xpexType == "deployment" || $xpexType == "deployment_costs"){
         $revenueType = "deployment";
     }elseif($xpexType == "opex"){
         $revenueType = "operating";
     }elseif($xpexType == "capex"){
         $revenueType = "equipment";
     }else{
-        throw new Exception(" 3.1 : wrong xpex type !");
+        throw new Exception(" 3.1 : wrong xpex type !: ".$xpexType);
     }
     $list =getListSupplierRevenuesUser($ucID, $projID, $revenueType);  
     foreach($list as $xpexID=>$xpexData){

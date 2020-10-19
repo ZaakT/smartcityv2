@@ -431,6 +431,11 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 prereq_ipc(1);
                 prereq_CostBenefits();
                 prereq_ipc_sup();
+                if( $type=="deployment_costs" || $type=="opex" || $type=="capex"){
+                    selectCashIn_Out("out");
+                }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
+                    selectCashIn_Out("in");
+                }
             } else {
                 header('Location: ?A=cost_benefits&A2=project');
             }
