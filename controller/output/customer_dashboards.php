@@ -149,6 +149,20 @@ function getNetCumulatedCash($projID, $scope, $projectYears, $side){
     }
     return $net_cumulated_cash;
 }
+function getPropKeyDates($scope,$projID,$schedules, $keydates_uc, $keydates_proj){
+    $propKeyDates=[];
+    foreach ($scope as $measID => $list_ucs) {
+        foreach ($list_ucs as $ucID) {
+            $projectStart = $keydates_proj[0];
+            $depStart = $keydates_uc["startdate"];
+            $depDuration =  $keydates_uc["implem_enddate"];
+            $projDuration = $keydates_uc["project_duration"];
+        }
+    }
+
+
+}
+
 
 function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
     $GLOBALS['useFiltre']= true;
@@ -165,8 +179,8 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
 
 
                 $proj = getProjByID($projID,$user[0]); 
-                $proj = getProjByID($projID,$user[0]);
                 $ucs = getListUCs();
+                var_dump($ucs);
                 $scope = getListSelScope($projID);
                 
 
@@ -175,10 +189,14 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $schedules = getListSelDates($projID);
                 //print_r($schedules);
                 $keydates_uc = get_keydates_uc($scope,$projID,$schedules);
+                var_dump($keydates_uc);
+                var_dump($schedules);
                 $uc_check_completed = check_if_UC_is_completed($projID,$scope);
+                
 
 
                 $keydates_proj = getKeyDatesProjSupplier($projID);
+                var_dump($keydates_proj);
                 
                 $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
                 $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);

@@ -1,6 +1,6 @@
 {% macro key_dates(scope,ucs,keydates_uc,uc_completed) %}
 {% import "/templates/traductions.twig" as traduction %}
-
+{#}
 <h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
 <table id="keyDatesTable" class=" text-center table dashboard-table">
     <tr>
@@ -29,7 +29,7 @@
                 {% for ucID in list_ucs %}
                 {% if uc_completed[ucID] == true %}
                     <div class="arrows">
-                            <div class="arrow ucnamearrow">
+                        <div class="arrow ucnamearrow">
                             <span>{{ ucs[ucID]['name'] }}</span>
                         </div>
                         <div id="step1_{{ ucID }}" class="arrow step1">
@@ -68,7 +68,52 @@
             {% endfor %}{% endfor %}
        
     </div>
+{#}
+<h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
+<table id="keyDatesTable" class=" text-center table dashboard-table">
+    <tr>
+        <th width="30%">{{traduction.getText("uses_cases")}}</th>
+        <th width="16%">{{traduction.getText("start_date")}}</th>
+        <th width="16%">{{traduction.getText("dashboard_summary_2")}}</th>
+        <th width="16%">{{traduction.getText("dashboard_summary_3")}}</th>
+        <th width="22%"></th>
+    </tr>
+    {% for measID,list_ucs in scope %}
+        {% for ucID in list_ucs %}
+            <tr hidden>
+                <td class="uc" id="uc_{{ ucID }}" width="30%">{{ ucs[ucID]['name'] }}</td>
+                <td id="start_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['startdate']}}  </td>
+                <td id="imp_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['implem_enddate']}}  </td>
+                <td id="end_{{ ucID }}" width="17.5%">{{ keydates_uc[ucID]['enddate'] }}  </td>
+                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</td>
+            </tr>
+    {% endfor %}{% endfor %}
+</table>
 
+
+    <div class="container">
+        
+            {% for measID,list_ucs in scope %}
+                {% for ucID in list_ucs %}
+                {% if uc_completed[ucID] == true %}
+
+                <div class="arrow ucnamearrow">
+                    <span>{{ ucs[ucID]['name'] }}</span>
+                </div>
+                <div class="progress">	
+                    <div id="proj_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...</div>		
+                    <div id="proj_2_bar" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>
+                    <div id="proj_3_bar" class="progress-bar progress-bar-main progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">Run</div>
+			        <div class="arrow duration">
+                        <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</span>
+                    </div>
+                </div>
+
+                {% endif %}
+
+            {% endfor %}{% endfor %}
+       
+    </div>
 {% endmacro %}
 
 {% macro costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) %}
