@@ -71,6 +71,11 @@ if(CNSC.length>0){
       ]
     },
     options: {
+      legend : {
+        labels : {
+          usePointStyle: true
+        }
+      },
       scales: {
         yAxes: [{
             scaleLabel: {
@@ -114,6 +119,11 @@ if(CNSC.length>0){
       ]
     },
     options: {
+      legend : {
+        labels : {
+          usePointStyle: true
+        }
+      },
       scales: {
         yAxes: [{
             scaleLabel: {

@@ -21,16 +21,21 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
 
     foreach ($revenues as $itemID => $revenue) {
         $schedule = getProjetSchedule($projID,$ucID);
-        if(isset($schedule[0])){
+        //var_dump($schedule);
+        //var_dump($revenue);
+        if(isset($schedule[0]) && isset($revenues['volume']) && $revenues['volume']>0){
             //$schedule = $schedule[0];
             $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
             $rev_end = date_create($schedule['uc_end'])->format("m/Y");
     
-            
+            //var_dump($revenue);
             $ramp_up_end = new DateTime($revenue['revenue_start_date']);
             $ramp_up_duration =$revenue['ramp_up_duration'];
+            //var_dump($ramp_up_end);
             $ramp_up_end->modify("+$ramp_up_duration months");
+            //var_dump($ramp_up_end);
             $ramp_up_end = $ramp_up_end->format('m/Y');
+            //var_dump($ramp_up_end);
             $revenueSchedule = getRevenueRepartition($keydates_proj[0], $rev_start, $ramp_up_end, $rev_end, $projectDates);
             $i=0;
             foreach ($revenueSchedule as $date => $prop) {
@@ -46,17 +51,17 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
 function getRevenueRepartition($projStart,$rev_start, $ramp_up_end, $rev_end, $projectDates){
     $repart=[];
 
-    var_dump($projStart);
+    //var_dump($projStart);
     $nb_lag = difMonthsBounds($rev_start, $projStart);
     $nb_ramp_up = difMonthsBounds($ramp_up_end, $rev_start)+$nb_lag;
     $nb_run = difMonthsBounds($rev_end, $ramp_up_end)+$nb_ramp_up;
 
-    var_dump($ramp_up_end);
-    var_dump($rev_start);
+    //var_dump($ramp_up_end);
+    //var_dump($rev_start);
 
-    var_dump($nb_ramp_up);
-    var_dump($nb_run);
-    var_dump($projectDates);
+    //var_dump($nb_ramp_up);
+    //var_dump($nb_run);
+    //var_dump($projectDates);
     for($i = 0; $i<$nb_lag; $i++){
         $repart[$projectDates[$i]] = 0;
     }
@@ -64,8 +69,8 @@ function getRevenueRepartition($projStart,$rev_start, $ramp_up_end, $rev_end, $p
         $repart[$projectDates[$i]] = $i/$nb_ramp_up*1;
     }
     for($i = $nb_ramp_up;$i<$nb_run; $i++ ){
-        var_dump($projectDates[$i], $i);
-        var_dump($nb_ramp_up);
+        //var_dump($projectDates[$i], $i);
+        //var_dump($nb_ramp_up);
         $repart[$projectDates[$i]] = 1;
     }
     for($i = $nb_run; $i<count($projectDates);$i++){
