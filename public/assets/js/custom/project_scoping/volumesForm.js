@@ -117,26 +117,29 @@ function fillTot2(formName){ //calcule le nombre total de use case  lorsque le n
             totZone = Number($("#totUC_"+uc+"_"+zone).val()); //total de UC pour une zone (ligne du bas)
             tot_totUC += totZone;
         })
+        console.log("#tot_totUC_"+uc)
         $("#tot_totUC_"+uc).text(tot_totUC);
     })
+    colorFilledVolumes();
 }
 
 function colorFilledVolumes(){
+    //console.log("col !")
     var ret = true;
     $(".volumes_table input").each(function(){
-                                        //console.log(this);
-        var element = $(this);
-        var value = element.val();
+        var id = this.id
+        var value = $("#"+id).val();
         //value = value=="" ? "" : parseInt(value);
         //console.log(value);
         if( value=="" || value<0){
-            element.css("background","salmon");
-            element.val("");
+            //console.log("#"+id)
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
             ret = false;
         } else {
             value = parseInt(value);
-            element.val(value);
-            element.css("background","#C3E6CB");
+            $("#"+id).val(value);
+            $("#"+id).css("background","#C3E6CB");
         }
     });
     return ret
@@ -150,15 +153,15 @@ fillTot2("form_volumes");
 function fillByAv(id){
     $("#"+id+" input").each(function(){
         var element = $(this);
-        console.log(element);
+        //console.log(element);
         if(element.attr("placeholder")){
             var tab = element.attr("placeholder").split("-");
             if(tab.length > 1){
                 var min = tab[0] != "" ? parseInt(tab[0].replace(",","")) : 0;
                 var max = tab[1] != "" ? parseInt(tab[1].replace(",","")) : 0;
-                console.log((min+max)/2);
+                //console.log((min+max)/2);
                 element.val(parseInt((min+max)/2));
-                console.log(element.val());
+                //console.log(element.val());
             } else {
                 var val = parseInt(tab[0]);
                 element.val(parseInt(val));
@@ -180,13 +183,13 @@ function displayGuideline() {
     var classes = $('#guideline_button').classes();
     if (classes.includes("active")) {
         $('#guideline_button').removeClass("active");
-        console.log($('#guideline_button').classes());
+        //console.log($('#guideline_button').classes());
         $('#body').removeClass('col-7');
         $('#body').addClass('col-12');    
         $('#guideline').hide();
     } else {
         $('#guideline_button').addClass("active");
-        console.log($('#guideline_button').classes());
+        //console.log($('#guideline_button').classes());
         $('#guideline').show();
         $('#body').removeClass('col-12');
         $('#body').addClass('col-7');
