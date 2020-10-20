@@ -59,6 +59,7 @@ function delete_user($userID){
 function manage_measures($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_measures = getListMeasures();
+    if(isset($list_measures[0])){unset($list_measures[0]);}
     $listNbUCs = getNbUCsMeas($list_measures);
     $list_users = getListUsers();
     $devises = getListDevises();
@@ -93,6 +94,7 @@ function delete_measure($measureID){
 function manage_uc_cat($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_cat = getListUCsCat();
+    if(isset($list_cat[0])){unset($list_cat[0]);}
     $listNbUCs = getNbUCsCat($list_cat);
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
@@ -275,7 +277,7 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     foreach ($listUC as $id_uc => $UC){ 
         if($catName != 'equipment_revenue' && $catName != 'deployment_revenue' && $catName != 'operating_revenue'){
             $fun = 'getList'.ucwords($catName).'Items';
-            $list_tampon = $fun(intval($id_uc));
+        $list_tampon = $fun(intval($id_uc));
         }else{
             $list_tampon = getListSupplierRevenuesItems(intval($id_uc), explode("_", $catName)[0]);
         }

@@ -80,6 +80,7 @@ function measures($twig,$is_connected,$ucmID=0){
         if(getUCMByID($ucmID,$user[0])){
             $ucm = getUCMByID($ucmID,$user[0]);
             $list_measures = getListMeasures();
+            if(isset($list_measures[0])){unset($list_measures[0]);}
             //var_dump($list_measures);
             $list_sel = getListSelMeas($ucm[0]);
             //var_dump($list_sel);

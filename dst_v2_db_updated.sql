@@ -2088,7 +2088,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
 --
 
 INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
-(0, 'Project Common', NULL, 0),
+(0, 'Project Overlay', NULL, 0),
 (1, 'Measure1', '', 0),
 (4, 'measure test admin', 'test test', 1),
 (11, 'Project Management Zak', '', 4),
@@ -4166,7 +4166,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
 --
 
 INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
-(-1, 'Project Common', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 0, 0),
+(-1, 'Project Overlay', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 0, 0),
 (1, 'Wi-Fi', '', 1, 1),
 (2, 'Electric Vehicule Charger', '', 1, 1),
 (3, 'Parking Management', '', 1, 2),
@@ -4231,7 +4231,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
 --
 
 INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
-(0, 'Project Common', NULL),
+(0, 'Project Overlay', NULL),
 (1, 'UC_cat_1', ''),
 (2, 'UC_cat_2', ''),
 (3, 'UC_cat_3', '');

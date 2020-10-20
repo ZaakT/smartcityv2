@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 19 oct. 2020 à 15:59
+-- Généré le :  mar. 20 oct. 2020 à 10:45
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -408,7 +408,8 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (42, 'hjhjhj', '', 'from_ntt', 'projDev', NULL),
 (44, 'myCap 2', '', 'from_ntt', 'customer', NULL),
 (45, 'my 1st cap', '', 'from_ntt', 'supplier', 'unit'),
-(46, 'cap', '', 'from_ntt', 'supplier', '');
+(46, 'cap', '', 'from_ntt', 'supplier', ''),
+(47, 'Remote control Software', 'A web hosted control system which provides monitoring, switching and dimming control. ', 'from_ntt', 'projDev', NULL);
 
 -- --------------------------------------------------------
 
@@ -451,7 +452,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -494,7 +495,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (46, 21),
 (39, 23),
 (40, 23),
-(45, 24);
+(45, 24),
+(47, 27);
 
 -- --------------------------------------------------------
 
@@ -554,7 +556,8 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (26, 11),
 (27, 11),
 (42, 11),
-(46, 11);
+(46, 11),
+(47, 16);
 
 -- --------------------------------------------------------
 
@@ -568,7 +571,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -588,7 +591,8 @@ INSERT INTO `cashreleasing_item` (`id`, `name`, `description`) VALUES
 (11, 'CRB 4', ''),
 (12, 'cash item', ''),
 (13, 'save 1', ''),
-(14, 'crb', '');
+(14, 'crb', ''),
+(15, 'Reduction of Electricity costs', '');
 
 -- --------------------------------------------------------
 
@@ -630,7 +634,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -649,7 +653,8 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (11, 8),
 (12, 21),
 (14, 21),
-(13, 23);
+(13, 23),
+(15, 27);
 
 -- --------------------------------------------------------
 
@@ -683,7 +688,8 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (9, 11),
 (10, 11),
 (11, 11),
-(14, 11);
+(14, 11),
+(15, 16);
 
 -- --------------------------------------------------------
 
@@ -864,7 +870,7 @@ CREATE TABLE IF NOT EXISTS `dlt` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `dlt`
@@ -872,7 +878,8 @@ CREATE TABLE IF NOT EXISTS `dlt` (
 
 INSERT INTO `dlt` (`id`, `name`, `description`) VALUES
 (1, 'city', ''),
-(2, 'subzone', '');
+(2, 'subzone', ''),
+(3, 'Montreal', '');
 
 -- --------------------------------------------------------
 
@@ -1223,7 +1230,9 @@ INSERT INTO `implem_schedule` (`id_uc`, `id_proj`, `start_date`, `25_completion`
 (10, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
 (10, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01'),
 (11, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
-(11, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01');
+(11, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01'),
+(15, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01'),
+(16, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01');
 
 -- --------------------------------------------------------
 
@@ -1350,7 +1359,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (43, 21, -1, NULL, NULL, NULL),
 (44, 21, -1, NULL, NULL, NULL),
 (45, 24, -1, 0, 0, 5),
-(46, 21, 11, 0, 0, 1);
+(46, 21, 11, 0, 0, 1),
+(47, 27, 16, 1, 12500, 3);
 
 -- --------------------------------------------------------
 
@@ -1402,7 +1412,8 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3, '0000-00-00', 0),
 (12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1, '0000-00-00', 0),
 (13, 23, 3, 'parking space', 5000, NULL, 100, 5, 0, 0, 0, '0000-00-00', 0),
-(14, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(14, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(15, 27, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2088,7 +2099,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
 --
 
 INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
-(0, 'Project Common', NULL, 0),
+(0, 'Project Overlay', NULL, 0),
 (21, 'Smart Lighting', '', 0);
 
 -- --------------------------------------------------------
@@ -2375,7 +2386,9 @@ INSERT INTO `opex_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `50_
 (10, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (10, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01'),
 (11, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
-(11, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01');
+(11, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01'),
+(15, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01'),
+(16, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01');
 
 -- --------------------------------------------------------
 
@@ -2500,7 +2513,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -2512,7 +2525,8 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
 (24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1),
-(26, 'Metro Area', '', NULL, NULL, NULL, '2020-10-19 17:44:28', '2020-10-19 17:47:55', 1, 0, 0);
+(26, 'Metro Area', '', NULL, NULL, NULL, '2020-10-19 17:44:28', '2020-10-19 17:47:55', 1, 0, 0),
+(27, 'Metro Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-20 12:07:24', 13, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2585,12 +2599,14 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (7, 1),
 (8, 1),
 (26, 1),
+(27, 1),
 (1, 2),
 (3, 2),
 (4, 2),
 (6, 2),
 (8, 2),
 (26, 2),
+(27, 2),
 (1, 3),
 (4, 3),
 (7, 3),
@@ -2601,6 +2617,7 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (6, 4),
 (8, 4),
 (26, 4),
+(27, 4),
 (1, 5),
 (4, 5),
 (6, 5),
@@ -2695,7 +2712,9 @@ INSERT INTO `project_size` (`id_uc`, `id_zone`, `id_mag`, `id_proj`) VALUES
 (10, 4, 2, 8),
 (11, 4, 2, 8),
 (15, 4, 2, 26),
+(15, 4, 2, 27),
 (16, 4, 2, 26),
+(16, 4, 2, 27),
 (1, 5, 2, 1),
 (1, 5, 2, 4),
 (1, 5, 2, 6),
@@ -2778,6 +2797,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (23, 0),
 (24, 0),
 (26, 0),
+(27, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -2791,7 +2811,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (23, 1),
 (24, 1),
 (3, 21),
-(26, 21);
+(26, 21),
+(27, 21);
 
 -- --------------------------------------------------------
 
@@ -2879,7 +2900,10 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (9, 24),
 (-1, 26),
 (15, 26),
-(16, 26);
+(16, 26),
+(-1, 27),
+(15, 27),
+(16, 27);
 
 -- --------------------------------------------------------
 
@@ -3295,7 +3319,9 @@ INSERT INTO `revenue_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `
 (10, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (10, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
 (11, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
-(11, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01');
+(11, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
+(15, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01'),
+(16, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01');
 
 -- --------------------------------------------------------
 
@@ -3788,7 +3814,8 @@ INSERT INTO `ucm_sel_measure` (`id_meas`, `id_ucm`) VALUES
 (1, 9),
 (4, 9),
 (16, 9),
-(21, 14);
+(21, 14),
+(21, 15);
 
 -- --------------------------------------------------------
 
@@ -4160,7 +4187,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
 --
 
 INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
-(-1, 'Project Common', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 0, 0),
+(-1, 'Project Overlay', 'Represente la partie commune du projet (payer le directeur de projet, l’assurance ...)', 0, 0),
 (1, 'Wi-Fi', '', 1, 1),
 (2, 'Electric Vehicule Charger', '', 1, 1),
 (3, 'Parking Management', '', 1, 2),
@@ -4206,7 +4233,7 @@ CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
@@ -4216,7 +4243,8 @@ INSERT INTO `use_cases_menu` (`id`, `name`, `description`, `creation_date`, `id_
 (3, 'uc_eval', '', '2020-02-13 12:22:10', 2),
 (7, 'test1', 'test', '2020-07-16 16:04:46', 5),
 (8, 'test1', 'test', '2020-08-17 09:19:57', 10),
-(14, 'Metro Area', '', '2020-10-19 17:16:51', 1);
+(14, 'Metro Area', '', '2020-10-19 17:16:51', 1),
+(15, 'Metro Area', '', '2020-10-20 11:11:14', 13);
 
 -- --------------------------------------------------------
 
@@ -4238,7 +4266,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
 --
 
 INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
-(0, 'Project Common', NULL),
+(0, 'Project Overlay', NULL),
 (5, 'Lamppost', ''),
 (8, 'Energy', ''),
 (9, 'Public Safety', ''),
@@ -4355,7 +4383,9 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (11, 6, 4, NULL, NULL, 65),
 (11, 6, 8, NULL, NULL, 11),
 (11, 7, 4, NULL, NULL, 6565),
-(11, 7, 8, NULL, NULL, 33);
+(11, 7, 8, NULL, NULL, 33),
+(15, 4, 27, NULL, NULL, 10),
+(16, 4, 27, NULL, NULL, 10);
 
 -- --------------------------------------------------------
 
@@ -4502,7 +4532,7 @@ CREATE TABLE IF NOT EXISTS `zone` (
   `id_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `zone`
@@ -4515,7 +4545,8 @@ INSERT INTO `zone` (`id`, `name`, `type`, `id_zone`) VALUES
 (4, 'ssquartier11', 'ssquartier', 2),
 (5, 'ssquartier12', 'ssquartier', 2),
 (6, 'ssquartier21', 'ssquartier', 3),
-(7, 'quartier3', 'quartier', 1);
+(7, 'quartier3', 'quartier', 1),
+(9, 'Montreal ', 'City', 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

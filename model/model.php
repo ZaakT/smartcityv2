@@ -1669,7 +1669,7 @@ description text
 
 function getListCapexItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT capex_item.id,name,description,unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT capex_item.id,name,description,capex_item.unit,source,range_min,range_max
                             FROM capex_item
                             LEFT JOIN capex_item_advice
                                 ON capex_item.id = capex_item_advice.id
@@ -2282,7 +2282,7 @@ function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
 
 function getListImplemItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT implem_item.id,name,description,unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT implem_item.id,name,description,implem_item.unit,source,range_min,range_max
                             FROM implem_item
                             LEFT JOIN implem_item_advice
                                 ON implem_item.id = implem_item_advice.id
@@ -2580,7 +2580,7 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
 
 function getListOpexItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT opex_item.id,name,description,unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT opex_item.id,name,description,opex_item.unit,source,range_min,range_max
                             FROM opex_item
                             LEFT JOIN opex_item_advice
                                 ON opex_item.id = opex_item_advice.id

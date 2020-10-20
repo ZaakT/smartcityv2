@@ -42,7 +42,7 @@ $GLOBALS['dicTrad']=[
     ],
     "home" => [
         'en'=>"Home", 
-        "fr"=>"Acceuil"
+        "fr"=>"Accueil"
     ],    
     "input_project" => [
         "en"=>"Cost-Input Project"
