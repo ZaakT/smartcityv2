@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 20 oct. 2020 à 15:20
+-- Généré le :  mar. 20 oct. 2020 à 15:33
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -2844,7 +2844,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
 (24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1),
 (26, 'Metro Area', '', NULL, NULL, NULL, '2020-10-19 17:44:28', '2020-10-19 17:47:55', 1, 0, 0),
-(27, 'Metro Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-20 17:19:23', 13, 1, 0);
+(27, 'Metro Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-20 17:28:51', 13, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2946,7 +2946,13 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (3, 7),
 (4, 7),
 (5, 7),
-(8, 7);
+(8, 7),
+(27, 9),
+(27, 11),
+(27, 13),
+(27, 15),
+(27, 20),
+(27, 22);
 
 -- --------------------------------------------------------
 
@@ -4971,21 +4977,25 @@ CREATE TABLE IF NOT EXISTS `zone` (
   `id_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `zone`
 --
 
 INSERT INTO `zone` (`id`, `name`, `type`, `id_zone`) VALUES
-(1, 'ville1', 'ville', NULL),
-(2, 'quartier1', 'quartier', 1),
-(3, 'quartier2', 'quartier', 1),
-(4, 'ssquartier11', 'ssquartier', 2),
-(5, 'ssquartier12', 'ssquartier', 2),
-(6, 'ssquartier21', 'ssquartier', 3),
-(7, 'quartier3', 'quartier', 1),
-(9, 'Montreal ', 'City', 0);
+(9, 'Montreal ', 'City', 0),
+(10, 'Ville-Marie', 'quartier', 9),
+(11, 'Rosemont', 'quartier', 9),
+(12, 'Villeret', 'quartier', 9),
+(13, 'Montroyal', 'quartier', 9),
+(15, 'Saint-Laurent', 'quartier', 9),
+(16, 'Mercier', 'quartier', 9),
+(17, 'Jean-Drapeau', 'Parc', 10),
+(19, 'Robert Bourassa', 'Artère ', 10),
+(20, 'Maisonneuve', 'Parc ', 11),
+(21, 'Saint-Michel', 'Complexe environnemental ', 12),
+(22, 'Cavendish-Toupin', 'Artère ', 15);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
