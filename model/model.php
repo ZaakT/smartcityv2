@@ -5699,7 +5699,7 @@ function insertItem($item,$catItem){
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO cashreleasing_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
-                                        INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
+                                        INSERT INTO cashreleasing_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost)
                                             VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost);
                                     END
                                         ');
@@ -5798,10 +5798,10 @@ function insertItem($item,$catItem){
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO risks_item (name,description) 
+                                        INSERT INTO risk_item (name,description) 
                                                 VALUES (risks_name,risks_desc);
                                         SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO risks_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                        INSERT INTO risk_uc (id_item,id_uc) VALUES (itemID,idUC);
                                     END
                                         ');
             $req = $db->prepare('CALL add_risks(?,?,?);');

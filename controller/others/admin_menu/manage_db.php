@@ -127,7 +127,9 @@ function delete_uc_category($categoryID){
 function manage_usecases($twig,$is_connected,$isTaken=false){
     $user = getUser($_SESSION['username']);
     $list_usecases = getListUCs();
+    if(isset($list_usecases[-1])){unset($list_usecases[-1]);}
     $list_measures = getListMeasures();
+    if(isset($list_measures[0])){unset($list_measures[0]);}
     $list_cat = getListUCsCat();
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
