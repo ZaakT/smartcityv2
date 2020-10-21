@@ -50,12 +50,14 @@ function countSelectedCapex(oForm) {
 
 
 function checkCapexInput(id){
+    //console.log("checkCapexInput")
     var ret = true;
     id = id.getAttribute('id');
     //console.log(id);
     var val = $("#"+id).val();
     //console.log(val);
     var tab = $("#"+id).classes();
+    //console.log(tab)
     if(tab.includes("volume")){
         val = val ? parseInt(val) : -1 ;
         //console.log(val);
@@ -79,7 +81,7 @@ function checkCapexInput(id){
         val = val ? parseInt(val) : -1 ;
         //console.log(val);
         if(val <= 0){
-            $(this).css("background","salmon");
+            $("#"+id).css("background","salmon");
             //$(this).val("");
             ret = false;
         } else {
@@ -116,7 +118,7 @@ function checkCapexInput(id){
             //changer la valeur de volume correspondante
             var ratio = val;
             var nb_uc = $("#nb_uc").html();
-            console.log(nb_uc);
+            //console.log(nb_uc);
             volume = Math.round(ratio * nb_uc);
             //console.log(volume);
             id = id.split("_");
@@ -150,6 +152,7 @@ function calcTotCapex(){
 }
 
 function setNewDeviseCapex(name){
+    //console.log("setNewDeviseCapex")
     deviseName = name;
     try{
         countSelectedCapex(form_capex);

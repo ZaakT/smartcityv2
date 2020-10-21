@@ -2,13 +2,14 @@ function searchIDs(formName){
     var list_ucs = [];
     var list_compo = [];
     var list_zones = [];
-    $("#"+formName+" .val_nb").each(function(){
+    $("#"+formName+" .val_nbuc").each(function(){
         var id = $(this).attr('id');
         var tab = id.split('_');
+        console.log(tab)
         var id_compo = parseInt(tab[2]);
         var id_uc = parseInt(tab[3]);
         var id_zone = parseInt(tab[4]);
-                                        //console.log(id_compo,id_uc,id_zone);
+        console.log(id_compo,id_uc,id_zone);
         if(!list_ucs.includes(id_uc)){
             list_ucs.push(id_uc);
         }
@@ -98,10 +99,14 @@ function fillTot(formName){  //calcule le nombre total de use case lorsque nb de
 }
 
 function fillTot2(formName){ //calcule le nombre total de use case  lorsque le nb de use case item par quartier est modifié
+    console.log("fillTot2")
     const list_ucs = searchIDs(formName)[0];
     const list_compo = searchIDs(formName)[1];
     const list_zones = searchIDs(formName)[2];
     const list_items = ["nb_","nbuc_"];
+    console.log(list_ucs)
+    console.log(list_zones)
+    console.log(list_items)
     list_compo.forEach((compo) => {
         //calcTot(compo,list_zones,"zones_"); pas compris
         list_items.forEach((item) => {
@@ -117,7 +122,7 @@ function fillTot2(formName){ //calcule le nombre total de use case  lorsque le n
             totZone = Number($("#totUC_"+uc+"_"+zone).val()); //total de UC pour une zone (ligne du bas)
             tot_totUC += totZone;
         })
-        console.log("#tot_totUC_"+uc)
+        console.log("#tot_totUC_"+uc, tot_totUC)
         $("#tot_totUC_"+uc).text(tot_totUC);
     })
     colorFilledVolumes();

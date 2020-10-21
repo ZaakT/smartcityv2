@@ -161,7 +161,7 @@
                     {% for id,zone in item %}
                         {% if zone['hasChildren'] == false %}
                             <td scope="col">
-                                <input class="val_nbuc w-100" id="totUC_{{uc}}_{{id}}" oninput='fillTot2("form_volumes");' name="totUC_{{uc}}_{{id}}" type="number" min=0 value="{{ list_sel[id][uc]['nb_tot_uc'] ? list_sel[id][uc]['nb_tot_uc'] : ''}}" >
+                                <input class="val_nbuc w-100" id="totUC_{{uc}}_{{id}}" oninput='fillTot2("form_volumes");' name="totUC_{{uc}}_{{id}}" type="number" min=0 value="{{ list_sel[id][uc]['nb_tot_uc'] ? list_sel[id][uc]['nb_tot_uc'] : ''}}" required>
                             </td>
                 {% endif %}{% endfor %}{% endfor %}
                 {#Total#}
