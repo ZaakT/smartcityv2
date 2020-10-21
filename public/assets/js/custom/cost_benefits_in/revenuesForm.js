@@ -109,7 +109,7 @@ function checkRevenuesInput(id){
             $("#"+id).css("background","#C3E6CB");
             //$(this).val(val.toLocaleString(undefined));
         }
-    }  else if (tab.includes("unit_rev") || tab.includes("anVarVol") || tab.includes("anVarRev")){
+    }  else if (tab.includes("unitIndic") || tab.includes("unit_rev") || tab.includes("anVarVol") || tab.includes("anVarRev")){
         //console.log(val);
         if(val){
             val = parseFloat(val);
