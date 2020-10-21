@@ -46,7 +46,7 @@ function toogleButton(cat){
 
 function activeButton(sel,cat){
     var tab = $(sel).classes();
-    //console.log(tab);
+    console.log(tab);
     var color = ['#3482FF','#90E84A','#FFF552','#36A8FF','#5FFF88']
     //console.log(cat);
     if(!tab.includes('active')){

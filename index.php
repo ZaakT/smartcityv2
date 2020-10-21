@@ -2218,7 +2218,7 @@ try{
                 if(isSup()){
                     prereq_navbar("customer");
                 }
-            }
+            } 
 
             // ---------- BUSINESS MODEL ----------
             elseif($_GET['A']=='business_model'){

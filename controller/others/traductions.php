@@ -14,7 +14,7 @@ $GLOBALS['dicTrad']=[
         "en"=>"URBATIS AI"
     ],
     "home_1" => [
-        "en"=>"Value and Financial modelin"
+        "en"=>"Impact Value and Financial modeling"
     ],
     "home_2" => [
         "en"=>"Make the case for Smart City projects"

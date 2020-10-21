@@ -7,7 +7,7 @@
                 <tr scope="row">
                     <th colspan=1 rowspan=3>Use Cases</th>
                     {% for cat in sel_critCat %}
-                    <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} style="background:{{ color[cat[0]-4] }};">{{ cat[1] }}</th>
                     {% endfor %}
                 </tr>
                 <tr scope="row">
@@ -44,7 +44,7 @@
                 <tr scope="row">
                     <th colspan=1 rowspan=3>Use Cases</th>
                     {% for cat in sel_critCat %}
-                    <th rowspan=1 colspan=1 style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    <th rowspan=1 colspan=1 style="background:{{ color[cat[0]-4] }};">{{ cat[1] }}</th>
                     {% endfor %}
                 </tr>
             </thead>

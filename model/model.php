@@ -680,7 +680,7 @@ function deleteSelUC($ucmID){
     $req = $db->prepare('DELETE FROM ucm_sel_uc WHERE id_ucm = ?');
     return $req->execute(array($ucmID));
 }
-
+// attention !
 function getGuidCrit($ucs,$criteria){
     $db = dbConnect();
     $req = $db->prepare('SELECT pertinence, range_min, range_max

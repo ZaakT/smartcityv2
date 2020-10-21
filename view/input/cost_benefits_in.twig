@@ -12,11 +12,19 @@
 
 {% block content %}
 <div class="">
-    <div class="row m-5 align-items-center">
-        <div class="col-lg-6 text-center">
-            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+    <div class="col m-5">
+
+        <div class="row">
+        
+            <div class="col-lg-3">
+                <img src="./../../public/img/contenu/iucProjDev.png" class="img-fluid" alt="Responsive image"></img>
+            </div>
+            <div class = "col-lg-6">
+                <img src="./../../public/img/contenu/projInput.PNG" class="img-fluid" alt="Responsive image"></img>
+            </div>
         </div>
-        <div class="col-lg-5">
+
+        <div class = "col-lg-5 align-items-center" >
             <h2 class="text-center">{% block title %}
             {% if sideBarName == "input_project_common_supplier" %}
                 Supplier BC - IPC
@@ -25,7 +33,9 @@
             {% elseif sideBarName == "input_use_case" %}
                 Customer BC - IUC
             {% else %}
-                Cost Benefits - Input
+            <br>
+                Cost Benefit Assessment
+                <br> Input Section
             {% endif %}
             {% endblock %}</h2>
         </div>
@@ -33,7 +43,7 @@
 </div>
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
-        Lorem ipsum spécifique
+        <h5>The following Section is intended to capture detailed components of each Use Case</h5>
     </div>
 </div>
 <div class="row text-center text-dark">

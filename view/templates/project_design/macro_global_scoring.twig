@@ -12,7 +12,7 @@
             <tbody>
                 {% for critCat in sel_critCat %}
                 <tr scope="row">
-                    <td scope="col" style="background:{{ color[critCat[0]-1] }};">{{critCat[1]}}</td>
+                    <td scope="col" style="background:{{ color[critCat[0]-4] }};">{{critCat[1]}}</td>
                     <td scope="col"><input class="text-center" name="{{critCat[0]}}" oninput="checkSum();" type="number" min=0 max=100 value={{weights_table[critCat[0]]}}></td>
                 </tr>
                 {% endfor %}
@@ -42,13 +42,13 @@
                     {% set sumSel = sumSel + nSel  %}
                     {% set sumTot = sumTot + nTot %}
                 <tr scope="row">
-                    <td scope="col" style="background:{{ color[critCat[0]-1] }};">{{critCat[1]}}</td>
+                    <td scope="col" style="background:{{ color[critCat[0]-4] }};">{{critCat[1]}}</td>
                     <td scope="col">{{repart_selCrit[critCat[0]]}}/{{repart_crit[critCat[0]]}}</td>
                     <td scope="col">{{(100*nSel/nTot)|number_format(2,'.',',')}}%</td>
                 </tr>
                 {% endfor %}
                 <tr scope="row">
-                    <td scope="col"></td>
+                    <td scope="col">Total</td>
                     <td scope="col">{{sumSel}}/{{sumTot}}</td>
                     <td scope="col">{{(100*sumSel/sumTot)|number_format(2,'.',',')}}%</td>
                 </tr>

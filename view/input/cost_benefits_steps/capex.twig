@@ -22,7 +22,7 @@
 
 <div class="row jumbotron text-light m-5 bg-dark p-3">
     <div class="col text-center">
-        <p class="text-justify">{{lorem|nl2br}}</p>
+        <h5>{{lorem|nl2br}}</h5>
     </div>
 </div>
 
@@ -36,19 +36,27 @@
     {{ list.list_capex_user(capex_user,projID,ucID,selCapex) }}
     {% endif %}
 </form>
-
-<div class="row my-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewCapexModal" role="button">Create a custom item</button>
-</div>
 <div class="row mt-3 text-center">
     <h6 id="createCapexHelp" class="col text-danger font-weight-bold">{{ isTaken ? "Please choose another name." : "" }}</h6>
 </div>
-<div class="row mt-5">
-    <button class="offset-5 col-2 btn btn-sm btn-danger text-light" data-toggle="modal" data-target="#deleteSelectionModal" role="button">Choose none &amp; Skip this part</button>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+      <button class=" btn btn-dark text-light" data-toggle="modal" data-target="#createNewCapexModal" role="button">Create a custom item</button>
+
+    </div>
+    <div class="col-md-auto">
+     <span id="countCapexSelect" class="text-white btn btn-info disabled"></span>
+
+    </div>
+    <div class="col col-lg-2">
+      <button class="btn btn-sm btn-danger text-light" data-toggle="modal" data-target="#deleteSelectionModal" role="button">Choose none &amp; Skip this part</button>
+
+    </div>
+  </div>
 </div>
-<div class="row mt-4 mb-0 text-center">
-    <span id="countCapexSelect" class="offset-5 col-2 text-white btn btn-info disabled"></span>
-</div>
+
 <div class="row text-center mt-3">
     <h6 id="help_capex" class="col text-danger font-weight-bold text-center" hidden>Please select at least one item !</h6>
 </div>

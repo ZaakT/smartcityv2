@@ -3,13 +3,13 @@
 
 
 <div class="row">
-    <div class="col mt-3 mx-5 list-table text-center rate-table">
+    <div class="col mt-3 mx-5 overflow-auto text-center rate-table">
         <table id="table_rate" class='table table-lg table-bordered table-striped table-responsive-lg align-middle'>
             <thead class="thead-dark sticky-top">
                 <tr scope="row">
                     <th colspan=1 rowspan=3>Use Cases</th>
                     {% for cat in sel_critCat %}
-                    <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} style="background:{{ color[cat[0]-1] }};">{{ cat[1] }}</th>
+                    <th rowspan=1 colspan={{repart_selCrit[cat[0]]}} style="background:{{ color[cat[0]-4] }};">{{ cat[1] }}</th>
                     {% endfor %}
                 </tr>
                 <tr scope="row">

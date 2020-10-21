@@ -283,6 +283,7 @@ function use_case($twig,$is_connected,$ucmID=0){
             $guidCrit = getGuidCrit($list_ucs,$list_selCrit);
             $pertDLT = getPertDLT($list_ucs,$list_selDLT);
             $list_sel = [];
+            //var_dump($guidCrit );
             foreach (getListSelUC($ucm[0]) as $value) {
                 array_push($list_sel,$value[0]);
             }
@@ -293,8 +294,14 @@ function use_case($twig,$is_connected,$ucmID=0){
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-    
-    echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],'ucs'=>$list_ucs,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,'sel_DLTs'=>$list_selDLT,'repart_selCrit'=>$repart_selCrit,'guidCrit'=>$guidCrit,'pertDLT'=>$pertDLT,'list_sel'=>$list_sel,'cat'=>$list_cat,'ucs_all'=>$ucs,'sel_meas'=>$list_selMeas,'meas'=>$list_meas));
+    //var_dump($guidCrit);
+    echo $twig->render('/input/project_design_steps/use_case.twig',array('is_connected'=>$is_connected,
+    'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],
+    'ucmID'=>$ucmID,'part'=>'Use Cases Menu',"selected"=>$ucm[1],'username'=>$user[1],
+    'ucs'=>$list_ucs,'sel_critCat'=>$list_selCritCat,'sel_crit'=>$list_selCrit,
+    'sel_DLTs'=>$list_selDLT,'repart_selCrit'=>$repart_selCrit,'guidCrit'=>$guidCrit,
+    'pertDLT'=>$pertDLT,'list_sel'=>$list_sel,'cat'=>$list_cat,'ucs_all'=>$ucs,
+    'sel_meas'=>$list_selMeas,'meas'=>$list_meas));
             prereq_ProjectDesign();
         } else {
             //header('Location: ?A=project_design&A2=use_case');
@@ -697,6 +704,7 @@ function calcDefaultWeights($sel_critCat){
     $res[$lastID] = $lastValue;
     //var_dump($res);
     return $res;
+
 }
 
 function calcGlobalScores($scores,$weights_table){

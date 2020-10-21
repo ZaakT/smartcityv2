@@ -166,11 +166,11 @@
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("language")}}</a>
+            {#<a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("language")}}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" id="language_en" href="?A=setLanguage&amp;language=en">{{traduction.getText("english")}}</a>
               <a class="dropdown-item" id="language_fr" href="?A=setLanguage&amp;language=fr">{{traduction.getText("french")}}</a>
-            </div>
+            </div>#}
             <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("currency")}}</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               {% if devises %}

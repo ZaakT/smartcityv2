@@ -12,8 +12,9 @@
                 </tr>
             </thead>
             <tbody>
+            {% set i = 0 %}
             {% for crit in criteria %}
-                <tr id = "tr_{{ crit['id'] }}" class="critCat_{{ crit['id_cat'] }}" style="background:{{ color[crit['id_cat']-1]}};" scope="row">
+                <tr id = "tr_{{ crit['id'] }}" class="critCat_{{ crit['id_cat'] }}" style="background:{{ color[crit['id_cat']-4]}};" scope="row">
                     {% if list_sel and (crit['id'] in list_sel) %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_crit(form_crit);" id='{{ crit['id'] }}' name="{{ crit['id'] }}" checked></td>
                     {% else %}

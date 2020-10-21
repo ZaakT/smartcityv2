@@ -28,7 +28,7 @@
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-6">
+        <div class="col">
             
 
                 <form class="container-fluid" onsubmit="return checkSum();" name="form_GS" action="?A=project_design&amp;A2=global_score&amp;ucmID={{ucmID}}" method="post">
@@ -44,8 +44,11 @@
                 </form>
         </div>
 
-        <div class="col-6">
+        <div class="container col">
+
+        <div class="row">
             {{ tables.critCat_recap(sel_ucs,globalScores) }}
+        </div>
             <div class="m-3 text-center">
                     <canvas id="globalScoresChart" ></canvas>
                     {% set ucs = [] %}

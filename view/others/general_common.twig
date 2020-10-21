@@ -10,10 +10,16 @@
 
 
 {% block content %}
+{% set image = "colorbannew.png" %}
+{% if sideBarName == "project_scoping" %}
+    {% set image = "contenu/carte.PNG" %}
+{% elseif sideBarName == "cost_benefits" %}
+    {% set image = "contenu/projInput.PNG" %}
+{% endif %}
 <div class="">
     <div class="row m-5 align-items-center">
         <div class="col-lg-6 text-center">
-            <img src="./../../public/img/colorbannew.png" class="img-fluid" alt="Responsive image"></img>
+            <img src="./../../public/img/{{image}}" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
             <h2 class="text-center text-uppercase">
@@ -25,7 +31,7 @@
                 {% elseif sideBarName=='scenario_settings' %}
                     Scenario Settings
                 {% elseif sideBarName=='project_scoping' %}
-                    Project Scoping
+                    Project Scope Definition
                 {% elseif sideBarName=='scope1' %}
                     Project Initialization
                 {% elseif sideBarName=='deal_criteria_customer' %}
@@ -44,12 +50,13 @@
 
 <div class="row jumbotron text-light bg-dark m-5 p-3">
     <div class="col text-center">
+    <h5>
     {% if sideBarName=='customer_dashboards' %}
         In this section, you will find Summary dashboards of the key project metrics across the project life cycle.
     {% elseif sideBarName=='supplier_dashboards' %}
         In this section, you will find Summary dashboards of the key project metrics across the project life cycle .
     {% elseif sideBarName=='project_scoping' %}
-        Lorem ipsum ...
+        The following Section is intended to capture main parameters of the project
     {% elseif sideBarName=='deal_criteria_supplier' %}
         Lorem ipsum ...
     {% elseif sideBarName=='deal_criteria_customer' %}
@@ -61,6 +68,7 @@
     {% elseif sideBarName=='input_project_common_supplier' %}
         In this section, please select or create your project and input its main characteristics.
     {% endif %}
+    </h5>
     </div>
 </div>
 <div class="row text-center text-dark">
