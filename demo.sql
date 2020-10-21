@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 21 oct. 2020 à 08:11
+-- Généré le :  mer. 21 oct. 2020 à 12:06
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -381,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -468,7 +468,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_advice`
@@ -515,7 +515,8 @@ INSERT INTO `capex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max
 (78, 'Per monitor', 'https://www.alibaba.com/product-detail/customized-7-segment-elevator-display-variable_1318854093.html?spm=a2700.7724838.2017115.151.ea412e94Sw6kMk', 20, 60),
 (79, 'Per antenna', 'https://www.alibaba.com/product-detail/All-in-one-body-led-street_60858254472.html?spm=a2700.galleryofferlist.normalList.187.77646241mK7Kzj', 15, 50),
 (80, 'Per antenna', 'http://www.l-com.com/wireless-antenna-24-ghz-6-dbi-omnidirectional-antenna-n-female-connector', 45, 140),
-(81, 'Per antenna', 'https://www.alibaba.com/product-detail/Antenna-Manufacturer-5G-5-8GHz-2x15_60625518394.html?spm=a2700.7724838.2017115.353.7c277109fTWItv', 30, 60);
+(81, 'Per antenna', 'https://www.alibaba.com/product-detail/Antenna-Manufacturer-5G-5-8GHz-2x15_60625518394.html?spm=a2700.7724838.2017115.353.7c277109fTWItv', 30, 60),
+(82, 'unnniiittt', '', 0, 10);
 
 -- --------------------------------------------------------
 
@@ -607,6 +608,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (43, -1),
 (44, -1),
 (45, -1),
+(82, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -883,7 +885,7 @@ CREATE TABLE IF NOT EXISTS `crit` (
   `id_cat` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `crit`
@@ -897,7 +899,39 @@ INSERT INTO `crit` (`id`, `name`, `description`, `scoring_guidance`, `id_cat`) V
 (5, 'crit_13', '', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 1),
 (6, 'crit123', '', NULL, 2),
 (9, 'ighorvf', 'gtrfed', 'biugtrvnf\r\nvirdcnklvnf\r\nvribiornobg\r\n3. vuifeibiovnrfnv juvbirbvng', 1),
-(10, 'Criterion 1', 'bvgfd', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 2);
+(10, 'Criterion 1', 'bvgfd', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 2),
+(11, 'Improved access to basic health care services', 'The extent to which the project has increased accessibility to basic health care', '', 4),
+(12, 'Encouraging a healthy lifestyle', 'The extent to which the project encourages a healthy lifestyle', '', 4),
+(13, 'Waiting time', 'Percentage reduction in waiting time due to project', '', 4),
+(14, 'Reduction of traffic accidents', 'Percentage reduction of transportation fatalities due to the project', '', 4),
+(15, 'Reduction in crime rate', 'Percentage reduction in number of violences, annoyances and crimes due to the project', '', 4),
+(16, 'Improved cybersecurity', 'The extent to which the project ensures cybersecurity', '', 4),
+(17, 'Improved data privacy', 'The extent to which data collected by the project is protected', '', 4),
+(18, 'Access to public transport', 'The extent to which public transport stops are available within 500m', '', 4),
+(19, 'Reduction in annual final energy consumption', 'Percentage change in annual final energy consumption due to the project for all uses and forms of energy', '', 5),
+(20, 'Reduction in lifcycle energy use', 'Reduction in life cycle energy use achieved by the project (%)', '', 5),
+(21, 'Reduction of embodied energy of products and services used in the project', 'The extent to which measures have been taken to reduce the embodied energy of products used in the project', '', 5),
+(22, 'Increase in local renewable energy production', 'Percentage increase in the share of local renewable energy due to the project', '', 5),
+(23, 'Carbon dioxide emission reduction', 'Percentage reduction in direct (operational) CO2 emissions achieved by the project', '', 5),
+(24, 'Increased use of local workforce', 'Share in the total project costs that has been spent on local suppliers, contractors and service providers', '', 7),
+(25, 'Local job creation', 'Number of jobs created by the project', '', 7),
+(26, 'Fuel poverty', 'Change in percentage points of (gross) household income spent on energy bills', '', 7),
+(27, 'Costs of housing', 'The percentage of gross household income spent on housing', '', 7),
+(28, 'Certified companies involved in the project', 'Share of the companies involved in the project holding an ISO 14001 certificate', '', 7),
+(29, 'Leadership', 'The extent to which the leadership of the project is successful in creating support for the project', '', 8),
+(30, 'Balanced project team\'', 'The extent to which the project team included all relevant experts and stakeholders from the start\'), (73, 4, \'Involvement of the city administration\', \'The extent to which the local authority is involved in the development of the project, other than financial, and how many departments are contributing', '', 8),
+(31, 'Involvement of the city administration', 'The extent to which the local authority is involved in the development of the project, other than financial, and how many departments are contributing', '', 8),
+(32, 'Clear division of responsibility', 'Has the responsibility for achieving the social and sustainability targets been clearly assigned to (a) specific actor(s) in the project?', '', 8),
+(33, 'Social compatibility', 'The extent to which the project\\\'s solution fits with people\\\'s frame of mind and does not negatively challenge people\\\'s values or the ways they are used to do things', '', 6),
+(34, 'Technical compatibility', 'The extent to which the smart city solution fits with the current existing technological standards/infrastructures', '', 6),
+(35, 'Ease of use for end users of the solution', 'The extent to which the solution is perceived as difficult to understand and use for potential end-users', '', 6),
+(36, 'Ease of use for professional stakeholders', 'The extent to which the innovation is perceived as difficult to understand, implement and use for professional users of the solution', '', 6),
+(37, 'Trialability', 'The extent to which the solution can be experimented with on a limited basis in the local context before full implementation', '', 6),
+(38, 'Advantages for end users', 'The extent to which the project offers clear advantages for end users', '', 8),
+(39, 'Advantages for stakeholders', 'The extent to which the project offers clear advantages for stakeholders', '', 8),
+(40, 'Visibility of Results', 'The extent to which the results of the project are visible to external actors', '', 6),
+(41, 'Solution(s) to development issues', 'The extent to which the project offers a solution to problems which are common to European cities', '', 6),
+(42, 'Market demand', 'The extent to which there is a general market demand for the solution', '', 6);
 
 -- --------------------------------------------------------
 
@@ -911,15 +945,18 @@ CREATE TABLE IF NOT EXISTS `critcat` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `critcat`
 --
 
 INSERT INTO `critcat` (`id`, `name`) VALUES
-(1, 'criteria_cat_1'),
-(2, 'criteria_cat_2');
+(8, 'Governance'),
+(4, 'People'),
+(5, 'Planet'),
+(6, 'Propagation'),
+(7, 'Prosperity');
 
 -- --------------------------------------------------------
 
@@ -1581,7 +1618,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (44, 21, -1, NULL, NULL, NULL),
 (45, 24, -1, 0, 0, 5),
 (46, 21, 11, 0, 0, 1),
-(47, 27, 16, 1, 12500, 3);
+(47, 27, 16, 1, 12500, 3),
+(56, 26, 16, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1634,7 +1672,8 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1, '0000-00-00', 0),
 (13, 23, 3, 'parking space', 5000, NULL, 100, 5, 0, 0, 0, '0000-00-00', 0),
 (14, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
-(15, 27, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(15, 27, 16, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(18, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1683,7 +1722,8 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (23, 32, -1, 10, 200),
 (23, 33, -1, 10, 1000),
 (23, 34, -1, 10, 100),
-(23, 35, 3, 300, 20);
+(23, 35, 3, 300, 20),
+(26, 47, 16, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1778,7 +1818,8 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (23, 14, -1, 1, NULL, 3000, 5, 0),
 (23, 15, -1, 3, NULL, 100, 5, 0),
 (23, 16, -1, 50, NULL, 50, 5, 5),
-(23, 17, 3, 40, NULL, 100, 4, 5);
+(23, 17, 3, 40, NULL, 100, 4, 5),
+(26, 29, 16, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1860,7 +1901,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (21, 12, -1, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (21, 12, 9, 15, NULL, 300, 3, 5, '2020-09-30', 2),
 (21, 15, 11, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
-(23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0);
+(23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0),
+(26, 17, 16, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1997,7 +2039,8 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2, '0000-00-00', 0),
 (12, 21, 9, 'test', 15, NULL, 10000, 5, 30, 6, 10, '0000-00-00', 0),
 (14, 23, 3, 'CO2', 1000, NULL, 1, 30, 0, 0, 0, '0000-00-00', 0),
-(15, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(15, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(17, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2847,7 +2890,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
 (23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
 (24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1),
-(26, 'Metro Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 10:09:20', 1, 1, 0),
+(26, 'Metro Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 10:23:00', 1, 1, 0),
 (27, 'Metro Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-20 17:28:51', 13, 1, 0);
 
 -- --------------------------------------------------------
