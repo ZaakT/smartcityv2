@@ -3140,7 +3140,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
                                 ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -3434,7 +3434,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],  $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -3689,7 +3689,7 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;

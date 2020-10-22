@@ -133,7 +133,7 @@
                                 <td scope="col" class="val_nb w-100" style="width: 1%;white-space: nowrap;" id="val_nb_{{id_compo}}_{{uc}}_{{id}}">{{ compo_per_zone[id_compo][id] ? compo_per_zone[id_compo][id]|number_format(0,'.',' ') : "-" }}</td>
                     {% endif %}{% endfor %}{% endfor %}
                     {#Total#}
-                    <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">-</td>
+                    <td id="tot_nb_{{id_compo}}_{{uc}}" scope="col">0</td>
                 </tr>
 
                 <!-- {#RATIO#}
@@ -165,7 +165,7 @@
                             </td>
                 {% endif %}{% endfor %}{% endfor %}
                 {#Total#}
-                <td scope="col" id="tot_totUC_{{uc}}" class="text-primary font-weight-bolder thead-light">-</td>          
+                <td scope="col" id="tot_totUC_{{uc}}" class="text-primary font-weight-bolder thead-light">0</td>          
             </tr>
 
             {#SEPARATEUR#}

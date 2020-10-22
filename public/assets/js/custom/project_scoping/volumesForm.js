@@ -1,3 +1,31 @@
+
+calcTot2()
+function calcTot2(){
+    var inputs, index;
+
+    inputs = document.getElementsByTagName('input');
+    //console.log(inputs);
+    line = 0
+    for (index = 0; index < inputs.length; ++index) {
+        
+        id = inputs[index].id;
+        val = parseInt($("#"+id).val());
+        if(val){   
+            //console.log("val", val);
+            //console.log("line", line);   
+            if(line != id.split('_')[1]){
+                //console.log("tot = 0")
+                $("#tot_totUC_"+id.split('_')[1]).text("0");
+            }  
+            line = id.split('_')[1];
+            tot = parseInt($("#tot_totUC_"+line).text());
+            $("#tot_totUC_"+line).text(tot+val);
+            
+        }
+
+    }
+}
+
 function searchIDs(formName){
     var list_ucs = [];
     var list_compo = [];
@@ -5,11 +33,11 @@ function searchIDs(formName){
     $("#"+formName+" .val_nbuc").each(function(){
         var id = $(this).attr('id');
         var tab = id.split('_');
-        console.log(tab)
+        //console.log(tab)
         var id_compo = parseInt(tab[2]);
         var id_uc = parseInt(tab[3]);
         var id_zone = parseInt(tab[4]);
-        console.log(id_compo,id_uc,id_zone);
+        //console.log(id_compo,id_uc,id_zone);
         if(!list_ucs.includes(id_uc)){
             list_ucs.push(id_uc);
         }
@@ -64,7 +92,7 @@ function calcTotUC(uc,zone,compo){ //calcule le nombre total de use case par zon
     }
     return 0;
 }
-
+/*
 function fillTot(formName){  //calcule le nombre total de use case lorsque nb de composant ou ration comp/uc est modifié
     colorFilledVolumes();
     const list_ucs = searchIDs(formName)[0];
@@ -97,34 +125,9 @@ function fillTot(formName){  //calcule le nombre total de use case lorsque nb de
         $("#tot_totUC_"+uc).text(tot_totUC);
     })
 }
-
+*/
 function fillTot2(formName){ //calcule le nombre total de use case  lorsque le nb de use case item par quartier est modifié
-    console.log("fillTot2")
-    const list_ucs = searchIDs(formName)[0];
-    const list_compo = searchIDs(formName)[1];
-    const list_zones = searchIDs(formName)[2];
-    const list_items = ["nb_","nbuc_"];
-    console.log(list_ucs)
-    console.log(list_zones)
-    console.log(list_items)
-    list_compo.forEach((compo) => {
-        //calcTot(compo,list_zones,"zones_"); pas compris
-        list_items.forEach((item) => {
-            list_ucs.forEach((uc) => {
-                calcTot(compo,list_zones,item,"_"+uc); //calcule les sommes sur zones de la colonne de droite
-            })
-        })
-    })
-    list_ucs.forEach((uc) => {
-        var tot_totUC = 0; //total pour un UC (en bas à droite)
-
-        list_zones.forEach((zone) => {
-            totZone = Number($("#totUC_"+uc+"_"+zone).val()); //total de UC pour une zone (ligne du bas)
-            tot_totUC += totZone;
-        })
-        console.log("#tot_totUC_"+uc, tot_totUC)
-        $("#tot_totUC_"+uc).text(tot_totUC);
-    })
+    calcTot2();
     colorFilledVolumes();
 }
 
