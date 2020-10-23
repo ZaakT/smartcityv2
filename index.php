@@ -190,6 +190,14 @@ try{
                                 manage_item('deployment_revenue',$twig,$is_connected); 
                             } elseif($_GET['A3']=='manage_operating_revenue'){
                                 manage_item('operating_revenue',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_guid_criteria'){
+                                manage_guid_criteria($twig,$is_connected); 
+                            } elseif($_GET['A3']=='update_guid_crit'){
+                                if(isset($_POST)){
+                                    update_guid_crit($twig,$is_connected, $_POST); 
+                                }else{
+                                    header('Location: ?A=admin&A2=manage_db&A3=manage_guid_criteria');
+                                }
                             } elseif($_GET['A3']=='create_item_3'){
                                 if(isset($_GET['cat'])){
                                     create_item3($twig,$is_connected,$_POST,$_GET['cat']);

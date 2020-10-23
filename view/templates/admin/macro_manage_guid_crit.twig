@@ -1,0 +1,71 @@
+{% macro tabProdCar(ucs, list_crit, guidCrit) %}
+
+<div class="row">
+    <div class="col mt-5 mx-5 list-table text-center ucs-table">
+        <table class="table table-lg table-bordered table-striped table-responsive-lg align-middle">
+
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" style="width: 10%;">Use Cases</th>
+                    {% for crit in list_crit %}
+                        <th scope="col" style="width: 10%;">{{crit['name']}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tboby>
+                {% for ucID in ucs|keys %}
+                <tr>
+                    <td>{{ucs[ucID]['name']}}</td>
+                    {% for crit in list_crit %}
+                        {% if guidCrit[ucID] %}
+                            {% if guidCrit[ucID][crit['id']]['pertinence']>=0 and guidCrit[ucID][crit['id']]['pertinence']<=3 %}
+                                {% set selected = guidCrit[ucID][crit['id']]['pertinence'] %}
+                            {% else %}
+                                {% set selected = 0 %}
+                            {% endif %}
+                        {% else %}
+                            {% set selected = 0 %}
+                        {% endif %}
+
+                        <td scope = "col" rowspan="1">
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Pertinence</span>
+                                </div>
+                            <select class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id = "pertinence*{{ ucID }}_{{ crit['id'] }}" name = "pertinence*{{ ucID }}_{{ crit['id'] }}" required>
+                                        
+                                            <option value = "0" {{ selected == 0 ? "selected" : ""}}> Low </option>
+                                            <option value = "1" {{ selected == 1 ? "selected" : ""}}> Medium </option>
+                                            <option value = "2" {{ selected == 2 ? "selected" : ""}}> High </option>
+                                        
+                                        </select>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Min</span>
+                                </div>
+                                <input width = '50%' aria-label="Small" aria-describedby="inputGroup-sizing-sm" class="text-center form-control" type = "number" id = "rangeMin*{{ ucID }}_{{ crit['id'] }}" name = "rangeMin*{{ ucID }}_{{ crit['id'] }}" value = "{{guidCrit[ucID] ? guidCrit[ucID][crit['id']]['range_min'] : 0  }}" />
+                            </div>
+
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Max</span>
+                                </div>
+                                <input width = '50%' aria-label="Small" aria-describedby="inputGroup-sizing-sm" class="text-center form-control" type = "number"id = "rangeMax*{{ ucID }}_{{ crit['id'] }}" name = "rangeMax*{{ ucID }}_{{ crit['id'] }}" value = "{{guidCrit[ucID] ? guidCrit[ucID][crit['id']]['range_max'] : 0  }}" />
+                            </div>
+
+    
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+{% endmacro %}

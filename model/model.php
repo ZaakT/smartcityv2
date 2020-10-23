@@ -688,22 +688,38 @@ function getGuidCrit($ucs,$criteria){
                         WHERE (uc_vs_crit.id_uc = ?)
                         AND (uc_vs_crit.id_crit = ?)');
     $list = [];
-    foreach ($ucs as $uc) {
+    foreach ($ucs as $idUC=>$uc) {
         $temp = [];
         foreach ($criteria as $crit) {
-            $req->execute(array($uc[0],$crit[0]));
+            $req->execute(array($idUC,$crit['id']));
             while ($row = $req->fetch()){
                 $pert = $row['pertinence'];
                 $min = $row['range_min'];
                 $max = $row['range_max'];
-                $temp[$crit[0]]=[$pert,$min,$max];
+                $temp[$crit['id']]=['pertinence'=>$pert,'range_min'=>$min,'range_max'=>$max, "0"=>$pert, "1"=>$min, "2"=>$max];
             }
         }
         //var_dump($temp);
-        $list[$uc[0]]=$temp;
+        $list[$idUC]=$temp;
     }
     //var_dump($list);
     return $list;                    
+}
+function insertGuidCrit($list){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE 
+                        FROM uc_vs_crit WHERE TRUE;');
+    $req->execute(array());
+    foreach ($list as $id => $el) {
+        $ucID = explode("_", $id)[0];
+        $critID = explode("_", $id)[1];
+        $req = $db->prepare('INSERT 
+                        INTO uc_vs_crit (pertinence, range_min, range_max, id_uc, id_crit) 
+                        VALUES (?,?,?,?,?);');
+        $req->execute(array($el['pertinence']=="" ? "0" : $el['pertinence'], $el['rangeMin']=="" ? "0" : $el['rangeMin'], $el['rangeMax']=="" ? "0" : $el['rangeMax'], $ucID, $critID));
+
+        # code...
+    }                   
 }
 
 function getPertDLT($ucs,$DLTs){

@@ -1,0 +1,18 @@
+{% extends '/others/admin_menu/manage_db.twig' %}
+
+{% block title %}Manage Criteria Guid{% endblock %}
+
+{% import "/templates/admin/macro_manage_guid_crit.twig" as list %}
+
+
+{% block content %}
+<div class ="row">
+    <form action="?A=admin&A2=manage_db&A3=update_guid_crit" method="post"  class="col container-fluid">
+        {{ list.tabProdCar(ucs, list_crit, guidCrit) }}
+
+        <div class="row m-3">
+            <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" type = "submit" role="button">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
