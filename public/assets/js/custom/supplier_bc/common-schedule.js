@@ -22,17 +22,29 @@ function updateBar(){
         lag_prop = monthDiff( valPStart, valDStart)/valPDur * 100;
         dep_prop = valDDur/valPDur * 100;
         run_prop = (valPDur -valDDur- monthDiff(valPStart, valDStart))/valPDur * 100;
+
+        dep_end = new Date(valDStart);
+        dep_end.setMonth(dep_end.getMonth()+valDDur);
+        $("#run_starttext").html(dep_end.toISOString().slice(0,10));
+
+        proj_end = new Date(valPStart);
+        proj_end.setMonth(dep_end.getMonth()+valPDur);
+        $("#project_end_text").html(proj_end.toISOString().slice(0,10));
+
+
         $("#bar_1").css("width", lag_prop + "%");
         $("#proj_start").css("width", lag_prop + "%");
         $("#proj_start_text").html(valPStart);
 
         $("#bar_2").css("width", dep_prop + "%");
-        $("#dep_start").css("width", lag_prop + "%");
-        $("#dep_start").html(valDStart);
+        $("#dep_start").css("width", dep_prop + "%");
+        $("#dep_start_text").html(valDStart);
 
         $("#bar_3").css("width", run_prop + "%");
         $("#run_start").css("width", run_prop/2 + "%");
         $("#project_end").css("width", run_prop/2 + "%");
+
+
     }else{
         //$("#chart_schedule").setAttribute("hidden", "true"); Pas utile ? 
     }

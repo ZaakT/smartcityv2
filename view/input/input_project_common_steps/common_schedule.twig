@@ -26,8 +26,8 @@
 
 		<div class="row jumbotron text-light mx-5 bg-dark p-3" style="margin-top: 2rem;">
 			<div class="col text-center">
-				<p class="text-justify">For the Selected Project, please input the Start and Deployment dates, as well as the respective length of time for the project and its deployment - in number of months.
-				</p>
+				<h5>For the Selected Project, please input the Start and Deployment dates, as well as the respective length of time for the project and its deployment - in number of months.
+				</h5>
 			</div>
 		</div>
 
@@ -37,25 +37,27 @@
 		</div>
 		<div id="chart_schedule" hidden>
 			<div class="container" >
-				<div class = "progress dash-bg-light">
-					<div id="proj_start" style="width: 10%" class="text-left">
-						<span class="oi oi-caret-bottom"></span><div id="proj_start_text"></div>
-					</div>
-					<div id="dep_start" style="width: 20%" class="text-left">
-						<span class="oi oi-caret-bottom"></span><div id="dep_start_text"></div>
-					</div>
-					<div id="run_start" style="width: 35%" class="text-left">
-						<span class="oi oi-caret-bottom"></span><div id="run_starttext"></div>
-					</div>
-					<div id="project_end" style="width: 35%" class="text-right">
-						<div id="project_end_text"></div><span class="oi oi-caret-bottom"></span>
-					</div>
-				</div>
+
 
 				<div class="progress">
 					<div id="bar_1" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 10%"></div>
 					<div id="bar_2" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>		
 					<div id="bar_3" class="progress-bar progress-bar-main progress-bar-striped progress-bar-animated" style="width: 70%">Run</div>
+				</div>
+
+				<div class = "progress dash-bg-light">
+					<div id="proj_start" style="width: 10%" class="text-left">
+						<span class="oi oi-caret-top"></span><div id="proj_start_text"></div>
+					</div>
+					<div id="dep_start" style="width: 20%" class="text-left">
+						<span class="oi oi-caret-top"></span><div id="dep_start_text"></div>
+					</div>
+					<div id="run_start" style="width: 35%" class="text-left">
+						<span class="oi oi-caret-top"></span><div id="run_starttext"></div>
+					</div>
+					<div id="project_end" style="width: 35%" class="text-right">
+						<div id="project_end_text"></div><span class="oi oi-caret-top"></span>
+					</div>
 				</div>
 			</div>
 		</div>
