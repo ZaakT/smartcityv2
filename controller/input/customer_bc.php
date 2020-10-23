@@ -86,7 +86,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                     $list_xpex_supplier[$ucID]=[];
                     if($type=="capex"){
                         
-                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID]  = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID]  = getListCapexAdvice($ucID, "internal", $side); 
 
@@ -101,7 +101,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                             $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
                         }
                     }elseif($type=="opex"){
-                        $list_xpex_advice_from_ntt[$ucID]  = getListOpexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID]  = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID]  = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID]  = getListOpexAdvice($ucID, "internal", $side); 
 
@@ -115,7 +115,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                             $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
                         }
                     }elseif($type=="deployment_costs"){
-                        $list_xpex_advice_from_ntt[$ucID]  = getListImplemAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID]  = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID]  = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID]  = getListImplemAdvice($ucID, "internal", $side); 
 
@@ -158,6 +158,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             //var_dump($list_xpex_user_from_ntt);
             //var_dump($list_selXpex);*/
             $devises = getListDevises();
+            //var_dump($list_xpex_advice_from_ntt, $list_xpex_advice_from_outside_ntt, $list_xpex_advice_internal);
             $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
             $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
             //print_r($list_xpex_advice_from_outside_ntt);
@@ -327,10 +328,10 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                     $list_xpex_supplier[$ucID]=[];
                     if($type=="capex"){
                             
-                        $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", $side); 
+                        $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
                         $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
 
-                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal", $side); 
 
@@ -347,10 +348,10 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
 
 
                     }elseif($type=="opex"){
-                        $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", $side); 
+                        $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", "projDev"); 
                         $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
 
-                        $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal", $side); 
 
@@ -365,10 +366,10 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                             $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
                         }
                     }elseif($type=="deployment_costs"){
-                        $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", $side);
+                        $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", "projDev");
                         $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
                         
-                        $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", $side); 
+                        $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
                         $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
                         $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
 
