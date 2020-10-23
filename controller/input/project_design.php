@@ -280,8 +280,7 @@ function use_case($twig,$is_connected,$ucmID=0){
             $list_meas = getListMeasures();
             $repart_selCrit = calcRepartCrit($list_selCritCat,$list_selCrit);
             $list_selDLT = getListSelDLTs($ucmID);
-            $guidCrit = getGuidCrit($list_ucs,$list_selCrit);
-            //var_dump($guidCrit);
+            $guidCrit = getGuidCrit($list_ucs,$list_selCrit, false);
             $pertDLT = getPertDLT($list_ucs,$list_selDLT);
             $list_sel = [];
             //var_dump($list_ucs,$list_selCrit);

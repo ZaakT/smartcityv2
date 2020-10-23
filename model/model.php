@@ -681,7 +681,7 @@ function deleteSelUC($ucmID){
     return $req->execute(array($ucmID));
 }
 // attention !
-function getGuidCrit($ucs,$criteria){
+function getGuidCrit($ucs,$criteria, $useUcID = true){
     $db = dbConnect();
     $req = $db->prepare('SELECT pertinence, range_min, range_max
                         FROM uc_vs_crit
@@ -691,7 +691,11 @@ function getGuidCrit($ucs,$criteria){
     foreach ($ucs as $idUC=>$uc) {
         $temp = [];
         foreach ($criteria as $crit) {
-            $req->execute(array($idUC,$crit['id']));
+            if($useUcID){
+                $req->execute(array($idUC,$crit['id']));
+            }else{
+                $req->execute(array($uc['id'],$crit['id']));
+            }
             while ($row = $req->fetch()){
                 $pert = $row['pertinence'];
                 $min = $row['range_min'];
@@ -700,7 +704,11 @@ function getGuidCrit($ucs,$criteria){
             }
         }
         //var_dump($temp);
-        $list[$idUC]=$temp;
+        if($useUcID){
+            $list[$idUC]=$temp;
+        }else{
+            $list[$uc['id']]=$temp;
+        }
     }
     //var_dump($list);
     return $list;                    
