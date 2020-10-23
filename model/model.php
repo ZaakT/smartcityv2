@@ -2568,8 +2568,7 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
     }elseif($side == "supplier"){
                $side_selection = "and opex_item.side = 'supplier'";
     }
-
-    $req = $db->prepare("SELECT *
+    $req = $db->prepare("SELECT opex_item_advice.id, name, description, opex_item_advice.unit, source, range_min, range_max, side
                             FROM opex_item_advice
                             INNER JOIN opex_uc
                                 INNER JOIN opex_item
