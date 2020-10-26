@@ -763,7 +763,7 @@ ID;;Use Case;;Section;;Sub-Section;;Item;;;;;Quantifiable impact;;;;;Non quantif
 760;Traffic – Vehicle Count-Public Roads-7.7-Item #5;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #5;Reduction of Healthcare Costs Resulting Medical Emergencies - Other (choking, severe anaphylaxis, acute diabetic emergencies);# of emergencies each month - Other (choking, severe anaphylaxis, acute diabetic emergencies) treatment;TVC-Public Roads-I.3.1;0%;0%;-7%;-7%;;;NA#;NA#; $11 000,0 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 761;Traffic – Vehicle Count-Public Roads-7.7-Item #6;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #6;Reduction of Property Damage in Building Fires;# of building fires each month;TVC-Public Roads-I.3.1;0%;0%;-32%;-32%;;;NA#;NA#; $27 000,0 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 762;Traffic – Vehicle Count-Public Roads-7.7-Item #7;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #7;Reduced Extra Fuel Consumption and Travel Time Due to Traffic Congestion;Estimated # of commuters under Traffic Congestion each month;TVC-Public Roads-I.3.2;0%;0%;-15%;-15%;;;NA#;NA#; $95,00 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
-763;Traffic – Vehicle Count-Public Roads-7.7-Item #8;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #8;Monetized CO2 emission savings related to lesser traffic congestion;Total Co2 emissions each month;TVC-Public Roads-I.3.3;0%;0%;-3,6%;-3,6%;;;NA#;NA#; $0,21 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
+763;Traffic – Vehicle Count-Public Roads-7.7-Item #8;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #8;Monetized CO2 emission savings related to lesser traffic congestion;Total Co2 emissions each month;TVC-Public Roads-I.3.3;0%;0%;-3,60%;-3,60%;;;NA#;NA#; $0,21 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 764;Traffic – Vehicle Count-Public Roads-7.7-Item #9;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #9;Reduction of Economic Costs of Premature Deaths Due to Air Pollution Attributable to Traffic Congestion;Estimated # of premature Deaths due to Traffic Congestion;TVC-Public Roads-I.3.4;-15%;-15%;0%;0%;;;NA#;NA#; $10 137 500 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 765;Traffic – Vehicle Count-Public Roads-7.7-Item #10;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,7;TVC - Public Roads- Customer - Wider Cash Benefits ;Item #10;;;;;;;;;;NA#;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 766;Traffic – Vehicle Count-Public Roads-7.8-Item #1;Traffic – Vehicle Count;Public Roads;7.;TVC - Public Roads- Customer;7,8;TVC - Public Roads- Customer - Quantifiable, non-monetizable benefits ;Item #1;Reduced Time Spent Waiting in Transit for buses;Total time spent waiting by passengers (all);TVC-Public Roads-I.4.1;-40%;-88%;NA#;NA#;;;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
@@ -823,7 +823,7 @@ ID;;Use Case;;Section;;Sub-Section;;Item;;;;;Quantifiable impact;;;;;Non quantif
 820;Traffic – Vehicle Count-Private Roads-7.7-Item #5;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #5;Reduction of Healthcare Costs Resulting Medical Emergencies - Other (choking, severe anaphylaxis, acute diabetic emergencies);# of emergencies each month - Other (choking, severe anaphylaxis, acute diabetic emergencies) treatment;TVC-Public Roads-I.3.1;0%;0%;-7%;-7%;;;NA#;NA#; $11 000,0 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 821;Traffic – Vehicle Count-Private Roads-7.7-Item #6;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #6;Reduction of Property Damage in Building Fires;# of building fires each month;TVC-Public Roads-I.3.1;0%;0%;-32%;-32%;;;NA#;NA#; $27 000,0 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 822;Traffic – Vehicle Count-Private Roads-7.7-Item #7;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #7;Reduced Extra Fuel Consumption and Travel Time Due to Traffic Congestion;Estimated # of commuters under Traffic Congestion each month;TVC-Public Roads-I.3.2;0%;0%;-15%;-15%;;;NA#;NA#; $95,00 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
-823;Traffic – Vehicle Count-Private Roads-7.7-Item #8;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #8;Monetized CO2 emission savings related to lesser traffic congestion;Total Co2 emissions each month;TVC-Public Roads-I.3.3;0%;0%;-3,6%;-3,6%;;;NA#;NA#; $0,21 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
+823;Traffic – Vehicle Count-Private Roads-7.7-Item #8;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #8;Monetized CO2 emission savings related to lesser traffic congestion;Total Co2 emissions each month;TVC-Public Roads-I.3.3;0%;0%;-3,60%;-3,60%;;;NA#;NA#; $0,21 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 824;Traffic – Vehicle Count-Private Roads-7.7-Item #9;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #9;Reduction of Economic Costs of Premature Deaths Due to Air Pollution Attributable to Traffic Congestion;# of  number of premature Deaths due to Traffic Congestion each month;TVC-Public Roads-I.3.4;-15%;-15%;0%;0%;;;NA#;NA#; $10 137 500 ;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 825;Traffic – Vehicle Count-Private Roads-7.7-Item #10;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,7;TVC - Private Roads- Customer - Wider Cash Benefits ;Item #10;;;;;;;;;;NA#;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#;;NA#
 826;Traffic – Vehicle Count-Private Roads-7.8-Item #1;Traffic – Vehicle Count;Private Roads;7.;TVC - Private Roads- Customer;7,8;TVC - Private Roads- Customer - Quantifiable, non-monetizable benefits ;Item #1;Reduced Time Spent Waiting in Transit for buses;Total time spent waiting by passengers (all);TVC-Public Roads-I.4.1;-40%;-88%;NA#;NA#;;;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
@@ -2166,33 +2166,3 @@ ID;;Use Case;;Section;;Sub-Section;;Item;;;;;Quantifiable impact;;;;;Non quantif
 2163;Back to Work Package -Offices-7.9-Item #8;Back to Work Package ;Offices;7.;BW - Offices- Customer;7,9;BW - Offices- Customer - Non quantifiable  benefits ;Item #8;;Likert scale;;NA#;NA#;NA#;NA#;;;;;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
 2164;Back to Work Package -Offices-7.9-Item #9;Back to Work Package ;Offices;7.;BW - Offices- Customer;7,9;BW - Offices- Customer - Non quantifiable  benefits ;Item #9;;Likert scale;;NA#;NA#;NA#;NA#;;;;;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
 2165;Back to Work Package -Offices-7.9-Item #10;Back to Work Package ;Offices;7.;BW - Offices- Customer;7,9;BW - Offices- Customer - Non quantifiable  benefits ;Item #10;;Likert scale;;NA#;NA#;NA#;NA#;;;;;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
