@@ -2208,6 +2208,7 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
                     $confirmedUC[$measID."_".$ucID]=isset($temp[$measID."_".$ucID]);
                 }
             }
+
             /*$selScope = keepUCNotEmpty($check, $selScope);
             //$check = $selScope[1];
             $selScope = $selScope[0];

@@ -14,10 +14,11 @@ function project($twig,$is_connected, $nextPage, $sideBarName){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     foreach ($list_projects as $key => $proj) {
-        $list_projects[$key][array_key_last($list_projects[$key])+1]= !empty(getProjetKeyDates($list_projects[$key]['id']));
+        //$list_projects[$key][array_key_last($list_projects[$key])+1]= !empty(getProjetKeyDates($list_projects[$key]['id']));
+        $list_projects[$key][array_key_last($list_projects[$key])+1]= count(getConfirmedUseCases($user[0],$sessionProj))>0; // has a uc confirmed
         
     }
-    
+    getConfirmedUseCases($user[0],$sessionProj);
     echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
     'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 
     'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']), "sessionProj"=>$sessionProj)); 
