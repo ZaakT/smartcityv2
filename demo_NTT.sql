@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 26 oct. 2020 à 16:04
+-- Généré le :  mar. 27 oct. 2020 à 15:34
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -73,16 +73,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCH
                                     END$$
 
 DROP PROCEDURE IF EXISTS `add_noncash`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO noncash_item (name,description)
-                                    VALUES (noncash_name,noncash_desc);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO noncash_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO noncash_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO noncash_item (name,description) 
+                                                VALUES (noncash_name,noncash_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_opex`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
@@ -97,28 +94,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(2
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO quantifiable_item (name,description)
-                                    VALUES (quantifiable_name,quantifiable_desc);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO quantifiable_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO quantifiable_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `min_red_nb` INT, IN `max_red_nb` INT, IN `idUC` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO quantifiable_item (name,description)
+                                            VALUES (quantifiable_name,quantifiable_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO quantifiable_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
+                                            VALUES (itemID,unit,source,min_red_nb,max_red_nb);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO revenues_item (name,description)
-                                    VALUES (revenues_name,revenues_desc);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO revenues_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO revenues_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT)  BEGIN
+                                    DECLARE itemID INT;
+                                    INSERT INTO revenues_item (name,description)
+                                        VALUES (revenues_name,revenues_desc);
+                                    SET itemID = LAST_INSERT_ID();
+                                    INSERT INTO revenues_uc (id_item,id_uc)
+                                        VALUES (itemID,idUC);
+                                    INSERT INTO revenues_item_advice (id,unit,source,range_min,range_max)
+                                        VALUES (itemID,unit,source,range_min,range_max);
+                                END$$
 
 DROP PROCEDURE IF EXISTS `add_risk`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(255), IN `risk_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -1931,7 +1928,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (26, 17, 16, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (27, 17, 16, 25, NULL, 1730, 10, 0, '0000-00-00', 0),
 (28, 22, 17, 5, NULL, 20.76, 1, 5, '2020-09-30', 0),
-(29, 23, 22, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(29, 23, 22, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(30, 27, 33, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2418,7 +2416,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -2444,7 +2442,74 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (17, 'wellbeing', '', NULL),
 (18, 'ncb', '', NULL),
 (19, 'nc', '', NULL),
-(20, 'non cashj', '', NULL);
+(20, 'non cashj', '', NULL),
+(21, 'Parks', '', NULL),
+(22, 'Parks', '', NULL),
+(23, 'Parks', '', NULL),
+(24, 'Parks', '', NULL),
+(25, 'Parks', '', NULL),
+(26, 'Parks', '', NULL),
+(27, 'Offices', '', NULL),
+(28, 'Offices', '', NULL),
+(29, 'Offices', '', NULL),
+(30, 'Factory/Manufact.', '', NULL),
+(31, 'Factory/Manufact.', '', NULL),
+(32, 'Factory/Manufact.', '', NULL),
+(33, 'Retail / Malls / Small shops', '', NULL),
+(34, 'Public Areas/Plazas', '', NULL),
+(35, 'Public Areas/Plazas', '', NULL),
+(36, 'Public Areas/Plazas', '', NULL),
+(37, 'Public Areas/Plazas', '', NULL),
+(38, 'Public Areas/Plazas', '', NULL),
+(39, 'Event, Cultural & Sports Facilities', '', NULL),
+(40, 'Event, Cultural & Sports Facilities', '', NULL),
+(41, 'Retail / Malls / Small shops', '', NULL),
+(42, 'Public Roads', '', NULL),
+(43, 'Private Roads', '', NULL),
+(44, 'Public Roads', '', NULL),
+(45, 'Public Roads', '', NULL),
+(46, 'Public Roads', '', NULL),
+(47, 'Private Roads', '', NULL),
+(48, 'Private Roads', '', NULL),
+(49, 'Private Roads', '', NULL),
+(50, 'Public Roads', '', NULL),
+(51, 'Public Roads', '', NULL),
+(52, 'Public Areas/Plazas', '', NULL),
+(53, 'Public Areas/Plazas', '', NULL),
+(54, 'Airports', '', NULL),
+(55, 'Airports', '', NULL),
+(56, 'Parks', '', NULL),
+(57, 'Parks', '', NULL),
+(58, 'Retail / Malls / Small shops', '', NULL),
+(59, 'Retail / Malls / Small shops', '', NULL),
+(60, 'Event, Cultural & Sports Facilities', '', NULL),
+(61, 'Event, Cultural & Sports Facilities', '', NULL),
+(62, 'Offices', '', NULL),
+(63, 'Offices', '', NULL),
+(64, 'Airports', '', NULL),
+(65, 'Airports', '', NULL),
+(66, 'Parks', '', NULL),
+(67, 'Parks', '', NULL),
+(68, 'Retail / Malls / Small shops', '', NULL),
+(69, 'Retail / Malls / Small shops', '', NULL),
+(70, 'Event, Cultural & Sports Facilities', '', NULL),
+(71, 'Event, Cultural & Sports Facilities', '', NULL),
+(72, 'Factory/Manufact.', '', NULL),
+(73, 'Factory/Manufact.', '', NULL),
+(74, 'Offices', '', NULL),
+(75, 'Offices', '', NULL),
+(76, 'Offices', '', NULL),
+(77, 'Offices', '', NULL),
+(78, 'Factory/Manufact.', '', NULL),
+(79, 'Factory/Manufact.', '', NULL),
+(80, 'Factory/Manufact.', '', NULL),
+(81, 'Factory/Manufact.', '', NULL),
+(82, 'Retail / Malls / Small shops', '', NULL),
+(83, 'Retail / Malls / Small shops', '', NULL),
+(84, 'Event, Cultural & Sports Facilities', '', NULL),
+(85, 'Event, Cultural & Sports Facilities', '', NULL),
+(86, 'Offices', '', NULL),
+(87, 'Offices', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2533,7 +2598,74 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (12, 11),
 (13, 11),
 (19, 11),
-(20, 17);
+(20, 17),
+(21, 32),
+(22, 32),
+(23, 32),
+(24, 32),
+(25, 32),
+(26, 32),
+(27, 33),
+(28, 33),
+(29, 33),
+(30, 34),
+(31, 34),
+(32, 34),
+(33, 35),
+(34, 36),
+(35, 36),
+(36, 36),
+(37, 36),
+(38, 36),
+(39, 38),
+(40, 38),
+(41, 39),
+(42, 42),
+(43, 43),
+(44, 44),
+(45, 44),
+(46, 44),
+(47, 45),
+(48, 45),
+(49, 45),
+(50, 49),
+(51, 49),
+(52, 50),
+(53, 50),
+(54, 51),
+(55, 51),
+(56, 52),
+(57, 52),
+(58, 53),
+(59, 53),
+(60, 54),
+(61, 54),
+(62, 55),
+(63, 55),
+(64, 56),
+(65, 56),
+(66, 57),
+(67, 57),
+(68, 58),
+(69, 58),
+(70, 59),
+(71, 59),
+(72, 60),
+(73, 60),
+(74, 61),
+(75, 61),
+(76, 62),
+(77, 62),
+(78, 63),
+(79, 63),
+(80, 64),
+(81, 64),
+(82, 65),
+(83, 65),
+(84, 66),
+(85, 66),
+(86, 67),
+(87, 67);
 
 -- --------------------------------------------------------
 
@@ -2934,10 +3066,10 @@ CREATE TABLE IF NOT EXISTS `project` (
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
 (26, 'Montreal Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 15:08:51', 1, 1, 0),
-(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-23 15:42:58', 13, 1, 0),
+(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-27 16:22:54', 13, 1, 1),
 (28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0),
-(30, 'ntt', '', NULL, NULL, NULL, '2020-10-26 17:04:17', NULL, 16, 0, 0);
+(30, 'ntt', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-10-27 16:08:40', 16, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2967,7 +3099,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (21, '2020-09-15', 48, '2021-02-01', 10),
 (23, '2021-01-04', 36, '2021-01-04', 6),
 (24, '2017-01-01', 52, '2017-04-01', 6),
-(29, '2020-10-01', 48, '2020-10-01', 6);
+(29, '2020-10-01', 48, '2020-10-01', 6),
+(30, '2020-10-01', 48, '2020-10-01', 6);
 
 -- --------------------------------------------------------
 
@@ -3085,7 +3218,9 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (23, 3, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
 (24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
 (29, 15, '2020-10-01', 3, '2024-09-01', '2020-12-01', 2),
-(29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3);
+(29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3),
+(30, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(30, 67, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6);
 
 -- --------------------------------------------------------
 
@@ -3234,6 +3369,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (27, 0),
 (28, 0),
 (29, 0),
+(30, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -3250,7 +3386,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (26, 21),
 (27, 21),
 (28, 21),
-(29, 21);
+(29, 21),
+(30, 25);
 
 -- --------------------------------------------------------
 
@@ -3348,7 +3485,23 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 29),
 (15, 29),
 (20, 29),
-(22, 29);
+(22, 29),
+(-1, 30),
+(33, 30),
+(49, 30),
+(50, 30),
+(55, 30),
+(56, 30),
+(57, 30),
+(58, 30),
+(59, 30),
+(60, 30),
+(61, 30),
+(62, 30),
+(64, 30),
+(65, 30),
+(66, 30),
+(67, 30);
 
 -- --------------------------------------------------------
 
@@ -3362,7 +3515,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -3378,7 +3531,12 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (10, 'number of accidents', ''),
 (11, 'cvcv', ''),
 (12, 'quant', ''),
-(13, 'uu', '');
+(14, 'Parks', ''),
+(15, 'Parks', ''),
+(16, 'Retail / Malls / Small shops', ''),
+(17, 'Airports', ''),
+(18, 'Public Roads', ''),
+(19, 'Private Roads', '');
 
 -- --------------------------------------------------------
 
@@ -3394,7 +3552,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_advice` (
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_advice`
@@ -3404,7 +3562,13 @@ INSERT INTO `quantifiable_item_advice` (`id`, `unit`, `source`, `range_min_red_n
 (1, 'per ...', 'www.     .fr', 5, 10),
 (2, 'tgrfe', 'btgrf', 1, 2),
 (3, 'htgrfe', 'tbgrfe', 4, 5),
-(4, 'per unit', 'www.google.com', 3, 100);
+(4, 'per unit', 'www.google.com', 3, 100),
+(14, 'Current # of  community activities held in premises each month', '', 20, 20),
+(15, 'Current # of  volunteers hours spent in premises each month', '', 20, 20),
+(16, '# of purchasing hours in store by visiting clients', '', -40, -88),
+(17, 'Total time spent waiting in Transit by passengers (all)', '', -40, -88),
+(18, 'Total time spent waiting by passengers (all)', '', -40, -88),
+(19, 'Total time spent waiting by passengers (all)', '', -40, -88);
 
 -- --------------------------------------------------------
 
@@ -3467,7 +3631,13 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (11, 9),
 (7, 11),
 (12, 11),
-(13, 17);
+(13, 17),
+(14, 32),
+(15, 32),
+(16, 35),
+(17, 37),
+(18, 44),
+(19, 45);
 
 -- --------------------------------------------------------
 
@@ -3603,7 +3773,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -3629,7 +3799,32 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`) VALUES
 (18, 'Fees for parking-services', ''),
 (19, 'Advertisement', ''),
 (20, 'Access to Wifi point', ''),
-(22, 'refv', '');
+(22, 'refv', ''),
+(24, 'Parks', ''),
+(25, 'Parks', ''),
+(26, 'Parks', ''),
+(27, 'Offices', ''),
+(28, 'Factory/Manufact.', ''),
+(29, 'Retail / Malls / Small shops', ''),
+(30, 'Public Areas/Plazas', ''),
+(31, 'Airports', ''),
+(32, 'Event, Cultural & Sports Facilities', ''),
+(33, 'Retail / Malls / Small shops', ''),
+(34, 'Public Areas/Plazas', ''),
+(35, 'Parks', ''),
+(36, 'Public Roads', ''),
+(37, 'Public Roads', ''),
+(38, 'Private Roads', ''),
+(39, 'Private Roads', ''),
+(40, 'Public Roads', ''),
+(41, 'Private Roads', ''),
+(42, 'Public Areas/Plazas', ''),
+(43, 'Public Roads', ''),
+(44, 'Private Roads', ''),
+(45, 'Public Roads', ''),
+(46, 'Public Roads', ''),
+(47, 'Public Areas/Plazas', ''),
+(48, 'Public Areas/Plazas', '');
 
 -- --------------------------------------------------------
 
@@ -3645,7 +3840,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_advice`
@@ -3659,7 +3854,32 @@ INSERT INTO `revenues_item_advice` (`id`, `unit`, `source`, `range_min`, `range_
 (17, 'Per charging point', 'https://www.justpark.com/uk/parking/london/', 525, 875),
 (18, 'Per charging point', 'Internal research', 455, 470),
 (19, 'Per  Banner', 'https://www.hastings.gov.uk/press_media/advertising/lamppostbanners/', 130, 300),
-(20, 'Per wifi access point', 'https://nypost.com/2018/05/01/nycs-free-public-wi-fi-kiosks-arent-making-enough-money/', 5, 5);
+(20, 'Per wifi access point', 'https://nypost.com/2018/05/01/nycs-free-public-wi-fi-kiosks-arent-making-enough-money/', 5, 5),
+(24, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(25, '# of additional clients each month', '', 0, 0),
+(26, '# of additional non-local visitors in the park each month', '', 0, 0),
+(27, 'Current # of square foot of unused space', '', 0, 0),
+(28, 'Current # of square foot of unused space', '', 0, 0),
+(29, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(30, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(31, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(32, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(33, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(34, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(35, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(36, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(37, '# of WWD occurrences', '', 0, 0),
+(38, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(39, '# of WWD occurrences', '', 0, 0),
+(40, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(41, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(42, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(43, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(44, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(45, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(46, '# of additional clients each month', '', 0, 0),
+(47, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(48, '# of additional clients each month', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3739,7 +3959,32 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (22, 17),
 (23, 22),
 (19, 25),
-(20, 28);
+(20, 28),
+(24, 32),
+(25, 32),
+(26, 32),
+(27, 33),
+(28, 34),
+(29, 35),
+(30, 36),
+(31, 37),
+(32, 38),
+(33, 39),
+(34, 40),
+(35, 41),
+(36, 42),
+(37, 42),
+(38, 43),
+(39, 43),
+(40, 44),
+(41, 45),
+(42, 46),
+(43, 47),
+(44, 48),
+(45, 49),
+(46, 49),
+(47, 50),
+(48, 50);
 
 -- --------------------------------------------------------
 
@@ -4108,7 +4353,8 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `departm
 (22, '', '', '', '', '', ''),
 (23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
 (24, '', '', '', '', 'verifDash', ''),
-(29, '', '', '', '', 'Insigth', '');
+(29, '', '', '', '', 'Insigth', ''),
+(30, '', '', '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -4325,8 +4571,8 @@ INSERT INTO `ucm_sel_critcat` (`id_critCat`, `id_ucm`, `weight`) VALUES
 (2, 6, NULL),
 (2, 7, 50),
 (2, 9, 50),
-(4, 15, NULL),
-(6, 15, NULL);
+(4, 15, 50),
+(6, 15, 50);
 
 -- --------------------------------------------------------
 
@@ -5311,102 +5557,46 @@ INSERT INTO `uc_vs_crit_input` (`id_uc`, `id_crit`, `id_ucm`, `rate`) VALUES
 (11, 9, 7, 1),
 (11, 9, 9, 4),
 (11, 10, 9, 4),
-(15, 11, 15, 5),
-(15, 14, 15, 5),
-(15, 18, 15, 4),
-(15, 21, 15, 6),
-(15, 22, 15, 4),
-(15, 23, 15, 3),
-(15, 24, 15, 5),
-(15, 26, 15, 2),
-(15, 31, 15, 9),
-(15, 33, 15, 5),
-(15, 36, 15, 2),
-(15, 39, 15, 3),
-(16, 11, 15, 7),
-(16, 14, 15, 8),
-(16, 18, 15, 5),
-(16, 21, 15, 4),
-(16, 22, 15, 3),
-(16, 23, 15, 3),
-(16, 24, 15, 7),
-(16, 26, 15, 6),
-(16, 31, 15, 8),
-(16, 33, 15, 6),
-(16, 36, 15, 4),
-(16, 39, 15, 6),
-(20, 11, 15, 3),
-(20, 14, 15, 2),
-(20, 18, 15, 6),
-(20, 21, 15, 4),
-(20, 22, 15, 1),
-(20, 23, 15, 4),
-(20, 24, 15, 3),
-(20, 26, 15, 1),
-(20, 31, 15, 4),
-(20, 33, 15, 7),
-(20, 36, 15, 1),
-(20, 39, 15, 6),
-(21, 11, 15, 9),
-(21, 14, 15, 3),
-(21, 18, 15, 3),
-(21, 21, 15, 3),
-(21, 22, 15, 6),
-(21, 23, 15, 9),
-(21, 24, 15, 3),
-(21, 26, 15, 9),
-(21, 31, 15, 4),
-(21, 33, 15, 4),
-(21, 36, 15, 4),
-(21, 39, 15, 4),
-(22, 11, 15, 4),
-(22, 14, 15, 2),
-(22, 18, 15, 3),
-(22, 21, 15, 4),
-(22, 22, 15, 5),
-(22, 23, 15, 2),
-(22, 24, 15, 6),
-(22, 26, 15, 3),
-(22, 31, 15, 5),
-(22, 33, 15, 3),
-(22, 36, 15, 3),
-(22, 39, 15, 2),
-(26, 11, 15, 6),
-(26, 14, 15, 6),
-(26, 18, 15, 7),
-(26, 21, 15, 9),
-(26, 22, 15, 4),
-(26, 23, 15, 4),
-(26, 24, 15, 6),
-(26, 26, 15, 9),
-(26, 31, 15, 9),
-(26, 33, 15, 8),
-(26, 36, 15, 3),
-(26, 39, 15, 2),
-(27, 11, 15, 5),
-(27, 14, 15, 9),
-(27, 18, 15, 5),
-(27, 21, 15, 6),
-(27, 22, 15, 9),
-(27, 23, 15, 2),
-(27, 24, 15, 9),
-(27, 26, 15, 6),
-(27, 31, 15, 1),
-(27, 33, 15, 4),
-(27, 36, 15, 4),
-(27, 39, 15, 8),
-(28, 11, 15, 1),
-(28, 14, 15, 2),
-(28, 18, 15, 2),
-(28, 21, 15, 3),
-(28, 22, 15, 1),
-(28, 23, 15, 5),
-(28, 24, 15, 5),
-(28, 26, 15, 9),
-(28, 31, 15, 3),
-(28, 33, 15, 3),
-(28, 36, 15, 3),
-(28, 39, 15, 2);
+(15, 13, 15, 5),
+(15, 34, 15, 5),
+(15, 37, 15, 5),
+(15, 40, 15, 5),
+(15, 41, 15, 5),
+(16, 13, 15, 5),
+(16, 34, 15, 5),
+(16, 37, 15, 5),
+(16, 40, 15, 5),
+(16, 41, 15, 5),
+(20, 13, 15, 5),
+(20, 34, 15, 5),
+(20, 37, 15, 5),
+(20, 40, 15, 5),
+(20, 41, 15, 5),
+(21, 13, 15, 5),
+(21, 34, 15, 5),
+(21, 37, 15, 5),
+(21, 40, 15, 5),
+(21, 41, 15, 5),
+(22, 13, 15, 5),
+(22, 34, 15, 5),
+(22, 37, 15, 5),
+(22, 40, 15, 5),
+(22, 41, 15, 5),
+(26, 13, 15, 5),
+(26, 34, 15, 5),
+(26, 37, 15, 5),
+(26, 40, 15, 5),
+(26, 41, 15, 5),
+(27, 13, 15, 5),
+(27, 34, 15, 5),
+(27, 37, 15, 5),
+(27, 40, 15, 5),
+(27, 41, 15, 5),
+(28, 13, 15, 5),
+(28, 34, 15, 5),
+(28, 37, 15, 5),
+(28, 40, 15, 5),
+(28, 41, 15, 5);
 
 -- --------------------------------------------------------
 
