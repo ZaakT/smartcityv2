@@ -1760,7 +1760,7 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
 function getListSelCapex($projID,$ucID, $side = "supplier"){
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,period, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,period, unit, guide
                             FROM input_capex
                             INNER JOIN capex_item
                                 WHERE  input_capex.id_uc = ? and id_proj = ? and id_item = capex_item.id
@@ -1775,10 +1775,11 @@ function getListSelCapex($projID,$ucID, $side = "supplier"){
         $volume = intval($row['volume']);
         $period = intval($row['period']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){
@@ -1893,12 +1894,13 @@ function insertCapexInputed($projID,$ucID,$list){
                                 period = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $req2 = $db->prepare("UPDATE capex_item
-                            SET unit = ? 
+                            SET unit = ?,
+                                guide = ?
                             WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['period'],$projID,$ucID,$id_item));        
         if(isset($data['unit'])){
-            $ret = $req2->execute(array( $data['unit'], $id_item));
+            $ret = $req2->execute(array( $data['unit'], $data['guide'], $id_item));
         }
     }
 
@@ -2072,7 +2074,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 : wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, unit
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, unit, guide
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -2090,12 +2092,13 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
 
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, 'guide'=>$guide];
         }
     }
     //var_dump($list);
@@ -2377,7 +2380,7 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
 function getListSelImplem($projID,$ucID, $side = "supplier"){
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume, unit, guide
                             FROM input_implem
                             INNER JOIN implem_item
                                 WHERE  input_implem.id_uc = ? and id_proj = ? and id_item = implem_item.id
@@ -2391,10 +2394,11 @@ function getListSelImplem($projID,$ucID, $side = "supplier"){
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){
@@ -2676,7 +2680,7 @@ function getListSelOpex($projID,$ucID, $side = "supplier"){
     
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost, unit, guide
                             FROM input_opex
                             INNER JOIN opex_item
                                 WHERE  input_opex.id_uc = ? and id_proj = ? and id_item = opex_item.id
@@ -2692,10 +2696,11 @@ function getListSelOpex($projID,$ucID, $side = "supplier"){
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarCost = floatval($row['annual_variation_unitcost']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){

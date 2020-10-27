@@ -401,7 +401,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                         throw new Exception("2 Wrong type.");
                     }
 
-
+                    //var_dump($list_selXpex);
                     $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
                     $compo = getCompoByUC($ucID);
         
@@ -600,6 +600,12 @@ function xpex_inputed($post, $sideBarName, $type){
                             $list[$temp[1]] += ['ramp_up_duration'=>$value];
                         } else {
                             $list[$temp[1]] = ['ramp_up_duration'=>$value];
+                        }
+                    }else if($temp[0]=="guide"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['guide'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['guide'=>$value];
                         }
                     }else{
                         throw new Exception("Error ! :".$temp[0]);
