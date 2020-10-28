@@ -66,6 +66,7 @@
                     <th scope="col">Unit</th>
                     <th scope="col">Ratio per Use Case</th> {# {{compo['name']}} #}
                     <th scope="col">Range of the Unit Revenue ( in {{selDevSym}} )</th>
+                    
                 </tr>
                 
             </thead>
@@ -105,6 +106,8 @@
                     <th scope="col">Start of Revenues</th>
                     <th scope="col">Ramp-up Duration</th>
                     {% endif %}
+                    <th scope="col">Guide</th>
+
                 </tr>
                 
             </thead>
@@ -132,7 +135,9 @@
                     {% if isSup %}
                     <td scope="col"><input id="revenueStart_{{id_revenues}}" name="revenueStart_{{id_revenues}}" class="text-center revenueStart p-1" type="date" required oninput="checkRevenuesInput(revenueStart_{{id_revenues}});" value="{{selRevenues[id_revenues]['revenue_start_date']}}"></td> 
                     <td scope="col"><input id="rampUpDurationt_{{id_revenues}}" name="rampUpDurationt_{{id_revenues}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkRevenuesInput(rampUpDurationt_{{id_revenues}});" value="{{selRevenues[id_revenues]['ramp_up_duration']}}"></td> 
-                    {% endif %}              
+                    {% endif %}     
+                    <td scope="col"><textarea id="guide_{{id_revenues}}" name="guide_{{id_revenues}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkRevenuesInput(guide_{{id_xpex}});">{{ selRevenues[id_revenues]['guide']}}</textarea></td> 
+
                 </tr> 
             {% endfor %}
             </tbody>

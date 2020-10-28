@@ -166,25 +166,25 @@
       <li class="nav-item dropleft">
           <span class="nav-link oi oi-cog" title="cog" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"aria-hidden="true"></span>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            {#<a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("language")}}</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <h6 class="dropdown-header">{{traduction.getText("language")}}</h6>
               <a class="dropdown-item" id="language_en" href="?A=setLanguage&amp;language=en">{{traduction.getText("english")}}</a>
               <a class="dropdown-item" id="language_fr" href="?A=setLanguage&amp;language=fr">{{traduction.getText("french")}}</a>
-            </div>#}
-            <a class="dropdown-item dropdown-toggle" data-toggle="dropdown" href="#">{{traduction.getText("currency")}}</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              
+              <div class="dropdown-divider"></div>
+              
+              <h6 class="dropdown-header">{{traduction.getText("currency")}}</h6>
               {% if devises %}
                 {% for id_devise,devise in devises %}
                   <a class="dropdown-item" id="link_setDevise_{{id_devise}}" href="?A=setDevise&amp;id={{id_devise}}">{{devise['name']}} ({{devise['symbol']}})</a>
                   <script type='text/javascript'>getPart({{id_devise}});</script>
                 {% endfor %}
-              {% else %}                  
-              <span class="dropdown-item text-danger font-italic">{{traduction.getText("navbar_no_devise")}}</>
-              {% endif %}
-            </div>
+                {% else %}                  
+                  <span class="dropdown-item text-danger font-italic">{{traduction.getText("navbar_no_devise")}}</>
+                {% endif %}
           </div>
       </li>
   </ul>
+  
 </nav>
   {% else %}
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top d-flex justify-content-end">
@@ -219,4 +219,6 @@
     </div>
   </div>
 </div>
+
+
 {% endmacro %}

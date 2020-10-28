@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 21 oct. 2020 à 16:07
+-- Généré le :  lun. 26 oct. 2020 à 15:01
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -27,16 +27,16 @@ DELIMITER $$
 -- Procédures
 --
 DROP PROCEDURE IF EXISTS `add_capex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT)  BEGIN
-                                        DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description)
-                                            VALUES (capex_name,capex_desc);
-                                        SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO capex_uc (id_item,id_uc)
-                                            VALUES (itemID,idUC);
-                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max)
-                                            VALUES (itemID,unit,source,range_min,range_max);
-                                    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO capex_item (name,description, origine, side)
+                                    VALUES (capex_name,capex_desc, origine, side);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO capex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO capex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_cashreleasing`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `unit_cost` INT, IN `min_red_nb` INT, IN `max_red_nb` INT, IN `min_red_cost` INT, IN `max_red_cost` INT, IN `idUC` INT)  BEGIN
@@ -85,16 +85,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VAR
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_opex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT)  BEGIN
-                                        DECLARE itemID INT;
-                                        INSERT INTO opex_item (name,description)
-                                            VALUES (opex_name,opex_desc);
-                                        SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO opex_uc (id_item,id_uc)
-                                            VALUES (itemID,idUC);
-                                        INSERT INTO opex_item_advice (id,unit,source,range_min,range_max)
-                                            VALUES (itemID,unit,source,range_min,range_max);
-                                    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO opex_item (name,description, origine, side)
+                                    VALUES (opex_name,opex_desc, origine, side);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO opex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO opex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -109,16 +109,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT)  BEGIN
-                                        DECLARE itemID INT;
-                                        INSERT INTO revenues_item (name,description)
-                                            VALUES (revenues_name,revenues_desc);
-                                        SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO revenues_uc (id_item,id_uc)
-                                            VALUES (itemID,idUC);
-                                        INSERT INTO revenues_item_advice (id,unit,source,range_min,range_max)
-                                            VALUES (itemID,unit,source,range_min,range_max);
-                                    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO revenues_item (name,description)
+                                    VALUES (revenues_name,revenues_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO revenues_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO revenues_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_risk`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(255), IN `risk_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -381,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -438,7 +438,7 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (64, 'Monitor/screens', 'Accessories, options include screens. ', 'from_ntt', 'projDev', NULL),
 (65, 'Code Blue IP', 'IP 1500 VoIp / 2500 VoIp / 5000 VoIp speakerphones ', 'from_ntt', 'projDev', NULL),
 (66, 'Wireless Concealed Placement Speaker ', 'Public Alerts posts and Info Concealed placement speaker (CPS).', 'from_ntt', 'projDev', NULL),
-(67, 'Air Quality Sensor ', 'It measures and find dust particles in the air.\n', 'from_ntt', 'projDev', NULL),
+(67, 'Air Quality Sensor ', 'It measures and find dust particles in the air.\n', 'from_ntt', 'projDev', 'my unit'),
 (68, 'Software tool', 'Shows the measures and collects data. Data is accessible in real time and measurements can be consulted remotely.', 'from_ntt', 'projDev', NULL),
 (69, 'Noise level sensor', 'The microphone is based on the LM386 amplifier and an electret microphone', 'from_ntt', 'projDev', NULL),
 (70, 'Software tool', 'Shows the measures and collects data. Data is accessible in real time and measurements can be consulted remotely.', 'from_ntt', 'projDev', NULL),
@@ -452,7 +452,8 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (78, 'Local parking guidance system ', 'Outdoor parking guidance monitors ', 'from_ntt', 'projDev', NULL),
 (79, 'Wifi antenna', 'Wifi antenna attached to a street light box', 'from_ntt', 'projDev', NULL),
 (80, 'Antennas (Distributed Antenna System)', 'Wireless communication system ', 'from_ntt', 'projDev', NULL),
-(81, '5G antenna', 'Cells to efficiently deliver high speed mobile broadband and other low latency applications.', 'from_ntt', 'projDev', NULL);
+(81, '5G antenna', 'Cells to efficiently deliver high speed mobile broadband and other low latency applications.', 'from_ntt', 'projDev', NULL),
+(83, 'cap', '', 'from_ntt', 'supplier', 'ha');
 
 -- --------------------------------------------------------
 
@@ -530,7 +531,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -574,7 +575,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (39, 23),
 (40, 23),
 (45, 24),
-(47, 27);
+(47, 27),
+(83, 29);
 
 -- --------------------------------------------------------
 
@@ -609,6 +611,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (44, -1),
 (45, -1),
 (82, -1),
+(83, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -1460,8 +1463,10 @@ INSERT INTO `implem_schedule` (`id_uc`, `id_proj`, `start_date`, `25_completion`
 (11, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01'),
 (15, 26, '2020-01-01', '2020-03-01', '2020-05-01', '2020-06-01', '2020-09-01'),
 (15, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01'),
+(15, 28, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-07-01'),
 (16, 26, '2020-01-01', '2020-03-01', '2020-05-01', '2020-06-01', '2020-09-01'),
-(16, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01');
+(16, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01'),
+(17, 28, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-07-01');
 
 -- --------------------------------------------------------
 
@@ -1623,7 +1628,10 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (52, 27, 15, 5, 8650, 3),
 (53, 27, 15, 500, 605.5, 3),
 (56, 26, 16, NULL, NULL, NULL),
-(56, 27, 16, 50, 86.5, 3);
+(56, 27, 16, 50, 86.5, 3),
+(59, 28, 17, 5, 17.3, 5),
+(67, 29, 22, 2, 1, 3),
+(83, 29, -1, 30, 20, 1);
 
 -- --------------------------------------------------------
 
@@ -1679,7 +1687,9 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (15, 27, 16, 'kWh', 600, NULL, 0.35, 3, 1, 20, 0, '0000-00-00', 0),
 (18, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (18, 27, 15, 'Per Kwh', 600, NULL, 0.35, 0, 1, 30, 0, '0000-00-00', 0),
-(19, 27, 15, 'Per light bulb', 30, NULL, 86.5, 0, 5, 30, 50, '0000-00-00', 0);
+(18, 29, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(19, 27, 15, 'Per light bulb', 30, NULL, 86.5, 0, 5, 30, 50, '0000-00-00', 0),
+(20, 28, 17, 'Per Kwh', 15, NULL, 89.96, 1, 2, 1, 2, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -1731,7 +1741,8 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (23, 35, 3, 300, 20),
 (26, 47, 16, NULL, NULL),
 (27, 44, 15, 5, 20760),
-(27, 47, 16, 5, 86.5);
+(27, 47, 16, 5, 86.5),
+(28, 50, 17, 5, 17.3);
 
 -- --------------------------------------------------------
 
@@ -1771,7 +1782,8 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (16, 21, 7, 4, 50),
 (17, 23, 3, 5, 100),
 (18, 21, 9, NULL, NULL),
-(19, 21, 11, NULL, NULL);
+(19, 21, 11, NULL, NULL),
+(20, 28, 17, 1, 10);
 
 -- --------------------------------------------------------
 
@@ -1830,7 +1842,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (26, 29, 16, NULL, NULL, NULL, NULL, NULL),
 (27, 26, 15, 5, NULL, 1730, 5, 0),
 (27, 29, 16, 5, NULL, 8.65, 3, 0),
-(27, 30, 16, 150, NULL, 0.35, 1, 0);
+(27, 30, 16, 150, NULL, 0.35, 1, 0),
+(28, 32, 17, 15, NULL, 3.46, 1, 2),
+(29, 54, 15, 20, NULL, 10, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -1867,7 +1881,8 @@ INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator
 (8, 3, 3, NULL, NULL, NULL, NULL),
 (10, 23, 3, 'accident', 10, 30, 5),
 (11, 21, 9, NULL, NULL, NULL, NULL),
-(12, 21, 11, NULL, NULL, NULL, NULL);
+(12, 21, 11, NULL, NULL, NULL, NULL),
+(13, 28, 17, 'y', 1, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -1914,7 +1929,9 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (21, 15, 11, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0),
 (26, 17, 16, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
-(27, 17, 16, 25, NULL, 1730, 10, 0, '0000-00-00', 0);
+(27, 17, 16, 25, NULL, 1730, 10, 0, '0000-00-00', 0),
+(28, 22, 17, 5, NULL, 20.76, 1, 5, '2020-09-30', 0),
+(29, 23, 22, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1951,7 +1968,8 @@ INSERT INTO `input_risk` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `pro
 (10, 8, 11, 7, 40),
 (11, 23, 3, 9, 20),
 (12, 21, 9, NULL, NULL),
-(13, 21, 11, NULL, NULL);
+(13, 21, 11, NULL, NULL),
+(54, 28, 17, 2, 50);
 
 -- --------------------------------------------------------
 
@@ -2001,7 +2019,10 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (18, 24, -1, 30, 10, 0, 0, 0, '0000-00-00', 0),
 (19, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
 (20, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
-(21, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0);
+(21, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(22, 29, -1, 100, 20, 0, 0, 0, '0000-00-00', 0),
+(23, 29, -1, 20, 30, 0, 1, 2, '0000-00-00', 0),
+(24, 29, 22, 300, 10, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -2053,7 +2074,8 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (14, 23, 3, 'CO2', 1000, NULL, 1, 30, 0, 0, 0, '0000-00-00', 0),
 (15, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (17, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
-(17, 27, 15, 'Per Ton of carbon', 30, NULL, 86.5, 2, 10, 30, 0, '0000-00-00', 0);
+(17, 27, 15, 'Per Ton of carbon', 30, NULL, 86.5, 2, 10, 30, 0, '0000-00-00', 0),
+(18, 28, 17, 'Per Ton of carbon', 1, NULL, 3.46, 5, 6, 1, 2, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -2369,7 +2391,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `user` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -2379,7 +2401,9 @@ INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
 (0, 'Project Overlay', NULL, 0),
 (21, 'Smart Lighting', '', 0),
 (22, 'Building retrofit', '', 0),
-(23, 'Traffic management', '', 0);
+(23, 'Traffic management', '', 0),
+(24, 'Project Management NTT', '', 16),
+(25, 'NTT', '', 16);
 
 -- --------------------------------------------------------
 
@@ -2394,7 +2418,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -2419,7 +2443,8 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (16, 'non cash', '', NULL),
 (17, 'wellbeing', '', NULL),
 (18, 'ncb', '', NULL),
-(19, 'nc', '', NULL);
+(19, 'nc', '', NULL),
+(20, 'non cashj', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2445,7 +2470,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -2467,7 +2492,8 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (16, 21),
 (18, 21),
 (19, 21),
-(17, 23);
+(17, 23),
+(20, 28);
 
 -- --------------------------------------------------------
 
@@ -2506,7 +2532,8 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (11, 11),
 (12, 11),
 (13, 11),
-(19, 11);
+(19, 11),
+(20, 17);
 
 -- --------------------------------------------------------
 
@@ -2523,7 +2550,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -2582,7 +2609,8 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`)
 (50, 'Maintenance of local parking guidance system ', '', 'from_ntt', 'projDev', NULL),
 (51, 'Maintenance of the sensor', '', 'from_ntt', 'projDev', NULL),
 (52, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL),
-(53, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL);
+(53, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL),
+(54, 'op', '', 'from_ntt', 'supplier', '');
 
 -- --------------------------------------------------------
 
@@ -2656,7 +2684,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2681,7 +2709,8 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (14, 23),
 (15, 23),
 (16, 23),
-(17, 23);
+(17, 23),
+(54, 29);
 
 -- --------------------------------------------------------
 
@@ -2734,8 +2763,10 @@ INSERT INTO `opex_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `50_
 (11, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01'),
 (15, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-06-01', '2023-12-01'),
 (15, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01'),
+(15, 28, '2012-08-01', '2012-12-01', '2013-03-01', '2013-07-01', '2013-09-01', '2019-01-01'),
 (16, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-06-01', '2023-12-01'),
-(16, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01');
+(16, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01'),
+(17, 28, '2012-08-01', '2012-12-01', '2013-03-01', '2013-07-01', '2013-09-01', '2019-01-01');
 
 -- --------------------------------------------------------
 
@@ -2783,6 +2814,7 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (25, 15),
 (26, 15),
 (27, 15),
+(54, 15),
 (28, 16),
 (29, 16),
 (30, 16),
@@ -2893,7 +2925,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -2901,12 +2933,10 @@ CREATE TABLE IF NOT EXISTS `project` (
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-19 17:09:37', 15, 1, 0),
-(22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
-(23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
-(24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1),
 (26, 'Montreal Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 15:08:51', 1, 1, 0),
-(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-21 18:01:43', 13, 1, 0);
+(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-10-23 15:42:58', 13, 1, 0),
+(28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
+(29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2933,9 +2963,10 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (4, '2020-09-06', 12, '2020-09-20', 4),
 (10, '2020-09-14', 36, '2020-09-14', 6),
 (11, '2021-01-01', 48, '2021-05-01', 6),
-(21, '2020-09-15', 48, '2021-02-01', 6),
+(21, '2020-09-15', 48, '2021-02-01', 10),
 (23, '2021-01-04', 36, '2021-01-04', 6),
-(24, '2017-01-01', 52, '2017-04-01', 6);
+(24, '2017-01-01', 52, '2017-04-01', 6),
+(29, '2020-10-01', 48, '2020-10-01', 6);
 
 -- --------------------------------------------------------
 
@@ -3005,9 +3036,11 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (8, 7),
 (26, 9),
 (27, 9),
+(28, 9),
 (27, 10),
 (26, 11),
 (27, 11),
+(28, 11),
 (27, 13),
 (27, 15),
 (26, 16),
@@ -3015,6 +3048,7 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (27, 17),
 (26, 20),
 (27, 20),
+(28, 20),
 (27, 22);
 
 -- --------------------------------------------------------
@@ -3048,7 +3082,9 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (21, 9, '2021-03-01', 3, '2023-06-01', '2021-05-01', 4),
 (21, 11, '2021-02-01', 3, '2023-07-01', '2021-03-01', 3),
 (23, 3, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
-(24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0);
+(24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(29, 15, '2020-10-01', 3, '2024-09-01', '2020-12-01', 2),
+(29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3);
 
 -- --------------------------------------------------------
 
@@ -3153,7 +3189,9 @@ INSERT INTO `project_size` (`id_uc`, `id_zone`, `id_mag`, `id_proj`) VALUES
 (15, 13, 2, 27),
 (16, 13, 2, 27),
 (15, 16, 2, 26),
+(15, 16, 2, 27),
 (16, 16, 2, 26),
+(16, 16, 2, 27),
 (15, 17, 2, 27),
 (16, 17, 2, 27),
 (15, 20, 2, 26),
@@ -3193,6 +3231,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (24, 0),
 (26, 0),
 (27, 0),
+(28, 0),
+(29, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -3207,7 +3247,9 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (24, 1),
 (3, 21),
 (26, 21),
-(27, 21);
+(27, 21),
+(28, 21),
+(29, 21);
 
 -- --------------------------------------------------------
 
@@ -3298,7 +3340,14 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (16, 26),
 (-1, 27),
 (15, 27),
-(16, 27);
+(16, 27),
+(-1, 28),
+(15, 28),
+(17, 28),
+(-1, 29),
+(15, 29),
+(20, 29),
+(22, 29);
 
 -- --------------------------------------------------------
 
@@ -3312,7 +3361,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -3327,7 +3376,8 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (9, 'test item', ''),
 (10, 'number of accidents', ''),
 (11, 'cvcv', ''),
-(12, 'quant', '');
+(12, 'quant', ''),
+(13, 'uu', '');
 
 -- --------------------------------------------------------
 
@@ -3367,7 +3417,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -3382,7 +3432,8 @@ INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
 (9, 21),
 (11, 21),
 (12, 21),
-(10, 23);
+(10, 23),
+(13, 28);
 
 -- --------------------------------------------------------
 
@@ -3414,7 +3465,8 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (4, 7),
 (11, 9),
 (7, 11),
-(12, 11);
+(12, 11),
+(13, 17);
 
 -- --------------------------------------------------------
 
@@ -3550,7 +3602,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -3575,7 +3627,8 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`) VALUES
 (17, 'Electricity charging fees', ''),
 (18, 'Fees for parking-services', ''),
 (19, 'Advertisement', ''),
-(20, 'Access to Wifi point', '');
+(20, 'Access to Wifi point', ''),
+(22, 'refv', '');
 
 -- --------------------------------------------------------
 
@@ -3619,7 +3672,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_user`
@@ -3639,7 +3692,10 @@ INSERT INTO `revenues_item_user` (`id`, `id_proj`) VALUES
 (11, 8),
 (12, 21),
 (15, 21),
-(14, 23);
+(14, 23),
+(21, 27),
+(22, 28),
+(23, 29);
 
 -- --------------------------------------------------------
 
@@ -3678,6 +3734,9 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (16, 16),
 (17, 16),
 (18, 16),
+(21, 16),
+(22, 17),
+(23, 22),
 (19, 25),
 (20, 28);
 
@@ -3732,8 +3791,10 @@ INSERT INTO `revenue_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `
 (11, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
 (15, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-05-01', '2023-12-01'),
 (15, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01'),
+(15, 28, '2012-08-01', '2013-01-01', '2013-03-01', '2013-04-01', '2013-06-01', '2019-01-01'),
 (16, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-05-01', '2023-12-01'),
-(16, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01');
+(16, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01'),
+(17, 28, '2012-08-01', '2013-01-01', '2013-03-01', '2013-04-01', '2013-06-01', '2019-01-01');
 
 -- --------------------------------------------------------
 
@@ -3748,7 +3809,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -3805,7 +3866,8 @@ INSERT INTO `risk_item` (`id`, `name`, `description`, `sources`) VALUES
 (48, 'Network interference', '', NULL),
 (49, 'Potential Negative impact on health', '', NULL),
 (50, 'Increase in housing prices and district attractiveness', '', NULL),
-(51, 'Potential Negative impact on health', '', NULL);
+(51, 'Potential Negative impact on health', '', NULL),
+(54, 'risk', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -3831,7 +3893,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -3850,7 +3912,9 @@ INSERT INTO `risk_item_user` (`id`, `id_proj`) VALUES
 (10, 8),
 (12, 21),
 (13, 21),
-(11, 23);
+(11, 23),
+(53, 27),
+(54, 28);
 
 -- --------------------------------------------------------
 
@@ -3891,8 +3955,10 @@ INSERT INTO `risk_uc` (`id_item`, `id_uc`) VALUES
 (18, 15),
 (19, 16),
 (20, 16),
+(53, 16),
 (21, 17),
 (22, 17),
+(54, 17),
 (23, 18),
 (24, 18),
 (25, 19),
@@ -4040,7 +4106,8 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `departm
 (21, 'a', 'Compiegne', 'Diego MEJIA', '12', 'Google', 'team a'),
 (22, '', '', '', '', '', ''),
 (23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
-(24, '', '', '', '', 'verifDash', '');
+(24, '', '', '', '', 'verifDash', ''),
+(29, '', '', '', '', 'Insigth', '');
 
 -- --------------------------------------------------------
 
@@ -4057,7 +4124,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `advice_user` enum('advice','user') NOT NULL,
   `unit` varchar(256) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -4081,7 +4148,10 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (18, '1st rec', 'operating', '', 'user', ''),
 (19, 'rev 1', 'equipment', '', 'user', 'u'),
 (20, 'dep', 'deployment', '', 'user', ''),
-(21, 'rec', 'operating', '', 'user', '');
+(21, 'rec', 'operating', '', 'user', ''),
+(22, 'dep 1', 'deployment', '', 'user', 'unitttt'),
+(23, 'rec', 'operating', '', 'user', ''),
+(24, 'reeev', 'equipment', '', 'user', '');
 
 -- --------------------------------------------------------
 
@@ -4121,7 +4191,10 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (18, -1),
 (19, 11),
 (20, 11),
-(21, 11);
+(21, 11),
+(22, -1),
+(23, -1),
+(24, 22);
 
 -- --------------------------------------------------------
 
@@ -4161,7 +4234,10 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (18, 24),
 (19, 21),
 (20, 21),
-(21, 21);
+(21, 21),
+(22, 29),
+(23, 29),
+(24, 29);
 
 -- --------------------------------------------------------
 
@@ -4212,18 +4288,11 @@ INSERT INTO `ucm_sel_crit` (`id_crit`, `id_ucm`) VALUES
 (6, 9),
 (9, 9),
 (10, 9),
-(11, 15),
-(14, 15),
-(18, 15),
-(21, 15),
-(22, 15),
-(23, 15),
-(24, 15),
-(26, 15),
-(31, 15),
-(33, 15),
-(36, 15),
-(39, 15);
+(13, 15),
+(34, 15),
+(37, 15),
+(40, 15),
+(41, 15);
 
 -- --------------------------------------------------------
 
@@ -4255,11 +4324,8 @@ INSERT INTO `ucm_sel_critcat` (`id_critCat`, `id_ucm`, `weight`) VALUES
 (2, 6, NULL),
 (2, 7, 50),
 (2, 9, 50),
-(4, 15, 20),
-(5, 15, 20),
-(6, 15, 20),
-(7, 15, 20),
-(8, 15, 20);
+(4, 15, NULL),
+(6, 15, NULL);
 
 -- --------------------------------------------------------
 
@@ -4321,7 +4387,8 @@ INSERT INTO `ucm_sel_measure` (`id_meas`, `id_ucm`) VALUES
 (4, 9),
 (16, 9),
 (21, 14),
-(21, 15);
+(21, 15),
+(21, 16);
 
 -- --------------------------------------------------------
 
@@ -4405,7 +4472,9 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`) VALUES
 (15, 21, 1, 9),
 (15, 21, 1, 11),
 (15, 24, 0, -1),
-(15, 24, 1, 9);
+(15, 24, 1, 9),
+(15, 29, 0, -1),
+(15, 29, 21, 22);
 
 -- --------------------------------------------------------
 
@@ -4423,6 +4492,652 @@ CREATE TABLE IF NOT EXISTS `uc_vs_crit` (
   PRIMARY KEY (`id_uc`,`id_crit`),
   KEY `id_crit` (`id_crit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `uc_vs_crit`
+--
+
+INSERT INTO `uc_vs_crit` (`id_uc`, `id_crit`, `pertinence`, `range_min`, `range_max`) VALUES
+(-1, 11, 0, 0, 0),
+(-1, 12, 0, 0, 0),
+(-1, 13, 2, 0, 0),
+(-1, 14, 0, 0, 0),
+(-1, 15, 0, 0, 0),
+(-1, 16, 0, 0, 0),
+(-1, 17, 0, 0, 0),
+(-1, 18, 1, 12, 0),
+(-1, 19, 0, 0, 0),
+(-1, 20, 0, 0, 0),
+(-1, 21, 0, 0, 0),
+(-1, 22, 0, 0, 0),
+(-1, 23, 0, 0, 0),
+(-1, 24, 0, 0, 0),
+(-1, 25, 0, 0, 0),
+(-1, 26, 0, 0, 0),
+(-1, 27, 0, 0, 0),
+(-1, 28, 0, 0, 0),
+(-1, 29, 0, 0, 0),
+(-1, 30, 0, 0, 0),
+(-1, 31, 0, 0, 0),
+(-1, 32, 0, 0, 0),
+(-1, 33, 0, 0, 0),
+(-1, 34, 0, 0, 0),
+(-1, 35, 0, 0, 0),
+(-1, 36, 0, 0, 0),
+(-1, 37, 0, 0, 0),
+(-1, 38, 0, 0, 0),
+(-1, 39, 0, 0, 0),
+(-1, 40, 0, 0, 0),
+(-1, 41, 2, 0, 0),
+(-1, 42, 0, 0, 0),
+(12, 11, 0, 0, 0),
+(12, 12, 0, 0, 0),
+(12, 13, 0, 0, 0),
+(12, 14, 0, 0, 0),
+(12, 15, 0, 0, 0),
+(12, 16, 0, 0, 0),
+(12, 17, 0, 0, 0),
+(12, 18, 0, 0, 0),
+(12, 19, 0, 0, 0),
+(12, 20, 0, 0, 0),
+(12, 21, 0, 0, 0),
+(12, 22, 0, 0, 0),
+(12, 23, 0, 0, 0),
+(12, 24, 0, 0, 0),
+(12, 25, 0, 0, 0),
+(12, 26, 0, 0, 0),
+(12, 27, 0, 0, 0),
+(12, 28, 0, 0, 0),
+(12, 29, 0, 0, 0),
+(12, 30, 0, 0, 0),
+(12, 31, 0, 0, 0),
+(12, 32, 0, 0, 0),
+(12, 33, 0, 0, 0),
+(12, 34, 0, 0, 0),
+(12, 35, 0, 0, 0),
+(12, 36, 0, 0, 0),
+(12, 37, 0, 0, 0),
+(12, 38, 0, 0, 0),
+(12, 39, 0, 0, 0),
+(12, 40, 0, 0, 0),
+(12, 41, 0, 0, 0),
+(12, 42, 0, 0, 0),
+(13, 11, 0, 0, 0),
+(13, 12, 0, 0, 0),
+(13, 13, 0, 0, 0),
+(13, 14, 0, 0, 0),
+(13, 15, 0, 0, 0),
+(13, 16, 0, 0, 0),
+(13, 17, 0, 0, 0),
+(13, 18, 0, 0, 0),
+(13, 19, 0, 0, 0),
+(13, 20, 0, 0, 0),
+(13, 21, 0, 0, 0),
+(13, 22, 0, 0, 0),
+(13, 23, 0, 0, 0),
+(13, 24, 0, 0, 0),
+(13, 25, 0, 0, 0),
+(13, 26, 0, 0, 0),
+(13, 27, 0, 0, 0),
+(13, 28, 0, 0, 0),
+(13, 29, 0, 0, 0),
+(13, 30, 0, 0, 0),
+(13, 31, 0, 0, 0),
+(13, 32, 0, 0, 0),
+(13, 33, 0, 0, 0),
+(13, 34, 0, 0, 0),
+(13, 35, 0, 0, 0),
+(13, 36, 0, 0, 0),
+(13, 37, 0, 0, 0),
+(13, 38, 0, 0, 0),
+(13, 39, 0, 0, 0),
+(13, 40, 0, 0, 0),
+(13, 41, 0, 0, 0),
+(13, 42, 0, 0, 0),
+(15, 11, 0, 0, 0),
+(15, 12, 0, 0, 0),
+(15, 13, 0, 0, 0),
+(15, 14, 0, 0, 0),
+(15, 15, 0, 0, 0),
+(15, 16, 0, 0, 0),
+(15, 17, 0, 0, 0),
+(15, 18, 0, 0, 0),
+(15, 19, 0, 0, 0),
+(15, 20, 0, 0, 0),
+(15, 21, 0, 0, 0),
+(15, 22, 0, 0, 0),
+(15, 23, 0, 0, 0),
+(15, 24, 0, 0, 0),
+(15, 25, 0, 0, 0),
+(15, 26, 0, 0, 0),
+(15, 27, 0, 0, 0),
+(15, 28, 0, 0, 0),
+(15, 29, 0, 0, 0),
+(15, 30, 0, 0, 0),
+(15, 31, 0, 0, 0),
+(15, 32, 0, 0, 0),
+(15, 33, 0, 0, 0),
+(15, 34, 0, 0, 0),
+(15, 35, 0, 0, 0),
+(15, 36, 0, 0, 0),
+(15, 37, 0, 0, 0),
+(15, 38, 0, 0, 0),
+(15, 39, 0, 0, 0),
+(15, 40, 0, 0, 0),
+(15, 41, 0, 0, 0),
+(15, 42, 0, 0, 0),
+(16, 11, 0, 0, 0),
+(16, 12, 0, 0, 0),
+(16, 13, 0, 0, 0),
+(16, 14, 0, 0, 0),
+(16, 15, 0, 0, 0),
+(16, 16, 0, 0, 0),
+(16, 17, 0, 0, 0),
+(16, 18, 0, 0, 0),
+(16, 19, 0, 0, 0),
+(16, 20, 0, 0, 0),
+(16, 21, 0, 0, 0),
+(16, 22, 0, 0, 0),
+(16, 23, 0, 0, 0),
+(16, 24, 0, 0, 0),
+(16, 25, 0, 0, 0),
+(16, 26, 0, 0, 0),
+(16, 27, 0, 0, 0),
+(16, 28, 0, 0, 0),
+(16, 29, 0, 0, 0),
+(16, 30, 0, 0, 0),
+(16, 31, 0, 0, 0),
+(16, 32, 0, 0, 0),
+(16, 33, 0, 0, 0),
+(16, 34, 0, 0, 0),
+(16, 35, 0, 0, 0),
+(16, 36, 0, 0, 0),
+(16, 37, 0, 0, 0),
+(16, 38, 0, 5, 0),
+(16, 39, 0, 0, 0),
+(16, 40, 0, 0, 0),
+(16, 41, 0, 0, 0),
+(16, 42, 0, 0, 0),
+(17, 11, 0, 0, 0),
+(17, 12, 0, 0, 0),
+(17, 13, 0, 0, 0),
+(17, 14, 0, 0, 0),
+(17, 15, 0, 0, 0),
+(17, 16, 0, 0, 0),
+(17, 17, 0, 0, 0),
+(17, 18, 0, 0, 0),
+(17, 19, 0, 0, 0),
+(17, 20, 0, 0, 0),
+(17, 21, 0, 0, 0),
+(17, 22, 0, 0, 0),
+(17, 23, 0, 0, 0),
+(17, 24, 0, 0, 0),
+(17, 25, 0, 0, 0),
+(17, 26, 0, 0, 0),
+(17, 27, 0, 0, 0),
+(17, 28, 0, 0, 0),
+(17, 29, 0, 0, 0),
+(17, 30, 0, 0, 0),
+(17, 31, 0, 0, 0),
+(17, 32, 0, 0, 0),
+(17, 33, 0, 0, 0),
+(17, 34, 0, 0, 0),
+(17, 35, 0, 0, 0),
+(17, 36, 0, 0, 0),
+(17, 37, 0, 0, 0),
+(17, 38, 0, 0, 0),
+(17, 39, 0, 0, 0),
+(17, 40, 0, 0, 0),
+(17, 41, 0, 0, 0),
+(17, 42, 0, 0, 0),
+(18, 11, 0, 0, 0),
+(18, 12, 0, 0, 0),
+(18, 13, 0, 0, 0),
+(18, 14, 0, 0, 0),
+(18, 15, 0, 0, 0),
+(18, 16, 0, 0, 0),
+(18, 17, 0, 0, 0),
+(18, 18, 1, 5, 0),
+(18, 19, 0, 0, 0),
+(18, 20, 0, 0, 0),
+(18, 21, 0, 0, 0),
+(18, 22, 0, 0, 0),
+(18, 23, 0, 0, 0),
+(18, 24, 0, 0, 0),
+(18, 25, 0, 0, 0),
+(18, 26, 0, 0, 0),
+(18, 27, 0, 0, 0),
+(18, 28, 0, 0, 0),
+(18, 29, 0, 0, 0),
+(18, 30, 1, 0, 0),
+(18, 31, 0, 0, 0),
+(18, 32, 0, 0, 0),
+(18, 33, 0, 0, 0),
+(18, 34, 0, 0, 0),
+(18, 35, 0, 0, 0),
+(18, 36, 0, 0, 0),
+(18, 37, 0, 0, 0),
+(18, 38, 2, 5, 0),
+(18, 39, 2, 0, 0),
+(18, 40, 0, 0, 0),
+(18, 41, 0, 0, 0),
+(18, 42, 0, 0, 0),
+(19, 11, 0, 0, 0),
+(19, 12, 0, 0, 0),
+(19, 13, 0, 0, 0),
+(19, 14, 0, 0, 0),
+(19, 15, 0, 0, 0),
+(19, 16, 0, 0, 0),
+(19, 17, 0, 0, 0),
+(19, 18, 0, 0, 0),
+(19, 19, 0, 0, 0),
+(19, 20, 0, 0, 0),
+(19, 21, 0, 0, 0),
+(19, 22, 0, 0, 0),
+(19, 23, 0, 0, 0),
+(19, 24, 0, 0, 0),
+(19, 25, 0, 0, 0),
+(19, 26, 0, 0, 0),
+(19, 27, 0, 0, 0),
+(19, 28, 0, 0, 0),
+(19, 29, 0, 0, 0),
+(19, 30, 0, 0, 0),
+(19, 31, 0, 0, 0),
+(19, 32, 0, 0, 0),
+(19, 33, 0, 0, 0),
+(19, 34, 0, 0, 0),
+(19, 35, 0, 0, 0),
+(19, 36, 0, 0, 0),
+(19, 37, 0, 0, 0),
+(19, 38, 0, 0, 0),
+(19, 39, 0, 0, 0),
+(19, 40, 0, 0, 0),
+(19, 41, 0, 0, 0),
+(19, 42, 0, 0, 0),
+(20, 11, 0, 0, 0),
+(20, 12, 0, 0, 0),
+(20, 13, 0, 0, 0),
+(20, 14, 0, 0, 0),
+(20, 15, 0, 0, 0),
+(20, 16, 0, 0, 0),
+(20, 17, 0, 0, 0),
+(20, 18, 0, 0, 0),
+(20, 19, 0, 0, 0),
+(20, 20, 0, 0, 0),
+(20, 21, 0, 0, 0),
+(20, 22, 0, 0, 0),
+(20, 23, 0, 0, 0),
+(20, 24, 0, 0, 0),
+(20, 25, 0, 0, 0),
+(20, 26, 0, 0, 0),
+(20, 27, 0, 0, 0),
+(20, 28, 0, 0, 0),
+(20, 29, 0, 0, 0),
+(20, 30, 0, 0, 0),
+(20, 31, 0, 0, 0),
+(20, 32, 0, 0, 0),
+(20, 33, 0, 0, 0),
+(20, 34, 0, 0, 0),
+(20, 35, 0, 0, 0),
+(20, 36, 0, 0, 0),
+(20, 37, 0, 0, 0),
+(20, 38, 0, 0, 0),
+(20, 39, 0, 0, 0),
+(20, 40, 0, 0, 0),
+(20, 41, 0, 0, 0),
+(20, 42, 0, 0, 0),
+(21, 11, 0, 0, 0),
+(21, 12, 0, 0, 0),
+(21, 13, 0, 0, 0),
+(21, 14, 0, 0, 0),
+(21, 15, 0, 0, 0),
+(21, 16, 0, 0, 0),
+(21, 17, 0, 0, 0),
+(21, 18, 0, 0, 0),
+(21, 19, 0, 0, 0),
+(21, 20, 0, 0, 0),
+(21, 21, 0, 0, 0),
+(21, 22, 0, 0, 0),
+(21, 23, 0, 0, 0),
+(21, 24, 0, 0, 0),
+(21, 25, 0, 0, 0),
+(21, 26, 0, 0, 0),
+(21, 27, 0, 0, 0),
+(21, 28, 0, 0, 0),
+(21, 29, 0, 0, 0),
+(21, 30, 0, 0, 0),
+(21, 31, 0, 0, 0),
+(21, 32, 0, 0, 0),
+(21, 33, 0, 0, 0),
+(21, 34, 0, 0, 0),
+(21, 35, 0, 0, 0),
+(21, 36, 0, 0, 0),
+(21, 37, 0, 0, 0),
+(21, 38, 0, 0, 0),
+(21, 39, 0, 0, 0),
+(21, 40, 0, 0, 0),
+(21, 41, 0, 0, 0),
+(21, 42, 0, 0, 0),
+(22, 11, 0, 0, 0),
+(22, 12, 0, 0, 0),
+(22, 13, 0, 0, 0),
+(22, 14, 0, 0, 0),
+(22, 15, 0, 0, 0),
+(22, 16, 0, 0, 0),
+(22, 17, 0, 0, 0),
+(22, 18, 0, 0, 0),
+(22, 19, 0, 0, 0),
+(22, 20, 0, 0, 0),
+(22, 21, 0, 0, 0),
+(22, 22, 0, 0, 0),
+(22, 23, 0, 0, 0),
+(22, 24, 0, 0, 0),
+(22, 25, 0, 0, 0),
+(22, 26, 0, 0, 0),
+(22, 27, 0, 0, 0),
+(22, 28, 0, 0, 0),
+(22, 29, 0, 0, 0),
+(22, 30, 0, 0, 0),
+(22, 31, 0, 0, 0),
+(22, 32, 0, 0, 0),
+(22, 33, 0, 0, 0),
+(22, 34, 0, 0, 0),
+(22, 35, 0, 0, 0),
+(22, 36, 0, 0, 0),
+(22, 37, 0, 0, 0),
+(22, 38, 0, 0, 0),
+(22, 39, 0, 0, 0),
+(22, 40, 0, 0, 0),
+(22, 41, 0, 0, 0),
+(22, 42, 0, 0, 0),
+(23, 11, 0, 0, 0),
+(23, 12, 0, 0, 0),
+(23, 13, 0, 0, 0),
+(23, 14, 0, 0, 0),
+(23, 15, 0, 0, 0),
+(23, 16, 0, 0, 0),
+(23, 17, 0, 0, 0),
+(23, 18, 0, 0, 0),
+(23, 19, 0, 0, 0),
+(23, 20, 0, 0, 0),
+(23, 21, 0, 0, 0),
+(23, 22, 0, 0, 0),
+(23, 23, 0, 0, 0),
+(23, 24, 0, 0, 0),
+(23, 25, 0, 0, 0),
+(23, 26, 0, 0, 0),
+(23, 27, 0, 0, 0),
+(23, 28, 0, 0, 0),
+(23, 29, 0, 0, 0),
+(23, 30, 0, 0, 0),
+(23, 31, 0, 0, 0),
+(23, 32, 0, 0, 0),
+(23, 33, 0, 0, 0),
+(23, 34, 0, 0, 0),
+(23, 35, 0, 0, 0),
+(23, 36, 0, 0, 0),
+(23, 37, 0, 0, 0),
+(23, 38, 0, 0, 0),
+(23, 39, 0, 0, 0),
+(23, 40, 0, 0, 0),
+(23, 41, 0, 0, 0),
+(23, 42, 0, 0, 0),
+(24, 11, 0, 0, 0),
+(24, 12, 0, 0, 0),
+(24, 13, 0, 0, 0),
+(24, 14, 0, 0, 0),
+(24, 15, 0, 0, 0),
+(24, 16, 0, 0, 0),
+(24, 17, 0, 0, 0),
+(24, 18, 0, 0, 0),
+(24, 19, 0, 0, 0),
+(24, 20, 0, 0, 0),
+(24, 21, 0, 0, 0),
+(24, 22, 0, 0, 0),
+(24, 23, 0, 0, 0),
+(24, 24, 0, 0, 0),
+(24, 25, 0, 0, 0),
+(24, 26, 0, 0, 0),
+(24, 27, 0, 0, 0),
+(24, 28, 0, 0, 0),
+(24, 29, 0, 0, 0),
+(24, 30, 0, 0, 0),
+(24, 31, 0, 0, 0),
+(24, 32, 0, 0, 0),
+(24, 33, 0, 0, 0),
+(24, 34, 0, 0, 0),
+(24, 35, 0, 0, 0),
+(24, 36, 0, 0, 0),
+(24, 37, 0, 0, 0),
+(24, 38, 0, 0, 0),
+(24, 39, 0, 0, 0),
+(24, 40, 0, 0, 0),
+(24, 41, 0, 0, 0),
+(24, 42, 0, 0, 0),
+(25, 11, 0, 0, 0),
+(25, 12, 0, 0, 0),
+(25, 13, 0, 0, 0),
+(25, 14, 0, 0, 0),
+(25, 15, 0, 0, 0),
+(25, 16, 0, 0, 0),
+(25, 17, 0, 0, 0),
+(25, 18, 0, 0, 0),
+(25, 19, 0, 0, 0),
+(25, 20, 0, 0, 0),
+(25, 21, 0, 0, 0),
+(25, 22, 0, 0, 0),
+(25, 23, 0, 0, 0),
+(25, 24, 0, 0, 0),
+(25, 25, 0, 0, 0),
+(25, 26, 0, 0, 0),
+(25, 27, 0, 0, 0),
+(25, 28, 0, 0, 0),
+(25, 29, 0, 0, 0),
+(25, 30, 0, 0, 0),
+(25, 31, 0, 0, 0),
+(25, 32, 0, 0, 0),
+(25, 33, 0, 0, 0),
+(25, 34, 0, 0, 0),
+(25, 35, 0, 0, 0),
+(25, 36, 0, 0, 0),
+(25, 37, 0, 0, 0),
+(25, 38, 0, 0, 0),
+(25, 39, 0, 0, 0),
+(25, 40, 0, 0, 0),
+(25, 41, 0, 0, 0),
+(25, 42, 0, 0, 0),
+(26, 11, 0, 0, 0),
+(26, 12, 0, 0, 0),
+(26, 13, 0, 0, 0),
+(26, 14, 0, 0, 0),
+(26, 15, 0, 0, 0),
+(26, 16, 0, 0, 0),
+(26, 17, 0, 0, 0),
+(26, 18, 0, 0, 0),
+(26, 19, 0, 0, 0),
+(26, 20, 0, 0, 0),
+(26, 21, 0, 0, 0),
+(26, 22, 0, 0, 0),
+(26, 23, 0, 0, 0),
+(26, 24, 0, 0, 0),
+(26, 25, 0, 0, 0),
+(26, 26, 0, 0, 0),
+(26, 27, 0, 0, 0),
+(26, 28, 0, 0, 0),
+(26, 29, 0, 0, 0),
+(26, 30, 0, 0, 0),
+(26, 31, 0, 0, 0),
+(26, 32, 0, 0, 0),
+(26, 33, 0, 0, 0),
+(26, 34, 0, 0, 0),
+(26, 35, 0, 0, 0),
+(26, 36, 0, 0, 0),
+(26, 37, 0, 0, 0),
+(26, 38, 0, 0, 0),
+(26, 39, 0, 0, 0),
+(26, 40, 0, 0, 0),
+(26, 41, 0, 0, 0),
+(26, 42, 0, 0, 0),
+(27, 11, 0, 0, 0),
+(27, 12, 0, 0, 0),
+(27, 13, 0, 0, 0),
+(27, 14, 0, 0, 0),
+(27, 15, 0, 0, 0),
+(27, 16, 0, 0, 0),
+(27, 17, 0, 0, 0),
+(27, 18, 0, 0, 0),
+(27, 19, 0, 0, 0),
+(27, 20, 0, 0, 0),
+(27, 21, 0, 0, 0),
+(27, 22, 0, 0, 0),
+(27, 23, 0, 0, 0),
+(27, 24, 0, 0, 0),
+(27, 25, 0, 0, 0),
+(27, 26, 0, 0, 0),
+(27, 27, 0, 0, 0),
+(27, 28, 0, 0, 0),
+(27, 29, 0, 0, 0),
+(27, 30, 0, 0, 0),
+(27, 31, 0, 0, 0),
+(27, 32, 0, 0, 0),
+(27, 33, 0, 0, 0),
+(27, 34, 0, 0, 0),
+(27, 35, 0, 0, 0),
+(27, 36, 0, 0, 0),
+(27, 37, 0, 0, 0),
+(27, 38, 0, 0, 0),
+(27, 39, 0, 0, 0),
+(27, 40, 0, 0, 0),
+(27, 41, 0, 0, 0),
+(27, 42, 0, 0, 0),
+(28, 11, 0, 0, 0),
+(28, 12, 0, 0, 0),
+(28, 13, 0, 0, 0),
+(28, 14, 0, 0, 0),
+(28, 15, 0, 0, 0),
+(28, 16, 0, 0, 0),
+(28, 17, 0, 0, 0),
+(28, 18, 0, 0, 0),
+(28, 19, 0, 0, 0),
+(28, 20, 0, 0, 0),
+(28, 21, 0, 0, 0),
+(28, 22, 0, 0, 0),
+(28, 23, 0, 0, 0),
+(28, 24, 0, 0, 0),
+(28, 25, 0, 0, 0),
+(28, 26, 0, 0, 0),
+(28, 27, 0, 0, 0),
+(28, 28, 0, 0, 0),
+(28, 29, 0, 0, 0),
+(28, 30, 0, 0, 0),
+(28, 31, 0, 0, 0),
+(28, 32, 0, 0, 0),
+(28, 33, 0, 0, 0),
+(28, 34, 0, 0, 0),
+(28, 35, 0, 0, 0),
+(28, 36, 0, 0, 0),
+(28, 37, 0, 0, 0),
+(28, 38, 0, 0, 0),
+(28, 39, 0, 0, 0),
+(28, 40, 0, 0, 0),
+(28, 41, 0, 0, 0),
+(28, 42, 0, 0, 0),
+(29, 11, 0, 0, 0),
+(29, 12, 0, 0, 0),
+(29, 13, 2, 0, 0),
+(29, 14, 0, 0, 0),
+(29, 15, 0, 0, 0),
+(29, 16, 0, 0, 0),
+(29, 17, 0, 0, 0),
+(29, 18, 0, 0, 0),
+(29, 19, 0, 0, 0),
+(29, 20, 0, 0, 0),
+(29, 21, 0, 0, 0),
+(29, 22, 0, 0, 0),
+(29, 23, 0, 0, 0),
+(29, 24, 0, 0, 0),
+(29, 25, 0, 0, 0),
+(29, 26, 0, 0, 0),
+(29, 27, 0, 0, 0),
+(29, 28, 0, 0, 0),
+(29, 29, 0, 0, 0),
+(29, 30, 0, 0, 0),
+(29, 31, 0, 0, 0),
+(29, 32, 0, 0, 0),
+(29, 33, 0, 0, 0),
+(29, 34, 0, 0, 0),
+(29, 35, 0, 0, 0),
+(29, 36, 0, 0, 0),
+(29, 37, 2, 0, 0),
+(29, 38, 0, 0, 0),
+(29, 39, 0, 0, 0),
+(29, 40, 0, 0, 0),
+(29, 41, 0, 0, 0),
+(29, 42, 0, 0, 0),
+(30, 11, 0, 0, 0),
+(30, 12, 0, 0, 0),
+(30, 13, 0, 0, 0),
+(30, 14, 0, 0, 0),
+(30, 15, 0, 0, 0),
+(30, 16, 0, 0, 0),
+(30, 17, 0, 0, 0),
+(30, 18, 0, 0, 0),
+(30, 19, 0, 0, 0),
+(30, 20, 0, 0, 0),
+(30, 21, 0, 0, 0),
+(30, 22, 0, 0, 0),
+(30, 23, 0, 0, 0),
+(30, 24, 0, 0, 0),
+(30, 25, 0, 0, 0),
+(30, 26, 0, 0, 0),
+(30, 27, 0, 0, 0),
+(30, 28, 0, 0, 0),
+(30, 29, 0, 0, 0),
+(30, 30, 0, 0, 0),
+(30, 31, 0, 0, 0),
+(30, 32, 0, 0, 0),
+(30, 33, 0, 0, 0),
+(30, 34, 0, 0, 0),
+(30, 35, 0, 0, 0),
+(30, 36, 0, 0, 0),
+(30, 37, 0, 0, 0),
+(30, 38, 0, 0, 0),
+(30, 39, 0, 0, 0),
+(30, 40, 0, 0, 0),
+(30, 41, 0, 0, 0),
+(30, 42, 0, 0, 0),
+(31, 11, 0, 0, 0),
+(31, 12, 0, 0, 0),
+(31, 13, 2, 0, 0),
+(31, 14, 0, 0, 0),
+(31, 15, 0, 0, 0),
+(31, 16, 0, 0, 0),
+(31, 17, 0, 0, 0),
+(31, 18, 0, 0, 0),
+(31, 19, 0, 0, 0),
+(31, 20, 0, 0, 0),
+(31, 21, 0, 0, 0),
+(31, 22, 0, 0, 0),
+(31, 23, 0, 0, 0),
+(31, 24, 0, 0, 0),
+(31, 25, 0, 0, 0),
+(31, 26, 0, 0, 0),
+(31, 27, 0, 0, 0),
+(31, 28, 0, 0, 0),
+(31, 29, 0, 0, 0),
+(31, 30, 0, 0, 0),
+(31, 31, 0, 0, 0),
+(31, 32, 0, 0, 0),
+(31, 33, 0, 0, 0),
+(31, 34, 0, 0, 0),
+(31, 35, 0, 0, 0),
+(31, 36, 0, 0, 0),
+(31, 37, 2, 0, 0),
+(31, 38, 0, 0, 0),
+(31, 39, 0, 0, 0),
+(31, 40, 2, 0, 0),
+(31, 41, 0, 0, 0),
+(31, 42, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -4730,7 +5445,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
@@ -4742,9 +5457,10 @@ INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `passwor
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', ''),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', ''),
 (12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', ''),
-(13, 'ProjDeve', NULL, NULL, NULL, '$2y$10$pzr45zxv7yM0jHFoOosweOs9ngQDAyCvdkyw.awDMwfFCZo/cgpwu', '7697641405f609379e18ed6.70056693', 1, NULL, '2020-09-15 12:12:10', 'd', ''),
+(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.'),
 (14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', ''),
-(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '');
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', ''),
+(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '');
 
 -- --------------------------------------------------------
 
@@ -4843,7 +5559,7 @@ CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
@@ -5000,6 +5716,7 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (15, 17, 27, NULL, NULL, 450),
 (15, 20, 26, NULL, NULL, 20),
 (15, 20, 27, NULL, NULL, 550),
+(15, 20, 28, NULL, NULL, 105),
 (15, 22, 27, NULL, NULL, 575),
 (16, 13, 27, NULL, NULL, 1),
 (16, 16, 26, NULL, NULL, 10),
@@ -5007,7 +5724,8 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (16, 17, 27, NULL, NULL, 1),
 (16, 20, 26, NULL, NULL, 20),
 (16, 20, 27, NULL, NULL, 1),
-(16, 22, 27, NULL, NULL, 1);
+(16, 22, 27, NULL, NULL, 1),
+(17, 20, 28, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 

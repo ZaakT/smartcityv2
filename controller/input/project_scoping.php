@@ -330,7 +330,7 @@ function perimeter_selected($post){
                 insertSelZones($projID,$selZones);
             }
             update_ModifDate_proj($projID);            
-            header('Location: ?A=project_scoping&A2=size&projID='.$projID);
+            header('Location: ?A=project_scoping&A2=volumes&projID='.$projID);
 
         } else {
             throw new Exception("No Project selected !");

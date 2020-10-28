@@ -188,6 +188,35 @@ function delete_crit_category($categoryID){
     header('Location: ?A=admin&A2=manage_db&A3=manage_crit_cat');
 }
 
+function manage_guid_criteria($twig,$is_connected){
+
+    $list_crit= getListCrit();
+    $ucs = getListUCs();
+    $guidCrit =  getGuidCrit($ucs,$list_crit);
+    //var_dump($list_crit, $ucs, $guidCrit);
+
+
+
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_guid_crit.twig',array('is_connected'=>$is_connected, "list_crit"=>$list_crit, "ucs"=>$ucs, "guidCrit"=>$guidCrit)); 
+
+}
+
+
+function update_guid_crit($twig,$is_connected, $post){
+    $list = [];
+    //var_dump($post);
+    foreach ($post as $idInput => $value) {
+        $id1 = explode("*", $idInput)[1];
+        $id2 = explode("*", $idInput)[0];
+        $list[$id1][$id2] = $value;
+
+    }
+    //var_dump($list);
+
+    insertGuidCrit($list);
+    header('Location: ?A=admin&A2=manage_db&A3=manage_guid_criteria');
+}
+
 
 //------------------------------------- CRITERIA -------------------------------------
 

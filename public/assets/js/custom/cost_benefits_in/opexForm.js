@@ -94,6 +94,8 @@ function checkOpexInput(id){
             $("#"+id).css("background","#C3E6CB");
             //$(this).val(val.toLocaleString(undefined));
         }
+    }else if (tab.includes("unitIndic")){
+        $("#"+id).css("background","#C3E6CB");
     }  else if (tab.includes("anVarVol") || tab.includes("anVarCost")){
         //console.log(val);
         if(val){

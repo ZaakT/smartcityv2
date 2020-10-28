@@ -651,7 +651,6 @@ function opex_input($twig,$is_connected,$projID=0,$ucID=0){
             
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoOpex($list_sel_opex_advice,$compo['id']);
-            //var_dump($list_ratio);
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -766,7 +765,9 @@ function revenues($twig,$is_connected,$projID=0,$ucID=0,$isTaken=false){
                         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/cost_benefits_steps/revenues.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,'isTaken'=>$isTaken,'selRevenues'=>$list_selRevenues));
+    echo $twig->render('/input/cost_benefits_steps/revenues.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,
+    'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,
+    "revenues_advice"=>$list_revenues_advice,"revenues_user"=>$list_revenues_user,'isTaken'=>$isTaken,'selRevenues'=>$list_selRevenues));
                         prereq_CostBenefits();
                     } else {
                         header('Location: ?A=cost_benefits&A2=cashreleasing&projID='.$projID.'&ucID='.$ucID);
@@ -887,7 +888,8 @@ function revenues_input($twig,$is_connected,$projID=0,$ucID=0){
             } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoRevenues($list_sel_revenues_advice,$compo['id']);
-            //var_dump($list_ratio);
+            //var_dump($list_revenues_advice);
+            //var_dump($list_selRevenues);
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -1123,12 +1125,14 @@ function cashreleasing_input($twig,$is_connected,$projID=0,$ucID=0){
             } 
             $nb_uc = getNbTotalUC($projID,$ucID);
             $list_ratio = getRatioCompoCashReleasing($list_sel_cashreleasing_advice,$compo['id']);
-            //var_dump($list_ratio);
             $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/input/cost_benefits_steps/cashreleasing_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,"cashreleasing_advice"=>$list_cashreleasing_advice,"cashreleasing_user"=>$list_cashreleasing_user,"selCashReleasing"=>$list_selCashReleasing,'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
+    echo $twig->render('/input/cost_benefits_steps/cashreleasing_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+    'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],
+    'projID'=>$projID,'ucID'=>$ucID,"cashreleasing_advice"=>$list_cashreleasing_advice,"cashreleasing_user"=>$list_cashreleasing_user,"selCashReleasing"=>$list_selCashReleasing,
+    'compo'=>$compo,'ratio'=>$list_ratio,'nb_compo'=>$nb_compo,'nb_uc'=>$nb_uc));
             prereq_CostBenefits();
         } else {
             header('Location: ?A=cost_benefits&A2=project');
@@ -2204,6 +2208,7 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
                     $confirmedUC[$measID."_".$ucID]=isset($temp[$measID."_".$ucID]);
                 }
             }
+
             /*$selScope = keepUCNotEmpty($check, $selScope);
             //$check = $selScope[1];
             $selScope = $selScope[0];

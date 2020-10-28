@@ -53,7 +53,7 @@
             {% for zone in item %}
             {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
             {% set inputID = zone['hasChildren'] ? "" : ""%}
-                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
+                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{#{hasChildren}#} child_{{zone['parent'][0]}}" scope="row">
                     <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')" {{ zone['id'] in list_sel|keys ? "checked" : ""}} ></td>
                     {# <td>{{ zone['id'] }}</td> #}
                     <td>{{ zone['name'] }}</td>
@@ -87,7 +87,7 @@
             {% for zone in item if zone['parent'][0] == zoneParent['id'] %}
             {% set hasChildren = zone['hasChildren'] ? "hasChildren bg-secondary" : "" %}
             {% set inputID = zone['hasChildren'] ? "" : ""%}
-                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{{hasChildren}} child_{{zone['parent'][0]}}" scope="row">
+                <tr id = "{{ zone['id'] }}_{{zone['parent'][0]}}" class="{#{hasChildren}#} child_{{zone['parent'][0]}}" scope="row">
                     <td class="check-col"><input type="checkbox" id='{{ inputID }}{{ zone['id'] }}' name="{{ inputID }}{{ zone['id'] }}" onclick="countChecked_zones('form_zones')" {{ zone['id'] in list_sel|keys ? "checked" : ""}} ></td>
                     {# <td>{{ zone['id'] }}</td> #}
                     <td>{{ zone['name'] }}</td>

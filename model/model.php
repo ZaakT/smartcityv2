@@ -681,29 +681,53 @@ function deleteSelUC($ucmID){
     return $req->execute(array($ucmID));
 }
 // attention !
-function getGuidCrit($ucs,$criteria){
+function getGuidCrit($ucs,$criteria, $useUcID = true){
     $db = dbConnect();
     $req = $db->prepare('SELECT pertinence, range_min, range_max
                         FROM uc_vs_crit
                         WHERE (uc_vs_crit.id_uc = ?)
                         AND (uc_vs_crit.id_crit = ?)');
     $list = [];
-    foreach ($ucs as $uc) {
+    foreach ($ucs as $idUC=>$uc) {
         $temp = [];
         foreach ($criteria as $crit) {
-            $req->execute(array($uc[0],$crit[0]));
+            if($useUcID){
+                $req->execute(array($idUC,$crit['id']));
+            }else{
+                $req->execute(array($uc['id'],$crit['id']));
+            }
             while ($row = $req->fetch()){
                 $pert = $row['pertinence'];
                 $min = $row['range_min'];
                 $max = $row['range_max'];
-                $temp[$crit[0]]=[$pert,$min,$max];
+                $temp[$crit['id']]=['pertinence'=>$pert,'range_min'=>$min,'range_max'=>$max, "0"=>$pert, "1"=>$min, "2"=>$max];
             }
         }
         //var_dump($temp);
-        $list[$uc[0]]=$temp;
+        if($useUcID){
+            $list[$idUC]=$temp;
+        }else{
+            $list[$uc['id']]=$temp;
+        }
     }
     //var_dump($list);
     return $list;                    
+}
+function insertGuidCrit($list){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE 
+                        FROM uc_vs_crit WHERE TRUE;');
+    $req->execute(array());
+    foreach ($list as $id => $el) {
+        $ucID = explode("_", $id)[0];
+        $critID = explode("_", $id)[1];
+        $req = $db->prepare('INSERT 
+                        INTO uc_vs_crit (pertinence, range_min, range_max, id_uc, id_crit) 
+                        VALUES (?,?,?,?,?);');
+        $req->execute(array($el['pertinence']=="" ? "0" : $el['pertinence'], $el['rangeMin']=="" ? "0" : $el['rangeMin'], $el['rangeMax']=="" ? "0" : $el['rangeMax'], $ucID, $critID));
+
+        # code...
+    }                   
 }
 
 function getPertDLT($ucs,$DLTs){
@@ -1594,23 +1618,7 @@ function getCapexUserItem($projID,$ucID,$name){
 }
 
 function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
-/* 
-CAPEX_ITEM_ADVICE
-id int(11)            id of the advice
-unit varchar(255)     ex: per lamppost
-source text 
-range_min int(11) 
-range_max
 
-CAPEX_UC
-id_item int(11) PK 
-id_uc int(11) PK
-
-CAPEX_ITEM_ADVICE
-id int(11) AI PK 
-name varchar(255) 
-description text
-*/
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -1752,7 +1760,7 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
 function getListSelCapex($projID,$ucID, $side = "supplier"){
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,period, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,period, unit, guide
                             FROM input_capex
                             INNER JOIN capex_item
                                 WHERE  input_capex.id_uc = ? and id_proj = ? and id_item = capex_item.id
@@ -1767,10 +1775,11 @@ function getListSelCapex($projID,$ucID, $side = "supplier"){
         $volume = intval($row['volume']);
         $period = intval($row['period']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'period'=>$period, 'unit'=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){
@@ -1885,12 +1894,13 @@ function insertCapexInputed($projID,$ucID,$list){
                                 period = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $req2 = $db->prepare("UPDATE capex_item
-                            SET unit = ? 
+                            SET unit = ?,
+                                guide = ?
                             WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['period'],$projID,$ucID,$id_item));        
         if(isset($data['unit'])){
-            $ret = $req2->execute(array( $data['unit'], $id_item));
+            $ret = $req2->execute(array( $data['unit'], $data['guide'], $id_item));
         }
     }
 
@@ -2064,7 +2074,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 : wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, unit
+    $req = $db->prepare("SELECT id_item, unit_cost, volume, anVarVol, anVarCost, unit, guide
                             FROM input_supplier_revenues
                             INNER JOIN supplier_revenues_item
                                 WHERE  input_supplier_revenues.id_uc = ? 
@@ -2082,12 +2092,13 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
 
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] += ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost];
+            $list[$id_item] = ["unit" => $unit, 'unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, 'guide'=>$guide];
         }
     }
     //var_dump($list);
@@ -2194,7 +2205,7 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                                 anVarCost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $reqUnit = $db->prepare("UPDATE supplier_revenues_item
-                                SET unit = ?
+                                SET unit = ?, 
                                 WHERE item_id = ?");
     foreach ($list as $id_item => $data) {
         try {
@@ -2369,7 +2380,7 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
 function getListSelImplem($projID,$ucID, $side = "supplier"){
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume, unit, guide
                             FROM input_implem
                             INNER JOIN implem_item
                                 WHERE  input_implem.id_uc = ? and id_proj = ? and id_item = implem_item.id
@@ -2383,10 +2394,11 @@ function getListSelImplem($projID,$ucID, $side = "supplier"){
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $volume = intval($row['volume']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume, 'unit'=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){
@@ -2544,8 +2556,7 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
     }elseif($side == "supplier"){
                $side_selection = "and opex_item.side = 'supplier'";
     }
-
-    $req = $db->prepare("SELECT *
+    $req = $db->prepare("SELECT opex_item_advice.id, name, description, opex_item_advice.unit, source, range_min, range_max, side
                             FROM opex_item_advice
                             INNER JOIN opex_uc
                                 INNER JOIN opex_item
@@ -2669,7 +2680,7 @@ function getListSelOpex($projID,$ucID, $side = "supplier"){
     
     if($side != "supplier" && $side != "customer" && $side != "projDev" ){throw new Exception("Wrong side");}
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost, unit
+    $req = $db->prepare("SELECT id_item,unit_cost,volume,annual_variation_volume,annual_variation_unitcost, unit, guide
                             FROM input_opex
                             INNER JOIN opex_item
                                 WHERE  input_opex.id_uc = ? and id_proj = ? and id_item = opex_item.id
@@ -2685,10 +2696,11 @@ function getListSelOpex($projID,$ucID, $side = "supplier"){
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarCost = floatval($row['annual_variation_unitcost']);
         $unit = $row['unit'];
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit];
+            $list[$id_item] += ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit, 'guide'=>$guide];
         } else {
-            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit];
+            $list[$id_item] = ['unit_cost'=>$unit_cost,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "unit"=>$unit, 'guide'=>$guide];
         }
     }
     if($side == "customer"){
@@ -3140,7 +3152,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
                                 ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '0000-00-00' : $data['revenue_start_date'], $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
@@ -3434,7 +3446,7 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],  $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -3689,7 +3701,7 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
     return $ret;

@@ -101,7 +101,7 @@ function checkXpexInput(id){
             //$("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         } 
-    }else if(tab.includes("unit")){
+    }else if(tab.includes("unit") || tab.includes("guide")){
 
         $("#"+id).css("background","#C3E6CB");
 
@@ -136,6 +136,9 @@ function setNewDeviseXpex(name){
         //do nothing
     } finally {
         $("input").each(function(){
+            checkXpexInput(this);
+        });
+        $("textarea").each(function(){
             checkXpexInput(this);
         });
         calcTotXpex();

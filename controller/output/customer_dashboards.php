@@ -301,9 +301,9 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $cahsOutTot = calcCashOut($ItemsPerMonthAndTot['capex']['perMonth'],$ItemsPerMonthAndTot['implem']['perMonth'],$ItemsPerMonthAndTot['opex']['perMonth']);
                 
                 if($side != "supplier"){
-                    $soc_operating_margin = $cahsOutTot == 0 ? 0 : round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                    $soc_operating_margin = array_sum($cahsOutTot) == 0 ? 0 : round(($cumulnetsoccashTot[array_key_last($cumulnetsoccashTot) ])/array_sum($cahsOutTot) * 100, 2);
                 }
-                $fin_operating_margin = $cahsOutTot == 0 ? 0 : round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
+                $fin_operating_margin = array_sum($cahsOutTot) == 0 ? 0 : round(($cumulnetcashTot[array_key_last($cumulnetcashTot) ])/array_sum($cahsOutTot) * 100, 2);
                 
                 if($side != "supplier"){
                     $bankability_cacl = array(
