@@ -3140,7 +3140,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
                                 ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date'], $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '0000-00-00' : $data['revenue_start_date'], $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
     }
     return $ret;
 }
