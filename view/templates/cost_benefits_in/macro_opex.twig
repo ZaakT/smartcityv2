@@ -122,7 +122,7 @@
 
                     <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput(cost_{{id_opex}});" value="{{selOpex[id_opex]['unit_cost']}}" placeholder="{{( opex_advice[id_opex]['range_min'] + opex_advice[id_opex]['range_max']) / 2 }}"></td> 
                     
-                    <td scope="col"><textarea id="guide_{{id_opex}}" name="guide_{{id_opex}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkOpexInput(guide_{{id_opex}});">{{ selOpex[id_opex]['guide']}}</textarea></td> 
+                    <td scope="col"><textarea id="guide_{{id_opex}}" name="guide_{{id_opex}}" class="guide pt-1 pb-1" type="text" oninput="checkOpexInput(guide_{{id_opex}});">{{ selOpex[id_opex]['guide']}}</textarea></td> 
                 </tr> 
             {% endfor %}
             </tbody>

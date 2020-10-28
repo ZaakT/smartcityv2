@@ -126,7 +126,7 @@
 
                     <td scope="col"><input id="period_{{id_capex}}" name="period_{{id_capex}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkCapexInput(period_{{id_capex}});" value="{{ selCapex[id_capex]['period'] ? selCapex[id_capex]['period'] : "" }}"></td>
                    
-                    <td scope="col"><textarea id="guide_{{id_capex}}" name="guide_{{id_capex}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkCapexInput(guide_{{id_capex}});">{{ selCapex[id_capex]['guide']}}</textarea></td> 
+                    <td scope="col"><textarea id="guide_{{id_capex}}" name="guide_{{id_capex}}" class="guide pt-1 pb-1" type="text" oninput="checkCapexInput(guide_{{id_capex}});">{{ selCapex[id_capex]['guide']}}</textarea></td> 
                 </tr> 
             {% endfor %}
             </tbody>

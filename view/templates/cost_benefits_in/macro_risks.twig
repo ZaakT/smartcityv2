@@ -80,7 +80,7 @@
                     <td scope="col"><input id="impact_{{id_risks}}" name="impact_{{id_risks}}" class="text-center impact" type="number" min=1 max=10 step=1 required oninput="checkRisksInput();" value="{{selRisks[id_risks]['exp_impact']}}"></td>
 
                     <td scope="col"><input id="prob_{{id_risks}}" name="prob_{{id_risks}}" class="text-center prob" type="number" min=0 max=100 step=10 required oninput="checkRisksInput();" value="{{selRisks[id_risks]['prob']}}" style="max-width:80%;"><span> %</span></td> 
-                    <td scope="col"><textarea id="guide_{{id_risks}}" name="guide_{{id_risks}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkRisksInput();">{{ selRisks[id_risks]['guide']}}</textarea></td> 
+                    <td scope="col"><textarea id="guide_{{id_risks}}" name="guide_{{id_risks}}" class="guide pt-1 pb-1" type="text" oninput="checkRisksInput();">{{ selRisks[id_risks]['guide']}}</textarea></td> 
                     
                 </tr> 
             {% endfor %}

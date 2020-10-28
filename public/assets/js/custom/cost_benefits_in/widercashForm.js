@@ -89,6 +89,13 @@ function checkWiderCashInput(){
             }
         }
     });
+    $("#widercash_input textarea").each(function(){
+        if(tab.includes("guide")){
+
+            $("#"+id).css("background","#C3E6CB");
+    
+        }
+    });
     calcTotWiderCash();
     return ret;
 }

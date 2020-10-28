@@ -80,7 +80,7 @@
                     <td scope="col"><input id="impact_{{id_noncash}}" name="impact_{{id_noncash}}" class="text-center impact" type="number" min=1 max=10 step=1 required oninput="checkNonCashInput();" value="{{selNonCash[id_noncash]['exp_impact']}}"></td>
 
                     <td scope="col"><input id="prob_{{id_noncash}}" name="prob_{{id_noncash}}" class="text-center prob" type="number" min=0 max=100 step=10 required oninput="checkNonCashInput();" value="{{selNonCash[id_noncash]['prob']}}" style="max-width:80%;"><span> %</span></td> 
-                    <td scope="col"><textarea id="guide_{{id_noncash}}" name="guide_{{id_noncash}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkNonCashInput();">{{ selNonCash[id_noncash]['guide']}}</textarea></td> 
+                    <td scope="col"><textarea id="guide_{{id_noncash}}" name="guide_{{id_noncash}}" class="guide pt-1 pb-1" type="text" oninput="checkNonCashInput();">{{ selNonCash[id_noncash]['guide']}}</textarea></td> 
                     
                 </tr> 
             {% endfor %}
