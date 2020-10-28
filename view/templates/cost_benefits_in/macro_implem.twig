@@ -100,6 +100,7 @@
                     <th scope="col">Ratio per Use Case</th>
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
+                    <th scope="col">Guide</th>
                 </tr>
                 
             </thead>
@@ -117,6 +118,7 @@
                     <td scope="col"><input id="vol_{{id_implem}}" name="vol_{{id_implem}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkImplemInput(vol_{{id_implem}});" value="{{ selImplem[id_implem]['volume'] }}" placeholder="{{ratio[id_implem]['val'] * nb_uc}}"></td> 
 
                     <td scope="col"><input id="cost_{{id_implem}}" name="cost_{{id_implem}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkImplemInput(cost_{{id_implem}});" value="{{selImplem[id_implem]['unit_cost']}}" placeholder="{{ (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
+                    <td scope="col"><textarea id="guide_{{id_implem}}" name="guide_{{id_implem}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkImplemInput(guide_{{id_implem}});">{{ selImplem[id_implem]['guide']}}</textarea></td> 
                 </tr> 
             {% endfor %}
             </tbody>

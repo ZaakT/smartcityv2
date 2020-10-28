@@ -195,6 +195,8 @@
                     <th scope="col" style="width:16%">Unit Cost ( in {{selDevSym}} )</th>
                     <th scope="col" style="width:16%">Evolution Volume / Year</th>
                     <th scope="col" style="width:16%">Evolution cost per unit / Year</th>
+                    <th scope="col" style="width:16%">Guide</th>
+                    
                     {#% if isSup %}
                     <th scope="col">Start of Revenues</th>
                     <th scope="col">Ramp-up Duration</th>
@@ -227,6 +229,7 @@
                     <td scope="col"><input id="revenueStart_{{id_cashreleasing}}" name="revenueStart_{{id_cashreleasing}}" class="text-center revenueStart p-1" type="date" required oninput="checkXpexInput(revenueStart_{{id_cashreleasing}});" value="{{selCashReleasing[id_cashreleasing]['revenue_start_date']}}"></td> 
                     <td scope="col"><input id="rampUpDurationt_{{id_cashreleasing}}" name="rampUpDurationt_{{id_cashreleasing}}" class="text-center rampUpDurationt p-1" type="number" required oninput="checkXpexInput(rampUpDurationt_{{id_cashreleasing}});" value="{{selCashReleasing[id_cashreleasing]['ramp_up_duration']}}"></td> 
                     {% endif %#}
+                    <td scope="col"><textarea id="guide_{{id_cashreleasing}}" name="guide_{{id_cashreleasing}}" class="text-center guide pt-1 pb-1" type="text" oninput="checkCashReleasingInput();">{{ selCashReleasing[id_cashreleasing]['guide']}}</textarea></td> 
                     
                 </tr> 
             {% endfor %}

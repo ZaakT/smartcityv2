@@ -2491,12 +2491,13 @@ function insertImplemInputed($projID,$ucID,$list){
                                 unit_cost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $req2 = $db->prepare("UPDATE implem_item
-                            SET unit = ? 
+                            SET unit = ?,
+                            guide = ?
                             WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$projID,$ucID,$id_item));        
         if(isset($data['unit'])){
-            $ret = $req2->execute(array( $data['unit'], $id_item));
+            $ret = $req2->execute(array( $data['unit'], $data['guide'], $id_item));
         }
     }
     return $ret;
@@ -2797,13 +2798,14 @@ function insertOpexInputed($projID,$ucID,$list){
                                 annual_variation_unitcost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $req2 = $db->prepare("UPDATE opex_item
-                            SET unit = ? 
+                            SET unit = ?, 
+                                guide = ?
                             WHERE id = ?");
 
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_cost']),$data['anVarVol'],$data['anVarCost'],$projID,$ucID,$id_item));
         if(isset($data['unit'])){
-            $ret = $req2->execute(array( $data['unit'], $id_item));
+            $ret = $req2->execute(array( $data['unit'], $data['guide'], $id_item));
         }
     }
     return $ret;
@@ -3039,7 +3041,7 @@ function getListRevenuesUser($projID,$ucID){
 
 function getListSelRevenues($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost, revenue_start_date, ramp_up_duration
+    $req = $db->prepare("SELECT id_item,revenues_per_unit,volume,annual_variation_volume,annual_variation_unitcost, revenue_start_date, ramp_up_duration, guide
                             FROM input_revenues
                             INNER JOIN revenues_item
                                 WHERE  input_revenues.id_uc = ? and id_proj = ? and id_item = revenues_item.id
@@ -3056,11 +3058,12 @@ function getListSelRevenues($projID,$ucID){
         $anVarRev = floatval($row['annual_variation_unitcost']);
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
         $ramp_up_duration = intval($row['ramp_up_duration']);
+        $guide = $row['guide'];
 
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] += ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -3151,8 +3154,14 @@ function insertRevenuesInputed($projID,$ucID,$list){
                                 revenue_start_date = ?,
                                 ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE revenues_item
+                                SET guide = ?
+                                WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
@@ -3328,7 +3337,7 @@ function getListCashReleasingUser($projID,$ucID){
 
 function getListSelCashReleasing($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration, guide
                             FROM input_cashreleasing
                             INNER JOIN cashreleasing_item
                                 WHERE  input_cashreleasing.id_uc = ? and id_proj = ? and id_item = cashreleasing_item.id
@@ -3348,10 +3357,11 @@ function getListSelCashReleasing($projID,$ucID){
         $anVarCost = floatval($row['annual_var_unit_cost']);
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
         $ramp_up_duration = intval($row['ramp_up_duration']);
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -3445,9 +3455,14 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             revenue_start_date = ?,
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE cashreleasing_item
+                        SET guide = ?
+                        WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],  $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
-
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
@@ -3583,7 +3598,7 @@ function getListWiderCashUser($projID,$ucID){
 
 function getListSelWiderCash($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,unit_cost,volume_reduc,unit_cost_reduc,annual_var_volume,annual_var_unit_cost, revenue_start_date, ramp_up_duration, guide
                             FROM input_widercash
                             INNER JOIN widercash_item
                                 WHERE  input_widercash.id_uc = ? and id_proj = ? and id_item = widercash_item.id
@@ -3603,10 +3618,11 @@ function getListSelWiderCash($projID,$ucID){
         $anVarCost = floatval($row['annual_var_unit_cost']);
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
         $ramp_up_duration = intval($row['ramp_up_duration']);
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -3700,9 +3716,14 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             revenue_start_date = ?,
                             ramp_up_duration = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE widercash_item
+                                SET guide = ?
+                                WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
-
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
@@ -3830,7 +3851,7 @@ function getListQuantifiableUser($projID,$ucID){
 
 function getListSelQuantifiable($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,unit_indicator,volume,volume_reduc,annual_var_volume
+    $req = $db->prepare("SELECT id_item,unit_indicator,volume,volume_reduc,annual_var_volume, guide
                             FROM input_quantifiable
                             INNER JOIN quantifiable_item
                                 WHERE  input_quantifiable.id_uc = ? and id_proj = ? and id_item = quantifiable_item.id
@@ -3845,10 +3866,11 @@ function getListSelQuantifiable($projID,$ucID){
         $volume = intval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red,'anVarVol'=>$anVarVol];
+            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red,'anVarVol'=>$anVarVol, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red, 'anVarVol'=>$anVarVol];
+            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red, 'anVarVol'=>$anVarVol, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -3919,9 +3941,16 @@ function insertQuantifiableInputed($projID,$ucID,$list){
                             volume_reduc = ?,
                             annual_var_volume = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+
+    $req2 = $db->prepare("UPDATE quantifiable_item
+                                SET guide = ?
+                                WHERE id = ?");
+
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['vol_red'],$data['anVarVol'],$projID,$ucID,$id_item));
-
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
@@ -4042,7 +4071,7 @@ function getListNonCashUser($projID,$ucID){
 
 function getListSelNonCash($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,expected_impact,probability
+    $req = $db->prepare("SELECT id_item,expected_impact,probability, guide
                             FROM input_noncash
                             INNER JOIN noncash_item
                                 WHERE  input_noncash.id_uc = ? and id_proj = ? and id_item = noncash_item.id
@@ -4055,10 +4084,11 @@ function getListSelNonCash($projID,$ucID){
         $id_item = intval($row['id_item']);
         $exp_impact = intval($row['expected_impact']);
         $prob = floatval($row['probability']);
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob];
+            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob];
+            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -4086,6 +4116,7 @@ function insertNonCashUser($projID,$ucID,$noncash_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
+
     $req = $db->prepare('CALL add_noncash(?,?,?,?);');
     $ret = $req->execute(array($noncash_data['name'],$noncash_data['description'],$ucID,$projID));
     return $ret;
@@ -4134,9 +4165,15 @@ function insertNonCashInputed($projID,$ucID,$list){
                             SET expected_impact = ?,
                             probability = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+
+    $req2 = $db->prepare("UPDATE noncash_item
+                                SET guide = ?
+                                WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['exp_impact'],$data['prob'],$projID,$ucID,$id_item));
-
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
@@ -4249,7 +4286,7 @@ function getListRiskUser($projID,$ucID){
 
 function getListSelRisks($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT id_item,expected_impact,probability
+    $req = $db->prepare("SELECT id_item,expected_impact,probability, guide
                             FROM input_risk
                             INNER JOIN risk_item
                                 WHERE  input_risk.id_uc = ? and id_proj = ? and id_item = risk_item.id
@@ -4262,10 +4299,11 @@ function getListSelRisks($projID,$ucID){
         $id_item = intval($row['id_item']);
         $exp_impact = intval($row['expected_impact']);
         $prob = floatval($row['probability']);
+        $guide = $row['guide'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob];
+            $list[$id_item] += ['exp_impact'=>$exp_impact,'prob'=>$prob, "guide"=>$guide];
         } else {
-            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob];
+            $list[$id_item] = ['exp_impact'=>$exp_impact,'prob'=>$prob, "guide"=>$guide];
         }
     }
     //var_dump($list);
@@ -4341,9 +4379,14 @@ function insertRiskInputed($projID,$ucID,$list){
                             SET expected_impact = ?,
                             probability = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE risk_item
+                                SET guide = ?
+                                WHERE id = ?");
     foreach ($list as $id_item => $data) {
         $ret = $req->execute(array($data['exp_impact'],$data['prob'],$projID,$ucID,$id_item));
-
+        if(isset($data['guide'])){
+            $ret = $req2->execute(array( $data['guide'], $id_item));
+        }
     }
     return $ret;
 }
