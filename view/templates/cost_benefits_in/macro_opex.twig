@@ -101,6 +101,7 @@
                     <th scope="col">Ratio per Use Case</th>
                     <th scope="col">Volume per month</th>
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
+                    <th scope="col">Guide</th>
                 </tr>
                 
             </thead>
@@ -120,6 +121,8 @@
                     <td scope="col"><input id="vol_{{id_opex}}" name="vol_{{id_opex}}" class="text-center volume p-1" type="number" min=0 step=1 required oninput="checkOpexInput(vol_{{id_opex}});" value="{{ selOpex[id_opex]['volume'] }}" placeholder="{{ratio[id_opex]['val'] * nb_uc}}"></td> 
 
                     <td scope="col"><input id="cost_{{id_opex}}" name="cost_{{id_opex}}" class="text-center unit_cost p-1" type="number" min=0 step=0.001 required oninput="checkOpexInput(cost_{{id_opex}});" value="{{selOpex[id_opex]['unit_cost']}}" placeholder="{{( opex_advice[id_opex]['range_min'] + opex_advice[id_opex]['range_max']) / 2 }}"></td> 
+                    
+                    <td scope="col"><textarea id="guide_{{id_opex}}" name="guide_{{id_opex}}" class="guide pt-1 pb-1" type="text" oninput="checkOpexInput(guide_{{id_opex}});">{{ selOpex[id_opex]['guide']}}</textarea></td> 
                 </tr> 
             {% endfor %}
             </tbody>

@@ -150,7 +150,11 @@ function checkImplemInput(id){
             $("#vol_"+id[1]).each(function(){
             });
         }
-    } 
+    } else if(tab.includes("guide")){
+
+        $("#"+id).css("background","#C3E6CB");
+
+    }
 
     calcTotImplem();
     return ret;
@@ -183,6 +187,9 @@ function setNewDeviseImplem(name){
         //do nothing
     } finally { 
         $("#implem_input input").each(function(){
+            checkImplemInput(this);
+        });
+        $("textarea").each(function(){
             checkImplemInput(this);
         });
         calcTotImplem();

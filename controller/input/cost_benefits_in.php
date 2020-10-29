@@ -265,6 +265,12 @@ function capex_inputed($post){
                         } else {
                             $list[$temp[1]] = ['period'=>$value];
                         }
+                    }else if($temp[0]=="guide"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['guide'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['guide'=>$value];
+                        }
                     }
                 }
                 insertCapexInputed($projID,$ucID,$list);
@@ -699,6 +705,12 @@ function opex_inputed($post){
                         } else {
                             $list[$temp[1]] = ['anVarCost'=>$value];
                         }
+                    }else if($temp[0]=="guide"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['guide'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['guide'=>$value];
+                        }
                     }
                 }
                 insertOpexInputed($projID,$ucID,$list);
@@ -952,6 +964,12 @@ function revenues_inputed($post){
                         } else {
                             $list[$temp[1]] = ['ramp_up_duration'=>$value];
                         }
+                    }else if($temp[0]=="guide"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['guide'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['guide'=>$value];
+                        }
                     }
                 }
                 foreach ($list as $itemID => $value) {
@@ -1149,6 +1167,7 @@ function cashreleasing_inputed($post){
             if(isset($_SESSION['ucID'])){
                 $ucID = $_SESSION['ucID'];
                 $list = getListCashRelFromPost($post);
+                //var_dump($list);
                 insertCashReleasingInputed($projID,$ucID,$list);
                 update_ModifDate_proj($projID);
                 updateCB($projID,0);
@@ -1222,6 +1241,12 @@ function getListCashRelFromPost($post){
                 $list[$temp[1]] += ['ramp_up_duration'=>$value];
             } else {
                 $list[$temp[1]] = ['ramp_up_duration'=>$value];
+            }
+        }else if($temp[0]=="guide"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['guide'=>$value];
+            } else {
+                $list[$temp[1]] = ['guide'=>$value];
             }
         }
     }
@@ -1479,6 +1504,12 @@ function getListWiderCashFromPost($post){
             } else {
                 $list[$temp[1]] = ['ramp_up_duration'=>$value];
             }
+        }else if($temp[0]=="guide"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['guide'=>$value];
+            } else {
+                $list[$temp[1]] = ['guide'=>$value];
+            }
         }
     }
     foreach ($list as $itemID => $value) {
@@ -1721,6 +1752,12 @@ function getListQuantifiableFromPost($post){
             } else {
                 $list[$temp[1]] = ['unit_cost'=>$value];
             }
+        }else if($temp[0]=="guide"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['guide'=>$value];
+            } else {
+                $list[$temp[1]] = ['guide'=>$value];
+            }
         }
     }
     return $list;
@@ -1928,7 +1965,13 @@ function getListNonCashFromPost($post){
             } else {
                 $list[$temp[1]] = ['prob'=>$value];
             }
-        } 
+        } else if($temp[0]=="guide"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['guide'=>$value];
+            } else {
+                $list[$temp[1]] = ['guide'=>$value];
+            }
+        }
     }
     return $list;
 }
@@ -2136,7 +2179,13 @@ function getListRiskFromPost($post){
             } else {
                 $list[$temp[1]] = ['prob'=>$value];
             }
-        } 
+        } else if($temp[0]=="guide"){
+            if(array_key_exists($temp[1],$list)){
+                $list[$temp[1]] += ['guide'=>$value];
+            } else {
+                $list[$temp[1]] = ['guide'=>$value];
+            }
+        }
     }
     return $list;
 }

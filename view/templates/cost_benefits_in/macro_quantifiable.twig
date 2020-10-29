@@ -108,6 +108,7 @@
                     <th scope="col">Unit Indicator</th>
                     <th scope="col">Volume / month</th>
                     <th scope="col">Evolution Volume / year</th>
+                    <th scope="col">Guide</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,6 +129,7 @@
                     <td scope="col"><input id="vol_{{id_quantifiable}}" name="vol_{{id_quantifiable}}" class="text-center volume pt-1 pb-1" type="number" min=0 step=1 required oninput="checkQuantifiableInput();" value="{{selQuantifiable[id_quantifiable]['volume']}}" placeholder="{{ratio['id_quantifiable']['val'] * nb_uc}}"></td>
 
                     <td scope="col"><input id="volRed_{{id_quantifiable}}" name="volRed_{{id_quantifiable}}" class="text-center volRed pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkQuantifiableInput();" value="{{selQuantifiable[id_quantifiable]['vol_red']}}" placeholder="{{ (quantifiable_advice['id_quantifiable']['range_min_red_nb'] + quantifiable_advice['id_quantifiable']['range_max_red_nb']) / 2 }}" style="max-width:80%;"><span> %</span></td> 
+                    <td scope="col"><textarea id="guide_{{id_quantifiable}}" name="guide_{{id_quantifiable}}" class="guide pt-1 pb-1" type="text" oninput="checkQuantifiableInput();">{{ selQuantifiable[id_quantifiable]['guide']}}</textarea></td> 
                     
                 </tr> 
             {% endfor %}

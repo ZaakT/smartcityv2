@@ -105,6 +105,7 @@
                     <th scope="col">Volume</th>
                     <th scope="col">Unit Cost ( in {{selDevSym}} )</th>
                     <th scope="col">Amortization Period ( in years)</th>
+                    <th scope="col">Guide</th>
                     
                 </tr>
             </thead>
@@ -124,6 +125,8 @@
                     <td scope="col"><input id="cost_{{id_capex}}" name="cost_{{id_capex}}" class="text-center unit_cost pt-1 pb-1" type="number" min=0 step=0.001 required oninput="checkCapexInput(cost_{{id_capex}});" value="{{ selCapex[id_capex]['unit_cost'] }}" placeholder="{{ (capex_advice[id_capex]['range_min'] + capex_advice[id_capex]['range_max']) / 2 }}"></td> 
 
                     <td scope="col"><input id="period_{{id_capex}}" name="period_{{id_capex}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkCapexInput(period_{{id_capex}});" value="{{ selCapex[id_capex]['period'] ? selCapex[id_capex]['period'] : "" }}"></td>
+                   
+                    <td scope="col"><textarea id="guide_{{id_capex}}" name="guide_{{id_capex}}" class="guide pt-1 pb-1" type="text" oninput="checkCapexInput(guide_{{id_capex}});">{{ selCapex[id_capex]['guide']}}</textarea></td> 
                 </tr> 
             {% endfor %}
             </tbody>

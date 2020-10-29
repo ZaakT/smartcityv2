@@ -137,7 +137,11 @@ function checkOpexInput(id){
             $("#vol_"+id[1]).each(function(){
             });
         }
-    } 
+    }else if(tab.includes("guide")){
+
+        $("#"+id).css("background","#C3E6CB");
+
+    }
     calcTotOpex();
     return ret;
 }
@@ -241,6 +245,9 @@ function setNewDeviseOpex(name){
             checkOpexInput(this);
         });
         $("#opex_input2 input").each(function(){
+            checkOpexInput(this);
+        });
+        $("#opex_input textarea").each(function(){
             checkOpexInput(this);
         });
         calcTotOpex();

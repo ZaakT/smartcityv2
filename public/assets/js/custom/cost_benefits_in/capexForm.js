@@ -125,7 +125,11 @@ function checkCapexInput(id){
             //console.log("vol_"+id[1]);
             $("#vol_"+id[1]).val(volume);
         }
-    } 
+    } else if(tab.includes("guide")){
+
+        $("#"+id).css("background","#C3E6CB");
+
+    }
 
     calcTotCapex();
     return ret;
@@ -160,6 +164,9 @@ function setNewDeviseCapex(name){
         //do nothing
     } finally {
         $("input").each(function(){
+            checkCapexInput(this);
+        });
+        $("textarea").each(function(){
             checkCapexInput(this);
         });
         calcTotCapex();

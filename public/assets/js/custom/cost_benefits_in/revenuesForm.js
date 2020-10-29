@@ -184,6 +184,10 @@ function checkRevenuesInput(id){
             $("#"+id).css("background","#C3E6CB");
         }
 
+    }else if(tab.includes("guide")){
+
+        $("#"+id).css("background","#C3E6CB");
+
     }
     calcTotRevenues();
     return ret;
@@ -285,6 +289,9 @@ function setNewDeviseRevenues(name){
         //do nothing
     } finally {
         $("#revenues_input input").each(function(){
+            checkRevenuesInput(this);
+        });        
+        $("#revenues_input textarea").each(function(){
             checkRevenuesInput(this);
         });
         calcTotRevenues();

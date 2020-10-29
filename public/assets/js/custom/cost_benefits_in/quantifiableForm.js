@@ -89,6 +89,13 @@ function checkQuantifiableInput(){
             }
         }
     });
+    $("#quantifiable_input textarea").each(function(){
+        if(tab.includes("guide")){
+
+            $("#"+id).css("background","#C3E6CB");
+    
+        }
+    });
     calcVolVarPerMonth();
     return ret;
 }
