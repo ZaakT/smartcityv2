@@ -2205,7 +2205,7 @@ function insertSupplierRevenuesInputed($projID,$ucID,$list){
                                 anVarCost = ?
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
     $reqUnit = $db->prepare("UPDATE supplier_revenues_item
-                                SET unit = ?, 
+                                SET unit = ?
                                 WHERE item_id = ?");
     foreach ($list as $id_item => $data) {
         try {
