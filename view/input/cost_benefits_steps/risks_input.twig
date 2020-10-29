@@ -39,7 +39,7 @@
             {#-------------- tab input et total --------------#}
             {{ list.list_risks_input(risks_advice,risks_user,selRisks) }}
 
-            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+            {#<h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
             {{ list.list_risks_total(risks_advice,risks_user,selRisks) }}
 
             {#-------------- bouton flèche --------------#}
@@ -49,12 +49,12 @@
             </form>
         </div>
         {#-------------- tab guide --------------#}
-        {% if isDev %}
+        {#{% if isDev %}
         <div class="col-lg-4 guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
         </div>
-        {% endif %}
+        {% endif %}#}
     </section>
 </div>
 

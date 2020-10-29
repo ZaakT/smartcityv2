@@ -30,8 +30,8 @@
         <div id="body" class="col-12 text-left">
             <div class="row">
                 <h2 class="ml-5 mt-5"> Revenues </h2> 
-                <button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
-            </div>
+                {#<button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+            #}</div>
          {#-------------- jumbotron --------------#}
         
 
@@ -49,7 +49,7 @@
         {{ list.list_revenues_input(selDevSym,revenues_advice,revenues_user,selRevenues) }}
         {{ list.list_revenues_input_2(revenues_advice,revenues_user,selRevenues) }}
 
-        {% if isDev %}
+        {#{% if isDev %}
             <h3 class="ml-5 mb-3" style="font-size: 1.5rem;">Output</h3>
             {{ list.list_revenues_total(selDevSym,revenues_advice,revenues_user,selRevenues) }}
         {% endif %}
@@ -62,7 +62,7 @@
 </div>
 
    {#-------------- tab guide --------------#}
-    <div  id="guideline" style="display:none;" class="col-lg-4 guideline">
+    {#<div  id="guideline" style="display:none;" class="col-lg-4 guideline">
         <div class="sticky-guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
@@ -72,7 +72,7 @@
         {{ list.list_revenues_guid(selDevSym,revenues_advice,revenues_user,selRevenues,compo,ratio) }}
         {% endif %}
         </div>
-    </div>
+    </div>#}
 
     </section>
 </div>

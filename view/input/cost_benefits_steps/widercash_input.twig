@@ -29,8 +29,8 @@
             <div id="body"class="col-12 text-left"> {# col-lg-8 #}
                 <div class="row">
                     <h2 class="ml-5 mt-5"> Wider Cash Benefits </h2> 
-                    <button id="guideline_button" type="button"  class="mt-5 mr-3 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
-                </div>
+                    {# <button id="guideline_button" type="button"  class="mt-5 mr-3 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+                #}</div>
                 
                 {#-------------- jumbotron --------------#}
 
@@ -48,10 +48,10 @@
                 {#-------------- tab input et total --------------#}
                 {{ list.list_widercash_input(selDevSym,widercash_advice,widercash_user,selWiderCash) }}
                 {{ list.list_widercash_input_2(widercash_advice,widercash_user,selWiderCash) }}
-                {% if isDev %}
+                {#{% if isDev %}
                     <h3 class="ml-5  mb-3" style="font-size: 1.5rem;">Output</h3>
                     {{ list.list_widercash_total(selDevSym,widercash_advice,widercash_user,selWiderCash) }}
-                {% endif %}
+                {% endif %}#}
 
                 {#-------------- bouton flèche --------------#}
                 <div class="row m-3 text-center text-dark">
@@ -60,17 +60,17 @@
             </div>
 
             {#-------------- tab guide --------------#}
-            <div id="guideline" style="display:none;" class="col-lg-4 guideline">
+            {#<div id="guideline" style="display:none;" class="col-lg-4 guideline">
                 <div class="sticky-guideline">
                 <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
                     {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
-                    {% if test %}
+                    {#{% if test %}
                     <h1 class="text-center mt-5 pt-2"> Guideline </h1>
                     {{ list.list_widercash_guid(selDevSym,widercash_advice,widercash_user,selWiderCash,compo,ratio) }}
                     {% endif %}
                 </div>
-            </div>
+            </div>#}
     </section>
 </div>
 

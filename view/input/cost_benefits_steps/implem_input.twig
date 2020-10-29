@@ -22,8 +22,8 @@
 
             <div class="row">
                 <h2 class="ml-5 mt-5"> Implementation cost </h2> 
-                <button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
-            </div>
+                {#<button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+            #}</div>
              {#-------------- jumbotron --------------#}
 
                 {% if isDev %}
@@ -50,8 +50,8 @@
             {#-------------- tab input et total --------------#}
             {{ list.list_implem_input(selDevSym,implem_advice,implem_user,selImplem,ratio,nb_uc) }}
 
-            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
-            {{ list.list_implem_total(selDevSym,implem_advice,implem_user,selImplem) }}
+            {#<h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+            {{ list.list_implem_total(selDevSym,implem_advice,implem_user,selImplem) }}#}
 
             {#-------------- bouton flèche --------------#}
             <div class="row m-3 text-center text-dark">
@@ -66,10 +66,10 @@
             {#-------------- tab guide --------------#}
             {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
 
-            {% if test %}
+            {#{% if test %}
              <h1 class="text-center mt-5 pt-2"> Guideline </h1>
             {{ list.list_implem_guid(selDevSym,implem_advice,implem_user,selImplem,compo,ratio) }}
-            {% endif %}
+            {% endif %}#}
 
         </div>
     </section>

@@ -20,7 +20,7 @@
 
 <div class="container-fluid">
     <section class="row">
-        <div class="col-lg-8 text-left">
+        <div class="col text-left">
 
             <h2 class="ml-5 mt-5">Non Cash Benefits</h2>
             {#-------------- jumbotron --------------#}
@@ -37,8 +37,8 @@
             {#-------------- tab input et total --------------#}
             {{ list.list_noncash_input(noncash_advice,noncash_user,selNonCash) }}
 
-            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
-            {{ list.list_noncash_total(noncash_advice,noncash_user,selNonCash) }}
+            {#<h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+            {{ list.list_noncash_total(noncash_advice,noncash_user,selNonCash) }}#}
 
             {#-------------- bouton flèche --------------#}
             <div class="row m-3 text-center text-dark">
@@ -47,13 +47,13 @@
         </div>
 
         {#-------------- tab guide --------------#}
-        {% if isDev %}
+        {#{% if isDev %}
         <div class="col-lg-4 guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
 
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
         </div>
-        {% endif %}
+        {% endif %}#}
     </section>
 </div>
 

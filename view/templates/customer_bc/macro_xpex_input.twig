@@ -18,7 +18,7 @@
     <td scope="col"><input id="margin_{{id_xpex}}" name="margin_{{id_xpex}}_{{ucID}}" class="text-center period pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(margin_{{id_xpex}});" value="{{ selXpex[id_xpex]['margin'] ? selXpex[id_xpex]['margin'] : "" }}"{{Mode == "supplier" ? "disabled"}}></td>
     {% endif %#}
 
-    {% if type =="opex" or type == "operating_revenues"  %}
+    {% if type =="opex" or type == "operating_revenues" or type == "revenues"  or type == "cashreleasing" or type == "widercash" %}
 
     <td scope="col"><input id="anVarVol_{{id_xpex}}" name="anVarVol_{{id_xpex}}_{{ucID}}" class="text-center anVarVol p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarVol_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"{{Mode == "supplier" ? "disabled"}}><span> %</span></td> 
     <td scope="col"><input id="anVarCost_{{id_xpex}}" name="anVarCost_{{id_xpex}}_{{ucID}}" class="text-center anVarCost p-1" type="number" step=0.001 required oninput="checkXpexInput(anVarCost_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarCost']}}"{{Mode == "supplier" ? "disabled"}}><span> %</span></td> 
@@ -35,9 +35,13 @@
 
 
     {% endif %}
+    {% if type == "cashreleasing" or type == "widercash" %}
+    <td scope="col"><input id="volImpact_{{id_xpex}}" name="volImpact_{{id_xpex}}_{{ucID}}" class="text-center volImpact pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(volImpact_{{id_xpex}});" value="{{ selXpex[id_xpex]['unitCostImpact'] ? selXpex[id_xpex]['period'] : "0" }}"{{Mode == "supplier" ? "disabled"}}></td>
+    <td scope="col"><input id="unitCostImpact_{{id_xpex}}" name="unitCostImpact_{{id_xpex}}_{{ucID}}" class="text-center unitCostImpact pt-1 pb-1" type="number" min=1 step=1 required oninput="checkXpexInput(unitCostImpact_{{id_xpex}});" value="{{ selXpex[id_xpex]['unitCostImpact'] ? selXpex[id_xpex]['period'] : "0" }}"{{Mode == "supplier" ? "disabled"}}></td>}
+    {% endif %}
 
-    <td scope="col"><textarea id="guide_{{id_xpex}}" name="guide_{{id_xpex}}_{{ucID}}" class="guide pt-1 pb-1" type="text" oninput="checkXpexInput(guide_{{id_xpex}});" {{Mode == "supplier" ? "disabled"}}>{{ selXpex[id_xpex]['guide']}}</textarea></td> 
-
+    {#<td scope="col"><textarea id="guide_{{id_xpex}}" name="guide_{{id_xpex}}_{{ucID}}" class="guide pt-1 pb-1" type="text" oninput="checkXpexInput(guide_{{id_xpex}});" {{Mode == "supplier" ? "disabled"}}>{{ selXpex[id_xpex]['guide']}}</textarea></td> 
+#}
 </tr>
 
 {% endmacro %}
@@ -102,24 +106,31 @@
         <div class="col mx-5 mb-5 list-table">
             <table id="xpex_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
                 <thead class="thead-dark text-center sticky-top">
-                    {% if type == "opex" or type == "operating_revenues" %}
+                    {% if type == "opex" or type == "operating_revenues" or type == "revenues" or type == "cashreleasing" or type == "widercash" %}
                     <tr>
                         <th scope="col" colspan=2 class="text-uppercase">Components</th>
                         <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
                         <th scope="col" colspan=2 class="text-uppercase">Growth</th>
+                        {% if type == "cashreleasing" or type == "widercash" %}
+                        <th scope="col" colspan=2 class="text-uppercase">Impact</th>
+                        {% endif %}
                     </tr>
                     {% endif %}
                     <tr>
                         <th scope="col">Item</th>
                         {{listUcsName|length > 1 ? "<th scope='col'>Use Case</th>"}}
-                        <th scope="col">Unit</th>
+                        <th scope="col">Reference Unit</th>
                         <th scope="col">Unit Cost</th>
-                        <th scope="col">#Units</th>
+                        {% if type != "revenues" %}
+                        <th scope="col">#Units per month</th>
+                        {% else %}
+                        <th scope="col">Unit Revenues</th>
+                        {% endif %}
                         {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
                         <th scope="col">Margin ( in % )</th>
                         
                         {% endif %#}
-                        {% if type == "opex" or type == "operating_revenues" %}
+                        {% if type == "opex" or type == "operating_revenues" or type == "revenues" or type == "cashreleasing" or type == "widercash" %}
                         <th scope="col">Annual unit cost variation</th>
                         <th scope="col">Annual volume variation</th>
                         {% set size = size + 2 %}
@@ -132,7 +143,12 @@
                         <th scope="col">Amortization Period ( in years )</th>
                         {% set size = size + 1 %}
                         {% endif %}
-                        <th scope="col">Guide</th>
+                        {% if type == "cashreleasing" or type == "widercash" %}
+                        <th scope="col">Volume</th>
+                        <th scope="col">Unit Cost</th>
+                        {% set size = size + 2 %}
+                        {% endif %}
+                        {#<th scope="col">Guide</th>#}
                     </tr>
                 </thead>
                 <tbody>

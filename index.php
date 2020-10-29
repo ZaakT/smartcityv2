@@ -1191,7 +1191,7 @@ try{
                         }
                     
                     // --- CAPEX ---
-                    }elseif(isSup() and ( $_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs")){
+                    }elseif( $_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
                         if(isset($_GET['ucID']) and $_GET['ucID']!=0 and isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
@@ -1232,8 +1232,9 @@ try{
                                 
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$projID);
                             }
-                    }
+                    /*}
                     // -*-*
+                    
                     elseif($_GET['A2']=="capex"){
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
@@ -1549,7 +1550,7 @@ try{
                     // --- INPUTED OPEX ---
                     } elseif($_GET['A2']=="opex_inputed"){
                         opex_inputed($_POST);
-
+*/
                     // -*-*
                         // --- REVENUES ---
                     }elseif($_GET['A2']=="revenues"){

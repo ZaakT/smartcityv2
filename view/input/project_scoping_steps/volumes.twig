@@ -36,7 +36,7 @@
             <div class="row mt-5 mb-0">
                 <h2 class="mx-auto">Input volumes for {{measures[meas]['name']}}</h2>
                 <button class="align-self-center btn btn-danger col-2 btn-sm" type="button" onclick="clearTable('volumes_table_{{meas}}'); return false;">Clear all</button>
-                <button id="guideline_button" type="button"  class=" mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>               
+                {#<button id="guideline_button" type="button"  class=" mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>#}               
                 
             </div>
             {#---------- tab input -----------#}
@@ -63,7 +63,7 @@
         </div> 
 
         {#---------------- guideline ----------------#}
-        <div id="guideline"  style="display:none;"  class="col-lg-5 guideline">
+        {#<div id="guideline"  style="display:none;"  class="col-lg-5 guideline">
             <div class="sticky-guideline list-table">
                 <h1 class="text-center mt-5 pt-2"> Guideline </h1>
                 
@@ -72,7 +72,7 @@
                 {{ list.list_indic(meas,list_ucs,ucs,measures,ratio,components) }}
                 {{ list.list_guid_compo(components, perimeter, meas, compo_per_zone) }}
                 {% endfor %}
-            </div>
+            </div>#}
     {% else %}
 
 

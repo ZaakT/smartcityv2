@@ -31,8 +31,8 @@
 
         <div class="row">
             <h2 class="ml-5 mt-5"> Opex (Operational Expenditure) </h2> 
-            <button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
-        </div>
+            {#<button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+        #}</div>
         {#-------------- jumbotron --------------#}
         {% if isDev %}
             {% set lorem = "For the chosen Use Case, input Opex / running cost item. " %}
@@ -50,8 +50,8 @@
         {{ list.list_opex_input(selDevSym,opex_advice,opex_user,selOpex,nb_uc) }}
         {{ list.list_opex_input_2(opex_advice,opex_user,selOpex) }}
 
-        <h3 class="ml-5 mb-3" style="font-size: 1.5rem;">Output</h3>
-        {{ list.list_opex_total(selDevSym,opex_advice,opex_user,selOpex) }}
+        {#<h3 class="ml-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+        {{ list.list_opex_total(selDevSym,opex_advice,opex_user,selOpex) }}#}
 
         {#-------------- bouton flèche --------------#}
         <div class="row m-3 text-center text-dark">
@@ -61,7 +61,7 @@
     </div>
 
     {#-------------- tab guide --------------#}
-    <div id="guideline" style="display:none;" class="col-lg-4 guideline">
+    {#<div id="guideline" style="display:none;" class="col-lg-4 guideline">
         <div class="sticky-guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
         {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
@@ -71,7 +71,7 @@
         {{ list.list_opex_guid(selDevSym,opex_advice,opex_user,selOpex,compo,ratio) }}
         {% endif %}
         </div>
-    </div>
+    </div>#}
 
     </section>
 </div>

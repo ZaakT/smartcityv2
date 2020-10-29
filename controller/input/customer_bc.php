@@ -62,6 +62,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
     //If ucID == 0 => we are locking ALL the UC of the project.
     //var_dump($_ucID);
     $user = getUser($_SESSION['username']);
+    $proj = getProjByID($projID,$user[0]);
     $_SESSION['_ucID']= $_ucID;
     if($_ucID==-1){$_SESSION['ucID'] = $_ucID;}
     if($projID!=0){
@@ -69,86 +70,24 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             $listUcID=getListUcID($_ucID, $projID);
             $listUcsName = getUcsName($listUcID);
 
-            $list_xpex_advice_from_ntt = [];
-            $list_xpex_advice_from_outside_ntt = [];
-            $list_xpex_advice_internal = [];
+            $listXpex = getListXpex($listUcID, $type, $projID, $side);
+            $list_xpex_advice = $listXpex[0];
+            $list_xpex_user = $listXpex[1];
+            $list_selXpex = $listXpex[2]; 
+            $list_xpex_advice_from_ntt = $listXpex[3];
+            $list_xpex_advice_from_outside_ntt = $listXpex[4];
 
-            $list_xpex_user_from_ntt = [];    
-            $list_xpex_user_from_outside_ntt = [];
-            $list_xpex_user_internal = []; 
+            $list_xpex_advice_internal = $listXpex[5];
+            $list_xpex_user_from_ntt = $listXpex[6];
+            $list_xpex_user_from_outside_ntt = $listXpex[7];
+            $list_xpex_user_internal = $listXpex[8];
+            $list_xpex_supplier = $listXpex[9]; 
+            $list_selXpex = $listXpex[10];
+            $list_sel_xpex_advice = $listXpex[11];
+            $nb_uc = $listXpex[12];
+            $list_ratio = $listXpex[13];
+            $uc = $listXpex[14];
 
-            $list_selXpex = []; 
-            $list_xpex_supplier = []; //Used only In cutomer side to show xpex equivalent to supplier revenues
-            $proj = getProjByID($projID,$user[0]);
-            foreach ($listUcID as $ucID) {
-                if(getUCByID($ucID)){
-                    $uc = getUCByID($ucID);
-                    $list_xpex_supplier[$ucID]=[];
-                    if($type=="capex"){
-                        
-                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID]  = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID]  = getListCapexAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID]   = getListCapexUser($projID,$ucID, "from_ntt", $side);  
-                        $list_xpex_user_from_outside_ntt[$ucID]  = getListCapexUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID]   = getListCapexUser($projID,$ucID, "internal", $side); 
-                        
- 
-                        $list_selXpex[$ucID] = getListSelCapex($projID,$ucID, $side);                         
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
-                        }
-                    }elseif($type=="opex"){
-                        $list_xpex_advice_from_ntt[$ucID]  = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID]  = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID]  = getListOpexAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID]   = getListOpexUser($projID,$ucID, "from_ntt", $side);    
-                        $list_xpex_user_from_outside_ntt[$ucID]   = getListOpexUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID]   = getListOpexUser($projID,$ucID, "internal", $side); 
-
-                        $list_selXpex[$ucID]  = getListSelOpex($projID,$ucID, $side); 
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
-                        }
-                    }elseif($type=="deployment_costs"){
-                        $list_xpex_advice_from_ntt[$ucID]  = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID]  = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID]  = getListImplemAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID]  = getListImplemUser($projID,$ucID, "from_ntt", $side);    
-                        $list_xpex_user_from_outside_ntt[$ucID]   = getListImplemUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
-                        
-                        $list_selXpex[$ucID]  = getListSelImplem($projID,$ucID, $side); 
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID],explode('_',$type)[0]);
-                        }
-                    }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
-                        
-                        $list_xpex_advice_from_outside_ntt[$ucID]  = [];
-                        $list_xpex_advice_internal[$ucID]  = [];
- 
-                        $list_xpex_user_from_outside_ntt[$ucID]  = [];
-                        $list_xpex_user_internal[$ucID]  = [];
-
-
-                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, explode('_',$type)[0]); 
-                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, explode('_',$type)[0]);   
- 
-                        
-                        $list_selXpex[$ucID]  = getListSelSupplierRevenues($projID,$ucID, explode('_',$type)[0]); 
-                    }else{
-                        throw new Exception("3 Wrong type.");
-                    }
-                } else {
-                    throw new Exception("This use case doesn't exist !");
-                }
-            }
             if(count($listUcID)!=1){
                 $ucID = 0;
             }else{
@@ -285,6 +224,156 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
 }
 
 
+function getListXpex($listUcID, $type, $projID, $side){
+    $nb_uc= [];
+    $list_xpex_advice = []; 
+    $list_xpex_user = [];   
+    $list_selXpex = [];
+
+    $list_xpex_advice_from_ntt = [];
+    $list_xpex_advice_from_outside_ntt = [];
+    $list_xpex_advice_internal = [];
+
+    $list_xpex_user_from_ntt  = [];    
+    $list_xpex_user_from_outside_ntt  = [];
+    $list_xpex_user_internal  = [];
+
+    $list_xpex_supplier = []; //Used only In cutomer side to show xpex equivalent to supplier revenues
+
+
+    $list_selXpex = [];
+
+    $list_sel_xpex_advice = [];
+    foreach ($listUcID as $ucID) {
+        $uc = getUCByID($ucID);
+        $list_xpex_supplier[$ucID]=[];
+        if($type=="capex"){
+                
+            $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
+            $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
+
+            $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
+            $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal", $side); 
+
+            $list_xpex_user_from_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_ntt", $side);    
+            $list_xpex_user_from_outside_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_outside_ntt", $side); 
+            $list_xpex_user_internal[$ucID] = getListCapexUser($projID,$ucID, "internal", $side); 
+
+            $list_selXpex[$ucID] = getListSelCapex($projID,$ucID, $side); 
+
+            if($side == "customer"){
+                //We need here to select the revenues of the supplier and transform it in xpex
+                $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
+            }
+
+
+        }elseif($type=="opex"){
+            $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", "projDev"); 
+            $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
+
+            $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
+            $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal", $side); 
+
+            $list_xpex_user_from_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_ntt", $side);    
+            $list_xpex_user_from_outside_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_outside_ntt", $side); 
+            $list_xpex_user_internal[$ucID] = getListOpexUser($projID,$ucID, "internal", $side); 
+
+            $list_selXpex[$ucID] = getListSelOpex($projID,$ucID, $side); 
+
+            if($side == "customer"){
+                //We need here to select the revenues of the supplier and transform it in xpex
+                $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
+            }
+        }elseif($type=="deployment_costs"){
+            $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", "projDev");
+            $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
+            
+            $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
+            $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
+
+            $list_xpex_user_from_ntt[$ucID]  = getListImplemUser($projID,$ucID, "from_ntt", $side);    
+            $list_xpex_user_from_outside_ntt[$ucID] = getListImplemUser($projID,$ucID, "from_outside_ntt", $side); 
+            $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
+            
+            $list_selXpex[$ucID] = getListSelImplem($projID,$ucID, $side); 
+            if($side == "customer"){
+                //We need here to select the revenues of the supplier and transform it in xpex
+                $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
+            }
+        }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
+            
+            $list_xpex_advice_from_outside_ntt[$ucID]  = [];
+            $list_xpex_advice_internal[$ucID]  = [];
+
+            $list_xpex_user_from_outside_ntt[$ucID]  = [];
+            $list_xpex_user_internal[$ucID]  = [];
+
+            $list_selXpex[$ucID]  = getListSelSupplierRevenues($projID,$ucID,  explode('_',$type)[0]); 
+
+            $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, explode('_',$type)[0]); 
+            $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, explode('_',$type)[0]);  
+
+            $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
+            
+        }elseif($type=="revenues" || $type =="cashreleasing" || $type =="widercash" || $type =="quantifiable" || $type =="noncash" || $type =="risks"){
+            
+            $list_xpex_advice_from_outside_ntt[$ucID]  = [];
+            $list_xpex_advice_internal[$ucID]  = [];
+
+            $list_xpex_user_from_outside_ntt[$ucID]  = [];
+            $list_xpex_user_internal[$ucID]  = [];
+
+            if($type=="revenues"){
+                $list_selXpex[$ucID]  =getListSelRevenues($projID,$ucID);
+                $list_xpex_advice_from_ntt[$ucID]  = getListRevenuesAdvice($ucID);
+                $list_xpex_user_from_ntt[$ucID]  = getListRevenuesUser($projID,$ucID); 
+            }elseif($type=="cashreleasing"){
+                $list_selXpex[$ucID]  = getListSelCashReleasing($projID,$ucID); 
+                $list_xpex_advice_from_ntt[$ucID]  = getListCashReleasingAdvice($ucID); 
+                $list_xpex_user_from_ntt[$ucID]  = getListCashReleasingUser($projID,$ucID);   
+            }elseif($type=="widercash"){
+                $list_selXpex[$ucID]  = getListSelWiderCash($projID,$ucID); 
+                $list_xpex_advice_from_ntt[$ucID]  = getListWiderCashAdvice($ucID);   
+                $list_xpex_user_from_ntt[$ucID]  = getListWiderCashUser($projID,$ucID);   
+            }elseif($type=="quantifiable"){
+                $list_selXpex[$ucID]  = getListSelQuantifiable($projID,$ucID);
+                $list_xpex_advice_from_ntt[$ucID]  = getListQuantifiableAdvice($ucID);
+                $list_xpex_user_from_ntt[$ucID]  = getListQuantifiableUser($projID,$ucID) ;
+            }elseif($type=="noncash"){
+                $list_selXpex[$ucID]  =getListSelNonCash($projID,$ucID);
+                $list_xpex_advice_from_ntt[$ucID]  = getListNonCashAdvice($ucID); 
+                $list_xpex_user_from_ntt[$ucID]  = getListNonCashUser($projID,$ucID); 
+            }elseif($type=="risks"){
+                $list_selXpex[$ucID]  = getListSelRisks($projID,$ucID);
+                $list_xpex_advice_from_ntt[$ucID]  = getListRisksAdvice($ucID);
+                $list_xpex_user_from_ntt[$ucID]  = getListRiskUser($projID,$ucID);
+            }
+
+            $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
+            
+        }else{
+            throw new Exception("2 Wrong type.");
+        }
+
+        //var_dump($list_selXpex);
+        $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
+        $compo = getCompoByUC($ucID);
+
+
+        $nb_uc[$ucID] = getNbTotalUC($projID,$ucID);
+            //var_dump($nb_uc);
+        $list_ratio[$ucID] = getRatioCompoCapex($list_sel_xpex_advice[$ucID],$compo['id']);
+            //var_dump($list_ratio);
+    }
+    return [$list_xpex_advice, $list_xpex_user, $list_selXpex, $list_xpex_advice_from_ntt, $list_xpex_advice_from_outside_ntt, 
+    $list_xpex_advice_internal, $list_xpex_user_from_ntt, $list_xpex_user_from_outside_ntt, $list_xpex_user_internal, $list_xpex_supplier, 
+    $list_selXpex, $list_sel_xpex_advice, $nb_uc, $list_ratio, $uc, $compo];
+}
+
+
 function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sideBarName, $side){
     /* 
     INPUT:  ID du projet, et id du UC
@@ -300,117 +389,11 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
             if(getProjByID($projID,$user[0])){
                 $proj = getProjByID($projID,$user[0]);
                 
-                $nb_uc= [];
 
                 $listUcsName = getUcsName($listUcID);
                 
 
-                $list_xpex_advice = []; 
-                $list_xpex_user = [];   
-                $list_selXpex = [];
 
-                $list_xpex_advice_from_ntt = [];
-                $list_xpex_advice_from_outside_ntt = [];
-                $list_xpex_advice_internal = [];
-
-                $list_xpex_user_from_ntt  = [];    
-                $list_xpex_user_from_outside_ntt  = [];
-                $list_xpex_user_internal  = [];
-
-                $list_xpex_supplier = []; //Used only In cutomer side to show xpex equivalent to supplier revenues
-            
-
-                $list_selXpex = [];
-
-                $list_sel_xpex_advice = [];
-                foreach ($listUcID as $ucID) {
-                    $uc = getUCByID($ucID);
-                    $list_xpex_supplier[$ucID]=[];
-                    if($type=="capex"){
-                            
-                        $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
-                        $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
-
-                        $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_ntt", $side);    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListCapexUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID] = getListCapexUser($projID,$ucID, "internal", $side); 
-
-                        $list_selXpex[$ucID] = getListSelCapex($projID,$ucID, $side); 
-
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
-                        }
-
-
-                    }elseif($type=="opex"){
-                        $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", "projDev"); 
-                        $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
-
-                        $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_ntt", $side);    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListOpexUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID] = getListOpexUser($projID,$ucID, "internal", $side); 
-
-                        $list_selXpex[$ucID] = getListSelOpex($projID,$ucID, $side); 
-
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
-                        }
-                    }elseif($type=="deployment_costs"){
-                        $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", "projDev");
-                        $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
-                        
-                        $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
-                        $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
-                        $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
-
-                        $list_xpex_user_from_ntt[$ucID]  = getListImplemUser($projID,$ucID, "from_ntt", $side);    
-                        $list_xpex_user_from_outside_ntt[$ucID] = getListImplemUser($projID,$ucID, "from_outside_ntt", $side); 
-                        $list_xpex_user_internal[$ucID]  = getListImplemUser($projID,$ucID, "internal", $side); 
-                        
-                        $list_selXpex[$ucID] = getListSelImplem($projID,$ucID, $side); 
-                        if($side == "customer"){
-                            //We need here to select the revenues of the supplier and transform it in xpex
-                            $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
-                        }
-                    }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
-                        
-                        $list_xpex_advice_from_outside_ntt[$ucID]  = [];
-                        $list_xpex_advice_internal[$ucID]  = [];
- 
-                        $list_xpex_user_from_outside_ntt[$ucID]  = [];
-                        $list_xpex_user_internal[$ucID]  = [];
-
-                        $list_selXpex[$ucID]  = getListSelSupplierRevenues($projID,$ucID,  explode('_',$type)[0]); 
-
-                        $list_xpex_advice_from_ntt[$ucID]  = getListSupplierRevenuesAdvice($ucID, explode('_',$type)[0]); 
-                        $list_xpex_user_from_ntt[$ucID]  = getListSupplierRevenuesUser($ucID, $projID, explode('_',$type)[0]);  
-
-                        $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
-                        
-                    }else{
-                        throw new Exception("2 Wrong type.");
-                    }
-
-                    //var_dump($list_selXpex);
-                    $list_sel_xpex_advice[$ucID] = getListSelByType($list_selXpex[$ucID],$list_xpex_advice[$ucID]);
-                    $compo = getCompoByUC($ucID);
-        
-   
-                    $nb_uc[$ucID] = getNbTotalUC($projID,$ucID);
-                        //var_dump($nb_uc);
-                    $list_ratio[$ucID] = getRatioCompoCapex($list_sel_xpex_advice[$ucID],$compo['id']);
-                        //var_dump($list_ratio);
-                }
                 $devises = getListDevises();
 
                 if(count($listUcID)>1){
@@ -418,6 +401,27 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 }else{
                     $ucID = $listUcID[0];
                 }
+
+                $listXpex = getListXpex($listUcID, $type, $projID, $side);
+                $list_xpex_advice = $listXpex[0];
+                $list_xpex_user = $listXpex[1];
+                $list_selXpex = $listXpex[2]; 
+                $list_xpex_advice_from_ntt = $listXpex[3];
+                $list_xpex_advice_from_outside_ntt = $listXpex[4];
+
+                $list_xpex_advice_internal = $listXpex[5];
+                $list_xpex_user_from_ntt = $listXpex[6];
+                $list_xpex_user_from_outside_ntt = $listXpex[7];
+                $list_xpex_user_internal = $listXpex[8];
+                $list_xpex_supplier = $listXpex[9]; 
+                $list_selXpex = $listXpex[10];
+                $list_sel_xpex_advice = $listXpex[11];
+                $nb_uc = $listXpex[12];
+                $list_ratio = $listXpex[13];
+                $uc = $listXpex[14];
+                $compo = $listXpex[15];
+
+
                 /*
                 //var_dump($list_xpex_supplier);
                 //var_dump($list_xpex_user_from_ntt);*/

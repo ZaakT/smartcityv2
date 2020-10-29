@@ -137,6 +137,24 @@ $GLOBALS['dicTrad']=[
     "procured_from_outside" => [
         "en"=>"Procured From Outside "
     ],
+    "revenues" => [
+        "en"=>"revenues"
+    ],
+    "cashreleasing" => [
+        "en"=>"Cash Releasing"
+    ],
+    "widercash" => [
+        "en"=>"Wider Cash"
+    ],
+    "quantifiable" => [
+        "en"=>"Quantifiable non monetizable"
+    ],
+    "noncash" => [
+        "en"=>"Non Cash"
+    ],
+    "risks" => [
+        "en"=>"risk"
+    ],
     "internal" => [
         "en"=>"Internal"
     ],

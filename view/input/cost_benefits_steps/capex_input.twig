@@ -32,8 +32,8 @@
              
             <div class="row">
                 <h2 class="ml-5 mt-5">Capex (Capital Expenditure)</h2>
-                <button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
-            </div>
+                {#<button id="guideline_button" type="button"  class="mt-5 mr-5 ml-auto align-self-center btn btn-outline-secondary " onclick="displayGuideline();">Guideline</button>
+            #}</div>
              {#-------------- jumbotron --------------#}
 
             {% if isDev %}
@@ -51,8 +51,8 @@
             {#-------------- tab input et total --------------#}
             {{ list.list_capex_input(selDevSym,capex_advice,capex_user,ratio,selCapex,nb_uc) }}
 
-            <h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
-            {{ list.list_capex_total(selDevSym,capex_advice,capex_user,selCapex) }}
+            {#<h3 class="ml-5 pl-5 mb-3" style="font-size: 1.5rem;">Output</h3>
+            {{ list.list_capex_total(selDevSym,capex_advice,capex_user,selCapex) }}#}
 
             {#-------------- bouton flèche --------------#}
             <div class="row m-3 text-center text-dark">
@@ -66,11 +66,11 @@
         <div  id="guideline" style="display:none;"  class="col-lg-4 guideline">
         <h1 class="text-center mt-5 pt-2"> Project Parameters </h1>
 
-        {{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
+        {#{{ guid.compo_guid(selected2,compo,nb_compo,nb_uc) }}
         {% if test %}
             <h1 class="text-center mt-5 pt-2"> Guideline </h1>
             {{ list.list_capex_guid(selDevSym,capex_advice,capex_user,selCapex,compo,ratio) }}
-        {% endif %}
+        {% endif %}#}
         </div>
         
 
