@@ -486,6 +486,18 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
                 insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "deployment");
             }elseif($type=='operating_revenues'){
                 insertSupplierRevenueUser($projID,$ucID,$xpex_infos, "operating");
+            }elseif($type=='revenues'){
+                insertRevenuesUser($projID,$ucID,$xpex_infos);
+            }elseif($type=='cashreleasing'){
+                insertCashReleasingUser($projID,$ucID,$xpex_infos);
+            }elseif($type=='widercash'){
+                insertWiderCashUser($projID,$ucID,$xpex_infos);
+            }elseif($type=='quantifiable'){
+                insertQuantifiableUser($projID,$ucID,$xpex_infos);
+            }elseif($type=='noncash'){
+                insertNonCashUser($projID,$ucID,$xpex_infos);
+            }elseif($type=='risks'){
+                insertRiskUser($projID,$ucID,$xpex_infos);
             }else{
                 throw new Exception("Wrong type !");
             }
@@ -511,6 +523,18 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
                 deleteImplemUser(intval($idXpex));
             }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
                 deleteSupplierRevenueUser(intval($idXpex));
+            }elseif($type=='revenues'){
+                deleteRevenuesUser(intval($idXpex));
+            }elseif($type=='cashreleasing'){
+                deleteCashReleasingUser(intval($idXpex));
+            }elseif($type=='widercash'){
+                deleteWiderCashUser(intval($idXpex));
+            }elseif($type=='quantifiable'){
+                deleteQuantifiableUser(intval($idXpex));
+            }elseif($type=='noncash'){
+                deleteNonCashUser(intval($idXpex));
+            }elseif($type=='risks'){
+                deleteRiskUser(intval($idXpex));
             }else{
                 throw new Exception("Wrong type !");
             }
@@ -611,6 +635,36 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['guide'=>$value];
                         }
+                    } else if($temp[0]=="unitIndic"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit_indic'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit_indic'=>$value];
+                        }
+                    } else if($temp[0]=="volRed"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['vol_red'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['vol_red'=>$value];
+                        }
+                    } else if($temp[0]=="unitCostRed"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit_cost_red'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit_cost_red'=>$value];
+                        }
+                    }elseif($temp[0]=="impact"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['exp_impact'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['exp_impact'=>$value];
+                        }
+                    } else if($temp[0]=="prob"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['prob'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['prob'=>$value];
+                        }
                     }else{
                         throw new Exception("Error ! :".$temp[0]);
                     }
@@ -628,6 +682,18 @@ function xpex_inputed($post, $sideBarName, $type){
                 }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
                     //var_dump($list);
                     insertSupplierRevenuesInputed($projID,$ucID,$list);
+                }elseif($type=='revenues'){
+                    deleteRevenuesUser(intval($idXpex));
+                }elseif($type=='cashreleasing'){
+                    deleteCashReleasingUser(intval($idXpex));
+                }elseif($type=='widercash'){
+                    deleteWiderCashUser(intval($idXpex));
+                }elseif($type=='quantifiable'){
+                    deleteQuantifiableUser(intval($idXpex));
+                }elseif($type=='noncash'){
+                    deleteNonCashUser(intval($idXpex));
+                }elseif($type=='risks'){
+                    deleteRiskUser(intval($idXpex));
                 }else{
                     throw new Exception("Wrong type !");
                 }
@@ -637,19 +703,18 @@ function xpex_inputed($post, $sideBarName, $type){
             if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier" or $sideBarName == "input_use_case_supplier"){
                 header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
             }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
-                if ($type == "capex"){
-                    header('Location: ?A='.$sideBarName.'&A2=deployment_costs&projID='.$projID.'&ucID='.$ucID); 
-                }
-                elseif($type == "deployment_costs"){
-                    header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID); 
-                }elseif($type == "opex"){
-                    header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID); 
-                }
+            //$type=="revenues" || $type =="cashreleasing" || $type =="widercash" || $type =="quantifiable" || $type =="noncash" || $type =="risks"
+                $next=["capex"=>"deployment_costs", 
+                "deployment_costs"=>"opex",
+                "opex"=>"revenues",
+                "revenues"=>"cashreleasing",
+                "cashreleasing"=>"widercash",
+                "widercash"=>"quantifiable",
+                "quantifiable"=>"noncash",
+                "noncash"=>"risks",
+                "risks"=>"summary"];
+                header('Location: ?A='.$sideBarName.'&A2='.$next [$type].'&projID='.$projID.'&ucID='.$ucID);
             }
-
-                
-                
-
         } else {
             throw new Exception("There is no Project selected !");
         }
@@ -670,6 +735,24 @@ function delete_selection_xpex($projID=0,$ucID=0, $type, $sideBarName){
                 deleteAllSelOpex($projID,$ucID);
                 header('Location: ?A='.$sideBarName.'&A2=revenues&projID='.$projID.'&ucID='.$ucID);
             }elseif($type == "deployment_costs"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "revenues"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "cashreleasing"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "widercash"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "quantifiable"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "noncash"){
+                deleteAllSelImplem($projID,$ucID);
+                header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
+            }elseif($type == "risks"){
                 deleteAllSelImplem($projID,$ucID);
                 header('Location: ?A='.$sideBarName.'&A2=opex&projID='.$projID.'&ucID='.$ucID);
             }else{
