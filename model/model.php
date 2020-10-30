@@ -1632,7 +1632,7 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
     }
 
     if($side=="projDev"){
-        $origine_selection = "and capex_item.side = 'projDev'";
+        $side_selection = "and capex_item.side = 'projDev'";
     }elseif($side == "customer"){
         $side_selection = "and capex_item.side = 'customer'";
     }elseif($side == "supplier"){
@@ -1653,6 +1653,7 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
                                         $side_selection
                             ORDER BY name
                             ");
+
     $req->execute(array($ucID));
 
     $list = [];
@@ -1672,6 +1673,7 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
         }
     }
     //var_dump($list);
+
     return $list;
 }
 
@@ -1718,10 +1720,10 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
     }elseif($origine == "from_outside_ntt"){
         $origine_selection = "and capex_item.origine = 'from_outside_ntt'";
     }elseif($origine == "internal"){
-               $origine_selection = "and capex_item.origine = 'internal'";
+        $origine_selection = "and capex_item.origine = 'internal'";
     }
     if($side=="projDev"){
-        $origine_selection = "and capex_item.side = 'projDev'";
+        $side_selection = "and capex_item.side = 'projDev'";
     }elseif($side == "customer"){
         $side_selection = "and capex_item.side = 'customer'";
     }elseif($side == "supplier"){
@@ -3059,7 +3061,6 @@ function getListSelRevenues($projID,$ucID){
             $list[$id_item] = ['unit_rev'=>$unit_rev,'volume'=>$volume,'anVarVol'=>$anVarVol,'anVarRev'=>$anVarRev, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -3149,6 +3150,7 @@ function insertRevenuesInputed($projID,$ucID,$list){
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
 
     foreach ($list as $id_item => $data) {
+        //var_dump($data);
         $ret = $req->execute(array($data['volume'],convertDevToGBP($data['unit_rev']),$data['anVarVol'],$data['anVarRev'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
 
     }
@@ -3347,9 +3349,9 @@ function getListSelCashReleasing($projID,$ucID){
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
         $ramp_up_duration = intval($row['ramp_up_duration']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] += ['unit'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarCost,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] = ['unit'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -3445,7 +3447,8 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
 
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],  $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        //var_dump($data);
+        $ret = $req->execute(array($data['unit'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],   '2020-09-30' , '0' ,$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -3603,9 +3606,9 @@ function getListSelWiderCash($projID,$ucID){
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
         $ramp_up_duration = intval($row['ramp_up_duration']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] += ['unit'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
+            $list[$id_item] = ['unit'=>$unit_indic,'volume'=>$volume,'unit_cost'=>$unit_cost,'vol_red'=>$vol_red,'unit_cost_red'=>$unit_cost_red,'anVarVol'=>$anVarVol,'anVarCost'=>$anVarCost, "revenue_start_date"=>$revenue_start_date, "ramp_up_duration"=>$ramp_up_duration];
         }
     }
     //var_dump($list);
@@ -3701,7 +3704,8 @@ function insertWiderCashInputed($projID,$ucID,$list){
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
 
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'], $data['revenue_start_date']=='NULL' ? '2020-09-30' : $data['revenue_start_date'] , $data['ramp_up_duration']=='NULL' ? '0' : $data['ramp_up_duration'],$projID,$ucID,$id_item));
+        //var_dump($data);
+        $ret = $req->execute(array($data['unit'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],  '2020-09-30'  ,  '0',$projID,$ucID,$id_item));
 
     }
     return $ret;
@@ -3846,9 +3850,9 @@ function getListSelQuantifiable($projID,$ucID){
         $vol_red = floatval($row['volume_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red,'anVarVol'=>$anVarVol];
+            $list[$id_item] += ['unit'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red,'anVarVol'=>$anVarVol];
         } else {
-            $list[$id_item] = ['unit_indic'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red, 'anVarVol'=>$anVarVol];
+            $list[$id_item] = ['unit'=>$unit_indic,'volume'=>$volume,'vol_red'=>$vol_red, 'anVarVol'=>$anVarVol];
         }
     }
     //var_dump($list);
@@ -3923,7 +3927,7 @@ function insertQuantifiableInputed($projID,$ucID,$list){
 
 
     foreach ($list as $id_item => $data) {
-        $ret = $req->execute(array($data['unit_indic'],$data['volume'],$data['vol_red'],$data['anVarVol'],$projID,$ucID,$id_item));
+        $ret = $req->execute(array($data['unit'],$data['volume'],$data['vol_red'],$data['anVarVol'],$projID,$ucID,$id_item));
     }
     return $ret;
 }

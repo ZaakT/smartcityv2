@@ -31,6 +31,18 @@
     {% set lorem = "For each Deployment Revenue item, please input Unit Costs and  Volumes (per month) to be generated from such deployment item(s)." %}
 {% elseif type == "operating_revenues" %}
     {% set lorem = "For each Operating Revenue item, please input Unit Costs, Volumes (per month) and annual variations impacting such revenue item(s)." %}
+{% elseif type == "revenues" %}
+    {% set lorem = "For the chosen Use Case, input target revenue items (unit cost and volumes) and a proposed annual variation." %}
+{% elseif type == "cashreleasing" %}
+    {% set lorem = "For the chosen Use Case, input baseline Cash Releasing benefit items (Unit Cost and volumes), a proposed annual variation and details on the impact affecting the baseline." %}
+{% elseif type == "widercash" %}
+    {% set lorem = "For the chosen Use Case, input baseline Wider Cash Benefits items (Unit Cost and volumes), a proposed annual variation and details on the impact affecting the baseline." %}
+{% elseif type == "quantifiable" %}
+    {% set lorem = "For the chosen Use Case, input baseline Quantifiable Non Monetizable Benefits items (Unit Cost and volumes), a proposed annual variation and details on the impact affecting the baseline." %}
+{% elseif type == "noncash" %}
+    {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Non Quantifiable Benefit items, and select % probability of occurrence to calculate impact." %}
+{% elseif type == "risks" %}
+    {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Risk items, and select % probability of occurrence to calculate Risk impact." %}
 {% endif %}
 
 
@@ -68,6 +80,7 @@
 
 {% block scripts %}
     {{ parent() }}
+    <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
     <script type="text/javascript">setNewDeviseXpex("{{selDevName}}");</script>
 {% endblock %}
 

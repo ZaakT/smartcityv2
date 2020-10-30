@@ -50,12 +50,13 @@ function countSelectedXpex(oForm) {
 }
 
 function checkXpexInput(id){
+    console.log("checkXpexInput()");
     var ret = true;
     id = id.getAttribute('id');
     var val = $("#"+id).val();
-    //console.log(val);
+    console.log(id);
     var tab = $("#"+id).classes();
-    if(tab.includes("volume")){
+    if(tab.includes("volume") || tab.includes("rampUpDurationt")){
         //console.log(tab);
         val = val ? parseInt(val) : -1 ;
         //console.log(val);
@@ -75,7 +76,7 @@ function checkXpexInput(id){
             //console.log("rat_"+id[1]);
             $("#rat_"+id[1]).val(ratio);
         } 
-    } else if (tab.includes("unitCost") || tab.includes("period")){
+    } else if (tab.includes("unitCost") || tab.includes("period") || tab.includes("unitRev") ){
         val = val ? parseFloat(val) : -1 ;
         var temp = String(val).split(".");
         if(val < 0.){
@@ -86,13 +87,12 @@ function checkXpexInput(id){
             $("#"+id).css("background","salmon");
             ret = false;
         } else {
-            //$(this).val(val);
+            //$("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
-    } else if(tab.includes("anVarCost") || tab.includes("anVarVol")){
+    } else if(tab.includes("anVarCost") || tab.includes("anVarVol") || tab.includes("anVarRev") || tab.includes("volRed") || tab.includes("unitCostRed")){
         val = val ? parseFloat(val) : 0 ;
 
-        console.log(val);
         if(val > 100){
             $("#"+id).css("background","salmon");
             $("#"+id).val("");
@@ -105,15 +105,54 @@ function checkXpexInput(id){
 
         $("#"+id).css("background","#C3E6CB");
 
-    }
+    }else if(tab.includes("impact")){
+        val = val ? parseInt(val) : -1 ;
+        console.log("dans impact");
+        if(val <= 0){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if(val > 10) {
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+    } else if (tab.includes("prob")){
+        console.log("dans prob")
+        val = val ? parseFloat(val) : -1 ;
+        var temp = String(val).split(".");
+        if(val < 0.){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if (temp.length==2 && temp[1].length>3){
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else if(val > 100) {
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            //$("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
+    }else if(tab.includes("revenueStart")){
+        if(val != ""){  // verification de la date ! 
+            $("#"+id).css("background","#C3E6CB");
+        }else{
+            $("#"+id).css("background","salmon");
+        }
+        
 
+    }
     calcTotXpex();
     return ret;
 }
 
 function calcTotXpex(){
     $("#xpex_table td").each(function(){
-        var id = $(this).attr('id');
+        var id = $("#"+id).attr('id');
         if (id){
             var temp = id.split("_");
             if (temp[0]=="cost"){
@@ -121,7 +160,7 @@ function calcTotXpex(){
                 var val1 = parseInt($("#vol_"+temp[1]).val());
                 var val2 = parseFloat($("#unitCost_"+temp[1]).val());
                 var tot = val1 && val2 ? val1*val2 : 0;
-                $(this).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
+                $("#"+id).text(tot.toLocaleString("en-UK",{style:"currency", currency:deviseName,maximumFractionDigits:3}));
             } 
             
         }

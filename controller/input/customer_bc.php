@@ -76,8 +76,8 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             $list_selXpex = $listXpex[2]; 
             $list_xpex_advice_from_ntt = $listXpex[3];
             $list_xpex_advice_from_outside_ntt = $listXpex[4];
-
             $list_xpex_advice_internal = $listXpex[5];
+            
             $list_xpex_user_from_ntt = $listXpex[6];
             $list_xpex_user_from_outside_ntt = $listXpex[7];
             $list_xpex_user_internal = $listXpex[8];
@@ -414,7 +414,6 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $list_xpex_user_from_outside_ntt = $listXpex[7];
                 $list_xpex_user_internal = $listXpex[8];
                 $list_xpex_supplier = $listXpex[9]; 
-                $list_selXpex = $listXpex[10];
                 $list_sel_xpex_advice = $listXpex[11];
                 $nb_uc = $listXpex[12];
                 $list_ratio = $listXpex[13];
@@ -425,6 +424,9 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 /*
                 //var_dump($list_xpex_supplier);
                 //var_dump($list_xpex_user_from_ntt);*/
+
+
+                //var_dump($list_selXpex);
                 $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
                 $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
                 echo $twig->render('/input/input_project_common_steps/xpex_input.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
@@ -550,6 +552,7 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
 
 function xpex_inputed($post, $sideBarName, $type){
     if($post){
+        //var_dump($post);
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
             if(isset($post['useCase'])){ //Input porject common
@@ -611,7 +614,7 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['margin'=>$value];
                         }
-                    }elseif($temp[0]=="unit"){
+                    }elseif($temp[0]=="unit" ){
                         if(array_key_exists($temp[1],$list)){
                             $list[$temp[1]] += ['unit'=>$value];
                         } else {
@@ -665,6 +668,18 @@ function xpex_inputed($post, $sideBarName, $type){
                         } else {
                             $list[$temp[1]] = ['prob'=>$value];
                         }
+                    }else if($temp[0]=="anVarRev"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['anVarRev'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['anVarRev'=>$value];
+                        }
+                    } else if($temp[0]=="unitRev"){
+                        if(array_key_exists($temp[1],$list)){
+                            $list[$temp[1]] += ['unit_rev'=>$value];
+                        } else {
+                            $list[$temp[1]] = ['unit_rev'=>$value];
+                        }
                     }else{
                         throw new Exception("Error ! :".$temp[0]);
                     }
@@ -683,17 +698,17 @@ function xpex_inputed($post, $sideBarName, $type){
                     //var_dump($list);
                     insertSupplierRevenuesInputed($projID,$ucID,$list);
                 }elseif($type=='revenues'){
-                    deleteRevenuesUser(intval($idXpex));
+                    insertRevenuesInputed($projID,$ucID,$list);
                 }elseif($type=='cashreleasing'){
-                    deleteCashReleasingUser(intval($idXpex));
+                    insertCashReleasingInputed($projID,$ucID,$list);
                 }elseif($type=='widercash'){
-                    deleteWiderCashUser(intval($idXpex));
+                    insertWiderCashInputed($projID,$ucID,$list);
                 }elseif($type=='quantifiable'){
-                    deleteQuantifiableUser(intval($idXpex));
+                    insertQuantifiableInputed($projID,$ucID,$list);
                 }elseif($type=='noncash'){
-                    deleteNonCashUser(intval($idXpex));
+                    insertNonCashInputed($projID,$ucID,$list);
                 }elseif($type=='risks'){
-                    deleteRiskUser(intval($idXpex));
+                    insertRiskInputed($projID,$ucID,$list);
                 }else{
                     throw new Exception("Wrong type !");
                 }
@@ -713,7 +728,7 @@ function xpex_inputed($post, $sideBarName, $type){
                 "quantifiable"=>"noncash",
                 "noncash"=>"risks",
                 "risks"=>"summary"];
-                header('Location: ?A='.$sideBarName.'&A2='.$next [$type].'&projID='.$projID.'&ucID='.$ucID);
+                //header('Location: ?A='.$sideBarName.'&A2='.$next [$type].'&projID='.$projID.'&ucID='.$ucID);
             }
         } else {
             throw new Exception("There is no Project selected !");
