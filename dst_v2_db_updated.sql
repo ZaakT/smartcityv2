@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 19 oct. 2020 à 10:23
+-- Généré le :  lun. 02 nov. 2020 à 12:29
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -61,16 +61,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_entity` (IN `entity_name` VARCH
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_implem`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCHAR(255), IN `implem_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO implem_item (name,description, origine, side)
-                                    VALUES (implem_name,implem_desc, origine, side);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO implem_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO implem_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCHAR(255), IN `implem_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO implem_item (name,description)
+                                            VALUES (implem_name,implem_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO implem_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO implem_item_advice (id,unit,source,range_min,range_max)
+                                            VALUES (itemID,unit,source,range_min,range_max);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_noncash`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
@@ -131,6 +131,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(2
                                 INSERT INTO risk_item_user (id,id_proj)
                                     VALUES (itemID,idProj);
                             END$$
+
+DROP PROCEDURE IF EXISTS `add_risks`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risks` (IN `risks_name` VARCHAR(255), IN `risks_desc` VARCHAR(255), IN `idUC` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO risk_item (name,description) 
+                                                VALUES (risks_name,risks_desc);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO risk_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_supplier_revenue`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_name` VARCHAR(255), IN `revenue_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `type_value` VARCHAR(255))  BEGIN
@@ -372,7 +381,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -408,7 +417,44 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (42, 'hjhjhj', '', 'from_ntt', 'projDev', NULL),
 (44, 'myCap 2', '', 'from_ntt', 'customer', NULL),
 (45, 'my 1st cap', '', 'from_ntt', 'supplier', 'unit'),
-(46, 'cap', '', 'from_ntt', 'supplier', '');
+(46, 'cap', '', 'from_ntt', 'supplier', ''),
+(47, 'Remote control Software', 'A web hosted control system which provides monitoring, switching and dimming control. ', 'from_ntt', 'projDev', ''),
+(48, 'Pole', 'Upgrade / replacement of the pole to enable use cases deployment', 'from_ntt', 'projDev', NULL),
+(49, 'Smart Lampost', 'Implementaion of multi applications smart lamppost', 'from_ntt', 'projDev', NULL),
+(50, 'LED street light', 'Light-emitting diode is an electronic device that gives off light when it receives an electrical current (90W-100W).\n', 'from_ntt', 'projDev', NULL),
+(51, 'Electrical systems', 'Service cabinets, covering energy supply and metering facilities.', 'from_ntt', 'projDev', NULL),
+(52, 'Remote control Software', 'A web hosted control system which provides monitoring, switching and dimming control. ', 'from_ntt', 'projDev', NULL),
+(53, 'Street lighting control boxes', 'which can be mounted on electric lamp post\n', 'from_ntt', 'projDev', NULL),
+(54, 'Box Gateway', 'It is used to receive information from wireless parking lot sensor and transmit this information to user system', 'from_ntt', 'projDev', NULL),
+(55, 'EVSE charger ', 'Hardware and electrical integrations to the power grid.', 'from_ntt', 'projDev', NULL),
+(56, 'Charging Connector ', 'Connectors and plug in for cars', 'from_ntt', 'projDev', 'my Unit'),
+(57, 'Photovoltaic Solar Panel', 'A photovoltaic (PV) cell, commonly called a solar cell, is a non-mechanical device that converts sunlight directly into electricity.', 'from_ntt', 'projDev', NULL),
+(58, 'Intelligent remote control', 'Smart Devices solutions allows to do a remote control', 'from_ntt', 'projDev', NULL),
+(59, 'Battery', 'The device stores energy for supplying to electrical appliances when there is a demand. ', 'from_ntt', 'projDev', NULL),
+(60, 'Battery', 'The device stores energy for supplying to electrical appliances when there is a demand. ', 'from_ntt', 'projDev', NULL),
+(61, 'Remote telemetry system', 'An automated communications process by which measurements and other data are collected at remote or inaccessible points and transmitted to receiving equipment for monitoring.\n', 'from_ntt', 'projDev', NULL),
+(62, 'Remote CCTV', 'A low-light camera with Wi-Fi connectivity, 3G/4G connectivity', 'from_ntt', 'projDev', NULL),
+(63, 'DVR (Digital Video Recorder)', 'Network Video Recorder (NVR) - NVRs are responsible for video monitoring, event management, and storage.  ', 'from_ntt', 'projDev', NULL),
+(64, 'Monitor/screens', 'Accessories, options include screens. ', 'from_ntt', 'projDev', NULL),
+(65, 'Code Blue IP', 'IP 1500 VoIp / 2500 VoIp / 5000 VoIp speakerphones ', 'from_ntt', 'projDev', NULL),
+(66, 'Wireless Concealed Placement Speaker ', 'Public Alerts posts and Info Concealed placement speaker (CPS).', 'from_ntt', 'projDev', NULL),
+(67, 'Air Quality Sensor ', 'It measures and find dust particles in the air.\n', 'from_ntt', 'projDev', 'my unit'),
+(68, 'Software tool', 'Shows the measures and collects data. Data is accessible in real time and measurements can be consulted remotely.', 'from_ntt', 'projDev', NULL),
+(69, 'Noise level sensor', 'The microphone is based on the LM386 amplifier and an electret microphone', 'from_ntt', 'projDev', NULL),
+(70, 'Software tool', 'Shows the measures and collects data. Data is accessible in real time and measurements can be consulted remotely.', 'from_ntt', 'projDev', NULL),
+(71, 'Water level sensor ', 'Measures water table levels in the base of a typical lamp post.', 'from_ntt', 'projDev', NULL),
+(72, 'Software tool', 'Shows the measures and collects data. Data is accessible in real time and measurements can be consulted remotely.', 'from_ntt', 'projDev', NULL),
+(73, 'Lamp post advertising light box', 'Scrolling light boxes, double sided, or rectangular, LED', 'from_ntt', 'projDev', NULL),
+(74, 'PIR (passive infrared) Sensor', 'Passive sensors do not transmit energy; rather, they detect the energy that is emitted or reflected from vehicles, road surfaces, and humans and other objects in the field of view and from the atmosphere', 'from_ntt', 'projDev', NULL),
+(75, 'Software tool', 'A web hosted control system which provides monitoring, switching and dimming control. ', 'from_ntt', 'projDev', NULL),
+(76, 'Surface-mounted Smart Parking Sensor', 'A wireless Smart Parking Sigfox sensor that enables you to monitor parking spots or any reserved areas occupancy.', 'from_ntt', 'projDev', NULL),
+(77, 'Wireless Data Collector/Gateway', 'It is used to receive information from wireless parking lot sensor and transmit this information to user system', 'from_ntt', 'projDev', NULL),
+(78, 'Local parking guidance system ', 'Outdoor parking guidance monitors ', 'from_ntt', 'projDev', NULL),
+(79, 'Wifi antenna', 'Wifi antenna attached to a street light box', 'from_ntt', 'projDev', NULL),
+(80, 'Antennas (Distributed Antenna System)', 'Wireless communication system ', 'from_ntt', 'projDev', NULL),
+(81, '5G antenna', 'Cells to efficiently deliver high speed mobile broadband and other low latency applications.', 'from_ntt', 'projDev', NULL),
+(83, 'cap', '', 'from_ntt', 'supplier', 'ha'),
+(84, 'tsq', '', 'from_ntt', 'customer', '');
 
 -- --------------------------------------------------------
 
@@ -424,7 +470,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_advice`
@@ -437,7 +483,42 @@ INSERT INTO `capex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max
 (5, 'per example', NULL, 7, 100),
 (12, '', '', 1, 56),
 (14, 'ver', 'vr', 3, 43),
-(16, '', '', 54, 54);
+(16, '', '', 54, 54),
+(48, 'Per Steel Pole', 'https://www.alibaba.com/product-detail/XINTONG-6m-8-meter-height-street_60763795461.html?spm=a2700.7724857.normalList.20.1d3914e72DnSRo&s=p', 140, 530),
+(49, 'Per Smart Lampost', 'https://www.euractiv.com/section/digital/news/european-cities-want-10-million-smart-streetlamps/', 2, 6),
+(50, 'Per LED bulb', 'https://i-solar-street-light.en.made-in-china.com/product/djxmEvMVXIWL/China-Isolar-60W-8m-Battery-Hanging-Outdoor-Lighting-Solar-LED-Street-Light.html', 50, 150),
+(51, 'Per streetlight cable system', 'https://www.made-in-china.com/productdirectory.do?word=led+street+light+transformer&subaction=hunt&style=b&mode=and&code=0&comProvince=nolimit&order=0&isOpenCorrection=1', 10, 30),
+(52, 'Per remote control device', 'https://www.telensa.com/applications#street_lighting\n', 10, 15),
+(53, 'Per sensor', 'https://www.meterboxesdirect.co.uk/electric-meter-pole-top-box-360-252-140-mm.html\n', 40, 100),
+(54, 'Per Data collector', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400),
+(55, 'Per charger', ' https://www.amazon.com/dp/B01NCEIG1F/ref=sspa_dk_detail_3?psc=1&pd_rd_i=B01NCEIG1F\n', 465, 600),
+(56, 'Per connector', 'https://www.amazon.fr/dp/B00YT75GWW/ref=dp_cerb_1\n', 150, 200),
+(57, 'Per PV panel', 'https://www.alibaba.com/product-detail/Cheap-price-direct-from-factory-all_60603459369.html?spm=a2700.7724857.normalList.113.21262cd34L6WIS', 70, 150),
+(58, 'Per remote control', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210),
+(59, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400),
+(60, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400),
+(61, 'Per telemetry system', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210),
+(62, 'Per CCTV', 'https://wardmay-cctv.en.made-in-china.com/product/vCRJeUoPnLhy/China-1080P-4X-10X-Optical-Zoom-Outdoor-Bullet-Waterproof-IP-PTZ-Security-Camera.html', 90, 350),
+(63, 'Per recorder', 'https://www.security-camera-warehouse.com/the-admiral-4-channel-nvr-adm4p4.php', 150, 380),
+(64, 'Per monitor', 'https://www.ebay.co.uk/itm/Hanns-G-18-5-inch-Flat-Screen-Professional-Monitor-LED-LCD-PC-CCTV-Display-UK/291391010247?epid=1188645162&hash=item43d841f5c7:g:tTIAAOSwpDdU7O0K', 100, 140),
+(65, 'Per VoIP speakerphone ', 'https://www.commgear.com/security-systems/emergency-telephones/code-blue-ip5000-voip-speakerphone-upgrade-from-one-button-to-two-button-with-keypad.html', 300, 2),
+(66, 'Per concealed loudspeakers', 'https://www.amazon.com/Acoustic-Research-Outdoor-Wireless-AW826/dp/B003EV6OTS', 80, 230),
+(67, 'Per sensor', 'https://www.wunderground.com/cat6/purple-airs-250-air-pollution-monitor-gives-government-equipment-run-money\n', 200, 310),
+(68, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
+(69, 'Per sensor', 'https://www.reichelt.com/fr/fr/arduino-capteur-sonore-grove-grv-sound-sens-p191177.html?PROVID=2788&gclid=EAIaIQobChMI2vqCw_q14AIVE_hRCh1aiQaBEAQYBiABEgJu5fD_BwE&&r=1', 5, 10),
+(70, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
+(71, 'Per sensor', 'https://www.alibaba.com/product-detail/IP68-water-level-sensor_60701581079.html?spm=a2700.7724857.normalList.21.40be13e4NmLJJf&s=p', 30, 80),
+(72, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
+(73, 'Per light box', 'https://www.alibaba.com/product-detail/Outdoor-street-LED-middle-lamp-post_60549918471.html?spm=a2700.7724857.normalList.138.45f7f5c74p8TiE', 350, 620),
+(74, 'Per sensor', 'https://www.englishlampposts.co.uk/garden-lamp-posts-pir', 15, 25),
+(75, 'Per software', 'http://qulon.pro\n', 25, 85),
+(76, 'Per sensor', 'https://www.alibaba.com/product-detail/IoT-Smart-Parking-sensor-SGM-201_50041290513.html?spm=a2700.7724838.2017115.338.2b876201jEvMqY', 60, 115),
+(77, 'Per gateway', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400),
+(78, 'Per monitor', 'https://www.alibaba.com/product-detail/customized-7-segment-elevator-display-variable_1318854093.html?spm=a2700.7724838.2017115.151.ea412e94Sw6kMk', 20, 60),
+(79, 'Per antenna', 'https://www.alibaba.com/product-detail/All-in-one-body-led-street_60858254472.html?spm=a2700.galleryofferlist.normalList.187.77646241mK7Kzj', 15, 50),
+(80, 'Per antenna', 'http://www.l-com.com/wireless-antenna-24-ghz-6-dbi-omnidirectional-antenna-n-female-connector', 45, 140),
+(81, 'Per antenna', 'https://www.alibaba.com/product-detail/Antenna-Manufacturer-5G-5-8GHz-2x15_60625518394.html?spm=a2700.7724838.2017115.353.7c277109fTWItv', 30, 60),
+(82, 'unnniiittt', '', 0, 10);
 
 -- --------------------------------------------------------
 
@@ -451,7 +532,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -494,7 +575,10 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (46, 21),
 (39, 23),
 (40, 23),
-(45, 24);
+(45, 24),
+(47, 27),
+(83, 29),
+(84, 30);
 
 -- --------------------------------------------------------
 
@@ -528,6 +612,8 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (43, -1),
 (44, -1),
 (45, -1),
+(82, -1),
+(83, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -554,7 +640,43 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (26, 11),
 (27, 11),
 (42, 11),
-(46, 11);
+(46, 11),
+(48, 12),
+(49, 13),
+(50, 14),
+(51, 14),
+(52, 15),
+(53, 15),
+(54, 15),
+(47, 16),
+(55, 16),
+(56, 16),
+(57, 17),
+(58, 17),
+(59, 17),
+(60, 18),
+(61, 18),
+(62, 19),
+(63, 19),
+(64, 19),
+(65, 20),
+(66, 21),
+(67, 22),
+(68, 22),
+(69, 23),
+(70, 23),
+(71, 24),
+(72, 24),
+(73, 25),
+(74, 26),
+(75, 26),
+(76, 27),
+(77, 27),
+(78, 27),
+(79, 28),
+(80, 29),
+(81, 30),
+(84, 33);
 
 -- --------------------------------------------------------
 
@@ -568,7 +690,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -588,7 +710,14 @@ INSERT INTO `cashreleasing_item` (`id`, `name`, `description`) VALUES
 (11, 'CRB 4', ''),
 (12, 'cash item', ''),
 (13, 'save 1', ''),
-(14, 'crb', '');
+(14, 'crb', ''),
+(15, 'Reduction of Electricity costs', ''),
+(16, 'Reduction of Electricity costs', ''),
+(17, 'Reduction of light Maintenance costs ', ''),
+(18, 'Reduction of Electricity costs', ''),
+(19, 'Reduction of light Maintenance costs ', ''),
+(20, 'Reduction of Electricity costs', ''),
+(21, 'Reduction of Electricity costs', '');
 
 -- --------------------------------------------------------
 
@@ -607,7 +736,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_advice`
@@ -616,7 +745,13 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
 INSERT INTO `cashreleasing_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range_min_red_nb`, `range_max_red_nb`, `range_min_red_cost`, `range_max_red_cost`) VALUES
 (1, 'per example', NULL, 15, 1.2, 1.8, 10, 11),
 (2, 'per example', NULL, 1, 2, 3, 4, 5),
-(3, 'per example', NULL, 2, 3, 4, 5, 6);
+(3, 'per example', NULL, 2, 3, 4, 5, 6),
+(16, 'Kwh', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/', 0, 50, 70, 0, 0),
+(17, 'Per Light bulb', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/\n', 30, 0, 0, 50, 80),
+(18, 'Per Kwh', 'https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 0, 15, 50, 0, 0),
+(19, 'Per light bulb', ' https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 30, 45, 60, 0, 0),
+(20, 'Per Kwh', 'https://mysolarhome.us/solar-lamp-post/', 0, 40, 60, 0, 0),
+(21, 'Per Kwh', 'https://ledcorporations.com/led-lighting-news/the-cost-of-electricity-how-utility-companies-are-charging-consumers/\n', 0, 40, 60, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -630,7 +765,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -649,7 +784,9 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (11, 8),
 (12, 21),
 (14, 21),
-(13, 23);
+(13, 23),
+(15, 27),
+(22, 27);
 
 -- --------------------------------------------------------
 
@@ -683,7 +820,15 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (9, 11),
 (10, 11),
 (11, 11),
-(14, 11);
+(14, 11),
+(16, 14),
+(17, 14),
+(18, 15),
+(19, 15),
+(15, 16),
+(22, 16),
+(20, 17),
+(21, 18);
 
 -- --------------------------------------------------------
 
@@ -748,7 +893,7 @@ CREATE TABLE IF NOT EXISTS `crit` (
   `id_cat` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `crit`
@@ -762,7 +907,39 @@ INSERT INTO `crit` (`id`, `name`, `description`, `scoring_guidance`, `id_cat`) V
 (5, 'crit_13', '', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 1),
 (6, 'crit123', '', NULL, 2),
 (9, 'ighorvf', 'gtrfed', 'biugtrvnf\r\nvirdcnklvnf\r\nvribiornobg\r\n3. vuifeibiovnrfnv juvbirbvng', 1),
-(10, 'Criterion 1', 'bvgfd', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 2);
+(10, 'Criterion 1', 'bvgfd', 'Likert scale:\r\nNo improvement - 1 - 2 - 3 - 4 - 5 - Very high improvement.\r\n\r\n    1. Not at all: the access to basic health care services was not imporved.\r\n    2. Poor: there was little improvement in the accessibility of basic health care services.\r\n    3. Somewhat: access to basic health care services was imroved, including a few important amenities such as a general practitioner or a pharmaacy.\r\n    4. Good: access to a sufficien number of health care service are widely available offline an donline (i.e. repeat prescriptions) was improved.\r\n    5. Excellent: access to a wide variety of basic health care services are widely available offline and online (i.e. first aid apps) was improved.\r\n', 2),
+(11, 'Improved access to basic health care services', 'The extent to which the project has increased accessibility to basic health care', '', 4),
+(12, 'Encouraging a healthy lifestyle', 'The extent to which the project encourages a healthy lifestyle', '', 4),
+(13, 'Waiting time', 'Percentage reduction in waiting time due to project', '', 4),
+(14, 'Reduction of traffic accidents', 'Percentage reduction of transportation fatalities due to the project', '', 4),
+(15, 'Reduction in crime rate', 'Percentage reduction in number of violences, annoyances and crimes due to the project', '', 4),
+(16, 'Improved cybersecurity', 'The extent to which the project ensures cybersecurity', '', 4),
+(17, 'Improved data privacy', 'The extent to which data collected by the project is protected', '', 4),
+(18, 'Access to public transport', 'The extent to which public transport stops are available within 500m', '', 4),
+(19, 'Reduction in annual final energy consumption', 'Percentage change in annual final energy consumption due to the project for all uses and forms of energy', '', 5),
+(20, 'Reduction in lifcycle energy use', 'Reduction in life cycle energy use achieved by the project (%)', '', 5),
+(21, 'Reduction of embodied energy of products and services used in the project', 'The extent to which measures have been taken to reduce the embodied energy of products used in the project', '', 5),
+(22, 'Increase in local renewable energy production', 'Percentage increase in the share of local renewable energy due to the project', '', 5),
+(23, 'Carbon dioxide emission reduction', 'Percentage reduction in direct (operational) CO2 emissions achieved by the project', '', 5),
+(24, 'Increased use of local workforce', 'Share in the total project costs that has been spent on local suppliers, contractors and service providers', '', 7),
+(25, 'Local job creation', 'Number of jobs created by the project', '', 7),
+(26, 'Fuel poverty', 'Change in percentage points of (gross) household income spent on energy bills', '', 7),
+(27, 'Costs of housing', 'The percentage of gross household income spent on housing', '', 7),
+(28, 'Certified companies involved in the project', 'Share of the companies involved in the project holding an ISO 14001 certificate', '', 7),
+(29, 'Leadership', 'The extent to which the leadership of the project is successful in creating support for the project', '', 8),
+(30, 'Balanced project team\'', 'The extent to which the project team included all relevant experts and stakeholders from the start\'), (73, 4, \'Involvement of the city administration\', \'The extent to which the local authority is involved in the development of the project, other than financial, and how many departments are contributing', '', 8),
+(31, 'Involvement of the city administration', 'The extent to which the local authority is involved in the development of the project, other than financial, and how many departments are contributing', '', 8),
+(32, 'Clear division of responsibility', 'Has the responsibility for achieving the social and sustainability targets been clearly assigned to (a) specific actor(s) in the project?', '', 8),
+(33, 'Social compatibility', 'The extent to which the project\\\'s solution fits with people\\\'s frame of mind and does not negatively challenge people\\\'s values or the ways they are used to do things', '', 6),
+(34, 'Technical compatibility', 'The extent to which the smart city solution fits with the current existing technological standards/infrastructures', '', 6),
+(35, 'Ease of use for end users of the solution', 'The extent to which the solution is perceived as difficult to understand and use for potential end-users', '', 6),
+(36, 'Ease of use for professional stakeholders', 'The extent to which the innovation is perceived as difficult to understand, implement and use for professional users of the solution', '', 6),
+(37, 'Trialability', 'The extent to which the solution can be experimented with on a limited basis in the local context before full implementation', '', 6),
+(38, 'Advantages for end users', 'The extent to which the project offers clear advantages for end users', '', 8),
+(39, 'Advantages for stakeholders', 'The extent to which the project offers clear advantages for stakeholders', '', 8),
+(40, 'Visibility of Results', 'The extent to which the results of the project are visible to external actors', '', 6),
+(41, 'Solution(s) to development issues', 'The extent to which the project offers a solution to problems which are common to European cities', '', 6),
+(42, 'Market demand', 'The extent to which there is a general market demand for the solution', '', 6);
 
 -- --------------------------------------------------------
 
@@ -776,15 +953,18 @@ CREATE TABLE IF NOT EXISTS `critcat` (
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `critcat`
 --
 
 INSERT INTO `critcat` (`id`, `name`) VALUES
-(1, 'criteria_cat_1'),
-(2, 'criteria_cat_2');
+(8, 'Governance'),
+(4, 'People'),
+(5, 'Planet'),
+(6, 'Propagation'),
+(7, 'Prosperity');
 
 -- --------------------------------------------------------
 
@@ -840,7 +1020,7 @@ CREATE TABLE IF NOT EXISTS `devise` (
   `symbol` varchar(255) DEFAULT NULL,
   `rateToGBP` double DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `devise`
@@ -849,7 +1029,8 @@ CREATE TABLE IF NOT EXISTS `devise` (
 INSERT INTO `devise` (`id`, `name`, `symbol`, `rateToGBP`) VALUES
 (1, 'GBP', '£', 1),
 (2, 'USD', 'US$', 0.85105),
-(3, 'EUR', '€', 0.76642);
+(3, 'EUR', '€', 0.76642),
+(4, 'CAD', '$CAD', 1.73);
 
 -- --------------------------------------------------------
 
@@ -864,15 +1045,16 @@ CREATE TABLE IF NOT EXISTS `dlt` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `dlt`
 --
 
 INSERT INTO `dlt` (`id`, `name`, `description`) VALUES
-(1, 'city', ''),
-(2, 'subzone', '');
+(3, 'Montreal', ''),
+(4, 'Greater London Authority', ''),
+(5, 'Caen', '');
 
 -- --------------------------------------------------------
 
@@ -1058,7 +1240,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1094,7 +1276,37 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (36, 'my dep', '', 'from_ntt', 'supplier', NULL),
 (37, 'dep', '', 'from_ntt', 'supplier', ''),
 (38, 'depdep', '', 'from_outside_ntt', 'customer', NULL),
-(39, 'dep 01 encore', '', 'from_ntt', 'customer', NULL);
+(39, 'dep 01 encore', '', 'from_ntt', 'customer', NULL),
+(40, 'Installation of the Pole', '', 'from_ntt', 'projDev', NULL),
+(41, 'Instllation of smart Lampost', '', 'from_ntt', 'projDev', NULL),
+(42, 'Upgrading of the LED lighting system', '', 'from_ntt', 'projDev', NULL),
+(43, 'Electrical systems', '', 'from_ntt', 'projDev', NULL),
+(44, 'Installation of the software', '', 'from_ntt', 'projDev', NULL),
+(45, 'Control boxes implementation', '', 'from_ntt', 'projDev', NULL),
+(46, 'Gateway implementation', '', 'from_ntt', 'projDev', NULL),
+(47, 'Installation of the charging point', '', 'from_ntt', 'projDev', 'my Unit'),
+(48, 'Installation of the wall connector', '', 'from_ntt', 'projDev', NULL),
+(49, 'Installation of the panel', '', 'from_ntt', 'projDev', NULL),
+(50, 'Installation of the battery &remote control', '', 'from_ntt', 'projDev', NULL),
+(51, 'Installation of the battery &remote control', '', 'from_ntt', 'projDev', NULL),
+(52, 'Installation of the CCTV system', '', 'from_ntt', 'projDev', NULL),
+(53, 'Installation of the PTT', '', 'from_ntt', 'projDev', NULL),
+(54, 'Installation of the public speakers', '', 'from_ntt', 'projDev', NULL),
+(55, 'Installation of the sensor', '', 'from_ntt', 'projDev', NULL),
+(56, 'Software installation', '', 'from_ntt', 'projDev', NULL),
+(57, 'Installation of the sensor', '', 'from_ntt', 'projDev', NULL),
+(58, 'Software installation', '', 'from_ntt', 'projDev', NULL),
+(59, 'Installation of the sensor', '', 'from_ntt', 'projDev', NULL),
+(60, 'Software installation', '', 'from_ntt', 'projDev', NULL),
+(61, 'Installation of the banner', '', 'from_ntt', 'projDev', NULL),
+(62, 'Installation of the sensor', '', 'from_ntt', 'projDev', NULL),
+(63, 'Software installation', '', 'from_ntt', 'projDev', NULL),
+(64, 'Installation of the sensor', '', 'from_ntt', 'projDev', NULL),
+(65, 'Installation of the software', '', 'from_ntt', 'projDev', NULL),
+(66, 'Installation of the local parking guidance system ', '', 'from_ntt', 'projDev', NULL),
+(67, 'Installation of the antenna', '', 'from_ntt', 'projDev', NULL),
+(68, 'Installation of the antenna', '', 'from_ntt', 'projDev', NULL),
+(69, 'Installation of the antenna', '', 'from_ntt', 'projDev', NULL);
 
 -- --------------------------------------------------------
 
@@ -1110,7 +1322,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_advice` (
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_advice`
@@ -1120,7 +1332,37 @@ INSERT INTO `implem_item_advice` (`id`, `unit`, `source`, `range_min`, `range_ma
 (1, 'per blabla', NULL, 50, 102),
 (3, 'per truc', NULL, 10, 20),
 (5, '', '', 13, 14),
-(7, 'vfg', '', 2, 21);
+(7, 'vfg', '', 2, 21),
+(40, 'Per streetlight pole', 'https://www.ledsmaster.com/channel/How-Much-Do-Street-Lights-Cost-Replacing-and-Running-the-Street-Lamp--77.html', 1200, 2300),
+(41, 'Per smart lamppost', 'Internal research', 26, 87),
+(42, 'Per LED light', 'https://www.myledlightingguide.com/blog-the-cost-of-street-lights', 160, 240),
+(43, 'Per cabling system', 'https://blog.lightinus.com/comparing-traditional-street-lights-and-solar-energy-lights', 38, 90),
+(44, 'Per software', 'http://qulon.pro\n', 25, 85),
+(45, 'Per sensor', 'https://www.homeadvisor.com/cost/electrical/upgrade-an-electrical-panel/', 80, 170),
+(46, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 7100, 22000),
+(47, 'Per EVSE Charging point', 'https://www.ubitricity.co.uk/unternehmen/newsroom/simple-conversion-turn-street-lamps-electric-car-chargers-daily-mail/\n', 1000, 1600),
+(48, 'Per connector', 'https://www.homeadvisor.com/cost/garages/install-an-electric-vehicle-charging-station/', 380, 440),
+(49, 'Per PV panel', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/\n', 600, 1200),
+(50, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570),
+(51, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570),
+(52, 'Per CCTV system', 'https://www.fixr.com/costs/install-video-surveillance-cameras', 280, 400),
+(53, 'Per PTT', 'http://www.groundcontrol.com/Iridium_PTT_Push-To-Talk.htm', 1700, 3900),
+(54, 'Per Public speakers', 'https://porch.com/project-cost/cost-to-install-outdoor-speakers', 150, 280),
+(55, 'Per sensor', 'https://www.london.gov.uk/what-we-do/environment/pollution-and-air-quality/monitoring-and-predicting-air-pollution\n', 310, 750),
+(56, 'Per software', 'Internal research', 1000, 1120),
+(57, 'Per sensor', 'Internal research', 155, 375),
+(58, 'Per software', 'Internal research', 1000, 1120),
+(59, 'Per sensor', 'https://reliabilityweb.com/articles/entry/wireless_sensors_work_provide_a_cost-effective_alternative_to_traditio', 500, 1500),
+(60, 'Per software', 'Internal research', 1000, 1120),
+(61, 'Per Advertising Panel', 'https://just-print.co.uk/155-lamp-post-advertising-boards-24-x-16-50-pack.html', 170, 200),
+(62, 'Per traffic monitoring sensor', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/5A53F0D1919AA5EE8525798300819B6E?OpenDocument&Query=CApp', 260, 1300),
+(63, 'Per software', 'https://www.researchgate.net/publication/280078500_Intelligent_Traffic_Monitoring_System', 640, 1900),
+(64, 'Per sensor', 'https://www.itscosts.its.dot.gov/its/benecost.nsf/0/E4717C6F075BAAA38525789B00610ECC?OpenDocument&Query=Home', 310, 625),
+(65, 'Per gateway', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/F1112FA098133F3C85256DB100458923?OpenDocument&Query=CApp', 210, 835),
+(66, 'Per guidance system', 'Internal research', 64, 385),
+(67, 'Per Wifi antenna', 'https://its.umich.edu/projects/wifi-upgrade/project-funding', 300, 380),
+(68, 'Per antenna', 'https://www.repeaterstore.com/pages/custom-solutions', 400, 800),
+(69, 'Per 5G antenna', 'https://www.ctia.org/news/what-is-a-small-cell', 400, 800);
 
 -- --------------------------------------------------------
 
@@ -1223,7 +1465,13 @@ INSERT INTO `implem_schedule` (`id_uc`, `id_proj`, `start_date`, `25_completion`
 (10, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
 (10, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01'),
 (11, 4, '2012-01-01', '2012-02-01', '2013-02-01', '2014-02-01', '2015-02-01'),
-(11, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01');
+(11, 8, '2014-02-01', '2014-04-01', '2014-08-01', '2014-11-01', '2015-02-01'),
+(15, 26, '2020-01-01', '2020-03-01', '2020-05-01', '2020-06-01', '2020-09-01'),
+(15, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01'),
+(15, 28, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-07-01'),
+(16, 26, '2020-01-01', '2020-03-01', '2020-05-01', '2020-06-01', '2020-09-01'),
+(16, 27, '2020-01-01', '2020-03-01', '2020-04-01', '2020-06-01', '2020-10-01'),
+(17, 28, '2012-02-01', '2012-03-01', '2012-04-01', '2012-05-01', '2012-07-01');
 
 -- --------------------------------------------------------
 
@@ -1281,7 +1529,37 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (30, 9),
 (31, 9),
 (36, 9),
-(37, 11);
+(37, 11),
+(40, 12),
+(41, 13),
+(42, 14),
+(43, 14),
+(44, 15),
+(45, 15),
+(46, 15),
+(47, 16),
+(48, 16),
+(49, 17),
+(50, 17),
+(51, 18),
+(52, 19),
+(53, 20),
+(54, 21),
+(55, 22),
+(56, 22),
+(57, 23),
+(58, 23),
+(59, 24),
+(60, 24),
+(61, 25),
+(62, 26),
+(63, 26),
+(64, 27),
+(65, 27),
+(66, 27),
+(67, 28),
+(68, 29),
+(69, 30);
 
 -- --------------------------------------------------------
 
@@ -1350,7 +1628,16 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (43, 21, -1, NULL, NULL, NULL),
 (44, 21, -1, NULL, NULL, NULL),
 (45, 24, -1, 0, 0, 5),
-(46, 21, 11, 0, 0, 1);
+(46, 21, 11, 0, 0, 1),
+(47, 27, 16, 5, 12499.99, 3),
+(52, 27, 15, 5, 8650, 3),
+(53, 27, 15, 500, 605.5, 3),
+(56, 26, 16, NULL, NULL, NULL),
+(56, 27, 16, 50, 86.5, 3),
+(59, 28, 17, 5, 17.3, 5),
+(67, 29, 22, 2, 1, 3),
+(83, 29, -1, 30, 20, 1),
+(84, 30, 33, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1402,7 +1689,13 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (11, 8, 11, 'SI', 5, NULL, 31, 3, 1, 5, 3, '0000-00-00', 0),
 (12, 21, 9, 'test', 1500, NULL, 15, 3, 5, 5, 1, '0000-00-00', 0),
 (13, 23, 3, 'parking space', 5000, NULL, 100, 5, 0, 0, 0, '0000-00-00', 0),
-(14, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(14, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(15, 27, 16, '', 3, NULL, 2, 45, 46, 2, 15, '2020-09-30', 0),
+(18, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(18, 27, 15, 'Per Kwh', 600, NULL, 0.35, 0, 1, 30, 0, '0000-00-00', 0),
+(18, 29, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(19, 27, 15, 'Per light bulb', 30, NULL, 86.5, 0, 5, 30, 50, '0000-00-00', 0),
+(20, 28, 17, 'Per Kwh', 15, NULL, 89.96, 1, 2, 1, 2, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -1451,7 +1744,11 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (23, 32, -1, 10, 200),
 (23, 33, -1, 10, 1000),
 (23, 34, -1, 10, 100),
-(23, 35, 3, 300, 20);
+(23, 35, 3, 300, 20),
+(26, 47, 16, NULL, NULL),
+(27, 44, 15, 5, 20760),
+(27, 47, 16, 10, 70),
+(28, 50, 17, 5, 17.3);
 
 -- --------------------------------------------------------
 
@@ -1491,7 +1788,9 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (16, 21, 7, 4, 50),
 (17, 23, 3, 5, 100),
 (18, 21, 9, NULL, NULL),
-(19, 21, 11, NULL, NULL);
+(19, 21, 11, NULL, NULL),
+(20, 28, 17, 1, 10),
+(88, 27, 16, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -1546,7 +1845,13 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (23, 14, -1, 1, NULL, 3000, 5, 0),
 (23, 15, -1, 3, NULL, 100, 5, 0),
 (23, 16, -1, 50, NULL, 50, 5, 5),
-(23, 17, 3, 40, NULL, 100, 4, 5);
+(23, 17, 3, 40, NULL, 100, 4, 5),
+(26, 29, 16, NULL, NULL, NULL, NULL, NULL),
+(27, 26, 15, 5, NULL, 1730, 5, 0),
+(27, 29, 16, 5, NULL, 10, 3, 0),
+(27, 30, 16, 150, NULL, 0, 1, 0),
+(28, 32, 17, 15, NULL, 3.46, 1, 2),
+(29, 54, 15, 20, NULL, 10, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -1583,7 +1888,9 @@ INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator
 (8, 3, 3, NULL, NULL, NULL, NULL),
 (10, 23, 3, 'accident', 10, 30, 5),
 (11, 21, 9, NULL, NULL, NULL, NULL),
-(12, 21, 11, NULL, NULL, NULL, NULL);
+(12, 21, 11, NULL, NULL, NULL, NULL),
+(13, 28, 17, 'y', 1, 2, 5),
+(20, 27, 16, '1', 2, 5, 3);
 
 -- --------------------------------------------------------
 
@@ -1628,7 +1935,12 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (21, 12, -1, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
 (21, 12, 9, 15, NULL, 300, 3, 5, '2020-09-30', 2),
 (21, 15, 11, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
-(23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0);
+(23, 14, 3, 100, NULL, 30, 5, 5, '0000-00-00', 0),
+(26, 17, 16, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(27, 17, 16, 2, NULL, 1, 4, 3, '2020-10-16', 4),
+(28, 22, 17, 5, NULL, 20.76, 1, 5, '2020-09-30', 0),
+(29, 23, 22, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(30, 27, 33, 0, NULL, 0, 0, 0, '2020-10-01', 2);
 
 -- --------------------------------------------------------
 
@@ -1665,7 +1977,9 @@ INSERT INTO `input_risk` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `pro
 (10, 8, 11, 7, 40),
 (11, 23, 3, 9, 20),
 (12, 21, 9, NULL, NULL),
-(13, 21, 11, NULL, NULL);
+(13, 21, 11, NULL, NULL),
+(54, 28, 17, 2, 50),
+(55, 27, 16, 3, 20);
 
 -- --------------------------------------------------------
 
@@ -1715,7 +2029,10 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (18, 24, -1, 30, 10, 0, 0, 0, '0000-00-00', 0),
 (19, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
 (20, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
-(21, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0);
+(21, 21, 11, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(22, 29, -1, 100, 20, 0, 0, 0, '0000-00-00', 0),
+(23, 29, -1, 20, 30, 0, 1, 2, '0000-00-00', 0),
+(24, 29, 22, 300, 10, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -1765,7 +2082,11 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (11, 8, 11, 'SI', 15, NULL, 200, 10, 50, 0, 2, '0000-00-00', 0),
 (12, 21, 9, 'test', 15, NULL, 10000, 5, 30, 6, 10, '0000-00-00', 0),
 (14, 23, 3, 'CO2', 1000, NULL, 1, 30, 0, 0, 0, '0000-00-00', 0),
-(15, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0);
+(15, 21, 11, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(17, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', 0),
+(17, 27, 15, 'Per Ton of carbon', 30, NULL, 86.5, 2, 10, 30, 0, '0000-00-00', 0),
+(18, 28, 17, 'Per Ton of carbon', 1, NULL, 3.46, 5, 6, 1, 2, '2020-09-30', 0),
+(26, 27, 16, '1', 3, NULL, 2, 2, 3, 5, 4, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -2079,27 +2400,23 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `user` int(11) NOT NULL DEFAULT '0',
+  `projID` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
 --
 
-INSERT INTO `measure` (`id`, `name`, `description`, `user`) VALUES
-(0, 'Project Overlay', NULL, 0),
-(1, 'Measure1', '', 0),
-(4, 'measure test admin', 'test test', 1),
-(11, 'Project Management Zak', '', 4),
-(12, 'Project Management test', '', 6),
-(13, 'Project Management test1', '', 7),
-(14, 'Project Management test2', '', 8),
-(15, 'Project Management ZakSup', '', 10),
-(16, 'Project Management adminD', '', 11),
-(18, 'Project Management ProjDeve', '', 13),
-(19, 'Project Management Supplier', '', 14),
-(20, 'Project Management SupplierTest', '', 15);
+INSERT INTO `measure` (`id`, `name`, `description`, `user`, `projID`) VALUES
+(0, 'Project Overlay', NULL, 0, 0),
+(21, 'Smart Lighting', '', 0, 0),
+(22, 'Building retrofit', '', 0, 0),
+(23, 'Traffic management', '', 0, 0),
+(24, 'Project Management NTT', '', 16, 0),
+(25, 'NTT', '', 16, 0),
+(26, 'test', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2114,7 +2431,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -2139,7 +2456,76 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`) VALUES
 (16, 'non cash', '', NULL),
 (17, 'wellbeing', '', NULL),
 (18, 'ncb', '', NULL),
-(19, 'nc', '', NULL);
+(19, 'nc', '', NULL),
+(20, 'non cashj', '', NULL),
+(21, 'Parks', '', NULL),
+(22, 'Parks', '', NULL),
+(23, 'Parks', '', NULL),
+(24, 'Parks', '', NULL),
+(25, 'Parks', '', NULL),
+(26, 'Parks', '', NULL),
+(27, 'Offices', '', NULL),
+(28, 'Offices', '', NULL),
+(29, 'Offices', '', NULL),
+(30, 'Factory/Manufact.', '', NULL),
+(31, 'Factory/Manufact.', '', NULL),
+(32, 'Factory/Manufact.', '', NULL),
+(33, 'Retail / Malls / Small shops', '', NULL),
+(34, 'Public Areas/Plazas', '', NULL),
+(35, 'Public Areas/Plazas', '', NULL),
+(36, 'Public Areas/Plazas', '', NULL),
+(37, 'Public Areas/Plazas', '', NULL),
+(38, 'Public Areas/Plazas', '', NULL),
+(39, 'Event, Cultural & Sports Facilities', '', NULL),
+(40, 'Event, Cultural & Sports Facilities', '', NULL),
+(41, 'Retail / Malls / Small shops', '', NULL),
+(42, 'Public Roads', '', NULL),
+(43, 'Private Roads', '', NULL),
+(44, 'Public Roads', '', NULL),
+(45, 'Public Roads', '', NULL),
+(46, 'Public Roads', '', NULL),
+(47, 'Private Roads', '', NULL),
+(48, 'Private Roads', '', NULL),
+(49, 'Private Roads', '', NULL),
+(50, 'Public Roads', '', NULL),
+(51, 'Public Roads', '', NULL),
+(52, 'Public Areas/Plazas', '', NULL),
+(53, 'Public Areas/Plazas', '', NULL),
+(54, 'Airports', '', NULL),
+(55, 'Airports', '', NULL),
+(56, 'Parks', '', NULL),
+(57, 'Parks', '', NULL),
+(58, 'Retail / Malls / Small shops', '', NULL),
+(59, 'Retail / Malls / Small shops', '', NULL),
+(60, 'Event, Cultural & Sports Facilities', '', NULL),
+(61, 'Event, Cultural & Sports Facilities', '', NULL),
+(62, 'Offices', '', NULL),
+(63, 'Offices', '', NULL),
+(64, 'Airports', '', NULL),
+(65, 'Airports', '', NULL),
+(66, 'Parks', '', NULL),
+(67, 'Parks', '', NULL),
+(68, 'Retail / Malls / Small shops', '', NULL),
+(69, 'Retail / Malls / Small shops', '', NULL),
+(70, 'Event, Cultural & Sports Facilities', '', NULL),
+(71, 'Event, Cultural & Sports Facilities', '', NULL),
+(72, 'Factory/Manufact.', '', NULL),
+(73, 'Factory/Manufact.', '', NULL),
+(74, 'Offices', '', NULL),
+(75, 'Offices', '', NULL),
+(76, 'Offices', '', NULL),
+(77, 'Offices', '', NULL),
+(78, 'Factory/Manufact.', '', NULL),
+(79, 'Factory/Manufact.', '', NULL),
+(80, 'Factory/Manufact.', '', NULL),
+(81, 'Factory/Manufact.', '', NULL),
+(82, 'Retail / Malls / Small shops', '', NULL),
+(83, 'Retail / Malls / Small shops', '', NULL),
+(84, 'Event, Cultural & Sports Facilities', '', NULL),
+(85, 'Event, Cultural & Sports Facilities', '', NULL),
+(86, 'Offices', '', NULL),
+(87, 'Offices', '', NULL),
+(88, 'gg', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -2165,7 +2551,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -2187,7 +2573,10 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (16, 21),
 (18, 21),
 (19, 21),
-(17, 23);
+(17, 23),
+(88, 27),
+(89, 27),
+(20, 28);
 
 -- --------------------------------------------------------
 
@@ -2226,7 +2615,77 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (11, 11),
 (12, 11),
 (13, 11),
-(19, 11);
+(19, 11),
+(88, 16),
+(89, 16),
+(20, 17),
+(21, 32),
+(22, 32),
+(23, 32),
+(24, 32),
+(25, 32),
+(26, 32),
+(27, 33),
+(28, 33),
+(29, 33),
+(30, 34),
+(31, 34),
+(32, 34),
+(33, 35),
+(34, 36),
+(35, 36),
+(36, 36),
+(37, 36),
+(38, 36),
+(39, 38),
+(40, 38),
+(41, 39),
+(42, 42),
+(43, 43),
+(44, 44),
+(45, 44),
+(46, 44),
+(47, 45),
+(48, 45),
+(49, 45),
+(50, 49),
+(51, 49),
+(52, 50),
+(53, 50),
+(54, 51),
+(55, 51),
+(56, 52),
+(57, 52),
+(58, 53),
+(59, 53),
+(60, 54),
+(61, 54),
+(62, 55),
+(63, 55),
+(64, 56),
+(65, 56),
+(66, 57),
+(67, 57),
+(68, 58),
+(69, 58),
+(70, 59),
+(71, 59),
+(72, 60),
+(73, 60),
+(74, 61),
+(75, 61),
+(76, 62),
+(77, 62),
+(78, 63),
+(79, 63),
+(80, 64),
+(81, 64),
+(82, 65),
+(83, 65),
+(84, 66),
+(85, 66),
+(86, 67),
+(87, 67);
 
 -- --------------------------------------------------------
 
@@ -2243,7 +2702,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'projDev',
   `unit` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -2269,7 +2728,41 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`)
 (17, 'C', '', 'from_ntt', 'customer', NULL),
 (18, 'op', '', 'from_ntt', 'supplier', 'test'),
 (19, 'opex', '', 'from_ntt', 'supplier', NULL),
-(20, 'opexopex', '', 'from_ntt', 'customer', NULL);
+(20, 'opexopex', '', 'from_ntt', 'customer', NULL),
+(21, 'Maintenance of the pole', '', 'from_ntt', 'projDev', NULL),
+(22, 'Maintenance of smart lamppost', '', 'from_ntt', 'projDev', NULL),
+(23, 'Maintenance of LED Bulb and electric system', '', 'from_ntt', 'projDev', NULL),
+(24, 'Maintenance of the Electrical systems', '', 'from_ntt', 'projDev', NULL),
+(25, 'Maintenance of the control boxes', '', 'from_ntt', 'projDev', NULL),
+(26, 'Software maintenance', '', 'from_ntt', 'projDev', NULL),
+(27, 'Maintenance of the box gateway', '', 'from_ntt', 'projDev', NULL),
+(28, 'Maintenance of the EV charging point', '', 'from_ntt', 'projDev', NULL),
+(29, 'Data and transactions run costs ', '', 'from_ntt', 'projDev', ''),
+(30, 'Electricity cost', '', 'from_ntt', 'projDev', ''),
+(31, 'Maintenance of the PV panel', '', 'from_ntt', 'projDev', NULL),
+(32, 'Maintenance of the battery & remote control', '', 'from_ntt', 'projDev', NULL),
+(33, 'Maintenance of the battery &remote control', '', 'from_ntt', 'projDev', NULL),
+(34, 'Maintenance of the CCTV monitor', '', 'from_ntt', 'projDev', NULL),
+(35, 'Maintenance of the CCTV camera', '', 'from_ntt', 'projDev', NULL),
+(36, 'Maintenance of the DVR (Digital Video Recorder) and monitor', '', 'from_ntt', 'projDev', NULL),
+(37, 'Maintenance of the PTT device', '', 'from_ntt', 'projDev', NULL),
+(38, 'Maintenance of the public speakers', '', 'from_ntt', 'projDev', NULL),
+(39, 'Maintenance of the Air Quality Sensor', '', 'from_ntt', 'projDev', NULL),
+(40, 'Maintenance of the software', '', 'from_ntt', 'projDev', NULL),
+(41, 'Maintenance of the noise sensor', '', 'from_ntt', 'projDev', NULL),
+(42, 'Maintenance of the software', '', 'from_ntt', 'projDev', NULL),
+(43, 'Maintenance of the water level sensor', '', 'from_ntt', 'projDev', NULL),
+(44, 'Maintenance of the software', '', 'from_ntt', 'projDev', NULL),
+(45, 'Maintenance of the banner', '', 'from_ntt', 'projDev', NULL),
+(46, 'Maintenance of the sensor', '', 'from_ntt', 'projDev', NULL),
+(47, 'Maintenance of the software', '', 'from_ntt', 'projDev', NULL),
+(48, 'Maintenance of the sensor', '', 'from_ntt', 'projDev', NULL),
+(49, 'Maintenance of the Data collector', '', 'from_ntt', 'projDev', NULL),
+(50, 'Maintenance of local parking guidance system ', '', 'from_ntt', 'projDev', NULL),
+(51, 'Maintenance of the sensor', '', 'from_ntt', 'projDev', NULL),
+(52, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL),
+(53, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL),
+(54, 'op', '', 'from_ntt', 'supplier', '');
 
 -- --------------------------------------------------------
 
@@ -2285,7 +2778,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_advice` (
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_advice`
@@ -2296,7 +2789,40 @@ INSERT INTO `opex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`
 (2, 'per ...', NULL, 2, 3),
 (3, 'per tructruc', NULL, 5, 4),
 (4, 'per blabla', '', 5, 6),
-(5, 'per bla', NULL, 2, 5);
+(5, 'per bla', NULL, 2, 5),
+(21, 'Per Pole', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/', 5, 15),
+(22, 'Per smart Lampost', 'Internal research', 8, 23),
+(23, 'Per LED light', 'http://www.nyc.gov/html/dot/html/infrastructure/streetlights.shtml', 3, 4),
+(24, 'Per cabling system', 'Internal research', 3, 7),
+(25, 'Per sensor', 'Internal research', 6, 12),
+(26, 'Per software', 'Internal research', 312, 1062),
+(27, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 90, 275),
+(28, 'Per charging point', 'https://www.ohmhomenow.com/electric-vehicles/ev-charging-station-cost/\n', 7, 20),
+(29, 'Per charging point', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 20, 25),
+(30, 'Per EV charging point', 'https://www.reminetwork.com/articles/the-benefits-of-ev-charging-stations/\n', 270, 300),
+(31, 'Per PV panel', 'https://info.lightinus.com/solar-street-lights#solar_street_light_applications', 9, 11),
+(32, 'Per battery', 'Internal research', 4, 8),
+(33, 'Per battery', 'Internal research', 6, 11),
+(34, 'Per CCTV', 'Internal research', 2, 5),
+(35, 'Per CCTV camera', 'https://www.thumbtack.com/p/security-camera-installation-cost', 6, 19),
+(36, 'Per DVR/NVR', 'https://householdquotes.co.uk/cctv-installation/', 30, 55),
+(37, 'Per PTT device', 'Internal research', 4, 25),
+(38, 'Per public speakers', 'Internal research', 1, 3),
+(39, 'Per sensor', 'Internal research', 3, 4),
+(40, 'Per software', 'Internal research', 14, 64),
+(41, 'Per sensor', 'Internal research', 3, 4),
+(42, 'Per software', 'Internal research', 14, 64),
+(43, 'Per sensor', 'Internal research', 3, 4),
+(44, 'Per Software', 'Internal research', 14, 64),
+(45, 'Per banner', 'Internal research', 5, 8),
+(46, 'Per traffic sensor', 'https://www.quora.com/What-are-typical-maintenance-fees-as-a-percentage-of-up-front-license-costs-for-enterprise-software', 90, 290),
+(47, 'Per software', 'https://blog.capterra.com/how-much-does-network-monitoring-software-cost/', 8, 24),
+(48, 'Per sensor', 'Internal research', 5, 8),
+(49, 'Per gateway', 'Internal research', 7, 11),
+(50, 'Per guidance system', 'Internal research', 2, 5),
+(51, 'Per Wifi sensor', 'Internal research', 4, 5),
+(52, 'Per Antennas', 'Internal research', 5, 10),
+(53, 'Per 5G antenna', 'Internal research', 5, 10);
 
 -- --------------------------------------------------------
 
@@ -2310,7 +2836,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -2335,7 +2861,8 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (14, 23),
 (15, 23),
 (16, 23),
-(17, 23);
+(17, 23),
+(54, 29);
 
 -- --------------------------------------------------------
 
@@ -2385,7 +2912,13 @@ INSERT INTO `opex_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `50_
 (10, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (10, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01'),
 (11, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
-(11, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01');
+(11, 8, '2015-04-01', '2015-06-01', '2015-12-01', '2016-02-01', '2016-04-01', '2016-09-01'),
+(15, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-06-01', '2023-12-01'),
+(15, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01'),
+(15, 28, '2012-08-01', '2012-12-01', '2013-03-01', '2013-07-01', '2013-09-01', '2019-01-01'),
+(16, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-06-01', '2023-12-01'),
+(16, 27, '2020-11-01', '2021-01-01', '2021-05-01', '2021-06-01', '2021-09-01', '2023-01-01'),
+(17, 28, '2012-08-01', '2012-12-01', '2013-03-01', '2013-07-01', '2013-09-01', '2019-01-01');
 
 -- --------------------------------------------------------
 
@@ -2425,7 +2958,41 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (4, 3),
 (17, 3),
 (18, 9),
-(19, 11);
+(19, 11),
+(21, 12),
+(22, 13),
+(23, 14),
+(24, 14),
+(25, 15),
+(26, 15),
+(27, 15),
+(54, 15),
+(28, 16),
+(29, 16),
+(30, 16),
+(31, 17),
+(32, 17),
+(33, 18),
+(34, 19),
+(35, 19),
+(36, 19),
+(37, 20),
+(38, 21),
+(39, 22),
+(40, 22),
+(41, 23),
+(42, 23),
+(43, 24),
+(44, 24),
+(45, 25),
+(46, 26),
+(47, 26),
+(48, 27),
+(49, 27),
+(50, 27),
+(51, 28),
+(52, 29),
+(53, 30);
 
 -- --------------------------------------------------------
 
@@ -2510,25 +3077,19 @@ CREATE TABLE IF NOT EXISTS `project` (
   `cb` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
 --
 
 INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
-(3, 'TESTV2', 'Pré-rempli avec des xpex supplier', 3, NULL, NULL, '2020-02-27 13:29:51', '2020-09-24 10:36:31', 1, 0, 0),
-(4, 'Projet 2802', 'Pré-rempli avec des dates de projet', 3.5, NULL, NULL, '2020-02-28 13:06:40', '2020-10-01 11:50:04', 1, 1, 0),
-(5, 'Projet nif', '', NULL, NULL, NULL, '2020-03-19 11:38:27', '2020-09-14 11:25:01', 1, 0, 0),
-(6, 'Projet 25 mai', '', 3, NULL, NULL, '2020-05-25 16:01:23', '2020-10-08 13:07:57', 1, 1, 1),
 (7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(8, 'MyProject', '', 4, NULL, NULL, '2020-08-28 15:01:37', '2020-09-14 15:32:05', 1, 1, 1),
-(9, 'Projet vide', 'Pas de préremplissage', NULL, NULL, NULL, '2020-09-03 15:51:19', '2020-09-14 15:49:09', 1, 0, 0),
-(11, 'Proj suplier', 'Projet fait pour tester la partie Suplier', NULL, NULL, NULL, '2020-09-15 09:50:24', '2020-09-15 10:40:18', 1, 1, 0),
-(21, 'Test Project', '', NULL, NULL, NULL, '2020-09-15 15:07:56', '2020-10-16 18:45:17', 15, 1, 0),
-(22, 'empty', '', NULL, NULL, NULL, '2020-09-28 14:46:13', '2020-09-28 14:46:24', 15, 1, 0),
-(23, 'MyProject', 'joli projet ', NULL, NULL, NULL, '2020-09-28 15:51:50', '2020-09-28 17:05:15', 15, 1, 1),
-(24, 'verif dash', '', NULL, NULL, NULL, '2020-10-07 16:37:42', '2020-10-07 17:26:47', 15, 1, 1);
+(26, 'Montreal Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 15:08:51', 1, 1, 0),
+(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1),
+(28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
+(29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0),
+(30, 'ntt', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-02 13:23:04', 16, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2555,9 +3116,11 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (4, '2020-09-06', 12, '2020-09-20', 4),
 (10, '2020-09-14', 36, '2020-09-14', 6),
 (11, '2021-01-01', 48, '2021-05-01', 6),
-(21, '2020-09-15', 36, '2021-02-01', 6),
+(21, '2020-09-15', 48, '2021-02-01', 10),
 (23, '2021-01-04', 36, '2021-01-04', 6),
-(24, '2017-01-01', 52, '2017-04-01', 6);
+(24, '2017-01-01', 52, '2017-04-01', 6),
+(29, '2020-10-01', 48, '2020-10-01', 6),
+(30, '2020-10-01', 48, '2020-10-01', 6);
 
 -- --------------------------------------------------------
 
@@ -2624,7 +3187,23 @@ INSERT INTO `project_perimeter` (`id_proj`, `id_zone`) VALUES
 (3, 7),
 (4, 7),
 (5, 7),
-(8, 7);
+(8, 7),
+(26, 9),
+(27, 9),
+(28, 9),
+(27, 10),
+(26, 11),
+(27, 11),
+(28, 11),
+(27, 13),
+(27, 15),
+(26, 16),
+(27, 16),
+(27, 17),
+(26, 20),
+(27, 20),
+(28, 20),
+(27, 22);
 
 -- --------------------------------------------------------
 
@@ -2657,7 +3236,11 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (21, 9, '2021-03-01', 3, '2023-06-01', '2021-05-01', 4),
 (21, 11, '2021-02-01', 3, '2023-07-01', '2021-03-01', 3),
 (23, 3, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
-(24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0);
+(24, 9, '0000-00-00', 0, '0000-00-00', '0000-00-00', 0),
+(29, 15, '2020-10-01', 3, '2024-09-01', '2020-12-01', 2),
+(29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3),
+(30, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(30, 67, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6);
 
 -- --------------------------------------------------------
 
@@ -2758,7 +3341,21 @@ INSERT INTO `project_size` (`id_uc`, `id_zone`, `id_mag`, `id_proj`) VALUES
 (9, 7, 3, 8),
 (10, 7, 2, 4),
 (10, 7, 3, 8),
-(11, 7, 3, 8);
+(11, 7, 3, 8),
+(15, 13, 2, 27),
+(16, 13, 2, 27),
+(15, 16, 2, 26),
+(15, 16, 2, 27),
+(16, 16, 2, 26),
+(16, 16, 2, 27),
+(15, 17, 2, 27),
+(16, 17, 2, 27),
+(15, 20, 2, 26),
+(15, 20, 2, 27),
+(16, 20, 2, 26),
+(16, 20, 2, 27),
+(15, 22, 2, 27),
+(16, 22, 2, 27);
 
 -- --------------------------------------------------------
 
@@ -2788,8 +3385,12 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (22, 0),
 (23, 0),
 (24, 0),
+(26, 0),
+(27, 0),
+(28, 0),
+(29, 0),
+(30, 0),
 (1, 1),
-(3, 1),
 (4, 1),
 (5, 1),
 (6, 1),
@@ -2800,7 +3401,13 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (21, 1),
 (22, 1),
 (23, 1),
-(24, 1);
+(24, 1),
+(3, 21),
+(26, 21),
+(27, 21),
+(28, 21),
+(29, 21),
+(30, 25);
 
 -- --------------------------------------------------------
 
@@ -2824,9 +3431,8 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (1, 1),
 (2, 1),
 (-1, 3),
-(1, 3),
-(2, 3),
-(3, 3),
+(15, 3),
+(16, 3),
 (-1, 4),
 (1, 4),
 (2, 4),
@@ -2886,7 +3492,36 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (1, 24),
 (2, 24),
 (7, 24),
-(9, 24);
+(9, 24),
+(-1, 26),
+(15, 26),
+(16, 26),
+(-1, 27),
+(15, 27),
+(16, 27),
+(-1, 28),
+(15, 28),
+(17, 28),
+(-1, 29),
+(15, 29),
+(20, 29),
+(22, 29),
+(-1, 30),
+(33, 30),
+(49, 30),
+(50, 30),
+(55, 30),
+(56, 30),
+(57, 30),
+(58, 30),
+(59, 30),
+(60, 30),
+(61, 30),
+(62, 30),
+(64, 30),
+(65, 30),
+(66, 30),
+(67, 30);
 
 -- --------------------------------------------------------
 
@@ -2900,7 +3535,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -2915,7 +3550,14 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`) VALUES
 (9, 'test item', ''),
 (10, 'number of accidents', ''),
 (11, 'cvcv', ''),
-(12, 'quant', '');
+(12, 'quant', ''),
+(14, 'Parks', ''),
+(15, 'Parks', ''),
+(16, 'Retail / Malls / Small shops', ''),
+(17, 'Airports', ''),
+(18, 'Public Roads', ''),
+(19, 'Private Roads', ''),
+(20, 'er df', '');
 
 -- --------------------------------------------------------
 
@@ -2931,7 +3573,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_advice` (
   `range_min_red_nb` double DEFAULT NULL,
   `range_max_red_nb` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_advice`
@@ -2941,7 +3583,13 @@ INSERT INTO `quantifiable_item_advice` (`id`, `unit`, `source`, `range_min_red_n
 (1, 'per ...', 'www.     .fr', 5, 10),
 (2, 'tgrfe', 'btgrf', 1, 2),
 (3, 'htgrfe', 'tbgrfe', 4, 5),
-(4, 'per unit', 'www.google.com', 3, 100);
+(4, 'per unit', 'www.google.com', 3, 100),
+(14, 'Current # of  community activities held in premises each month', '', 20, 20),
+(15, 'Current # of  volunteers hours spent in premises each month', '', 20, 20),
+(16, '# of purchasing hours in store by visiting clients', '', -40, -88),
+(17, 'Total time spent waiting in Transit by passengers (all)', '', -40, -88),
+(18, 'Total time spent waiting by passengers (all)', '', -40, -88),
+(19, 'Total time spent waiting by passengers (all)', '', -40, -88);
 
 -- --------------------------------------------------------
 
@@ -2955,7 +3603,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -2970,7 +3618,10 @@ INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
 (9, 21),
 (11, 21),
 (12, 21),
-(10, 23);
+(10, 23),
+(20, 27),
+(21, 27),
+(13, 28);
 
 -- --------------------------------------------------------
 
@@ -3002,7 +3653,16 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (4, 7),
 (11, 9),
 (7, 11),
-(12, 11);
+(12, 11),
+(20, 16),
+(21, 16),
+(13, 17),
+(14, 32),
+(15, 32),
+(16, 35),
+(17, 37),
+(18, 44),
+(19, 45);
 
 -- --------------------------------------------------------
 
@@ -3138,7 +3798,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -3158,7 +3818,38 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`) VALUES
 (12, 'test', ''),
 (13, 'efh', ''),
 (14, 'Rev1', ''),
-(15, 'revenues', '');
+(15, 'revenues', ''),
+(16, 'User fee - Membership card', ''),
+(17, 'Electricity charging fees', ''),
+(18, 'Fees for parking-services', ''),
+(19, 'Advertisement', ''),
+(20, 'Access to Wifi point', ''),
+(22, 'refv', ''),
+(24, 'Parks', ''),
+(25, 'Parks', ''),
+(26, 'Parks', ''),
+(27, 'Offices', ''),
+(28, 'Factory/Manufact.', ''),
+(29, 'Retail / Malls / Small shops', ''),
+(30, 'Public Areas/Plazas', ''),
+(31, 'Airports', ''),
+(32, 'Event, Cultural & Sports Facilities', ''),
+(33, 'Retail / Malls / Small shops', ''),
+(34, 'Public Areas/Plazas', ''),
+(35, 'Parks', ''),
+(36, 'Public Roads', ''),
+(37, 'Public Roads', ''),
+(38, 'Private Roads', ''),
+(39, 'Private Roads', ''),
+(40, 'Public Roads', ''),
+(41, 'Private Roads', ''),
+(42, 'Public Areas/Plazas', ''),
+(43, 'Public Roads', ''),
+(44, 'Private Roads', ''),
+(45, 'Public Roads', ''),
+(46, 'Public Roads', ''),
+(47, 'Public Areas/Plazas', ''),
+(48, 'Public Areas/Plazas', '');
 
 -- --------------------------------------------------------
 
@@ -3174,7 +3865,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_advice`
@@ -3183,7 +3874,37 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
 INSERT INTO `revenues_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`) VALUES
 (1, 'per example', NULL, 1, 10),
 (2, 'per example', NULL, 2, 20),
-(5, '43GVFD', '', 54, 543);
+(5, '43GVFD', '', 54, 543),
+(16, 'Per user', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 8, 10),
+(17, 'Per charging point', 'https://www.justpark.com/uk/parking/london/', 525, 875),
+(18, 'Per charging point', 'Internal research', 455, 470),
+(19, 'Per  Banner', 'https://www.hastings.gov.uk/press_media/advertising/lamppostbanners/', 130, 300),
+(20, 'Per wifi access point', 'https://nypost.com/2018/05/01/nycs-free-public-wi-fi-kiosks-arent-making-enough-money/', 5, 5),
+(24, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(25, '# of additional clients each month', '', 0, 0),
+(26, '# of additional non-local visitors in the park each month', '', 0, 0),
+(27, 'Current # of square foot of unused space', '', 0, 0),
+(28, 'Current # of square foot of unused space', '', 0, 0),
+(29, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(30, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(31, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(32, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(33, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(34, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(35, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(36, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(37, '# of WWD occurrences', '', 0, 0),
+(38, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(39, '# of WWD occurrences', '', 0, 0),
+(40, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(41, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(42, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(43, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(44, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(45, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(46, '# of additional clients each month', '', 0, 0),
+(47, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
+(48, '# of additional clients each month', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3197,7 +3918,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_user`
@@ -3217,7 +3938,11 @@ INSERT INTO `revenues_item_user` (`id`, `id_proj`) VALUES
 (11, 8),
 (12, 21),
 (15, 21),
-(14, 23);
+(14, 23),
+(21, 27),
+(49, 27),
+(22, 28),
+(23, 29);
 
 -- --------------------------------------------------------
 
@@ -3252,7 +3977,41 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (10, 11),
 (11, 11),
 (13, 11),
-(15, 11);
+(15, 11),
+(16, 16),
+(17, 16),
+(18, 16),
+(21, 16),
+(49, 16),
+(22, 17),
+(23, 22),
+(19, 25),
+(20, 28),
+(24, 32),
+(25, 32),
+(26, 32),
+(27, 33),
+(28, 34),
+(29, 35),
+(30, 36),
+(31, 37),
+(32, 38),
+(33, 39),
+(34, 40),
+(35, 41),
+(36, 42),
+(37, 42),
+(38, 43),
+(39, 43),
+(40, 44),
+(41, 45),
+(42, 46),
+(43, 47),
+(44, 48),
+(45, 49),
+(46, 49),
+(47, 50),
+(48, 50);
 
 -- --------------------------------------------------------
 
@@ -3302,7 +4061,13 @@ INSERT INTO `revenue_schedule` (`id_uc`, `id_proj`, `start_date`, `25_rampup`, `
 (10, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
 (10, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
 (11, 4, '2012-02-01', '2012-03-01', '2013-02-01', '2014-02-01', '2015-02-01', '2016-02-01'),
-(11, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01');
+(11, 8, '2016-04-01', '2016-09-01', '2016-12-01', '2017-01-01', '2017-06-01', '2017-12-01'),
+(15, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-05-01', '2023-12-01'),
+(15, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01'),
+(15, 28, '2012-08-01', '2013-01-01', '2013-03-01', '2013-04-01', '2013-06-01', '2019-01-01'),
+(16, 26, '2021-01-01', '2021-02-01', '2021-03-01', '2021-04-01', '2021-05-01', '2023-12-01'),
+(16, 27, '2021-01-01', '2021-05-01', '2021-06-01', '2021-08-01', '2021-11-01', '2023-01-01'),
+(17, 28, '2012-08-01', '2013-01-01', '2013-03-01', '2013-04-01', '2013-06-01', '2019-01-01');
 
 -- --------------------------------------------------------
 
@@ -3317,7 +4082,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `description` text,
   `sources` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -3336,7 +4101,47 @@ INSERT INTO `risk_item` (`id`, `name`, `description`, `sources`) VALUES
 (10, 'risk 3', '', NULL),
 (11, 'black', '', NULL),
 (12, 'ri', '', NULL),
-(13, 'risk 01', '', NULL);
+(13, 'risk 01', '', NULL),
+(14, 'Potential Negative impact on health', '', NULL),
+(15, 'Harm to animals', '', NULL),
+(16, 'Lack of public acceptance', '', NULL),
+(17, 'Network Hacking', '', NULL),
+(18, 'Network crash', '', NULL),
+(19, 'Grid reliability (instability and disruptions)', '', NULL),
+(20, 'Security and safety risks (extreme weather, collisions, vandalism).', '', NULL),
+(21, 'Vandalism', '', NULL),
+(22, 'Bad weather (sunlight)', '', NULL),
+(23, 'Safety risks', '', NULL),
+(24, 'Vandalism', '', NULL),
+(25, 'Cyber attack', '', NULL),
+(26, 'Vandalism', '', NULL),
+(27, 'Lack of public acceptance', '', NULL),
+(28, 'Network and coverage Issues', '', NULL),
+(29, 'Vandalism', '', NULL),
+(30, 'Lack of public acceptance', '', NULL),
+(31, 'Sound coverage', '', NULL),
+(32, 'Lack of scalability - coverage', '', NULL),
+(33, 'Lack of public acceptance', '', NULL),
+(34, 'Cyber attacks(Hacking and Data leaks)', '', NULL),
+(35, 'Lack of scalability - coverage', '', NULL),
+(36, 'Sensitivity to high temperature', '', NULL),
+(37, 'Lack of scalability - coverage', '', NULL),
+(38, 'Limited visibility due to the height of advertisement', '', NULL),
+(39, 'Development of Urban planning ', '', NULL),
+(40, 'Data hacking', '', NULL),
+(41, 'Reduction of control to parking usage ', '', NULL),
+(42, 'Cyber attacks', '', NULL),
+(43, 'Public acceptance', '', NULL),
+(44, 'WiFi access point', '', NULL),
+(45, 'Cyber attacks', '', NULL),
+(46, 'Connectivity', '', NULL),
+(47, 'Cyber attacks', '', NULL),
+(48, 'Network interference', '', NULL),
+(49, 'Potential Negative impact on health', '', NULL),
+(50, 'Increase in housing prices and district attractiveness', '', NULL),
+(51, 'Potential Negative impact on health', '', NULL),
+(54, 'risk', '', NULL),
+(55, 'rrrrr', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -3362,7 +4167,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -3381,7 +4186,11 @@ INSERT INTO `risk_item_user` (`id`, `id_proj`) VALUES
 (10, 8),
 (12, 21),
 (13, 21),
-(11, 23);
+(11, 23),
+(53, 27),
+(55, 27),
+(56, 27),
+(54, 28);
 
 -- --------------------------------------------------------
 
@@ -3414,7 +4223,49 @@ INSERT INTO `risk_uc` (`id_item`, `id_uc`) VALUES
 (8, 11),
 (9, 11),
 (10, 11),
-(13, 11);
+(13, 11),
+(14, 14),
+(15, 14),
+(16, 14),
+(17, 15),
+(18, 15),
+(19, 16),
+(20, 16),
+(53, 16),
+(55, 16),
+(56, 16),
+(21, 17),
+(22, 17),
+(54, 17),
+(23, 18),
+(24, 18),
+(25, 19),
+(26, 19),
+(27, 19),
+(28, 20),
+(29, 20),
+(30, 21),
+(31, 21),
+(32, 22),
+(33, 23),
+(34, 23),
+(35, 23),
+(36, 23),
+(37, 24),
+(38, 25),
+(39, 26),
+(40, 26),
+(41, 27),
+(42, 27),
+(43, 27),
+(44, 28),
+(45, 28),
+(46, 28),
+(47, 29),
+(48, 29),
+(49, 29),
+(50, 30),
+(51, 30);
 
 -- --------------------------------------------------------
 
@@ -3533,7 +4384,9 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `departm
 (21, 'a', 'Compiegne', 'Diego MEJIA', '12', 'Google', 'team a'),
 (22, '', '', '', '', '', ''),
 (23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
-(24, '', '', '', '', 'verifDash', '');
+(24, '', '', '', '', 'verifDash', ''),
+(29, '', '', '', '', 'Insigth', ''),
+(30, '', '', '', '', 'NTT', '');
 
 -- --------------------------------------------------------
 
@@ -3550,7 +4403,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `advice_user` enum('advice','user') NOT NULL,
   `unit` varchar(256) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -3574,7 +4427,10 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (18, '1st rec', 'operating', '', 'user', ''),
 (19, 'rev 1', 'equipment', '', 'user', 'u'),
 (20, 'dep', 'deployment', '', 'user', ''),
-(21, 'rec', 'operating', '', 'user', '');
+(21, 'rec', 'operating', '', 'user', ''),
+(22, 'dep 1', 'deployment', '', 'user', 'unitttt'),
+(23, 'rec', 'operating', '', 'user', ''),
+(24, 'reeev', 'equipment', '', 'user', '');
 
 -- --------------------------------------------------------
 
@@ -3614,7 +4470,10 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (18, -1),
 (19, 11),
 (20, 11),
-(21, 11);
+(21, 11),
+(22, -1),
+(23, -1),
+(24, 22);
 
 -- --------------------------------------------------------
 
@@ -3654,7 +4513,10 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (18, 24),
 (19, 21),
 (20, 21),
-(21, 21);
+(21, 21),
+(22, 29),
+(23, 29),
+(24, 29);
 
 -- --------------------------------------------------------
 
@@ -3704,7 +4566,12 @@ INSERT INTO `ucm_sel_crit` (`id_crit`, `id_ucm`) VALUES
 (5, 9),
 (6, 9),
 (9, 9),
-(10, 9);
+(10, 9),
+(13, 15),
+(34, 15),
+(37, 15),
+(40, 15),
+(41, 15);
 
 -- --------------------------------------------------------
 
@@ -3735,7 +4602,9 @@ INSERT INTO `ucm_sel_critcat` (`id_critCat`, `id_ucm`, `weight`) VALUES
 (2, 4, 15),
 (2, 6, NULL),
 (2, 7, 50),
-(2, 9, 50);
+(2, 9, 50),
+(4, 15, 50),
+(6, 15, 50);
 
 -- --------------------------------------------------------
 
@@ -3764,7 +4633,8 @@ INSERT INTO `ucm_sel_dlt` (`id_ucm`, `id_dlt`) VALUES
 (4, 2),
 (7, 2),
 (8, 2),
-(9, 2);
+(9, 2),
+(15, 3);
 
 -- --------------------------------------------------------
 
@@ -3794,7 +4664,10 @@ INSERT INTO `ucm_sel_measure` (`id_meas`, `id_ucm`) VALUES
 (15, 8),
 (1, 9),
 (4, 9),
-(16, 9);
+(16, 9),
+(21, 14),
+(21, 15),
+(21, 16);
 
 -- --------------------------------------------------------
 
@@ -3842,7 +4715,15 @@ INSERT INTO `ucm_sel_uc` (`id_uc`, `id_ucm`) VALUES
 (7, 9),
 (9, 9),
 (10, 9),
-(11, 9);
+(11, 9),
+(15, 15),
+(16, 15),
+(20, 15),
+(21, 15),
+(22, 15),
+(26, 15),
+(27, 15),
+(28, 15);
 
 -- --------------------------------------------------------
 
@@ -3870,7 +4751,9 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`) VALUES
 (15, 21, 1, 9),
 (15, 21, 1, 11),
 (15, 24, 0, -1),
-(15, 24, 1, 9);
+(15, 24, 1, 9),
+(15, 29, 0, -1),
+(15, 29, 21, 22);
 
 -- --------------------------------------------------------
 
@@ -3888,6 +4771,652 @@ CREATE TABLE IF NOT EXISTS `uc_vs_crit` (
   PRIMARY KEY (`id_uc`,`id_crit`),
   KEY `id_crit` (`id_crit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `uc_vs_crit`
+--
+
+INSERT INTO `uc_vs_crit` (`id_uc`, `id_crit`, `pertinence`, `range_min`, `range_max`) VALUES
+(-1, 11, 0, 0, 0),
+(-1, 12, 0, 0, 0),
+(-1, 13, 2, 0, 0),
+(-1, 14, 0, 0, 0),
+(-1, 15, 0, 0, 0),
+(-1, 16, 0, 0, 0),
+(-1, 17, 0, 0, 0),
+(-1, 18, 1, 12, 0),
+(-1, 19, 0, 0, 0),
+(-1, 20, 0, 0, 0),
+(-1, 21, 0, 0, 0),
+(-1, 22, 0, 0, 0),
+(-1, 23, 0, 0, 0),
+(-1, 24, 0, 0, 0),
+(-1, 25, 0, 0, 0),
+(-1, 26, 0, 0, 0),
+(-1, 27, 0, 0, 0),
+(-1, 28, 0, 0, 0),
+(-1, 29, 0, 0, 0),
+(-1, 30, 0, 0, 0),
+(-1, 31, 0, 0, 0),
+(-1, 32, 0, 0, 0),
+(-1, 33, 0, 0, 0),
+(-1, 34, 0, 0, 0),
+(-1, 35, 0, 0, 0),
+(-1, 36, 0, 0, 0),
+(-1, 37, 0, 0, 0),
+(-1, 38, 0, 0, 0),
+(-1, 39, 0, 0, 0),
+(-1, 40, 0, 0, 0),
+(-1, 41, 2, 0, 0),
+(-1, 42, 0, 0, 0),
+(12, 11, 0, 0, 0),
+(12, 12, 0, 0, 0),
+(12, 13, 0, 0, 0),
+(12, 14, 0, 0, 0),
+(12, 15, 0, 0, 0),
+(12, 16, 0, 0, 0),
+(12, 17, 0, 0, 0),
+(12, 18, 0, 0, 0),
+(12, 19, 0, 0, 0),
+(12, 20, 0, 0, 0),
+(12, 21, 0, 0, 0),
+(12, 22, 0, 0, 0),
+(12, 23, 0, 0, 0),
+(12, 24, 0, 0, 0),
+(12, 25, 0, 0, 0),
+(12, 26, 0, 0, 0),
+(12, 27, 0, 0, 0),
+(12, 28, 0, 0, 0),
+(12, 29, 0, 0, 0),
+(12, 30, 0, 0, 0),
+(12, 31, 0, 0, 0),
+(12, 32, 0, 0, 0),
+(12, 33, 0, 0, 0),
+(12, 34, 0, 0, 0),
+(12, 35, 0, 0, 0),
+(12, 36, 0, 0, 0),
+(12, 37, 0, 0, 0),
+(12, 38, 0, 0, 0),
+(12, 39, 0, 0, 0),
+(12, 40, 0, 0, 0),
+(12, 41, 0, 0, 0),
+(12, 42, 0, 0, 0),
+(13, 11, 0, 0, 0),
+(13, 12, 0, 0, 0),
+(13, 13, 0, 0, 0),
+(13, 14, 0, 0, 0),
+(13, 15, 0, 0, 0),
+(13, 16, 0, 0, 0),
+(13, 17, 0, 0, 0),
+(13, 18, 0, 0, 0),
+(13, 19, 0, 0, 0),
+(13, 20, 0, 0, 0),
+(13, 21, 0, 0, 0),
+(13, 22, 0, 0, 0),
+(13, 23, 0, 0, 0),
+(13, 24, 0, 0, 0),
+(13, 25, 0, 0, 0),
+(13, 26, 0, 0, 0),
+(13, 27, 0, 0, 0),
+(13, 28, 0, 0, 0),
+(13, 29, 0, 0, 0),
+(13, 30, 0, 0, 0),
+(13, 31, 0, 0, 0),
+(13, 32, 0, 0, 0),
+(13, 33, 0, 0, 0),
+(13, 34, 0, 0, 0),
+(13, 35, 0, 0, 0),
+(13, 36, 0, 0, 0),
+(13, 37, 0, 0, 0),
+(13, 38, 0, 0, 0),
+(13, 39, 0, 0, 0),
+(13, 40, 0, 0, 0),
+(13, 41, 0, 0, 0),
+(13, 42, 0, 0, 0),
+(15, 11, 0, 0, 0),
+(15, 12, 0, 0, 0),
+(15, 13, 0, 0, 0),
+(15, 14, 0, 0, 0),
+(15, 15, 0, 0, 0),
+(15, 16, 0, 0, 0),
+(15, 17, 0, 0, 0),
+(15, 18, 0, 0, 0),
+(15, 19, 0, 0, 0),
+(15, 20, 0, 0, 0),
+(15, 21, 0, 0, 0),
+(15, 22, 0, 0, 0),
+(15, 23, 0, 0, 0),
+(15, 24, 0, 0, 0),
+(15, 25, 0, 0, 0),
+(15, 26, 0, 0, 0),
+(15, 27, 0, 0, 0),
+(15, 28, 0, 0, 0),
+(15, 29, 0, 0, 0),
+(15, 30, 0, 0, 0),
+(15, 31, 0, 0, 0),
+(15, 32, 0, 0, 0),
+(15, 33, 0, 0, 0),
+(15, 34, 0, 0, 0),
+(15, 35, 0, 0, 0),
+(15, 36, 0, 0, 0),
+(15, 37, 0, 0, 0),
+(15, 38, 0, 0, 0),
+(15, 39, 0, 0, 0),
+(15, 40, 0, 0, 0),
+(15, 41, 0, 0, 0),
+(15, 42, 0, 0, 0),
+(16, 11, 0, 0, 0),
+(16, 12, 0, 0, 0),
+(16, 13, 0, 0, 0),
+(16, 14, 0, 0, 0),
+(16, 15, 0, 0, 0),
+(16, 16, 0, 0, 0),
+(16, 17, 0, 0, 0),
+(16, 18, 0, 0, 0),
+(16, 19, 0, 0, 0),
+(16, 20, 0, 0, 0),
+(16, 21, 0, 0, 0),
+(16, 22, 0, 0, 0),
+(16, 23, 0, 0, 0),
+(16, 24, 0, 0, 0),
+(16, 25, 0, 0, 0),
+(16, 26, 0, 0, 0),
+(16, 27, 0, 0, 0),
+(16, 28, 0, 0, 0),
+(16, 29, 0, 0, 0),
+(16, 30, 0, 0, 0),
+(16, 31, 0, 0, 0),
+(16, 32, 0, 0, 0),
+(16, 33, 0, 0, 0),
+(16, 34, 0, 0, 0),
+(16, 35, 0, 0, 0),
+(16, 36, 0, 0, 0),
+(16, 37, 0, 0, 0),
+(16, 38, 0, 5, 0),
+(16, 39, 0, 0, 0),
+(16, 40, 0, 0, 0),
+(16, 41, 0, 0, 0),
+(16, 42, 0, 0, 0),
+(17, 11, 0, 0, 0),
+(17, 12, 0, 0, 0),
+(17, 13, 0, 0, 0),
+(17, 14, 0, 0, 0),
+(17, 15, 0, 0, 0),
+(17, 16, 0, 0, 0),
+(17, 17, 0, 0, 0),
+(17, 18, 0, 0, 0),
+(17, 19, 0, 0, 0),
+(17, 20, 0, 0, 0),
+(17, 21, 0, 0, 0),
+(17, 22, 0, 0, 0),
+(17, 23, 0, 0, 0),
+(17, 24, 0, 0, 0),
+(17, 25, 0, 0, 0),
+(17, 26, 0, 0, 0),
+(17, 27, 0, 0, 0),
+(17, 28, 0, 0, 0),
+(17, 29, 0, 0, 0),
+(17, 30, 0, 0, 0),
+(17, 31, 0, 0, 0),
+(17, 32, 0, 0, 0),
+(17, 33, 0, 0, 0),
+(17, 34, 0, 0, 0),
+(17, 35, 0, 0, 0),
+(17, 36, 0, 0, 0),
+(17, 37, 0, 0, 0),
+(17, 38, 0, 0, 0),
+(17, 39, 0, 0, 0),
+(17, 40, 0, 0, 0),
+(17, 41, 0, 0, 0),
+(17, 42, 0, 0, 0),
+(18, 11, 0, 0, 0),
+(18, 12, 0, 0, 0),
+(18, 13, 0, 0, 0),
+(18, 14, 0, 0, 0),
+(18, 15, 0, 0, 0),
+(18, 16, 0, 0, 0),
+(18, 17, 0, 0, 0),
+(18, 18, 1, 5, 0),
+(18, 19, 0, 0, 0),
+(18, 20, 0, 0, 0),
+(18, 21, 0, 0, 0),
+(18, 22, 0, 0, 0),
+(18, 23, 0, 0, 0),
+(18, 24, 0, 0, 0),
+(18, 25, 0, 0, 0),
+(18, 26, 0, 0, 0),
+(18, 27, 0, 0, 0),
+(18, 28, 0, 0, 0),
+(18, 29, 0, 0, 0),
+(18, 30, 1, 0, 0),
+(18, 31, 0, 0, 0),
+(18, 32, 0, 0, 0),
+(18, 33, 0, 0, 0),
+(18, 34, 0, 0, 0),
+(18, 35, 0, 0, 0),
+(18, 36, 0, 0, 0),
+(18, 37, 0, 0, 0),
+(18, 38, 2, 5, 0),
+(18, 39, 2, 0, 0),
+(18, 40, 0, 0, 0),
+(18, 41, 0, 0, 0),
+(18, 42, 0, 0, 0),
+(19, 11, 0, 0, 0),
+(19, 12, 0, 0, 0),
+(19, 13, 0, 0, 0),
+(19, 14, 0, 0, 0),
+(19, 15, 0, 0, 0),
+(19, 16, 0, 0, 0),
+(19, 17, 0, 0, 0),
+(19, 18, 0, 0, 0),
+(19, 19, 0, 0, 0),
+(19, 20, 0, 0, 0),
+(19, 21, 0, 0, 0),
+(19, 22, 0, 0, 0),
+(19, 23, 0, 0, 0),
+(19, 24, 0, 0, 0),
+(19, 25, 0, 0, 0),
+(19, 26, 0, 0, 0),
+(19, 27, 0, 0, 0),
+(19, 28, 0, 0, 0),
+(19, 29, 0, 0, 0),
+(19, 30, 0, 0, 0),
+(19, 31, 0, 0, 0),
+(19, 32, 0, 0, 0),
+(19, 33, 0, 0, 0),
+(19, 34, 0, 0, 0),
+(19, 35, 0, 0, 0),
+(19, 36, 0, 0, 0),
+(19, 37, 0, 0, 0),
+(19, 38, 0, 0, 0),
+(19, 39, 0, 0, 0),
+(19, 40, 0, 0, 0),
+(19, 41, 0, 0, 0),
+(19, 42, 0, 0, 0),
+(20, 11, 0, 0, 0),
+(20, 12, 0, 0, 0),
+(20, 13, 0, 0, 0),
+(20, 14, 0, 0, 0),
+(20, 15, 0, 0, 0),
+(20, 16, 0, 0, 0),
+(20, 17, 0, 0, 0),
+(20, 18, 0, 0, 0),
+(20, 19, 0, 0, 0),
+(20, 20, 0, 0, 0),
+(20, 21, 0, 0, 0),
+(20, 22, 0, 0, 0),
+(20, 23, 0, 0, 0),
+(20, 24, 0, 0, 0),
+(20, 25, 0, 0, 0),
+(20, 26, 0, 0, 0),
+(20, 27, 0, 0, 0),
+(20, 28, 0, 0, 0),
+(20, 29, 0, 0, 0),
+(20, 30, 0, 0, 0),
+(20, 31, 0, 0, 0),
+(20, 32, 0, 0, 0),
+(20, 33, 0, 0, 0),
+(20, 34, 0, 0, 0),
+(20, 35, 0, 0, 0),
+(20, 36, 0, 0, 0),
+(20, 37, 0, 0, 0),
+(20, 38, 0, 0, 0),
+(20, 39, 0, 0, 0),
+(20, 40, 0, 0, 0),
+(20, 41, 0, 0, 0),
+(20, 42, 0, 0, 0),
+(21, 11, 0, 0, 0),
+(21, 12, 0, 0, 0),
+(21, 13, 0, 0, 0),
+(21, 14, 0, 0, 0),
+(21, 15, 0, 0, 0),
+(21, 16, 0, 0, 0),
+(21, 17, 0, 0, 0),
+(21, 18, 0, 0, 0),
+(21, 19, 0, 0, 0),
+(21, 20, 0, 0, 0),
+(21, 21, 0, 0, 0),
+(21, 22, 0, 0, 0),
+(21, 23, 0, 0, 0),
+(21, 24, 0, 0, 0),
+(21, 25, 0, 0, 0),
+(21, 26, 0, 0, 0),
+(21, 27, 0, 0, 0),
+(21, 28, 0, 0, 0),
+(21, 29, 0, 0, 0),
+(21, 30, 0, 0, 0),
+(21, 31, 0, 0, 0),
+(21, 32, 0, 0, 0),
+(21, 33, 0, 0, 0),
+(21, 34, 0, 0, 0),
+(21, 35, 0, 0, 0),
+(21, 36, 0, 0, 0),
+(21, 37, 0, 0, 0),
+(21, 38, 0, 0, 0),
+(21, 39, 0, 0, 0),
+(21, 40, 0, 0, 0),
+(21, 41, 0, 0, 0),
+(21, 42, 0, 0, 0),
+(22, 11, 0, 0, 0),
+(22, 12, 0, 0, 0),
+(22, 13, 0, 0, 0),
+(22, 14, 0, 0, 0),
+(22, 15, 0, 0, 0),
+(22, 16, 0, 0, 0),
+(22, 17, 0, 0, 0),
+(22, 18, 0, 0, 0),
+(22, 19, 0, 0, 0),
+(22, 20, 0, 0, 0),
+(22, 21, 0, 0, 0),
+(22, 22, 0, 0, 0),
+(22, 23, 0, 0, 0),
+(22, 24, 0, 0, 0),
+(22, 25, 0, 0, 0),
+(22, 26, 0, 0, 0),
+(22, 27, 0, 0, 0),
+(22, 28, 0, 0, 0),
+(22, 29, 0, 0, 0),
+(22, 30, 0, 0, 0),
+(22, 31, 0, 0, 0),
+(22, 32, 0, 0, 0),
+(22, 33, 0, 0, 0),
+(22, 34, 0, 0, 0),
+(22, 35, 0, 0, 0),
+(22, 36, 0, 0, 0),
+(22, 37, 0, 0, 0),
+(22, 38, 0, 0, 0),
+(22, 39, 0, 0, 0),
+(22, 40, 0, 0, 0),
+(22, 41, 0, 0, 0),
+(22, 42, 0, 0, 0),
+(23, 11, 0, 0, 0),
+(23, 12, 0, 0, 0),
+(23, 13, 0, 0, 0),
+(23, 14, 0, 0, 0),
+(23, 15, 0, 0, 0),
+(23, 16, 0, 0, 0),
+(23, 17, 0, 0, 0),
+(23, 18, 0, 0, 0),
+(23, 19, 0, 0, 0),
+(23, 20, 0, 0, 0),
+(23, 21, 0, 0, 0),
+(23, 22, 0, 0, 0),
+(23, 23, 0, 0, 0),
+(23, 24, 0, 0, 0),
+(23, 25, 0, 0, 0),
+(23, 26, 0, 0, 0),
+(23, 27, 0, 0, 0),
+(23, 28, 0, 0, 0),
+(23, 29, 0, 0, 0),
+(23, 30, 0, 0, 0),
+(23, 31, 0, 0, 0),
+(23, 32, 0, 0, 0),
+(23, 33, 0, 0, 0),
+(23, 34, 0, 0, 0),
+(23, 35, 0, 0, 0),
+(23, 36, 0, 0, 0),
+(23, 37, 0, 0, 0),
+(23, 38, 0, 0, 0),
+(23, 39, 0, 0, 0),
+(23, 40, 0, 0, 0),
+(23, 41, 0, 0, 0),
+(23, 42, 0, 0, 0),
+(24, 11, 0, 0, 0),
+(24, 12, 0, 0, 0),
+(24, 13, 0, 0, 0),
+(24, 14, 0, 0, 0),
+(24, 15, 0, 0, 0),
+(24, 16, 0, 0, 0),
+(24, 17, 0, 0, 0),
+(24, 18, 0, 0, 0),
+(24, 19, 0, 0, 0),
+(24, 20, 0, 0, 0),
+(24, 21, 0, 0, 0),
+(24, 22, 0, 0, 0),
+(24, 23, 0, 0, 0),
+(24, 24, 0, 0, 0),
+(24, 25, 0, 0, 0),
+(24, 26, 0, 0, 0),
+(24, 27, 0, 0, 0),
+(24, 28, 0, 0, 0),
+(24, 29, 0, 0, 0),
+(24, 30, 0, 0, 0),
+(24, 31, 0, 0, 0),
+(24, 32, 0, 0, 0),
+(24, 33, 0, 0, 0),
+(24, 34, 0, 0, 0),
+(24, 35, 0, 0, 0),
+(24, 36, 0, 0, 0),
+(24, 37, 0, 0, 0),
+(24, 38, 0, 0, 0),
+(24, 39, 0, 0, 0),
+(24, 40, 0, 0, 0),
+(24, 41, 0, 0, 0),
+(24, 42, 0, 0, 0),
+(25, 11, 0, 0, 0),
+(25, 12, 0, 0, 0),
+(25, 13, 0, 0, 0),
+(25, 14, 0, 0, 0),
+(25, 15, 0, 0, 0),
+(25, 16, 0, 0, 0),
+(25, 17, 0, 0, 0),
+(25, 18, 0, 0, 0),
+(25, 19, 0, 0, 0),
+(25, 20, 0, 0, 0),
+(25, 21, 0, 0, 0),
+(25, 22, 0, 0, 0),
+(25, 23, 0, 0, 0),
+(25, 24, 0, 0, 0),
+(25, 25, 0, 0, 0),
+(25, 26, 0, 0, 0),
+(25, 27, 0, 0, 0),
+(25, 28, 0, 0, 0),
+(25, 29, 0, 0, 0),
+(25, 30, 0, 0, 0),
+(25, 31, 0, 0, 0),
+(25, 32, 0, 0, 0),
+(25, 33, 0, 0, 0),
+(25, 34, 0, 0, 0),
+(25, 35, 0, 0, 0),
+(25, 36, 0, 0, 0),
+(25, 37, 0, 0, 0),
+(25, 38, 0, 0, 0),
+(25, 39, 0, 0, 0),
+(25, 40, 0, 0, 0),
+(25, 41, 0, 0, 0),
+(25, 42, 0, 0, 0),
+(26, 11, 0, 0, 0),
+(26, 12, 0, 0, 0),
+(26, 13, 0, 0, 0),
+(26, 14, 0, 0, 0),
+(26, 15, 0, 0, 0),
+(26, 16, 0, 0, 0),
+(26, 17, 0, 0, 0),
+(26, 18, 0, 0, 0),
+(26, 19, 0, 0, 0),
+(26, 20, 0, 0, 0),
+(26, 21, 0, 0, 0),
+(26, 22, 0, 0, 0),
+(26, 23, 0, 0, 0),
+(26, 24, 0, 0, 0),
+(26, 25, 0, 0, 0),
+(26, 26, 0, 0, 0),
+(26, 27, 0, 0, 0),
+(26, 28, 0, 0, 0),
+(26, 29, 0, 0, 0),
+(26, 30, 0, 0, 0),
+(26, 31, 0, 0, 0),
+(26, 32, 0, 0, 0),
+(26, 33, 0, 0, 0),
+(26, 34, 0, 0, 0),
+(26, 35, 0, 0, 0),
+(26, 36, 0, 0, 0),
+(26, 37, 0, 0, 0),
+(26, 38, 0, 0, 0),
+(26, 39, 0, 0, 0),
+(26, 40, 0, 0, 0),
+(26, 41, 0, 0, 0),
+(26, 42, 0, 0, 0),
+(27, 11, 0, 0, 0),
+(27, 12, 0, 0, 0),
+(27, 13, 0, 0, 0),
+(27, 14, 0, 0, 0),
+(27, 15, 0, 0, 0),
+(27, 16, 0, 0, 0),
+(27, 17, 0, 0, 0),
+(27, 18, 0, 0, 0),
+(27, 19, 0, 0, 0),
+(27, 20, 0, 0, 0),
+(27, 21, 0, 0, 0),
+(27, 22, 0, 0, 0),
+(27, 23, 0, 0, 0),
+(27, 24, 0, 0, 0),
+(27, 25, 0, 0, 0),
+(27, 26, 0, 0, 0),
+(27, 27, 0, 0, 0),
+(27, 28, 0, 0, 0),
+(27, 29, 0, 0, 0),
+(27, 30, 0, 0, 0),
+(27, 31, 0, 0, 0),
+(27, 32, 0, 0, 0),
+(27, 33, 0, 0, 0),
+(27, 34, 0, 0, 0),
+(27, 35, 0, 0, 0),
+(27, 36, 0, 0, 0),
+(27, 37, 0, 0, 0),
+(27, 38, 0, 0, 0),
+(27, 39, 0, 0, 0),
+(27, 40, 0, 0, 0),
+(27, 41, 0, 0, 0),
+(27, 42, 0, 0, 0),
+(28, 11, 0, 0, 0),
+(28, 12, 0, 0, 0),
+(28, 13, 0, 0, 0),
+(28, 14, 0, 0, 0),
+(28, 15, 0, 0, 0),
+(28, 16, 0, 0, 0),
+(28, 17, 0, 0, 0),
+(28, 18, 0, 0, 0),
+(28, 19, 0, 0, 0),
+(28, 20, 0, 0, 0),
+(28, 21, 0, 0, 0),
+(28, 22, 0, 0, 0),
+(28, 23, 0, 0, 0),
+(28, 24, 0, 0, 0),
+(28, 25, 0, 0, 0),
+(28, 26, 0, 0, 0),
+(28, 27, 0, 0, 0),
+(28, 28, 0, 0, 0),
+(28, 29, 0, 0, 0),
+(28, 30, 0, 0, 0),
+(28, 31, 0, 0, 0),
+(28, 32, 0, 0, 0),
+(28, 33, 0, 0, 0),
+(28, 34, 0, 0, 0),
+(28, 35, 0, 0, 0),
+(28, 36, 0, 0, 0),
+(28, 37, 0, 0, 0),
+(28, 38, 0, 0, 0),
+(28, 39, 0, 0, 0),
+(28, 40, 0, 0, 0),
+(28, 41, 0, 0, 0),
+(28, 42, 0, 0, 0),
+(29, 11, 0, 0, 0),
+(29, 12, 0, 0, 0),
+(29, 13, 2, 0, 0),
+(29, 14, 0, 0, 0),
+(29, 15, 0, 0, 0),
+(29, 16, 0, 0, 0),
+(29, 17, 0, 0, 0),
+(29, 18, 0, 0, 0),
+(29, 19, 0, 0, 0),
+(29, 20, 0, 0, 0),
+(29, 21, 0, 0, 0),
+(29, 22, 0, 0, 0),
+(29, 23, 0, 0, 0),
+(29, 24, 0, 0, 0),
+(29, 25, 0, 0, 0),
+(29, 26, 0, 0, 0),
+(29, 27, 0, 0, 0),
+(29, 28, 0, 0, 0),
+(29, 29, 0, 0, 0),
+(29, 30, 0, 0, 0),
+(29, 31, 0, 0, 0),
+(29, 32, 0, 0, 0),
+(29, 33, 0, 0, 0),
+(29, 34, 0, 0, 0),
+(29, 35, 0, 0, 0),
+(29, 36, 0, 0, 0),
+(29, 37, 2, 0, 0),
+(29, 38, 0, 0, 0),
+(29, 39, 0, 0, 0),
+(29, 40, 0, 0, 0),
+(29, 41, 0, 0, 0),
+(29, 42, 0, 0, 0),
+(30, 11, 0, 0, 0),
+(30, 12, 0, 0, 0),
+(30, 13, 0, 0, 0),
+(30, 14, 0, 0, 0),
+(30, 15, 0, 0, 0),
+(30, 16, 0, 0, 0),
+(30, 17, 0, 0, 0),
+(30, 18, 0, 0, 0),
+(30, 19, 0, 0, 0),
+(30, 20, 0, 0, 0),
+(30, 21, 0, 0, 0),
+(30, 22, 0, 0, 0),
+(30, 23, 0, 0, 0),
+(30, 24, 0, 0, 0),
+(30, 25, 0, 0, 0),
+(30, 26, 0, 0, 0),
+(30, 27, 0, 0, 0),
+(30, 28, 0, 0, 0),
+(30, 29, 0, 0, 0),
+(30, 30, 0, 0, 0),
+(30, 31, 0, 0, 0),
+(30, 32, 0, 0, 0),
+(30, 33, 0, 0, 0),
+(30, 34, 0, 0, 0),
+(30, 35, 0, 0, 0),
+(30, 36, 0, 0, 0),
+(30, 37, 0, 0, 0),
+(30, 38, 0, 0, 0),
+(30, 39, 0, 0, 0),
+(30, 40, 0, 0, 0),
+(30, 41, 0, 0, 0),
+(30, 42, 0, 0, 0),
+(31, 11, 0, 0, 0),
+(31, 12, 0, 0, 0),
+(31, 13, 2, 0, 0),
+(31, 14, 0, 0, 0),
+(31, 15, 0, 0, 0),
+(31, 16, 0, 0, 0),
+(31, 17, 0, 0, 0),
+(31, 18, 0, 0, 0),
+(31, 19, 0, 0, 0),
+(31, 20, 0, 0, 0),
+(31, 21, 0, 0, 0),
+(31, 22, 0, 0, 0),
+(31, 23, 0, 0, 0),
+(31, 24, 0, 0, 0),
+(31, 25, 0, 0, 0),
+(31, 26, 0, 0, 0),
+(31, 27, 0, 0, 0),
+(31, 28, 0, 0, 0),
+(31, 29, 0, 0, 0),
+(31, 30, 0, 0, 0),
+(31, 31, 0, 0, 0),
+(31, 32, 0, 0, 0),
+(31, 33, 0, 0, 0),
+(31, 34, 0, 0, 0),
+(31, 35, 0, 0, 0),
+(31, 36, 0, 0, 0),
+(31, 37, 2, 0, 0),
+(31, 38, 0, 0, 0),
+(31, 39, 0, 0, 0),
+(31, 40, 2, 0, 0),
+(31, 41, 0, 0, 0),
+(31, 42, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -4059,7 +5588,47 @@ INSERT INTO `uc_vs_crit_input` (`id_uc`, `id_crit`, `id_ucm`, `rate`) VALUES
 (11, 6, 9, 4),
 (11, 9, 7, 1),
 (11, 9, 9, 4),
-(11, 10, 9, 4);
+(11, 10, 9, 4),
+(15, 13, 15, 5),
+(15, 34, 15, 5),
+(15, 37, 15, 5),
+(15, 40, 15, 5),
+(15, 41, 15, 5),
+(16, 13, 15, 5),
+(16, 34, 15, 5),
+(16, 37, 15, 5),
+(16, 40, 15, 5),
+(16, 41, 15, 5),
+(20, 13, 15, 5),
+(20, 34, 15, 5),
+(20, 37, 15, 5),
+(20, 40, 15, 5),
+(20, 41, 15, 5),
+(21, 13, 15, 5),
+(21, 34, 15, 5),
+(21, 37, 15, 5),
+(21, 40, 15, 5),
+(21, 41, 15, 5),
+(22, 13, 15, 5),
+(22, 34, 15, 5),
+(22, 37, 15, 5),
+(22, 40, 15, 5),
+(22, 41, 15, 5),
+(26, 13, 15, 5),
+(26, 34, 15, 5),
+(26, 37, 15, 5),
+(26, 40, 15, 5),
+(26, 41, 15, 5),
+(27, 13, 15, 5),
+(27, 34, 15, 5),
+(27, 37, 15, 5),
+(27, 40, 15, 5),
+(27, 41, 15, 5),
+(28, 13, 15, 5),
+(28, 34, 15, 5),
+(28, 37, 15, 5),
+(28, 40, 15, 5),
+(28, 41, 15, 5);
 
 -- --------------------------------------------------------
 
@@ -4099,7 +5668,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `user`
@@ -4111,9 +5680,10 @@ INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `passwor
 (5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', ''),
 (10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', ''),
 (12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', ''),
-(13, 'ProjDeve', NULL, NULL, NULL, '$2y$10$pzr45zxv7yM0jHFoOosweOs9ngQDAyCvdkyw.awDMwfFCZo/cgpwu', '7697641405f609379e18ed6.70056693', 1, NULL, '2020-09-15 12:12:10', 'd', ''),
+(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.'),
 (14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', ''),
-(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '');
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', ''),
+(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '');
 
 -- --------------------------------------------------------
 
@@ -4159,7 +5729,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
   PRIMARY KEY (`id`),
   KEY `id_meas` (`id_meas`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case`
@@ -4175,7 +5745,62 @@ INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
 (7, '5G', '', 1, 1),
 (9, 'Photo Voltaic', '', 1, 1),
 (10, 'Public Information & advertising', '', 1, 2),
-(11, 'Water Level Sensor', NULL, 1, 2);
+(11, 'Water Level Sensor', NULL, 1, 2),
+(12, 'Pole', '', 21, 5),
+(13, 'Smart Lamppost', '', 21, 5),
+(15, 'LED', '', 21, 15),
+(16, 'CMS', '', 21, 15),
+(17, 'EVCP', '', 21, 8),
+(18, 'PV', '', 21, 8),
+(19, 'ES', '', 21, 8),
+(20, 'CCTV', '', 21, 9),
+(21, 'Push To Talk', '', 21, 9),
+(22, 'Public Speakers', '', 21, 9),
+(23, 'Air Quality Sensing', '', 21, 10),
+(24, 'Noise Sensor', '', 21, 10),
+(25, 'Water Level Sensor', '', 21, 10),
+(26, 'Public Information & Advertising', '', 21, 11),
+(27, 'Traffic Monitoring', '', 21, 13),
+(28, 'Parking Management ', '', 21, 13),
+(29, 'Wifi', '', 21, 14),
+(30, 'Wireless Communication ', '', 21, 14),
+(31, '5G', '', 21, 14),
+(32, 'Parks', '', 25, 16),
+(33, 'Offices', '', 25, 16),
+(34, 'Factory/Manufact.', '', 25, 16),
+(35, 'Retail / Malls / Small shops', '', 25, 16),
+(36, 'Public Areas/Plazas', '', 25, 16),
+(37, 'Airports', '', 25, 16),
+(38, 'Event, Cultural & Sports Facilities', '', 25, 16),
+(39, 'Retail / Malls / Small shops', '', 25, 17),
+(40, 'Public Areas/Plazas', '', 25, 17),
+(41, 'Parks', '', 25, 17),
+(42, 'Public Roads', '', 25, 18),
+(43, 'Private Roads', '', 25, 18),
+(44, 'Public Roads', '', 25, 19),
+(45, 'Private Roads', '', 25, 19),
+(46, 'Public Areas/Plazas', '', 25, 19),
+(47, 'Public Roads', '', 25, 20),
+(48, 'Private Roads', '', 25, 20),
+(49, 'Public Roads', '', 25, 21),
+(50, 'Public Areas/Plazas', '', 25, 21),
+(51, 'Airports', '', 25, 22),
+(52, 'Parks', '', 25, 22),
+(53, 'Retail / Malls / Small shops', '', 25, 22),
+(54, 'Event, Cultural & Sports Facilities', '', 25, 22),
+(55, 'Offices', '', 25, 22),
+(56, 'Airports', '', 25, 23),
+(57, 'Parks', '', 25, 23),
+(58, 'Retail / Malls / Small shops', '', 25, 23),
+(59, 'Event, Cultural & Sports Facilities', '', 25, 23),
+(60, 'Factory/Manufact.', '', 25, 23),
+(61, 'Offices', '', 25, 23),
+(62, 'Offices', '', 25, 24),
+(63, 'Factory/Manufact.', '', 25, 24),
+(64, 'Factory/Manufact.', '', 25, 25),
+(65, 'Retail / Malls / Small shops', '', 25, 25),
+(66, 'Event, Cultural & Sports Facilities', '', 25, 25),
+(67, 'Offices', '', 25, 25);
 
 -- --------------------------------------------------------
 
@@ -4193,23 +5818,18 @@ CREATE TABLE IF NOT EXISTS `use_cases_menu` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_cases_menu`
 --
 
 INSERT INTO `use_cases_menu` (`id`, `name`, `description`, `creation_date`, `id_user`) VALUES
-(1, 'projet', '', '2020-02-11 14:55:56', 1),
 (3, 'uc_eval', '', '2020-02-13 12:22:10', 2),
-(4, 'projet2', '', '2020-04-17 11:09:45', 1),
-(6, 'test', 'testing', '2020-06-29 16:12:35', 1),
 (7, 'test1', 'test', '2020-07-16 16:04:46', 5),
 (8, 'test1', 'test', '2020-08-17 09:19:57', 10),
-(9, 'MyProject', '', '2020-08-28 14:59:04', 1),
-(10, 'Project1', '', '2020-08-31 15:11:38', 1),
-(11, 'MyProject2', 'test', '2020-08-31 15:12:59', 1),
-(12, 'retest', '', '2020-09-02 11:51:40', 1);
+(14, 'Montreal Area', '', '2020-10-19 17:16:51', 1),
+(15, 'Montreal Area', '', '2020-10-20 11:11:14', 13);
 
 -- --------------------------------------------------------
 
@@ -4224,7 +5844,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case_cat`
@@ -4232,9 +5852,24 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
 
 INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (0, 'Project Overlay', NULL),
-(1, 'UC_cat_1', ''),
-(2, 'UC_cat_2', ''),
-(3, 'UC_cat_3', '');
+(5, 'Lamppost', ''),
+(8, 'Energy', ''),
+(9, 'Public Safety', ''),
+(10, 'Environmental Monitoring ', ''),
+(11, 'Signage ', ''),
+(13, 'Movment Monitoring ', ''),
+(14, 'Connectivity ', ''),
+(15, 'Ligthing', ''),
+(16, 'Occupancy and Notification', ''),
+(17, 'Missing Person', ''),
+(18, ' Wrong Direction', ''),
+(19, 'Traffic – Vehicle Count', ''),
+(20, ' Traffic – Vehicle of Interest ', ''),
+(21, 'Traffic – Origination and Destination', ''),
+(22, 'Health Check – Thermal Scan', ''),
+(23, 'Boundary Compliance', ''),
+(24, ' Plant Safety (Manufacturing)  ', ''),
+(25, 'Back to Work Package ', '');
 
 -- --------------------------------------------------------
 
@@ -4343,7 +5978,23 @@ INSERT INTO `volumes_input` (`id_uc`, `id_zone`, `id_proj`, `nb_compo`, `nb_per_
 (11, 6, 4, NULL, NULL, 65),
 (11, 6, 8, NULL, NULL, 11),
 (11, 7, 4, NULL, NULL, 6565),
-(11, 7, 8, NULL, NULL, 33);
+(11, 7, 8, NULL, NULL, 33),
+(15, 13, 27, NULL, NULL, 400),
+(15, 16, 26, NULL, NULL, 10),
+(15, 16, 27, NULL, NULL, 8940),
+(15, 17, 27, NULL, NULL, 450),
+(15, 20, 26, NULL, NULL, 20),
+(15, 20, 27, NULL, NULL, 550),
+(15, 20, 28, NULL, NULL, 105),
+(15, 22, 27, NULL, NULL, 575),
+(16, 13, 27, NULL, NULL, 1),
+(16, 16, 26, NULL, NULL, 10),
+(16, 16, 27, NULL, NULL, 1),
+(16, 17, 27, NULL, NULL, 1),
+(16, 20, 26, NULL, NULL, 20),
+(16, 20, 27, NULL, NULL, 1),
+(16, 22, 27, NULL, NULL, 1),
+(17, 20, 28, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -4357,7 +6008,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item` (
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item`
@@ -4375,7 +6026,18 @@ INSERT INTO `widercash_item` (`id`, `name`, `description`) VALUES
 (11, 'WCB 2', ''),
 (12, 'wcb', ''),
 (14, 'Polution', ''),
-(15, 'wider', '');
+(15, 'wider', ''),
+(16, 'Carbon savings', ''),
+(17, 'Carbon savings', ''),
+(18, 'Carbon savings', ''),
+(19, 'Reduction of cabling Maintenance', ''),
+(20, 'Crime reduction & prevention', ''),
+(21, 'Carbon savings', ''),
+(22, 'Improved security surveillance system', ''),
+(23, 'Reduction of flood cost', ''),
+(24, 'Reduces number of traffic accidents', ''),
+(25, 'Reduction in congestion time due to traffic monitoring', ''),
+(26, 'ddd', '');
 
 -- --------------------------------------------------------
 
@@ -4394,7 +6056,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_advice` (
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_advice`
@@ -4405,7 +6067,17 @@ INSERT INTO `widercash_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range
 (2, 'per example', NULL, 4, 5, 6, 7, 8),
 (6, 'thgfd', '', 0, 5, 45, 5, 45),
 (7, 'GEFRD', '', 4, 5, 6, 7, 8),
-(8, 'GRTFED', 'GTRFE', 5, 4, 3, 42, 2);
+(8, 'GRTFED', 'GTRFE', 5, 4, 3, 42, 2),
+(16, 'Per Ton of carbon', 'https://www.surrey.ca/city-services/4614.aspx', 16, 20, 40, 0, 0),
+(17, 'Per Ton of carbon', 'https://www.citintelly.com/intelligent-street-lighting-products/street-lighting-control-system/', 16, 20, 60, 0, 0),
+(18, 'Per Ton of carbon', 'https://www.smallbizdaily.com/4-ways-ev-charging-stations-can-benefit-business/\n', 16, 85, 100, 0, 0),
+(19, 'Per cabling system', 'https://reneweconomy.com.au/hidden-cost-of-rooftop-solar-who-should-pay-for-maintenance-99200/\n', 8, 10, 30, 0, 0),
+(20, 'Per crime (property, persons) ', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 4800, 10, 30, 0, 0),
+(21, 'Per Ton of carbon', 'https://www.epa.gov/air-research/deliberating-performance-targets-air-quality-sensors-workshop\n', 16, 20, 40, 0, 0),
+(22, 'Per safety investigation', 'https://www.oti.fi/en/oti/investigation-of-road-accidents/', 2415, 40, 60, 0, 0),
+(23, 'Per claimed inhabitant', 'http://www.libelium.com/smart_water_wsn_flood_detection/', 1310, 10, 20, 0, 0),
+(24, 'Per accident', 'https://www.researchgate.net/publication/12411590_Traffic_accident_reduction_by_monitoring_driver_behaviour_with_in-car_data_recorders', 14374, 10, 20, 0, 0),
+(25, 'Number of hours lost', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 8, 20, 50, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -4419,7 +6091,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_user`
@@ -4439,7 +6111,9 @@ INSERT INTO `widercash_item_user` (`id`, `id_proj`) VALUES
 (12, 21),
 (15, 21),
 (13, 23),
-(14, 23);
+(14, 23),
+(26, 27),
+(27, 27);
 
 -- --------------------------------------------------------
 
@@ -4474,7 +6148,19 @@ INSERT INTO `widercash_uc` (`id_item`, `id_uc`) VALUES
 (9, 11),
 (10, 11),
 (11, 11),
-(15, 11);
+(15, 11),
+(16, 14),
+(17, 15),
+(26, 16),
+(27, 16),
+(18, 17),
+(19, 18),
+(20, 19),
+(21, 22),
+(22, 23),
+(23, 24),
+(24, 26),
+(25, 26);
 
 -- --------------------------------------------------------
 
@@ -4490,20 +6176,25 @@ CREATE TABLE IF NOT EXISTS `zone` (
   `id_zone` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_zone` (`id_zone`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `zone`
 --
 
 INSERT INTO `zone` (`id`, `name`, `type`, `id_zone`) VALUES
-(1, 'ville1', 'ville', NULL),
-(2, 'quartier1', 'quartier', 1),
-(3, 'quartier2', 'quartier', 1),
-(4, 'ssquartier11', 'ssquartier', 2),
-(5, 'ssquartier12', 'ssquartier', 2),
-(6, 'ssquartier21', 'ssquartier', 3),
-(7, 'quartier3', 'quartier', 1);
+(9, 'Montreal ', 'City', 0),
+(10, 'Ville-Marie', 'quartier', 9),
+(11, 'Rosemont', 'quartier', 9),
+(12, 'Villeret', 'quartier', 9),
+(13, 'Montroyal', 'quartier', 9),
+(15, 'Saint-Laurent', 'quartier', 9),
+(16, 'Mercier', 'quartier', 9),
+(17, 'Jean-Drapeau', 'Parc', 10),
+(19, 'Robert Bourassa', 'Artère ', 10),
+(20, 'Maisonneuve', 'Parc ', 11),
+(21, 'Saint-Michel', 'Complexe environnemental ', 12),
+(22, 'Cavendish-Toupin', 'Artère ', 15);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

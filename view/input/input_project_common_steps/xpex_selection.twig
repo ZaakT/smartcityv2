@@ -76,7 +76,7 @@
         {% if item|length >0 %}{% set print = true %}{% endif %}
     {% endfor %}
     {% if print %}
-    {{ list.list_xpex(xpex_user_from_ntt, xpex_user_from_outside_ntt, xpex_user_internal, projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, "custom") }}
+    {{ list.list_xpex(xpex_user_from_ntt, xpex_user_from_outside_ntt, xpex_user_internal, projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, "") }}
     {% endif %}
 </form>
 

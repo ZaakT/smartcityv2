@@ -2172,8 +2172,8 @@ function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $revenueType){
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO supplier_revenues_item (name,description, type, advice_user)
-                                    VALUES (revenue_name,revenue_desc, type_value, "user");
+                                INSERT INTO supplier_revenues_item (name,description, type, advice_user, unit)
+                                    VALUES (revenue_name,revenue_desc, type_value, "user", "");
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                     VALUES (itemID,idUC);

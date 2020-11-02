@@ -1,6 +1,6 @@
 {% macro summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC) %}
 {#}{% set symb = ["x","check","media-record"] %}{#}
-{% set symb = ["x","check",""] %}
+{% set symb = ["ø","check","ø"] %}
 {% set color = ["text-danger","text-success","text-warning"] %}
 
 <div class="row m-5 text-center">
@@ -15,8 +15,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td scope="col"><span title="{{symb[0]}}" class="oi oi-{{symb[0]}} {{color[0]}}"></span></td>
-                    <td scope="col"><span title="{{symb[2]}}" class="oi oi-{{symb[2]}} {{color[2]}}"></span></td>
+                    <td scope="col"><span title='{{symb[0]}}' class="oi oi-{{symb[0]}} {{color[0]}}">{{symb[0]}}</span></td>
+                    <td scope="col"><span title="{{symb[2]}}" class="oi oi-{{symb[2]}} {{color[2]}}">{{symb[2]}}</span></td>
                     <td scope="col"><span title="{{symb[1]}}" class="oi oi-{{symb[1]}} {{color[1]}}"></span></td>
                 </tr>
             </tbody>
@@ -54,7 +54,11 @@
                         {% endif %}
                         <td scope="col">
                         {% if showNA %} NA 
-                        {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}"></span>
+                        {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}">
+                            {% if list_checks[uc][name[1]] != 1 %}
+                                {{symb[list_checks[uc][name[1]]]}}
+                            {% endif %}
+                        </span>
                         {% endif %}
                         </td>
                         {% endfor %}

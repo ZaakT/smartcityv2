@@ -50,7 +50,9 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"> <strong>{{traduction.getText("procured_from")}}{{companyName}} </strong></td></tr>
+                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                    <tr class="table-primary"><td colspan="{{size}}"> <strong>{{traduction.getText("procured_from")}}{{companyName}} </strong></td></tr>
+                {% endif %}
                 {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
@@ -60,7 +62,9 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("procured_from_outside")}}{{companyName}} </strong></td></tr>
+                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                    <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("procured_from_outside")}}{{companyName}} </strong></td></tr>
+                {% endif %}
                 {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
 
@@ -70,7 +74,9 @@
             {% endfor %}
 
             {% if print  %}
-                <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("internal")}}</strong></td></tr>
+                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                    <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("internal")}}</strong></td></tr>
+                {% endif %}
                 {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
             {% endif %}
         </table>

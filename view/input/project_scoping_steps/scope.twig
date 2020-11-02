@@ -1,10 +1,8 @@
 {% extends '/others/general_common.twig' %}
 
 {% import "/templates/second_bar.twig" as second_bar %}
-{% import "/templates/admin/modal_measures.twig" as modal1 %}
+{% import "/templates/project_scoping/modal_hierarchie.twig" as modal %}
 {% import "/templates/sidebar.twig" as sidebar %}
-{% import "/templates/admin/modal_uc_cat.twig" as modal2 %}
-{% import "/templates/admin/modal_usecases.twig" as modal3 %}
 {% import "/templates/project_scoping/macro_scope.twig" as list %}
 
 {% block sidebar %}{{ sidebar.sidebar(sideBarName,projID) }}{% endblock %}
@@ -130,9 +128,9 @@
 </div>
 
 
-{{ modal1.create_measure(users, projID) }}
-{{ modal2.create_category() }}
-{{ modal3.create_usecase(measures,cat) }}
+{{ modal.create_measure(users, projID) }}
+{{ modal.create_category() }}
+{{ modal.create_usecase(measures,cat) }}
 
 {% endif %}
 

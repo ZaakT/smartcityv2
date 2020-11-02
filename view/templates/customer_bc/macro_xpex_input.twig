@@ -70,7 +70,9 @@
         {% endfor %}
     {% endfor %}
     {% if show %}
-        <tr class="table-primary"><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
+        {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+            <tr class="table-primary"><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
+        {% endif %}
         {% for ucID in listUcID %}
             {% for id_xpex,data in selXpex[ucID] %}
                     {% if id_xpex in _xpex[ucID]|keys %}
@@ -133,6 +135,11 @@
                         <th scope="col" colspan=1 class="text-uppercase">Growth</th>
                         <th scope="col" colspan=1 class="text-uppercase">Impact</th>
                     </tr>
+                    {% elseif type == "capex" or type == "deployment_costs" %}
+                     <tr>
+                        <th scope="col" colspan=2 class="text-uppercase">Components</th>
+                        <th scope="col" colspan={{type == "capex" ? 3 : 2}} class="text-uppercase">Baseline</th>
+                    </tr>                   
                     {% endif %}
                     <tr>
                         <th scope="col">Item</th>
