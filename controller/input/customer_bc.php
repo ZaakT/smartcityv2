@@ -419,7 +419,9 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $list_ratio = $listXpex[13];
                 $uc = $listXpex[14];
                 $compo = $listXpex[15];
-
+                    
+                $list_limite_schedule = getProjetSchedule($projID, $ucID);  
+                
 
                 /*
                 //var_dump($list_xpex_supplier);
@@ -434,7 +436,8 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 "selected"=>$proj[1],'part2'=>"Use Case",'selected2'=>$uc[1],'projID'=>$projID,'ucID'=>$ucID,'selXpex'=>$list_selXpex, 
                 "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
                 "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal, "xpex_supplier"=>$list_xpex_supplier
-                ,'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName));
+                ,'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName, 
+                "list_limite_schedule"=>$list_limite_schedule));
                 prereq_ipc(1);
                 prereq_CostBenefits();
                 prereq_ipc_sup();
@@ -728,7 +731,7 @@ function xpex_inputed($post, $sideBarName, $type){
                 "quantifiable"=>"noncash",
                 "noncash"=>"risks",
                 "risks"=>"summary"];
-                //header('Location: ?A='.$sideBarName.'&A2='.$next [$type].'&projID='.$projID.'&ucID='.$ucID);
+                header('Location: ?A='.$sideBarName.'&A2='.$next [$type].'&projID='.$projID.'&ucID='.$ucID);
             }
         } else {
             throw new Exception("There is no Project selected !");

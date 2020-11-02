@@ -177,15 +177,15 @@
         <a class="nav-item nav-link disabled" id="summary" href="?A=input_use_case_supplier&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
 
         <!-- Admin -->
-    {% elseif page=="admin" %}
+    {% elseif page == "admin" %}
         <h4 class="nav-item text-center">Administration</h4>
         <a class="nav-item nav-link" id="manage_db" href="?A=admin&amp;A2=manage_db"><span class="oi oi-pencil nav-link" title="pencil" aria-hidden="true"></span>Manage Database</a>
         <a class="nav-item nav-link disabled" id="id" href="">Other</a>
-    {% elseif page=="manage_db" %}
+    {% elseif page == "manage_db" %}
         <h4 class="nav-item text-center">Manage Database</h4>
         <a class="nav-item nav-link" id="manage_users" href="?A=admin&amp;A2=manage_db&amp;A3=manage_users"><span class="oi oi-people nav-link" title="people" aria-hidden="true"></span>Users</a>
         <a class="nav-item nav-link" id="manage_currency" href="?A=admin&amp;A2=manage_db&amp;A3=manage_currency"><span class="oi oi-globe nav-link" title="globe" aria-hidden="true"></span>Currency</a>
-        <a class="nav-item nav-link" id="manage_measures" href="?A=admin&amp;A2=manage_db&amp;A3=manage_measures"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Domains</a>
+        {#<a class="nav-item nav-link" id="manage_measures" href="?A=admin&amp;A2=manage_db&amp;A3=manage_measures"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Domains</a>
         <li class="active">
             <a href="#UCSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-item nav-link"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Use Cases</a>
             <ul class="collapse list-unstyled" id="UCSubmenu">
@@ -244,18 +244,18 @@
                     <a class="nav-item nav-link" id="manage_risks_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_risks_item">Risks Item</a>
                 </li>                
                 <li>
-                    <a class="nav-item nav-link" id="manage_equipment_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_equipment_revenue">Equipment Revenues Item (Supplier)</a> {#}Supplier only{#}
+                    <a class="nav-item nav-link" id="manage_equipment_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_equipment_revenue">Equipment Revenues Item (Supplier)</a> {#}{#}Supplier only{#}{#}
                 </li>
                 <li>
-                    <a class="nav-item nav-link" id="manage_deployment_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_deployment_revenue">Deployment Revenues Item (Supplier)</a> {#}Supplier only{#}
+                    <a class="nav-item nav-link" id="manage_deployment_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_deployment_revenue">Deployment Revenues Item (Supplier)</a> {#}{#}Supplier only{#}{#}
                 </li>
                 <li>
-                    <a class="nav-item nav-link" id="manage_operating_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_operating_revenue">Recurring Revenues Item (Supplier)</a> {#}Supplier only{#}
+                    <a class="nav-item nav-link" id="manage_operating_revenue" href="?A=admin&amp;A2=manage_db&amp;A3=manage_operating_revenue">Recurring Revenues Item (Supplier)</a> {#}{#}Supplier only{#}{#}
                 </li>
             </ul>
         </li>
         <a class="nav-item nav-link disabled" id="id" href=""><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Other</a>
-        
+        #}
         
         
         

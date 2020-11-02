@@ -55,8 +55,10 @@
         <h5>{{lorem|nl2br}}</h5>
     </div>
 </div>
+<div id="alerts_container"></div>
+
 {% if xpex_advice_from_ntt or xpex_advice_from_outside_ntt or xpex_advice_internal or  xpex_user_from_ntt or xpex_user_from_outside_ntt or xpex_user_internal or xpex_supplier %}
-    <form id="form_xpex_input" name="form_xpex_input" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=inputed&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return checkCapexPeriod() && checkCapexInput();">
+    <form id="form_xpex_input" name="form_xpex_input" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=inputed&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return checkXpexAll();">
 
     {{ list.list_xpex(selDevSym,xpex_supplier,[], [] ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "supplier") }}
 
@@ -80,6 +82,8 @@
 
 {% block scripts %}
     {{ parent() }}
+    <div id="pricing_start"   hidden>{{list_limite_schedule["pricing_start"]}}</div>
+    <div id="uc_end"   hidden>{{list_limite_schedule["uc_end"]}}</div>
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
     <script type="text/javascript">setNewDeviseXpex("{{selDevName}}");</script>
 {% endblock %}

@@ -20,6 +20,17 @@
     };
 })(jQuery);
 
+
+function monthDiff(d1, d2)
+{
+    month1 = parseInt(d1.split("-")[1]);
+    year1 = parseInt(d1.split("-")[0]);
+
+    month2 = parseInt(d2.split("-")[1]);
+    year2 = parseInt(d2.split("-")[0]);
+    return (year2-year1)*12 + month2-month1;
+}
+
 function submitForm(formName){
     $("#"+formName).submit();
 }
@@ -49,14 +60,16 @@ function countSelectedXpex(oForm) {
     }
 }
 
-function checkXpexInput(id){
+function checkXpexInput(id, idAlert){
     console.log("checkXpexInput()");
     var ret = true;
     id = id.getAttribute('id');
     var val = $("#"+id).val();
     console.log(id);
     var tab = $("#"+id).classes();
-    if(tab.includes("volume") || tab.includes("rampUpDurationt")){
+    var revenue_start = $("#pricing_start").text();
+    var uc_end = $("#uc_end").text();
+    if(tab.includes("volume")){
         //console.log(tab);
         val = val ? parseInt(val) : -1 ;
         //console.log(val);
@@ -137,17 +150,45 @@ function checkXpexInput(id){
             //$("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
-    }else if(tab.includes("revenueStart")){
-        if(val != ""){  // verification de la date ! 
-            $("#"+id).css("background","#C3E6CB");
-        }else{
+      
+
+    } else if(tab.includes("revenueStart")){
+        if(val == "" || monthDiff(val, revenue_start)>0  || monthDiff(val, uc_end)<0){
             $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+            if(val != ""){
+                addAlert("The start of revenue has to be beetwen "+revenue_start+" and "+uc_end+".", idAlert);
+                idAlert++;
+            }
+        } else {
+            //$(this).val(val);
+            $("#"+id).css("background","#C3E6CB");
         }
-        
+
+    }else if(tab.includes("rampUpDurationt")){
+        if(val == ""){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if($("#revenueStart_"+id.split("_")[1]).val()!=""){
+            if(monthDiff( uc_end, $("#revenueStart_"+id.split("_")[1]).val())>-val){
+                $("#"+id).css("background","salmon");
+                $("#"+id).val("");
+                addAlert("Revenuses must end before the Use Case ("+uc_end+").", idAlert);
+                idAlert++;
+                ret = false;
+            }
+            else{
+                $("#"+id).css("background","#C3E6CB");
+            }
+        }else{
+            $("#"+id).css("background","#C3E6CB");
+        }
 
     }
     calcTotXpex();
-    return ret;
+    return [idAlert, ret];
 }
 
 function calcTotXpex(){
@@ -167,6 +208,23 @@ function calcTotXpex(){
     });
 }
 
+function checkXpexAll(){
+    idAlert = 0;
+    ret = true;
+    $("input").each(function(){
+        res = checkXpexInput(this, idAlert);
+        idAlert = res[0];
+        ret = ret && res[1];
+    });
+    $("textarea").each(function(){
+        res = checkXpexInput(this, idAlert);
+        idAlert = res[0];
+        ret = ret && res[1];
+    });
+    calcTotXpex();
+    return ret;
+}
+
 function setNewDeviseXpex(name){
     deviseName = name;
     try{
@@ -174,13 +232,7 @@ function setNewDeviseXpex(name){
     } catch {
         //do nothing
     } finally {
-        $("input").each(function(){
-            checkXpexInput(this);
-        });
-        $("textarea").each(function(){
-            checkXpexInput(this);
-        });
-        calcTotXpex();
+        checkXpexAll();
     }
 }
 
