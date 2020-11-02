@@ -91,10 +91,39 @@ function verifIsSup(){
     }
 }
 
-function companyName(){
+function getProjID(){
     $projID = isset($_GET['projID']) ? $_GET['projID'] : "";
     $projID = isset($_SESSION['projID']) ? $_SESSION['projID'] : $projID ;
-    return getCompanyName($projID);
+}
+
+function getUserId(){
+    $user = getUser($_SESSION['username']);
+    if(isset($user[0])){
+        return $user[0];
+    }else{
+        return -1;
+    }
+}
+
+function companyName(){
+    if(isset($_SESSION['username'])){
+        $user = getUser($_SESSION['username']);
+        if(isset($user[7])){
+            return $user[7];
+        }
+    }
+    return "NoName";
+
+}
+
+function divisionName(){
+    if(isset($_SESSION['username'])){
+        $user = getUser($_SESSION['username']);
+        if(isset($user[8])){
+            return $user[8];
+        }
+    }
+    return "NoName";
 }
 
 function setLanguage($lang='en'){
@@ -105,3 +134,4 @@ function setLanguage($lang='en'){
 function getLanguage(){
     return isset($_SESSION['language']) ? $_SESSION['language'] : 'en';
 }
+

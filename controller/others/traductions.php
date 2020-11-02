@@ -11,7 +11,7 @@ $GLOBALS['dicTrad']=[
         "fr"=>"Langue :"
     ],
     "home_urbatisName" => [
-        "en"=>"URBATIS AI"
+        "en"=>"URBATIS AI platform"
     ],
     "home_1" => [
         "en"=>"Impact Value and Financial modeling"
@@ -66,16 +66,16 @@ $GLOBALS['dicTrad']=[
         "en"=>"Business Model"
     ],    
     "project_initialization" => [
-        "en"=>"Project Initialization"
+        "en"=>"Project"
     ],    
     "supplier_bc" => [
-        "en"=>"Supplier BC"
+        "en"=>"Supplier"
     ],    
     "input_project_overlay" => [
         "en"=>"Input Project Overlay"
     ],    
     "customer_bc" => [
-        "en"=>"Customer BC"
+        "en"=>"Customer"
     ],    
     "language" => [
         "en"=>"Language",

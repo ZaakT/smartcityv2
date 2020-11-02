@@ -120,7 +120,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName, companyName, divisionName FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -132,7 +132,9 @@ function getUser($username){
         $salt = $res['salt'];
         $profile=$res["profile"];
         $logoName = $res['logoName'];
-        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName];
+        $companyName = $res['companyName'];
+        $divisionName = $res['divisionName'];
+        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName, $companyName, $divisionName];
     } else {
         $user = [];
     }
@@ -189,9 +191,11 @@ function modifyUser($user){
                         SET username = ?,
                             salt = ?,
                             password = ?, 
-                            logoName = ?
+                            logoName = ?,
+                            companyName = ?,
+                            divisionName = ?
                         WHERE id = ?');
-    return $req->execute(array($user[1],$user[2],$user[3],$user[4], $user[0]));
+    return $req->execute(array($user[1],$user[2],$user[3],$user[4],$user[5],$user[6], $user[0]));
 }
 
 function deleteUser($userID){
@@ -1135,18 +1139,7 @@ function getPerimeterSupplier($projID){
     return $req->fetch();
 }
 
-function getCompanyName($projID){
-    if($projID == ""){
-        return "NoName";
-    }
-    getPerimeterSupplier($projID);
-    $comp = getPerimeterSupplier($projID)['company'];
 
-    if($comp == ""){
-        return "NoName";
-    }
-    return $comp;
-}
 
 
 // ---------------------------------------- SIZE ----------------------------------------

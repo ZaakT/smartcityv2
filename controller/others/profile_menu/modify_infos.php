@@ -61,8 +61,10 @@ function save_infos($twig,$is_connected,$post, $files){
         }else{
             $logoName = getLogoName();
         }
-        $userInfos = [$id,$username_new,$salt,$hashed, $logoName];
+        $userInfos = [$id,$username_new,$salt,$hashed, $logoName, $post['companyName'],$post['divisionName'] ];
         $_SESSION['logoName']=$logoName;
+        $_SESSION['companyName']=$post['companyName'];
+        $_SESSION['divisionName']=$post['divisionName'];
         modifyUser($userInfos);
         $_SESSION['username'] = $username_new;
         setcookie('username',$_SESSION['username']);

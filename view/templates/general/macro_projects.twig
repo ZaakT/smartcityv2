@@ -6,10 +6,10 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col">Name</th>
+                    <th scope="col">Current project</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Modification Date</th>
                     <th scope="col">Creation Date</th>
+                    <th scope="col">Last Modification Date</th>
                     {% if scopeMode %}<th scope="col">Project Scoping</th> {% endif %}
                     {% if costBenefitsMode %}<th scope="col">Costs Benefits</th> {% endif %}
                     {% if scheduleVerifMode %}<th scope="col">{{scheduleVerifModeText}}</th>{% endif %}
@@ -24,8 +24,8 @@
                     <td ><input type="radio" id='radio_proj{{((sessionProj == proj[0]) and selectable ) ? '_checked' : ""}}' name="radio_proj" value="{{ proj[0] }}" {{((sessionProj == proj[0]) and selectable ) ? 'checked' : ""}} {{selectable ? "" : "disabled"}} required></td>
                     <td>{{ proj[1] }}</td>
                     <td>{{ proj[2] }}</td>
-                    <td>{{ proj[7] }}</td>
                     <td>{{ proj[6] }}</td>
+                    <td>{{ proj[7] }}</td>
                     {# <td><span title={{proj[9] ? "check" : "x"}} class="oi oi-{{proj[9] ? "check" : "x"}} text-{{proj[9] ? "success" : "danger"}}"></span></td> #}
                     {% if scopeMode %}<td><img width=20 height=20 id="{{ proj[9] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[9] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
                     {% if costBenefitsMode %}<td><img width=20 height=20 id="{{ proj[10] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[10] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}

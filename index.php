@@ -35,6 +35,7 @@ $twig->addGlobal('userRole', getUserRole());
 $twig->addGlobal('isDev', isDev());
 $twig->addGlobal('isSup', isSup());
 $twig->addGlobal('companyName', companyName());
+$twig->addGlobal('divisionName', divisionName());
 $twig->addGlobal('language', getLanguage());
 $twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
 
