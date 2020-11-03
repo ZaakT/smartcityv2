@@ -68,7 +68,7 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 $operating_margin_nogo = floatval($post['operating_margin_nogo']);
 
                 insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $projID);
-                header('Location: ?A=input_project_common_supplier&A2=deal_criteria&projID=' . $projID);
+                header('Location: ?A=input_supplier&A2=deal_criteria&projID=' . $projID);
             }
             //throw new Exception("Not yet implemented !");
         }

@@ -100,7 +100,7 @@
     <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/discountRateForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/project_design/prereq_Project_Initailisation.js"></script>
 
-{% elseif sideBarName =='input_project_common' or sideBarName =='input_project_common_supplier' %}
+{% elseif sideBarName =='input_project_common' or sideBarName =='input_project_common_supplier' or sideBarName =='input_supplier' %}
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/xpexForm.js"></script>
     <script type="text/javascript" src="../../public/assets/js/custom/customer_bc/prereq_ipc.js"></script>
 
@@ -124,9 +124,9 @@
 
 {% endif %}
 
-{% if sideBarName == "input_project_common"or sideBarName =="input_use_case" or sideBarName =="customer_dashboards" or (sideBarName =="cost_benefits" and isSup) %}
+{% if sideBarName == "input_project_common"or sideBarName =="input_use_case" or sideBarName =="customer_dashboards" or (sideBarName =="cost_benefits" and isSup) or sideBarName =='input_supplier' %}
     <script>prereq_navbar("customer");</script>
-{% elseif sideBarName =="input_project_common_supplier" or sideBarName =="input_use_case_supplier" or sideBarName =="supplier_dashboards" %}
+{% elseif sideBarName =="input_project_common_supplier" or sideBarName =="input_use_case_supplier" or sideBarName =="supplier_dashboards"  or sideBarName =='input_supplier'%}
     <script>prereq_navbar("supplier");</script>
 {% endif %}
 {% endblock %}

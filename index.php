@@ -666,11 +666,12 @@ try{
             // ---------- Customer BC / Supplier BC ----------
             // **** 
             // ---------- Input Project Common SUPPLIER ----------
-            elseif($_GET['A']=='input_project_common_supplier'){
+            elseif($_GET['A']=='input_supplier'){
                 verifIsSup();
+                
                 if(isset($_GET['A2'])) {
                     if($_GET['A2']=='project_selection'){
-                        \general\project($twig,$is_connected, '?A=input_project_common_supplier&A2=proj_selected',  'input_project_common_supplier');
+                        \general\project($twig,$is_connected, '?A=input_supplier&A2=proj_selected',  'input_supplier');
                     } elseif($_GET['A2']=="create_proj"){
                         if(isset($_POST)){
                             \general\create_proj($_POST,$_GET['A'], "project_selection" );
@@ -690,7 +691,7 @@ try{
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;
-                            header('Location: ?A=input_project_common_supplier&A2=schedule&projID='.$projID);
+                            header('Location: ?A=input_supplier&A2=schedule&projID='.$projID);
                         }
                     } elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                         //Le projet est choisi
@@ -705,7 +706,7 @@ try{
                                                 alterProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
                                             }
 
-                                            header('Location: ?A=input_project_common_supplier&A2=equipment_revenues&projID='.$_SESSION['projID']);
+                                            header('Location: ?A=input_supplier&A2=equipment_revenues&projID='.$_SESSION['projID']);
                                         } else {
                                             throw new Exception("There was an error with the form.");
                                         }
@@ -747,10 +748,97 @@ try{
                          
                     }  elseif($_GET['A2']=="deal_criteria_input") {
                         deal_criteria_input_nogo_target($_POST, "supplier");
-                    } 
+                    } elseif($_GET['A2']=="use_case_cb"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                \general\use_case_selection($twig,$is_connected,'?A=input_use_case_supplier&A2=uc_selected&projID='.$_SESSION['projID'],$_GET['A'],$_SESSION['projID']);
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                            }
+                        }
+                        else {
+                            use_case_cb($twig,$is_connected);
+                        }
+                    } elseif($_GET['A2']=="uc_selected"){
+                        if(isset($_SESSION['projID'])){
+                            if($_SESSION['projID']!=0){
+                                if(isset($_POST['radio_uc'])){
+                                    $ucID = intval($_POST['radio_uc']);
+                                    $_SESSION['ucID']=$ucID;
+                                    header('Location: ?A='.$_GET['A'].'&A2=schedule&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                                }
+                                else {
+                                    header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                                }
+                            }
+                            else {
+                                header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                            }
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
+                        }
+                    } elseif($_GET['A2']=="schedule") {
+                        if(isset($_GET['A3'])) {
+                            if($_GET['A3'] == "save") {
+                                if($_POST) {
+                                    $keyDates = getProjetSchedule($_SESSION['projID'], $_SESSION['ucID']);
+                                    if(empty($keyDates)) {
+                                        insertProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
+                                    } else {
+                                        alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
+                                    }
+
+                                    header('Location: ?A=input_use_case_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);
+                                } else {
+                                    throw new Exception("There was an error with the form.");
+                                }
+                            }
+                        } else {
+                            use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        }
+                    } elseif($_GET['A2']=="equipment_revenues" || $_GET['A2']=="deployment_revenues" || $_GET['A2']=="operating_revenues" ||  $_GET['A2']=="capex" || $_GET['A2']=="opex" || $_GET['A2']=="deployment_costs"){
+                        if(isset($_GET['A3'])) {
+                            if($_GET['A3']=="create_xpex"){
+                                create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
+                            }elseif($_GET['A3']=="delete_xpex"){
+                                if(isset($_GET['id'])){
+                                    delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
+                                }else{
+                                    header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID']);
+                                }
+                            }elseif($_GET['A3']=="selected"){
+                                xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
+                            }elseif($_GET['A3']=="inputed"){
+                                if(isset($_POST)){
+                                    xpex_inputed($_POST, $_GET['A'], $_GET['A2']);
+                                }
+                                else{
+                                    header('Location: ?A='.$_GET['A'].'&A2='.$_GET['A2'].'&projID='.$_SESSION['projID'].'&ucID='.$_GET['ucID']);
+                                }
+                            }
+                        } else {
+                            $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
+                            xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],"supplier", $isTaken); 
+                            //use_case_equipment($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                        }
+                    }elseif($_GET['A2']=="summary"){
+                        if(isset($_GET['confirm'])){
+                            summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm'],$_GET['A']);
+                        } else {
+                            summary($twig,$is_connected,$_SESSION['projID'], 0,$_GET['A']);
+                        }
+                    }elseif($_GET["A2"]=="summary_inputed"){
+                        if(isset($_POST)){
+                            summary_inputed($twig,$is_connected,$_SESSION['projID'], $_POST, $_GET['A']);
+                        }else{
+                            header('Location: ?A='.$_GET['A'].'&A2=summary&projID='.$_SESSION['projID']);
+                        }
                     }  
+                }
                 } else {  
-                    \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
+                    \general\commonPage($twig,$is_connected, "?A=input_supplier&A2=project_selection", "input_supplier");
                 }
                 prereq_navbar("supplier");
             }
