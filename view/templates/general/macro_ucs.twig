@@ -1,4 +1,4 @@
-{% macro list_ucs(selScope,ucs,measures, scheduleMode) %}
+{% macro list_ucs(selScope,ucs,measures, scheduleMode, list_cat) %}
 
 <div class="row text-center">
     <div class="col mx-5 list-table">
@@ -8,7 +8,8 @@
                     <th scope="col"></th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
-                    <th scope="col">Measure</th>
+                    <th scope="col">Domain</th>
+                    <th scope="col">Solution</th>
                     {% if scheduleMode %}
                     <th scope="col">Schedule</th>
                     {% endif %}
@@ -23,6 +24,8 @@
                     <td scope="col">{{ ucs[uc]['name'] }}</td>
                     <td scope="col">{{ ucs[uc]['description'] }}</td>
                     <td scope="col">{{measures[meas]['name']}}</td>
+                    <td scope="col">{{ list_cat[ucs[uc]['id_cat']]["name"] }}</td>
+
                     {% if scheduleMode %}
                         <td scope="col"><img width=20 height=20 src="../../../public/img/{{ ucs[uc]["hasSchedule"] ? "full_circle" : "empty_circle" }}.png"/></td>
                     {% endif %}

@@ -2,12 +2,11 @@
 
 <div class="row text-center">
     <div class="col mt-5 mx-3 list-table">
-        <table class='table table-sm table-striped table-responsive-lg'>
+        <table id="uc_table" class='table table-sm table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col" class="check-col"></th>
                     <th scope="col">Domain</th>
-                    <th scope="col">Description</th>
                 </tr>
             </thead>
             <tbody>
@@ -18,8 +17,7 @@
                     {% else %}
                     <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" ></td>
                     {% endif %}
-                    <td style="width:35%;">{{ meas['name'] }}</td>
-                    <td style="width:55%;">{{ meas['description'] }}</td>
+                    <td>{{ meas['name'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -79,7 +77,7 @@
         <table id="cat_table" class='table table-sm table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col" colspan=2>Select Solution(s)</th>
+                    <th scope="col" colspan=2>Solution(s)</th>
                 </tr>
             </thead>
             <tbody>
@@ -118,7 +116,7 @@
         <table id="uc2_table" hidden class='table table-sm table-striped table-responsive-lg cat_{{id_cat}}'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
-                    <th scope="col" colspan=2>{#Select {{cat_item['name']}}#} Use Case</th>
+                    <th scope="col" colspan=2>{{cat_item['name']}}->Use Case(s)</th>
                 </tr>
             </thead>
             <tbody>

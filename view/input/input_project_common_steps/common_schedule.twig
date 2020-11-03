@@ -35,6 +35,61 @@
 		<div id="alerts_container">
 
 		</div>
+		
+
+
+<div class="justify-content-center row m-2 text-center text-dark">
+			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
+				<div>
+					<div class="form-group row">
+						<div class="col">
+							<h3>Project Key Dates</h3>
+						</div>
+						<div class="col">
+							<h3>Project Deployment Key Dates</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col  border-right">
+							<div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+								</div>
+								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}" oninput="updateBar()">
+							</div>
+
+							<div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
+								</div>
+								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}" oninput="updateBar()">
+							</div>
+
+						</div>
+						<div class="form-group col">
+							<div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+								</div>
+								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}" oninput="updateBar()">
+							</div>
+
+							<div class="input-group input-group-sm mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
+								</div>
+								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}" oninput="updateBar()">
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+
+		{#  FIN DU CONTENU #}
+
+
 		<div id="chart_schedule" hidden>
 			<div class="container-fluid" >
 
@@ -61,39 +116,6 @@
 				</div>
 			</div>
 		</div>
-
-
-<div class="justify-content-center row m-2 text-center text-dark">
-			<form class="w-100 pl-5 pr-5" id="supplier_schedule" name="supplier_schedule" action="?A=input_project_common_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{ projID }}" method="post">
-				<div>
-					<div class="form-group row">
-						<div class="col">
-							<h3>Project Key Dates</h3>
-						</div>
-						<div class="col">
-							<h3>Project Deployment Key Dates</h3>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col">
-							<label for="fname">Project Start Date</label>
-							<input class="form-control" type="date" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}" oninput="updateBar()">
-							<label for="lname">Project Duration (in months)</label>
-							<input class="form-control" type="text" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}" oninput="updateBar()">
-						</div>
-						<div class="form-group col">
-							<label for="fname">Deployment Start Date</label>
-							<input class="form-control" type="date" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}" oninput="updateBar()">
-							<label for="lname">Deployment Duration (in months)</label>
-							<input class="form-control" type="text" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}" oninput="updateBar()">
-						</div>
-					</div>
-				</div>
-			</form>
-		</div>
-
-
-		{#  FIN DU CONTENU #}
 
 		<div class="row m-3 text-center text-dark">
 			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="submitForm('supplier_schedule');"></button>
