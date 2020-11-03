@@ -29,7 +29,6 @@
         <!-- - Input - / Cost Benefits -->
     {% elseif page=="cost_benefits" or page=="input_use_case" %}
         <h4 class="nav-item text-center"> {% if isDev %} {{'- Input -\n Cost Benefits'|nl2br}} {% else %}{{'- Customer BC -\n Input Use Case'|nl2br}} {% endif %}</h4>        
-        <a class="nav-item nav-link" id="project_cb" href="?A=cost_benefits&amp;A2=project_cb"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project</a>
         <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=cost_benefits&amp;A2=use_case_cb&amp;projID={{ selectID }}"><span id="uc-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Cases</a>
         <div class="dropdown-divider"></div>
         <h4 class = "nav-item text-center">Cash-out</h4>
@@ -118,14 +117,12 @@
     <!-- - Customer BC -->
     {% elseif page=="input_project_common" %}
         <h4 class="nav-item text-center">Customer BC <br>Input Project Overlay </h4>
-        <a class="nav-item nav-link" id="project_selection" href="?A=input_project_common&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="capex" href="?A=input_project_common&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_project_common&amp;A2=deployment_costs&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment Costs</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_project_common&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         {#<a class="nav-item nav-link disabled" id="deal_criteria" href="?A=input_project_common&amp;A2=deal_criteria&amp;projID={{selectID}}"><span id="deal_criteria-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deal Criteria</a>#}
       {% elseif page=="customer_dashboards" %}
         <h4 class="nav-item text-center">Customer BC <br>Dashboards</h4>
-        <a class="nav-item nav-link" id="project_selection" href="?A=customer_dashboards&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="summary" href="?A=customer_dashboards&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
         <a class="nav-item nav-link disabled" id="project_details" href="?A=customer_dashboards&amp;A2=project_details&amp;projID={{selectID}}"><span id="project_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project Details</a>
         <a class="nav-item nav-link disabled" id="use_case_details" href="?A=customer_dashboards&amp;A2=use_case_details&amp;projID={{selectID}}"><span id="use_case_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Case Details</a>
@@ -135,7 +132,6 @@
     <!-- - Supplier BC -->
     {% elseif page=="input_project_common_supplier" %}
         <h4 class="nav-item text-center">Supplier BC <br>Input Project Overlay </h4>
-        <a class="nav-item nav-link" id="project_selection" href="?A=input_project_common_supplier&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="schedule" href="?A=input_project_common_supplier&amp;A2=schedule&amp;projID={{selectID}}"><span id="schedule-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Overlay Schedule</a>
         
         <li class="nav-item dropdown">
@@ -157,7 +153,6 @@
         <a class="nav-item nav-link disabled" id="deal_criteria" href="?A=input_project_common_supplier&amp;A2=deal_criteria&amp;projID={{selectID}}"><span id="deal_criteria-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deal Criteria</a>    
     {% elseif page=="supplier_dashboards" %}
         <h4 class="nav-item text-center">Supplier BC <br>Dashboards</h4>
-        <a class="nav-item nav-link" id="project_selection" href="?A=supplier_dashboards&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="summary" href="?A=supplier_dashboards&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
         <a class="nav-item nav-link disabled" id="project_details" href="?A=supplier_dashboards&amp;A2=project_details&amp;projID={{selectID}}"><span id="project_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project Details</a>
         <a class="nav-item nav-link disabled" id="use_case_details" href="?A=supplier_dashboards&amp;A2=use_case_details&amp;projID={{selectID}}"><span id="use_case_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use Case Details</a>
@@ -165,7 +160,6 @@
         <h4 class="nav-item text-center">Supplier BC <br>Scenario settings</h4>
     {% elseif page=="input_use_case_supplier" %}
         <h4 class="nav-item text-center">Supplier BC <br>Input Use Case</h4>
-        <a class="nav-item nav-link" id="project_selection" href="?A=input_use_case_supplier&amp;A2=project_selection"><span id="project-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Project selection</a>
         <a class="nav-item nav-link disabled" id="use_case_cb" href="?A=input_use_case_supplier&amp;A2=use_case_cb&amp;projID={{selectID}}"><span id="use_case_cb-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Use case selection</a>
         <a class="nav-item nav-link disabled" id="schedule" href="?A=input_use_case_supplier&amp;A2=schedule&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="schedule-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Schedule</a>
         <a class="nav-item nav-link disabled" id="equipment_revenues" href="?A=input_use_case_supplier&amp;A2=equipment_revenues&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="use_case_details-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Equipment Revenues</a>

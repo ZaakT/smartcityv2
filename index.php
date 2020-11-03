@@ -750,7 +750,7 @@ try{
                     } 
                     }  
                 } else {  
-                    \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=project_selection", "input_project_common_supplier");
+                    \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=schedule", "input_project_common_supplier");
                 }
                 prereq_navbar("supplier");
             }
@@ -835,59 +835,12 @@ try{
 
                 } else {  
                     //input_project_common($twig,$is_connected);
-                    \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=project_selection", "input_project_common");
+                    \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=capex", "input_project_common");
                 }
                 prereq_navbar("customer");
             }
 
-            // ---------- Deal Criteria ----------
-            /*elseif($_GET['A']=='deal_criteria'){
-                verifIsSup();
-                if(isset($_GET['A3']) and ($_GET['A3']=="" or $_GET['A3']=="supplier" or $_GET['A3']=="customer")){
-                    if(isset($_GET['A2'])){
-                        if($_GET['A2']=='project_selection'){
-                            \general\project($twig,$is_connected, '?A=deal_criteria&A2=proj_selected&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
-                        // --- SELECTED PROJECT ---
-                        }elseif($_GET['A2']=="create_proj"){
-                            if(isset($_POST)){
-                                \general\create_proj($_POST,$_GET['A'], "project_selection" );
-                            }
-                            else{
-                                
-                                header('Location: ?A='.$_GET['A'].'=&A2=project_selection');
-                            }
-                        }elseif($_GET['A2']=="delete_proj"){
-                            if(isset($_GET['id'])){
-                                \general\delete_proj($_GET['id'], $_GET['A'], "project_selection");
-                            }
-                            else {
-                                header('Location: ?A='.$_GET['A'].'&A2=project');
-                            }
-                        } elseif($_GET['A2']=="proj_selected"){
-                            if(isset($_POST['radio_proj'])){
-                                $projID = intval($_POST['radio_proj']);
-                                $_SESSION['projID']=$projID;
-                                header('Location: ?A=deal_criteria&A2=deal_criteria&projID='.$projID.'&A3='.$_GET['A3']);
-                            }
-                        // --- DEAL CRiTERIA ---
-                        } elseif($_GET['A2']=="deal_criteria"){
-                            if(isset($_SESSION['projID'])){
-                                deal_criteria($twig,$is_connected, $_SESSION['projID'], $_GET['A3']);
-                            }else{
-                                header('Location: ?A=deal_criteria&A2project_selection&A3='.$_GET['A3']);
-                            }
-                            
-                        } elseif($_GET['A2']=="deal_criteria_input") {
-                            deal_criteria_input_nogo_target($_POST, $_GET['A3']);
-                        }
-                    } else {  
-                        \general\commonPage($twig,$is_connected, '?A=deal_criteria&A2=project_selection&A3='.$_GET['A3'], 'deal_criteria_'.$_GET['A3']);
-                    }
-                }else{
-                    header('Location: ?A=home');
-                }
-                
-            }*/
+            
             // ---------- Dashborads ----------
             elseif($_GET['A']=='customer_dashboards'){
                 verifIsSup();
@@ -947,7 +900,7 @@ try{
                         }
                     }
                 } else{
-                    \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=project_selection', 'customer_dashboards');
+                    \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=summary', 'customer_dashboards');
 
                 }
                 prereq_navbar("customer");
@@ -999,7 +952,7 @@ try{
                         }
                     }
                 } else{
-                    \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=project_selection', 'supplier_dashboards');
+                    \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=summary', 'supplier_dashboards');
                 }
                 prereq_navbar("supplier");
             }
