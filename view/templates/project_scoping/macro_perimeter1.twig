@@ -1,6 +1,6 @@
-{% macro makeInput(type, value, idComplement) %}
+{% macro makeInput(type, value, idComplement, title) %}
     <div class="input-group mb-3" id="div_{{type}}_{{idComplement}}">
-        <input type="text" class="form-control {{type}}" id="{{type}}_{{idComplement}}" name="{{type}}_{{idComplement}}" value="{{value}}">
+        <input type="text" class="form-control {{type}}" id="{{type}}_{{idComplement}}" name="{{type}}_{{idComplement}}" value="{{value}}" placeholder = "New {{title}}">
         <div class="input-group-append">
             <span class="input-group-text oi oi-plus" id="create_{{type}}_{{idComplement}}" onclick="addInput('{{type}}')"></span>
             <span class="oi oi-trash text-dark input-group-text" id="delete_{{type}}_{{idComplement}}" onclick="deleteInput('{{type}}','{{idComplement}}')"></span>
@@ -14,7 +14,7 @@
         {% if data %}
             {% set i = 0 %}
             {% for id in data|keys %}
-                {{_self.makeInput(type, data[id], i)}}
+                {{_self.makeInput(type, data[id], i, title)}}
                 {% set i = i + 1 %}
             {% endfor %}
         {% else %}

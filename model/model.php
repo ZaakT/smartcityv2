@@ -1117,19 +1117,17 @@ function insert_perimeter_supplier($projID ,$post){
     $db = dbConnect();
     $country = isset($post['inputCountry']) ? $post['inputCountry'] : "";
     $city = isset($post['inputCity']) ? $post['inputCity'] : "";
+    $area = isset($post['inputArea']) ? $post['inputArea'] : "";
     $name = isset($post['inputName']) ? $post['inputName'] : "";
-    $department = isset($post['inputDepartment']) ? $post['inputDepartment'] : "";
-    $company = isset($post['inputCompany']) ? $post['inputCompany'] : "";
-    $team = isset($post['inputTeam']) ? $post['inputTeam'] : "";
 
     $req = $db->prepare('DELETE FROM `supplier_perimeter` WHERE `supplier_perimeter`.`proj_id` =  ?');  
     $req->execute(array($projID));
 
 
     $req = $db->prepare("INSERT INTO supplier_perimeter
-                            (proj_id, country, city, name, department, company, team)
-                            VALUES (?,?,?,?,?,?,?)");
-    $ret = $req->execute(array($projID,$country, $city, $name , $department, $company , $team ));
+                            (proj_id, country, city, name, area)
+                            VALUES (?,?,?,?,?)");
+    $ret = $req->execute(array($projID,$country, $city, $name , $area ));
 }
 
 function getPerimeterSupplier($projID){
@@ -1140,7 +1138,35 @@ function getPerimeterSupplier($projID){
 }
 
 
+function getPerimeterData($projID){
+    $db = dbConnect();
+    $list = ["department"=>[], "team"=>[]];
+    $req = $db->prepare('SELECT * FROM `supplier_perimeter_data` WHERE `proj_id` =  ? ORDER BY data ASC;');  
+    $req->execute(array($projID));
+    while($row = $req->fetch()){
+        array_push($list[$row['type']],$row['data']);
+    }
+    return $list;
 
+}
+
+function insertPerimeterSupplierData($post, $projID){
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM supplier_perimeter_data WHERE proj_id=?");
+    $req->execute(array($projID));
+    $req = $db->prepare("INSERT INTO supplier_perimeter_data 
+                            (proj_id, data, type)
+                            VALUE (?,?,?)");
+    foreach ($post as $key => $value) {
+        $type = explode("_", $key)[0];
+        if(($type == "department" || $type == "team") && $value != ""){
+            $req->execute(array($projID, $value, $type));
+        }
+    }
+
+
+
+}
 
 // ---------------------------------------- SIZE ----------------------------------------
 

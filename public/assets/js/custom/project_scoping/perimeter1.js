@@ -30,7 +30,9 @@ function createInput(type, father){
     newInput.type = "text";
     newInput.id = type+"_"+newID;
     newInput.name = type+"_"+newID;
-    divCont.appendChild(newInput)
+    newInput.setAttribute('placeholder',"New "+type);
+
+    divCont.appendChild(newInput);
 
     //We create the 2nd div
     var divModal = document.createElement("div");

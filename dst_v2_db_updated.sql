@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 02 nov. 2020 à 12:29
+-- Généré le :  mar. 03 nov. 2020 à 13:47
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -3089,7 +3089,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1),
 (28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0),
-(30, 'ntt', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-02 13:23:04', 16, 1, 0);
+(30, 'ntt', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-03 14:44:32', 16, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -4367,12 +4367,10 @@ CREATE TABLE IF NOT EXISTS `shared_ucm` (
 DROP TABLE IF EXISTS `supplier_perimeter`;
 CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
   `proj_id` int(10) UNSIGNED NOT NULL,
-  `country` varchar(256) NOT NULL,
-  `city` varchar(256) NOT NULL,
-  `name` varchar(256) NOT NULL,
-  `department` varchar(256) NOT NULL,
-  `company` varchar(256) NOT NULL,
-  `team` varchar(256) NOT NULL,
+  `country` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `city` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `name` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `area` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`proj_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -4380,13 +4378,38 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter` (
 -- Déchargement des données de la table `supplier_perimeter`
 --
 
-INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `department`, `company`, `team`) VALUES
-(21, 'a', 'Compiegne', 'Diego MEJIA', '12', 'Google', 'team a'),
-(22, '', '', '', '', '', ''),
-(23, 'USA', 'Las Vegas', 'CIty of Las Vegas', 'Plice departement', 'Smart Solution Corp', 'team a'),
-(24, '', '', '', '', 'verifDash', ''),
-(29, '', '', '', '', 'Insigth', ''),
-(30, '', '', '', '', 'NTT', '');
+INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) VALUES
+(21, 'a', 'Compiegne', 'Diego MEJIA', ''),
+(22, '', '', '', ''),
+(23, 'USA', 'Las Vegas', 'CIty of Las Vegas', ''),
+(24, '', '', '', ''),
+(29, '', '', '', ''),
+(30, 'C1', 'C2', 'name 4', 'Area 3');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `supplier_perimeter_data`
+--
+
+DROP TABLE IF EXISTS `supplier_perimeter_data`;
+CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
+  `proj_id` int(10) UNSIGNED NOT NULL,
+  `data` varchar(256) NOT NULL,
+  `type` enum('department','team') NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_perimeter_data`
+--
+
+INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
+(30, 'team b', 'team', 43),
+(30, 'team a', 'team', 42),
+(30, 'dep 02', 'department', 41),
+(30, 'dep 01', 'department', 40);
 
 -- --------------------------------------------------------
 
@@ -4403,7 +4426,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `advice_user` enum('advice','user') NOT NULL,
   `unit` varchar(256) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -4430,7 +4453,8 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (21, 'rec', 'operating', '', 'user', ''),
 (22, 'dep 1', 'deployment', '', 'user', 'unitttt'),
 (23, 'rec', 'operating', '', 'user', ''),
-(24, 'reeev', 'equipment', '', 'user', '');
+(24, 'reeev', 'equipment', '', 'user', ''),
+(25, 'eee', 'equipment', '', 'user', '');
 
 -- --------------------------------------------------------
 
@@ -4473,7 +4497,8 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (21, 11),
 (22, -1),
 (23, -1),
-(24, 22);
+(24, 22),
+(25, 67);
 
 -- --------------------------------------------------------
 
@@ -4516,7 +4541,8 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (21, 21),
 (22, 29),
 (23, 29),
-(24, 29);
+(24, 29),
+(25, 30);
 
 -- --------------------------------------------------------
 
@@ -5665,6 +5691,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `profile` enum('d','s') NOT NULL,
   `logoName` text NOT NULL,
+  `companyName` text NOT NULL,
+  `divisionName` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -5674,16 +5702,16 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`, `logoName`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd', ''),
-(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd', ''),
-(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', ''),
-(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', ''),
-(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', ''),
-(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.'),
-(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', ''),
-(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', ''),
-(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '');
+INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`, `logoName`, `companyName`, `divisionName`) VALUES
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd', '', '', ''),
+(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd', '', '', ''),
+(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', '', '', ''),
+(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', '', '', ''),
+(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', '', '', ''),
+(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.', '', ''),
+(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', '', '', ''),
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '', '', ''),
+(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '16.', 'NTT', 'Division 1 ');
 
 -- --------------------------------------------------------
 

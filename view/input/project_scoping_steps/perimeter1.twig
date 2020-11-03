@@ -54,7 +54,7 @@
 								<label for="inputName">Name</label>
 								<input type="text" class="form-control" id="inputName" name="inputName" value="{{data['name']}}">
 							</div>
-							{{list.makeInputList([], "Department", "department")}}
+							{{list.makeInputList(dataList["department"], "Department", "department")}}
 						</div>
 						<div class="col-4 text-center">
 							<h3 class="row-md-12 mx-auto">About {{companyName}} </h3>
@@ -63,7 +63,7 @@
 								<input type="text" class="form-control" id="inputCompany" name="inputCompany" value="{{companyName}}" disabled>
 							</div>
 							<div class="form-group row-md-4">
-								{{list.makeInputList([], "Team", "team")}}
+								{{list.makeInputList(dataList["team"], "Team", "team")}}
 							</div>
 						</div>
 
@@ -81,6 +81,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" src="../../public/assets/js/custom/project_design/prereq_Project_Initailisation.js"></script>
 <script type="text/javascript" src="../../public/assets/js/custom/project_scoping/perimeter1.js"></script>
 
 {% endblock %}
