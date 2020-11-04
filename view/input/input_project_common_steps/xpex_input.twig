@@ -23,8 +23,6 @@
     {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from #{companyName} and outside of #{companyName}." %}
 {% elseif type == "opex" %}
     {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from #{companyName} and outside of #{companyName}." %}
-{% elseif type == "opex" %}
-    {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from #{companyName} and outside of #{companyName}." %}
 {% elseif type == "equipment_revenues" %}
     {% set lorem = "For each Equipment Revenue item, please input Unit Costs and  Volumes (per month) to be generated from the sale of such equipment item(s)." %}
 {% elseif type == "deployment_revenues" %}
@@ -43,6 +41,8 @@
     {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Non Quantifiable Benefit items, and select % probability of occurrence to calculate impact." %}
 {% elseif type == "risks" %}
     {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Risk items, and select % probability of occurrence to calculate Risk impact." %}
+{% elseif type == "revenuesProtection" %}
+    {% set lorem = "lorem" %}
 {% endif %}
 
 
@@ -58,6 +58,7 @@
 <div id="alerts_container"></div>
 
 {% if xpex_advice_from_ntt or xpex_advice_from_outside_ntt or xpex_advice_internal or  xpex_user_from_ntt or xpex_user_from_outside_ntt or xpex_user_internal or xpex_supplier %}
+
     <form id="form_xpex_input" name="form_xpex_input" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=inputed&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return checkXpexAll();">
 
     {{ list.list_xpex(selDevSym,xpex_supplier,[], [] ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "supplier") }}

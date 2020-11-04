@@ -2371,6 +2371,15 @@ function checkRevenues($projID,$ucID){
         return 2;
     }
 }
+function checkRevenuesProtection($projID,$ucID){
+    $listSel = getListSelRevenuesProtection($projID,$ucID);
+    if(!empty($listSel)){
+        echo "<script>checkProgress('revenuesProtection');</script>";
+        return 1;
+    } else {
+        return 2;
+    }
+}
 
 function checkCashReleasing($projID,$ucID){
     $listSel = getListSelCashReleasing($projID,$ucID);
@@ -2465,6 +2474,7 @@ function checkProgress(){
             checkImplem($projID,$ucID);
             checkOpex($projID,$ucID);
             checkRevenues($projID,$ucID);
+            checkRevenuesProtection($projID,$ucID);
             checkCashReleasing($projID,$ucID);
             checkWiderCash($projID,$ucID);
             checkQuantifiable($projID,$ucID);

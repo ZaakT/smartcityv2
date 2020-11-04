@@ -1619,7 +1619,167 @@ function insertSelDiscountRate($projID,$val){
 
 
 
-// ---------------------------------------- CAPEX----------------------------------------
+
+// ---------------------------------------- REVENUES-PROTECTION ----------------------------------------
+function getRevenuesProtectionUserItem($projID,$ucID,$name){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM revenuesprotection_item_user
+                            INNER JOIN revenuesprotection_uc
+                                INNER JOIN revenuesprotection_item
+                                    WHERE revenuesprotection_item_user.id_proj = ?
+                                        and revenuesprotection_item.id = revenuesprotection_item_user.id
+                                        and revenuesprotection_uc.id_uc = ?
+                                        and revenuesprotection_item.name = ?
+                        ");
+    $req->execute(array($projID,$ucID,$name));
+    return $req->fetchAll();
+}
+
+
+function getListRevenuesProtectionUser($projID,$ucID){
+    $db = dbConnect();
+
+    $req = $db->prepare("SELECT revenuesprotection_item.id,name,description, unit
+                            FROM revenuesprotection_item_user
+                            INNER JOIN revenuesprotection_uc
+                                INNER JOIN revenuesprotection_item
+                                    WHERE revenuesprotection_uc.id_uc = ?
+                                        and revenuesprotection_item.id = revenuesprotection_uc.id_item
+                                        and revenuesprotection_item_user.id_proj = ?
+                                        and revenuesprotection_item_user.id = revenuesprotection_item.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit= $row['unit'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'unit'=>$unit];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'unit'=>$unit];
+        }
+    }
+    return $list;
+}
+
+function getListSelRevenuesProtection($projID,$ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT id_item,impact, current_revenues, unit
+                            FROM input_revenuesprotection
+                            INNER JOIN revenuesprotection_item
+                                WHERE  input_revenuesprotection.id_uc = ? and id_proj = ? and id_item = revenuesprotection_item.id
+                            ORDER BY revenuesprotection_item.name
+                            ");
+    $req->execute(array($ucID,$projID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id_item']);
+        $impact = floatval($row['impact']);
+        $current_revenues = floatval($row['current_revenues']);
+        $unit = $row['unit'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['impact'=>$impact,'current_revenues'=>$current_revenues,'unit'=>$unit];
+        } else {
+            $list[$id_item] = ['impact'=>$impact,'current_revenues'=>$current_revenues, 'unit'=>$unit];
+        }
+    }
+    return $list;
+}
+
+
+function insertRevenuesProtectionUser($projID,$ucID,$revenuesprotection_data){
+    $db = dbConnect();
+    $ret = false;
+    $db->exec('DROP PROCEDURE IF EXISTS `add_revenuesprotection`;');
+    $db->exec(' CREATE PROCEDURE `add_revenuesprotection`(
+                            IN revenuesprotection_name VARCHAR(255),
+                            IN revenuesprotection_desc VARCHAR(255),
+                            IN idUC INT,
+                            IN idProj INT
+                            )
+                            BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO revenuesprotection_item (name,description)
+                                    VALUES (revenuesprotection_name,revenuesprotection_desc);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO revenuesprotection_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO revenuesprotection_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END
+                                ');
+    $req = $db->prepare('CALL add_revenuesprotection(?,?,?,?);');
+    $ret = $req->execute(array($revenuesprotection_data['name'],$revenuesprotection_data['description'],$ucID,$projID));
+    return $ret;
+    
+}
+
+function deleteRevenuesProtectionUser($idRevenuesProtection){
+    $db = dbConnect();
+    $req = $db->prepare('DELETE FROM revenuesprotection_item WHERE id = ?');
+    return $req->execute(array($idRevenuesProtection));
+}
+
+function insertSelRevenuesProtection($projID,$ucID,$list){
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("INSERT INTO input_revenuesprotection
+                            (id_item,id_proj,id_uc)
+                            VALUES (?,?,?)");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($id_item,$projID,$ucID));
+    }
+    return $ret;
+}
+
+function deleteSelRevenuesProtection($projID,$ucID,$list){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_revenuesprotection WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    foreach ($list as $id_item) {
+        $ret = $req->execute(array($projID,$ucID,$id_item));
+    }
+    return $ret;
+}
+
+function insertRevenuesProtectionInputed($projID,$ucID,$list){
+    //var_dump($list);
+    $db = dbConnect();
+    $ret = false;
+    $req = $db->prepare("UPDATE input_revenuesprotection
+                            SET impact = ?,
+                            current_revenues = ?
+                            WHERE id_proj = ? and id_uc = ? and id_item = ?");
+    $req2 = $db->prepare("UPDATE revenuesprotection_item
+                            SET unit = ?
+                            WHERE id = ?");
+    foreach ($list as $id_item => $data) {
+        $ret = $req->execute(array($data['impact'],$data['currentRevenues'],$projID,$ucID,$id_item));        
+        if(isset($data['unit'])){
+            $ret = $req2->execute(array( $data['unit'], $id_item));
+        }
+    }
+
+
+    return $ret;
+}
+
+function deleteAllSelRevenuesProtection($projID,$ucID){
+    $ret = false;
+    $db = dbConnect();
+    $req = $db->prepare("DELETE FROM input_revenuesprotection WHERE id_proj = ? and id_uc = ?");
+    $ret = $req->execute(array($projID,$ucID));
+    return $ret;
+}
+
+
+// ---------------------------------------- CAPEX ----------------------------------------
 
 function getCapexUserItem($projID,$ucID,$name){
     $db = dbConnect();

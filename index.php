@@ -1151,6 +1151,7 @@ try{
                     $_GET['A2']=="capex" || 
                     $_GET['A2']=="opex" || 
                     $_GET['A2']=="revenues" || 
+                    $_GET['A2']=="revenuesProtection" || 
                     $_GET['A2']=="cashreleasing" || 
                     $_GET['A2']=="widercash" || 
                     $_GET['A2']=="quantifiable" || 

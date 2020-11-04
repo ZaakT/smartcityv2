@@ -13,9 +13,9 @@ function prereq_CostBenefits1(check){
 
 function prereq_CostBenefits2(check,hasRevSchedule){
     if(hasRevSchedule){
-        var parts_cond = ["capex","implem", "deployment_costs","opex","revenues","cashreleasing","widercash","quantifiable","noncash","risks","summary"];
+        var parts_cond = ["capex","implem", "deployment_costs","opex","revenues", "revenuesProtection","cashreleasing","widercash","quantifiable","noncash","risks","summary"];
     } else {
-        var parts_cond = ["capex","implem", "deployment_costs","opex","cashreleasing","widercash","quantifiable","noncash","risks","summary"];
+        var parts_cond = ["capex","implem", "deployment_costs","opex", "revenuesProtection","cashreleasing","widercash","quantifiable","noncash","risks","summary"];
     }
     if(check){
         parts_cond.forEach(part => {
@@ -34,6 +34,7 @@ function prereq_CostBenefits2(check,hasRevSchedule){
 } */
 
 function checkProgress(part){
+    console.log("we check :"+part);
     $("#"+part+"-item").removeClass("d-none");
 }
 

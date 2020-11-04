@@ -119,6 +119,9 @@ $GLOBALS['dicTrad']=[
     "equipment_revenues" => [
         "en"=>"Equipement Sales"
     ],
+    "revenuesProtection" => [
+        "en"=>"Revenues Protection"
+    ],
     "deployment_revenues" => [
         "en"=>"Deployment Sales"
     ],

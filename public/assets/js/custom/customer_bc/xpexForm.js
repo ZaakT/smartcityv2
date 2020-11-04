@@ -89,7 +89,7 @@ function checkXpexInput(id, idAlert){
             //console.log("rat_"+id[1]);
             $("#rat_"+id[1]).val(ratio);
         } 
-    } else if (tab.includes("unitCost") || tab.includes("period") || tab.includes("unitRev") ){
+    } else if (tab.includes("unitCost") || tab.includes("period") || tab.includes("unitRev") || tab.includes("currentRevenues")  ){
         val = val ? parseFloat(val) : -1 ;
         var temp = String(val).split(".");
         if(val < 0.){
@@ -118,6 +118,19 @@ function checkXpexInput(id, idAlert){
 
         $("#"+id).css("background","#C3E6CB");
 
+    }else if(tab.includes("impact100")){
+        val = val ? parseInt(val) : -1 ;
+        if(val < 0){
+            $("#"+id).css("background","salmon");
+            $("#"+id).val("");
+            ret = false;
+        } else if(val > 100) {
+            $("#"+id).css("background","salmon");
+            ret = false;
+        } else {
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
+        }
     }else if(tab.includes("impact")){
         val = val ? parseInt(val) : -1 ;
         console.log("dans impact");
