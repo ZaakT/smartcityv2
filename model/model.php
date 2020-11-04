@@ -912,34 +912,38 @@ function getSolutionByUcID($ucID){
 
 function insertXpexcCat($solID, $name, $xpexType){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO xpex_cat (name,id_solution, xpex_type) VALUES (?,?,?)');
+    $req = $db->prepare('INSERT INTO xpex_cat (name,id_uc, xpex_type) VALUES (?,?,?)');
     return $req->execute(array( $name,$solID, $xpexType));   
 }
 
 function getListXpexCat($xpexType, $ucID){
-
-    if($xpexType != "capex" && 
-    $xpexType != "opex" &&
-    $xpexType != "cashreleasing" &&
-    $xpexType != "implem" && 
-    $xpexType != "noncash" && 
-    $xpexType != "quantifiable" && 
-    $xpexType != "revenuesprotection" && 
-    $xpexType != "revenues" && 
-    $xpexType != "risk" && 
-    $xpexType != "supplier_revenues" &&
-    $xpexType != "widercash" )
+    $typeAdaptation = [
+        "capex"=>"capex",
+        "opex"=>"opex",
+        "cashreleasing"=>"cashreleasing",
+        "deployment_costs"=>"implem",
+        "implem"=>"implem",
+        "noncash"=>"noncash",
+        "revenuesProtection"=>"revenuesprotection",
+        "revenues"=>"revenues",
+        "risks"=>"risk",
+        "equipment_revenues"=>"supplier_revenues",
+        "deployment_revenues"=>"supplier_revenues",
+        "operating_revenues"=>"supplier_revenues",
+        "widercash"=>"widercash",
+        "quantifiable"=>"quantifiable"
+    ];
+    if(!array_key_exists($xpexType, $typeAdaptation) )
     {
         throw new Exception("Error Bad Xpex Type", 1);
     }
+
 
     $db = dbConnect();
     //Select all the category of the UC (no matter if we should check for others UC of the solution)
     $req = $db->prepare("SELECT id_cat, xpex_cat.name
                         FROM xpex_cat
-                        JOIN ".$xpexType."_item
-                        ON cat = id_cat
-                        WHERE id = ?");
+                        WHERE id_uc = ?");
     $req->execute(array($ucID));
     $listCat = [];
     while($row = $req->fetch()){

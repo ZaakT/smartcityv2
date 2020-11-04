@@ -109,7 +109,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             'part2'=>"Use Case",'selected2'=>$uc[1], 'projID'=>$projID, 'ucID'=>$ucID,
             "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
             "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,"xpex_supplier"=>$list_xpex_supplier,
-            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName ));
+            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName, "xpexCategories"=>$list_xpex_cat ));
             prereq_ipc(1);
             prereq_CostBenefits();
             prereq_ipc_sup();
@@ -873,8 +873,8 @@ function create_xpex_cat($twig,$is_connected, $post,  $type, $sideBarName,$side)
     $projID = getProjID();
     if($projID!=-1){
         $ucID = $post['ucID'];
+        insertXpexcCat($ucID, $post['name'], $type);
     }
-    $sol = getSolutionByUcID($ucID);
-    insertXpexcCat($sol["id"], $post['name'], $type);
+    //$sol = getSolutionByUcID($ucID);
     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
 }
