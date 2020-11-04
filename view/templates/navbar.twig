@@ -138,7 +138,7 @@
         <a class="nav-link" href="?A=project_sdesign&amp;A2=project">{{traduction.getText("project_initialization")}} <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_supplier" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("supplier_bc")}} </a>
+        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_supplier" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{traduction.getText("supplier_bc")}} </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?A=input_project_common_supplier">{{traduction.getText("input_project_overlay")}} </a>
           <a class="dropdown-item" href="?A=input_use_case_supplier">{{traduction.getText("input_use_case")}}</a>
@@ -147,7 +147,7 @@
       </li>
       {#                  CUSTOMERS BC              #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
+        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?A=input_project_common">{{traduction.getText("input_project_overlay")}} </a>
           <a class="dropdown-item" href="?A=input_use_case">{{traduction.getText("input_use_case")}}</a>
@@ -222,3 +222,4 @@
 
 
 {% endmacro %}
+

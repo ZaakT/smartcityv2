@@ -38,6 +38,7 @@ $twig->addGlobal('companyName', companyName());
 $twig->addGlobal('divisionName', divisionName());
 $twig->addGlobal('language', getLanguage());
 $twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
+$twig->addGlobal('GlobalProjID', getProjID());
 
 
 $is_connected = isConnected();
@@ -1035,7 +1036,12 @@ try{
                         } else {
                             use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
                         }
-                    } elseif($_GET['A2']=="equipment_revenues" || $_GET['A2']=="deployment_revenues" || $_GET['A2']=="operating_revenues" ||  $_GET['A2']=="capex" || $_GET['A2']=="opex" || $_GET['A2']=="deployment_costs"){
+                    } elseif($_GET['A2']=="equipment_revenues" || 
+                    $_GET['A2']=="deployment_revenues" || 
+                    $_GET['A2']=="operating_revenues" ||  
+                    $_GET['A2']=="capex" || 
+                    $_GET['A2']=="opex" || 
+                    $_GET['A2']=="deployment_costs"){
                         if(isset($_GET['A3'])) {
                             if($_GET['A3']=="create_xpex"){
                                 create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
@@ -1170,6 +1176,9 @@ try{
                                     }elseif($_GET['A3']=="create_xpex"){
                                         $side = isDev() ? "projDev" : "customer";
                                         create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
+                                    }elseif($_GET['A3']=="create_xpex_cat"){
+                                        $side = isDev() ? "projDev" : "customer";
+                                        create_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 

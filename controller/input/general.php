@@ -41,6 +41,9 @@ function create_proj($post, $sideBarName, $A2){
 function delete_proj($idProj, $sideBarName, $A2){
     // var_dump($idProj);
     deleteProj($idProj);
+    if($idProj==getProjID()){
+        unset($_SESSION["projID"]);
+    }
     header('Location: ?A='.$sideBarName.'&A2='.$A2);
 }
 

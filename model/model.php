@@ -891,6 +891,64 @@ function update_ModifDate_proj($projID){
     return $req->execute(array($projID));
 }
 
+function getSolutionByUcID($ucID){
+    $db = dbConnect();
+    //use_case_cat
+    $req = $db->prepare('SELECT id_cat
+                        FROM use_case
+                        WHERE id = ?');
+    $req->execute(array($ucID));
+    $idSol = -1;
+    while ($row = $req->fetch()){
+        $idSol = $row["id_cat"];
+    }
+
+    $req = $db->prepare('SELECT *
+                        FROM use_case_cat
+                        WHERE id = ?');
+    $req->execute(array($idSol));
+    return $req->fetch();
+}
+
+function insertXpexcCat($solID, $name, $xpexType){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO xpex_cat (name,id_solution, xpex_type) VALUES (?,?,?)');
+    return $req->execute(array( $name,$solID, $xpexType));   
+}
+
+function getListXpexCat($xpexType, $ucID){
+
+    if($xpexType != "capex" && 
+    $xpexType != "opex" &&
+    $xpexType != "cashreleasing" &&
+    $xpexType != "implem" && 
+    $xpexType != "noncash" && 
+    $xpexType != "quantifiable" && 
+    $xpexType != "revenuesprotection" && 
+    $xpexType != "revenues" && 
+    $xpexType != "risk" && 
+    $xpexType != "supplier_revenues" &&
+    $xpexType != "widercash" )
+    {
+        throw new Exception("Error Bad Xpex Type", 1);
+    }
+
+    $db = dbConnect();
+    //Select all the category of the UC (no matter if we should check for others UC of the solution)
+    $req = $db->prepare("SELECT id_cat, xpex_cat.name
+                        FROM xpex_cat
+                        JOIN ".$xpexType."_item
+                        ON cat = id_cat
+                        WHERE id = ?");
+    $req->execute(array($ucID));
+    $listCat = [];
+    while($row = $req->fetch()){
+        $listCat[$row['id_cat']] = $row['name'];
+    }
+
+    return $listCat;
+
+}
 
 function getListUCs(){
     $db = dbConnect();

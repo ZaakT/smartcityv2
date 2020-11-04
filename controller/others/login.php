@@ -92,8 +92,8 @@ function verifIsSup(){
 }
 
 function getProjID(){
-    $projID = isset($_GET['projID']) ? $_GET['projID'] : "";
-    $projID = isset($_SESSION['projID']) ? $_SESSION['projID'] : $projID ;
+    $projID = isset($_SESSION['projID']) ? $_SESSION['projID'] : "-1" ;
+    return $projID;
 }
 
 function getUserId(){
