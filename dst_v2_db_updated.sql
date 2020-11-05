@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 04 nov. 2020 à 16:39
+-- Généré le :  jeu. 05 nov. 2020 à 13:04
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -6324,18 +6324,19 @@ INSERT INTO `widercash_uc` (`id_item`, `id_uc`) VALUES
 DROP TABLE IF EXISTS `xpex_cat`;
 CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `id_cat` int(11) NOT NULL AUTO_INCREMENT,
-  `id_solution` int(11) NOT NULL,
+  `id_uc` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
 --
 
-INSERT INTO `xpex_cat` (`id_cat`, `id_solution`, `name`, `xpex_type`) VALUES
-(1, 25, 'eee', 'capex');
+INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`) VALUES
+(1, 25, 'eee', 'capex'),
+(2, 67, 'eeeee', 'capex');
 
 -- --------------------------------------------------------
 
