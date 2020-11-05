@@ -5,11 +5,12 @@
     {% endif %}
 {% endmacro  %}
 
-{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, listUcsName, Mode = "suggested" ) %}
+{% macro sub_list_xpex(xpex,projID=0,ucID=0,selXpex=[], type="capex", sideBarName, listUcID, listUcsName, Mode = "suggested", categoryID, xpexCategoriesSubList ) %}
 {% import "/templates/customer_bc/modal_xpex.twig" as modal %}
 {% for ucID in listUcID %}
     {% for id,item in xpex[ucID] %}
-        <tr id = "tr_{{ id }} ucID_{{ucID}}" scope="row">
+        {% if item['cat']== categoryID %}
+        <tr id = "tr_{{ id }} ucID_{{ucID}}" scope="row" class = "cat_{{categoryID}}">
             <td class="check-col align-middle"><input type="checkbox" {{Mode == "supplier" ? "checked disabled"}}  onclick="countSelectedXpex(form_xpex);" id='{{ id }}' name="{{ucID}}_{{ id }}" {{id in selXpex[ucID]|keys ? "checked" : ""}}></td>
             <td scope="col">{{ item['name'] }}</td>
             <td scope="col">{{ item['description'] }}</td>  
@@ -19,12 +20,13 @@
                 <td class="check-col align-middle"><a href=""></a><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteXpex_{{ id }}"></span></a></td>
                 {{ modal.delete_xpex(id,item['name'],projID,ucID, type, sideBarName) }}
             {% endif %}
-        </tr>         
+        </tr> 
+        {% endif %}        
     {% endfor %}
 {% endfor %}
 {% endmacro %}
 
-{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID = 0, ucID = 0, selXpex = [], type = "capex", sideBarName,listUcID,listUcsName, Mode = "suggested") %}
+{% macro list_xpex(xpex_from_ntt, xpex_from_outside_ntt, xpex_internal,projID = 0, ucID = 0, selXpex = [], type = "capex", sideBarName,listUcID,listUcsName, Mode = "suggested", xpexCategories) %}
 {% import "/templates/traductions.twig" as traduction %}
 {% import "/templates/customer_bc/macro_xpex.twig" as macro %}
 {% set size = 3 %}
@@ -44,41 +46,58 @@
                     {{Mode == "custom" ? "<th scope='col'></th>" }}
                 </tr>
             </thead>
-            {% set print = false %}
-            {% for item in xpex_from_ntt %}
-                {% if item|length > 0 %}{% set print = true %}{% endif %}
-            {% endfor %}
 
-            {% if print  %}
-                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
-                    <tr class="table-primary"><td colspan="{{size}}"> <strong>{{traduction.getText("procured_from")}}{{companyName}} </strong></td></tr>
+
+            {% for categoryID in xpexCategories[xpexCategories|keys[0]]|keys %}
+                {% set print1 = false %}
+                {% for item in xpex_from_ntt %}
+                    {% for subItem in item %}
+                        {% if subItem['cat'] == categoryID %}{% set print1 = true %}{% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% set print2 = false %}
+                {% for item in xpex_from_outside_ntt %}
+                    {% for subItem in item %}
+                        {% if subItem['cat'] == categoryID %}{% set print2 = true %}{% endif %}
+                    {% endfor %}
+                {% endfor %}
+                
+                {% set print3 = false %}
+                {% for item in xpex_internal %}
+                    {% for subItem in item %}
+                        {% if subItem['cat'] == categoryID %}{% set print3 = true %}{% endif %}
+                    {% endfor %}
+                {% endfor %}
+
+                {% if print1 or print2 or print3 %}
+                    <tr class="table-primary" onclick = "hide({{categoryID}});" ><td colspan="{{size}}"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td></tr>
+                    
+
+                    {% if print1  %}
+                        {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                            <tr class="table-secondary cat_{{categoryID}}"><td colspan="{{size}}"> <strong>{{traduction.getText("procured_from")}}{{companyName}} </strong></td></tr>
+                        {% endif %}
+                        {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode, categoryID, xpexCategories[xpexCategories|keys[0]]) }}
+                    {% endif %}
+
+
+                    {% if print2  %}
+                        {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                            <tr class="table-secondary cat_{{categoryID}}"><td colspan="{{size}}"><strong>{{traduction.getText("procured_from_outside")}}{{companyName}} </strong></td></tr>
+                        {% endif %}
+                        {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode, categoryID, xpexCategories[xpexCategories|keys[0]]) }}
+                    {% endif %}
+
+
+                    {% if print3  %}
+                        {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
+                            <tr class="table-secondary cat_{{categoryID}}"><td colspan="{{size}}"><strong>{{traduction.getText("internal")}}</strong></td></tr>
+                        {% endif %}
+                        {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode, categoryID, xpexCategories[xpexCategories|keys[0]]) }}
+                    {% endif %}
                 {% endif %}
-                {{ macro.sub_list_xpex(xpex_from_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
-            {% endif %}
-
-            {% set print = false %}
-            {% for item in xpex_from_outside_ntt %}
-                {% if item|length > 0 %}{% set print = true %}{% endif %}
             {% endfor %}
-
-            {% if print  %}
-                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
-                    <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("procured_from_outside")}}{{companyName}} </strong></td></tr>
-                {% endif %}
-                {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
-            {% endif %}
-
-            {% set print = false %}
-            {% for item in xpex_internal %}
-                {% if item|length > 0 %}{% set print = true %}{% endif %}
-            {% endfor %}
-
-            {% if print  %}
-                {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
-                    <tr class="table-primary"><td colspan="{{size}}"><strong>{{traduction.getText("internal")}}</strong></td></tr>
-                {% endif %}
-                {{ macro.sub_list_xpex(xpex_internal,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode) }}
-            {% endif %}
         </table>
     </div>
 </div>

@@ -89,7 +89,6 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             $uc = $listXpex[14];
             $list_xpex_cat = $listXpex[16];
 
-            var_dump($list_xpex_cat);
 
             if(count($listUcID)!=1){
                 $ucID = 0;
@@ -300,7 +299,7 @@ function getListXpex($listUcID, $type, $projID, $side){
     foreach ($listUcID as $ucID) {
         $uc = getUCByID($ucID);
         $list_xpex_supplier[$ucID]=[];
-        $list_xpex_cat[$ucID] = getListXpexCat($type, $ucID);
+        $list_xpex_cat[$ucID] = getListXpexCat($type, $ucID,$side);
         if($type=="capex"){
                 
             $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
@@ -531,7 +530,8 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
         $name = $post['name'];
         $description = isset($post['description']) ? $post['description'] : "";
         $origine = isset($post['origine']) ? $post['origine'] : "from_ntt";
-        $xpex_infos = ["name"=>$name,"description"=>$description];
+        $cat = $post['category'];
+        $xpex_infos = ["name"=>$name,"description"=>$description, "cat"=>$cat];
         //echo $origine;
 
         //var_dump(getCapexUserItem($projID,$ucID,$name));
@@ -869,11 +869,10 @@ function delete_selection_xpex($projID=0,$ucID=0, $type, $sideBarName){
 }
 
 function create_xpex_cat($twig,$is_connected, $post,  $type, $sideBarName,$side){
-    var_dump($post);
     $projID = getProjID();
     if($projID!=-1){
         $ucID = $post['ucID'];
-        insertXpexcCat($ucID, $post['name'], $type);
+        insertXpexcCat($ucID, $post['name'], $type, $side);
     }
     //$sol = getSolutionByUcID($ucID);
     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);

@@ -249,5 +249,15 @@ function setNewDeviseXpex(name){
     }
 }
 
+function hide(id){
+    $(".cat_"+id).each(function(){
+        if(this.hasAttribute("hidden")){
+            this.removeAttribute("hidden");
+        }else{
+            this.setAttribute("hidden", true);
+        }
+    });
+}
+
 setNewDeviseXpex("GBP");
 

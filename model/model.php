@@ -910,13 +910,13 @@ function getSolutionByUcID($ucID){
     return $req->fetch();
 }
 
-function insertXpexcCat($solID, $name, $xpexType){
+function insertXpexcCat($solID, $name, $xpexType, $side){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO xpex_cat (name,id_uc, xpex_type) VALUES (?,?,?)');
-    return $req->execute(array( $name,$solID, $xpexType));   
+    $req = $db->prepare('INSERT INTO xpex_cat (name,id_uc, xpex_type, side) VALUES (?,?,?,?)');
+    return $req->execute(array( $name,$solID, $xpexType,$side));   
 }
 
-function getListXpexCat($xpexType, $ucID){
+function getListXpexCat($xpexType, $ucID, $side){
     $typeAdaptation = [
         "capex"=>"capex",
         "opex"=>"opex",
@@ -943,11 +943,37 @@ function getListXpexCat($xpexType, $ucID){
     //Select all the category of the UC (no matter if we should check for others UC of the solution)
     $req = $db->prepare("SELECT id_cat, xpex_cat.name
                         FROM xpex_cat
-                        WHERE id_uc = ?");
-    $req->execute(array($ucID));
+                        WHERE id_uc = ?
+                        AND side = ?");
+    $req->execute(array($ucID, $side));
     $listCat = [];
     while($row = $req->fetch()){
         $listCat[$row['id_cat']] = $row['name'];
+        //array_push($listCat, ["id"=>$row['id_cat'], "name"=>$row['name']]);
+
+    }
+    //var_dump($side);
+    if($side == "supplier"){
+        //We need to add the categories of the other UC
+        $solID = getSolutionByUcID($ucID)['id'];
+        //We select all the ucID in the same Solution
+        $req2 = $db->prepare("SELECT id
+                                FROM use_case
+                                WHERE id_cat = ?
+                                AND id != ?");
+        
+        $req2->execute(array($solID, $ucID));
+        while($row2 = $req2->fetch()){
+
+            $ucIDSol = $row2["id"];
+            $req->execute(array($ucIDSol, $side));
+
+            while($row = $req->fetch()){
+                $listCat[$row['id_cat']] = $row['name'];
+        
+            }
+        }
+
     }
 
     return $listCat;
@@ -1702,7 +1728,7 @@ function getRevenuesProtectionUserItem($projID,$ucID,$name){
 function getListRevenuesProtectionUser($projID,$ucID){
     $db = dbConnect();
 
-    $req = $db->prepare("SELECT revenuesprotection_item.id,name,description, unit
+    $req = $db->prepare("SELECT revenuesprotection_item.id,name,description, unit, cat
                             FROM revenuesprotection_item_user
                             INNER JOIN revenuesprotection_uc
                                 INNER JOIN revenuesprotection_item
@@ -1720,10 +1746,11 @@ function getListRevenuesProtectionUser($projID,$ucID){
         $name = $row['name'];
         $description = $row['description'];
         $unit= $row['unit'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'unit'=>$unit];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'unit'=>$unit, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'unit'=>$unit];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'unit'=>$unit, "cat"=>$cat];
         }
     }
     return $list;
@@ -1763,12 +1790,13 @@ function insertRevenuesProtectionUser($projID,$ucID,$revenuesprotection_data){
                             IN revenuesprotection_name VARCHAR(255),
                             IN revenuesprotection_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO revenuesprotection_item (name,description)
-                                    VALUES (revenuesprotection_name,revenuesprotection_desc);
+                                INSERT INTO revenuesprotection_item (name,description, cat)
+                                    VALUES (revenuesprotection_name,revenuesprotection_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO revenuesprotection_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -1776,8 +1804,8 @@ function insertRevenuesProtectionUser($projID,$ucID,$revenuesprotection_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_revenuesprotection(?,?,?,?);');
-    $ret = $req->execute(array($revenuesprotection_data['name'],$revenuesprotection_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_revenuesprotection(?,?,?,?,?);');
+    $ret = $req->execute(array($revenuesprotection_data['name'],$revenuesprotection_data['description'],$ucID,$projID, $revenuesprotection_data['cat']));
     return $ret;
     
 }
@@ -1971,7 +1999,7 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
                $side_selection = "and capex_item.side = 'supplier'";
     }
 
-    $req = $db->prepare("SELECT capex_item.id,name,description, side
+    $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
                             FROM capex_item_user
                             INNER JOIN capex_uc
                                 INNER JOIN capex_item
@@ -1991,10 +2019,11 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
         $name = $row['name'];
         $description = $row['description'];
         $side = $row['side'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         }
     }
     return $list;
@@ -2042,12 +2071,13 @@ function insertCapexUser($projID,$ucID,$capex_data, $origine="from_ntt", $side="
                             IN idUC INT,
                             IN idProj INT,
                             IN origine VARCHAR(255),
-                            IN side VARCHAR(255)
+                            IN side VARCHAR(255),
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO capex_item (name,description, origine, side)
-                                    VALUES (capex_name,capex_desc, origine, side);
+                                INSERT INTO capex_item (name,description, origine, side, cat)
+                                    VALUES (capex_name,capex_desc, origine, side, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO capex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2055,8 +2085,8 @@ function insertCapexUser($projID,$ucID,$capex_data, $origine="from_ntt", $side="
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_capex(?,?,?,?, ?, ?);');
-    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID, $origine, $side));
+    $req = $db->prepare('CALL add_capex(?,?,?,?, ?, ?,?);');
+    $ret = $req->execute(array($capex_data['name'],$capex_data['description'],$ucID,$projID, $origine, $side, $capex_data['cat']));
     return $ret;
     
 }
@@ -2300,10 +2330,11 @@ function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
         $id_item = intval($row['id_revenue']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -2409,12 +2440,13 @@ function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $revenueType){
                             IN revenue_desc VARCHAR(255),
                             IN idUC INT,
                             IN idProj INT,
-                            IN type_value VARCHAR(255)
+                            IN type_value VARCHAR(255),
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO supplier_revenues_item (name,description, type, advice_user, unit)
-                                    VALUES (revenue_name,revenue_desc, type_value, "user", "");
+                                INSERT INTO supplier_revenues_item (name,description, type, advice_user, unit, cat)
+                                    VALUES (revenue_name,revenue_desc, type_value, "user", "", cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                     VALUES (itemID,idUC);
@@ -2422,8 +2454,8 @@ function insertSupplierRevenueUser($projID,$ucID,$revenue_data, $revenueType){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_supplier_revenue(?,?,?,?,?);');
-    $ret = $req->execute(array($revenue_data['name'],$revenue_data['description'],$ucID,$projID, $revenueType));
+    $req = $db->prepare('CALL add_supplier_revenue(?,?,?,?,?,?);');
+    $ret = $req->execute(array($revenue_data['name'],$revenue_data['description'],$ucID,$projID, $revenueType, $revenue_data['cat']));
     return $ret;
 }
 
@@ -2586,7 +2618,7 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
     }
 
 
-    $req = $db->prepare("SELECT implem_item.id,name,description, side
+    $req = $db->prepare("SELECT implem_item.id,name,description, side, cat
                             FROM implem_item_user
                             INNER JOIN implem_uc
                                 INNER JOIN implem_item
@@ -2606,10 +2638,11 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
         $name = $row['name'];
         $description = $row['description'];
         $side = $row['side'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
+        $cat = $row['cat'];
+    if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -2658,12 +2691,13 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="from_ntt", $side
                             IN idUC INT,
                             IN idProj INT,
                             IN origine VARCHAR(255),
-                            IN side VARCHAR(255)
+                            IN side VARCHAR(255),
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO implem_item (name,description, origine, side)
-                                    VALUES (implem_name,implem_desc, origine, side);
+                                INSERT INTO implem_item (name,description, origine, side, cat)
+                                    VALUES (implem_name,implem_desc, origine, side, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO implem_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2672,7 +2706,7 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="from_ntt", $side
                             END
                                 ');
     $req = $db->prepare('CALL add_implem(?,?,?,?,?,?);');
-    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine, $side));
+    $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine, $side, $implem_data['cat']));
     return $ret;
 }
 
@@ -2885,7 +2919,7 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
   
 
 
-    $req = $db->prepare("SELECT opex_item.id,name,description, side
+    $req = $db->prepare("SELECT opex_item.id,name,description, side, cat
                             FROM opex_item_user
                             INNER JOIN opex_uc
                                 INNER JOIN opex_item
@@ -2905,10 +2939,11 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
         $name = $row['name'];
         $description = $row['description'];
         $side = $row['side'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side];
+        $cat = $row['cat'];
+if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -2960,12 +2995,13 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="from_ntt", $side="pr
                             IN idUC INT,
                             IN idProj INT,
                             IN origine VARCHAR(255),
-                            IN side VARCHAR(255)
+                            IN side VARCHAR(255),
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO opex_item (name,description, origine, side)
-                                    VALUES (opex_name,opex_desc, origine, side);
+                                INSERT INTO opex_item (name,description, origine, side, cat)
+                                    VALUES (opex_name,opex_desc, origine, side, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO opex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -2974,8 +3010,8 @@ function insertOpexUser($projID,$ucID,$opex_data, $origine="from_ntt", $side="pr
                             END
                                 ');
     //var_dump($projID,$ucID,$opex_data);
-    $req = $db->prepare('CALL add_opex(?,?,?,?,?,?);');
-    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine, $side));
+    $req = $db->prepare('CALL add_opex(?,?,?,?,?,?,?);');
+    $ret = $req->execute(array($opex_data['name'],$opex_data['description'],$ucID,$projID, $origine, $side, $opex_data['cat']));
     return $ret;
 }
 
@@ -3249,7 +3285,7 @@ function getListRevenuesItems($ucID){
 
 function getListRevenuesUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT revenues_item.id,name,description
+    $req = $db->prepare("SELECT revenues_item.id,name,description, cat
                             FROM revenues_item_user
                             INNER JOIN revenues_uc
                                 INNER JOIN revenues_item
@@ -3266,10 +3302,11 @@ function getListRevenuesUser($projID,$ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     return $list;
@@ -3313,12 +3350,13 @@ function insertRevenuesUser($projID,$ucID,$revenues_data){
                             IN revenues_name VARCHAR(255),
                             IN revenues_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO revenues_item (name,description)
-                                    VALUES (revenues_name,revenues_desc);
+                                INSERT INTO revenues_item (name,description, cat)
+                                    VALUES (revenues_name,revenues_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO revenues_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -3326,8 +3364,8 @@ function insertRevenuesUser($projID,$ucID,$revenues_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_revenues(?,?,?,?);');
-    $ret = $req->execute(array($revenues_data['name'],$revenues_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_revenues(?,?,?,?,?);');
+    $ret = $req->execute(array($revenues_data['name'],$revenues_data['description'],$ucID,$projID, $revenues_data['cat']));
     return $ret;
 }
 
@@ -3539,7 +3577,7 @@ function getListCashreleasingItems($ucID){
 
 function getListCashReleasingUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT cashreleasing_item.id,name,description
+    $req = $db->prepare("SELECT cashreleasing_item.id,name,description, cat
                             FROM cashreleasing_item_user
                             INNER JOIN cashreleasing_uc
                                 INNER JOIN cashreleasing_item
@@ -3556,10 +3594,11 @@ function getListCashReleasingUser($projID,$ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -3607,12 +3646,13 @@ function insertCashReleasingUser($projID,$ucID,$cashreleasing_data){
                             IN cashreleasing_name VARCHAR(255),
                             IN cashreleasing_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO cashreleasing_item (name,description)
-                                    VALUES (cashreleasing_name,cashreleasing_desc);
+                                INSERT INTO cashreleasing_item (name,description, cat)
+                                    VALUES (cashreleasing_name,cashreleasing_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO cashreleasing_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -3620,8 +3660,8 @@ function insertCashReleasingUser($projID,$ucID,$cashreleasing_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_cashreleasing(?,?,?,?);');
-    $ret = $req->execute(array($cashreleasing_data['name'],$cashreleasing_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_cashreleasing(?,?,?,?,?);');
+    $ret = $req->execute(array($cashreleasing_data['name'],$cashreleasing_data['description'],$ucID,$projID, $cashreleasing_data['cat']));
     return $ret;
 }
 
@@ -3796,7 +3836,7 @@ function getListWidercashItems($ucID){
 
 function getListWiderCashUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT widercash_item.id,name,description
+    $req = $db->prepare("SELECT widercash_item.id,name,description, cat
                             FROM widercash_item_user
                             INNER JOIN widercash_uc
                                 INNER JOIN widercash_item
@@ -3812,11 +3852,12 @@ function getListWiderCashUser($projID,$ucID){
     while($row = $req->fetch()){
         $id_item = intval($row['id']);
         $name = $row['name'];
+        $cat = $row['cat'];
         $description = $row['description'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -3864,12 +3905,13 @@ function insertWiderCashUser($projID,$ucID,$widercash_data){
                             IN widercash_name VARCHAR(255),
                             IN widercash_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO widercash_item (name,description)
-                                    VALUES (widercash_name,widercash_desc);
+                                INSERT INTO widercash_item (name,description, cat)
+                                    VALUES (widercash_name,widercash_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO widercash_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -3877,8 +3919,8 @@ function insertWiderCashUser($projID,$ucID,$widercash_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_widercash(?,?,?,?);');
-    $ret = $req->execute(array($widercash_data['name'],$widercash_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_widercash(?,?,?,?,?);');
+    $ret = $req->execute(array($widercash_data['name'],$widercash_data['description'],$ucID,$projID, $widercash_data['cat']));
     return $ret;
 }
 
@@ -4045,7 +4087,7 @@ function getListQuantifiableItems($ucID){
 
 function getListQuantifiableUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT quantifiable_item.id,name,description
+    $req = $db->prepare("SELECT quantifiable_item.id,name,description, cat
                             FROM quantifiable_item_user
                             INNER JOIN quantifiable_uc
                                 INNER JOIN quantifiable_item
@@ -4062,10 +4104,11 @@ function getListQuantifiableUser($projID,$ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -4108,12 +4151,13 @@ function insertQuantifiableUser($projID,$ucID,$quantifiable_data){
                             IN quantifiable_name VARCHAR(255),
                             IN quantifiable_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO quantifiable_item (name,description)
-                                    VALUES (quantifiable_name,quantifiable_desc);
+                                INSERT INTO quantifiable_item (name,description, cat)
+                                    VALUES (quantifiable_name,quantifiable_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO quantifiable_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -4121,8 +4165,8 @@ function insertQuantifiableUser($projID,$ucID,$quantifiable_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_quantifiable(?,?,?,?);');
-    $ret = $req->execute(array($quantifiable_data['name'],$quantifiable_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_quantifiable(?,?,?,?,?);');
+    $ret = $req->execute(array($quantifiable_data['name'],$quantifiable_data['description'],$ucID,$projID, $quantifiable_data['cat']));
     return $ret;
 }
 
@@ -4259,7 +4303,7 @@ function getListNoncashItems($ucID){
 
 function getListNonCashUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT noncash_item.id,name,description
+    $req = $db->prepare("SELECT noncash_item.id,name,description, cat
                             FROM noncash_item_user
                             INNER JOIN noncash_uc
                                 INNER JOIN noncash_item
@@ -4276,10 +4320,11 @@ function getListNonCashUser($projID,$ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -4320,12 +4365,13 @@ function insertNonCashUser($projID,$ucID,$noncash_data){
                             IN noncash_name VARCHAR(255),
                             IN noncash_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO noncash_item (name,description)
-                                    VALUES (noncash_name,noncash_desc);
+                                INSERT INTO noncash_item (name,description, cat)
+                                    VALUES (noncash_name,noncash_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO noncash_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -4334,8 +4380,8 @@ function insertNonCashUser($projID,$ucID,$noncash_data){
                             END
                                 ');
 
-    $req = $db->prepare('CALL add_noncash(?,?,?,?);');
-    $ret = $req->execute(array($noncash_data['name'],$noncash_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_noncash(?,?,?,?,?);');
+    $ret = $req->execute(array($noncash_data['name'],$noncash_data['description'],$ucID,$projID, $noncash_data['cat']));
     return $ret;
 }
 
@@ -4469,7 +4515,7 @@ function getListRisksItems($ucID){
 
 function getListRiskUser($projID,$ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT risk_item.id,name,description
+    $req = $db->prepare("SELECT risk_item.id,name,description, cat
                             FROM risk_item_user
                             INNER JOIN risk_uc
                                 INNER JOIN risk_item
@@ -4486,10 +4532,11 @@ function getListRiskUser($projID,$ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat = $row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
         }
     }
     //var_dump($list);
@@ -4531,12 +4578,13 @@ function insertRiskUser($projID,$ucID,$risk_data){
                             IN risk_name VARCHAR(255),
                             IN risk_desc VARCHAR(255),
                             IN idUC INT,
-                            IN idProj INT
+                            IN idProj INT,
+                            IN cat INT
                             )
                             BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO risk_item (name,description)
-                                    VALUES (risk_name,risk_desc);
+                                INSERT INTO risk_item (name,description, cat)
+                                    VALUES (risk_name,risk_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO risk_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -4544,8 +4592,8 @@ function insertRiskUser($projID,$ucID,$risk_data){
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_risk(?,?,?,?);');
-    $ret = $req->execute(array($risk_data['name'],$risk_data['description'],$ucID,$projID));
+    $req = $db->prepare('CALL add_risk(?,?,?,?,?);');
+    $ret = $req->execute(array($risk_data['name'],$risk_data['description'],$ucID,$projID, $risk_data['cat']));
     return $ret;
 }
 

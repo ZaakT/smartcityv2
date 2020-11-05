@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 05 nov. 2020 à 13:04
+-- Généré le :  jeu. 05 nov. 2020 à 19:51
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -27,10 +27,10 @@ DELIMITER $$
 -- Procédures
 --
 DROP PROCEDURE IF EXISTS `add_capex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255), IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO capex_item (name,description, origine, side)
-                                    VALUES (capex_name,capex_desc, origine, side);
+                                INSERT INTO capex_item (name,description, origine, side, cat)
+                                    VALUES (capex_name,capex_desc, origine, side, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO capex_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -154,10 +154,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risks` (IN `risks_name` VARCHAR
                                     END$$
 
 DROP PROCEDURE IF EXISTS `add_supplier_revenue`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_name` VARCHAR(255), IN `revenue_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `type_value` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_name` VARCHAR(255), IN `revenue_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `type_value` VARCHAR(255), IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO supplier_revenues_item (name,description, type, advice_user, unit)
-                                    VALUES (revenue_name,revenue_desc, type_value, "user", "");
+                                INSERT INTO supplier_revenues_item (name,description, type, advice_user, unit, cat)
+                                    VALUES (revenue_name,revenue_desc, type_value, "user", "", cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                     VALUES (itemID,idUC);
@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -468,7 +468,13 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (81, '5G antenna', 'Cells to efficiently deliver high speed mobile broadband and other low latency applications.', 'from_ntt', 'projDev', NULL, 0),
 (83, 'cap', '', 'from_ntt', 'supplier', 'ha', 0),
 (84, 'tsq', '', 'from_ntt', 'customer', '', 0),
-(85, 'myCap02', '', 'from_ntt', 'customer', 'bonjour', 0);
+(85, 'myCap02', '', 'from_ntt', 'customer', 'bonjour', 0),
+(86, 'My Cap in Cat 2', '', 'from_ntt', 'customer', NULL, 0),
+(88, 'cap cat1', '', 'from_ntt', 'customer', NULL, 5),
+(89, 'cap cat 1 pour de vrai', '', 'from_ntt', 'customer', NULL, 4),
+(90, '011', '', 'from_ntt', 'customer', NULL, 7),
+(91, 'test 2', '', 'from_ntt', 'customer', NULL, 8),
+(92, 'test 3', '', 'from_ntt', 'customer', NULL, 8);
 
 -- --------------------------------------------------------
 
@@ -546,7 +552,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -593,7 +599,14 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (47, 27),
 (83, 29),
 (84, 30),
-(85, 30);
+(85, 30),
+(86, 30),
+(87, 30),
+(88, 30),
+(89, 30),
+(90, 30),
+(91, 30),
+(92, 30);
 
 -- --------------------------------------------------------
 
@@ -692,7 +705,14 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (80, 29),
 (81, 30),
 (84, 33),
-(85, 67);
+(88, 66),
+(89, 66),
+(85, 67),
+(86, 67),
+(87, 67),
+(90, 67),
+(91, 67),
+(92, 67);
 
 -- --------------------------------------------------------
 
@@ -3291,6 +3311,8 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (29, 15, '2020-10-01', 3, '2024-09-01', '2020-12-01', 2),
 (29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3),
 (30, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(30, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
+(30, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
 (30, 67, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6);
 
 -- --------------------------------------------------------
@@ -4547,7 +4569,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `unit` varchar(256) NOT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -4576,7 +4598,9 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (23, 'rec', 'operating', '', 'user', '', 0),
 (24, 'reeev', 'equipment', '', 'user', '', 0),
 (25, 'eee', 'equipment', '', 'user', '', 0),
-(26, 'cap', 'equipment', '', 'user', '', 0);
+(26, 'cap', 'equipment', '', 'user', '', 0),
+(27, 'equip rev 01', 'equipment', '', 'user', '', 9),
+(28, 'blabla', 'equipment', '', 'user', '', 3);
 
 -- --------------------------------------------------------
 
@@ -4621,7 +4645,9 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (23, -1),
 (24, 22),
 (25, 67),
-(26, -1);
+(26, -1),
+(27, 67),
+(28, 67);
 
 -- --------------------------------------------------------
 
@@ -4666,7 +4692,9 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (23, 29),
 (24, 29),
 (25, 30),
-(26, 30);
+(26, 30),
+(27, 30),
+(28, 30);
 
 -- --------------------------------------------------------
 
@@ -6327,16 +6355,24 @@ CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `id_uc` int(11) NOT NULL,
   `name` varchar(256) NOT NULL,
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
+  `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'supplier',
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
 --
 
-INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`) VALUES
-(1, 25, 'eee', 'capex'),
-(2, 67, 'eeeee', 'capex');
+INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`, `side`) VALUES
+(1, 25, 'eee', 'capex', 'supplier'),
+(2, 67, 'eeeee', 'capex', 'supplier'),
+(3, 67, 'cat 2', 'capex', 'supplier'),
+(4, 66, '1 st cat', 'capex', 'supplier'),
+(5, 66, '2nd cat', 'capex', 'supplier'),
+(6, 66, 'new cat empty', 'capex', 'supplier'),
+(7, 67, 'Cat 01', 'capex', 'customer'),
+(8, 67, 'cat 02', 'capex', 'customer'),
+(9, 67, 'Cat equip ', 'equipment_revenues', 'customer');
 
 -- --------------------------------------------------------
 
