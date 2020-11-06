@@ -61,11 +61,11 @@
 
     <form id="form_xpex_input" name="form_xpex_input" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=inputed&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return checkXpexAll();">
 
-    {{ list.list_xpex(selDevSym,xpex_supplier,[], [] ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "supplier") }}
+    {{ list.list_xpex(selDevSym,xpex_supplier,[], [] ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "supplier", xpexCategories) }}
 
-    {{ list.list_xpex(selDevSym,xpex_advice_from_ntt,xpex_advice_from_outside_ntt, xpex_advice_internal ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "suggested") }}
+    {{ list.list_xpex(selDevSym,xpex_advice_from_ntt,xpex_advice_from_outside_ntt, xpex_advice_internal ,ratio,selXpex,nb_uc, type,listUcID, listUcsName, "suggested", xpexCategories) }}
 
-    {{ list.list_xpex(selDevSym,xpex_user_from_ntt,xpex_user_from_outside_ntt, xpex_user_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, "") }}
+    {{ list.list_xpex(selDevSym,xpex_user_from_ntt,xpex_user_from_outside_ntt, xpex_user_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, "", xpexCategories) }}
 
 
 

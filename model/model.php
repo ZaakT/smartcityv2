@@ -2041,19 +2041,20 @@ function getListCapexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
             array_push($ucIDList, $ucItem['id']);
         }
     }
+    $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
+    FROM capex_item_user
+    INNER JOIN capex_uc
+        INNER JOIN capex_item
+            WHERE capex_uc.id_uc = ?
+                and capex_item.id = capex_uc.id_item
+                and capex_item_user.id_proj = ?
+                and capex_item_user.id = capex_item.id
+                $origine_selection
+                $side_selection
+    ORDER BY name
+    ");
     foreach($ucIDList as $ucID){
-        $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
-        FROM capex_item_user
-        INNER JOIN capex_uc
-            INNER JOIN capex_item
-                WHERE capex_uc.id_uc = ?
-                    and capex_item.id = capex_uc.id_item
-                    and capex_item_user.id_proj = ?
-                    and capex_item_user.id = capex_item.id
-                    $origine_selection
-                    $side_selection
-        ORDER BY name
-        ");
+
         $req->execute(array($ucID,$projID));
 
         while($row = $req->fetch()){
@@ -2351,11 +2352,20 @@ function getListSupplierRevenuesAdvice($ucID, $revenueType){
     return $list;
 }
 
-function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
+function getListSupplierRevenuesUser($uc_ID, $projID, $revenueType){
     $db = dbConnect();
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2 wrong equipment type.");}
 
     
+    $list = [];
+    $ucIDList = [$uc_ID];
+
+    $solID = getSolutionByUcID($uc_ID);
+    $ucInSol = getUC($solID);
+    foreach ($ucInSol as $ucItem) {
+        array_push($ucIDList, $ucItem['id']);
+    }
+
     $req = $db->prepare("SELECT *
                         FROM supplier_revenues_item 
                         INNER JOIN supplier_revenues_uc 
@@ -2368,18 +2378,21 @@ function getListSupplierRevenuesUser($ucID, $projID, $revenueType){
                             and supplier_revenues_user.id_proj = ?
                         ORDER BY name
                             ;");
-    $req->execute(array($ucID, $revenueType, $projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id_revenue']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID, $revenueType, $projID));
+
+        while($row = $req->fetch()){
+            $id_item = intval($row['id_revenue']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
     }
     //var_dump($list);
@@ -2641,7 +2654,7 @@ function getListImplemItems($ucID){
     return $list;
 }
 
-function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
+function getListImplemUser( $projID,$uc_ID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -2662,7 +2675,15 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
                $side_selection = "and implem_item.side = 'supplier'";
     }
 
-
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT implem_item.id,name,description, side, cat
                             FROM implem_item_user
                             INNER JOIN implem_uc
@@ -2675,22 +2696,23 @@ function getListImplemUser( $projID,$ucID, $origine = "all", $side="projDev"){
                                         $side_selection
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $side = $row['side'];
-        $cat = $row['cat'];
-    if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
+
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $side = $row['side'];
+            $cat = $row['cat'];
+        if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            }
         }
     }
-    //var_dump($list);
     return $list;
 
 }
@@ -2941,7 +2963,7 @@ function getListOpexItems($ucID){
     return $list;
 }
 
-function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
+function getListOpexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -2962,7 +2984,15 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
                $side_selection = "and opex_item.side = 'supplier'";
     }
   
-
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
 
     $req = $db->prepare("SELECT opex_item.id,name,description, side, cat
                             FROM opex_item_user
@@ -2976,19 +3006,22 @@ function getListOpexUser($projID,$ucID, $origine = "all", $side="projDev"){
                                         $side_selection
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $side = $row['side'];
-        $cat = $row['cat'];
-if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
+
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $side = $row['side'];
+            $cat = $row['cat'];
+        if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            }
         }
     }
     //var_dump($list);
@@ -3620,8 +3653,17 @@ function getListCashreleasingItems($ucID){
     return $list;
 }
 
-function getListCashReleasingUser($projID,$ucID){
+function getListCashReleasingUser($projID,$uc_ID){
     $db = dbConnect();
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT cashreleasing_item.id,name,description, cat
                             FROM cashreleasing_item_user
                             INNER JOIN cashreleasing_uc
@@ -3632,18 +3674,19 @@ function getListCashReleasingUser($projID,$ucID){
                                         and cashreleasing_item_user.id = cashreleasing_item.id
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
     }
     //var_dump($list);
@@ -3879,8 +3922,17 @@ function getListWidercashItems($ucID){
     return $list;
 }
 
-function getListWiderCashUser($projID,$ucID){
-    $db = dbConnect();
+function getListWiderCashUser($projID,$uc_ID){
+    $db = dbConnect();    
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT widercash_item.id,name,description, cat
                             FROM widercash_item_user
                             INNER JOIN widercash_uc
@@ -3891,21 +3943,21 @@ function getListWiderCashUser($projID,$ucID){
                                         and widercash_item_user.id = widercash_item.id
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $cat = $row['cat'];
-        $description = $row['description'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $cat = $row['cat'];
+            $description = $row['description'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
-    }
-    //var_dump($list);
+    }//var_dump($list);
     return $list;
 
 }
@@ -4130,8 +4182,17 @@ function getListQuantifiableItems($ucID){
     return $list;
 }
 
-function getListQuantifiableUser($projID,$ucID){
+function getListQuantifiableUser($projID,$uc_ID){
     $db = dbConnect();
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT quantifiable_item.id,name,description, cat
                             FROM quantifiable_item_user
                             INNER JOIN quantifiable_uc
@@ -4142,21 +4203,22 @@ function getListQuantifiableUser($projID,$ucID){
                                         and quantifiable_item_user.id = quantifiable_item.id
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
+        //var_dump($list);
     }
-    //var_dump($list);
     return $list;
 
 }
@@ -4346,8 +4408,17 @@ function getListNoncashItems($ucID){
     return $list;
 }
 
-function getListNonCashUser($projID,$ucID){
+function getListNonCashUser($projID,$uc_ID){
     $db = dbConnect();
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT noncash_item.id,name,description, cat
                             FROM noncash_item_user
                             INNER JOIN noncash_uc
@@ -4358,21 +4429,22 @@ function getListNonCashUser($projID,$ucID){
                                         and noncash_item_user.id = noncash_item.id
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
+        //var_dump($list);
     }
-    //var_dump($list);
     return $list;
 
 }
@@ -4531,6 +4603,15 @@ function getListRisksAdvice($ucID){
 
 function getListRisksItems($ucID){
     $db = dbConnect();
+    $list = [];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
     $req = $db->prepare("SELECT DISTINCT risk_item.id,risk_item.name,risk_item.description
                             FROM risk_item
                             LEFT JOIN risk_item_advice
@@ -4541,24 +4622,26 @@ function getListRisksItems($ucID){
                             WHERE risk_uc.id_uc = ?
                             ORDER BY name
                             ");
-    $req->execute(array($ucID));
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID));
 
-    $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+    
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description];
+            }
         }
     }
     //var_dump($list);
     return $list;
 }
 
-function getListRiskUser($projID,$ucID){
+function getListRiskUser($projID,$uc_ID){
     $db = dbConnect();
     $req = $db->prepare("SELECT risk_item.id,name,description, cat
                             FROM risk_item_user

@@ -1,6 +1,6 @@
-{% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc, listUcsName, ucID, Mode, selDevSym) %}
+{% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc, listUcsName, ucID, Mode, selDevSym, categoryID) %}
 
-<tr id = "tr_{{ id_xpex }}" scope="row">
+<tr id = "tr_{{ id_xpex }}" scope="row"  class = "cat_{{categoryID}}">
     
     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
     {% if type != "risks" and type != "noncash" %}
@@ -59,28 +59,27 @@
 {% endmacro %}
 
 
-{% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName, Mode, selDevSym) %}
+{% macro part(selXpex, _xpex, type, nb_uc, partTitle, size,listUcID,listUcsName, Mode, selDevSym,categoryID) %}
 
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
 
 {% if _xpex %}
     {% set show = false %}
     {% for ucID in listUcID %}
-    
-        {% for id_xpex,data in selXpex %}
-            {% if (id_xpex in _xpex|keys)  %}
+        {% for id_xpex,data in selXpex[ucID] %}
+            {% if  _xpex[ucID][id_xpex]["cat"] == categoryID %}
                 {% set show = true %}
             {% endif %}
         {% endfor %}
     {% endfor %}
     {% if show %}
         {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
-            <tr class="table-primary"><td colspan="{{size}}"> <strong> {{partTitle}} </strong></td></tr>
+            <tr class="table-secondary" class = "cat_{{categoryID}}"><td colspan="{{size}}"> <strong> {{partTitle}}</strong></td></tr>
         {% endif %}
         {% for ucID in listUcID %}
             {% for id_xpex,data in selXpex[ucID] %}
-                    {% if id_xpex in _xpex[ucID]|keys %}
-                        {{ list.sub_list_xpex(id_xpex, _xpex[ucID], type, selXpex[ucID], nb_uc[ucID],listUcsName, ucID, Mode,selDevSym ) }}
+                    {% if  _xpex[ucID][id_xpex]["cat"] == categoryID %}
+                        {{ list.sub_list_xpex(id_xpex, _xpex[ucID], type, selXpex[ucID], nb_uc[ucID],listUcsName, ucID, Mode,selDevSym, categoryID) }}
                     {% endif %}
             {% endfor %}
         {% endfor %}
@@ -89,7 +88,7 @@
 {% endmacro %}
 
 
-{% macro list_xpex(selDevSym,xpex_from_ntt,xpex_from_outside_ntt, xpex_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, Mode = "suggested") %}
+{% macro list_xpex(selDevSym,xpex_from_ntt,xpex_from_outside_ntt, xpex_internal ,ratio,selXpex,nb_uc, type,listUcID,listUcsName, Mode = "suggested", xpexCategories) %}
 {% import "/templates/customer_bc/macro_xpex_input.twig" as list %}
 {% import "/templates/customer_bc/macro_xpex.twig" as name %}
 {% set show1 = false %}
@@ -152,6 +151,7 @@
                         <th scope="col" colspan={{type == "capex" ? 3 : 2}} class="text-uppercase">Baseline</th>
                     </tr>                   
                     {% endif %}
+
                     <tr>
                         <th scope="col">Item</th>
                         {% set size = size + 1 %}
@@ -220,9 +220,30 @@
                 </thead>
                 <tbody>
 
-                {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From #{companyName}", size, listUcID,listUcsName, Mode, selDevSym) }}{% endif %}
-                {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside #{companyName}", size,listUcID,listUcsName, Mode, selDevSym )}}{% endif %}
-                {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName, Mode,selDevSym )}}{% endif %}
+                {% for categoryID in xpexCategories[xpexCategories|keys[0]]|keys %}
+                    {% set show1 = false %}
+                    {% set show2 = false %}
+                    {% set show3 = false %}
+                    {% for ucID in listUcID %}
+                        {% for id_xpex,data in selXpex[ucID] %}
+                            {% if xpex_from_ntt[ucID][id_xpex]['cat'] == categoryID %}
+                                {% set show1 = true %}
+                            {% endif %}
+                            {% if xpex_from_outside_ntt[ucID][id_xpex]['cat'] == categoryID %}
+                                {% set show2 = true %}
+                            {% endif %}
+                            {% if xpex_internal[ucID][id_xpex]['cat'] == categoryID %}
+                                {% set show3 = true %}
+                            {% endif %}
+                        {% endfor %} 
+                    {% endfor %}
+                    {% if show1 or show2 or show2 %}
+                        <tr class="table-primary" onclick = "hide({{categoryID}});" ><td colspan="1000"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td></tr>
+                        {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From #{companyName}", size, listUcID,listUcsName, Mode, selDevSym, categoryID) }}{% endif %}
+                        {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "From Outside #{companyName}", size,listUcID,listUcsName, Mode, selDevSym, categoryID )}}{% endif %}
+                        {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName, Mode,selDevSym, categoryID )}}{% endif %}
+                    {% endif %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
