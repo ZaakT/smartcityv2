@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 05 nov. 2020 à 19:51
+-- Généré le :  ven. 06 nov. 2020 à 13:04
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -394,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -474,7 +474,8 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (89, 'cap cat 1 pour de vrai', '', 'from_ntt', 'customer', NULL, 4),
 (90, '011', '', 'from_ntt', 'customer', NULL, 7),
 (91, 'test 2', '', 'from_ntt', 'customer', NULL, 8),
-(92, 'test 3', '', 'from_ntt', 'customer', NULL, 8);
+(92, 'test 3', '', 'from_ntt', 'customer', NULL, 8),
+(93, 'my cap', '', 'from_ntt', 'supplier', NULL, 6);
 
 -- --------------------------------------------------------
 
@@ -552,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -606,7 +607,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (89, 30),
 (90, 30),
 (91, 30),
-(92, 30);
+(92, 30),
+(93, 30);
 
 -- --------------------------------------------------------
 
@@ -712,7 +714,8 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (87, 67),
 (90, 67),
 (91, 67),
-(92, 67);
+(92, 67),
+(93, 67);
 
 -- --------------------------------------------------------
 
@@ -3311,6 +3314,9 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (29, 15, '2020-10-01', 3, '2024-09-01', '2020-12-01', 2),
 (29, 22, '2020-10-01', 3, '2024-04-02', '2020-12-01', 3),
 (30, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(30, 49, '2020-11-01', 4, '2024-10-01', '2020-11-01', 5),
+(30, 50, '2020-11-01', 2, '2024-07-01', '2020-11-01', 4),
+(30, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
 (30, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
 (30, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
 (30, 67, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6);
@@ -4569,7 +4575,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `unit` varchar(256) NOT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -4600,7 +4606,9 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (25, 'eee', 'equipment', '', 'user', '', 0),
 (26, 'cap', 'equipment', '', 'user', '', 0),
 (27, 'equip rev 01', 'equipment', '', 'user', '', 9),
-(28, 'blabla', 'equipment', '', 'user', '', 3);
+(28, 'blabla', 'equipment', '', 'user', '', 3),
+(30, 'item 01', 'deployment', '', 'user', '', 14),
+(31, 'item 02', 'deployment', '', 'user', '', 14);
 
 -- --------------------------------------------------------
 
@@ -4647,7 +4655,10 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (25, 67),
 (26, -1),
 (27, 67),
-(28, 67);
+(28, 67),
+(29, 50),
+(30, 67),
+(31, 67);
 
 -- --------------------------------------------------------
 
@@ -4694,7 +4705,10 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (25, 30),
 (26, 30),
 (27, 30),
-(28, 30);
+(28, 30),
+(29, 30),
+(30, 30),
+(31, 30);
 
 -- --------------------------------------------------------
 
@@ -6357,7 +6371,7 @@ CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'supplier',
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
@@ -6372,7 +6386,8 @@ INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`, `side`) VALUES
 (6, 66, 'new cat empty', 'capex', 'supplier'),
 (7, 67, 'Cat 01', 'capex', 'customer'),
 (8, 67, 'cat 02', 'capex', 'customer'),
-(9, 67, 'Cat equip ', 'equipment_revenues', 'customer');
+(9, 67, 'Cat equip ', 'equipment_revenues', 'customer'),
+(14, 67, 'cat 01', 'deployment_revenues', 'supplier');
 
 -- --------------------------------------------------------
 

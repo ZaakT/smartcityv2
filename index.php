@@ -1064,6 +1064,9 @@ try{
                                     }elseif($_GET['A3']=="create_xpex_cat"){
                                         //var_dump($side);
                                         create_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
+                                    }elseif($_GET['A3']=="delete_xpex_cat"){
+                                        //var_dump($side);
+                                        delete_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 

@@ -95,6 +95,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             }else{
                 $ucID = $listUcID[0];
             }
+            //var_dump($list_xpex_user_from_ntt);
             /*var_dump($list_xpex_supplier);
             //var_dump($list_xpex_user_from_ntt);
             //var_dump($list_selXpex);*/
@@ -875,5 +876,19 @@ function create_xpex_cat($twig,$is_connected, $post,  $type, $sideBarName,$side)
         insertXpexcCat($ucID, $post['name'], $type, $side);
     }
     //$sol = getSolutionByUcID($ucID);
+    header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+}
+function delete_xpex_cat($twig,$is_connected, $post,  $type, $sideBarName,$side){
+
+    $projID = getProjID();
+    $ucID = $_GET['ucID'];
+
+    if($projID!=-1){
+        //var_dump($post);
+        foreach ($post as $key => $value) {
+            $catID = explode("_", $key)[1];
+        }
+        deleteXpexCat($catID,  $type);
+    }
     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
 }

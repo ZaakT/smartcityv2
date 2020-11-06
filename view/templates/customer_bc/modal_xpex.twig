@@ -176,3 +176,38 @@
     </div>
 </div>    
 {% endmacro %}
+
+{% macro delete_xpex_cat( projID, ucID, type, sideBarName, listUcID, listUcsName, xpexCategories) %}
+<div class="modal fade" id="deleteXpexCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteXpexCatModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="deleteXpexCat-form" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_xpex_cat&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="deleteXpexCatModal">Select the categories to delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group col-sm-10">
+
+                        {% for categoryID in xpexCategories[listUcID[listUcID|keys[0]]]|keys %}
+                            <div class="form-check">
+                                <input type = "checkbox" name = "delete_{{categoryID}}">
+                                <label class="form-check-label" for="delete_{{categoryID}}">
+                                    {{xpexCategories[listUcID[listUcID|keys[0]]][categoryID]}} 
+                                </label>
+                            </div>
+                            
+                        {% endfor %}
+                    </div>
+                </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Delete selection</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>    
+{% endmacro %}

@@ -605,6 +605,8 @@ function deleteZone($idZone){
 
 // ---------------------------------------- USE CASES ----------------------------------------
 
+
+
 function getUC($list_measID){
     $db = dbConnect();
     $req = $db->prepare('SELECT id,name FROM use_case WHERE id_meas = ? ORDER BY name');
@@ -916,7 +918,7 @@ function insertXpexcCat($solID, $name, $xpexType, $side){
     return $req->execute(array( $name,$solID, $xpexType,$side));   
 }
 
-function getListXpexCat($xpexType, $ucID, $side){
+function getXpexTableName($xpex_type){
     $typeAdaptation = [
         "capex"=>"capex",
         "opex"=>"opex",
@@ -933,10 +935,40 @@ function getListXpexCat($xpexType, $ucID, $side){
         "widercash"=>"widercash",
         "quantifiable"=>"quantifiable"
     ];
-    if(!array_key_exists($xpexType, $typeAdaptation) )
+    if(!array_key_exists($xpex_type, $typeAdaptation) )
     {
-        throw new Exception("Error Bad Xpex Type", 1);
+        throw new Exception("Error Bad Xpex Type : $xpex_type", 1);
     }
+    return  $typeAdaptation[$xpex_type];
+}
+
+function deleteXpexCat($catID, $xpex_type){
+
+    $db = dbConnect();
+    $reqCat = $db->prepare('DELETE FROM  xpex_cat WHERE id_cat = ?');
+    $reqCat->execute(array($catID));  
+    $table_name = getXpexTableName($xpex_type);
+
+    $reqXpex = $db->prepare('SELECT * FROM  '.$table_name.'_item WHERE cat = ?');
+    $reqXpex->execute(array($catID));
+
+    while($row = $reqXpex->fetch()){
+        $reqDel2 =  $db->prepare('DELETE FROM  input_'.$table_name.'WHERE id_item = ?');
+        if($table_name !=  "supplier_revenues"){
+            $reqDel1 =  $db->prepare('DELETE FROM  '.$table_name.'_item WHERE id = ?');
+        }else{
+            $reqDel1 =  $db->prepare('DELETE FROM  '.$table_name.'_item  WHERE item_id = ?');
+        }
+        $reqDel1->execute(array($row[0]));
+        $reqDel2->execute(array($row[0]));
+
+    }
+
+}
+
+function getListXpexCat($xpexType, $ucID, $side){
+    getXpexTableName($xpexType);
+
 
 
     $db = dbConnect();
@@ -944,8 +976,9 @@ function getListXpexCat($xpexType, $ucID, $side){
     $req = $db->prepare("SELECT id_cat, xpex_cat.name
                         FROM xpex_cat
                         WHERE id_uc = ?
-                        AND side = ?");
-    $req->execute(array($ucID, $side));
+                        AND side = ?
+                        AND xpex_type = ?");
+    $req->execute(array($ucID, $side, $xpexType));
     $listCat = [];
     while($row = $req->fetch()){
         $listCat[$row['id_cat']] = $row['name'];
@@ -966,7 +999,7 @@ function getListXpexCat($xpexType, $ucID, $side){
         while($row2 = $req2->fetch()){
 
             $ucIDSol = $row2["id"];
-            $req->execute(array($ucIDSol, $side));
+            $req->execute(array($ucIDSol, $side, $xpexType));
 
             while($row = $req->fetch()){
                 $listCat[$row['id_cat']] = $row['name'];
@@ -1979,7 +2012,7 @@ function getListCapexItems($ucID){
     return $list;
 }
 
-function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
+function getListCapexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -1999,33 +2032,45 @@ function getListCapexUser($projID,$ucID, $origine = "all", $side="projDev"){
                $side_selection = "and capex_item.side = 'supplier'";
     }
 
-    $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
-                            FROM capex_item_user
-                            INNER JOIN capex_uc
-                                INNER JOIN capex_item
-                                    WHERE capex_uc.id_uc = ?
-                                        and capex_item.id = capex_uc.id_item
-                                        and capex_item_user.id_proj = ?
-                                        and capex_item_user.id = capex_item.id
-                                        $origine_selection
-                                        $side_selection
-                            ORDER BY name
-                            ");
-    $req->execute(array($ucID,$projID));
-
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $side = $row['side'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+    $ucIDList = [$uc_ID];
+    if($side == "supplier"){
+        $solID = getSolutionByUcID($uc_ID);
+        $ucInSol = getUC($solID);
+        foreach ($ucInSol as $ucItem) {
+            array_push($ucIDList, $ucItem['id']);
         }
     }
+    foreach($ucIDList as $ucID){
+        $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
+        FROM capex_item_user
+        INNER JOIN capex_uc
+            INNER JOIN capex_item
+                WHERE capex_uc.id_uc = ?
+                    and capex_item.id = capex_uc.id_item
+                    and capex_item_user.id_proj = ?
+                    and capex_item_user.id = capex_item.id
+                    $origine_selection
+                    $side_selection
+        ORDER BY name
+        ");
+        $req->execute(array($ucID,$projID));
+
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $side = $row['side'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, 'side'=>$side, "cat"=>$cat];
+            }
+        }
+    }
+
+    
     return $list;
 }
 

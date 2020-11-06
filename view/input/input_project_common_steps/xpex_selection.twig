@@ -83,14 +83,20 @@
 </form>
 
 {% if xpexCategories[xpexCategories|keys[0]] %}
-<div class="row my-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewXpexModal" role="button">Create a custom item</button>
-</div>
+    <div class="row my-1">
+        <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewXpexModal" role="button">Create a custom item</button>
+    </div>
 {% endif %}
 
-<div class="row my-5">
+<div class="row my-1">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewXpexCatModal" role="button">Create a Category</button>
 </div>
+
+{% if xpexCategories[xpexCategories|keys[0]] %}
+    <div class="row my-1">
+        <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#deleteXpexCatModal" role="button">Delete a Category</button>
+    </div>
+{% endif %}
 
 <div class="row mt-3 text-center" {{ isTaken ? : "hidden"}}>
     <h6 id="createXpexHelp" class="col text-danger font-weight-bold"> "Please choose another name."</h6>
@@ -115,6 +121,7 @@
 
 {{ modal.create_xpex(projID,ucID, type, sideBarName ,listUcID, listUcsName, xpexCategories) }}
 {{ modal.create_xpex_cat(projID,ucID, type, sideBarName ,listUcID, listUcsName) }}
+{{ modal.delete_xpex_cat(projID,ucID, type, sideBarName ,listUcID, listUcsName, xpexCategories) }}
 {{xpexCategories|length}}
 
 {% if sideBarName == 'cost_benefits' or sideBarName == "input_use_case" %}
