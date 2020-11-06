@@ -95,7 +95,7 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             }else{
                 $ucID = $listUcID[0];
             }
-            //var_dump($list_xpex_user_from_ntt);
+            var_dump($list_xpex_user_from_ntt);
             /*var_dump($list_xpex_supplier);
             //var_dump($list_xpex_user_from_ntt);
             //var_dump($list_selXpex);*/
@@ -548,7 +548,7 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
             }elseif($type=="opex"){
                 insertOpexUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=='deployment_costs'){
-                insertImplemUser($projID,$ucID,$xpex_infos, $origine, $side);
+            insertImplemUser($projID,$ucID,$xpex_infos, $origine, $side);
             }elseif($type=='revenuesProtection'){
                 insertRevenuesProtectionUser($projID,$ucID,$xpex_infos);
             }elseif($type=='equipment_revenues'){

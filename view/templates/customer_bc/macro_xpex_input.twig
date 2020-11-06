@@ -171,7 +171,7 @@
                                 <th scope="col">% Protected </th>
                                 {% set size = size + 2 %}
                             {% else %}
-                                <th scope="col">#Reference unit per month </th>
+                                <th scope="col">#Reference unit {{ type != "capex" ? "per month"}} </th>
                                 {% set size = size + 1 %}
                             {% endif %}
                             {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}

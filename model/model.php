@@ -2772,7 +2772,7 @@ function insertImplemUser($projID,$ucID,$implem_data, $origine="from_ntt", $side
                                     VALUES (itemID,idProj);
                             END
                                 ');
-    $req = $db->prepare('CALL add_implem(?,?,?,?,?,?);');
+    $req = $db->prepare('CALL add_implem(?,?,?,?,?,?,?);');
     $ret = $req->execute(array($implem_data['name'],$implem_data['description'],$ucID,$projID,$origine, $side, $implem_data['cat']));
     return $ret;
 }
