@@ -64,7 +64,7 @@ function checkXpexInput(id, idAlert){
     console.log("checkXpexInput()");
     var ret = true;
     id = id.getAttribute('id');
-    var val = $("#"+id).val();
+    var val = $("#"+id).val().toString();
     console.log(id);
     var tab = $("#"+id).classes();
     var revenue_start = $("#pricing_start").text();
@@ -101,6 +101,7 @@ function checkXpexInput(id, idAlert){
             ret = false;
         } else {
             //$("#"+id).val(val);
+            $("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
     } else if(tab.includes("anVarCost") || tab.includes("anVarVol") || tab.includes("anVarRev") || tab.includes("volRed") || tab.includes("unitCostRed")){
@@ -112,10 +113,12 @@ function checkXpexInput(id, idAlert){
             ret = false;
         } else {
             //$("#"+id).val(val);
+            $("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         } 
     }else if(tab.includes("unit") || tab.includes("guide")){
 
+        $("#"+id).val(val);
         $("#"+id).css("background","#C3E6CB");
 
     }else if(tab.includes("impact100")){
@@ -161,6 +164,7 @@ function checkXpexInput(id, idAlert){
             ret = false;
         } else {
             //$("#"+id).val(val);
+            $("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
       
@@ -176,6 +180,7 @@ function checkXpexInput(id, idAlert){
             }
         } else {
             //$(this).val(val);
+            $("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
 
@@ -193,9 +198,11 @@ function checkXpexInput(id, idAlert){
                 ret = false;
             }
             else{
-                $("#"+id).css("background","#C3E6CB");
+            $("#"+id).val(val);
+            $("#"+id).css("background","#C3E6CB");
             }
         }else{
+            $("#"+id).val(val);
             $("#"+id).css("background","#C3E6CB");
         }
 

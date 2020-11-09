@@ -142,7 +142,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?A=input_project_common_supplier">{{traduction.getText("input_project_overlay")}} </a>
           <a class="dropdown-item" href="?A=input_use_case_supplier">{{traduction.getText("input_use_case")}}</a>
-          <a class="dropdown-item" href="?A=supplier_dashboards">{{traduction.getText("dashboards")}}</a>
+          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=supplier_dashboards">{{traduction.getText("dashboards")}}</a>
         </div>
       </li>
       {#                  CUSTOMERS BC              #}
@@ -151,7 +151,7 @@
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?A=input_project_common">{{traduction.getText("input_project_overlay")}} </a>
           <a class="dropdown-item" href="?A=input_use_case">{{traduction.getText("input_use_case")}}</a>
-          <a class="dropdown-item" href="?A=customer_dashboards">{{traduction.getText("dashboards")}}</a>
+          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=customer_dashboards">{{traduction.getText("dashboards")}}</a>
         </div>
       </li>
       {% endif %}

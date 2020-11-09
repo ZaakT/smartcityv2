@@ -135,3 +135,17 @@ function getLanguage(){
     return isset($_SESSION['language']) ? $_SESSION['language'] : 'en';
 }
 
+
+function getNbConfirmedUC(){
+    $projID = getProjID();
+
+    if(isset($_SESSION['username']) && $projID != -1){
+        $user = getUser($_SESSION['username']);
+        $UcConfirmed = getConfirmedUseCases($user[0], $projID);
+        return count($UcConfirmed);
+    }
+    else{
+        return 0;
+    }
+
+}

@@ -41,6 +41,7 @@ $twig->addGlobal('divisionName', divisionName());
 $twig->addGlobal('language', getLanguage());
 $twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
 $twig->addGlobal('GlobalProjID', getProjID());
+$twig->addGlobal('getNbConfirmedUC', getNbConfirmedUC());
 
 
 $is_connected = isConnected();
@@ -718,6 +719,7 @@ try{
                                 }
                             }  // --- CAPEX OR OPEX (XPEX) ---
                             elseif($_GET['A2']=="equipment_revenues" || $_GET['A2']=="deployment_revenues" || $_GET['A2']=="operating_revenues" ||  $_GET['A2']=="capex" || $_GET['A2']=="opex" || $_GET['A2']=="deployment_costs"){
+                                $side = "supplier";
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
@@ -726,6 +728,12 @@ try{
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
                                     }elseif($_GET['A3']=="create_xpex"){
                                         create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"supplier"); 
+                                    }elseif($_GET['A3']=="create_xpex_cat"){
+                                        //var_dump($side);
+                                        create_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
+                                    }elseif($_GET['A3']=="delete_xpex_cat"){
+                                        //var_dump($side);
+                                        delete_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -800,6 +808,12 @@ try{
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
                                     }elseif($_GET['A3']=="create_xpex"){
                                         create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],"customer"); 
+                                    }elseif($_GET['A3']=="create_xpex_cat"){
+                                        //var_dump($side);
+                                        create_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
+                                    }elseif($_GET['A3']=="delete_xpex_cat"){
+                                        //var_dump($side);
+                                        delete_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
                                             delete_xpex_user($_GET['id'],$_GET['A2'], $_GET['A']); 
@@ -1216,19 +1230,16 @@ try{
                     $_GET['A2']=="risks" || 
                     $_GET['A2']=="deployment_costs"){
                         if(isset($_GET['ucID']) and $_GET['ucID']!=0 and isset($_SESSION['projID']) and $_SESSION['projID']!=0){
+                                $side = isDev() ? "projDev" : "customer";
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                        $side = isDev() ? "projDev" : "customer";
                                         xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],$side, $isTaken); 
                                     }elseif($_GET['A3']=="selected"){
-                                        $side = isDev() ? "projDev" : "customer";
                                         xpex_selected($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="create_xpex"){
-                                        $side = isDev() ? "projDev" : "customer";
                                         create_xpex($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="create_xpex_cat"){
-                                        $side = isDev() ? "projDev" : "customer";
                                         create_xpex_cat($twig,$is_connected, $_POST,  $_GET['A2'], $_GET['A'],$side); 
                                     }elseif($_GET['A3']=="delete_xpex"){
                                         if(isset($_GET['id'])){
@@ -1249,7 +1260,6 @@ try{
                                     }
                                 }else {
                                     $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;
-                                    $side = isDev() ? "projDev" : "customer";
                                     xpex_selection($twig,$is_connected,$_SESSION['projID'], $_GET['ucID'],$_GET['A'], $_GET['A2'],$side, $isTaken);
                                 }
         

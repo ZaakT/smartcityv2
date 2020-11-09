@@ -531,7 +531,14 @@ function create_xpex($twig,$is_connected, $post,  $type, $sideBarName, $side) {
         }
         $name = $post['name'];
         $description = isset($post['description']) ? $post['description'] : "";
-        $origine = isset($post['origine']) ? $post['origine'] : "from_ntt";
+        $origine = "from_ntt";
+        if(isset($post['origine'])){
+            $origine = $post['origine'];
+        }else{
+            if($side == "supplier"){
+                $origine = "from_outside_ntt";
+            }
+        }
         $cat = $post['category'];
         $xpex_infos = ["name"=>$name,"description"=>$description, "cat"=>$cat];
         //echo $origine;

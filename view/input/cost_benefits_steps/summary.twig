@@ -62,7 +62,21 @@
 </div>
 {{isSup ?  "<form>"}}
 
-{{ modal.ask_redir(projID,ucID) }}
+{% set nbUC = 0 %}
+{% for sel_meas,sel_ucs in selScope %} 
+    {% for uc in sel_ucs %}
+        {% set nbUC = nbUC + 1 %}
+    {% endfor %}
+{% endfor %}
+
+{% set nbConfirmed = 0 %}
+{% for confirmed in confirmedUC %}
+    {% if confirmed %}
+        {% set nbConfirmed = 1 + nbConfirmed %}
+    {% endif %}
+{% endfor %}
+
+{{ modal.ask_redir(projID,ucID, nbUC, nbConfirmed) }}
 
     {% if confirm == 1 %}
         <script type="text/javascript">$('#askRedir').modal('show');</script>

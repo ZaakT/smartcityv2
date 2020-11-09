@@ -1,4 +1,4 @@
-{% macro ask_redir(projID=0,ucID=0) %}
+{% macro ask_redir(projID = 0, ucID = 0, nbUC = 1, nbConfirmed = 0) %}
 <div class="modal fade" id="askRedir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -9,7 +9,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                Where do you want to go now ?
+                {% if idDev or nbConfirmed > 0 %}
+                    Where do you want to go now ?
+                {% endif %}
+                {% if isSup and nbUC != nbConfirmed %}
+                    <br>Use Case(s) confirmed : {{nbConfirmed}}/{{nbUC}}
+                {% endif %}
             </div>
             <div class="modal-footer justify-content-center">
             {% if isDev %}
@@ -18,8 +23,8 @@
                 <a href="?A=dashboards&amp;A2=project"><button type="button" class="btn btn-dark">Dashboards</button></a>
                 <a href="?A=comp_projects&amp;A2=projects"><button type="button" class="btn btn-dark">Comparison</button></a>
             {% elseif isSup %}
-                <a href="?A=customer_dashboards"><button type="button" class="btn btn-dark">Customer Dashboards</button></a>
-                <a href="?A=supplier_dashboards"><button type="button" class="btn btn-dark">Supplier Dashboards</button></a>
+                <a href="?A=customer_dashboards"><button type="button" class="btn btn-dark" {{nbConfirmed == 0 ? "disabled" }}>Customer Dashboards</button></a>
+                <a href="?A=supplier_dashboards"><button type="button" class="btn btn-dark" {{nbConfirmed == 0 ? "disabled" }}>Supplier Dashboards</button></a>
 
             {% endif %}
             </div>

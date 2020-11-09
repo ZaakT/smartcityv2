@@ -3657,13 +3657,13 @@ function getListCashReleasingUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+    /*if($side == "supplier"){
         $solID = getSolutionByUcID($uc_ID);
         $ucInSol = getUC($solID);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
-    }
+    }*/
     $req = $db->prepare("SELECT cashreleasing_item.id,name,description, cat
                             FROM cashreleasing_item_user
                             INNER JOIN cashreleasing_uc
@@ -3926,13 +3926,13 @@ function getListWiderCashUser($projID,$uc_ID){
     $db = dbConnect();    
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+    /*if($side == "supplier"){
         $solID = getSolutionByUcID($uc_ID);
         $ucInSol = getUC($solID);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
-    }
+    }*/
     $req = $db->prepare("SELECT widercash_item.id,name,description, cat
                             FROM widercash_item_user
                             INNER JOIN widercash_uc
@@ -4186,13 +4186,13 @@ function getListQuantifiableUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+    /*if($side == "supplier"){
         $solID = getSolutionByUcID($uc_ID);
         $ucInSol = getUC($solID);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
-    }
+    }*/
     $req = $db->prepare("SELECT quantifiable_item.id,name,description, cat
                             FROM quantifiable_item_user
                             INNER JOIN quantifiable_uc
@@ -4412,13 +4412,13 @@ function getListNonCashUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+    /*if($side == "supplier"){
         $solID = getSolutionByUcID($uc_ID);
         $ucInSol = getUC($solID);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
-    }
+    }*/
     $req = $db->prepare("SELECT noncash_item.id,name,description, cat
                             FROM noncash_item_user
                             INNER JOIN noncash_uc
@@ -4653,18 +4653,21 @@ function getListRiskUser($projID,$uc_ID){
                                         and risk_item_user.id = risk_item.id
                             ORDER BY name
                             ");
-    $req->execute(array($ucID,$projID));
 
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat = $row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+    $ucIDList = [$uc_ID];
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID,$projID));
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat = $row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, "cat"=>$cat];
+            }
         }
     }
     //var_dump($list);

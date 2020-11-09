@@ -622,27 +622,26 @@ function getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, $perio
         throw new Exception("Wrong perdiode !");
     }
      // Cash-out Capex
-     $capex_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","capex", $side, $periode);
-     if($side == "customer"){
-         $capex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","capex", $side, $periode);
-     }
+    $capex_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","capex", $side, $periode);
+
+    $capex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","capex", $side, $periode);
+
  
      //Cash-out Opex
  
-     $opex_from_nttTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex", $side, $periode);
-     $opex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex", $side, $periode);
-     if($side == "customer"){
-         $opex_internalTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex", $side, $periode);
-     }
+    $opex_from_nttTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex", $side, $periode);
+    $opex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex", $side, $periode);
+
+    $opex_internalTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex", $side, $periode);
+
  
      //Cash-out Deployment 
  
  
-     $implem_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","implem", $side, $periode);
-     $implem_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","implem", $side, $periode);
-     if($side == "customer"){
-         $implem_internalTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","implem", $side, $periode);
-     }
+    $implem_from_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","implem", $side, $periode);
+    $implem_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","implem", $side, $periode);
+    $implem_internalTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","implem", $side, $periode);
+
      //Cash-in 
      if($side == "customer"){
          //Cash-in : Revenues
@@ -671,9 +670,9 @@ function getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, $perio
              $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot, 
              $revenues, $cash_realeasing_benefits, $wider_cash_benefits));
          }elseif($side == "supplier"){
-             array_push($list, getDataYearSupplier($projID, $ucID,$dates, $date,  $capex_from_nttTot, 
-             $implem_from_nttTot,  $implem_from_outside_nttTot, 
-             $opex_from_nttTot,  $opex_from_outside_nttTot, 
+             array_push($list, getDataYearSupplier($projID, $ucID,$dates, $date,  $capex_from_outside_nttTot, 
+             $implem_from_nttTot,  $implem_from_outside_nttTot,  $implem_internalTot, 
+             $opex_from_nttTot,  $opex_from_outside_nttTot,  $opex_internalTot, 
              $equipment, $deployment, $operating));
          }
      }
@@ -687,7 +686,7 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
     if($side ==  "customer"){
         $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }elseif($side == "supplier"){
-        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $list[1] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
     $list = getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, "year", $list);
     foreach ($list as $yearKey => $yearValues) {
@@ -701,13 +700,15 @@ function getUcData($projID, $ucID, $projectYears, $scope, $side){
     return $list;
 
 }
+
 function getDataYearSupplier($projID, $ucID,$projectYears, $year,  $capex_from_nttTot,  
-$implem_from_outside_nttTot,  $implem_from_nttTot,  $opex_from_nttTot,  $opex_from_outside_nttTot, 
+$implem_from_outside_nttTot,  $implem_internalTot,  
+$opex_from_outside_nttTot,  $opex_internalTot, 
 $equipment, $deployment, $operating){
     //return the data for the uc corresponding to the year.
     $capexTot = $capex_from_nttTot[$year];
-    $implemTot =  $implem_from_nttTot[$year]+$implem_from_outside_nttTot[$year];
-    $opexTot =  $opex_from_nttTot[$year]+$opex_from_outside_nttTot[$year];
+    $implemTot =  $implem_internalTot[$year]+$implem_from_outside_nttTot[$year];
+    $opexTot =  $opex_internalTot[$year]+$opex_from_outside_nttTot[$year];
 
 
     $cash_in =  $equipment[$year]+ $deployment[$year] + $operating[$year];
@@ -718,7 +719,7 @@ $equipment, $deployment, $operating){
     $net_cumulated_cash = $netCash;
     foreach ($projectYears as $yearKey) {
         if($year>$yearKey && $yearKey!="tot"){
-            $net_cumulated_cash += $equipment[$yearKey]+ $deployment[$yearKey] + $operating[$yearKey] - ($capex_from_nttTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]); 
+            $net_cumulated_cash += $equipment[$yearKey]+ $deployment[$yearKey] + $operating[$yearKey] - ($capex_from_nttTot[$yearKey] + $implem_internalTot[$yearKey]+$implem_from_outside_nttTot[$yearKey] + $opex_internalTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]); 
         
         }
         if($year==$yearKey){
@@ -734,7 +735,11 @@ $equipment, $deployment, $operating){
         $cash_out, 
             $capex_from_nttTot[$year], 
             $implemTot, 
+                $implem_internalTot[$year],
+                $implem_from_outside_nttTot[$year],
             $opexTot, 
+                $opex_internalTot[$year],
+                $opex_from_outside_nttTot[$year],
         $netCash, 
         $net_cumulated_cash
     ];
