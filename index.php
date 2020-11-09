@@ -1095,8 +1095,44 @@ try{
                                 header('Location: ?A='.$_GET['A'].'&A2=use_case_cb&projID='.$projID);
                             }
 
+                        
+                } elseif($_GET['A2']=="summary"){
+
+                    if(isset($_SESSION['projID'])){
+                        if($_SESSION['projID']!=0){
+                            if(isset($_GET['confirm'])){
+                                summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm']);
+                            } else {
+                                summary($twig,$is_connected,$_SESSION['projID']);
+                            }
                         }
-                } else {
+                        else { 
+                            header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                        }
+                    }
+                    else {
+                        header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                    }
+                    
+                }elseif($_GET['A2']=="summary_inputed"){
+                    if(isset($_SESSION['projID'])){
+                        if($_SESSION['projID']!=0){
+                            if(isset($_POST)){
+                                summary_inputed($twig,$is_connected,$_SESSION['projID'], $_POST, $_GET['A']);
+                            }else{
+                                header('Location: ?A='.$_GET['A'].'&A2=summary&projID='.$_SESSION['projID']);
+                            }
+                        }
+                        else { 
+                            header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                        }
+                    }
+                    else {
+                        header('Location: ?A='.$_GET['A'].'&A2=project_cb');
+                    }
+                    
+                } 
+            }else {
                     input_use_case_supplier($twig,$is_connected);
                 }
                 prereq_navbar("supplier");
