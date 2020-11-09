@@ -16,6 +16,8 @@ function login($twig,$username_in=true,$password_in=true){
     
 }
 
+
+
 function connexion($twig,$post){
     if(isset($post['inputLogin']) and isset($post['inputPassword'])){
         $username = $post['inputLogin'];

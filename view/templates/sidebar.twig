@@ -2,7 +2,13 @@
 
 {% macro sidebar(page,selectID=0,selectID2=0) %}
     <div class="nav navbar-dark bg-dark nav-pills flex-column sidebar">
-        <a class="navbar-brand px-5 py-3" href="?A=home"><h3 class="text-center">Urbatis AI</h3></a>
+        <a class="navbar-brand px-5 py-3" href="?A=home">
+            {% if logoName != "LogoUrbatis.png" %}
+                <img class="rounded float-left" src='../uploads/logos/{{logoName}}'></img>
+            {% else %}
+                <h3 class="text-center">Urbatis AI</h3>
+            {% endif %}
+        </a>
        
         <!-- - Input - / Project Design -->
         {% if page=="project_design" %}

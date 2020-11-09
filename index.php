@@ -41,7 +41,8 @@ $twig->addGlobal('divisionName', divisionName());
 $twig->addGlobal('language', getLanguage());
 $twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
 $twig->addGlobal('GlobalProjID', getProjID());
-$twig->addGlobal('getNbConfirmedUC', getNbConfirmedUC());
+$twig->addGlobal('getNbConfirmedUC', getNbConfirmedUC());getLogoName();
+$twig->addGlobal('logoName', getLogoName());
 
 
 $is_connected = isConnected();
