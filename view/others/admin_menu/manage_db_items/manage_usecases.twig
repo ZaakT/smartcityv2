@@ -11,10 +11,20 @@
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUseCaseModal" role="button">Create a new Use Case</button>
 </div>
 {% for id_meas,meas in measures %}
+    {% set test = false %}
+    {% for id_cat,cat_item in cat %}
+        {% for id_uc,usecase in usecases if usecase['id_meas'] == id_meas and usecase['id_cat'] == id_cat and test == false %}
+            {% set test = true %}
+        {% endfor %}
+    {% endfor %}
+
+
+    {% if test %}     
     <div class="row mt-5">
         <h3 class="col text-center">{{meas['name']}}</h3>
     </div>
     {{ list.list_usecases(usecases,measures,id_meas,cat,isTaken) }}
+    {% endif %}
 {% endfor %}
 {{ modal.create_usecase(measures,cat) }}
 {% endblock %}

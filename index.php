@@ -72,6 +72,8 @@ try{
                                 manage_users($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_user'){
                                 create_user($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=='create_user_group'){
+                                create_user_group($twig,$is_connected,$_POST);
                             } elseif($_GET['A3']=="delete_user"){
                                 if(isset($_GET['id'])){
                                     delete_user($_GET['id']);

@@ -10,6 +10,6 @@
 <div class="row mt-5">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewMeasureModal" role="button">Create a new Domain</button>
 </div>
-{{ list.list_measures(measures,isTaken,listNbUCs) }}
-{{ modal.create_measure(users) }}
+{{ list.list_measures(measures,isTaken,listNbUCs, listGroups) }}
+{{ modal.create_measure(users, listGroups) }}
 {% endblock %}

@@ -18,7 +18,7 @@
             <tbody>
                 {% for id_cat,cat_item in cat %}
                     {% set test = false %}
-                    {% for id_uc,usecase in usecases if usecase['id_meas']==id_meas and usecase['id_cat']==id_cat and test == false %}
+                    {% for id_uc,usecase in usecases if usecase['id_meas'] == id_meas and usecase['id_cat'] == id_cat and test == false %}
                         {% set test = true %}
                     {% endfor %}
                     {% if test %}

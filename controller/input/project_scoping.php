@@ -76,7 +76,7 @@ function scope($twig,$is_connected,$projID=0, $sideBarName){
             $list_measures = getListMeasures();
             $list_measures_user = [];
             foreach ($list_measures as $id_measure => $measure){
-                if($measure['user'] == 0 or $measure['user'] == $user[0]){
+                if(($measure['user'] == 0 and $measure['group_id'] == 0) or $measure['user'] == $user[0] or  $measure['group_id']==$user[9]){
                     $list_measures_user[$id_measure] = $measure;
                 }
             }

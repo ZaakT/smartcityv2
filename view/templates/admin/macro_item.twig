@@ -12,9 +12,10 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Category<br/>ID : name</th>
                     <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col">Unit</th>
-                    <th scope="col">Source of Guidance</th>
+                    <th scope="col" >Source of Guidance</th>
                     <th scope="col">Range</th>
                     <th scope="col"></th>
                 </tr>
@@ -25,6 +26,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
+                            <td>{{item['cat_id']}} : {{item['cat_name']}}</td>
                             <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td>{{ item['unit'] }}</td>
                             <td>{{ item['source'] }}</td>
@@ -53,6 +55,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Category<br/>ID : name</th>                    
                     <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Source of Guidance</th>
@@ -68,6 +71,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
+                            <td>{{item['cat_id']}} : {{item['cat_name']}}</td>
                             <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td>{{ item['unit'] }}</td>
                             <td>{{ item['source'] }}</td>
@@ -98,6 +102,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Category<br/>ID : name</th>                    
                     <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col">Unit</th>
                     <th scope="col">Source of Guidance</th>
@@ -111,6 +116,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
+                            <td>{{item['cat_id']}} : {{item['cat_name']}}</td>
                             <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td>{{ item['unit'] }}</td>
                             <td>{{ item['source'] }}</td>
@@ -139,6 +145,7 @@
                     <th scope="col">id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Category<br/>ID : name</th>                    
                     <th scope="col">Use Case<br/>ID : name</th>
                     <th scope="col"></th>
                 </tr>
@@ -149,6 +156,7 @@
                             <td class="check-col">{{ id }}</td>
                             <td>{{ item['name'] }}</td>
                             <td>{{ item['description'] }}</td>
+                            <td>{{item['cat_id']}} : {{item['cat_name']}}</td>
                             <td>{{ item['UC'][0] }} : {{ item['UC'][1] }}</td> {# si plusieurs uc par capex item => remplacer par un for qui parcourt  #}
                             <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteItem_{{ catItemName }}_{{ id }}"></span></a></td>
                             {{ modal.delete_item(catItemName,id,item['name']) }} 

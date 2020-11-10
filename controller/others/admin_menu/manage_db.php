@@ -22,6 +22,16 @@ function manage_users($twig,$is_connected,$isTaken=false){
     echo $twig->render('/others/admin_menu/manage_db_items/manage_users.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'users'=>$list_users, 'isTaken'=>$isTaken)); 
 }
 
+function create_user_group($twig,$is_connected,$post){
+    if(isset($post['name'])){
+        $name = $post['name'];
+        insertUserGroup($name);
+    }else{
+        throw new Exception('No name find !');
+    }
+    header('Location: ?A=admin&A2=manage_db&A3=manage_users');
+
+}
 function create_user($twig,$is_connected,$post){
     if(isset($post['isAdmin'])){
         $isAdmin=1;
@@ -65,16 +75,21 @@ function manage_measures($twig,$is_connected,$isTaken=false){
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
+    $listGroups = getListUserGroup();
+
     
-    echo $twig->render('/others/admin_menu/manage_db_items/manage_measures.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'measures'=>$list_measures, 'isTaken'=>$isTaken,'listNbUCs'=>$listNbUCs,'users'=>$list_users)); 
+    echo $twig->render('/others/admin_menu/manage_db_items/manage_measures.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+    'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'measures'=>$list_measures, 'isTaken'=>$isTaken,'listNbUCs'=>$listNbUCs,'users'=>$list_users,
+    'listGroups'=>$listGroups)); 
 }
 
 function create_measure($twig,$is_connected,$post){
     $name = $post['name'];
     $description = $post['description'];
     $user = $post['user'];
+    $group = $post['group'];
 
-    $measureInfos = [$name,$description,$user];
+    $measureInfos = [$name,$description,$user,$group];
     if(!empty(getMeasure($name))){
         manage_measures($twig,$is_connected,true);
     } else {

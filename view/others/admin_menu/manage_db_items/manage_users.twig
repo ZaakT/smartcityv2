@@ -12,6 +12,10 @@
 <div class="row mt-5">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserModal" role="button">Create a new User</button>
 </div>
+<div class="row mt-5">
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUserGroupModal" role="button">Create a new Group</button>
+</div>
 {{ list.list_users(users,isTaken) }}
 {{ modal.create_user() }}
+{{ modal.create_user_group() }}
 {% endblock %}

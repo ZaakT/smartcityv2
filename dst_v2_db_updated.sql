@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 09 nov. 2020 à 16:33
+-- Généré le :  mar. 10 nov. 2020 à 12:31
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -2501,24 +2501,25 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `name` varchar(255) NOT NULL,
   `description` text,
   `user` int(11) NOT NULL DEFAULT '0',
-  `projID` int(11) NOT NULL,
+  `group_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
 --
 
-INSERT INTO `measure` (`id`, `name`, `description`, `user`, `projID`) VALUES
+INSERT INTO `measure` (`id`, `name`, `description`, `user`, `group_id`) VALUES
 (0, 'Project Overlay', NULL, 0, 0),
 (21, 'Smart Lighting', '', 0, 0),
 (22, 'Building retrofit', '', 0, 0),
 (23, 'Traffic management', '', 0, 0),
 (24, 'Project Management NTT', '', 16, 0),
-(25, 'NTT', '', 16, 0),
-(26, 'test', '', 0, 0),
-(27, 'IoT Solutions', '', 0, 0);
+(25, 'NTT Accelerate Smart Solutions', '', 16, 0),
+(27, 'IoT Solutions', '', 0, 0),
+(28, 'My domain', '', 0, 0),
+(30, 'test G1', '', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -3199,7 +3200,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1),
 (28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0),
-(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-09 15:00:10', 16, 1, 1),
+(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-10 13:25:39', 16, 1, 1),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-09 13:50:01', 16, 1, 0);
 
 -- --------------------------------------------------------
@@ -4585,17 +4586,17 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
   `type` enum('department','team') NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_perimeter_data`
 --
 
 INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
-(30, 'team b', 'team', 51),
-(30, 'team a', 'team', 50),
-(30, 'dep 02', 'department', 49),
-(30, 'dep 01', 'department', 48),
+(30, 'team b', 'team', 69),
+(30, 'team a', 'team', 68),
+(30, 'dep 02', 'department', 67),
+(30, 'dep 01', 'department', 66),
 (32, 'NTT accelerate SMART', 'department', 55),
 (32, 'Finance', 'team', 56),
 (32, 'Sales', 'team', 57);
@@ -5916,6 +5917,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `logoName` text NOT NULL,
   `companyName` text NOT NULL,
   `divisionName` text NOT NULL,
+  `group_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -5925,16 +5927,16 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Déchargement des données de la table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`, `logoName`, `companyName`, `divisionName`) VALUES
-(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd', '', '', ''),
-(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd', '', '', ''),
-(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', '', '', ''),
-(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', '', '', ''),
-(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', '', '', ''),
-(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.', '', ''),
-(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', '', '', ''),
-(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '', '', ''),
-(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '16.', 'NTT', 'NTT  Accelerate SMART Solutions');
+INSERT INTO `user` (`id`, `username`, `lastname`, `firstname`, `email`, `password`, `salt`, `is_admin`, `is_active`, `creation_date`, `profile`, `logoName`, `companyName`, `divisionName`, `group_id`) VALUES
+(1, 'admin', NULL, NULL, NULL, '$2y$10$vZD1YOsZNMYWzqzyg.q5KOiJ5M6VrLK8sOGcyOtEB5zWrYb3P4fGq', '10661622345dce8dd31fac11.66803067', 1, 1, '2020-02-11 11:42:57', 'd', '', '', '', 0),
+(2, 'user1', NULL, NULL, NULL, '$2y$10$wFtEEFoLQawd.KdW05QTGeituOfY8mA2kyqHBFnurWKsHu63Ke5vu', '646419995e428578913042.05825044', 0, NULL, '2020-02-11 11:44:08', 'd', '', '', '', 0),
+(5, 'Zak', NULL, NULL, NULL, '$2y$10$8OstD4JHwDpDsUdmO2FM0Ocszp7gHS9M.7wXIb88WUm4nA8m5dC1W', '7528837005f032af7425025.62320933', 1, NULL, '2020-07-06 15:45:27', 'd', '', '', '', 0),
+(10, 'ZakSup', NULL, NULL, NULL, '$2y$10$A5Ler5Xbj7Y6WpG/3gls6uuLRDdfv773iwOHesIKrt4rQpC/Aoz7e', '12867769935f1053d19cec80.37775064', 1, NULL, '2020-07-16 15:19:13', 's', '', '', '', 0),
+(12, 'adminD', NULL, NULL, NULL, '$2y$10$31NeoivqFMZ4VYFgA2OBDeHo3JzyRYD64SdvRSHDAEtPxwMSVY66S', '8699085225f3a309ecca908.48687664', 0, NULL, '2020-08-17 09:24:14', 'd', '', '', '', 0),
+(13, 'hsolignac', NULL, NULL, NULL, '$2y$10$CcJhKSDio5GeUGKMpXrliOOoa/4HhGAHMuYwXqxeYKh0uoAYprjwe', '13261339555f913abbcfa8a9.99900149', 1, NULL, '2020-09-15 12:12:10', 'd', '.', '', '', 0),
+(14, 'Supplier', NULL, NULL, NULL, '$2y$10$ZRmI4EdFyNa0DjXBIuVy0OEss9uyquBbrs07M4p2ABNp9NwW5y.26', '19226631715f609399dea569.52156583', 1, NULL, '2020-09-15 12:12:42', 's', '', '', '', 0),
+(15, 'SupplierTest', NULL, NULL, NULL, '$2y$10$9f42/LpUAetvI3ucAfii7eXEuA3HSfPk.2eSi1nErlj3BcXHhhpRO', '4077705355f60bc8fcbd303.92552720', 1, NULL, '2020-09-15 15:07:27', 's', '', '', '', 0),
+(16, 'NTT', NULL, NULL, NULL, '$2y$10$5l/yrvBWGAX5Il.JcLQdNeKKVY5AcKTcHlaaMCj0OOiPdfYggGuye', '2121549035f96d9f18e0b16.02798293', 1, NULL, '2020-10-26 15:15:13', 's', '16.', 'NTT', 'NTT  Accelerate SMART Solutions', 1);
 
 -- --------------------------------------------------------
 
@@ -5948,7 +5950,14 @@ CREATE TABLE IF NOT EXISTS `user_group` (
   `name` varchar(256) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `user_group`
+--
+
+INSERT INTO `user_group` (`id`, `name`) VALUES
+(1, 'group 1');
 
 -- --------------------------------------------------------
 

@@ -120,7 +120,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName, companyName, divisionName FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName, companyName, divisionName, group_id FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -134,11 +134,19 @@ function getUser($username){
         $logoName = $res['logoName'];
         $companyName = $res['companyName'];
         $divisionName = $res['divisionName'];
-        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName, $companyName, $divisionName];
+        $group_id = $res['group_id'];
+        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName, $companyName, $divisionName, $group_id];
     } else {
         $user = [];
     }
     return $user;
+}
+
+function getGroupByID($groupID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM user_group WHERE id = ?');
+    $req->execute(array($groupID));
+    return $req->fetch();
 }
 
 function getListUsers(){
@@ -151,6 +159,24 @@ function getListUsers(){
     }
     return $list;
 }
+
+function insertUserGroup($name){
+    $db = dbConnect();
+    $req = $db->prepare('INSERT INTO user_group (name) VALUES (?)');
+    return $req->execute(array($name));
+}
+
+function getListUserGroup(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM user_group');    
+    $req->execute();
+    $list = [];
+    while ($row = $req->fetch()){
+        array_push($list,$row);
+    }
+    return $list;
+}
+
 
 function insertUser($user){
     /*$db = dbConnect();
@@ -193,9 +219,10 @@ function modifyUser($user){
                             password = ?, 
                             logoName = ?,
                             companyName = ?,
-                            divisionName = ?
+                            divisionName = ?,
+                            group_id = ?
                         WHERE id = ?');
-    return $req->execute(array($user[1],$user[2],$user[3],$user[4],$user[5],$user[6], $user[0]));
+    return $req->execute(array($user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7], $user[0]));
 }
 
 function deleteUser($userID){
@@ -260,7 +287,7 @@ function update_ModifDate_ucm($ucmID){
 
 function getListMeasures(){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id,name,description,user FROM measure ORDER BY name');
+    $req = $db->prepare('SELECT id,name,description,user,group_id FROM measure ORDER BY name');
     $req->execute();
     $list = [];
     while ($row = $req->fetch()){
@@ -268,7 +295,9 @@ function getListMeasures(){
         $name = $row['name'];
         $description = $row['description'];
         $user = $row['user'];
-        $list[$id] = ['name'=>$name,'description'=>$description,'user'=>$user];
+        $group_id = $row['group_id'];
+        $group_name = getGroupByID($group_id)["name"];
+        $list[$id] = ['name'=>$name,'description'=>$description,'user'=>$user,'group_id'=>$group_id, "group_name"=>$group_name];
     }
     return $list;
 }
@@ -296,8 +325,8 @@ function getMeasure($measName){
 
 function insertMeasure($measure){
     $db = dbConnect();
-    $req = $db->prepare('INSERT INTO measure (name,description,user) VALUES (?,?,?)');
-    return $req->execute(array($measure[0],$measure[1],$measure[2]));
+    $req = $db->prepare('INSERT INTO measure (name,description,user,group_id) VALUES (?,?,?,?)');
+    return $req->execute(array($measure[0],$measure[1],$measure[2],$measure[3]));
 }
 
 function deleteMeasure($measID){
@@ -909,6 +938,13 @@ function getSolutionByUcID($ucID){
                         FROM use_case_cat
                         WHERE id = ?');
     $req->execute(array($idSol));
+    return $req->fetch();
+}
+
+function getXpexCatByID($id_cat){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT * FROM xpex_cat WHERE id_cat = ?');
+    $req->execute(array($id_cat));
     return $req->fetch();
 }
 
@@ -1981,7 +2017,7 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
 
 function getListCapexItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT capex_item.id,name,description,capex_item_advice.unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT capex_item.id,name,description,capex_item_advice.unit,source,range_min,range_max, cat
                             FROM capex_item
                             LEFT JOIN capex_item_advice
                                 ON capex_item.id = capex_item_advice.id
@@ -2002,10 +2038,13 @@ function getListCapexItems($ucID){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max
+            ,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -2438,7 +2477,7 @@ function getListSupplierRevenuesItems($ucID, $revenueType){
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("2.1 wrong equipment type.");}
 
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT supplier_revenues_item.item_id,supplier_revenues_item.name,supplier_revenues_item.description
+    $req = $db->prepare("SELECT DISTINCT supplier_revenues_item.item_id,supplier_revenues_item.name,supplier_revenues_item.description, cat
                             FROM supplier_revenues_item
                             LEFT JOIN supplier_revenues_uc
                                 ON supplier_revenues_item.item_id = supplier_revenues_uc.id_revenue
@@ -2455,10 +2494,12 @@ function getListSupplierRevenuesItems($ucID, $revenueType){
         $id_item = intval($row['item_id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -2623,7 +2664,7 @@ function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
 
 function getListImplemItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT implem_item.id,name,description,implem_item_advice.unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT implem_item.id,name,description,implem_item_advice.unit,source,range_min,range_max, cat
                             FROM implem_item
                             LEFT JOIN implem_item_advice
                                 ON implem_item.id = implem_item_advice.id
@@ -2644,10 +2685,12 @@ function getListImplemItems($ucID){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -2932,7 +2975,7 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
 
 function getListOpexItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT opex_item.id,name,description,opex_item_advice.unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT opex_item.id,name,description,opex_item_advice.unit,source,range_min,range_max, cat
                             FROM opex_item
                             LEFT JOIN opex_item_advice
                                 ON opex_item.id = opex_item_advice.id
@@ -2953,10 +2996,12 @@ function getListOpexItems($ucID){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -3331,7 +3376,7 @@ function getListRevenuesAdvice($ucID){
 
 function getListRevenuesItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT revenues_item.id,name,description,revenues_item_advice.unit,source,range_min,range_max
+    $req = $db->prepare("SELECT DISTINCT revenues_item.id,name,description,revenues_item_advice.unit,source,range_min,range_max, cat
                             FROM revenues_item
                             LEFT JOIN revenues_item_advice
                                 ON revenues_item.id = revenues_item_advice.id
@@ -3352,10 +3397,12 @@ function getListRevenuesItems($ucID){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     return $list;
@@ -3608,7 +3655,7 @@ function getListCashReleasingAdvice($ucID){
         $range_max_red_cost = floatval($row['range_max_red_cost']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
         } else {
             $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
         }
@@ -3619,7 +3666,7 @@ function getListCashReleasingAdvice($ucID){
 
 function getListCashreleasingItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT cashreleasing_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost
+    $req = $db->prepare("SELECT DISTINCT cashreleasing_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost, cat
                             FROM cashreleasing_item
                             LEFT JOIN cashreleasing_item_advice
                                 ON cashreleasing_item.id = cashreleasing_item_advice.id
@@ -3643,10 +3690,12 @@ function getListCashreleasingItems($ucID){
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost ,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost ,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -3888,7 +3937,7 @@ function getListWiderCashAdvice($ucID){
 
 function getListWidercashItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT widercash_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost
+    $req = $db->prepare("SELECT DISTINCT widercash_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost,unit_cost, cat
                             FROM widercash_item
                             LEFT JOIN widercash_item_advice
                                 ON widercash_item.id = widercash_item_advice.id
@@ -3912,10 +3961,12 @@ function getListWidercashItems($ucID){
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -4151,7 +4202,7 @@ function getListQuantifiableAdvice($ucID){
 
 function getListQuantifiableItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT quantifiable_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb
+    $req = $db->prepare("SELECT DISTINCT quantifiable_item.id,name,description,unit,source,range_min_red_nb,range_max_red_nb, cat
                             FROM quantifiable_item
                             LEFT JOIN quantifiable_item_advice
                                 ON quantifiable_item.id = quantifiable_item_advice.id
@@ -4172,10 +4223,12 @@ function getListQuantifiableItems($ucID){
         $source = $row['source'];
         $range_min_red_nb = floatval($row['range_min_red_nb']);
         $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -4381,7 +4434,7 @@ function getListNonCashAdvice($ucID){
 
 function getListNoncashItems($ucID){
     $db = dbConnect();
-    $req = $db->prepare("SELECT DISTINCT noncash_item.id,name,description
+    $req = $db->prepare("SELECT DISTINCT noncash_item.id,name,description, cat
                             FROM noncash_item
                             LEFT JOIN noncash_item_advice
                                 ON noncash_item.id = noncash_item_advice.id
@@ -4398,10 +4451,12 @@ function getListNoncashItems($ucID){
         $id_item = intval($row['id']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat_id = intval($row['cat']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
         }
     }
     //var_dump($list);
@@ -4601,18 +4656,11 @@ function getListRisksAdvice($ucID){
     return $list;
 }
 
-function getListRisksItems($ucID){
+function getListRisksItems($uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
-        foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
-        }
-    }
-    $req = $db->prepare("SELECT DISTINCT risk_item.id,risk_item.name,risk_item.description
+    $req = $db->prepare("SELECT DISTINCT risk_item.id,risk_item.name,risk_item.description, cat
                             FROM risk_item
                             LEFT JOIN risk_item_advice
                                 ON risk_item.id = risk_item_advice.id
