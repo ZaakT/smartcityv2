@@ -479,6 +479,14 @@ try{
                             
                             header('Location: ?A='.$_GET['A'].'=&A2=project');
                         }
+                    }elseif($_GET['A2']=="duplicate_proj"){
+                        if(isset($_POST)){
+                            \general\duplicate_proj($_POST,$_GET['A'], "project");
+                        }
+                        else{
+                            
+                           // header('Location: ?A='.$_GET['A'].'=&A2=project');
+                        }
                     }elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);

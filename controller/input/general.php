@@ -55,6 +55,33 @@ function edit_proj($post, $sideBarName, $A2){
     }
 }
 
+function duplicate_proj($post, $sideBarName, $A2){
+    var_dump($post);
+    //Duplicate the project
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $projIDorigin = $post["projID"];
+    $projOrigin = getProjByID($projIDorigin, $idUser);
+    $oldName = $projOrigin['name'];
+    $nbCopy = 0;
+    $newName = $oldName." copy";
+    while(!empty(getProj($idUser,$newName))){
+        $nbCopy++;
+        $newName = $oldName." copy ($nbCopy)";
+    }
+    var_dump($newName);
+    insertProj([$newName,$projOrigin['description'], $idUser]);    
+    $newProj = getProj($idUser,$newName);
+
+    //The project has duplicated, now we duplicate the scope 
+    $listSelScopeOrigin = getListSelScope($projIDorigin);
+    insertSelScope($newProj["id"],$listSelScopeOrigin);
+
+
+
+    header('Location: ?A='.$sideBarName.'&A2='.$A2);
+}
+
 
 function delete_proj($idProj, $sideBarName, $A2){
     // var_dump($idProj);

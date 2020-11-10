@@ -114,25 +114,6 @@
 
 
 {% macro edit_proj(projID, projName, projDescription, sideBarName) %}
-{#<div class="modal fade" id="editProj_{{ projID }}"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Project Edition</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Please enter the new Project informations?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                <a href="?A={{sideBarName}}&amp;A2=edit_proj&amp;id={{ projID }}"><button type="button" class="btn btn-dark">Yes</button></a>
-            </div>
-        </div>
-    </div>
-</div> #}
 <div class="modal fade" id="editProj_{{ projID }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog">
         <form id="editProj-form" action="?A={{sideBarName}}&amp;A2=edit_proj" method='post'>
@@ -161,6 +142,32 @@
                 <div class="modal-footer">
                 <button type="submit" class="btn btn-dark">Update</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>    
+{% endmacro %}
+
+{% macro duplicate_proj(projID, projName, sideBarName) %}
+<div class="modal fade" id="duplicateProj_{{ projID }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="duplicateProj-form" action="?A={{sideBarName}}&amp;A2=duplicate_proj" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Project Duplication</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Do you want to duplicate this project ({{projName}}) 
+                </div>
+                <input type="number" class="form-control" name="projID" value = "{{projID}}" required hidden>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-dark">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                 </div>
             </div>
         </form>

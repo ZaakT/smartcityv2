@@ -16,6 +16,7 @@
                     {% if deleteMode %}
                         <th scope="col"></th>
                         <th scope="col"></th>
+                        <th scope="col"></th>
                     {% endif %}
 
                 </tr>
@@ -36,6 +37,7 @@
                     {% if deleteMode %}
                         <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteProj_{{ proj[0] }}"></span></a></td>
                         <td><a href="#"><span class="oi oi-pencil text-dark" title="pencil" aria-hidden="true" data-toggle="modal" data-target="#editProj_{{ proj[0] }}"></span></a></td>
+                        <td><a href="#"><span class="oi oi-transfer text-dark" title="duplicate" aria-hidden="true" data-toggle="modal" data-target="#duplicateProj_{{ proj[0] }}"></span></a></td>
                     {% endif %}
                 </tr>
             {% endfor %}
