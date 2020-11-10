@@ -73,9 +73,15 @@ function duplicate_proj($post, $sideBarName, $A2){
     insertProj([$newName,$projOrigin['description'], $idUser]);    
     $newProj = getProj($idUser,$newName);
 
+    //We duplicate the project information
+    copyProjInf($newProj["id"], $projOrigin);
+    copyProfPerimeter($newProj["id"],$projIDorigin );
+    
     //The project has duplicated, now we duplicate the scope 
     $listSelScopeOrigin = getListSelScope($projIDorigin);
     insertSelScope($newProj["id"],$listSelScopeOrigin);
+
+
 
 
 

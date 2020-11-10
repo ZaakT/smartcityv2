@@ -875,6 +875,39 @@ function getListWeights($ucmID){
 
 // ---------------------------------------- PROJECT ----------------------------------------
 
+function copyProfPerimeter($idNewProj, $idOriginProj){
+    $originPerimeter = getPerimeterSupplier($idOriginProj);
+    $originPerimeterData = getPerimeterData($idOriginProj);
+
+    $db = dbConnect();
+    $req = $db->prepare("INSERT INTO supplier_perimeter
+                            (proj_id, country, city, name, area)
+                            VALUES (?,?,?,?,?)");
+
+    $req->execute(array($idNewProj,$originPerimeter['country'], $originPerimeter['city'], $originPerimeter['name'] , $originPerimeter['area']));     
+    
+    $req = $db->prepare("INSERT INTO supplier_perimeter_data 
+                (proj_id, data, type)
+                VALUE (?,?,?)");
+    foreach($originPerimeterData as $type=>$dataType){
+        foreach($dataType as $data){
+            $req->execute(array($idNewProj, $data, $type));
+        }
+    }
+}
+
+function copyProjInf($idNewProj, $projInfo){
+    // Copy the information of projInfo into the project of idNewProj
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project 
+                            SET discount_rate = ?,
+                            weight_bank = ?,
+                            weight_bank_soc = ?,
+                            scoping = ?,
+                            cb = ?
+                            WHERE id = ?;');
+    $req->execute(array($projInfo['discount_rate'],$projInfo['weight_bank'],$projInfo['weight_bank_soc'],$projInfo['scoping'],$projInfo['cb'],$idNewProj));
+}
 
 
 function getProjByID($id,$idUser){
@@ -1191,6 +1224,7 @@ function getListSelScope($projID){
 
     return $list;
 }
+ 
 
 function insertSelScope($projID,$list){
     $db = dbConnect();
