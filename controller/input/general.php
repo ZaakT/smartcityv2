@@ -38,6 +38,24 @@ function create_proj($post, $sideBarName, $A2){
     }
 }
 
+function edit_proj($post, $sideBarName, $A2){
+    var_dump($post);
+    $name = $post['name'];
+    $description = isset($post['description']) ? $post['description'] : "";
+    $user = getUser($_SESSION['username']);
+    $idUser = $user[0];
+    $projID =  $post['projID'];
+
+    $projInfos = [$name,$description,$projID];
+    if(!empty(getProj($idUser,$name)) && getProj($idUser,$name)['id']=!$projID ){
+        header('Location: ?A='.$sideBarName.'&A2='.$A2.'t&isTaken=true');
+    } else {
+        editProj($projInfos);
+        header('Location: ?A='.$sideBarName.'&A2='.$A2);
+    }
+}
+
+
 function delete_proj($idProj, $sideBarName, $A2){
     // var_dump($idProj);
     deleteProj($idProj);

@@ -910,6 +910,18 @@ function insertProj($proj){
     return $req->execute(array($proj[0],$proj[1],$proj[2]));
 }
 
+function editProj($proj){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project 
+                            SET name = ?,
+                            description = ?
+                            WHERE id = ?;');
+
+    var_dump($req);
+    var_dump(array($proj[0],$proj[1],$proj[2]));
+    return $req->execute(array($proj[0],$proj[1],$proj[2]));
+}
+
 function deleteProj($id){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM project WHERE id = ?');

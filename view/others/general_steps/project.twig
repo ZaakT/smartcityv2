@@ -110,6 +110,14 @@
 
 
 {% if createMode %}{{ modal.create_proj(sideBarName) }}{% endif %}
+{% if deleteMode %}
+
+    {% for proj in projects %}
+        {{ modal.delete_proj(proj[0],proj[1], sideBarName) }}
+        {{ modal.edit_proj(proj[0],proj[1], proj[2], sideBarName) }}
+    {% endfor %}
+
+{% endif %}
 
 {% endblock %}
 

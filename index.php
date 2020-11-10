@@ -471,8 +471,15 @@ try{
                         else {
                             header('Location: ?A='.$_GET['A'].'&A2=project');
                         }
-                    }
-                    elseif($_GET['A2']=="proj_selected"){
+                    }elseif($_GET['A2']=="edit_proj"){
+                        if(isset($_POST)){
+                            \general\edit_proj($_POST,$_GET['A'], "project");
+                        }
+                        else{
+                            
+                            header('Location: ?A='.$_GET['A'].'=&A2=project');
+                        }
+                    }elseif($_GET['A2']=="proj_selected"){
                         if(isset($_POST['radio_proj'])){
                             $projID = intval($_POST['radio_proj']);
                             $_SESSION['projID']=$projID;

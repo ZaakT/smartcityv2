@@ -4,10 +4,10 @@
         <form id="createProj-form" action="?A={{sideBarName}}&amp;A2=create_proj" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Project informations</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Project informations</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group row">
@@ -23,12 +23,12 @@
                         </div>
                     </div>
                 </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-dark">Create</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </form>
+                <div class="modal-footer">
+                <button type="submit" class="btn btn-dark">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>  
+        </form>
     </div>
 </div>    
 {% endmacro %}
@@ -113,3 +113,57 @@
 {% endmacro %}
 
 
+{% macro edit_proj(projID, projName, projDescription, sideBarName) %}
+{#<div class="modal fade" id="editProj_{{ projID }}"tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Project Edition</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please enter the new Project informations?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A={{sideBarName}}&amp;A2=edit_proj&amp;id={{ projID }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> #}
+<div class="modal fade" id="editProj_{{ projID }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="editProj-form" action="?A={{sideBarName}}&amp;A2=edit_proj" method='post'>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Please enter the new Project informations</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" placeholder="Enter a name" value = "{{projName}}" required>
+                            <input type="number" class="form-control" name="projID" value = "{{projID}}" required hidden>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-sm-3 col-form-label">Description</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="description" id="description" placeholder="Enter a description"  value = "{{projDescription}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="submit" class="btn btn-dark">Update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>    
+{% endmacro %}

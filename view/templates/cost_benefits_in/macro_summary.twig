@@ -8,14 +8,14 @@
         <table class='table table-sm table-bordered table-responsive-lg text-center'>
             <thead class="thead thead-light text-center">
                 <tr>
-                    <th scope="col">To Be Completed</th> 
+                    {#<th scope="col">To Be Completed</th>#}
                     <th scope="col">Left Blank</th>
                     <th scope="col">Completed</th> 
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td scope="col"><span title='{{symb[0]}}' class="oi oi-{{symb[0]}} {{color[0]}}">{{symb[0]}}</span></td>
+                    {#<td scope="col"><span title='{{symb[0]}}' class="oi oi-{{symb[0]}} {{color[0]}}">{{symb[0]}}</span></td>#}
                     <td scope="col"><span title="{{symb[2]}}" class="oi oi-{{symb[2]}} {{color[2]}}">{{symb[2]}}</span></td>
                     <td scope="col"><span title="{{symb[1]}}" class="oi oi-{{symb[1]}} {{color[1]}}"></span></td>
                 </tr>
@@ -67,7 +67,7 @@
                 {% endfor %}
                 {% if isSup %}
                 <tr class="table-primary">
-                    <td>Validation</td>
+                    <td>UC Selection for computation</td>
                     {% for sel_meas,sel_ucs in selScope %} 
                         {% for uc in sel_ucs %}
                         <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>

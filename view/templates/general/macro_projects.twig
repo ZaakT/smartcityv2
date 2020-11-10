@@ -13,7 +13,10 @@
                     {% if scopeMode %}<th scope="col">Project Scoping</th> {% endif %}
                     {% if costBenefitsMode %}<th scope="col">Costs Benefits</th> {% endif %}
                     {% if scheduleVerifMode %}<th scope="col">{{scheduleVerifModeText}}</th>{% endif %}
-                    {% if deleteMode %}<th scope="col"></th>{% endif %}
+                    {% if deleteMode %}
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    {% endif %}
 
                 </tr>
             </thead>
@@ -30,8 +33,10 @@
                     {% if scopeMode %}<td><img width=20 height=20 id="{{ proj[9] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[9] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
                     {% if costBenefitsMode %}<td><img width=20 height=20 id="{{ proj[10] ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[10] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
                     {% if scheduleVerifMode %}<td><img width=20 height=20 id="{{ scheduleVerif ? "full_circle" : "empty_circle" }}" src="../../../public/img/{{ proj[11] ? "full_circle" : "empty_circle" }}.png"/></td>{% endif %}
-                    {% if deleteMode %}<td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteProj_{{ proj[0] }}"></span></a></td>{% endif %}
-                    {{ modal.delete_proj(proj[0],proj[1], sideBarName) }}
+                    {% if deleteMode %}
+                        <td><a href="#"><span class="oi oi-trash text-dark" title="trash" aria-hidden="true" data-toggle="modal" data-target="#askDeleteProj_{{ proj[0] }}"></span></a></td>
+                        <td><a href="#"><span class="oi oi-pencil text-dark" title="pencil" aria-hidden="true" data-toggle="modal" data-target="#editProj_{{ proj[0] }}"></span></a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
