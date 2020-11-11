@@ -138,7 +138,7 @@ function updateData(){
     console.log(data);
     //console.log("coucou");
     if(data[getUcSelected()].length==0){
-      $("#errorInput").text("Error: Any Item selected for This use case, please go to the Input Use Case section.");
+      $("#errorInput").text("Error: No Item selected for This use case, please go to the Input Use Case section.");
       removeGraphs();
       updateTable(tableRef,data[ucSeleted] );
       $("#cball_table").attr('hidden', true);

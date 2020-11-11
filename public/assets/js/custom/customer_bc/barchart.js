@@ -62,7 +62,7 @@ function updateData(){
     $("#barchart").remove();
     console.log(data[getUcSelected()]);
     if(data[getUcSelected()].length==0){
-        $("#errorInput").text("Error: Any Item selected for This use case, please go to the Input Use Case section.");
+        $("#errorInput").text("Error: No Item selected for This use case, please go to the Input Use Case section.");
       }else{
         $("#errorInput").text("");
         $('#graph-container').append('<canvas id="barchart"><canvas>');
