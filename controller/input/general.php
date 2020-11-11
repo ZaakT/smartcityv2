@@ -56,7 +56,6 @@ function edit_proj($post, $sideBarName, $A2){
 }
 
 function duplicate_proj($post, $sideBarName, $A2){
-    var_dump($post);
     //Duplicate the project
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
@@ -69,7 +68,7 @@ function duplicate_proj($post, $sideBarName, $A2){
         $nbCopy++;
         $newName = $oldName." copy ($nbCopy)";
     }
-    var_dump($newName);
+    
     insertProj([$newName,$projOrigin['description'], $idUser]);    
     $newProj = getProj($idUser,$newName);
 
@@ -80,6 +79,39 @@ function duplicate_proj($post, $sideBarName, $A2){
     //The project has duplicated, now we duplicate the scope 
     $listSelScopeOrigin = getListSelScope($projIDorigin);
     insertSelScope($newProj["id"],$listSelScopeOrigin);
+
+    //Now, we duplicate the overlay schedule
+    $keyDatesOrigin = getProjetKeyDates($projIDorigin);
+    if(isset($keyDatesOrigin[0])){
+        //We duplicate only if we find a schedule
+        $keyDatesOrigin = $keyDatesOrigin[0];
+        insertProjetKeyDates($newProj["id"], $keyDatesOrigin['start_date'], $keyDatesOrigin['duration'], $keyDatesOrigin['deploy_start_date'], $keyDatesOrigin['deploy_duration']);
+    }
+
+    //We duplicate the UCs schedules
+    $listSelScopeNew= getListSelScope($newProj["id"]);
+    foreach ($listSelScopeNew as $measID => $list_ucs) {
+        foreach ($list_ucs as $ucID) {
+            $scheduleDatesOrigin = getProjetSchedule($projIDorigin, $ucID);
+            if($scheduleDatesOrigin){
+                insertProjectSchedule($newProj["id"], $ucID, $scheduleDatesOrigin['deploy_start'], $scheduleDatesOrigin['deployment_duration'], 
+                $scheduleDatesOrigin['uc_end'], $scheduleDatesOrigin['pricing_start'], $scheduleDatesOrigin['poc_duration']);
+            }
+        }
+    }
+
+
+    //We duplicate the UCs selection (inputed in the summary)
+    $confirmedUseCasesOrigin = getConfirmedUseCases($user[0], $projIDorigin );
+    foreach($confirmedUseCasesOrigin as $key=>$value){
+        $key = explode("_", $key);
+        insertNewUseCaseConfirmation($user[0], $newProj["id"], $key[1], $key[0]);
+    }
+
+    //Now ... we have to duplicate the UC's items ... It will not be easy
+    duplicateXpexItems($projIDorigin,$newProj["id"]);
+
+
 
 
 

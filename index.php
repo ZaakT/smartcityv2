@@ -5,7 +5,9 @@ This file acts as a router, that is to say that it will be in charge of the redi
 We use the variable $ _GET to retrieve information (like A, A2, ucmID, projectID, ...).
 Then, we will call functions (defined in the controllers) according to the value of this information.
 */
-
+ini_set("xdebug.var_display_max_children", '-1');
+ini_set("xdebug.var_display_max_data", '-1');
+ini_set("xdebug.var_display_max_depth", '-1');
 // importing files
 require __DIR__ . '/vendor/autoload.php';
 function prereq_navbar($side){
