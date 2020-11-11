@@ -70,7 +70,7 @@
     </div>
 {#}
 <h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
-<table id="keyDatesTable" class=" text-center table dashboard-table">
+<table id="keyDatesTable" class="table table-lg table-bordered table-striped table-responsive-lg">
     <tr>
         <th width="30%">{{traduction.getText("uses_cases")}}</th>
         <th width="16%">{{traduction.getText("schedule")}}</th>
@@ -131,10 +131,9 @@
                             <div id="proj_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: {{propKeyDates[ucID]['lag2Porp']}}%"></div>
                         </div>
                     </td>
-                    <td>
-                        <div class="arrow duration">
-                                <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</span>
-                            </div>
+                    <td class = "justify-content-center">
+                        <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</span>
+
                     </td>
                 </tr>
 

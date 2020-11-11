@@ -120,18 +120,21 @@
             <h2 class="col text-center m-5">There is no measure / use case, please contact an administrator.</h2>
     {% endif %}
 
-    <div class = "container row">
+    {#<div class = "container row">
         <div class = "col">    <button class="offset-5 btn btn-dark text-light" data-toggle="modal" data-target="#createNewMeasureModal" role="button">Create a new Domain</button></div>
         <div class = "col">    <button class="offset-5 btn btn-dark text-light" data-toggle="modal" data-target="#createNewCategoryModal" role="button">Create a new Solution</button></div>
         <div class = "col">    <button class="offset-5 btn btn-dark text-light" data-toggle="modal" data-target="#createNewUseCaseModal" role="button">Create a new Use Case</button></div>
     </div>
     
+    {{ modal.create_measure(users, projID) }}
+    {{ modal.create_category() }}
+    {{ modal.create_usecase(measures,cat) }}
+#}
+    
 </div>
 
 
-{{ modal.create_measure(users, projID) }}
-{{ modal.create_category() }}
-{{ modal.create_usecase(measures,cat) }}
+
 
 {% endif %}
 

@@ -111,6 +111,19 @@ function duplicate_proj($post, $sideBarName, $A2){
     //Now ... we have to duplicate the UC's items ... It will not be easy
     duplicateXpexItems($projIDorigin,$newProj["id"]);
 
+    //We duplicate the deal criteria 
+    $inputNogoTargetOrigin = getDealCriteriaInputNogoTarget($projIDorigin);
+
+    insertInputDealCriteriaSupplier(
+        $inputNogoTargetOrigin['npv_nogo'], 
+        $inputNogoTargetOrigin['npv_target'], 
+        $inputNogoTargetOrigin['roi_nogo'], 
+        $inputNogoTargetOrigin['roi_target'], 
+        $inputNogoTargetOrigin['payback_nogo'], 
+        $inputNogoTargetOrigin['payback_target'], 
+        $inputNogoTargetOrigin['operating_margin_target'], 
+        $inputNogoTargetOrigin['operating_margin_nogo'],
+        $newProj["id"] );
 
 
 

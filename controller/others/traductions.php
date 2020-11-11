@@ -200,6 +200,12 @@ $GLOBALS['dicTrad']=[
     ], 
     "start_date" => [
         "en"=>"Start Date"
+    ],    
+    "schedule" => [
+        "en"=>"Schedule"
+    ],    
+    "duration" => [
+        "en"=>"Duration"
     ], 
     "months_short"> [
         "en"=>"months"

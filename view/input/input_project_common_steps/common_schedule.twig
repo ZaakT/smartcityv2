@@ -43,22 +43,22 @@
 				<div>
 					<div class="form-group row">
 						<div class="col">
-							<h3>Project Key Dates</h3>
+							<h3>Project</h3>
 						</div>
 						<div class="col">
-							<h3>Project Deployment Key Dates</h3>
+							<h3>Project Deployment</h3>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col  border-right">
-							<div class="input-group input-group-sm mb-3">
+							<div class="input-group  mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
 								</div>
 								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}" oninput="updateBar()">
 							</div>
 
-							<div class="input-group input-group-sm mb-3">
+							<div class="input-group  mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
 								</div>
@@ -67,14 +67,14 @@
 
 						</div>
 						<div class="form-group col">
-							<div class="input-group input-group-sm mb-3">
+							<div class="input-group  mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
 								</div>
 								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}" oninput="updateBar()">
 							</div>
 
-							<div class="input-group input-group-sm mb-3">
+							<div class="input-group  mb-3">
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
 								</div>
@@ -89,29 +89,32 @@
 
 		{#  FIN DU CONTENU #}
 
+		<div class = "dash-bg container-fluid m-1 ml-2 p-4">
+			<div class="dash-bg-light container-fluid p-3">
+				<div id="chart_schedule" hidden>
+					<div class="container-fluid" >
 
-		<div id="chart_schedule" hidden>
-			<div class="container-fluid" >
 
+						<div class="progress">
+							<div id="bar_1" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 10%"></div>
+							<div id="bar_2" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>		
+							<div id="bar_3" class="progress-bar progress-bar-main progress-bar-striped progress-bar-animated" style="width: 70%">Run</div>
+						</div>
 
-				<div class="progress">
-					<div id="bar_1" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 10%"></div>
-					<div id="bar_2" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>		
-					<div id="bar_3" class="progress-bar progress-bar-main progress-bar-striped progress-bar-animated" style="width: 70%">Run</div>
-				</div>
-
-				<div class = "progress dash-bg-light">
-					<div id="proj_start" style="width: 10%" class="text-left">
-						<span class="oi oi-caret-top"></span><div id="proj_start_text"></div>
-					</div>
-					<div id="dep_start" style="width: 20%" class="text-left">
-						<span class="oi oi-caret-top"></span><div id="dep_start_text"></div>
-					</div>
-					<div id="run_start" style="width: 35%" class="text-left">
-						<span class="oi oi-caret-top"></span><div id="run_starttext"></div>
-					</div>
-					<div id="project_end" style="width: 35%" class="text-right">
-						<div id="project_end_text"></div><span class="oi oi-caret-top"></span>
+						<div class = "progress dash-bg-light">
+							<div id="proj_start" style="width: 10%" class="text-left">
+								<span class="oi oi-caret-top"></span><div id="proj_start_text"></div>
+							</div>
+							<div id="dep_start" style="width: 20%" class="text-left">
+								<span class="oi oi-caret-top"></span><div id="dep_start_text"></div>
+							</div>
+							<div id="run_start" style="width: 35%" class="text-left">
+								<span class="oi oi-caret-top"></span><div id="run_starttext"></div>
+							</div>
+							<div id="project_end" style="width: 35%" class="text-right">
+								<div id="project_end_text"></div><span class="oi oi-caret-top"></span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
