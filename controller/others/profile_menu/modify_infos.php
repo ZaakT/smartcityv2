@@ -20,7 +20,8 @@ function modify_infos($twig,$is_connected,$isTaken=false){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     $listGroups = getListUserGroup();
     echo $twig->render('/others/profile_menu/modify_infos.twig',array('is_connected'=>$is_connected, "logoName"=>$logoName, 'devises'=>$devises,'selDevSym'=>$selDevSym,
-    'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'listGroups'=>$listGroups, "userGroup"=>$user[9])); 
+    'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'isTaken'=>$isTaken,'listGroups'=>$listGroups, "userGroup"=>$user[9], "lastname"=>$user[10], 
+    "firstname"=>$user[11], 'email'=>$user[12])); 
 }
 
 function renameImage($target_file, $userID){
@@ -63,7 +64,7 @@ function save_infos($twig,$is_connected,$post, $files){
         }else{
             $logoName = getLogoName();
         }
-        $userInfos = [$id,$username_new,$salt,$hashed, $logoName, $post['companyName'],$post['divisionName'],$post['group'] ];
+        $userInfos = [$id,$username_new,$salt,$hashed, $logoName, $post['companyName'],$post['divisionName'],$post['group'],$post['lastName'],$post['firstname'],$post['email']];
         $_SESSION['logoName']=$logoName;
         $_SESSION['companyName']=$post['companyName'];
         $_SESSION['divisionName']=$post['divisionName'];

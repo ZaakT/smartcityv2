@@ -25,6 +25,24 @@
                     <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" placeholder="Enter a new username" value="{{ username}}" required>
                     <h6 id="createUserHelp" class="col text-danger font-italic">{{ isTaken ? "username already taken" : "" }}</h6>
                 </div>
+            </div>            
+            <div class="form-group row">
+                <label for="lastName" class="col-lg-3 col-form-label">Last Name</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="lastName" id="lastName" aria-describedby="lastNameHelp" placeholder="Enter your last name" value="{{ lastname}}" >
+                </div>
+            </div>            
+            <div class="form-group row">
+                <label for="firstname" class="col-lg-3 col-form-label">First Name</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="firstname" id="firstname" aria-describedby="firstnameHelp" placeholder="Enter your first name" value="{{ firstname}}" >
+                </div>
+            </div>           
+            <div class="form-group row">
+                <label for="email" class="col-lg-3 col-form-label">Email</label>
+                <div class="col-lg-9">
+                    <input type="text" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter a new email" value="{{ email}}" >
+                </div>
             </div>
             <div class="form-group row">
                 <label for="group" class="col-lg-3 col-form-label">Group</label>

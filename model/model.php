@@ -120,7 +120,7 @@ function getUserByUsername($username){
 
 function getUser($username){
     $db = dbConnect();
-    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName, companyName, divisionName, group_id FROM user WHERE username = ?');
+    $req = $db->prepare('SELECT id, username, is_admin, password,salt,profile, logoName, companyName, divisionName, group_id, lastname, firstname, email FROM user WHERE username = ?');
     $req->execute(array($username));
     $res =  $req->fetch();
     
@@ -135,7 +135,10 @@ function getUser($username){
         $companyName = $res['companyName'];
         $divisionName = $res['divisionName'];
         $group_id = $res['group_id'];
-        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName, $companyName, $divisionName, $group_id];
+        $lastname = $res['lastname'];
+        $firstname = $res['firstname'];
+        $email = $res['email'];
+        $user = [$userID,$userName,$userPassword,$isAdmin,$salt,$profile, $logoName, $companyName, $divisionName, $group_id, $lastname, $firstname, $email];
     } else {
         $user = [];
     }
@@ -220,9 +223,12 @@ function modifyUser($user){
                             logoName = ?,
                             companyName = ?,
                             divisionName = ?,
-                            group_id = ?
+                            group_id = ?,
+                            lastname = ?,
+                            firstname = ?,
+                            email = ?
                         WHERE id = ?');
-    return $req->execute(array($user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7], $user[0]));
+    return $req->execute(array($user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8],$user[9],$user[10], $user[0]));
 }
 
 function deleteUser($userID){
