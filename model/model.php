@@ -1226,19 +1226,23 @@ function deleteXpexCat($catID, $xpex_type){
 
 }
 
-function getListXpexCat($xpexType, $ucID, $side){
+function getListXpexCat($xpexType, $ucID, $side="all"){
     getXpexTableName($xpexType);
 
-
+    $sideReq = $side != "all" ? 'AND side = ?' : "" ;
 
     $db = dbConnect();
     //Select all the category of the UC (no matter if we should check for others UC of the solution)
     $req = $db->prepare("SELECT id_cat, xpex_cat.name
                         FROM xpex_cat
                         WHERE id_uc = ?
-                        AND side = ?
+                        $sideReq
                         AND xpex_type = ?");
-    $req->execute(array($ucID, $side, $xpexType));
+    if($side != "all"){
+        $req->execute(array($ucID, $side, $xpexType));
+    }else{
+        $req->execute(array($ucID, $xpexType));
+    }
     $listCat = [];
     while($row = $req->fetch()){
         $listCat[$row['id_cat']] = $row['name'];

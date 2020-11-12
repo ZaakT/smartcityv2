@@ -315,12 +315,34 @@ function delete_zone($idZone){
 }
 
 //-------------------------------------  MANAGE ITEM  -------------------------------------
+function getTradTypeDb(){
+    return [
+        "equipment_revenue"=>"equipment_revenues",
+        "deployment_revenue"=>"deployment_revenues",
+        "operating_revenue"=>"operating_revenues",
+        "capex"=>"capex",
+        "opex"=>"opex",
+        "implem"=>"deployment_costs",
+        "revenues"=>"revenues",
+        "cashreleasing"=>"cashreleasing",
+        "widercash"=>"widercash",
+        "quantifiable"=>"quantifiable",
+        "noncash"=>"noncash",
+        "risks"=>"risks",
+        "revenuesProtection"=>"revenuesProtection"];
+}
+
 
 function manage_item($catName,$twig,$is_connected,$isTaken=false){
+
+    $tradType = getTradTypeDb();
+
     $user = getUser($_SESSION['username']);
     $list_item = [];
     $listUC = getListUCs();   
+    $listCatXpex = [];
     foreach ($listUC as $id_uc => $UC){ 
+        $listCatXpex[$id_uc] = getListXpexCat($tradType[$catName], $id_uc);
         if($catName != 'equipment_revenue' && $catName != 'deployment_revenue' && $catName != 'operating_revenue'){
             $fun = 'getList'.ucwords($catName).'Items';
         $list_tampon = $fun(intval($id_uc));
@@ -345,31 +367,31 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     //var_dump($list_item);
     //echo $twig->render('/others/admin_menu/manage_db_items/manage_'.$catName.'_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken));
     echo $twig->render('/others/admin_menu/manage_db_items/manage_item.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],
-    'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken, "itemName"=>$catName));
+    'username'=>$user[1],'listItem'=>$list_item,'catItemName'=>$catName, 'UC'=>$listUC, 'isTaken'=>$isTaken, "itemName"=>$catName, "listCatXpex"=>$listCatXpex));
     
 }
 
 function create_xpex_cat_db($twig,$is_connected,$post){
-    $tradType = [
-    "equipment_revenue"=>"equipment_revenues",
-    "deployment_revenue"=>"deployment_revenues",
-    "operating_revenue"=>"operating_revenues",
-    "capex"=>"capex",
-    "opex"=>"opex",
-    "implem"=>"deployment_costs",
-    "revenues"=>"revenues",
-    "cashreleasing"=>"cashreleasing",
-    "widercash"=>"widercash",
-    "quantifiable"=>"quantifiable",
-    "noncash"=>"noncash",
-    "risks"=>"risks",
-    "revenuesProtection"=>"revenuesProtection"];
+    $tradType = getTradTypeDb();
 
 
 
     $ucID = $post['useCase'];
     insertXpexcCat($ucID, $post['name'], $tradType[$post['itemName']], $post['side']);
-     header('Location:  ?A=admin&A2=manage_db&A3=manage_'.$post['itemName'].'_item');
+    header('Location:  ?A=admin&A2=manage_db&A3=manage_'.$post['itemName'].'_item');
+}
+
+function delete_xpex_cat_db($twig,$is_connected,$post){
+    $tradType = getTradTypeDb();
+
+    $itemName = $post['itemName'];
+    $type = $tradType[$itemName];
+    unset($post['itemName']);
+    foreach ($post as $catID => $value) {
+        deleteXpexCat($catID,  $type);
+    }
+
+    header('Location:  ?A=admin&A2=manage_db&A3=manage_'.$itemName.'_item');
 }
 
 function create_item1($twig,$is_connected,$post,$catItem){

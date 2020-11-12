@@ -92,6 +92,8 @@ try{
                                 manage_measures($twig,$is_connected); 
                             } elseif($_GET['A3']=='create_xpex_cat'){
                                 create_xpex_cat_db($twig,$is_connected,$_POST);
+                            } elseif($_GET['A3']=='delete_xpex_cat'){
+                                delete_xpex_cat_db($twig,$is_connected,$_POST);
                             }elseif($_GET['A3']=='create_measure'){
                                 create_measure($twig,$is_connected,$_POST);
                             } elseif($_GET['A3']=="delete_measure"){

@@ -897,8 +897,8 @@ function delete_xpex_cat($twig,$is_connected, $post,  $type, $sideBarName,$side)
         //var_dump($post);
         foreach ($post as $key => $value) {
             $catID = explode("_", $key)[1];
+            deleteXpexCat($catID,  $type);
         }
-        deleteXpexCat($catID,  $type);
     }
     header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
 }

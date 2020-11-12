@@ -289,7 +289,7 @@
 {% endmacro %}
 
 
-{% macro create_xpex_cat(sideBarName, listUC, itemName) %}
+{% macro create_xpex_cat(listUC, itemName) %}
 <div class="modal fade" id="createNewXpexCatModal" tabindex="-1" role="dialog" aria-labelledby="createNewXpexCatModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createXpexCat-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_xpex_cat" method='post'>
@@ -339,10 +339,10 @@
 </div>    
 {% endmacro %}
 
-{% macro delete_xpex_cat( projID, ucID, type, sideBarName, listUcID, listUcsName, xpexCategories) %}
+{% macro delete_xpex_cat(listUC, listCatXpex, itemName) %}
 <div class="modal fade" id="deleteXpexCatModal" tabindex="-1" role="dialog" aria-labelledby="deleteXpexCatModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="deleteXpexCat-form" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=delete_xpex_cat&amp;projID={{projID}}&amp;ucID={{ucID}}" method='post'>
+        <form id="deleteXpexCat-form" action="?A=admin&amp;A2=manage_db&amp;A3=delete_xpex_cat" method='post'>
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="deleteXpexCatModal">Select the categories to delete</h5>
@@ -352,15 +352,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group col-sm-10">
+                        <input type="text" class="form-control" name="itemName" id="itemName" aria-describedby="itemNameHelp" value="{{itemName}}" required hidden>
 
-                        {% for categoryID in xpexCategories[listUcID[listUcID|keys[0]]]|keys %}
-                            <div class="form-check">
-                                <input type = "checkbox" name = "delete_{{categoryID}}">
-                                <label class="form-check-label" for="delete_{{categoryID}}">
-                                    {{xpexCategories[listUcID[listUcID|keys[0]]][categoryID]}} 
-                                </label>
-                            </div>
-                            
+                        {% for ucID in listCatXpex|keys %}
+                            {% for catID in listCatXpex[ucID]|keys %}
+                                <div class="form-check">
+                                    <input type = "checkbox" name = "{{catID}}">
+                                    <label class="form-check-label" for="delete_{{catID}}">
+                                        {{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}
+                                    </label>
+                                </div>
+                            {% endfor %}
                         {% endfor %}
                     </div>
                 </div>
