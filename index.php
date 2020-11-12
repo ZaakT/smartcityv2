@@ -90,7 +90,9 @@ try{
                                 change_currency_rate($twig,$is_connected,$_POST);
                             } elseif($_GET['A3']=='manage_measures'){
                                 manage_measures($twig,$is_connected); 
-                            } elseif($_GET['A3']=='create_measure'){
+                            } elseif($_GET['A3']=='create_xpex_cat'){
+                                create_xpex_cat_db($twig,$is_connected,$_POST);
+                            }elseif($_GET['A3']=='create_measure'){
                                 create_measure($twig,$is_connected,$_POST);
                             } elseif($_GET['A3']=="delete_measure"){
                                 if(isset($_GET['id'])){
@@ -837,6 +839,7 @@ try{
                     }elseif(isset($_SESSION['projID']) and $_SESSION['projID']!=0){
                         // --- USE CASE SELECTION ---
                             if($_GET['A2']=="capex" or $_GET['A2']=="opex" or $_GET['A2']=="deployment_costs"){
+                                $side = "customer";
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3']=="selection"){
                                         $isTaken = isset($_GET['isTaken'])? $_GET['isTaken']=="true" : false;

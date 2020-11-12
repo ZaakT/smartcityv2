@@ -225,6 +225,7 @@
                     {% set show2 = false %}
                     {% set show3 = false %}
                     {% for ucID in listUcID %}
+
                         {% for id_xpex,data in selXpex[ucID] %}
                             {% if xpex_from_ntt[ucID][id_xpex]['cat'] == categoryID %}
                                 {% set show1 = true %}
@@ -237,8 +238,14 @@
                             {% endif %}
                         {% endfor %} 
                     {% endfor %}
-                    {% if show1 or show2 or show2 %}
-                        <tr class="table-primary" onclick = "hide({{categoryID}});" ><td colspan="1000"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td></tr>
+                    {% if show1 or show2 or show3 %}
+                        <tr class="table-primary" onclick = "hide({{categoryID}});" style="cursor: pointer;" >
+                            <td>
+                                <span class="oi oi-chevron-bottom cat_{{categoryID}}" title="oi-chevron-bottom" aria-hidden="true"></span>
+                                <span hidden="true" class="oi oi-chevron-left cat_{{categoryID}}" title="oi-chevron-left" aria-hidden="true"></span>
+                            </td>
+                            <td colspan="1000"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td>
+                        </tr>
                         {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From #{companyName}", size, listUcID,listUcsName, Mode, selDevSym, categoryID) }}{% endif %}
                         {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "Third Part", size,listUcID,listUcsName, Mode, selDevSym, categoryID )}}{% endif %}
                         {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName, Mode,selDevSym, categoryID )}}{% endif %}

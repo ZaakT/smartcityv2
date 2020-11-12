@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 11 nov. 2020 à 17:02
+-- Généré le :  jeu. 12 nov. 2020 à 14:15
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -534,7 +534,23 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (136, 'test 2', '', 'from_ntt', 'customer', 'my Unit', 8),
 (137, 'my cap', '', 'from_ntt', 'supplier', 'number', 6),
 (138, 'new item', '', 'from_outside_ntt', 'supplier', 'number', 6),
-(139, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23);
+(139, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23),
+(140, 'tsq', '', 'from_ntt', 'customer', '', 0),
+(141, 'test 2', '', 'from_ntt', 'customer', 'my Unit', 8),
+(142, 'my cap', '', 'from_ntt', 'supplier', 'number', 6),
+(143, 'new item', '', 'from_outside_ntt', 'supplier', 'number', 6),
+(144, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23),
+(145, 'tsq', '', 'from_ntt', 'customer', '', 0),
+(146, 'test 2', '', 'from_ntt', 'customer', 'my Unit', 8),
+(147, 'my cap', '', 'from_ntt', 'supplier', 'number', 6),
+(148, 'new item', '', 'from_outside_ntt', 'supplier', 'number', 6),
+(149, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23),
+(150, 'tsq', '', 'from_ntt', 'customer', '', 0),
+(151, 'test 2', '', 'from_ntt', 'customer', 'my Unit', 8),
+(152, 'my cap', '', 'from_ntt', 'supplier', 'number', 6),
+(153, 'new item', '', 'from_outside_ntt', 'supplier', 'number', 6),
+(154, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23),
+(155, 'cap 01', '', 'from_ntt', 'customer', NULL, 30);
 
 -- --------------------------------------------------------
 
@@ -612,7 +628,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -713,7 +729,23 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (136, 40),
 (137, 40),
 (138, 40),
-(139, 40);
+(139, 40),
+(155, 40),
+(140, 41),
+(141, 41),
+(142, 41),
+(143, 41),
+(144, 41),
+(145, 42),
+(146, 42),
+(147, 42),
+(148, 42),
+(149, 42),
+(150, 43),
+(151, 43),
+(152, 43),
+(153, 43),
+(154, 43);
 
 -- --------------------------------------------------------
 
@@ -759,6 +791,10 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (129, -1),
 (134, -1),
 (139, -1),
+(144, -1),
+(149, -1),
+(154, -1),
+(155, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -830,6 +866,9 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (125, 33),
 (130, 33),
 (135, 33),
+(140, 33),
+(145, 33),
+(150, 33),
 (88, 66),
 (89, 66),
 (99, 66),
@@ -840,6 +879,9 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (127, 66),
 (132, 66),
 (137, 66),
+(142, 66),
+(147, 66),
+(152, 66),
 (85, 67),
 (86, 67),
 (87, 67),
@@ -866,7 +908,13 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (131, 67),
 (133, 67),
 (136, 67),
-(138, 67);
+(138, 67),
+(141, 67),
+(143, 67),
+(146, 67),
+(148, 67),
+(151, 67),
+(153, 67);
 
 -- --------------------------------------------------------
 
@@ -881,7 +929,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -917,7 +965,10 @@ INSERT INTO `cashreleasing_item` (`id`, `name`, `description`, `cat`) VALUES
 (28, 'CRB 12', '', 0),
 (29, 'CRB 12', '', 0),
 (30, 'CRB 12', '', 0),
-(31, 'CRB 12', '', 0);
+(31, 'CRB 12', '', 0),
+(32, 'CRB 12', '', 0),
+(33, 'CRB 12', '', 0),
+(34, 'CRB 12', '', 0);
 
 -- --------------------------------------------------------
 
@@ -965,7 +1016,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -995,7 +1046,10 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (28, 37),
 (29, 38),
 (30, 39),
-(31, 40);
+(31, 40),
+(32, 41),
+(33, 42),
+(34, 43);
 
 -- --------------------------------------------------------
 
@@ -1046,7 +1100,10 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (28, 67),
 (29, 67),
 (30, 67),
-(31, 67);
+(31, 67),
+(32, 67),
+(33, 67),
+(34, 67);
 
 -- --------------------------------------------------------
 
@@ -1227,7 +1284,10 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (30, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
 (38, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
 (39, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
-(40, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25);
+(40, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
+(41, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
+(42, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25),
+(43, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25);
 
 -- --------------------------------------------------------
 
@@ -1463,7 +1523,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1547,7 +1607,10 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (84, 'e', '', 'from_ntt', 'supplier', 'INstalation', 18),
 (85, 'Engineering', '', 'internal', 'supplier', NULL, 24),
 (86, 'e', '', 'from_ntt', 'supplier', 'INstalation', 18),
-(87, 'Engineering', '', 'internal', 'supplier', NULL, 24);
+(87, 'Engineering', '', 'internal', 'supplier', NULL, 24),
+(88, 'item 01', '', 'from_ntt', 'customer', NULL, 28),
+(89, 'deploy 111', '', 'from_ntt', 'customer', NULL, 31),
+(90, 'itzm 123', '', 'from_outside_ntt', 'supplier', NULL, 24);
 
 -- --------------------------------------------------------
 
@@ -1617,7 +1680,7 @@ CREATE TABLE IF NOT EXISTS `implem_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_user`
@@ -1677,7 +1740,10 @@ INSERT INTO `implem_item_user` (`id`, `id_proj`) VALUES
 (84, 39),
 (85, 39),
 (86, 40),
-(87, 40);
+(87, 40),
+(88, 40),
+(89, 40),
+(90, 40);
 
 -- --------------------------------------------------------
 
@@ -1775,6 +1841,8 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (83, -1),
 (85, -1),
 (87, -1),
+(89, -1),
+(90, -1),
 (1, 1),
 (3, 1),
 (9, 1),
@@ -1836,7 +1904,8 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (80, 67),
 (82, 67),
 (84, 67),
-(86, 67);
+(86, 67),
+(88, 67);
 
 -- --------------------------------------------------------
 
@@ -1964,7 +2033,23 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (136, 40, 67, 11, 10, 12),
 (137, 40, 66, NULL, NULL, NULL),
 (138, 40, 67, 30, 20, 3),
-(139, 40, -1, 100, 50, 3);
+(139, 40, -1, 100, 50, 3),
+(140, 41, 33, 0, 1, 1),
+(141, 41, 67, 11, 10, 12),
+(142, 41, 66, NULL, NULL, NULL),
+(143, 41, 67, 30, 20, 3),
+(144, 41, -1, 100, 50, 3),
+(145, 42, 33, 0, 1, 1),
+(146, 42, 67, 11, 10, 12),
+(147, 42, 66, NULL, NULL, NULL),
+(148, 42, 67, 30, 20, 3),
+(149, 42, -1, 100, 50, 3),
+(150, 43, 33, 0, 1, 1),
+(151, 43, 67, 11, 10, 12),
+(152, 43, 66, NULL, NULL, NULL),
+(153, 43, 67, 30, 20, 3),
+(154, 43, -1, 100, 50, 3),
+(155, 40, -1, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2031,7 +2116,10 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (28, 37, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (29, 38, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (30, 39, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
-(31, 40, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0);
+(31, 40, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
+(32, 41, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
+(33, 42, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
+(34, 43, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -2087,6 +2175,10 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (28, 50, 17, 5, 17.3),
 (30, 70, 67, 100, 10),
 (30, 71, -1, NULL, NULL),
+(40, 86, 67, NULL, NULL),
+(40, 87, -1, NULL, NULL),
+(40, 88, 67, NULL, NULL),
+(40, 89, -1, NULL, NULL),
 (72, 0, 67, 100, 10),
 (73, 0, -1, NULL, NULL),
 (74, 0, 67, 100, 10),
@@ -2209,6 +2301,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (30, 55, 66, NULL, NULL, NULL, NULL, NULL),
 (30, 55, 67, 5, NULL, 5, 5, 5),
 (30, 56, -1, NULL, NULL, NULL, NULL, NULL),
+(40, 75, -1, NULL, NULL, NULL, NULL, NULL),
+(40, 76, 67, NULL, NULL, NULL, NULL, NULL),
+(40, 77, -1, NULL, NULL, NULL, NULL, NULL),
 (57, 0, 66, NULL, NULL, NULL, NULL, NULL),
 (58, 0, 67, 5, NULL, 5, 5, 5),
 (59, 0, -1, NULL, NULL, NULL, NULL, NULL),
@@ -2356,7 +2451,10 @@ INSERT INTO `input_revenuesprotection` (`id_item`, `id_proj`, `id_uc`, `current_
 (6, 37, 67, 10, 15),
 (7, 38, 67, 10, 15),
 (8, 39, 67, 10, 15),
-(9, 40, 67, 10, 15);
+(9, 40, 67, 10, 15),
+(10, 41, 67, 10, 15),
+(11, 42, 67, 10, 15),
+(12, 43, 67, 10, 15);
 
 -- --------------------------------------------------------
 
@@ -2455,7 +2553,10 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (32, 30, 67, 5, 50, 0, 0, 0, '0000-00-00', 0),
 (33, 30, 67, 10, 10, 0, 0, 0, '0000-00-00', 0),
 (34, 30, 66, 1200, 3000, 0, 0, 0, '0000-00-00', 0),
-(35, 30, 67, 5, 10, 0, 0, 5, '0000-00-00', 0);
+(35, 30, 67, 5, 10, 0, 0, 5, '0000-00-00', 0),
+(36, 40, -1, 0, 0, 0, 0, 0, '0000-00-00', 0),
+(37, 30, -1, 10, 20, 0, 0, 0, '0000-00-00', 0),
+(38, 30, -1, 10, 30, 0, 0, 0, '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -3129,7 +3230,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -3191,7 +3292,6 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (53, 'Maintenance of the Antenna', '', 'from_ntt', 'projDev', NULL, 0),
 (54, 'op', '', 'from_ntt', 'supplier', '', 0),
 (55, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
-(56, 'Sensor maintenance', '', 'internal', 'supplier', NULL, 25),
 (57, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
 (58, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
 (59, 'Sensor maintenance', '', 'internal', 'supplier', NULL, 25),
@@ -3210,7 +3310,11 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (72, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
 (73, 'Sensor maintenance', '', 'internal', 'supplier', NULL, 25),
 (74, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
-(75, 'Sensor maintenance', '', 'internal', 'supplier', NULL, 25);
+(75, 'Sensor maintenance', '', 'internal', 'supplier', NULL, 25),
+(76, 'item 03', '', 'from_ntt', 'customer', NULL, 29),
+(77, 'dog 01', '', 'from_ntt', 'customer', NULL, 32),
+(79, 'iyem', '', 'from_outside_ntt', 'supplier', NULL, 35),
+(80, 'itaze', '', 'from_outside_ntt', 'supplier', NULL, 36);
 
 -- --------------------------------------------------------
 
@@ -3284,7 +3388,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -3331,7 +3435,13 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (72, 39),
 (73, 39),
 (74, 40),
-(75, 40);
+(75, 40),
+(76, 40),
+(77, 40),
+(78, 40),
+(79, 40),
+(80, 40),
+(81, 40);
 
 -- --------------------------------------------------------
 
@@ -3428,6 +3538,11 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (71, -1),
 (73, -1),
 (75, -1),
+(77, -1),
+(78, -1),
+(79, -1),
+(80, -1),
+(81, -1),
 (1, 1),
 (2, 1),
 (6, 1),
@@ -3482,7 +3597,8 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (74, 66),
 (58, 67),
 (61, 67),
-(64, 67);
+(64, 67),
+(76, 67);
 
 -- --------------------------------------------------------
 
@@ -3565,23 +3681,23 @@ CREATE TABLE IF NOT EXISTS `project` (
   `id_user` int(11) NOT NULL,
   `scoping` tinyint(4) DEFAULT '0',
   `cb` tinyint(4) DEFAULT '0',
+  `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
 --
 
-INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`) VALUES
-(7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0),
-(26, 'Montreal Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 15:08:51', 1, 1, 0),
-(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1),
-(28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0),
-(29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0),
-(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-11 16:29:11', 16, 1, 1),
-(32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-09 13:50:01', 16, 1, 0),
-(40, 'Las Vegas NTT Smart copy', '', NULL, NULL, NULL, '2020-11-11 17:43:18', '2020-11-11 17:43:18', 16, 1, 1);
+INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_bank`, `weight_bank_soc`, `creation_date`, `modif_date`, `id_user`, `scoping`, `cb`, `hide`) VALUES
+(7, 'SupplierZak', 'test', NULL, NULL, NULL, '2020-08-17 09:43:18', '2020-08-17 09:47:32', 10, 0, 0, 0),
+(26, 'Montreal Area', '', 5, NULL, NULL, '2020-10-19 17:44:28', '2020-10-21 15:08:51', 1, 1, 0, 0),
+(27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1, 0),
+(28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0, 0),
+(29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
+(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-12 14:11:54', 16, 1, 1, 0),
+(32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -3620,7 +3736,10 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (37, '2020-10-01', 48, '2020-11-01', 6),
 (38, '2020-10-01', 48, '2020-11-01', 6),
 (39, '2020-10-01', 48, '2020-11-01', 6),
-(40, '2020-10-01', 48, '2020-11-01', 6);
+(40, '2020-10-01', 48, '2020-11-01', 6),
+(41, '2020-10-01', 48, '2020-11-01', 6),
+(42, '2020-10-01', 48, '2020-11-01', 6),
+(43, '2020-10-01', 48, '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -3801,7 +3920,28 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (40, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
 (40, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
 (40, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
-(40, 67, '2020-11-01', 6, '2024-10-01', '2020-11-01', 6);
+(40, 67, '2020-11-01', 6, '2024-10-01', '2020-11-01', 6),
+(41, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(41, 49, '2020-11-01', 4, '2024-10-01', '2020-11-01', 5),
+(41, 50, '2020-11-01', 2, '2024-07-01', '2020-11-01', 4),
+(41, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
+(41, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
+(41, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
+(41, 67, '2020-11-01', 6, '2024-10-01', '2020-11-01', 6),
+(42, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(42, 49, '2020-11-01', 4, '2024-10-01', '2020-11-01', 5),
+(42, 50, '2020-11-01', 2, '2024-07-01', '2020-11-01', 4),
+(42, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
+(42, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
+(42, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
+(42, 67, '2020-11-01', 6, '2024-10-01', '2020-11-01', 6),
+(43, 33, '2020-10-01', 6, '2024-10-01', '2020-10-01', 6),
+(43, 49, '2020-11-01', 4, '2024-10-01', '2020-11-01', 5),
+(43, 50, '2020-11-01', 2, '2024-07-01', '2020-11-01', 4),
+(43, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
+(43, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
+(43, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
+(43, 67, '2020-11-01', 6, '2024-10-01', '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -3959,6 +4099,9 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (38, 0),
 (39, 0),
 (40, 0),
+(41, 0),
+(42, 0),
+(43, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -3984,7 +4127,10 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (37, 25),
 (38, 25),
 (39, 25),
-(40, 25);
+(40, 25),
+(41, 25),
+(42, 25),
+(43, 25);
 
 -- --------------------------------------------------------
 
@@ -4226,7 +4372,55 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (64, 40),
 (65, 40),
 (66, 40),
-(67, 40);
+(67, 40),
+(-1, 41),
+(33, 41),
+(49, 41),
+(50, 41),
+(55, 41),
+(56, 41),
+(57, 41),
+(58, 41),
+(59, 41),
+(60, 41),
+(61, 41),
+(62, 41),
+(64, 41),
+(65, 41),
+(66, 41),
+(67, 41),
+(-1, 42),
+(33, 42),
+(49, 42),
+(50, 42),
+(55, 42),
+(56, 42),
+(57, 42),
+(58, 42),
+(59, 42),
+(60, 42),
+(61, 42),
+(62, 42),
+(64, 42),
+(65, 42),
+(66, 42),
+(67, 42),
+(-1, 43),
+(33, 43),
+(49, 43),
+(50, 43),
+(55, 43),
+(56, 43),
+(57, 43),
+(58, 43),
+(59, 43),
+(60, 43),
+(61, 43),
+(62, 43),
+(64, 43),
+(65, 43),
+(66, 43),
+(67, 43);
 
 -- --------------------------------------------------------
 
@@ -4506,7 +4700,7 @@ CREATE TABLE IF NOT EXISTS `revenuesprotection_item` (
   `unit` varchar(256) DEFAULT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenuesprotection_item`
@@ -4521,7 +4715,10 @@ INSERT INTO `revenuesprotection_item` (`id`, `name`, `description`, `unit`, `cat
 (6, 'prot', '', NULL, 0),
 (7, 'prot', '', NULL, 0),
 (8, 'prot', '', NULL, 0),
-(9, 'prot', '', NULL, 0);
+(9, 'prot', '', NULL, 0),
+(10, 'prot', '', NULL, 0),
+(11, 'prot', '', NULL, 0),
+(12, 'prot', '', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -4549,7 +4746,10 @@ INSERT INTO `revenuesprotection_item_user` (`id`, `id_proj`) VALUES
 (6, 37),
 (7, 38),
 (8, 39),
-(9, 40);
+(9, 40),
+(10, 41),
+(11, 42),
+(12, 43);
 
 -- --------------------------------------------------------
 
@@ -4577,7 +4777,10 @@ INSERT INTO `revenuesprotection_uc` (`id_item`, `id_uc`) VALUES
 (6, 67),
 (7, 67),
 (8, 67),
-(9, 67);
+(9, 67),
+(10, 67),
+(11, 67),
+(12, 67);
 
 -- --------------------------------------------------------
 
@@ -5215,7 +5418,10 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) 
 (37, 'C1', 'C2', 'name 4', 'Area 3'),
 (38, 'C1', 'C2', 'name 4', 'Area 3'),
 (39, 'C1', 'C2', 'name 4', 'Area 3'),
-(40, 'C1', 'C2', 'name 4', 'Area 3');
+(40, 'C1', 'C2', 'name 4', 'Area 3'),
+(41, 'C1', 'C2', 'name 4', 'Area 3'),
+(42, 'C1', 'C2', 'name 4', 'Area 3'),
+(43, 'C1', 'C2', 'name 4', 'Area 3');
 
 -- --------------------------------------------------------
 
@@ -5230,7 +5436,7 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
   `type` enum('department','team') NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=106 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=118 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_perimeter_data`
@@ -5275,7 +5481,19 @@ INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
 (40, 'dep 01', 'department', 102),
 (40, 'dep 02', 'department', 103),
 (40, 'team a', 'team', 104),
-(40, 'team b', 'team', 105);
+(40, 'team b', 'team', 105),
+(41, 'dep 01', 'department', 106),
+(41, 'dep 02', 'department', 107),
+(41, 'team a', 'team', 108),
+(41, 'team b', 'team', 109),
+(42, 'dep 01', 'department', 110),
+(42, 'dep 02', 'department', 111),
+(42, 'team a', 'team', 112),
+(42, 'team b', 'team', 113),
+(43, 'dep 01', 'department', 114),
+(43, 'dep 02', 'department', 115),
+(43, 'team a', 'team', 116),
+(43, 'team b', 'team', 117);
 
 -- --------------------------------------------------------
 
@@ -5293,7 +5511,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `unit` varchar(256) NOT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -5329,7 +5547,10 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (31, 'item 02', 'deployment', '', 'user', 'Number', 14),
 (32, 'equ rev in 2', 'equipment', '', 'user', 'Quantity', 17),
 (33, 'equ rev in 1', 'equipment', '', 'user', 'number', 16),
-(35, 'Maintenance Sensor', 'operating', '', 'user', 'Sensors', 26);
+(35, 'Maintenance Sensor', 'operating', '', 'user', 'Sensors', 26),
+(36, 'item 01', 'deployment', '', 'user', '', 27),
+(37, 'dep test', 'deployment', '', 'user', 'test', 27),
+(38, 'dep test 2', 'deployment', '', 'user', 'test', 27);
 
 -- --------------------------------------------------------
 
@@ -5383,7 +5604,10 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (32, 67),
 (33, 67),
 (34, 66),
-(35, 67);
+(35, 67),
+(36, -1),
+(37, -1),
+(38, -1);
 
 -- --------------------------------------------------------
 
@@ -5437,7 +5661,10 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (32, 30),
 (33, 30),
 (34, 30),
-(35, 30);
+(35, 30),
+(36, 40),
+(37, 30),
+(38, 30);
 
 -- --------------------------------------------------------
 
@@ -5719,7 +5946,22 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`) VALUES
 (16, 40, 25, 33),
 (16, 40, 25, 65),
 (16, 40, 25, 66),
-(16, 40, 25, 67);
+(16, 40, 25, 67),
+(16, 41, 0, -1),
+(16, 41, 25, 33),
+(16, 41, 25, 65),
+(16, 41, 25, 66),
+(16, 41, 25, 67),
+(16, 42, 0, -1),
+(16, 42, 25, 33),
+(16, 42, 25, 65),
+(16, 42, 25, 66),
+(16, 42, 25, 67),
+(16, 43, 0, -1),
+(16, 43, 25, 33),
+(16, 43, 25, 65),
+(16, 43, 25, 66),
+(16, 43, 25, 67);
 
 -- --------------------------------------------------------
 
@@ -7167,7 +7409,7 @@ CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'supplier',
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
@@ -7192,8 +7434,14 @@ INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`, `side`) VALUES
 (21, -1, 'new cat empty very new', 'equipment_revenues', 'supplier'),
 (23, -1, 'Sensor', 'capex', 'supplier'),
 (24, -1, 'project management', 'deployment_costs', 'supplier'),
-(25, -1, 'Maintenacne', 'opex', 'supplier'),
-(26, 67, 'Laintenance', 'operating_revenues', 'supplier');
+(26, 67, 'Laintenance', 'operating_revenues', 'supplier'),
+(27, -1, 'cat 01', 'deployment_revenues', 'supplier'),
+(28, 67, 'cat 01', 'deployment_costs', 'customer'),
+(29, 67, 'cat 01', 'opex', 'customer'),
+(30, -1, 'cat 111', 'capex', 'customer'),
+(31, -1, 'my cat ', 'deployment_costs', 'customer'),
+(32, -1, 'm my dog', 'opex', 'customer'),
+(38, 26, 'teeeest', 'capex', 'customer');
 
 -- --------------------------------------------------------
 

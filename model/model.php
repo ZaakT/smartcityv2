@@ -1209,11 +1209,11 @@ function deleteXpexCat($catID, $xpex_type){
     $reqCat->execute(array($catID));  
     $table_name = getXpexTableName($xpex_type);
 
-    $reqXpex = $db->prepare('SELECT * FROM  '.$table_name.'_item WHERE cat = ?');
+    $reqXpex = $db->prepare('SELECT * FROM '.$table_name.'_item WHERE cat = ?');
     $reqXpex->execute(array($catID));
-
+    var_dump("coucou");
     while($row = $reqXpex->fetch()){
-        $reqDel2 =  $db->prepare('DELETE FROM  input_'.$table_name.'WHERE id_item = ?');
+        $reqDel2 =  $db->prepare('DELETE FROM input_'.$table_name.' WHERE id_item = ?');
         if($table_name !=  "supplier_revenues"){
             $reqDel1 =  $db->prepare('DELETE FROM  '.$table_name.'_item WHERE id = ?');
         }else{

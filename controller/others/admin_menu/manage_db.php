@@ -338,6 +338,7 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     }
     //var_dump($list_item, $UC); 
 
+    //var_dump($listUC );
     $devises = getListDevises();
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
@@ -348,6 +349,28 @@ function manage_item($catName,$twig,$is_connected,$isTaken=false){
     
 }
 
+function create_xpex_cat_db($twig,$is_connected,$post){
+    $tradType = [
+    "equipment_revenue"=>"equipment_revenues",
+    "deployment_revenue"=>"deployment_revenues",
+    "operating_revenue"=>"operating_revenues",
+    "capex"=>"capex",
+    "opex"=>"opex",
+    "implem"=>"deployment_costs",
+    "revenues"=>"revenues",
+    "cashreleasing"=>"cashreleasing",
+    "widercash"=>"widercash",
+    "quantifiable"=>"quantifiable",
+    "noncash"=>"noncash",
+    "risks"=>"risks",
+    "revenuesProtection"=>"revenuesProtection"];
+
+
+
+    $ucID = $post['useCase'];
+    insertXpexcCat($ucID, $post['name'], $tradType[$post['itemName']], $post['side']);
+     header('Location:  ?A=admin&A2=manage_db&A3=manage_'.$post['itemName'].'_item');
+}
 
 function create_item1($twig,$is_connected,$post,$catItem){
     //ajoute dans la db un item de catégorie 1 (opex, capex, implementatin, revenues)

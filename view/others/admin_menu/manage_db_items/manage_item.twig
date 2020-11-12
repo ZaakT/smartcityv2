@@ -48,7 +48,7 @@
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#create{{mode}}Modal" role="button">Create a new {{itemShow}} Item</button>
 </div>
 <div class="row mt-5">
-    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createXpexCat" role="button">Create a new Category</button>
+    <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#createNewXpexCatModal" role="button">Create a new Category</button>
 </div>
 <div class="row my-1">
     <button class="offset-5 col-2 btn btn-dark text-light" data-toggle="modal" data-target="#deleteXpexCatModal" role="button">Delete a Category</button>
@@ -67,4 +67,10 @@
     {{ list.list_item3(listItem,catItemName,isTaken) }} 
     {{ modal.create_item3(catItemName,UC) }} 
 {% endif %}
+
+
+{{ modal.create_xpex_cat(sideBarName, UC, itemName)}}
+{{ modal.delete_xpex_cat( projID, ucID, type, sideBarName, listUcID, listUcsName, xpexCategories) }}
+
+
 {% endblock %}
