@@ -18,7 +18,7 @@ function project($twig,$is_connected, $nextPage, $sideBarName){
         //$list_projects[$key][array_key_last($list_projects[$key])+1]= count(getConfirmedUseCases($user[0],$sessionProj))>0; // has a uc confirmed
         
     }
-    getConfirmedUseCases($user[0],$sessionProj);
+
     echo $twig->render('/others/general_steps/project.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
     'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project",'projects'=>$list_projects, 
     'nextPage'=>$nextPage, 'sideBarName'=>$sideBarName,  'isTaken'=>(isset($_GET['isTaken']) && $_GET['isTaken']), "sessionProj"=>$sessionProj)); 
@@ -134,6 +134,19 @@ function duplicate_proj($post, $sideBarName, $A2){
 }
 
 
+function restore_proj($idProj, $sideBarName, $A2){
+    // var_dump($idProj);
+    restoreProj($idProj);
+    header('Location: ?A='.$sideBarName.'&A2='.$A2);
+}
+function basket_proj($idProj, $sideBarName, $A2){
+    // var_dump($idProj);
+    hideProj($idProj);
+    if($idProj==getProjID()){
+        unset($_SESSION["projID"]);
+    }
+    header('Location: ?A='.$sideBarName.'&A2='.$A2);
+}
 function delete_proj($idProj, $sideBarName, $A2){
     // var_dump($idProj);
     deleteProj($idProj);

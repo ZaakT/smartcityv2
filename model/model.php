@@ -943,6 +943,28 @@ function getListProjects($idUser){
     return $list;
 }
 
+function restoreProj($idProj){
+    $user = getUser($_SESSION['username']);
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project SET hide = ? WHERE id = ? AND id_user = ?');
+    $req->execute(array(false, $idProj,$user[0]));
+
+}
+
+function getNbProjHidden(){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT COUNT(id) FROM project WHERE hide = ?');
+    $req->execute(array(true));
+    return $req->fetch()[0];
+
+}
+
+function hideProj($idProj){
+    $db = dbConnect();
+    $req = $db->prepare('UPDATE project SET hide = ? WHERE id = ?');
+    $req->execute(array(true, $idProj));
+}
+
 function insertProj($proj){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO project (name,description,id_user) VALUES (?,?,?)');
@@ -5110,7 +5132,8 @@ function getListProjects2($idUser){
         $id_user = intval($row['id_user']);
         $scoping = intval($row['scoping']);
         $cb = intval($row['cb']);
-        $list[$id] = ['name'=>$name,'description'=>$description,'discount_rate'=>$discount_rate,'weight_bank'=>$weight_bank,'weight_bank_soc'=>$weight_bank_soc,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_user'=>$id_user,'scoping'=>$scoping,'cb'=>$cb];
+        $hide = boolval($row['hide']);
+        $list[$id] = ['name'=>$name,'description'=>$description,'discount_rate'=>$discount_rate,'weight_bank'=>$weight_bank,'weight_bank_soc'=>$weight_bank_soc,'creation_date'=>$creation_date,'modif_date'=>$modif_date,'id_user'=>$id_user,'scoping'=>$scoping,'cb'=>$cb, "hide"=>$hide];
     }
     return $list;
 }

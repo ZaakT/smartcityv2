@@ -724,6 +724,8 @@ function calcGlobalScores($scores,$weights_table){
 }
 
 
+
+
 // ---------------------------------------- CHECK PRE-REQ ----------------------------------------
 function prereq_ProjectDesign(){
     if(isset($_SESSION['ucmID'])){

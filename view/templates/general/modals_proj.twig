@@ -55,6 +55,50 @@
 </div> 
 {% endmacro %}
 
+{% macro basket_proj(idProj,nameProj, sideBarName) %}
+<div class="modal fade" id="askBasketProj_{{ idProj }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Project deleting confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to put this project ({{ nameProj }}) in the basket ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A={{sideBarName}}&amp;A2=basket_proj&amp;id={{ idProj }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}
+
+{% macro restore_proj(idProj,nameProj, sideBarName) %}
+<div class="modal fade" id="askRestoreProj_{{ idProj }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Project restoration confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to restore this project ({{ nameProj }}) ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="?A={{sideBarName}}&amp;A2=restore_proj&amp;id={{ idProj }}"><button type="button" class="btn btn-dark">Yes</button></a>
+            </div>
+        </div>
+    </div>
+</div> 
+{% endmacro %}
+
 {% macro create_proj1() %}
 <div class="modal fade" id="createNewProjModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">

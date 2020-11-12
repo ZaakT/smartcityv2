@@ -10,16 +10,20 @@
 
 
 {% block content %}
-{% set image = "colorbannew.png" %}
+{% if logoName != "" %}
+    {% set image = '../uploads/logos/' ~ logoName %}
+{% else %}
+    {% set image = "./../../public/img/colorbannew.png" %}
+{% endif %}
 {% if sideBarName == "project_scoping" %}
-    {% set image = "contenu/carte.PNG" %}
+    {% set image = "./../../public/img/contenu/carte.PNG" %}
 {% elseif sideBarName == "cost_benefits" %}
-    {% set image = "contenu/projInput.PNG" %}
+    {% set image = "./../../public/img/contenu/projInput.PNG" %}
 {% endif %}
 <div class="">
     <div class="row m-5 align-items-center">
         <div class="col-lg-6 text-center">
-            <img src="./../../public/img/{{image}}" class="img-fluid" alt="Responsive image"></img>
+            <img src="{{image}}" class="img-fluid" alt="Responsive image"></img>
         </div>
         <div class="col-lg-5">
             <h2 class="text-center text-uppercase">

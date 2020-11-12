@@ -153,6 +153,11 @@
           <a class="dropdown-item" href="?A=input_use_case">{{traduction.getText("input_use_case")}}</a>
           <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=customer_dashboards">{{traduction.getText("dashboards")}}</a>
         </div>
+      </li>     
+      {#                  COMPARISON BC              #}
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle disabled" href="#" id="navbarDropdownMenuLink_comparison" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("comparison")}}</a>
+
       </li>
       {% endif %}
     </ul>

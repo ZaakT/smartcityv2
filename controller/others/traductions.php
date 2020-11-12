@@ -29,6 +29,10 @@ $GLOBALS['dicTrad']=[
     "navbar_log_out_?" => [
         "en"=>"Do you want to log out ?"
     ],
+    "comparison" => [
+        "en"=>"Comparison",
+        "fr"=> "Comparaison"
+    ],
     
     // -------- Words -------- 
     "project_design" => [

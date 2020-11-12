@@ -45,6 +45,7 @@ $twig->addGlobal('dicTraductions', $GLOBALS['dicTrad']);
 $twig->addGlobal('GlobalProjID', getProjID());
 $twig->addGlobal('getNbConfirmedUC', getNbConfirmedUC());getLogoName();
 $twig->addGlobal('logoName', getLogoName());
+$twig->addGlobal('nbProjectHidden', getNbProjHidden());
 
 
 $is_connected = isConnected();
@@ -458,6 +459,8 @@ try{
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="project"){
                         \general\project($twig,$is_connected,'?A=project_sdesign&A2=proj_selected','project_sdesign');
+                    }elseif($_GET['A2']=="basket"){
+                        \general\project($twig,$is_connected, '','project_sdesign');
                     }elseif($_GET['A2']=="create_proj"){
                         if(isset($_POST)){
                             \general\create_proj($_POST,$_GET['A'], "project" );
@@ -466,9 +469,23 @@ try{
                             
                             header('Location: ?A='.$_GET['A'].'=&A2=project');
                         }
+                    }elseif($_GET['A2']=="basket_proj"){
+                        if(isset($_GET['id'])){
+                            \general\basket_proj($_GET['id'], $_GET['A'], "project");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
+                    }elseif($_GET['A2']=="restore_proj"){
+                        if(isset($_GET['id'])){
+                            \general\restore_proj($_GET['id'], $_GET['A'], "basket");
+                        }
+                        else {
+                            header('Location: ?A='.$_GET['A'].'&A2=project');
+                        }
                     }elseif($_GET['A2']=="delete_proj"){
                         if(isset($_GET['id'])){
-                            \general\delete_proj($_GET['id'], $_GET['A'], "project");
+                            \general\delete_proj($_GET['id'], $_GET['A'], "basket");
                         }
                         else {
                             header('Location: ?A='.$_GET['A'].'&A2=project');

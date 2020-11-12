@@ -9,6 +9,7 @@
     {% set lorem = 'Select or create a new project.' %}
     {% set scheduleVerifMode = false %}
     {% set scheduleVerifModeText = "" %}
+    {% set hideMode = true %}
 
 {% if sideBarName =="project_scoping" %}
     {% set scopeMode = false %}
@@ -48,6 +49,13 @@
 {% elseif sideBarName =="input_use_case_supplier" %}
     {% set scheduleVerifMode = true %}
     {% set scheduleVerifModeText = "Use Case Confirmed" %}
+
+{% elseif sideBarName =="project_sdesign" and nextPage =="" %}
+    {% set hideMode = false %}
+    {% set deleteMode = false %}
+    {% set scopeMode = false %}
+    {% set createMode = false %}
+    {% set lorem = "Delete or restore a project." %}
 
 {% elseif sideBarName =="project_sdesign" %}
     {% set scopeMode = false %}
@@ -90,13 +98,15 @@
 
 <form action={{nextPage}} method="post">
 {% if projects %}
-{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText, scheduleVerif, sessionProj) }}
+{{ list.list_projects(projects, scopeMode, deleteMode, veriScopefMode, costBenefitsMode, verifCostBenefits, sideBarName, scheduleVerifMode, scheduleVerifModeText, scheduleVerif, sessionProj, hideMode) }}
 {% else %}
 <h2 class="text-center m-5">You have no Project !</h2>
 {% endif %}
+{% if nextPage != '' %}
 <div class="row m-3 text-center text-dark">
     <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" {{projects ? "" : "disabled"}} title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
 </div>
+{% endif %}
 </form>
 {% if createMode %}
 <div class="row m-3">
@@ -113,12 +123,22 @@
 {% if deleteMode %}
 
     {% for proj in projects %}
-        {{ modal.delete_proj(proj[0],proj[1], sideBarName) }}
         {{ modal.edit_proj(proj[0],proj[1], proj[2], sideBarName) }}
         {{ modal.duplicate_proj(proj[0],proj[1],  sideBarName) }}
+        {{ modal.basket_proj(proj[0],proj[1],  sideBarName) }}
     {% endfor %}
 
 {% endif %}
+
+{% if not hideMode %}
+    {% for proj in projects %}
+        {{ modal.delete_proj(proj[0],proj[1], sideBarName) }}
+        {{ modal.restore_proj(proj[0],proj[1], sideBarName) }}
+    {% endfor %}
+
+{% endif %}
+
+
 
 {% endblock %}
 
