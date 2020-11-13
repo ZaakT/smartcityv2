@@ -1043,9 +1043,13 @@ function getColumnsName($tableName){
 }
 
 function createReqCopyXpex($columnsName){
+
     $colID = [];
     $tablePara = [];
     $tableValues = [];
+    foreach ($columnsName as $tableName => $columnNameS){
+        $columnsName[$tableName ]=array_unique($columnNameS);
+    }
     unset($columnsName[array_keys($columnsName)[0]][array_search("id", $columnsName[array_keys($columnsName)[0]])]);
     foreach ($columnsName as $tableName => $columnNameS) {
         $colID=array_merge($colID, $columnNameS);
@@ -1163,8 +1167,6 @@ function duplicateXpexItems($projIDorigin,$newProjID){
                 }
 
                 if(!empty($row['id_proj'])){
-                    //var_dump($param);
-                    //var_dump($procedureParaName);
                     $reqCopy->execute($param); 
 
                     /*var_dump($reqCopy);
