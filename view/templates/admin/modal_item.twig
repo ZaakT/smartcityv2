@@ -1,4 +1,4 @@
-{% macro create_item1(catItemName, UC) %} {# capex opex implem revenues #}
+{% macro create_item1(catItemName, listUC, listCatXpex) %} {# capex opex implem revenues #}
 <div class="modal fade" id="createNewItem1Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_1&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
@@ -23,12 +23,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <label for="cat_id" class="col-sm-3 col-form-label">Category (ID)</label>
                         <div class="col-sm-9">
-                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
-                                <option value="" disabled>Select Use Case ID</option>
-                                {% for uc_id, uc in UC %}
-                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                            <select class="selectpicker" name="cat_uc_id" id="cat_uc_id" aria-describedby="cat_uc_id">
+                                <option value="" disabled>Select Category ID</option>
+                                {% for ucID in listCatXpex|keys %}
+                                    {% for catID in listCatXpex[ucID]|keys %}
+                                        <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
+                                    {% endfor %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -66,7 +68,7 @@
 </div>
 {% endmacro %}
 
-{% macro create_item2(catItemName, UC) %} {# widercash cashreleasing #}
+{% macro create_item2(catItemName, listUC, listCatXpex) %} {# widercash cashreleasing #}
 <div class="modal fade" id="createNewItem2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_2&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
@@ -91,12 +93,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <label for="cat_id" class="col-sm-3 col-form-label">Category (ID)</label>
                         <div class="col-sm-9">
-                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
-                                <option value="" disabled>Select Use Case ID</option>
-                                {% for uc_id, uc in UC %}
-                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                            <select class="selectpicker" name="cat_uc_id" id="cat_uc_id" aria-describedby="cat_uc_id">
+                                <option value="" disabled>Select Category ID</option>
+                                {% for ucID in listCatXpex|keys %}
+                                    {% for catID in listCatXpex[ucID]|keys %}
+                                        <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
+                                    {% endfor %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -150,7 +154,7 @@
 </div>
 {% endmacro %}
 
-{% macro create_item3(catItemName, UC) %} {# noncash risks #}
+{% macro create_item3(catItemName, listUC, listCatXpex) %} {# noncash risks #}
 <div class="modal fade" id="createNewItem3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_item_3&amp;cat={{ catItemName }}" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
@@ -175,12 +179,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <label for="cat_id" class="col-sm-3 col-form-label">Category (ID)</label>
                         <div class="col-sm-9">
-                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
-                                <option value="" disabled>Select Use Case ID</option>
-                                {% for uc_id, uc in UC %}
-                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                            <select class="selectpicker" name="cat_uc_id" id="cat_uc_id" aria-describedby="cat_uc_id">
+                                <option value="" disabled>Select Category ID</option>
+                                {% for ucID in listCatXpex|keys %}
+                                    {% for catID in listCatXpex[ucID]|keys %}
+                                        <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
+                                    {% endfor %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -198,7 +204,7 @@
 
 
 
-{% macro create_quantifiable(UC) %} 
+{% macro create_quantifiable(listUC, listCatXpex) %} 
 <div class="modal fade" id="createQuantifiableModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form id="createItem1-form" action="?A=admin&amp;A2=manage_db&amp;A3=create_quantifiable_item" method='post' oninput='passwordConfirmation.setCustomValidity(passwordConfirmation.value != password.value ? "Passwords do not match." : "")'>
@@ -223,12 +229,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="uc_id" class="col-sm-3 col-form-label">Use Case (ID)</label>
+                        <label for="cat_id" class="col-sm-3 col-form-label">Category (ID)</label>
                         <div class="col-sm-9">
-                            <select class="selectpicker" name="uc_id" id="uc_id" aria-describedby="uc_id">
-                                <option value="" disabled>Select Use Case ID</option>
-                                {% for uc_id, uc in UC %}
-                                <option value="{{ uc_id }}">{{ uc_id }} : {{ uc['name'] }}</option>
+                            <select class="selectpicker" name="cat_uc_id" id="cat_uc_id" aria-describedby="cat_uc_id">
+                                <option value="" disabled>Select Category ID</option>
+                                {% for ucID in listCatXpex|keys %}
+                                    {% for catID in listCatXpex[ucID]|keys %}
+                                        <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
+                                    {% endfor %}
                                 {% endfor %}
                             </select>
                         </div>

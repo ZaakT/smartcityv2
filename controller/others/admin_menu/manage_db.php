@@ -402,8 +402,9 @@ function create_item1($twig,$is_connected,$post,$catItem){
     $source = $post['source'];
     $range_min = $post['range_min'];
     $range_max = $post['range_max'];
-    $uc = $post['uc_id'];
-    $itemInfos = [$name,$description,$unit,$source,$range_min,$range_max,$uc];
+    $uc = explode("_",$post['cat_uc_id'])[1];
+    $cat = explode("_",$post['cat_uc_id'])[0];
+    $itemInfos = [$name,$description,$unit,$source,$range_min,$range_max,$uc,$cat];
     if(!empty(getItemByNameAndCat($name,$catItem))){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {
@@ -423,8 +424,9 @@ function create_item2($twig,$is_connected,$post,$catItem){
     $range_max_red_nb = $post['range_max_red_nb'];
     $range_min_red_cost = $post['range_min_red_cost'];
     $range_max_red_cost = $post['range_max_red_cost'];
-    $uc = $post['uc_id'];
-    $itemInfos = [$name,$description,$unit,$source,$unit_cost,$range_min_red_nb,$range_max_red_nb,$range_min_red_cost,$range_max_red_cost,$uc];
+    $uc = explode("_",$post['cat_uc_id'])[1];
+    $cat = explode("_",$post['cat_uc_id'])[0];
+    $itemInfos = [$name,$description,$unit,$source,$unit_cost,$range_min_red_nb,$range_max_red_nb,$range_min_red_cost,$range_max_red_cost,$uc,$cat];
     if(!empty(getItemByNameAndCat($name,$catItem))){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {
@@ -437,8 +439,9 @@ function create_item3($twig,$is_connected,$post,$catItem){
     //ajoute dans la db un item quantifiable
     $name = $post['name'];
     $description = $post['description'];
-    $uc = $post['uc_id'];
-    $itemInfos = [$name,$description,$uc];
+    $uc = explode("_",$post['cat_uc_id'])[1];
+    $cat = explode("_",$post['cat_uc_id'])[0];
+    $itemInfos = [$name,$description,$uc,$cat];
     if(!empty(getItemByNameAndCat($name,$catItem))){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {
@@ -459,8 +462,9 @@ function create_quantifiable_item($twig,$is_connected,$post){
     $source = $post['source'];
     $range_min_red_nb = $post['range_min_red_nb'];
     $range_max_red_nb = $post['range_max_red_nb'];
-    $uc = $post['uc_id'];    
-    $itemInfos = [$name,$description,$unit,$source,$range_min_red_nb,$range_max_red_nb,$uc];
+    $uc = explode("_",$post['cat_uc_id'])[1];
+    $cat = explode("_",$post['cat_uc_id'])[0]; 
+    $itemInfos = [$name,$description,$unit,$source,$range_min_red_nb,$range_max_red_nb,$uc,$cat];
     if(!empty(getItemByNameAndCat($name,'quantifiable'))){
         manage_item('quantifiable',$twig,$is_connected,true); 
     } else {

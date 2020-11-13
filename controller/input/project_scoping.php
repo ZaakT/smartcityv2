@@ -162,7 +162,7 @@ function scope_selected($post){
             update_ModifDate_proj($projID);  
             if(isSup()){
 
-                header('Location: ?A=project_sdesign&A2=scope1&projID='.$projID);
+                header('Location: ?A=input_project_common_supplier&A2=schedule&projID='.$projID);
             }else{
                 header('Location: ?A=project_scoping&A2=perimeter&projID='.$projID);
             }       

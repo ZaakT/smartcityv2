@@ -73,14 +73,14 @@ function countChecked_scope(formName) {
     $("#countUCSelectScope").text(n[2]+" selected");
 
     if (n[0] == 0){
-        $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
+        //$("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
         $("#cat_table, #countCatSelectScope, #help_cat_scope").attr('hidden', 'hidden');
         $("#help_meas_scope").removeAttr('hidden');
     } else {
         $("#cat_table, #countCatSelectScope").removeAttr('hidden');
         $("#help_meas_scope").attr("hidden","hidden");
         if(n[1] == 0){
-            $("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
+            //$("#uc_table, #countUCSelectScope, #help_uc").attr("hidden","hidden");
             $("#help_cat_scope").removeAttr('hidden');
         } else {
             $("#help_cat_scope").attr("hidden","hidden");

@@ -56,16 +56,16 @@
 
 {% if mode == "NewItem1" %}
     {{ list.list_item1(listItem,catItemName,isTaken) }} 
-    {{ modal.create_item1(catItemName,UC) }} 
+    {{ modal.create_item1(catItemName,UC, listCatXpex) }} 
 {% elseif mode == "NewItem2" %}
     {{ list.list_item2(listItem,catItemName,isTaken) }} 
-    {{ modal.create_item2(catItemName,UC) }} 
+    {{ modal.create_item2(catItemName,UC, listCatXpex) }} 
 {% elseif mode == "Quantifiable" %}
     {{ list.list_quantifiable(listItem,'quantifiable',isTaken) }} 
-    {{ modal.create_quantifiable(UC) }} 
+    {{ modal.create_quantifiable(UC, listCatXpex) }} 
 {% elseif mode == "NewItem3" %}
     {{ list.list_item3(listItem,catItemName,isTaken) }} 
-    {{ modal.create_item3(catItemName,UC) }} 
+    {{ modal.create_item3(catItemName,UC, listCatXpex) }} 
 {% endif %}
 
 

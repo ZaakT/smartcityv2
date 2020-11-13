@@ -59,7 +59,7 @@
     
 <div class ="row">
     {% if measures and ucs %} 
-        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action={{sideBarName == "project_scoping" ? '"?A=project_scoping&amp;A2=scope_selected"'}}{{sideBarName == "project_sdesign" ? '"?A=input_project_common_supplier&amp;A2=schedule"'}}"?A=project_scoping&amp;A2=scope_selected" method="post">
+        <form class="row container-fluid" name="form_scope" id="form_scope" onsubmit="return countChecked_scope('form_scope');" action={{sideBarName == "project_scoping" ? '"?A=project_scoping&amp;A2=scope_selected"'}}{{sideBarName == "project_sdesign" ? '"?A=project_sdesign&amp;A2=scope_selected"'}} method="post">
             <div class="container-fluid">
                 <div class="row my-0 text-center text-dark">
                     <button type="submit" class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button mt-4" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true"></button>
