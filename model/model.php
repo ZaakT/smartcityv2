@@ -18,12 +18,12 @@ if (!function_exists('array_key_first')) {
 function dbConnect()
 {
     try{
-    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
         
         return $db;
     } catch(Exception $e){ 
         try {
-            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=3306', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=3306', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
                 return $db;
         } catch (Exception $e2) {
             throw new Exception("Access to the database impossible ! : 

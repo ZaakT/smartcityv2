@@ -38,6 +38,10 @@ $GLOBALS['dicTrad']=[
     "project_design" => [
         "en"=>"Project Design"
     ],    
+    "project" => [
+        "en"=>"Project",
+        "fr"=>"Projet"
+    ],    
     "current" => [
         "en"=>"current"
     ],    
@@ -239,6 +243,9 @@ $GLOBALS['dicTrad']=[
     ], 
     "cumulated_net_societal_cash" => [
         "en"=>"Cumulated Net Societal Cash"
+    ], 
+    "benef_breakdown" => [
+        "en"=>"Benefit Breakdown"
     ], 
 
 

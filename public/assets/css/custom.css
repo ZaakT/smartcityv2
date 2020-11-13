@@ -220,6 +220,12 @@ td {
     background-color: #ffffff;
 }
 
+.tableFixHead          { overflow-y: auto;  }
+.tableFixHead thead th { position: sticky; top: 0; }
+
+
+
+
 .cball_table .item {
     color: #495057;
     background-color: #e9ecef;
