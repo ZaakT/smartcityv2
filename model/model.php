@@ -2308,8 +2308,8 @@ function getListCapexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -2957,8 +2957,8 @@ function getListImplemUser( $projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -3268,8 +3268,8 @@ function getListOpexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -3943,8 +3943,8 @@ function getListCashReleasingUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4214,8 +4214,8 @@ function getListWiderCashUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4476,8 +4476,8 @@ function getListQuantifiableUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4704,8 +4704,8 @@ function getListNonCashUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
