@@ -2236,10 +2236,11 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
         $side = $row['side'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -2615,10 +2616,11 @@ function getListSupplierRevenuesAdvice($ucID, $revenueType){
         $id_item = intval($row['id_revenue']);
         $name = $row['name'];
         $description = $row['description'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description];
+            $list[$id_item] += ['name'=>$name,'description'=>$description, 'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description];
+            $list[$id_item] = ['name'=>$name,'description'=>$description, 'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -2886,10 +2888,11 @@ function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
         $side = $row['side'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -3197,10 +3200,11 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
         $side = $row['side'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -3598,10 +3602,11 @@ function getListRevenuesAdvice($ucID){
         $source = $row['source'];
         $range_min = intval($row['range_min']);
         $range_max = intval($row['range_max']);
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -3888,10 +3893,11 @@ function getListCashReleasingAdvice($ucID){
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -4159,10 +4165,11 @@ function getListWiderCashAdvice($ucID){
         $range_min_red_cost = floatval($row['range_min_red_cost']);
         $range_max_red_cost = floatval($row['range_max_red_cost']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'unit_cost'=>$unit_cost,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'range_min_red_cost'=>$range_min_red_cost,'range_max_red_cost'=>$range_max_red_cost,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -4424,10 +4431,11 @@ function getListQuantifiableAdvice($ucID){
         $source = $row['source'];
         $range_min_red_nb = floatval($row['range_min_red_nb']);
         $range_max_red_nb = floatval($row['range_max_red_nb']);
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min_red_nb'=>$range_min_red_nb,'range_max_red_nb'=>$range_max_red_nb,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -4655,10 +4663,11 @@ function getListNonCashAdvice($ucID){
         $name = $row['name'];
         $description = $row['description'];
         $sources = $row['sources'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources,'cat'=>$cat];
         }
     }
     //var_dump($list);
@@ -4880,10 +4889,11 @@ function getListRisksAdvice($ucID){
         $name = $row['name'];
         $description = $row['description'];
         $sources = $row['sources'];
+        $cat=$row['cat'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'sources'=>$sources,'cat'=>$cat];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'sources'=>$sources,'cat'=>$cat];
         }
     }
     //var_dump($list);

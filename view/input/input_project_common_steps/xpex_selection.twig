@@ -59,7 +59,7 @@
 <form id="form_xpex" name="form_xpex" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedXpex(form_xpex);">
     {% set print = false %}
     {% for item in xpex_supplier %}
-        {% if item|length >0  and item['cat'] == categoryID  %}{% set print = true %}{% endif %}
+        {% if item|length > 0  and item['cat'] == categoryID  %}{% set print = true %}{% endif %}
     {% endfor %}
     {% if print %}
     {{ list.list_xpex(xpex_supplier, [], [], projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, 'supplier', xpexCategories ) }}
@@ -67,15 +67,15 @@
     
     {% set print = false %}
     {% for item in xpex_advice_from_ntt|merge(xpex_advice_from_outside_ntt)|merge(xpex_advice_internal) %}
-        {% if item|length >0 %}{% set print = true %}{% endif %}
+        {% if item|length > 0 and item['cat'] == categoryID  %}{% set print = true %}{% endif %}
     {% endfor %}
     {% if print %}
-    {{ list.list_xpex(xpex_advice_from_ntt, xpex_advice_from_outside_ntt, xpex_advice_internal, projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, "custom", xpexCategories ) }}
+    {{ list.list_xpex(xpex_advice_from_ntt, xpex_advice_from_outside_ntt, xpex_advice_internal, projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, "advice", xpexCategories ) }}
     {% endif %}
 
     {% set print = false %}
     {% for item in xpex_user_from_ntt|merge(xpex_user_from_outside_ntt)|merge(xpex_user_internal) %}
-        {% if item|length >0 %}{% set print = true %}{% endif %}
+        {% if item|length > 0 and item['cat'] == categoryID  %}{% set print = true %}{% endif %}
     {% endfor %}
     {% if print %}
     {{ list.list_xpex(xpex_user_from_ntt, xpex_user_from_outside_ntt, xpex_user_internal, projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, "custom", xpexCategories) }}
