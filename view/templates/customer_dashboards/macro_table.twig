@@ -90,12 +90,13 @@
 
 {% macro table(ligneNames, colNames, selDevSym, classTable = 'table table-lg table-bordered table-striped table-responsive-lg', classThead = "thead-light text-center sticky-top", classTd = "item") %}
 {% import "/templates/customer_dashboards/macro_table.twig" as table %}
+
 {% set levelID0 = 0 %}
 {% set levelID1 = 0 %}
 {% set levelID2 = 0 %}
 <div class="row text-center">
-     <div class="col mt-2 mx-5 list-table cball_table">
-        <table id="cball_table" class="{{classTable}}" data-fixed-columns="true" data-fixed-number="4">
+     <div class="col mt-2 mx-5 list-table cball_table tableFixHead">
+        <table id="cball_table" class="{{classTable}} table table-fixed" data-fixed-columns="true" data-fixed-number="4">
             <thead class="{{classThead}}">
             <tr>
             {% set first = true %}
@@ -138,10 +139,10 @@
 
 
 
+
 {% endmacro %}
 
 {% macro simpleTable(iMax, jMax, id, tableClass) %}
-hhhhhhhhhhheeeeeeeeeeeeeeyyyyyyyyyyyyy
     <table id="cball_table" class = {{tableClass}}>
         <tbody>
             {% for i in 0..iMax %}

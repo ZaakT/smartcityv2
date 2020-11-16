@@ -70,7 +70,7 @@
     </div>
 {#}
 <h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
-<table id="keyDatesTable" class="table table-lg table-bordered table-striped table-responsive-lg">
+<table id="keyDatesTable" class=" text-center table dashboard-table">
     <tr>
         <th width="30%">{{traduction.getText("uses_cases")}}</th>
         <th width="16%">{{traduction.getText("schedule")}}</th>
@@ -176,14 +176,15 @@
 
 
 {% macro project_score(title, sideBarName) %}
+{% import "/templates/traductions.twig" as traduction %}
 
-<table id="project_score_table" class="table">
+<table id="project_score_table" class="table table-lg table-bordered table-striped table-responsive-lg">
 
-    <thead>
-        <th></th>
+    <thead class="thead-dark text-center sticky-top">
+        <th>KPI</th>
         <th>{{traduction.getText("project")}}</th>
-        <th>{{traduction.getText("target")}}</th>
         {% if sideBarName == "supplier_dashboards" %}
+        <th>{{traduction.getText("target")}}Target</th>
         <th>{{traduction.getText("bankability")}}</th>
         {% endif %}
     </thead>
@@ -193,8 +194,8 @@
         <tr>
             <th>{{line[0]}}</th>
             <td id="current_{{line[1]}}"> - </td>
-            <td id="display_{{line[1]}}"> - </td>
         {% if sideBarName == "supplier_dashboards" %}
+            <td id="display_{{line[1]}}"> - </td>
             <td>
                 <span hidden id="fin_{{line[1]}}_thumb-up" class="oi oi-thumb-up" title="thumb-up" aria-hidden="true"></span>
                 <span hidden id="fin_{{line[1]}}_thumb-down" class="oi oi-thumb-down" title="thumb-down" aria-hidden="true"></span>

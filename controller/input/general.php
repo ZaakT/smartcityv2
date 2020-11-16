@@ -39,7 +39,6 @@ function create_proj($post, $sideBarName, $A2){
 }
 
 function edit_proj($post, $sideBarName, $A2){
-    var_dump($post);
     $name = $post['name'];
     $description = isset($post['description']) ? $post['description'] : "";
     $user = getUser($_SESSION['username']);

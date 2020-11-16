@@ -97,6 +97,7 @@ function createGraph(title, father, x, y, currency="£"){
     chart.resize();
     return chart;
 }
+
 function createDiv(idFather, idDiv){
     div = document.createElement('div');
     father = document.getElementById(idFather);
@@ -152,3 +153,6 @@ function updateData(){
 
 
 }
+
+    var data = $('#data').data("toShow");
+    console.log(data);
