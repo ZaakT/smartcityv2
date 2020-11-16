@@ -96,6 +96,9 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
                 $ucID = $listUcID[0];
             }
             //var_dump($list_xpex_advice_from_ntt);
+            //var_dump($list_xpex_user_from_ntt);
+            //var_dump($list_xpex_user_from_outside_ntt);
+            //var_dump($list_xpex_user_internal);
             /*var_dump($list_xpex_supplier);
             //var_dump($list_xpex_user_from_ntt);
             //var_dump($list_selXpex);*/

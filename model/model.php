@@ -18,12 +18,12 @@ if (!function_exists('array_key_first')) {
 function dbConnect()
 {
     try{
-    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+    $db = new PDO('mysql:host=smartcityv2;dbname=dst_v2_db_updated;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
         
         return $db;
     } catch(Exception $e){ 
         try {
-            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=3306', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8;port=3306', 'root','root', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
                 return $db;
         } catch (Exception $e2) {
             throw new Exception("Access to the database impossible ! : 
@@ -1043,9 +1043,13 @@ function getColumnsName($tableName){
 }
 
 function createReqCopyXpex($columnsName){
+
     $colID = [];
     $tablePara = [];
     $tableValues = [];
+    foreach ($columnsName as $tableName => $columnNameS){
+        $columnsName[$tableName ]=array_unique($columnNameS);
+    }
     unset($columnsName[array_keys($columnsName)[0]][array_search("id", $columnsName[array_keys($columnsName)[0]])]);
     foreach ($columnsName as $tableName => $columnNameS) {
         $colID=array_merge($colID, $columnNameS);
@@ -1163,8 +1167,6 @@ function duplicateXpexItems($projIDorigin,$newProjID){
                 }
 
                 if(!empty($row['id_proj'])){
-                    //var_dump($param);
-                    //var_dump($procedureParaName);
                     $reqCopy->execute($param); 
 
                     /*var_dump($reqCopy);
@@ -2307,8 +2309,8 @@ function getListCapexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -2958,8 +2960,8 @@ function getListImplemUser( $projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -3270,8 +3272,8 @@ function getListOpexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
     $list = [];
     $ucIDList = [$uc_ID];
     if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -3947,8 +3949,8 @@ function getListCashReleasingUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4219,8 +4221,8 @@ function getListWiderCashUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4482,8 +4484,8 @@ function getListQuantifiableUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
@@ -4711,8 +4713,8 @@ function getListNonCashUser($projID,$uc_ID){
     $list = [];
     $ucIDList = [$uc_ID];
     /*if($side == "supplier"){
-        $solID = getSolutionByUcID($uc_ID);
-        $ucInSol = getUC($solID);
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUC([$solID]);
         foreach ($ucInSol as $ucItem) {
             array_push($ucIDList, $ucItem['id']);
         }
