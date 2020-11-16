@@ -181,7 +181,12 @@
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_use_case_supplier&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         <div class="dropdown-divider"></div>
         <a class="nav-item nav-link disabled" id="summary" href="?A=input_use_case_supplier&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
-
+    
+    {% elseif page=="supplier_comparison" %}
+        <h4 class="nav-item text-center">Supplier BC <br>Input Use Case</h4>
+        <a class="nav-item nav-link" id="supplier_comparison" href="?A=supplier_comparison"></span>Projects Selection</a>
+        <a class="nav-item nav-link disabled" id="comparison" href="?A=supplier_comparison&amp;A2=comparison&amp;">Comparison</a>
+        
         <!-- Admin -->
     {% elseif page == "admin" %}
         <h4 class="nav-item text-center">Administration</h4>

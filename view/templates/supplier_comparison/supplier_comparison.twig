@@ -1,0 +1,32 @@
+{% macro list_projects(projects,list_proj_select)%}
+<div class="row text-center">
+    <div class="col mx-5 list-table">
+        <table class='table text-center table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Current project</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Creation Date</th>
+                    <th scope="col">Last Modification Date</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for proj in projects %}
+                {% if not proj['hide'] %}
+                    <tr id = "tr_{{ proj[0] }}" scope="row" oninput="checkCountProj();" >
+                        <td><input type = "checkbox" name="{{ proj[0]}}" {{proj[0] in list_proj_select ? "checked"}}></td>
+                        <td>{{ proj[1] }}</td>
+                        <td>{{ proj[2] }}</td>
+                        <td>{{ proj[6] }}</td>
+                        <td>{{ proj[7] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endmacro %}

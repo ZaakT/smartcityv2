@@ -1193,7 +1193,26 @@ try{
                 }
                 prereq_navbar("supplier");
             }
+            // ---------- COMPARISON (SUPPLIER !!) ----------
+            elseif($_GET['A']=='supplier_comparison') {
+                verifIsSup();
+                if(isset($_GET['A2'])){
+                    if($_GET['A2']=="proj_selected" and isset($_POST)){
+                        comp_proj_selected($twig,$is_connected, $_POST);
+                    }elseif(isset($_SESSION['listProjComp'])){
+                        if($_GET["A2"] ==  "comparison"){
+                            supplier_comparison($twig,$is_connected);
+                        }
 
+                    }else{
+                        projectComparison($twig,$is_connected);
+                    }
+
+                }else{
+                    projectComparison($twig,$is_connected);
+                }
+            
+            }
             // ---------- COST BENEFITS ----------
             elseif($_GET['A']=='cost_benefits' or $_GET['A']=='input_use_case'){
                 //Available for Dev AND sup, do NOT use verifIsSup(); or verifIsDev();
@@ -1208,7 +1227,7 @@ try{
                         }
                         else{
                             
-                            header('Location: ?A='.$_GET['A'].'=&A2=project_cb');
+                            header('Location: ?A='.$_GET['A'].'&A2=project_cb');
                         }
                     }elseif($_GET['A2']=="delete_proj"){
                         if(isset($_GET['id'])){
