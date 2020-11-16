@@ -66,14 +66,16 @@
                 </tr>
                 {% endfor %}
                 {% if isSup %}
-                <tr class="table-primary">
-                    <td>UC Selection for computation</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>
-                        {% endfor %}
-                    {% endfor %} 
-                </tr>
+                    <thead class="thead-light">
+                    <tr class="table-primary">
+                        <td><h6>Confirm UC Selection</h6></td>
+                        {% for sel_meas,sel_ucs in selScope %} 
+                            {% for uc in sel_ucs %}
+                            <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>
+                            {% endfor %}
+                        {% endfor %} 
+                    </tr>
+                    </thead>
                 {% endif %}
             </tbody>
         </table>

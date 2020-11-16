@@ -13,7 +13,9 @@
                     Where do you want to go now ?
                 {% endif %}
                 {% if isSup and nbUC != nbConfirmed %}
-                    <br>Use Case(s) confirmed : {{nbConfirmed}}/{{nbUC}}
+                    {{ nbConfirmed == 0 ?  "<p class = 'text-danger'>": "<br><p>"}}
+                    Use Case(s) confirmed : {{nbConfirmed}}/{{nbUC}}
+                    </p>
                 {% endif %}
             </div>
             <div class="modal-footer justify-content-center">

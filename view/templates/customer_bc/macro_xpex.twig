@@ -91,7 +91,7 @@
 
                     {% if print2  %}
                         {% if type == "capex" or type == "opex" or type == "deployment_costs"  %}
-                            <tr class="table-secondary cat_{{categoryID}}"><td colspan="{{size}}"><strong>Third Part</strong></td></tr>
+                            <tr class="table-secondary cat_{{categoryID}}"><td colspan="{{size}}"><strong>Third Party</strong></td></tr>
                         {% endif %}
                         {{ macro.sub_list_xpex(xpex_from_outside_ntt,projID,ucID,selXpex, type, sideBarName, listUcID,listUcsName, Mode, categoryID, xpexCategories[xpexCategories|keys[0]]) }}
                     {% endif %}

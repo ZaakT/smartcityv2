@@ -1,8 +1,10 @@
 <?php
 
 function deal_criteria($twig, $is_connected, $projID, $side, $sideBarName)
-{
+{ 
+
     $user = getUser($_SESSION['username']);
+    $projDuration = getProjetKeyDates($_SESSION['projID'])[0]['duration'];
     $list_projects = getListProjects($user[0]);
 
     $devises = getListDevises();
@@ -15,7 +17,7 @@ function deal_criteria($twig, $is_connected, $projID, $side, $sideBarName)
             echo $twig->render('/input/deal_criteria_steps/deal_criteria.twig', array('is_connected' => $is_connected, 
             'devises' => $devises, 'selDevSym' => $selDevSym, 'selDevName' => $selDevName, 'is_admin' => $user[2], 
             'username' => $user[1], 'part' => "Project", 'projID' => $projID, "selected" => $proj[1], 'projects' => $list_projects, 
-            'input' => $inputNogoTarget, 'side' => $side, "sideBarName"=>$sideBarName));
+            'input' => $inputNogoTarget, 'side' => $side, "sideBarName"=>$sideBarName, "projDuration"=>$projDuration));
             prereq_ipc(1);
             prereq_ipc_sup();
         }

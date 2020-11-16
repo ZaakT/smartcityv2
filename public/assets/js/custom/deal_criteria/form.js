@@ -29,20 +29,20 @@ function checkInput(id){
     "nqbr" : true,
     "risks_rating" : false
     };//true if the target has to be >= than the nogo 
-    console.log
+    var projDuration = $("#projDuration").text();
     id = id.getAttribute('id');
     var idType = id.substr(0, id.lastIndexOf("_"));//payback, societal_payback, ...
     var idGoal = id.substr(id.lastIndexOf("_")+1);//nogo or target
-    console.log(id, idType, idGoal, orderDict[idType]);
+    //console.log(id, idType, idGoal, orderDict[idType]);
     var val = $("#"+id).val();
     val = val ? parseFloat(val) : -1 ;        
     var temp = String(val).split(".");
     var opGoal = "nogo";
     if(idGoal == "nogo"){ opGoal = "target" ;}
-
-    if(val < 0. || (val>100. && ( idType=="roi" || idType=="societal_roi")) || (val>10. && (idType=="risks_rating" ||idType=="nqbr" ))){
+    console.log(val, projDuration)
+    if(val < 0. || (val>100. && ( idType=="roi" || idType=="societal_roi")) || (val>10. && (idType=="risks_rating" ||idType=="nqbr" )) || (val > projDuration && (idType=="payback"))){
         $("#"+id).css("background","salmon");
-        $("#"+id).val("");
+        //$("#"+id).val("");
     } else if (temp.length==2 && temp[1].length>3){
         $("#"+id).css("background","salmon");
     } else {

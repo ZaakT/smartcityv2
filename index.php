@@ -1157,9 +1157,9 @@ try{
                     if(isset($_SESSION['projID'])){
                         if($_SESSION['projID']!=0){
                             if(isset($_GET['confirm'])){
-                                summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm']);
+                                summary($twig,$is_connected,$_SESSION['projID'],$_GET['confirm'],$_GET['A']);
                             } else {
-                                summary($twig,$is_connected,$_SESSION['projID']);
+                                summary($twig,$is_connected,$_SESSION['projID'],0,$_GET['A']);
                             }
                         }
                         else { 

@@ -13,9 +13,9 @@
             {% for id_meas,meas in measures %}
                 <tr id = "tr_{{ id_meas }}" scope="row">
                     {% if (id_meas in list_sel|keys ) %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" checked></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas big-checkbox " id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" checked></td>
                     {% else %}
-                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas" id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" ></td>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="countChecked_scope('form_scope');" class="meas big-checkbox " id='meas_{{ id_meas }}' name="meas_{{ id_meas }}" ></td>
                     {% endif %}
                     <td>{{ meas['name'] }}</td>
                 </tr>

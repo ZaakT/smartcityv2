@@ -120,7 +120,8 @@
         <div class="col mx-5 mb-5 list-table">
             <table id="xpex_table" class='table table-lg table-bordered table-striped table-responsive-lg'>
                 <thead class="thead-dark text-center sticky-top">
-                    {% if type == "opex" or type == "operating_revenues" or type == "revenues" or type == "cashreleasing" or type == "widercash" %}
+                    {#{% if type == "opex" or type == "operating_revenues" or type == "revenues" or type == "cashreleasing" or type == "widercash" %}#}
+                    {% if type == "revenues" or type == "cashreleasing" or type == "widercash" %}
                     <tr>
                         <th scope="col" colspan=2 class="text-uppercase">Components</th>
                         <th scope="col" colspan=2 class="text-uppercase">Baseline</th>
@@ -145,11 +146,11 @@
                         <th scope="col" colspan=1 class="text-uppercase">Baseline</th>
                         <th scope="col" colspan=1 class="text-uppercase">Impact</th>
                     </tr>                    
-                    {% elseif type == "capex" or type == "deployment_costs" %}
+                    {#{% elseif type == "capex" or type == "deployment_costs" %}
                      <tr>
                         <th scope="col" colspan=2 class="text-uppercase">Components</th>
                         <th scope="col" colspan={{type == "capex" ? 3 : 2}} class="text-uppercase">Baseline</th>
-                    </tr>                   
+                    </tr>  #}                 
                     {% endif %}
 
                     <tr>
@@ -160,7 +161,7 @@
                                 <th scope="col">Reference Unit</th>
                                 {% set size = size + 1 %}
                             {% if type != "quantifiable" and type != "revenues"  and type != "revenuesProtection" %}
-                                <th scope="col">Unit Cost</th>
+                                <th scope="col">Unit Cost {{type == "opex" ? "per month"}}</th>
                                 {% set size = size + 1 %}
                             {% elseif type == "revenues" %}
                                 <th scope="col">Unit Revenues</th>
@@ -171,7 +172,7 @@
                                 <th scope="col">% Protected </th>
                                 {% set size = size + 2 %}
                             {% else %}
-                                <th scope="col">#Reference units {{ type != "capex" ? "per month"}} </th>
+                                <th scope="col">#Units {{ type != "capex" and type != "deployment_costs" and type != "implem" ? "per month"}} </th>
                                 {% set size = size + 1 %}
                             {% endif %}
                             {#% if type == "equipment_revenues" or  type == "deployment_revenues" or type == "operating_revenues" %}
@@ -247,7 +248,7 @@
                             <td colspan="1000"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td>
                         </tr>
                         {% if show1 %}{{ list.part(selXpex, xpex_from_ntt,type, nb_uc, "From #{companyName}", size, listUcID,listUcsName, Mode, selDevSym, categoryID) }}{% endif %}
-                        {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "Third Part", size,listUcID,listUcsName, Mode, selDevSym, categoryID )}}{% endif %}
+                        {% if show2 %}{{ list.part(selXpex, xpex_from_outside_ntt,type, nb_uc, "Third Party", size,listUcID,listUcsName, Mode, selDevSym, categoryID )}}{% endif %}
                         {% if show3 %}{{ list.part(selXpex, xpex_internal,type, nb_uc, "Internal", size,listUcID,listUcsName, Mode,selDevSym, categoryID )}}{% endif %}
                     {% endif %}
                 {% endfor %}

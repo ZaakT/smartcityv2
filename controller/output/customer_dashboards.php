@@ -336,6 +336,9 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                         'fin_operating_margin'=>$fin_operating_margin        
                     );
                 }
+                foreach($bankability_cacl as $key => $value){
+                    $bankability_cac = round($value, 2);
+                }
                 
             /*}
             catch(\Throwable $th){

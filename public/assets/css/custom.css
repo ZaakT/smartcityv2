@@ -220,6 +220,8 @@ td {
     background-color: #ffffff;
 }
 
+input[type=checkbox] {width: 20px; height: 20px;}
+
 .tableFixHead          { overflow-y: auto;  }
 .tableFixHead thead th { position: sticky; top: 0; }
 
