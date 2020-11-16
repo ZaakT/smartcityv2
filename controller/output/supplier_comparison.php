@@ -21,7 +21,6 @@ function projectComparison($twig,$is_connected){
 
 function comp_proj_selected($twig,$is_connected, $post){
     $_SESSION['listProjComp'] = array_keys($post);
-    var_dump('Location: ?A='.$_GET['A'].'&A2=comparison');
     header('Location: ?A='.$_GET['A'].'&A2=comparison');
 
 

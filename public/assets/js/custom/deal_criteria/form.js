@@ -18,7 +18,6 @@ function isInf(idSup, idInf){
 
 
 function checkInput(id){
-    console.log("hey hey hey");
     var orderDict = {
     "operating_margin" : true,
     "payback": false,
@@ -30,7 +29,7 @@ function checkInput(id){
     "nqbr" : true,
     "risks_rating" : false
     };//true if the target has to be >= than the nogo 
-
+    console.log
     id = id.getAttribute('id');
     var idType = id.substr(0, id.lastIndexOf("_"));//payback, societal_payback, ...
     var idGoal = id.substr(id.lastIndexOf("_")+1);//nogo or target

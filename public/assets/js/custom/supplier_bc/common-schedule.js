@@ -11,8 +11,15 @@ function monthDiff(d1, d2)
     return (year2-year1)*12 + month2-month1;
 }
 
-function updateBar(){
-    if(verifForm()){
+function dateWihtoutDay(date){
+    date_exp = date.toDateString().split(' ').slice(1);
+    delete date_exp[1];
+    return date_exp.join(' ');
+
+}
+
+function updateBar(submitMode = false){
+    if(verifForm(submitMode)){
         console.log("remove");
         $("#chart_schedule").removeAttr("hidden");
         var valDDur = parseFloat($("#dduration").val());
@@ -25,52 +32,59 @@ function updateBar(){
 
         dep_end = new Date(valDStart);
         dep_end.setMonth(dep_end.getMonth()+valDDur);
-        $("#run_starttext").html(dep_end.toISOString().slice(0,10));
+        $("#run_starttext").html(dateWihtoutDay(dep_end));
 
         proj_end = new Date(valPStart);
         proj_end.setMonth(dep_end.getMonth()+valPDur);
-        $("#project_end_text").html(proj_end.toISOString().slice(0,10));
+        $("#project_end_text").html(dateWihtoutDay(proj_end));
 
 
         $("#bar_1").css("width", lag_prop + "%");
         $("#proj_start").css("width", lag_prop + "%");
-        $("#proj_start_text").html(valPStart);
+        $("#proj_start_text").html(dateWihtoutDay(new Date(valPStart)));
 
         $("#bar_2").css("width", dep_prop + "%");
         $("#dep_start").css("width", dep_prop + "%");
-        $("#dep_start_text").html(valDStart);
+        $("#dep_start_text").html(dateWihtoutDay(new Date(valDStart)));
 
         $("#bar_3").css("width", run_prop + "%");
         $("#run_start").css("width", run_prop/2 + "%");
         $("#project_end").css("width", run_prop/2 + "%");
 
-
+        return true;
     }else{
         //$("#chart_schedule").setAttribute("hidden", "true"); Pas utile ? 
+        return false;
     }
     
 }
 
-function verifForm(){
+function verifForm(submitMode){
     clearAlerts();
     var validate_form = true;
     var colored_inputs = [];
     id = 0;
 
-    inputs.forEach(i => {
-        if($(i).val() == "") {
-            addAlert("Some fields are missing.", id);
-            id++;
-            validate_form = false;
+    if(submitMode){
+        var test=false
+        inputs.forEach(i => {
+            if($(i).val() == "") {
+                if(!test){
+                    addAlert("Some fields are missing.", id);
+                    id++;
+                    validate_form = false;
+                }
 
-            $(i).addClass("bg-warning");
-            colored_inputs.push(i);
-        } else {
-            if(!colored_inputs.includes(i)) {
-                $(i).removeClass("bg-warning");
+                $(i).addClass("bg-warning");
+                colored_inputs.push(i);
+                test = true;
+            } else {
+                if(!colored_inputs.includes(i)) {
+                    $(i).removeClass("bg-warning");
+                }
             }
-        }
-    });
+        });
+    }
 
     var valDDur = $("#dduration").val();
     valDDur = parseFloat(valDDur) ;  
