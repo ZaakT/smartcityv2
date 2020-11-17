@@ -1080,7 +1080,7 @@ function createReqCopyXpex($columnsName){
     $procedurePara =substr($procedurePara, 0, -3);
     $db = dbConnect();
 
-    /*var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
+    var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
     )
     BEGIN
@@ -1095,7 +1095,7 @@ function createReqCopyXpex($columnsName){
         INSERT INTO '.array_keys($columnsName)[3].' ('.$tablePara[array_keys($columnsName)[3]].')
             VALUES (itemID,id_uc);
     END
-        ');*/
+        ');
 
     $db->exec('DROP PROCEDURE IF EXISTS `copy_xpex_user`;');
     $db->exec(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
@@ -1157,6 +1157,7 @@ function duplicateXpexItems($projIDorigin,$newProjID){
                 LEFT JOIN input_'.$tableName.'
                 ON  input_'.$tableName.'.id_item = '.$tableName.'_item.item_id
                 WHERE '.$tableName.'_user.id_proj = ?
+                AND `supplier_revenues_item`.advice_user = `user`
                 GROUP BY '.$tableName.'_item.item_id');
 
             $columnsName = [$tableName.'_item'=>getColumnsName($tableName.'_item'), 
@@ -1183,12 +1184,12 @@ function duplicateXpexItems($projIDorigin,$newProjID){
             }
 
             if(!empty($row['id_proj'])){
-               //var_dump("coucou1");
-                //var_dump($param);
-               //var_dump($procedureParaName);
-                //var_dump($tableName);
+                var_dump("coucou1");
+                var_dump($param);
+                var_dump($procedureParaName);
+                var_dump($tableName);
                 $reqCopy->execute($param); 
-                //var_dump("coucou2");
+                var_dump("coucou2");
 
                 /*var_dump($reqCopy);
                 //var_dump($row);

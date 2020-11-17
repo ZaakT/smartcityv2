@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 17 nov. 2020 à 16:52
+-- Généré le :  mar. 17 nov. 2020 à 17:01
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -5855,25 +5855,13 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (44, 'PaaS - 0 to 50 ASUs', 'operating', '', 'user', '#', 48),
 (45, 'PaaS - 51 to 200 ASUs', 'operating', '', 'user', '#', 48),
 (46, 'Engineering', 'deployment', '', 'advice', 'FTEs-days', 41),
-(47, 'Engineering', 'deployment', '', 'advice', 'FTEs-days', 41),
-(48, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 42),
-(49, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 42),
 (50, 'Camera', 'equipment', '', 'advice', '#', 46),
 (51, 'Camera hooking', 'deployment', '', 'advice', '#FTEs-days', 47),
-(52, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 48),
-(53, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 48),
-(54, 'Engineering', 'deployment', '', 'advice', 'FTEs-days', 41),
-(55, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 42),
-(56, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 42),
 (57, 'Camera', 'equipment', '', 'advice', '#', 46),
-(58, 'Camera hooking', 'deployment', '', 'advice', '#FTEs-days', 47),
-(59, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 48),
-(60, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 48),
 (61, 'Engineering', 'deployment', '', 'advice', 'FTEs-days', 41),
 (62, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 42),
 (63, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 42),
 (64, 'Camera', 'equipment', '', 'advice', '#', 46),
-(65, 'Camera hooking', 'deployment', '', 'advice', '#FTEs-days', 47),
 (66, 'PaaS - 0 to 50 ASUs', 'operating', '', 'advice', '#', 48),
 (67, 'PaaS - 51 to 200 ASUs', 'operating', '', 'advice', '#', 48);
 
@@ -5940,25 +5928,13 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (43, 41),
 (44, 41),
 (45, 41),
-(47, -1),
-(48, -1),
-(49, -1),
 (50, 41),
 (51, 41),
-(52, 41),
-(53, 41),
-(54, -1),
-(55, -1),
-(56, -1),
 (57, 41),
-(58, 41),
-(59, 41),
-(60, 41),
 (61, -1),
 (62, -1),
 (63, -1),
 (64, 41),
-(65, 41),
 (66, 41),
 (67, 41);
 

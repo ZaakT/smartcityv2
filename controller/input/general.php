@@ -130,7 +130,7 @@ function duplicate_proj($post, $sideBarName, $A2){
 
 
 
-    header('Location: ?A='.$sideBarName.'&A2='.$A2);
+    //header('Location: ?A='.$sideBarName.'&A2='.$A2);
 }
 
 
