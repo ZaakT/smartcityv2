@@ -146,7 +146,7 @@
       </li>
       {#                  CUSTOMERS BC              #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
+        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" or not hasPOSchedule ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
           <a class="dropdown-item" href="?A=cost_benefits&amp;A2=use_case_cb">Input </a>
           <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=customer_dashboards&amp;A2=summary">{{traduction.getText("dashboards")}}</a>

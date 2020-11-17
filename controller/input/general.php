@@ -114,14 +114,15 @@ function duplicate_proj($post, $sideBarName, $A2){
     $inputNogoTargetOrigin = getDealCriteriaInputNogoTarget($projIDorigin);
 
     insertInputDealCriteriaSupplier(
-        $inputNogoTargetOrigin['npv_nogo'], 
-        $inputNogoTargetOrigin['npv_target'], 
-        $inputNogoTargetOrigin['roi_nogo'], 
-        $inputNogoTargetOrigin['roi_target'], 
-        $inputNogoTargetOrigin['payback_nogo'], 
-        $inputNogoTargetOrigin['payback_target'], 
-        $inputNogoTargetOrigin['operating_margin_target'], 
-        $inputNogoTargetOrigin['operating_margin_nogo'],
+        isset($inputNogoTargetOrigin['npv_nogo']) ? $inputNogoTargetOrigin['npv_nogo'] : "", 
+        isset($inputNogoTargetOrigin['npv_target']) ? $inputNogoTargetOrigin['npv_target'] : "", 
+        isset($inputNogoTargetOrigin['roi_nogo']) ? $inputNogoTargetOrigin['roi_nogo'] : "", 
+        isset($inputNogoTargetOrigin['roi_target']) ? $inputNogoTargetOrigin['roi_target'] : "", 
+        isset($inputNogoTargetOrigin['payback_nogo']) ? $inputNogoTargetOrigin['payback_nogo'] : "", 
+        isset($inputNogoTargetOrigin['payback_target']) ? $inputNogoTargetOrigin['payback_target'] : "", 
+        isset($inputNogoTargetOrigin['operating_margin_target']) ? $inputNogoTargetOrigin['operating_margin_target'] : "", 
+        isset($inputNogoTargetOrigin['operating_margin_nogo']) ? $inputNogoTargetOrigin['operating_margin_nogo'] : "",
+        isset($inputNogoTargetOrigin['checked']) ? $inputNogoTargetOrigin['checked'] : "",
         $newProj["id"] );
 
 

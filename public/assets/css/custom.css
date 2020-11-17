@@ -221,6 +221,7 @@ td {
 }
 
 input[type=checkbox] {width: 20px; height: 20px;}
+input[type=radio] {width: 20px; height: 20px;}
 
 .tableFixHead          { overflow-y: auto;  }
 .tableFixHead thead th { position: sticky; top: 0; }

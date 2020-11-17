@@ -46,6 +46,7 @@ $twig->addGlobal('GlobalProjID', getProjID());
 $twig->addGlobal('getNbConfirmedUC', getNbConfirmedUC());getLogoName();
 $twig->addGlobal('logoName', getLogoName());
 $twig->addGlobal('nbProjectHidden', getNbProjHidden());
+$twig->addGlobal('hasPOSchedule', !empty(getProjetKeyDates(getProjID())));
 
 
 $is_connected = isConnected();
