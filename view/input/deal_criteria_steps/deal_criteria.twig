@@ -30,21 +30,25 @@
         {{lorem|nl2br}}
     </div>
 </div>
+<div id="alerts_container">
 
+</div>
 <div class="col" width = "50%">
     <div class="dash-bg container-fluid  p-4">
         <div class="dash-bg-light container-fluid p-3">
             <h3 class="dash-title mb-3">Input <br> Deal Criteria</h3>
-            {{ macros.input_target_nogo(selDevSym,input,side) }}
+            {{ macros.input_target_nogo(selDevSym,input,side, checkList) }}
         </div>
     </div>
-</div>
+</div>   
 {% endblock %}
 
 
 {% block scripts %}
     {{ parent() }}
     <div id="projDuration">{{projDuration}}</div>
-    <script type="text/javascript" src="../../public/assets/js/custom/deal_criteria/form.js"></script>
+	<script type="text/javascript" src="../../public/assets/js/custom/supplier_bc/alertCreator.js"></script>
+<script type="text/javascript" src="../../public/assets/js/custom/deal_criteria/form.js"></script>
+
 {% endblock %}
 

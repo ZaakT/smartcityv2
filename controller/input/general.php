@@ -182,9 +182,9 @@ function use_case_selection($twig,$is_connected, $nextPage, $sideBarName, $projI
             }
             $selScope = getListSelScope($projID);
             //Suppression de project common car il ne peu être modifier que dans la partie project common
-            if(isset($list_measures[0])){unset($list_measures[0]);}
+            /*if(isset($list_measures[0])){unset($list_measures[0]);}
             if(isset($list_ucs[-1])){unset($list_ucs[-1]);}
-            if(isset($selScope[0])){unset($selScope[0]);}
+            if(isset($selScope[0])){unset($selScope[0]);}*/
 
             $list_cat = getListUCsCat();
 
@@ -211,3 +211,15 @@ function use_case_selection($twig,$is_connected, $nextPage, $sideBarName, $projI
 } 
 
 
+
+
+function use_case_selected($twig,$is_connected,$post,$sideBarNameA,$A2A,$sideBarNameB,$A2B){
+    $ucID = intval($post['radio_uc']);
+    $_SESSION['ucID']=$ucID;
+    if($ucID != -1){
+        header('Location: ?A='.$sideBarNameA.'&A2='.$A2A.'&ucID='.$ucID);
+    }else{
+        header('Location: ?A='.$sideBarNameB.'&A2='.$A2B.'&ucID='.$ucID);
+
+    }
+}

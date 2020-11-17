@@ -54,7 +54,8 @@
 								<label for="inputName">Name</label>
 								<input type="text" class="form-control" id="inputName" name="inputName" value="{{data['name']}}">
 							</div>
-							{{list.makeInputList(dataList["department"], "Department", "department")}}
+							{{list.makeInputList(dataList["customerDepartment"], "Department", "customerDepartment")}}
+							{{list.makeInputList(dataList["customerTeam"], "Team", "customerTeam")}}
 						</div>
 						<div class="col-4 text-center">
 							<h3 class="row-md-12 mx-auto">About Supplier </h3>
@@ -63,7 +64,8 @@
 								<input type="text" class="form-control" id="inputCompany" name="inputCompany" value="{{companyName}}" disabled>
 							</div>
 							<div class="form-group row-md-4">
-								{{list.makeInputList(dataList["team"], "Team", "team")}}
+								{{list.makeInputList(dataList["supplierBusinessUnit"], "Business Unit", "supplierBusinessUnit")}}
+								{{list.makeInputList(dataList["supplierTeam"], "Team", "supplierTeam")}}
 							</div>
 						</div>
 

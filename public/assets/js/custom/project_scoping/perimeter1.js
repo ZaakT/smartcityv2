@@ -30,7 +30,7 @@ function createInput(type, father){
     newInput.type = "text";
     newInput.id = type+"_"+newID;
     newInput.name = type+"_"+newID;
-    newInput.setAttribute('placeholder',"New "+type);
+    newInput.setAttribute('placeholder',"New "+$('#for_'+type).text());
 
     divCont.appendChild(newInput);
 

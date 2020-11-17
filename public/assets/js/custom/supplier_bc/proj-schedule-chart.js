@@ -59,6 +59,12 @@ function check_form_debug() {
     $("#supplier_schedule").submit();
 }
 
+function dateWihtoutDay(date){
+    date_exp = date.toDateString().split(' ').slice(1);
+    delete date_exp[1];
+    return date_exp.join(' ');
+
+}
 function update_all_chart() {
     let debut_projet = new Date(document.querySelector("p#project-start").outerText)
     let fin_projet = new Date(document.querySelector("p#project-end").outerText)

@@ -1060,9 +1060,7 @@ try{
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
                                 if(isset($_POST['radio_uc'])){
-                                    $ucID = intval($_POST['radio_uc']);
-                                    $_SESSION['ucID']=$ucID;
-                                    header('Location: ?A='.$_GET['A'].'&A2=schedule&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                                    \general\use_case_selected($twig,$is_connected,$_POST,"input_use_case_supplier","schedule","input_project_common_supplier","schedule");
                                 }
                                 else {
                                     header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');
@@ -1092,7 +1090,7 @@ try{
                                 }
                             }
                         } else {
-                            use_case_schedule($twig,$is_connected, $_GET['projID'], $_GET['ucID']);
+                            use_case_schedule($twig,$is_connected, $_SESSION['projID'], $_GET['ucID']);
                         }
                     } elseif($_GET['A2']=="equipment_revenues" || 
                     $_GET['A2']=="deployment_revenues" ||
@@ -1260,9 +1258,8 @@ try{
                         if(isset($_SESSION['projID'])){
                             if($_SESSION['projID']!=0){
                                 if(isset($_POST['radio_uc'])){
-                                    $ucID = intval($_POST['radio_uc']);
-                                    $_SESSION['ucID']=$ucID;
-                                    header('Location: ?A='.$_GET['A'].'&A2=capex&projID='.$_SESSION['projID'].'&ucID='.$ucID);
+                                    \general\use_case_selected($twig,$is_connected,$_POST,$_GET['A'],"capex","input_project_common","capex");
+
                                 }
                                 else {
                                     header('Location: ?A='.$_GET['A'].'&A2=use_case_cb');

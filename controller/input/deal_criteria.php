@@ -58,20 +58,24 @@ function deal_criteria_input_nogo_target($post = [], $side)
             }
         } elseif ($side == "supplier") {
             //Supplier BC SIDE
-            if (isset($post['operating_margin_target']) && isset($post['operating_margin_nogo']) && isset($post['npv_nogo']) && isset($post['npv_target']) && isset($post['roi_nogo']) && isset($post['roi_target']) && isset($post['payback_nogo']) && isset($post['payback_target'])) {
-                
-                $npv_nogo = floatval($post['npv_nogo']);
-                $npv_target = floatval($post['npv_target']);
-                $roi_nogo = floatval($post['roi_nogo']);
-                $roi_target = floatval($post['roi_target']);
-                $payback_nogo = floatval($post['payback_nogo']);
-                $payback_target = floatval($post['payback_target']);
-                $operating_margin_target = floatval($post['operating_margin_target']);
-                $operating_margin_nogo = floatval($post['operating_margin_nogo']);
-
-                insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $projID);
-                header('Location: ?A=input_project_common_supplier&A2=deal_criteria&projID=' . $projID);
+            $checked = "";
+            foreach ($post as $key => $value) {
+                if(strpos($key, 'check') !== false){
+                    $checked.=$key.'-';
+                }
             }
+                
+            $npv_nogo = isset($post['npv_nogo']) ? floatval($post['npv_nogo']) : '';
+            $npv_target = isset($post['npv_target']) ? floatval($post['npv_target']) : '';
+            $roi_nogo = isset($post['roi_nogo']) ? floatval($post['roi_nogo']) : '';
+            $roi_target = isset($post['roi_target']) ? floatval($post['roi_target']) : '';
+            $payback_nogo = isset($post['payback_nogo']) ? floatval($post['payback_nogo']) : '';
+            $payback_target = isset($post['payback_target']) ? floatval($post['payback_target']) : '';
+            $operating_margin_target = isset($post['operating_margin_target']) ? floatval($post['operating_margin_target']) : '';
+            $operating_margin_nogo = isset($post['operating_margin_nogo']) ? floatval($post['operating_margin_nogo']) : '';
+            insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo,$checked, $projID);
+            header('Location: ?A=input_project_common_supplier&A2=deal_criteria&projID=' . $projID);
+            
             //throw new Exception("Not yet implemented !");
         }
     } else {

@@ -10,7 +10,7 @@
 
 {% macro makeInputList(data, title, type) %}
     <div class="form-group row-md-4" id = "{{type}}_container">
-        <label for="{{type}}">{{title}}</label>
+        <label for="{{type}}" id = "for_{{type}}">{{title}}</label>
         {% if data %}
             {% set i = 0 %}
             {% for id in data|keys %}
@@ -18,7 +18,7 @@
                 {% set i = i + 1 %}
             {% endfor %}
         {% else %}
-            {{_self.makeInput(type, "", 0)}}
+            {{_self.makeInput(type, "", 0, title)}}
         {% endif %} 
     </div>
 

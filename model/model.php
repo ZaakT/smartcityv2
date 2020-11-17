@@ -1531,7 +1531,7 @@ function getPerimeterSupplier($projID){
 
 function getPerimeterData($projID){
     $db = dbConnect();
-    $list = ["department"=>[], "team"=>[]];
+    $list = ["customerDepartment"=>[], "customerTeam"=>[], "supplierBusinessUnit"=>[], "supplierTeam"=>[]];
     $req = $db->prepare('SELECT * FROM `supplier_perimeter_data` WHERE `proj_id` =  ? ORDER BY data ASC;');  
     $req->execute(array($projID));
     while($row = $req->fetch()){
@@ -1550,7 +1550,7 @@ function insertPerimeterSupplierData($post, $projID){
                             VALUE (?,?,?)");
     foreach ($post as $key => $value) {
         $type = explode("_", $key)[0];
-        if(($type == "department" || $type == "team") && $value != ""){
+        if(($type == "customerDepartment" || $type == "customerTeam" || $type == "supplierBusinessUnit" || $type == "supplierTeam" ) && $value != ""){
             $req->execute(array($projID, $value, $type));
         }
     }
@@ -5722,10 +5722,10 @@ function insertInputDealCriteria($societal_npv_nogo,$societal_npv_target,$societ
     return $req->execute(Array($projID,$societal_npv_nogo,$societal_npv_target,$societal_roi_nogo,$societal_roi_target,$societal_payback_nogo,$societal_payback_target,$npv_nogo,$npv_target,$roi_nogo,$roi_target,$payback_nogo,$payback_target,$rr_nogo,$rr_target,$nqbr_nogo,$nqbr_target));
 }
 
-function insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $projID){
+function insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo, $checked,$projID){
     $db = dbConnect();
-    $req = $db->prepare('REPLACE INTO deal_criteria_input_nogo_target (id,npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, operating_margin_nogo, operating_margin_target) VALUES (?,?,?,?,?,?,?,?,?)');
-    return $req->execute(Array($projID,$npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_nogo,$operating_margin_target));
+    $req = $db->prepare('REPLACE INTO deal_criteria_input_nogo_target (id,npv_nogo, npv_target, roi_nogo, roi_target, payback_nogo, payback_target, operating_margin_nogo, operating_margin_target,checked) VALUES (?,?,?,?,?,?,?,?,?,?)');
+    return $req->execute(Array($projID,$npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_nogo,$operating_margin_target,$checked));
 }
 function getDealCriteriaInputNogoTarget($projID, $filtre = ""){
     $db = dbConnect();
@@ -5751,13 +5751,14 @@ function getDealCriteriaInputNogoTarget($projID, $filtre = ""){
         $nqbr_target = floatval($row['nqbr_target']);
         $operating_margin_nogo = floatval($row['operating_margin_nogo']);
         $operating_margin_target = floatval($row['operating_margin_target']);
+        $checked = $row["checked"];
     
         if($filtre=="nogo"){
-            $list = ['operating_margin_nogo' => $operating_margin_nogo, 'societal_npv_nogo'=>$societal_npv_nogo,  'societal_roi_nogo'=>$societal_roi_nogo,  'societal_payback_nogo'=>$payback_nogo, 'npv_nogo'=>$npv_nogo,  'roi_nogo'=>$roi_nogo,  'payback_nogo'=>$payback_nogo,  'rr_nogo'=>$rr_nogo,  'nqbr_nogo'=>$nqbr_nogo];
+            $list = ['operating_margin_nogo' => $operating_margin_nogo, 'societal_npv_nogo'=>$societal_npv_nogo,  'societal_roi_nogo'=>$societal_roi_nogo,  'societal_payback_nogo'=>$payback_nogo, 'npv_nogo'=>$npv_nogo,  'roi_nogo'=>$roi_nogo,  'payback_nogo'=>$payback_nogo,  'rr_nogo'=>$rr_nogo,  'nqbr_nogo'=>$nqbr_nogo, "checked"=>$checked];
         }elseif($filtre=="target"){
-            $list = ['operating_margin_target' => $operating_margin_target, 'societal_npv_target'=>$societal_npv_target,  'societal_roi_target'=>$societal_roi_target,  'societal_payback_target'=>$payback_target, 'npv_target'=>$npv_target,  'roi_target'=>$roi_target,  'payback_target'=>$payback_target,  'rr_target'=>$rr_target,  'nqbr_target'=>$nqbr_target];
+            $list = ['operating_margin_target' => $operating_margin_target, 'societal_npv_target'=>$societal_npv_target,  'societal_roi_target'=>$societal_roi_target,  'societal_payback_target'=>$payback_target, 'npv_target'=>$npv_target,  'roi_target'=>$roi_target,  'payback_target'=>$payback_target,  'rr_target'=>$rr_target,  'nqbr_target'=>$nqbr_target, "checked"=>$checked];
         }elseif($filtre==""){
-            $list = ['operating_margin_target' => $operating_margin_target,'operating_margin_nogo' => $operating_margin_nogo,'societal_npv_nogo'=>$societal_npv_nogo, 'societal_npv_target'=>$societal_npv_target, 'societal_roi_nogo'=>$societal_roi_nogo, 'societal_roi_target'=>$roi_target, 'societal_payback_nogo'=>$payback_nogo, 'societal_payback_target'=>$societal_payback_target,'npv_nogo'=>$npv_nogo, 'npv_target'=>$npv_target, 'roi_nogo'=>$roi_nogo, 'roi_target'=>$roi_target, 'payback_nogo'=>$payback_nogo, 'payback_target'=>$payback_target, 'rr_nogo'=>$rr_nogo, 'rr_target'=>$rr_target, 'nqbr_nogo'=>$nqbr_nogo, 'nqbr_target'=>$nqbr_target];
+            $list = ['operating_margin_target' => $operating_margin_target,'operating_margin_nogo' => $operating_margin_nogo,'societal_npv_nogo'=>$societal_npv_nogo, 'societal_npv_target'=>$societal_npv_target, 'societal_roi_nogo'=>$societal_roi_nogo, 'societal_roi_target'=>$roi_target, 'societal_payback_nogo'=>$payback_nogo, 'societal_payback_target'=>$societal_payback_target,'npv_nogo'=>$npv_nogo, 'npv_target'=>$npv_target, 'roi_nogo'=>$roi_nogo, 'roi_target'=>$roi_target, 'payback_nogo'=>$payback_nogo, 'payback_target'=>$payback_target, 'rr_nogo'=>$rr_nogo, 'rr_target'=>$rr_target, 'nqbr_nogo'=>$nqbr_nogo, 'nqbr_target'=>$nqbr_target, "checked"=>$checked];
         }
     }
     return $list;
