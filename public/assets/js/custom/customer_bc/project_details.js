@@ -236,18 +236,20 @@ function addRow(table, jMax){
 
 
 
-function addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months){
+function addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months, currency){
     addRow(table, 2);
     var div = createDiv("graphCell_"+i+"_0", "container_"+i*2);
     var canvas = createCanvas(div.id, "canevas_"+i*2);
-    graphYears = createGraph(lineName , canvas, yearsData, years);
+    graphYears = createGraph(lineName , canvas, yearsData, years, currency);
     var div = createDiv("graphCell_"+i+"_1", "container_"+i*2+1);
     var canvas = createCanvas(div.id, "canevas_"+i*2+1);
-    graphMonths = createGraph(lineName, canvas, monthsData, months);
+    graphMonths = createGraph(lineName, canvas, monthsData, months,currency);
     return [graphYears, graphMonths];
 }
 
 function drawCharts(){
+    var deviseName = $('#deviseName').text();
+    console.log(deviseName)
     var data = $('#data').data("toShow");
     var years = $('#data').data("years");
     var months = $('#data').data("months");
@@ -283,7 +285,7 @@ function drawCharts(){
         //console.log(levelTr);
         //addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months);
         if((levelTr[1]==0||Lv2hasLv3Child(i)) && levelTr[2]==0 ){
-            graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months);
+            graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months,deviseName);
             k++;
 
             for(let l = i+1; l<iMax; l++){

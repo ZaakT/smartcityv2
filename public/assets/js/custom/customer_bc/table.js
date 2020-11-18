@@ -42,7 +42,7 @@ function createCanvas(idDiv, idCanvas){
     return canvas;
 }
 
-function createGraph(title, father, x, y, currency="£"){
+function createGraph(title, father, x, y, deviseName="GBP"){
     //console.log("id :"+father.id);
     var chart= new  Chart(father.id, {
         type: 'line',
@@ -67,11 +67,18 @@ function createGraph(title, father, x, y, currency="£"){
                   },
                   ticks: {
                       callback: function(value, index, values) {
-                          if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
-                              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        return Math.round(value).toLocaleString("en-UK",
+                        {
+                            style:"currency", 
+                            currency:deviseName,
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                        });
+                          /*if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' '+currency;
                           } else {
-                              return value;
-                          }
+                              return value+' '+currency;
+                          }*/
                       }
                   }          
               }],
@@ -82,7 +89,8 @@ function createGraph(title, father, x, y, currency="£"){
                 }
                 
               }]*/
-            },    
+            },
+   
 
           title: {
             display: false

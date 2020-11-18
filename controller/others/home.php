@@ -21,18 +21,9 @@ function setDevise($idDevise,$lastURL){
     $_SESSION['devise_symbol'] = $devises[$idDevise]['symbol'];
     $tab = explode(',',$lastURL);
     $url = "";
-    foreach($tab as $i => $val){
-        if( $i <= 2){
-            if($i < sizeof($tab) - 1){
-                if($i%2 == 0){
-                    $url .= $val."=";
-                } else {
-                    $url .= $val."&";
-                }
-            } else {
-                $url .= $val;
-            }
-        }
+    for($i = 0; $i<count($tab); $i+=2){
+        $url.=$tab[$i]."=".$tab[$i+1]."&";
     }
+    var_dump($url);
     header('Location: '.$url);
 }
