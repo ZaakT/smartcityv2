@@ -64,16 +64,16 @@
 
 								<div class="input-group input-group-sm mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text" id="inputGroup-sizing-sm">UC End</span>
+										<span class="input-group-text" id="inputGroup-sizing-sm">Deployment End</span>
 									</div>
-									<input name="uc_end" value="{{ schedule_dates['uc_end'] }}" type="month" class="form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
+									<input type="month" class="form-control" style="margin: auto;" id="uc_deploy_end" disabled>
 								</div>
 
 								<div class="input-group input-group-sm mb-3">
 									<div class="input-group-prepend">
-										<span class="input-group-text" id="inputGroup-sizing-sm">Deployment End</span>
+										<span class="input-group-text" id="inputGroup-sizing-sm">UC End</span>
 									</div>
-									<input type="month" class="form-control" style="margin: auto;" id="deploy_end" disabled>
+									<input name="uc_end" value="{{ schedule_dates['uc_end'] }}" type="month" class="form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
 								</div>
 							</div>
 						</div>

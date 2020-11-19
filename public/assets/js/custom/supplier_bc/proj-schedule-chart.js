@@ -20,8 +20,6 @@ function update_all_chart() {
     let duree_projet = Math.round(fin_projet.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)
 
 
-
-    console.log("coucou");
     
 
 
@@ -50,6 +48,14 @@ function update_all_chart() {
                 $("#" + bar_produ_operation).css("width", duree_production_operation + "%")
                 $("#" + bar_void_fin_operation).css("width", (100-duree_production_operation-duree_deployment_operation-duree_void_operation) + "%")
                 $("#" + bar_void_fin_pricing).css("width", (100-duree_production_operation-duree_deployment_operation-duree_void_operation) + "%")
+
+
+
+                deploy_start_operation = new Date($("#ucop_deploy_start").val())
+                deploy_start_operation.setMonth(deploy_start_operation.getMonth()+ parseInt($("#ucop_deployment_duration").val()));
+                deploy_start_operation = deploy_start_operation.toISOString().split('-');
+                deploy_start_operation =deploy_start_operation[0]+'-'+deploy_start_operation[1];
+                $("#uc_deploy_end").val(deploy_start_operation);
             }
 
         }
@@ -74,21 +80,33 @@ function update_all_chart() {
     
     //UC Pricing Schedule (3 bars)
 
+    //console.log(1);
     let poc_start = new Date($("#ucpri_pricing_start").val())
     var poc_duration = $("#ucpri_poc_duration").val()
     if(poc_start){
         var duree_void_pricing = Math.round((Math.round(poc_start.getTime() - debut_projet.getTime()) / (1000 * 60 * 60 * 24)) / duree_projet * 100)
         $("#" + bar_void_pricing).css("width", duree_void_pricing + "%")
 
-        if (poc_duration) {
-            let duree_poc = Math.round(poc_duration*30 / duree_projet * 100)
-            $("#" + bar_poc_pricing).css("width", duree_poc + "%")
+        //console.log(2);
+    if (poc_duration) {
+        //console.log(3);
+        let duree_poc = Math.round(poc_duration*30 / duree_projet * 100)
+        $("#" + bar_poc_pricing).css("width", duree_poc + "%")
 
-            let duree_run = 100 - (100-duree_production_operation-duree_deployment_operation-duree_void_operation) - duree_void_pricing - duree_poc
-    
-            $("#" + bar_run_pricing).css("width", duree_run + "%")
-        }
+        let duree_run = 100 - (100-duree_production_operation-duree_deployment_operation-duree_void_operation) - duree_void_pricing - duree_poc
+
+        $("#" + bar_run_pricing).css("width", duree_run + "%")
+
+
+        pricing_start = new Date($("#ucpri_pricing_start").val())
+        pricing_start.setMonth(pricing_start.getMonth()+ parseInt($("#ucpri_poc_duration").val()));
+        pricing_start = pricing_start.toISOString().split('-');
+        pricing_start =pricing_start[0]+'-'+pricing_start[1];
+        //console.log("pricing_start :")
+        //console.log(pricing_start)
+        $("#poc_end").val(pricing_start);
     }
+}
 
 
 
