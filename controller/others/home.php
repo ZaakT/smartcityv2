@@ -22,8 +22,10 @@ function setDevise($idDevise,$lastURL){
     $tab = explode(',',$lastURL);
     $url = "";
     for($i = 0; $i<count($tab); $i+=2){
-        $url.=$tab[$i]."=".$tab[$i+1]."&";
+        if(isset($tab[$i+1])){
+            $url.=$tab[$i]."=".$tab[$i+1]."&";
+        }
     }
-    var_dump($url);
+    //var_dump('Location: '.$url);
     header('Location: '.$url);
 }

@@ -128,9 +128,16 @@ function divisionName(){
     return "NoName";
 }
 
-function setLanguage($lang='en'){
-    $_SESSION['language'] = $lang;
-    header('Location: ?A=home');
+function setLanguage($lang='en', $lastURL){
+    $_SESSION['language'] = $lang;    
+    $tab = explode(',',$lastURL);
+    $url = "";
+    for($i = 0; $i<count($tab); $i+=2){
+        if(isset($tab[$i+1])){
+            $url.=$tab[$i]."=".$tab[$i+1]."&";
+        }
+    }
+    header('Location: '.$url);
 }
 
 function getLanguage(){

@@ -58,6 +58,10 @@ function createGraph(title, father, x, y, deviseName="GBP"){
           ]
         },
         options: {
+            title: {
+              display: true,
+              text: 'Custom Chart Title'
+            },
             responsive:true,
             maintainAspectRatio: true,
           scales: {
@@ -110,8 +114,8 @@ function createDiv(idFather, idDiv){
     div = document.createElement('div');
     father = document.getElementById(idFather);
     div.id     = idDiv;
-    div.width  = 300 ;
-    div.height = 300;   
+    //div.width  = 300 ;
+    //div.height = 300;   
     div.style = "height: 300px; width: 95%; margin: 1em;";     
     div.style.zIndex   = 8;
     father.appendChild(div);

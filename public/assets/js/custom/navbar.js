@@ -24,8 +24,8 @@ function getPart(idDev){
             }
         }
     }
-    var href = $("#link_setDevise_"+idDev).attr('href');
-    $("#link_setDevise_"+idDev).attr('href',href+"&lastURL="+temp4+"");
+    var href = $("#"+idDev).attr('href');
+    $("#"+idDev).attr('href',href+"&lastURL="+temp4+"");
     //console.log($("#link_setDevise_"+idDev).attr('href'));
     return NomDuFichier;
 }

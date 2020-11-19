@@ -6,10 +6,10 @@
             <thead class="thead-dark text-center sticky-top">
                 <tr>
                     <th scope="col"></th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Description</th>
                     <th scope="col">Domain</th>
                     <th scope="col">Solution</th>
+                    <th scope="col">Context</th>
+                    <th scope="col">Description</th>
                     {% if scheduleMode %}
                     <th scope="col">Schedule</th>
                     {% endif %}
@@ -21,10 +21,10 @@
                 {% for uc in list_ucs %}
                 <tr id = "tr_{{ uc }}" scope="row">
                     <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} {% if (scheduleMode and not ucs[uc]["hasSchedule"] and uc != -1) or (not hasPOSchedule and uc != -1)%}disabled {% endif %}required></td>
-                    <td scope="col">{{ ucs[uc]['name'] }}</td>
-                    <td scope="col">{{ ucs[uc]['description'] }}</td>
                     <td scope="col">{{measures[meas]['name']}}</td>
                     <td scope="col">{{ list_cat[ucs[uc]['id_cat']]["name"] }}</td>
+                    <td scope="col">{{ ucs[uc]['name'] }}</td>
+                    <td scope="col">{{ ucs[uc]['description'] }}</td>
 
                     {% if scheduleMode %}
                         <td scope="col"><img width=20 height=20 src="../../../public/img/{{ ucs[uc]["hasSchedule"] or uc == -1 ? "full_circle" : "empty_circle" }}.png"/></td>

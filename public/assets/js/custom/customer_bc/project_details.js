@@ -201,12 +201,25 @@ function changeMonths(){
         hideShowMonths(true, iMax, jMax);
     }
 
+    $("#graphCell td").each(function() {
+        console.log(this);
+        id = this.id;
+        if(id.split('_')[2]==1){
+            if($("#"+id)[0].hasAttribute("hidden")){
+                $("#"+id).removeAttr('hidden')
+            }else{
+                $("#"+id).attr('hidden', true);
+            }
+        }
+    });
+
 }
 
 function createTable(iMax, jMax, idFather, idTable){
 
     table = document.createElement('table');
     father = document.getElementById(idFather);
+    
     table.id = idTable;
     father.appendChild(table);
 

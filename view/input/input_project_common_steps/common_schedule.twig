@@ -50,7 +50,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
 								</div>
-								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pstart" name="pstart" value="{{ key_dates[0]['start_date'] }}" oninput="updateBar()">
+								<input type="month" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pstart" name="pstart" value="{{ key_dates['start_date'] }}" oninput="updateBar()">
 							</div>
 						</div>
 						<div class="row">
@@ -58,7 +58,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
 								</div>
-								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pduration" name="pduration" placeholder="36" value="{{ key_dates[0]['duration'] }}" oninput="updateBar()">
+								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="pduration" name="pduration" placeholder="36" value="{{ key_dates['duration'] }}" oninput="updateBar()">
 							</div>
 						</div>
 												
@@ -70,7 +70,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
 								</div>
-								<input type="date" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dstart" name="dstart" value="{{ key_dates[0]['deploy_start_date'] }}" oninput="updateBar()">
+								<input type="month" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dstart" name="dstart" value="{{ key_dates['deploy_start_date'] }}" oninput="updateBar()">
 							</div>
 						</div>
 						<div class="row">
@@ -78,7 +78,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="inputGroup-sizing-sm">Duration (in months)</span>
 								</div>
-								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dduration" name="dduration" placeholder="6" value="{{ key_dates[0]['deploy_duration'] }}" oninput="updateBar()">
+								<input type="number" class="form-control text-center" aria-label="Small" aria-describedby="inputGroup-sizing-sm" id="dduration" name="dduration" placeholder="6" value="{{ key_dates['deploy_duration'] }}" oninput="updateBar()">
 							</div>
 						</div>
 					</div>

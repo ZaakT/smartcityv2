@@ -244,9 +244,9 @@ try{
             elseif($_GET['A']=='setLanguage'){
                 if(isset($_GET['language'])){
                     if($_GET['language'] == "en" || $_GET['language'] == "fr"){
-                        setLanguage($_GET['language']);
+                        $lastURL = isset($_GET['lastURL']) ? $_GET['lastURL'] : "?A,home";
+                        setLanguage($_GET['language'], $lastURL);
                     }
-                    header('Location: ?A=home');
                 }else{
                     header('Location: ?A=home');
                 }
@@ -744,14 +744,7 @@ try{
                                 if(isset($_GET['A3'])){
                                     if($_GET['A3'] == "save"){
                                         if($_POST) {
-                                            $keyDates = getProjetKeyDates($_SESSION['projID']);
-                                            if(empty($keyDates)) {
-                                                insertProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
-                                            } else {
-                                                alterProjetKeyDates($_SESSION['projID'], $_POST['pstart'], $_POST['pduration'], $_POST['dstart'], $_POST['dduration']);
-                                            }
-
-                                            header('Location: ?A=input_project_common_supplier&A2=equipment_revenues&projID='.$_SESSION['projID']);
+                                            save_supplier_schedule($twig,$is_connected, $_POST);
                                         } else {
                                             throw new Exception("There was an error with the form.");
                                         }
@@ -1078,14 +1071,7 @@ try{
                         if(isset($_GET['A3'])) {
                             if($_GET['A3'] == "save") {
                                 if($_POST) {
-                                    $keyDates = getProjetSchedule($_SESSION['projID'], $_SESSION['ucID']);
-                                    if(empty($keyDates)) {
-                                        insertProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
-                                    } else {
-                                        alterProjectSchedule($_SESSION['projID'], $_SESSION['ucID'], $_POST['deploy_start'], $_POST['deployment_duration'], $_POST['uc_end'], $_POST['pricing_start'], $_POST['poc_duration']);
-                                    }
-
-                                    header('Location: ?A=input_use_case_supplier&A2=equipment_revenues&projID='.$_SESSION['projID'].'&ucID='.$_SESSION['ucID']);
+                                    save_use_case_schedule($twig,$is_connected, $_POST);
                                 } else {
                                     throw new Exception("There was an error with the form.");
                                 }

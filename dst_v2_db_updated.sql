@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 18 nov. 2020 à 08:48
+-- Généré le :  mer. 18 nov. 2020 à 14:29
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -3146,7 +3146,7 @@ CREATE TABLE IF NOT EXISTS `measure` (
   `group_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `measure`
@@ -3156,12 +3156,8 @@ INSERT INTO `measure` (`id`, `name`, `description`, `user`, `group_id`) VALUES
 (0, 'Project Overlay', NULL, 0, 0),
 (21, 'Smart Lighting', '', 0, 0),
 (22, 'Building retrofit', '', 0, 0),
-(23, 'Traffic management', '', 0, 0),
-(24, 'Project Management NTT', '', 16, 0),
 (25, 'NTT Accelerate Smart Solutions', '', 16, 0),
-(27, 'IoT Solutions', '', 0, 0),
-(28, 'My domain', '', 0, 0),
-(30, 'test G1', '', 0, 1);
+(31, 'Intelligente Workplace', '', 16, 1);
 
 -- --------------------------------------------------------
 
@@ -3962,16 +3958,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
 (30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-12 14:11:54', 16, 1, 1, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
-(44, 'Las Vegas NTT Smart copy', '', NULL, NULL, NULL, '2020-11-13 12:06:08', '2020-11-16 12:08:19', 16, 1, 1, 1),
-(45, 'test', '', NULL, NULL, NULL, '2020-11-13 12:10:03', '2020-11-17 17:52:23', 16, 1, 0, 1),
-(46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-17 17:37:35', 16, 1, 1, 0),
-(47, 'de', '', NULL, NULL, NULL, '2020-11-16 16:23:40', '2020-11-17 17:52:20', 16, 0, 0, 1),
-(48, 'SMART Bedrock  copy', '', NULL, NULL, NULL, '2020-11-17 17:37:43', '2020-11-17 17:52:16', 16, 1, 1, 1),
-(49, 'SMART Bedrock  copy (1)', '', NULL, NULL, NULL, '2020-11-17 17:39:49', '2020-11-17 17:52:10', 16, 1, 1, 1),
-(50, 'SMART Bedrock  copy (2)', '', NULL, NULL, NULL, '2020-11-17 17:49:36', '2020-11-17 17:52:07', 16, 1, 1, 1),
-(51, 'SMART Bedrock  copy (3)', '', NULL, NULL, NULL, '2020-11-17 17:50:36', '2020-11-17 17:52:05', 16, 1, 1, 1),
-(52, 'SMART Bedrock  copy (4)', '', NULL, NULL, NULL, '2020-11-17 18:28:46', '2020-11-17 18:28:46', 16, 1, 1, 0),
-(53, 'SMART Bedrock  copy (5)', '', NULL, NULL, NULL, '2020-11-17 18:29:19', '2020-11-17 18:30:06', 16, 1, 1, 0);
+(46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-17 17:37:35', 16, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -5807,71 +5794,10 @@ DROP TABLE IF EXISTS `supplier_perimeter_data`;
 CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
   `proj_id` int(10) UNSIGNED NOT NULL,
   `data` varchar(256) NOT NULL,
-  `type` enum('department','team') NOT NULL,
+  `type` enum('customerDepartment','customerTeam','supplierBusinessUnit','supplierTeam') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
-
---
--- Déchargement des données de la table `supplier_perimeter_data`
---
-
-INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
-(30, 'team b', 'team', 81),
-(30, 'team a', 'team', 80),
-(30, 'dep 02', 'department', 79),
-(30, 'dep 01', 'department', 78),
-(32, 'NTT accelerate SMART', 'department', 55),
-(32, 'Finance', 'team', 56),
-(32, 'Sales', 'team', 57),
-(33, 'dep 01', 'department', 70),
-(33, 'dep 02', 'department', 71),
-(33, 'team a', 'team', 72),
-(33, 'team b', 'team', 73),
-(34, 'dep 01', 'department', 74),
-(34, 'dep 02', 'department', 75),
-(34, 'team a', 'team', 76),
-(34, 'team b', 'team', 77),
-(35, 'dep 01', 'department', 82),
-(35, 'dep 02', 'department', 83),
-(35, 'team a', 'team', 84),
-(35, 'team b', 'team', 85),
-(36, 'dep 01', 'department', 86),
-(36, 'dep 02', 'department', 87),
-(36, 'team a', 'team', 88),
-(36, 'team b', 'team', 89),
-(37, 'dep 01', 'department', 90),
-(37, 'dep 02', 'department', 91),
-(37, 'team a', 'team', 92),
-(37, 'team b', 'team', 93),
-(38, 'dep 01', 'department', 94),
-(38, 'dep 02', 'department', 95),
-(38, 'team a', 'team', 96),
-(38, 'team b', 'team', 97),
-(39, 'dep 01', 'department', 98),
-(39, 'dep 02', 'department', 99),
-(39, 'team a', 'team', 100),
-(39, 'team b', 'team', 101),
-(40, 'dep 01', 'department', 102),
-(40, 'dep 02', 'department', 103),
-(40, 'team a', 'team', 104),
-(40, 'team b', 'team', 105),
-(41, 'dep 01', 'department', 106),
-(41, 'dep 02', 'department', 107),
-(41, 'team a', 'team', 108),
-(41, 'team b', 'team', 109),
-(42, 'dep 01', 'department', 110),
-(42, 'dep 02', 'department', 111),
-(42, 'team a', 'team', 112),
-(42, 'team b', 'team', 113),
-(43, 'dep 01', 'department', 114),
-(43, 'dep 02', 'department', 115),
-(43, 'team a', 'team', 116),
-(43, 'team b', 'team', 117),
-(44, 'dep 01', 'department', 118),
-(44, 'dep 02', 'department', 119),
-(44, 'team a', 'team', 120),
-(44, 'team b', 'team', 121);
 
 -- --------------------------------------------------------
 

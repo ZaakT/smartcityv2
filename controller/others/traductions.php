@@ -125,16 +125,16 @@ $GLOBALS['dicTrad']=[
         "en"=>"Opex"
     ],
     "equipment_revenues" => [
-        "en"=>"Equipement Sales"
+        "en"=>"Equipment"
     ],
     "revenuesProtection" => [
         "en"=>"Revenues Protection"
     ],
     "deployment_revenues" => [
-        "en"=>"Deployment Sales"
+        "en"=>"Deployment"
     ],
     "operating_revenues" => [
-        "en"=>"Recurring Sales"
+        "en"=>"Recurring"
     ],
     "deployment_costs" => [
         "en"=>"Deployment and Set-up"

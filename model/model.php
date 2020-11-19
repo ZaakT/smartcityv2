@@ -23,7 +23,7 @@ function dbConnect()
         return $db;
     } catch(Exception $e){ 
         try {
-            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8', 'server','server', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
+            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
                 return $db;
         } catch (Exception $e2) {
             throw new Exception("Access to the database impossible ! : 
@@ -1043,7 +1043,7 @@ function getColumnsName($tableName){
 }
 
 function createReqCopyXpex($columnsName){
-    var_dump($columnsName);
+    //var_dump($columnsName);
 
     $colID = [];
     $tablePara = [];
@@ -1168,7 +1168,7 @@ function duplicateXpexItems($projIDorigin,$newProjID){
                 AND supplier_revenues_item.advice_user = ?
                 GROUP BY '.$tableName.'_item.item_id');
 
-                var_dump($req);
+                //var_dump($req);
             $columnsName = [$tableName.'_item'=>getColumnsName($tableName.'_item'), 
             $tableName.'_user'=>getColumnsName($tableName.'_user'), 
             'input_'.$tableName=>getColumnsName('input_'.$tableName), 
@@ -1194,12 +1194,12 @@ function duplicateXpexItems($projIDorigin,$newProjID){
             }
 
             if(!empty($row['id_proj'])){
-                var_dump("coucou1");
-                var_dump($param);
-                var_dump($procedureParaName);
-                var_dump($tableName);
+                //var_dump("coucou1");
+                //var_dump($param);
+                //var_dump($procedureParaName);
+                //var_dump($tableName);
                 $reqCopy->execute($param); 
-                var_dump("coucou2");
+                //var_dump("coucou2");
 
                 /*var_dump($reqCopy);
                 //var_dump($row);

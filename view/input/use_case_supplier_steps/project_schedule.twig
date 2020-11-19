@@ -32,116 +32,139 @@
 
 		{#  CONTENU #}
 		<div id="date-start" hidden>{{ project_start }}</div>
-		<div id="date-end" hidden>{{ project_end }}</div>
+		<div id="date-end" hidden>{{ project_end }}</div>	
+				<input hidden value="{{ project_dep_start }}" type="date" class="form-control" style="margin: auto;" id="project_dep_start" oninput="update_chart(event.target)">
+				<input hidden value="{{ project_dep_end }}" type="date" class="form-control" style="margin: auto;" id="project_dep_end" oninput="update_chart(event.target)">
+				
 		<div id="alerts_container">
-
 		</div>
 		<form id="supplier_schedule" name="supplier_schedule" action="?A=input_use_case_supplier&amp;A2=schedule&amp;A3=save&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post">
-			<div id="dates_projet">
-				<p id="project-start">
-					<span class="oi oi-caret-bottom"></span>{{ project_start }}
-				</p>
-				<p id="project-end" style="float: right;">{{ project_end }}
-					<span class="oi oi-caret-bottom"></span>
-				</p>
-			</div>
-			<div class="progress">	
-				<input hidden value="{{ project_dep_start }}" type="date" class="w-25 form-control" style="margin: auto;" id="project_dep_start" oninput="update_chart(event.target)">
-				<input hidden value="{{ project_dep_end }}" type="date" class="w-25 form-control" style="margin: auto;" id="project_dep_end" oninput="update_chart(event.target)">
-				
-				<div id="proj_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...	</div>		
-				<div id="proj_2_bar" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>
-				<div id="proj_3_bar" class="progress-bar progress-bar-main progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-					Project
-				</div>
-			</div>
-			<div class="form-group">
-				<button id="ucop" class="btn btn-dark d-block mx-auto mb-1 mt-4" type="button" data-toggle="collapse" data-target="#collapse_uc_operations" aria-expanded="false" aria-controls="collapseExample">
-					UC Operations Schedule
-					<span class="oi oi-pencil"></span>
-				</button>
-				<div id="collapse_uc_operations" class="row collapse mb-2">
-					<div class="col justify-content-center text-center">
-						<div class="row">
-							<div class="form-group col">
-								<label for="fname">{{traduction.getText("deployment_start")}}</label>
-								<input name="deploy_start" value="{{ schedule_dates['deploy_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_deploy_start" oninput="update_chart(event.target)" required>
-								<label for="lname">{{traduction.getText("deployment_duration")}} ({{traduction.getText("months")}})</label>
-								<input class="form-control" type="number" min=0 id="ucop_deployment_duration" name="deployment_duration" placeholder="6" value="{{ schedule_dates['deployment_duration'] }}" oninput="update_chart(event.target)"  required>
+			<div class="form-group row">
+				<div class="col-5  border-right">
+					<div class = "row">
+						<button id="ucop" class="btn btn-dark d-block mx-auto mb-1 mt-4" type="button" data-toggle="collapse" data-target="#collapse_uc_operations" aria-expanded="false" aria-controls="collapseExample">
+							UC Operations Schedule
+							<span class="oi oi-pencil"></span>
+						</button>
+						<div id="collapse_uc_operations" class="row collapse mb-2">
+							<div class="col justify-content-center text-center ml-3">
+								<div class="input-group input-group-sm mb-3 mt-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">{{traduction.getText("deployment_start")}}</span>
+									</div>
+									<input name="deploy_start" value="{{ schedule_dates['deploy_start'] }}" type="month" class="form-control" style="margin: auto;" id="ucop_deploy_start" oninput="update_chart(event.target)" required>
+								</div>
+
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">{{traduction.getText("deployment_duration")}} ({{traduction.getText("months")}})</span>
+									</div>
+									<input class="form-control" type="number" min=0 id="ucop_deployment_duration" name="deployment_duration" placeholder="6" value="{{ schedule_dates['deployment_duration'] }}" oninput="update_chart(event.target)"  required>
+								</div>
+
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">UC End</span>
+									</div>
+									<input name="uc_end" value="{{ schedule_dates['uc_end'] }}" type="month" class="form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
+								</div>
+
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">Deployment End</span>
+									</div>
+									<input type="month" class="form-control" style="margin: auto;" id="deploy_end" disabled>
+								</div>
 							</div>
-							<div class="form-group col">
-								<label for="fname">UC End</label>
-								<input name="uc_end" value="{{ schedule_dates['uc_end'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucop_uc_end" oninput="update_chart(event.target)" required>
+						</div>
+					</div>
+
+
+					<div class = "row">
+						<button id="ucpri" class="btn btn-dark d-block mx-auto mb-1 mt-4" type="button" data-toggle="collapse" data-target="#collapse_uc_pricing" aria-expanded="false" aria-controls="collapseExample">
+							UC Pricing Schedule
+							<span class="oi oi-pencil"></span>
+						</button>
+						<div id="collapse_uc_pricing" class="row collapse mb-2">
+							<div class="col justify-content-center text-center ml-3">
+								<div class="input-group input-group-sm mb-3 mt-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">Start of pricing</span>
+									</div>
+									<input name="pricing_start" value="{{ schedule_dates['pricing_start'] }}" type="month" class="form-control" style="margin: auto;" id="ucpri_pricing_start" oninput="update_chart(event.target)" required>
+								</div>
+
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">POC duration (in months)</span>
+									</div>
+									<input class="form-control" type="number" min="0" step ="1" id="ucpri_poc_duration" name="poc_duration" placeholder="6" value="{{ schedule_dates['poc_duration'] }}" oninput="update_chart(event.target)"  required>
+								</div>
+
+								<div class="input-group input-group-sm mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm">POC End</span>
+									</div>
+									<input type="month" class="form-control" style="margin: auto;" id="poc_end" disabled>
+								</div>
+
 							</div>
-						</div>	
+						</div>
 					</div>
+					
 				</div>
-				<div class="progress">
-					<div id="ucop_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
+				<div class = "col  align-self-center dash-bg container-fluid m-1 ml-2 p-4">
+					<div class = "row-md-auto dash-bg-light container-fluid p-3 ">
+						<div class="row justify-content-md-center">
+							<h3 class=" justify-content-md-center"><span class="badge badge-secondary">UC Project Schedulde</span></h3>
+						</div>
+						
+						<div id="dates_projet">
+							<p id="project-start">
+								<span class="oi oi-caret-bottom"></span>{{ project_start }}
+							</p>
+							<p id="project-end" style="float: right;">{{ project_end }}
+								<span class="oi oi-caret-bottom"></span>
+							</p>
+						</div>
+						<div class="progress">	
+							
+							<div id="proj_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...	</div>		
+							<div id="proj_2_bar" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment</div>
+							<div id="proj_3_bar" class="progress-bar progress-bar-main progress-bar-striped active progress-bar-animated" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">Project</div>
+						</div>
 					</div>
-					<div id="ucop_2_bar" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment
+					<div class = "row-md-auto dash-bg-light container-fluid p-3 mt-4">
+						<div class="row justify-content-md-center">
+							<h3 class=" justify-content-md-center"><span class="badge badge-secondary">UC Operating Schedulde</span></h3>
+						</div>
+						<div class="progress">
+							<div id="ucop_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
+							</div>
+							<div id="ucop_2_bar" class="progress-bar progress-bar-operations-1 progress-bar-striped progress-bar-animated" style="width: 20%">Deployment
+							</div>
+							<div id="ucop_3_bar" class="progress-bar progress-bar-remaining progress-bar-striped progress-bar-animated" style="width: 60%">Production
+							</div>
+							<div id="ucop_4_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 00%">...
+							</div>
+						</div>
 					</div>
-					<div id="ucop_3_bar" class="progress-bar progress-bar-remaining progress-bar-striped progress-bar-animated" style="width: 60%">Production
-					</div>
-					<div id="ucop_4_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 00%">...
-					</div>
-				</div>
-				<button id="ucpri" class="btn btn-dark d-block mx-auto mb-1 mt-4" type="button" data-toggle="collapse" data-target="#collapse_uc_pricing" aria-expanded="false" aria-controls="collapseExample">
-					UC Pricing Schedule
-					<span class="oi oi-pencil"></span>
-				</button>
-				<div id="collapse_uc_pricing" class="row collapse mb-2">
-					<div class="col justify-content-center text-center">						
-						<div class="row">
-							<div class="form-group col">
-								<label>Start of pricing</label>
-								<input name="pricing_start" value="{{ schedule_dates['pricing_start'] }}" type="date" class="w-25 form-control" style="margin: auto;" id="ucpri_pricing_start" oninput="update_chart(event.target)" required>
-								<label>POC duration (in months)</label>
-								<input class="form-control" type="number" min="0" step ="1" id="ucpri_poc_duration" name="poc_duration" placeholder="6" value="{{ schedule_dates['poc_duration'] }}" oninput="update_chart(event.target)"  required>
+					<div class = "row-md-auto dash-bg-light container-fluid p-3 mt-4">
+						<div class="row justify-content-md-center">
+							<h3 class=" justify-content-md-center"><span class="badge badge-secondary">UC Pricing Schedulde</span></h3>
+						</div>
+						<div class="progress">
+							<div id="ucpri_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
+							</div>
+							<div id="ucpri_2_bar" class="progress-bar progress-bar-pricing-1 progress-bar-striped progress-bar-animated" style="width: 40%">POC
+							</div>
+							<div id="ucpri_3_bar" class="progress-bar progress-bar-remaining progress-bar-striped progress-bar-animated" style="width: 40%">Run
+							</div>
+							<div id="ucpri_4_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="progress">
-					<div id="ucpri_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
-					</div>
-					<div id="ucpri_2_bar" class="progress-bar progress-bar-pricing-1 progress-bar-striped progress-bar-animated" style="width: 40%">POC
-					</div>
-					<div id="ucpri_3_bar" class="progress-bar progress-bar-remaining progress-bar-striped progress-bar-animated" style="width: 40%">Run
-					</div>
-					<div id="ucpri_4_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
-					</div>
-				</div>
-				{#}
-				<button id="ucrev" class="btn btn-dark d-block mx-auto mb-1 mt-4" type="button" data-toggle="collapse" data-target="#collapse_uc_revenue" aria-expanded="false" aria-controls="collapseExample">
-					UC Revenues Schedule
-					<span class="oi oi-pencil"></span>
-				</button>
-				<div id="collapse_uc_revenue" class="row collapse mb-2">
-					<div class="col">
-						<label>Lag Start</label>
-						<input value="{{ schedule_dates['lag_start'] }}" name="lag_start" type="date" class="start-date form-control" id="ucrev_2" oninput="update_chart(event.target)">
-					</div>
-					<div class="col">
-						<label>Lag > Ramp-up</label>
-						<input value="{{ schedule_dates['lag_ramp'] }}" name="lag_ramp" type="date" class="form-control" id="ucrev_3" oninput="update_chart(event.target)">
-					</div>
-					<div class="col">
-						<label>Ramp-up > Run</label>
-						<input value="{{ schedule_dates['ramp_run'] }}" name="ramp_run" type="date" class="form-control" id="ucrev_4" oninput="update_chart(event.target)">
-					</div>
-				</div>
-				<div class="progress">
-					<div id="ucrev_1_bar" class="progress-bar progress-bar-nothing progress-bar-striped progress-bar-animated" style="width: 20%">...
-					</div>
-					<div id="ucrev_2_bar" class="progress-bar progress-bar-revenues-1 progress-bar-striped progress-bar-animated" style="width: 25%">Lag
-					</div>
-					<div id="ucrev_3_bar" class="progress-bar progress-bar-revenues-2 progress-bar-striped progress-bar-animated" style="width: 25%">Ramp-up
-					</div>
-					<div id="ucrev_4_bar" class="progress-bar progress-bar-remaining progress-bar-striped progress-bar-animated" style="width: 30%">Run
-					</div>
-				</div>
-				{#}
 			</div>
 		</form>
 		{#  FIN DU CONTENU #}
@@ -149,15 +172,7 @@
 		<div class="row m-3 text-center text-dark">
 			<button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="check_form();"></button>
 		</div>
-{#<canvas id ="canvas" name="2d" ></canvas>
-<script src="https://frogcat.github.io/canvas-arrow/canvas-arrow.js"></script>
-		<script>
-			var canvas = document.getElementById('canvas');
-			var context = canvas.getContext("2d");
-			context.beginPath();
-			context.arrow(10, 1, 80, 1, [0, 1, -10, 1, -10, 5]);
-			context.fill();
-		</script>#}
+
 	{% endif %}
 
 
