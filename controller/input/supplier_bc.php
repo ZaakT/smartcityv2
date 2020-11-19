@@ -4,9 +4,11 @@ require_once('model/model.php');
 
 function dropDays($list){
     $newList = [];
-    foreach ($list as $key => $value) {
-        $exp = explode('-', $value);
-        $newList[$key]=count($exp)>2 ? implode('-', [$exp[0], $exp[1]]) : $value;
+    if($list){
+        foreach ($list as $key => $value) {
+            $exp = explode('-', $value);
+            $newList[$key]=count($exp)>2 ? implode('-', [$exp[0], $exp[1]]) : $value;
+        }
     }
     return $newList;
 }
@@ -19,7 +21,8 @@ function supplier_schedule($twig,$is_connected, $projID){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
 
     if($projID != 0) {
-        $keyDates = dropDays(getProjetKeyDates($projID)[0]);
+        $keyDates = getProjetKeyDates($projID);
+        $keyDates = isset($keyDates[0]) ? dropDays($keyDates[0]) : $keyDates;
         echo $twig->render('/input/input_project_common_steps/common_schedule.twig',array('key_dates'=>$keyDates, 'is_connected'=>$is_connected,
         'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3], 'projID'=>$projID,'part'=>"Project","selected"=>$proj[1], 'username'=>$user[1]));
         prereq_ipc(0);
