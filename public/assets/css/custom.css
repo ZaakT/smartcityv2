@@ -165,6 +165,12 @@ td {
     border-color: #dee2e6;
 }
 
+.summary_table .itemPart {
+    color: #495057;
+    background-color: #e9ecef;
+    border-bottom: 1px solid black;
+}
+
 .cbuc_table {
     max-height: 100vh;
 }

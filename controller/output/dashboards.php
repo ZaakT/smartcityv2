@@ -1586,7 +1586,7 @@ function calcCapexAmort($capex,$periods,$projectDates,$projectYears){
     $list = array_fill_keys($projectDates,0);
     foreach ($periods as $id_item => $period){
         $list2 = array_fill_keys($projectDates,0);
-        $period *= 12;
+        //$period *= 12;
         foreach ($capex as $date => $value){
             $list3 = array_fill_keys($projectDates,0);
             if($value!=0){

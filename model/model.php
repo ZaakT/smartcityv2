@@ -23,7 +23,7 @@ function dbConnect()
         return $db;
     } catch(Exception $e){ 
         try {
-            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8', 'root','', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
+            $db = new PDO('mysql:host=mysql_v2_test;dbname=smartcity_v2_db;charset=utf8', 'server','server', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,PDO::ATTR_PERSISTENT => true));
                 return $db;
         } catch (Exception $e2) {
             throw new Exception("Access to the database impossible ! : 
@@ -1087,6 +1087,8 @@ function createReqCopyXpex($columnsName){
     $procedurePara =substr($procedurePara, 0, -3);
     $db = dbConnect();
 
+    var_dump("drop");
+    $db->exec('DROP PROCEDURE IF EXISTS `copy_xpex_user`;');
     var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
     )
@@ -1104,7 +1106,6 @@ function createReqCopyXpex($columnsName){
     END
         ');
 
-    $db->exec('DROP PROCEDURE IF EXISTS `copy_xpex_user`;');
     $db->exec(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
         )
@@ -1421,17 +1422,15 @@ function getListSelScope($projID){
         $id_meas = intval($row['id_meas']);
 
         // We check if we want to use a filter to keep only the selected UC
-        if(isset($GLOBALS["useFiltre"])){
-            if($GLOBALS["useFiltre"]){
-                $user = getUser($_SESSION['username']);
-                $confirmedUC = getConfirmedUseCases($user[0], $projID);
-                if(isset($confirmedUC[$id_meas."_".$id_uc])){
-                    array_unshift($list[$id_meas],$id_uc);
-                    
-                }
-            }else{
+        if((isset($GLOBALS["useFiltre"]) && $GLOBALS["useFiltre"]) || (isset($GLOBALS["useFiltre2"]) && $GLOBALS["useFiltre2"])){
+
+            $user = getUser($_SESSION['username']);
+            $confirmedUC =isset($GLOBALS["useFiltre2"]) ? getSelectedUseCases($user[0], $projID) : getConfirmedUseCases($user[0], $projID);
+            if(isset($confirmedUC[$id_meas."_".$id_uc])){
                 array_unshift($list[$id_meas],$id_uc);
+                
             }
+
         }else{
             array_unshift($list[$id_meas],$id_uc);
         }
@@ -5617,11 +5616,45 @@ function getConfirmedUseCases($userID, $projID){
     return $list;
 }
 
+function getSelectedUseCases($userID, $projID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT meas_id, uc_id
+                            FROM uc_confirmed
+                            WHERE user_id = ? and proj_id = ? and selected = ?");
+    $req->execute(array($userID,$projID,true));
+    $list = [];
+    while($res = $req->fetch()){
+        $list[$res['meas_id']."_".$res['uc_id']] = true;
+    }
+    return $list;
+}
+
 function dropUseCasConfirmation($userID, $projID){
     $db = dbConnect();
     $req = $db->prepare('DELETE FROM uc_confirmed 
     WHERE user_id = ? and proj_id = ?');
     $req->execute(array($userID,$projID));
+
+}
+
+function unSelectAllUseCasConfirmation($userID, $projID){
+    $db = dbConnect();
+    $req = $db->prepare("UPDATE uc_confirmed
+            SET selected = ?
+            WHERE user_id = ? and proj_id = ?");
+    $req->execute(array(false, $userID,$projID));
+
+}
+
+function selectUseCaseConfirmation($userID, $projID, $uc_id, $meas_id ){
+    $db = dbConnect();
+
+    $req = $db->prepare("UPDATE uc_confirmed
+            SET selected = ?
+            WHERE user_id = ? AND proj_id = ? AND uc_id = ? AND meas_id = ?");
+
+    $req->execute(array(true,$userID, $projID, $uc_id, $meas_id));
+
 
 }
 

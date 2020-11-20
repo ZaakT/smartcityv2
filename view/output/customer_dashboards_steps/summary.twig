@@ -47,16 +47,15 @@
 
 
 <h2 class="ml-5 mt-5" ><span style="font-weight: 600;">{{ selected }} - </span><span style="font-weight: 400;"></span> {{traduction.getText("summary")}}</h2>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-6 px-0">
             {# SCOPE #}
             <div class="dash-bg container-fluid m-1 ml-2 p-4">
-                {# KEY DATES #}
+                {# UC Seletion #}
                 <div class="dash-bg-light container-fluid p-3">
-                    {{ macros.key_dates(scope,ucs,keydates_uc,uc_completed, propKeyDates) }}
-                </div>
+                    {{macros.UC_selection(scopeUCSelection,ucs,seletedUC, sideBarName,measures, list_cat)}}
+                </div>  
 
                 {# # OF UC #}
                 {% if sideBarName == "supplier_dashboards" %}
@@ -91,14 +90,20 @@
 
         <div class="col-6">
             <div class="dash-bg container-fluid m-1 ml-2 p-4">
-                    <div class="dash-bg-light container-fluid p-3">
-                        {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
-                    </div>
+                {# KEY DATES #}
+                <div class="dash-bg-light container-fluid p-3">
+                    {{ macros.key_dates(scope,ucs,keydates_uc,uc_completed, propKeyDates) }}
+                </div>
             </div>            
             <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
                     <div class="dash-bg-light container-fluid p-3">
                         <h3 class="dash-title mb-3">{% if sideBarName == "customer_dashboards" %} {{traduction.getText("benef_breakdown")}} {% else %} {{traduction.getText("cash-in")}}  {% endif %} {{traduction.getText("dashboard_summary_1")}}</h3>
                         <canvas id="repartitionOfBenefits" height="150px"/> 
+                    </div>
+            </div>
+            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
+                    <div class="dash-bg-light container-fluid p-3">
+                        {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
                     </div>
             </div>
 

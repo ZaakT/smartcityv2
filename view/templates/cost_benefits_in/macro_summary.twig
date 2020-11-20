@@ -1,4 +1,4 @@
-{% macro summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC) %}
+{% macro summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC,partName) %}
 {#}{% set symb = ["x","check","media-record"] %}{#}
 {% set symb = ["ø","check","ø"] %}
 {% set color = ["text-danger","text-success","text-warning"] %}
@@ -26,9 +26,10 @@
 
 <div class="row m-5 text-center">
     <div class="col list-table summary_table">
-        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg text-center'>
+        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg text-center table-striped '>
             <thead class="thead thead-light text-center">
                 <tr>
+                    {% if partName %}<th rowspan=2 scope="col"></th>{% endif %}
                     <th rowspan=2 scope="col"></th>
                     {% for sel_meas,sel_ucs in selScope %}
                     <th colspan={{sel_ucs|length}} scope="col">{{meas[sel_meas]['name']}}</th>
@@ -43,8 +44,15 @@
                 </tr>
             </thead>
             <tbody>
+            {% set iPart = 0 %}
+            {% set subIPart = 0 %}
                 {% for name in names %}
                 <tr>
+                    {% if subIPart == 0 %}
+                        <td class="itemPart" rowspan = "{{partName[iPart][1]}}"><h6>{{partName[iPart][0]}}</h6></td>
+                        {% set subIPart = partName[iPart][1] %}
+                        {% set iPart = iPart + 1 %}
+                    {% endif %}
                     <td class="item">{{name[0]}}</td>
                     {% for sel_meas,sel_ucs in selScope %} 
                         {% for uc in sel_ucs %}
@@ -64,11 +72,13 @@
                         {% endfor %}
                     {% endfor %} 
                 </tr>
+                {% set subIPart = subIPart - 1 %}
                 {% endfor %}
                 {% if isSup %}
                     <thead class="thead-light">
                     <tr class="table-primary">
-                        <td><h6>Confirm UC Selection</h6></td>
+                        <td></td>
+                        <td><h6>Confirm UC Input is complete (only complete UC allow you to generate dashboard)</h6></td>
                         {% for sel_meas,sel_ucs in selScope %} 
                             {% for uc in sel_ucs %}
                             <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>

@@ -195,7 +195,7 @@ function getPropKeyDates($scope,$projID, $keydates_uc, $keydates_proj){
 
 
 function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
-    $GLOBALS['useFiltre']= true;
+    $GLOBALS['useFiltre2']= true;
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -211,6 +211,12 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $proj = getProjByID($projID,$user[0]); 
                 $ucs = getListUCs();
                 $scope = getListSelScope($projID);
+
+                unset($GLOBALS['useFiltre2']);
+                $GLOBALS['useFiltre']= true;
+                $scopeUCSelection = getListSelScope($projID);
+                $GLOBALS['useFiltre2']= true;
+                unset($GLOBALS['useFiltre']);
                 
 
            
@@ -263,6 +269,13 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                             $cash_realeasing_benefitsSum+= getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side)['tot'];
                             $wider_cash_benefitsSum += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side)['tot'];
                         }
+                    }
+                }
+
+                $temp = getSelectedUseCases($user[0], $projID);
+                foreach ($scope as $measID => $listUcs) {
+                    foreach ($listUcs as $ucID) {
+                        $seletedUC[$measID."_".$ucID]=isset($temp[$measID."_".$ucID]);
                     }
                 }
 
@@ -357,6 +370,8 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 $repartition_of_benefits = array("titles"=>$titles, 
                 "data"=>$ucsBenefits);
             }
+            $list_cat = getListUCsCat();
+            $list_measures = getListMeasures();
             $propKeyDates = getPropKeyDates($scope,$projID, $keydates_uc, $keydates_proj);
             echo $twig->render('/output/customer_dashboards_steps/summary.twig',array(
                 'is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
@@ -364,18 +379,32 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                 'part'=>"Project",'projID'=>$projID,"selected"=>$proj[1],'projects'=>$list_projects,
                 'ucs'=>$ucs,'scope'=>$scope,'keydates_uc'=>$keydates_uc,'uc_completed'=>$uc_check_completed,
                 'years'=>$projectYears,'cumulnetcashTot'=>$cumulnetcashTot,'cumulnetsoccashTot'=>$cumulnetsoccashTot, "propKeyDates"=>$propKeyDates,
-                'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl, 'repartition_of_benefits'=> $repartition_of_benefits
+                'bankability_target'=> $bankabilityData, "bankability_cacl"=>$bankability_cacl, 'repartition_of_benefits'=> $repartition_of_benefits,
+                'seletedUC'=>$seletedUC, "scopeUCSelection"=>$scopeUCSelection,'measures'=>$list_measures, 'list_cat'=>$list_cat
             ));
             prereq_dashbords();
             
         }
     }
-    unset($GLOBALS['useFiltre']);
+    unset($GLOBALS['useFiltre2']);
+}
+
+function save_uc_selection_filter($twig,$is_connected, $post, $sideBarName){
+    $user = getUser($_SESSION['username']);
+    $projID = getProjID();
+    unSelectAllUseCasConfirmation($user[0], $projID);
+    foreach($post as $key=>$value){
+        $key = explode("_", $key);
+        selectUseCaseConfirmation($user[0], $projID, $key[1], $key[0]);
+    }
+    //var_dump('Location: ?A='.$sideBarName.'&A2=summary');
+    header('Location: ?A='.$sideBarName.'&A2=summary');
+
 }
 
 // --- Project Details
 function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, $side){
-    $GLOBALS['useFiltre']= true;
+    $GLOBALS['useFiltre2'] = true;
     if($projID!=0){
         $user = getUser($_SESSION['username']);
         if(getProjByID($projID,$user[0])){
@@ -420,7 +449,7 @@ function dashboards_project_details($twig,$is_connected, $projID, $sideBarName, 
     } else {
         throw new Exception("No Project selected !");
     }
-    unset($GLOBALS['useFiltre']);
+    unset($GLOBALS['useFiltre2']);
 }
 
 function getUcsData($projID,$selScope, $projectYears, $scope, $side){
@@ -804,7 +833,7 @@ $UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits){
 }
 
 function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName, $side){
-    $GLOBALS['useFiltre']= true;
+    $GLOBALS['useFiltre2']= true;
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
 
@@ -842,7 +871,7 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             prereq_dashbords();
         }
     }
-    unset($GLOBALS['useFiltre']);
+    unset($GLOBALS['useFiltre2']);
 }
 
 function difMonthsBounds($d1, $d2){
@@ -910,7 +939,7 @@ function getQualitativeYearEvolution($projID,$ucID){
 }
 
 function dashboards_non_monetizable($twig,$is_connected, $projID){
-    $GLOBALS['useFiltre']= true;
+    $GLOBALS['useFiltre2']= true;
     $side="customer";
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -969,11 +998,11 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
             prereq_dashbords();
         }
     }
-    unset($GLOBALS['useFiltre']);
+    unset($GLOBALS['useFiltre2']);
 }
 
 function dashboards_qualitative($twig,$is_connected, $projID){
-    $GLOBALS['useFiltre']= true;
+    $GLOBALS['useFiltre2']= true;
     $side="customer";
     $user = getUser($_SESSION['username']);
     $list_projects = getListProjects($user[0]);
@@ -1029,6 +1058,6 @@ function dashboards_qualitative($twig,$is_connected, $projID){
             prereq_dashbords();
         }
     }
-    unset($GLOBALS['useFiltre']);
+    unset($GLOBALS['useFiltre2']);
 }
 

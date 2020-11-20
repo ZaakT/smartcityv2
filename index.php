@@ -923,7 +923,11 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
+                            if(isset($_GET["A3"]) && $_GET["A3"]=="save_uc_confirm" && isset($_POST)){
+                                save_uc_selection_filter($twig,$is_connected, $_POST,$_GET['A']);    
+                            }else{
+                                dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
+                            }
                         }else{
                             header('Location: ?A=customer_dashboards&A2project_selection');
                         }
@@ -987,7 +991,11 @@ try{
                         }
                     }elseif($_GET['A2']=="summary"){
                         if(isset($_SESSION['projID'])&&$_SESSION['projID']!=0){
-                            dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
+                            if(isset($_GET["A3"]) && $_GET["A3"]=="save_uc_confirm" && isset($_POST)){
+                                save_uc_selection_filter($twig,$is_connected, $_POST,$_GET['A']);    
+                            }else{
+                                dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
+                            }
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
                         }
@@ -1716,7 +1724,7 @@ try{
                 comparison($twig,$is_connected);  
             }
             elseif($_GET['A']=='comp_projects'){ 
-                verifIsDev();
+                //verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="projects"){
                         projects($twig,$is_connected);

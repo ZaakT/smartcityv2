@@ -21,7 +21,8 @@ function comp_projects($twig,$is_connected){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/output/comparison_items/comp_projects.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3]));
+    echo $twig->render('/output/comparison_items/comp_projects.twig',array('is_connected'=>$is_connected,
+    'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3]));
 }
 
 function projects($twig,$is_connected){
@@ -60,7 +61,7 @@ function projects_summary($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $start_date = $keydates_proj[0];
             $start_date2 = explode('/',$start_date);
             $start_date2 = date_create_from_format('m/Y',$start_date2[0].'/'.$start_date2[1]);
@@ -317,7 +318,7 @@ function investment($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $capex = $CB_values['capex'];
             $implem = $CB_values['implementation'];
@@ -349,7 +350,7 @@ function operations($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $opex = $CB_values['opex'];
             $revenues = $CB_values['revenues'];
@@ -387,7 +388,7 @@ function cash_flows($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $netcash = $CB_values['netcash'];
             $netsoccash = $CB_values['netsoccash'];
@@ -421,7 +422,7 @@ function non_quant($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $noncash = $CB_values['noncash'];
             $risks = $CB_values['risks'];
@@ -455,7 +456,7 @@ function finsoc_comp($twig,$is_connected){
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
-            $keydates_proj = getKeyDatesProj($schedules,$scope);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $npv = $CB_values['npv'];
             $socnpv = $CB_values['socnpv'];
@@ -764,7 +765,7 @@ function getCashFlows($scenID,$projID,$list_FS){
     
     $scope = getListSelScope($projID);
     $schedules = getListSelDates($projID);
-    $keydates_proj = getKeyDatesProj($schedules,$scope);
+    $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
     $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 

@@ -202,7 +202,7 @@ function changeMonths(){
     }
 
     $("#graphCell td").each(function() {
-        console.log(this);
+        //console.log(this);
         id = this.id;
         if(id.split('_')[2]==1){
             if($("#"+id)[0].hasAttribute("hidden")){
@@ -249,20 +249,36 @@ function addRow(table, jMax){
 
 
 
-function addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months, currency){
+function addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months, currency, title){
     addRow(table, 2);
     var div = createDiv("graphCell_"+i+"_0", "container_"+i*2);
+
+
+    addTitle(title, div);
+
     var canvas = createCanvas(div.id, "canevas_"+i*2);
     graphYears = createGraph(lineName , canvas, yearsData, years, currency);
     var div = createDiv("graphCell_"+i+"_1", "container_"+i*2+1);
+    addTitle(title, div);
     var canvas = createCanvas(div.id, "canevas_"+i*2+1);
     graphMonths = createGraph(lineName, canvas, monthsData, months,currency);
     return [graphYears, graphMonths];
 }
 
+function addTitle(title, father){
+    h3 = document.createElement('h3');
+    h3.classList.add("justify-content-md-center");
+    father.appendChild(h3);
+
+    span = document.createElement('span');
+    span.classList.add("badge-secondary");
+    span.classList.add("badge");
+    span.innerHTML = title;
+    h3.appendChild(span);
+}
 function drawCharts(){
     var deviseName = $('#deviseName').text();
-    console.log(deviseName)
+    //console.log(deviseName)
     var data = $('#data').data("toShow");
     var years = $('#data').data("years");
     var months = $('#data').data("months");
@@ -298,7 +314,9 @@ function drawCharts(){
         //console.log(levelTr);
         //addGraphsYearMonth(table, i, lineName, yearsData, years, monthsData, months);
         if((levelTr[1]==0||Lv2hasLv3Child(i)) && levelTr[2]==0 ){
-            graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months,deviseName);
+            console.log("titre ? :")
+            console.log(lineName)
+            graphs=addGraphsYearMonth(table, k, lineName, yearsData, years, monthsData, months,deviseName, lineName);
             k++;
 
             for(let l = i+1; l<iMax; l++){

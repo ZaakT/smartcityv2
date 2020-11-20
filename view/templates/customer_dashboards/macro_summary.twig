@@ -1,74 +1,38 @@
+
+
+{% macro UC_selection(scope,ucs, seletedUC, sideBarName,measures, list_cat) %}
+    <form action="?A={{sideBarName}}&amp;A2=summary&amp;A3=save_uc_confirm" method="post">
+        <table id="uc_selection_table" class="table table-lg table-bordered table-striped table-responsive-lg">
+            <thead class="thead-dark text-center sticky-top">
+                <th></th>
+                <th>Domain</th>
+                <th>Solution</th>
+                <th>Context</th>
+            </thead>
+            <tbody>
+                {% for measID,list_ucs in scope %}
+                    {% for ucID in list_ucs %}
+                        <tr>
+                            <td><input type = "checkbox" {{seletedUC[measID ~ "_" ~ ucID] ? "checked"}} name="{{measID ~ "_" ~ ucID}}"></td>
+                            <td scope="col">{{measures[measID]['name']}}</td>
+                            <td scope="col">{{ list_cat[ucs[ucID]['id_cat']]["name"] }}</td>
+                            <td scope="col">{{ucs[ucID]['name']}}</td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class = "text-center">
+            <button type="submit" class="btn btn-outline-dark m-3">
+                Save
+            </button>
+        </div>
+    </form>
+{% endmacro %}
+
+
 {% macro key_dates(scope,ucs,keydates_uc,uc_completed, propKeyDates) %}
 {% import "/templates/traductions.twig" as traduction %}
-{#}
-<h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
-<table id="keyDatesTable" class=" text-center table dashboard-table">
-    <tr>
-        <th width="30%">{{traduction.getText("uses_cases")}}</th>
-        <th width="16%">{{traduction.getText("start_date")}}</th>
-        <th width="16%">{{traduction.getText("dashboard_summary_2")}}</th>
-        <th width="16%">{{traduction.getText("dashboard_summary_3")}}</th>
-        <th width="22%"></th>
-    </tr>
-    {% for measID,list_ucs in scope %}
-        {% for ucID in list_ucs %}
-            <tr hidden>
-                <td class="uc" id="uc_{{ ucID }}" width="30%">{{ ucs[ucID]['name'] }}</td>
-                <td id="start_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['startdate']}}  </td>
-                <td id="imp_{{ ucID }}" width="17.5%">{{keydates_uc[ucID]['implem_enddate']}}  </td>
-                <td id="end_{{ ucID }}" width="17.5%">{{ keydates_uc[ucID]['enddate'] }}  </td>
-                <td width="17.5%">{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</td>
-            </tr>
-    {% endfor %}{% endfor %}
-</table>
-
-
-    <div class="container">
-        
-            {% for measID,list_ucs in scope %}
-                {% for ucID in list_ucs %}
-                {% if uc_completed[ucID] == true %}
-                    <div class="arrows">
-                        <div class="arrow ucnamearrow">
-                            <span>{{ ucs[ucID]['name'] }}</span>
-                        </div>
-                        <div id="step1_{{ ucID }}" class="arrow step1">
-                            <span>{{keydates_uc[ucID]['startdate']}}</span>
-                        </div>
-                        <div id="step2_{{ ucID }}" class="arrow step2">
-                            <span>{{keydates_uc[ucID]['implem_enddate']}}</span>
-                        </div>
-                        <div id="step3_{{ ucID }}" class="arrow step3">
-                            <span>{{ keydates_uc[ucID]['enddate'] }}</span>
-                        </div>
-                        <div class="arrow duration">
-                            <span>&nbsp;{{ keydates_uc[ucID]['project_duration'] }} {{traduction.getText("months_short")}}</span>
-                        </div> 
-                    </div>
-                {% else %}
-                    <div class="arrows">
-                            <div class="arrow ucnamearrow">
-                            <span>{{ ucs[ucID]['name'] }}</span>
-                        </div>
-                        <div id="step1_{{ ucID }}" class="arrow step1">
-                            <span>NA</span>
-                        </div>
-                        <div id="step2_{{ ucID }}" class="arrow step2">
-                            <span>NA</span>
-                        </div>
-                        <div id="step3_{{ ucID }}" class="arrow step3">
-                            <span>NA</span>
-                        </div>
-                        <div class="arrow duration">
-                            <span>NA</span>
-                        </div> 
-                    </div>
-                {% endif %}
-
-            {% endfor %}{% endfor %}
-       
-    </div>
-{#}
 <h3 class="dash-title">{{traduction.getText("key_dates")}}</h3>
 <table id="keyDatesTable" class=" text-center table dashboard-table">
     <tr>

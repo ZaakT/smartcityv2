@@ -24,7 +24,11 @@
         ["Capex", "capex"],
         ["Deployment", "implem"],
         ["Opex", "opex"]
-    ] %}
+    ] %}    
+    {% set partName = [
+        ["Cash-in", 3],
+        ["Cash-out", 3]
+    ]%}
 {% else %}
     {% set names = [
         ["Capex", "capex"],
@@ -37,6 +41,11 @@
         ["Non Cash Benefits", "noncash"],
         ["Risks", "risks"]
     ] %}
+    {% set partName = [
+        ["Cash-out", 3],
+        ["Cash-in", 4],
+        ["Non monetizable", 4]
+    ]%}
 {% endif %}
 
 
@@ -53,7 +62,7 @@
 {% if isSup %}
     <form id="form_summary" name="form_summary" action="?A={{sideBarName}}&amp;A2=summary_inputed&amp;projID={{projID}}" method="post">
 {% endif %}
-{{ list.summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC)}}
+{{ list.summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC,partName)}}
 
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">
