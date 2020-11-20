@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 20 nov. 2020 à 15:02
+-- Généré le :  ven. 20 nov. 2020 à 16:14
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -1334,25 +1334,25 @@ INSERT INTO `critcat` (`id`, `name`) VALUES
 DROP TABLE IF EXISTS `deal_criteria_input_nogo_target`;
 CREATE TABLE IF NOT EXISTS `deal_criteria_input_nogo_target` (
   `id` int(11) NOT NULL,
-  `societal_npv_nogo` int(11) DEFAULT NULL,
-  `societal_npv_target` int(11) DEFAULT NULL,
-  `societal_roi_nogo` int(11) DEFAULT NULL,
-  `societal_roi_target` int(11) DEFAULT NULL,
-  `societal_payback_nogo` int(11) DEFAULT NULL,
-  `societal_payback_target` int(11) DEFAULT NULL,
-  `npv_nogo` int(11) DEFAULT NULL,
-  `npv_target` int(11) DEFAULT NULL,
-  `roi_nogo` int(11) DEFAULT NULL,
-  `roi_target` int(11) DEFAULT NULL,
-  `payback_nogo` int(11) DEFAULT NULL,
-  `payback_target` int(11) DEFAULT NULL,
-  `risks_rating_nogo` int(11) DEFAULT NULL,
-  `risks_rating_target` int(11) DEFAULT NULL,
-  `nqbr_nogo` int(11) DEFAULT NULL,
-  `nqbr_target` int(11) DEFAULT NULL,
-  `operating_margin_nogo` int(11) DEFAULT NULL,
-  `operating_margin_target` int(11) DEFAULT NULL,
-  `checked` varchar(1024) NOT NULL,
+  `societal_npv_nogo` int(11) DEFAULT '0',
+  `societal_npv_target` int(11) DEFAULT '0',
+  `societal_roi_nogo` int(11) DEFAULT '0',
+  `societal_roi_target` int(11) DEFAULT '0',
+  `societal_payback_nogo` int(11) DEFAULT '0',
+  `societal_payback_target` int(11) DEFAULT '0',
+  `npv_nogo` int(11) DEFAULT '0',
+  `npv_target` int(11) DEFAULT '0',
+  `roi_nogo` int(11) DEFAULT '0',
+  `roi_target` int(11) DEFAULT '0',
+  `payback_nogo` int(11) DEFAULT '0',
+  `payback_target` int(11) DEFAULT '0',
+  `risks_rating_nogo` int(11) DEFAULT '0',
+  `risks_rating_target` int(11) DEFAULT '0',
+  `nqbr_nogo` int(11) DEFAULT '0',
+  `nqbr_target` int(11) DEFAULT '0',
+  `operating_margin_nogo` int(11) DEFAULT '0',
+  `operating_margin_target` int(11) DEFAULT '0',
+  `checked` varchar(1024) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2243,8 +2243,8 @@ CREATE TABLE IF NOT EXISTS `input_cashreleasing` (
   `unit_cost_reduc` double DEFAULT NULL,
   `annual_var_volume` double DEFAULT NULL,
   `annual_var_unit_cost` double DEFAULT NULL,
-  `revenue_start_date` date NOT NULL,
-  `ramp_up_duration` int(11) NOT NULL,
+  `revenue_start_date` date NOT NULL DEFAULT '0001-01-01',
+  `ramp_up_duration` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
@@ -2588,8 +2588,8 @@ CREATE TABLE IF NOT EXISTS `input_revenues` (
   `revenues_per_unit` double DEFAULT NULL,
   `annual_variation_volume` double DEFAULT NULL,
   `annual_variation_unitcost` double DEFAULT NULL,
-  `revenue_start_date` date NOT NULL,
-  `ramp_up_duration` int(11) NOT NULL,
+  `revenue_start_date` date NOT NULL DEFAULT '0001-01-01',
+  `ramp_up_duration` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
   KEY `id_uc` (`id_uc`)
@@ -2842,8 +2842,8 @@ CREATE TABLE IF NOT EXISTS `input_widercash` (
   `unit_cost_reduc` double DEFAULT NULL,
   `annual_var_volume` double DEFAULT NULL,
   `annual_var_unit_cost` double DEFAULT NULL,
-  `revenue_start_date` date NOT NULL,
-  `ramp_up_duration` int(11) NOT NULL,
+  `revenue_start_date` date NOT NULL DEFAULT '0001-01-01',
+  `ramp_up_duration` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
   KEY `id_proj` (`id_proj`),
   KEY `id_uc` (`id_uc`)
@@ -6427,11 +6427,11 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`, `selected`
 (15, 24, 1, 9, 1),
 (15, 29, 0, -1, 1),
 (15, 29, 21, 22, 1),
-(16, 30, 0, -1, 0),
-(16, 30, 25, 33, 1),
-(16, 30, 25, 65, 1),
-(16, 30, 25, 66, 1),
-(16, 30, 25, 67, 1),
+(16, 30, 0, -1, 1),
+(16, 30, 25, 33, 0),
+(16, 30, 25, 65, 0),
+(16, 30, 25, 66, 0),
+(16, 30, 25, 67, 0),
 (16, 33, 0, -1, 1),
 (16, 33, 25, 33, 1),
 (16, 33, 25, 65, 1),

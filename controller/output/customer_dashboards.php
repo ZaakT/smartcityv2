@@ -350,7 +350,7 @@ function dashboards_summary($twig,$is_connected, $projID, $sideBarName, $side){
                     );
                 }
                 foreach($bankability_cacl as $key => $value){
-                    $bankability_cac = round($value, 2);
+                    $bankability_cacl[$key] = round($value, 2);
                 }
                 
             /*}

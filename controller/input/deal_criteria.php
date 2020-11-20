@@ -65,14 +65,14 @@ function deal_criteria_input_nogo_target($post = [], $side)
                 }
             }
                 
-            $npv_nogo = isset($post['npv_nogo']) ? floatval($post['npv_nogo']) : '';
-            $npv_target = isset($post['npv_target']) ? floatval($post['npv_target']) : '';
-            $roi_nogo = isset($post['roi_nogo']) ? floatval($post['roi_nogo']) : '';
-            $roi_target = isset($post['roi_target']) ? floatval($post['roi_target']) : '';
-            $payback_nogo = isset($post['payback_nogo']) ? floatval($post['payback_nogo']) : '';
-            $payback_target = isset($post['payback_target']) ? floatval($post['payback_target']) : '';
-            $operating_margin_target = isset($post['operating_margin_target']) ? floatval($post['operating_margin_target']) : '';
-            $operating_margin_nogo = isset($post['operating_margin_nogo']) ? floatval($post['operating_margin_nogo']) : '';
+            $npv_nogo = isset($post['npv_nogo']) ? floatval($post['npv_nogo']) : 0;
+            $npv_target = isset($post['npv_target']) ? floatval($post['npv_target']) : 0;
+            $roi_nogo = isset($post['roi_nogo']) ? floatval($post['roi_nogo']) : 0;
+            $roi_target = isset($post['roi_target']) ? floatval($post['roi_target']) : 0;
+            $payback_nogo = isset($post['payback_nogo']) ? floatval($post['payback_nogo']) : 0;
+            $payback_target = isset($post['payback_target']) ? floatval($post['payback_target']) : 0;
+            $operating_margin_target = isset($post['operating_margin_target']) ? floatval($post['operating_margin_target']) : 0;
+            $operating_margin_nogo = isset($post['operating_margin_nogo']) ? floatval($post['operating_margin_nogo']) : 0;
             insertInputDealCriteriaSupplier($npv_nogo, $npv_target, $roi_nogo, $roi_target, $payback_nogo, $payback_target,$operating_margin_target,$operating_margin_nogo,$checked, $projID);
             header('Location: ?A=input_project_common_supplier&A2=deal_criteria&projID=' . $projID);
             

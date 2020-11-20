@@ -5642,7 +5642,7 @@ function unSelectAllUseCasConfirmation($userID, $projID){
     $req = $db->prepare("UPDATE uc_confirmed
             SET selected = ?
             WHERE user_id = ? and proj_id = ?");
-    $req->execute(array(false, $userID,$projID));
+    $req->execute(array(0, $userID,$projID));
 
 }
 
@@ -5653,7 +5653,7 @@ function selectUseCaseConfirmation($userID, $projID, $uc_id, $meas_id ){
             SET selected = ?
             WHERE user_id = ? AND proj_id = ? AND uc_id = ? AND meas_id = ?");
 
-    $req->execute(array(true,$userID, $projID, $uc_id, $meas_id));
+    $req->execute(array(1,$userID, $projID, $uc_id, $meas_id));
 
 
 }
