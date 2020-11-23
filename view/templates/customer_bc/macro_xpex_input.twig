@@ -159,7 +159,6 @@
 
 
 {% if show1 or show2 or show3 %}
-
     {% set size = 0 %}
     {% if listUcsName|length > 1 %} {% set size = size + 1 %}
     {% endif %}
@@ -268,13 +267,11 @@
                     </tr>
                 </thead>
                 <tbody>
-
                 {% for categoryID in xpexCategories[xpexCategories|keys[0]]|keys %}
                     {% set show1 = false %}
                     {% set show2 = false %}
                     {% set show3 = false %}
                     {% for ucID in listUcID %}
-
                         {% for id_xpex,data in selXpex[ucID] %}
                             {% if xpex_from_ntt[ucID][id_xpex]['cat'] == categoryID %}
                                 {% set show1 = true %}

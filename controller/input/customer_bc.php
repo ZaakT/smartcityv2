@@ -238,7 +238,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                     }elseif($type=="deployment_costs"){
                         deleteSelImplem($projID,$ucID,$selXpex_diff_rm);
                         insertSelImplem($projID,$ucID,$selXpex_diff_add);
-                    }elseif($type=="deployment_costs"){
+                    }elseif($type=="revenuesProtection"){
                         deleteSelRevenuesProtection($projID,$ucID,$selXpex_diff_rm);
                         insertSelRevenuesProtection($projID,$ucID,$selXpex_diff_add);
                     }elseif($type=="revenues"){
