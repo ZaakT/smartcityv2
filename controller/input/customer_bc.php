@@ -201,7 +201,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                     }elseif($type=="noncash"){
                         insertSelNonCash($projID,$ucID,$selXpex[$ucID]);
                     }elseif($type=="risks"){
-                        insertSelRisks($projID,$ucID,$selXpex[$ucID]);
+                        insertSelRisk($projID,$ucID,$selXpex[$ucID]);
                     }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
                         insertSelSupplierRevenues($projID,$ucID,$selXpex[$ucID], explode('_',$type)[0]);
                     }
@@ -258,7 +258,7 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
                         insertSelNonCash($projID,$ucID,$selXpex_diff_add);
                     }elseif($type=="risks"){
                         deleteSelRisks($projID,$ucID,$selXpex_diff_rm);
-                        insertSelRisks($projID,$ucID,$selXpex_diff_add);
+                        insertSelRisk($projID,$ucID,$selXpex_diff_add);
                     }elseif($type=='equipment_revenues' ||$type=="deployment_revenues" || $type=="operating_revenues"){
                         deleteSelSupplierRevenues($projID,$ucID,$selXpex_diff_rm, explode('_',$type)[0]);
                         insertSelSupplierRevenues($projID,$ucID,$selXpex_diff_add, explode('_',$type)[0]);

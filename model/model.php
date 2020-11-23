@@ -1087,9 +1087,9 @@ function createReqCopyXpex($columnsName){
     $procedurePara =substr($procedurePara, 0, -3);
     $db = dbConnect();
 
-    var_dump("drop");
+    //var_dump("drop");
     $db->exec('DROP PROCEDURE IF EXISTS `copy_xpex_user`;');
-    var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
+    /*var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
     )
     BEGIN
@@ -1104,7 +1104,7 @@ function createReqCopyXpex($columnsName){
         INSERT INTO '.array_keys($columnsName)[3].' ('.$tablePara[array_keys($columnsName)[3]].')
             VALUES (itemID,id_uc);
     END
-        ');
+        ');*/
 
     $db->exec(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
@@ -2269,10 +2269,11 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
         $range_max = intval($row['range_max']);
         $side = $row['side'];
         $cat=$row['cat'];
+        $default_cost = $row['default_cost'];
         if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat];
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
         } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat];
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
         }
     }
     //var_dump($list);
@@ -6378,7 +6379,8 @@ function insertItem($item,$catItem){
                                     IN source VARCHAR(255),
                                     IN range_min INT,
                                     IN range_max INT,
-                                    in cat INT
+                                    IN cat INT,
+                                    IN default_cost VARCHAR(255)
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
@@ -6387,12 +6389,12 @@ function insertItem($item,$catItem){
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO capex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
-                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max)
-                                            VALUES (itemID,unit,source,range_min,range_max);
+                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max, default_cost)
+                                            VALUES (itemID,unit,source,range_min,range_max, default_cost);
                                     END
                                         ');
-            $req = $db->prepare('CALL add_capex(?,?,?,?,?,?,?,?);');
-            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[7])));
+            $req = $db->prepare('CALL add_capex(?,?,?,?,?,?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],$item[6],$item[2],$item[3],intval($item[4]),intval($item[5]),intval($item[7]),intval($item[8])));
         
             return $ret;
             break;

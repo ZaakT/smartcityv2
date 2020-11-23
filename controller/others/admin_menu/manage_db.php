@@ -404,7 +404,8 @@ function create_item1($twig,$is_connected,$post,$catItem){
     $range_max = $post['range_max'];
     $uc = explode("_",$post['cat_uc_id'])[1];
     $cat = explode("_",$post['cat_uc_id'])[0];
-    $itemInfos = [$name,$description,$unit,$source,$range_min,$range_max,$uc,$cat];
+    $default_cost = $post['default_cost'];
+    $itemInfos = [$name,$description,$unit,$source,$range_min,$range_max,$uc,$cat,$default_cost];
     if(!empty(getItemByNameAndCat($name,$catItem))){
         manage_item($catItem,$twig,$is_connected,true); 
     } else {

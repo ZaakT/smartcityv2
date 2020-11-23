@@ -12,7 +12,7 @@
         {% if type != "quantifiable" and type != "revenues" and type != "revenuesProtection" %}
             <td scope="col">
                 <div class="input-group">
-                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_cost']}}" placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
+                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_cost'] ? selXpex[id_xpex]['unit_cost'] : xpex[id_xpex]['default_cost']}}" placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
                     </div>
@@ -143,6 +143,7 @@
 {% set show2 = false %}
 {% set show3 = false %}
 {% for ucID in listUcID %}
+
     {% for id_xpex,data in selXpex[ucID] %}
         {% if id_xpex in xpex_from_ntt[ucID]|keys %}
             {% set show1 = true %}
