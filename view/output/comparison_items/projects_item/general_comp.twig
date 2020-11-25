@@ -39,7 +39,7 @@
 
 {% block scripts %}
     {{ parent() }}
-    <div id="data"  data-compo="{{ compoData|json_encode }}" data-list-compo="{{ list_compo|json_encode }}" data-projects="{{ projects|json_encode }}" ></div>
+    <div id="data"  data-compo="{{ compoData|json_encode }}" data-list-compo="{{ list_compo|json_encode }}" data-projects="{{ projects|json_encode }}" data-cat="{{ cat2Indicator|json_encode }}" ></div>
     <script type="text/javascript" src="../../public/assets/js/custom/comp_projects/graphCompo.js"></script>
     <script type="text/javascript">setNewDeviseInvestment("{{selDevName}}","{{selDevSym}}");</script>
     <script>drawGraphs()</script>

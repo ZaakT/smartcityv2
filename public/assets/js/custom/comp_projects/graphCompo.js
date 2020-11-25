@@ -15,15 +15,13 @@ function manageIndicator(indicatorID){
 function drawGraphs(){
     compoData = $('#data').data("compo");
     projects = $('#data').data("projects");
-    listCompo = $('#data').data("listCompo");
-    console.log(compoData);
-    console.log(projects);
-    console.log(listCompo);
+    listCompo = $('#data').data("cat");
     for(let i = 0; i < listCompo.length ; i++){
         data = [];
         names = [];
         idProjTab = Object.keys(compoData);
         for(let j = 0; j<idProjTab.length; j++){
+            console.log(idProjTab[j], listCompo[i])
             data.push(compoData[idProjTab[j]][listCompo[i]]);
             names.push(projects[idProjTab[j]]['name']);
         }

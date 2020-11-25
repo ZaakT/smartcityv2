@@ -51,6 +51,7 @@ function projects_selected($post){
     }
 }
 
+
 function projects_summary($twig,$is_connected){
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
@@ -338,7 +339,9 @@ function getCBValues($projID,$scope,$schedules,$keydates_proj, $side = "customer
     $revenuesTot = round($revenuesTot, 2);
     $cashreleasingTot = round($cashreleasingTot, 2);
     $widercashTot = round($widercashTot, 2);
-    return ['capex'=>$capexTot,'implementation'=>$implemTot,'opex'=>$opexTot ,'revenues'=>$revenuesTot,
+    $cashin = $revenuesTot + $cashreleasingTot + $widercashTot;
+    $cashout = $capexTot + $implemTot + $opexTot;
+    return ['capex'=>$capexTot,'implementation'=>$implemTot,'opex'=>$opexTot ,'revenues'=>$revenuesTot, "cashin"=>$cashin, "cashout"=>$cashout,
     'cashreleasing'=>$cashreleasingTot,'widercash'=>$widercashTot,'netcash'=>$netcashTot[0]['tot'],'netsoccash'=>$netsoccashTot[0]['tot'],
     'noncash'=>$ratingNonCash,'risks'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'roi'=>$ROI,'socroi'=>$SOCROI,'payback'=>$resPayback[0],'socpayback'=>$resSocPayback[0]];
 }
@@ -349,14 +352,14 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
         "op"=>['opex','revenues','cashreleasing','widercash'],
         "cash_flows"=>['netcash','netsoccash'],
         "non_quant"=>['noncash','risks'],
-        "finsoc_comp"=>['npv','socnpv','roi', 'socroi', 'payback', 'socpayback']];
+        "finsoc_comp"=>['cashin','cashout','npv','socnpv','roi', 'socroi', 'payback', 'socpayback']];
 
     $cat2IndicatorName = [
         "invest"=>['capex','implementation'],
         "op"=>['opex','revenues','cash releasing benefits','wider cash benefits'],
         "cash_flows"=>['net cash','net societal cash'],
         "non_quant"=>['non cash benefits','risks'],
-        "finsoc_comp"=>['npv','societal npv','return over investment','societal return over investment','payback','societal payback']];
+        "finsoc_comp"=>['cash-in','cash-out','npv','societal npv','return over investment','societal return over investment','payback','societal payback']];
 
     $user = getUser($_SESSION['username']);
     if(isset($_SESSION['selProjects']) && count($_SESSION['selProjects'])){
@@ -379,7 +382,7 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];       
         echo $twig->render('/output/comparison_items/projects_item/general_comp.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
-        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects));
+        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects, "cat2Indicator"=>$cat2Indicator[$cat]));
         prereq_compProjects();
 
     } else {
