@@ -71,7 +71,19 @@ function projects_summary($twig,$is_connected){
             $duration_Y = intval($end_date2->diff($start_date2)->y);
             $duration_M = intval($end_date2->diff($start_date2)->m);
             $duration = $duration_Y*12+$duration_M;
-            $projectsData[$projID] = ['scope'=>$scope,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration];
+
+            $solutionsSize = [];
+            foreach ($scope as $measID => $listUcs) {
+                foreach ($listUcs as $ucID) {
+                    $sol = getSolutionByUcID($ucID);
+                    if(isset($solutionsSize[$sol['id']])){
+                        $solutionsSize[$sol['id']]['nb'] += 1;
+                    }else{
+                        $solutionsSize[$sol['id']] = ["name"=>$sol['name'], "nb"=>1];
+                    }
+                }
+            }
+            $projectsData[$projID] = ['scope'=>$scope,"solutionsSize"=>$solutionsSize,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration];
         }
         $measures = getListMeasures();
         $ucs = getListUCs();
@@ -85,7 +97,7 @@ function projects_summary($twig,$is_connected){
     }
 }
 
-function  getCBValues($projID,$scope,$schedules,$keydates_proj){
+function getCBValues($projID,$scope,$schedules,$keydates_proj, $side = "customer"){
     $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
     //var_dump($keydates_proj);
@@ -302,8 +314,80 @@ function  getCBValues($projID,$scope,$schedules,$keydates_proj){
     $ratingRisks = $nbUCS != 0 && $ratingRisks > 0 ? $ratingRisks/$nbUCS : -1;
     
 
-    return ['capex'=>$capexTot['tot'],'implementation'=>$implemTot['tot'],'opex'=>$opexPerMonth,'revenues'=>$revenuesPerMonth,'cashreleasing'=>$cashreleasingPerMonth,'widercash'=>$widercashPerMonth,'netcash'=>$netcashTot[0]['tot'],'netsoccash'=>$netsoccashTot[0]['tot'],'noncash'=>$ratingNonCash,'risks'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'roi'=>$ROI,'socroi'=>$SOCROI,'payback'=>$resPayback[0],'socpayback'=>$resSocPayback[0]];
+
+    $capexTot = 0;
+    $implemTot = 0;
+    $opexTot = 0;
+    $revenuesTot = 0;
+    $cashreleasingTot = 0;
+    $widercashTot = 0;
+    foreach ($scope as $i => $value) {
+        for($j = 0; $j<count($scope[$i]); $j++){
+            $ucID = $scope[$i][$j];
+            $capexTot += getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","capex", $side)['tot'] + getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","capex", $side)['tot'];
+            $implemTot += getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","implem", $side)['tot'] + getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","implem", $side)['tot'] + getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","implem", $side)['tot'];
+            $opexTot += getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex", $side)['tot'] + getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex", $side)['tot'] + getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex", $side)['tot'];
+            $revenuesTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)['tot'] ;
+            $cashreleasingTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side)['tot'] ;
+            $widercashTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side)['tot'];
+        }
+    }
+    $capexTot = round($capexTot, 2);
+    $implemTot = round($implemTot, 2);
+    $opexTot = round($opexTot, 2);
+    $revenuesTot = round($revenuesTot, 2);
+    $cashreleasingTot = round($cashreleasingTot, 2);
+    $widercashTot = round($widercashTot, 2);
+    return ['capex'=>$capexTot,'implementation'=>$implemTot,'opex'=>$opexTot ,'revenues'=>$revenuesTot,
+    'cashreleasing'=>$cashreleasingTot,'widercash'=>$widercashTot,'netcash'=>$netcashTot[0]['tot'],'netsoccash'=>$netsoccashTot[0]['tot'],
+    'noncash'=>$ratingNonCash,'risks'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'roi'=>$ROI,'socroi'=>$SOCROI,'payback'=>$resPayback[0],'socpayback'=>$resSocPayback[0]];
 }
+
+function comparisonCategoriePage($twig,$is_connected, $cat){
+    $cat2Indicator = [
+        "invest"=>['capex','implementation'],
+        "op"=>['opex','revenues','cashreleasing','widercash'],
+        "cash_flows"=>['netcash','netsoccash'],
+        "non_quant"=>['noncash','risks'],
+        "finsoc_comp"=>['npv','socnpv','roi', 'socroi', 'payback', 'socpayback']];
+
+    $cat2IndicatorName = [
+        "invest"=>['capex','implementation'],
+        "op"=>['opex','revenues','cash releasing benefits','wider cash benefits'],
+        "cash_flows"=>['net cash','net societal cash'],
+        "non_quant"=>['non cash benefits','risks'],
+        "finsoc_comp"=>['npv','societal npv','return over investment','societal return over investment','payback','societal payback']];
+
+    $user = getUser($_SESSION['username']);
+    if(isset($_SESSION['selProjects']) && count($_SESSION['selProjects'])){
+        $selProjects  = $_SESSION['selProjects'];
+        $projects = getListProjects2($user[0]);
+        $list_compo = $cat2IndicatorName[$cat];
+        $compoData = [];
+
+        foreach($selProjects as $key => $projID){
+            $scope = getListSelScope($projID);
+            $schedules = getListSelDates($projID);
+            $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
+            $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
+            $compoData[$projID] = [];
+            foreach ($cat2Indicator[$cat] as  $indicator) {
+                $compoData[$projID][$indicator] = $CB_values[$indicator];
+            }
+        } 
+        $devises = getListDevises();
+        $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
+        $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];       
+        echo $twig->render('/output/comparison_items/projects_item/general_comp.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects));
+        prereq_compProjects();
+
+    } else {
+        throw new Exception("There is no selected projects");
+
+    }
+}
+
 
 function investment($twig,$is_connected){
     $user = getUser($_SESSION['username']);

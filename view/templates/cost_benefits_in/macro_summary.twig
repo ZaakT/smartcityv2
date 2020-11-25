@@ -1,4 +1,62 @@
-{% macro summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC,partName) %}
+{% macro sublist(names, partName, selScope, sideBarName, symb, list_checks, color, solutionsSize, ucs) %}
+    {% set iPart = 0 %}
+    {% set subIPart = 0 %}
+    {% for name in names %}
+        <tr>
+            {% if subIPart == 0 %}
+                <tr class="table-secondary"><td colspan="100%"> {{partName[iPart][0]}} </td></tr>
+                {% set subIPart = partName[iPart][1] %}
+                {% set iPart = iPart + 1 %}
+            {% endif %}
+            <td class="item">{{name[0]}}</td>
+            {#}{#}
+                {% for sel_meas,sel_ucs in selScope %}
+                    {% for solution, solData in solutionsSize %}
+                        {% for uc in sel_ucs %}
+                            {% if ucs[uc]['id_meas'] == sel_meas and ucs[uc]['id_cat'] == solution  %}
+                                {% set showNA = false %}
+                                {% if uc == -1 and (sideBarName == "input_use_case" or (isSup and sideBarName == "cost_benefits"))and (name[0] != "Capex" and name[0] != "Implementation" and name[0] != "Opex" ) %}
+                                    {% set showNA = true %}
+                                {% endif %}
+                                <td scope="col">
+                                {% if showNA %} NA 
+                                {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}">
+                                    {% if list_checks[uc][name[1]] != 1 %}
+                                        {{symb[list_checks[uc][name[1]]]}}
+                                    {% endif %}
+                                </span>
+                                {% endif %}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %} 
+            {#}
+            {% for sel_meas,sel_ucs in selScope %} 
+                {% for uc in sel_ucs %}
+                    {% set showNA = false %}
+                    {% if uc == -1 and (sideBarName == "input_use_case" or (isSup and sideBarName == "cost_benefits"))and (name[0] != "Capex" and name[0] != "Implementation" and name[0] != "Opex" ) %}
+                        {% set showNA = true %}
+                    {% endif %}
+                    <td scope="col">
+                    {% if showNA %} NA 
+                    {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}">
+                        {% if list_checks[uc][name[1]] != 1 %}
+                            {{symb[list_checks[uc][name[1]]]}}
+                        {% endif %}
+                    </span>
+                    {% endif %}
+                    </td>
+                {% endfor %}
+            {% endfor %} 
+            {#}
+        </tr>
+        {% set subIPart = subIPart - 1 %}
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro summary(meas,ucs,selScope,list_checks, names, names2, sideBarName, confirmedUC,partName,partName2, solutionsSize) %}
 {#}{% set symb = ["x","check","media-record"] %}{#}
 {% set symb = ["ø","check","ø"] %}
 {% set color = ["text-danger","text-success","text-warning"] %}
@@ -23,65 +81,59 @@
         </table>
     </div>
 </div>
-
 <div class="row m-5 text-center">
     <div class="col list-table summary_table">
-        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg text-center table-striped '>
-            <thead class="thead thead-light text-center">
+        <table id="summary_table" class='table table-sm table-bordered table-responsive-lg text-center table-striped table-fixed'>
+            <thead class="thead thead-light text-center sticky-top">
                 <tr>
-                    {% if partName %}<th rowspan=2 scope="col"></th>{% endif %}
-                    <th rowspan=2 scope="col"></th>
+                    <th rowspan=3 scope="col"></th>
                     {% for sel_meas,sel_ucs in selScope %}
                     <th colspan={{sel_ucs|length}} scope="col">{{meas[sel_meas]['name']}}</th>
                     {% endfor %}
                 </tr>
                 <tr>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        <th scope="col">{{ucs[uc]['name']}}</th>
-                        {% endfor %}
-                    {% endfor %}   
-                </tr>
-            </thead>
-            <tbody>
-            {% set iPart = 0 %}
-            {% set subIPart = 0 %}
-                {% for name in names %}
-                <tr>
-                    {% if subIPart == 0 %}
-                        <td class="itemPart" rowspan = "{{partName[iPart][1]}}"><h6>{{partName[iPart][0]}}</h6></td>
-                        {% set subIPart = partName[iPart][1] %}
-                        {% set iPart = iPart + 1 %}
-                    {% endif %}
-                    <td class="item">{{name[0]}}</td>
-                    {% for sel_meas,sel_ucs in selScope %} 
-                        {% for uc in sel_ucs %}
-                        {% set showNA = false %}
-                        {% if uc == -1 and (sideBarName == "input_use_case" or (isSup and sideBarName == "cost_benefits"))and (name[0] != "Capex" and name[0] != "Implementation" and name[0] != "Opex" ) %}
-                            {% set showNA = true %}
-                        {% endif %}
-                        <td scope="col">
-                        {% if showNA %} NA 
-                        {% else %}<span title="{{symb[list_checks[uc][name[1]]]}}" class="oi oi-{{symb[list_checks[uc][name[1]]]}} {{color[list_checks[uc][name[1]]]}}">
-                            {% if list_checks[uc][name[1]] != 1 %}
-                                {{symb[list_checks[uc][name[1]]]}}
+                    {% for sel_meas,sel_ucs in selScope %}
+                        {% for solution, solData in solutionsSize %}
+                            {% set nb = 0 %}
+                            {% for uc in sel_ucs %}
+                                {% if ucs[uc]['id_meas'] == sel_meas and ucs[uc]['id_cat'] == solution  %}
+                                    {% set nb = nb + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if nb != 0 %}
+                                <th colspan={{nb}} scope="col">{{solData['name']}}</th>
                             {% endif %}
-                        </span>
-                        {% endif %}
-                        </td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for sel_meas,sel_ucs in selScope %}
+                        {% for solution, solData in solutionsSize %}
+                            {% for uc in sel_ucs %}
+                                {% if ucs[uc]['id_meas'] == sel_meas and ucs[uc]['id_cat'] == solution  %}
+                                    <th scope="col">{{ucs[uc]['name']}}</th>
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
                     {% endfor %} 
                 </tr>
-                {% set subIPart = subIPart - 1 %}
-                {% endfor %}
+            </thead>
+            <tbody>
+                <tr class="table-primary"><td colspan="100%"> <strong> Supplier </strong></td></tr>
+                {{_self.sublist(names, partName, selScope, sideBarName, symb, list_checks, color, solutionsSize, ucs)}}
+                <tr class="table-primary"><td colspan="100%"> <strong> Customer </strong></td></tr>
+                {{_self.sublist(names2, partName2, selScope, sideBarName, symb, list_checks, color, solutionsSize, ucs)}}
                 {% if isSup %}
                     <thead class="thead-light">
                     <tr class="table-primary">
-                        <td></td>
-                        <td><h6>Confirm UC Input is complete (only complete UC allow you to generate dashboard)</h6></td>
-                        {% for sel_meas,sel_ucs in selScope %} 
-                            {% for uc in sel_ucs %}
-                            <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>
+                        <td><h6>Check to confirm UC input is complete</h6> (please note that UC dashboard can be generated only on completed UC)</td>
+                        {% for sel_meas,sel_ucs in selScope %}
+                            {% for solution, solData in solutionsSize %}
+                                {% for uc in sel_ucs %}
+                                    {% if ucs[uc]['id_meas'] == sel_meas and ucs[uc]['id_cat'] == solution  %}
+                                        <td scope="col"><input type="checkbox" name ="{{sel_meas}}_{{uc}}" {{confirmedUC [sel_meas ~ "_" ~ uc] ? "checked"}}></td>
+                                    {% endif %}
+                                {% endfor %}
                             {% endfor %}
                         {% endfor %} 
                     </tr>

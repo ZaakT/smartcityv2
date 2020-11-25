@@ -11,7 +11,7 @@
 
         {% if type != "quantifiable" and type != "revenues" and type != "revenuesProtection" %}
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                    <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_cost'] ? selXpex[id_xpex]['unit_cost'] : xpex[id_xpex]['default_cost']}}" placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
@@ -21,7 +21,7 @@
         {% endif %}
         {% if type == "revenues" %}
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                    <input id="unitRev_{{id_xpex}}" name="unitRev_{{id_xpex}}_{{ucID}}" class="text-center unitRev pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_rev']}}" placeholder="{{ ratio[id_xpex]['unit_rev'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
@@ -31,7 +31,7 @@
         {% endif %}
         {% if type == "revenuesProtection" %}
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                    <input id="currentRevenues_{{id_xpex}}" name="currentRevenues_{{id_xpex}}_{{ucID}}" class="text-center currentRevenues pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['current_revenues']}}" placeholder="{{ ratio[id_xpex]['current_revenues'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
@@ -39,7 +39,7 @@
                 </div>
             </td> 
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                    <input id="impact_{{id_xpex}}" name="impact100_{{id_xpex}}_{{ucID}}" class="text-center impact100 pt-1 pb-1" type="number" min=0 max = 100 step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['impact']}}" placeholder="{{ ratio[id_xpex]['impact']}}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">%</span>
@@ -53,7 +53,7 @@
         {% if type =="opex" or type == "operating_revenues"   or type == "cashreleasing" or type == "widercash" %}
         
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group class="text-center"">
                     <input id="anVarCost_{{id_xpex}}" name="anVarCost_{{id_xpex}}_{{ucID}}" class="text-center anVarCost p-1" type="text" step=0.001 required oninput="checkXpexAll();" value="{{selXpex[id_xpex]['anVarCost']}}"{{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">%</span>
@@ -62,7 +62,7 @@
             </td> 
         {% elseif type == "revenues" %}
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                     <input id="anVarRev_{{id_xpex}}" name="anVarRev_{{id_xpex}}_{{ucID}}" class="text-center anVarRev p-1 responsive" type="text" step=0.001 required oninput="checkXpexAll();" value="{{selXpex[id_xpex]['anVarRev']}}"{{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">%</span>
@@ -73,7 +73,7 @@
         
         {% if type =="opex" or type == "operating_revenues" or type == "revenues"  or type == "cashreleasing" or type == "widercash" or type == "quantifiable" %}
             <td scope="col">
-                <div class="input-group">
+                <div class="input-group justify-content-center">
                     <input id="anVarVol_{{id_xpex}}" name="anVarVol_{{id_xpex}}_{{ucID}}" class="text-center anVarVol p-1" type="text" step=0.001 required oninput="checkXpexInput(anVarVol_{{id_xpex}});" value="{{selXpex[id_xpex]['anVarVol']}}"{{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">%</span>

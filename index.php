@@ -1732,10 +1732,12 @@ try{
                         projects_selected($_POST);
                     } elseif($_GET['A2']=="summary"){
                         projects_summary($twig,$is_connected);
-                    } elseif($_GET['A2']=="invest"){
-                        investment($twig,$is_connected);
+                    } elseif($_GET['A2']=="invest" || $_GET['A2']=="finsoc_comp" || $_GET['A2']=="cash_flows" || $_GET['A2']=="non_quant" || $_GET['A2']=="op"){
+                        comparisonCategoriePage($twig,$is_connected, $_GET['A2']);
+                        //investment($twig,$is_connected);
                     } elseif($_GET['A2']=="op"){
-                        operations($twig,$is_connected);
+                        comparisonCategoriePage($twig,$is_connected, $_GET['A2']);
+                        //operations($twig,$is_connected);
                     } elseif($_GET['A2']=="cash_flows"){
                         cash_flows($twig,$is_connected);
                     } elseif($_GET['A2']=="non_quant"){

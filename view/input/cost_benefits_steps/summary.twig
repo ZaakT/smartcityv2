@@ -16,7 +16,7 @@
 {% block content %}
 
 
-{% if sideBarName == "input_use_case_supplier" %}
+{% if isSup %}
 {% set names = [
         ["Equipment Revenues", "equipment_revenues"],
         ["Deployment Revenues", "deployment_revenues"],
@@ -28,6 +28,22 @@
     {% set partName = [
         ["Cash-in", 3],
         ["Cash-out", 3]
+    ]%}
+     {% set names2 = [
+        ["Capex", "capex"],
+        ["Implementation", "implem"],
+        ["Opex", "opex"],
+        ["Revenues", "revenues"],
+        ["Cash Releasing Benefits", "cashreleasing"],
+        ["Wider Cash Benefits", "widercash"],
+        ["Quantifiable Non Monetizable Benefits", "quantifiable"],
+        ["Non Cash Benefits", "noncash"],
+        ["Risks", "risks"]
+    ] %}
+    {% set partName2 = [
+        ["Cash-out", 3],
+        ["Cash-in", 4],
+        ["Non monetizable", 4]
     ]%}
 {% else %}
     {% set names = [
@@ -62,7 +78,7 @@
 {% if isSup %}
     <form id="form_summary" name="form_summary" action="?A={{sideBarName}}&amp;A2=summary_inputed&amp;projID={{projID}}" method="post">
 {% endif %}
-{{ list.summary(meas,ucs,selScope,list_checks, names, sideBarName, confirmedUC,partName)}}
+{{ list.summary(meas,ucs,selScope,list_checks, names, names2, sideBarName, confirmedUC,partName,partName2, solutionsSize)}}
 
 
 <div class="row m-5 btn-group-sm justify-content-center" role="group">

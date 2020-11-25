@@ -2252,8 +2252,15 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
                 updateCB($projID,1);
             }
             $temp = getConfirmedUseCases($user[0], $projID);
+            $solutionsSize = [];
             foreach ($selScope as $measID => $listUcs) {
                 foreach ($listUcs as $ucID) {
+                    $sol = getSolutionByUcID($ucID);
+                    if(isset($solutionsSize[$sol['id']])){
+                        $solutionsSize[$sol['id']]['nb'] += 1;
+                    }else{
+                        $solutionsSize[$sol['id']] = ["name"=>$sol['name'], "nb"=>1];
+                    }
                     $confirmedUC[$measID."_".$ucID]=isset($temp[$measID."_".$ucID]);
                 }
             }
@@ -2267,7 +2274,7 @@ function summary($twig,$is_connected,$projID=0,$confirm=0, $sideBarName = "cost_
     echo $twig->render('/input/cost_benefits_steps/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,
     'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[2],'username'=>$user[1],'part'=>"Project","selected"=>$proj[1],
     'projID'=>$projID,'meas'=>$list_measures,'ucs'=>$list_ucs,'selScope'=>$selScope,'list_checks'=>$list_checks,'isValid'=>$isValid,'confirm'=>$confirm,
-"sideBarName"=>$sideBarName, "confirmedUC"=>$confirmedUC));
+"sideBarName"=>$sideBarName, "confirmedUC"=>$confirmedUC, "solutionsSize"=>$solutionsSize));
     /*if($sideBarName == "input_use_case_supplier"){
         prereq_ipc_sup();
     }else{*/

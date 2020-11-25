@@ -3,8 +3,8 @@
 <form action="?A=input_project_common_supplier&amp;A2=deal_criteria_input&amp;A3={{side}}" method="post" onsubmit="return checkSubmit();">
     <table id="input_target_nogo" class="table table-lg table-bordered table-striped table-responsive-lg">
         <thead class="thead-dark text-center sticky-top">
-            <th width="30px;"></th>
-            <th>KPI</th>
+            <th width="40px;"></th>
+            <th width="150px;">KPI</th>
             <th>Target</th>
             <th>No Go</th>
         </thead>
@@ -15,35 +15,95 @@
 
             <tr>
                 <td><input type = "checkbox" id = "npv_check" name = "npv_check" oninput="checkSubmit()" {{"npv_check" in checkList or checkList|length == 0 ? "checked"}}></td>
-                <td>NPV</td>
-                <td><input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_target']}}" oninput="checkSubmit();">&nbsp;{{selDevSym}}</td>
-                <td> No Go if &le;    
-                <input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_nogo']}}" oninput="checkSubmit();">&nbsp;{{selDevSym}}</td>
-           
+                <td class = "text-center">NPV</td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <input id="npv_target" name="npv_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_target']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">{{selDevSym}}</span>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <div class="input-group-append">
+                            <span class="input-group-text">No Go if &le; </span>
+                        </div>
+                        <input id="npv_nogo" name="npv_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['npv_nogo']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">{{selDevSym}}</span>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td><input type = "checkbox" id = "roi_check" name = "roi_check" oninput="checkSubmit()" {{"roi_check" in checkList or checkList|length == 0 ? "checked"}}></td>
-                <td>ROI</td>
-               <td><input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_target']}}" oninput="checkSubmit();">&nbsp;%</td>
-                <td> No Go if &le;    
-                <input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_nogo']}}" oninput="checkSubmit();">&nbsp;%</td>
-       
+                <td class = "text-center">ROI</td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <input id="roi_target" name="roi_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_target']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <div class="input-group-append">
+                            <span class="input-group-text">No Go if &le; </span>
+                        </div>
+                        <input id="roi_nogo" name="roi_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['roi_nogo']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </td>
             </tr> 
             <tr>
                 <td><input type = "checkbox" id = "operating_margin_check" name = "operating_margin_check" oninput="checkSubmit()" {{"operating_margin_check" in checkList or checkList|length == 0 ? "checked"}}></td>
-                <td>Operating margin</td>
-                <td><input id="operating_margin_target" name="operating_margin_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_target']}}" oninput="checkSubmit();">&nbsp;%</td>
-                <td> No Go if &le;    
-                <input id="operating_margin_nogo" name="operating_margin_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_nogo']}}" oninput="checkSubmit();">&nbsp;%</td>
-        
+                <td class = "text-center">Operating margin</td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <input id="operating_margin_target" name="operating_margin_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_target']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <div class="input-group-append">
+                            <span class="input-group-text">No Go if &le; </span>
+                        </div>
+                        <input id="operating_margin_nogo" name="operating_margin_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['operating_margin_nogo']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td><input type = "checkbox" id = "payback_check" name = "payback_check"  oninput="checkSubmit()" {{"payback_check" in checkList   or input|length == 0 ? "checked"}}></td>
-                <td>Payback</td>
-                <td><input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_target']}}" oninput="checkSubmit();">&nbsp;months</td>
-                <td>No Go if &ge;   
-                <input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_nogo']}}" oninput="checkSubmit();" >&nbsp;months</td>
-                          
+                <td class = "text-center">Payback</td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <input id="payback_target" name="payback_target" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_target']}}" oninput="checkSubmit();">
+                        <div class="input-group-append">
+                            <span class="input-group-text">months</span>
+                        </div>
+                    </div>
+                </td>
+                <td scope="col">
+                    <div class="input-group justify-content-center">
+                        <div class="input-group-append">
+                            <span class="input-group-text">No Go if &ge; </span>
+                        </div>
+                        <input id="payback_nogo" name="payback_nogo" class="text-center py-1 form-control-inline" type="number" min=0 step=0.01 required value="{{input['payback_nogo']}}" oninput="checkSubmit();" >
+                        <div class="input-group-append">
+                            <span class="input-group-text">months</span>
+                        </div>
+                    </div>
+                </td>                          
             </tr>
         </tbody>
     </table>

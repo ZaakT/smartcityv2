@@ -34,28 +34,81 @@
 {% macro summary_projects(projects,projectsData,measures,ucs) %}
 <div class="row text-center">
     <div class="col mt-5 mx-5 list-table summary_projects">
-        <table class='table table-sm table-bordered table-responsive-lg'>
+        <table class='table table-sm table-bordered table-responsive-lg '>
             <thead class="thead-light text-center sticky-top">
                 <tr>
-                    <th scope="col" rowspan=2 style="width: 30%;">Name</th>
-                    <th scope="col" colspan=2 style="width: 50%;">SCOPE</th>
+                    <th scope="col" rowspan=2 style="width: 20%;">Name</th>
+                    <th scope="col" colspan=3 style="width: 60%;">SCOPE</th>
                     <th scope="col" rowspan=2 style="width: 10%;">Start Date</th>
                     <th scope="col" rowspan=2 style="width: 10%;">Duration</th>
                 </tr>
                 <tr>
-                    <th scope="col" style="width: 20%;">Measures</th>
-                    <th scope="col" style="width: 30%;">Use Cases</th>
+                    <th scope="col" style="width: 20%;">Domain</th>
+                    <th scope="col" style="width: 20%;">Solution</th>
+                    <th scope="col" style="width: 20%;">Context</th>
                 </tr>
             </thead>
             <tbody>
             {% for id_proj,proj in projects if id_proj in projectsData|keys %}
                 <tr height="25px" style="background-color: #f5f5f5;">
-                    <td colspan=5></td>
+                    <td colspan="100%"></td>
                 </tr>
-                <tr id = "tr_{{ id_proj }}" scope="row">
+                {% set nbTotUC = 0 %}
+                {% for meas,list_ucs in projectsData[id_proj]['scope'] %}
+                    {% set nbTotUC = nbTotUC + list_ucs|length %}
+                {% endfor %}
+                
+                {% for meas,list_ucs in projectsData[id_proj]['scope'] %}
+                        {% set nbSol = 0 %}
+                        {% for id_cat, cat in projectsData[id_proj]['solutionsSize'] %}
+                            {% for uc in list_ucs %}
+                                {% if ucs[uc]['id_cat'] == id_cat and ucs[uc]['id_meas'] == meas %}
+                                    {% set nbSol = nbSol + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% for id_cat, cat in projectsData[id_proj]['solutionsSize']  %}
+                        {% set subNbUC = 0 %}
+                        {% for uc in list_ucs %}
+                            {% if ucs[uc]['id_cat'] == id_cat and ucs[uc]['id_meas'] == meas %}
+                                {% set subNbUC = subNbUC + 1 %}
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for uc in list_ucs %}
+                            {% if ucs[uc]['id_cat'] == id_cat and ucs[uc]['id_meas'] == meas %}
+                                <tr id = "tr_{{ id_proj }}" scope="row">
+                                    {% if nbTotUC != 0 %}
+                                        <td class="font-weight-bold" rowspan = "{{nbTotUC}}">{{ proj['name'] }}</td>
+                                    {% endif %}
+                                    {% if nbSol != 0 %}
+                                        <td rowspan = "{{nbSol}}">{{measures[meas]['name']}}</td>
+                                        {% set nbSol = 0 %}
+                                    {% endif %}
+                                    {% if subNbUC != 0 %}
+                                        <td rowspan = "{{subNbUC}}">{{cat['name']}}</td>
+                                        {% set subNbUC = 0 %}
+                                    {% endif %}
+                                    <td>{{ucs[uc]['name']}}</td>
+                                    {% if nbTotUC != 0 %}
+                                        <td rowspan = "{{nbTotUC}}">{{ projectsData[id_proj]['start_date'] }}</td>
+                                        <td rowspan = "{{nbTotUC}}">{{ projectsData[id_proj]['duration_Y'] }}{{ projectsData[id_proj]['duration_Y'] > 0 ? "Y" : "" }}&nbsp;{{ projectsData[id_proj]['duration_M'] }}M</td>
+                                        {% set nbTotUC = 0 %}
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+
+
+
+                {#<tr id = "tr_{{ id_proj }}" scope="row">
                     <td class="font-weight-bold" rowspan={{projectsData[id_proj]['scope']|length}}>{{ proj['name'] }}</td>
                     {% set idMeas = projectsData[id_proj]['scope']|keys|first %}
                     <td>{{measures[idMeas]['name']}}</td>
+                    <td></td>
+
                     <td class="text-left">
                         <ul>
                             {% for id_uc in projectsData[id_proj]['scope'][idMeas] %}
@@ -68,7 +121,9 @@
                 </tr>
                 {% for id_meas in projectsData[id_proj]['scope']|keys|slice(1,last) %}
                 <tr >
+
                     <td>Meas 2</td>
+                    <td></td>
                     <td class="text-left">
                         <ul>
                             {% for id_uc in projectsData[id_proj]['scope'][id_meas] %}
@@ -77,7 +132,7 @@
                         </ul>
                     </td>
                 </tr>
-                {% endfor %}
+                {% endfor %}#}
                 
             {% endfor %}
             </tbody>
@@ -85,6 +140,86 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro insert_table_data(list_compo,compoData,projects) %}
+<div class="row text-center">
+    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+        <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th>Project</th>
+                    {% for id_compo,compo in list_compo %}
+                            <th scope="col" class="dep_{{id_compo}}">{{ compo }}</th>
+                    {% endfor %}
+                </tr>       
+            </thead>
+            <tbody>
+                {% for id_proj,projData in compoData %}
+                    <tr>
+                        <td>{{projects[id_proj]['name']}}</td>
+                        {% set id_compo = 0 %}
+                        {% for data in projData %}
+                            <td class="dep_{{id_compo}}">{{data}}</td>
+                            {% set id_compo = id_compo + 1  %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            <tbody>
+        </table>
+    </div>
+</div>
+
+{% endmacro %}
+
+{% macro sel_compo_gen(list_compo) %}
+
+<div class="row text-center">
+    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+        <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
+            <thead class="thead-dark text-center sticky-top">
+                <tr>
+                    <th scope="col" colspan=2>Components</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for id_compo,compo in list_compo %}
+                <tr>
+                    <td class="check-col align-middle"><input type="checkbox" onclick="manageIndicator({{id_compo}});" class="compo" id='compo_{{ id_compo }}' name="compo_{{ compo }}" checked></td>
+                    <td class="text-capitalize">{{ compo }}</td>
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
+    </div>
+</div>
+
+{% endmacro %}
+{% macro insert_graphes(list_compo) %}
+
+<div class="mt-5 container mx-auto ">
+    {% set nb = 0 %}
+    {% for id_compo,compo in list_compo  %}
+        {% if nb == 0 %}
+            <div class = "row">
+        {% endif %}
+        <div class="col dep_{{id_compo}}" width="45%">
+            <div class="row justify-content-md-center">
+                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ compo }}</span></h3>
+            </div>
+            <canvas class="comp_graph" id="comp_graph_{{id_compo}}"></canvas>
+        </div>
+        {% if nb == 1 %}
+            </div>
+            {% set nb = 0 %}
+        {% else  %}
+            {% set nb = nb + 1 %}
+        {% endif %}
+    {% endfor %}
+</div>
+
+{% endmacro %}
+
+
 
 {% macro sel_compo(list_compo,compoData,projects,function) %}
 <div class="row text-center">

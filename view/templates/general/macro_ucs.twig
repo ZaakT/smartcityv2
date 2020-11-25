@@ -18,22 +18,44 @@
             </thead>
             <tbody>
             {% for meas,list_ucs in selScope %}
+                {% set nbMeas = 0 %}
                 {% for uc in list_ucs %}
-                <tr id = "tr_{{ uc }}" scope="row">
-                    <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} {% if (scheduleMode and not ucs[uc]["hasSchedule"] and uc != -1) or (not hasPOSchedule and uc != -1)%}disabled {% endif %}required></td>
-                    <td scope="col">{{measures[meas]['name']}}</td>
-                    <td scope="col">{{ list_cat[ucs[uc]['id_cat']]["name"] }}</td>
-                    <td scope="col">{{ ucs[uc]['name'] }}</td>
-                    <td scope="col">{{ ucs[uc]['description'] }}</td>
-
-                    {% if scheduleMode %}
-                        <td scope="col"><img width=20 height=20 src="../../../public/img/{{ ucs[uc]["hasSchedule"] or uc == -1 ? "full_circle" : "empty_circle" }}.png"/></td>
+                    {% if ucs[uc]['id_meas'] == meas %}
+                        {% set nbMeas = nbMeas + 1 %}
                     {% endif %}
-                </tr>                    
                 {% endfor %}
-                {% if meas != selScope|keys|last %}
-                <tr><td colspan=4></td></tr>
-                {% endif %}
+                {% for id_cat, cat in list_cat %}
+                    {% set nbCat = 0 %}
+                    {% for uc in list_ucs %}
+                        {% if ucs[uc]['id_cat'] == id_cat and ucs[uc]['id_meas'] == meas %}
+                            {% set nbCat = nbCat + 1 %}
+                        {% endif %}
+                    {% endfor %}
+                    {% for uc in list_ucs %}
+                        {% if ucs[uc]['id_cat'] == id_cat and ucs[uc]['id_meas'] == meas %}
+                            <tr id = "tr_{{ uc }}" scope="row">
+                                <td scope="col" class="check-col"><input type="radio" id='radio_uc' name="radio_uc" value="{{ uc }}" {{list_ucs|length == 1 ? "checked" : ""}} {% if (scheduleMode and not ucs[uc]["hasSchedule"] and uc != -1) or (not hasPOSchedule and uc != -1)%}disabled {% endif %}required></td>
+                                {% if nbMeas != 0 %}
+                                    <td scope="col" rowspan = "{{nbMeas}}">{{measures[meas]['name']}}</td>
+                                    {% set nbMeas = 0 %}
+                                {% endif %}
+                                {% if nbCat != 0 %}
+                                    <td scope="col" rowspan = "{{nbCat}}">{{ list_cat[ucs[uc]['id_cat']]["name"] }}</td>
+                                    {% set nbCat = 0 %}
+                                {% endif %}
+                                <td scope="col">{{ ucs[uc]['name'] }}</td>
+                                <td scope="col">{{ ucs[uc]['description'] }}</td>
+
+                                {% if scheduleMode %}
+                                    <td scope="col"><img width=20 height=20 src="../../../public/img/{{ ucs[uc]["hasSchedule"] or uc == -1 ? "full_circle" : "empty_circle" }}.png"/></td>
+                                {% endif %}
+                            </tr> 
+                            {% if meas != selScope|keys|last %}
+                            <tr><td colspan=4></td></tr>
+                            {% endif %}  
+                        {% endif %}                 
+                    {% endfor %}
+                {% endfor %}
             {% endfor %}
             </tbody>
         </table>
