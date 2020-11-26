@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 26 nov. 2020 à 15:05
+-- Généré le :  jeu. 26 nov. 2020 à 15:37
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -7707,12 +7707,7 @@ INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (9, 'Public Safety', ''),
 (11, 'Signage ', ''),
 (13, 'Movment Monitoring ', ''),
-(15, 'Ligthing', ''),
-(16, 'Occupancy and Notification', ''),
-(17, 'Missing Person', ''),
-(19, 'Traffic – Vehicle Count', ''),
-(21, 'Traffic – Origination and Destination', ''),
-(26, 'test', '');
+(15, 'Ligthing', '');
 
 -- --------------------------------------------------------
 
