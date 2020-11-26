@@ -17,28 +17,20 @@ def getScope():
         solution = getSolution(j)
         UC = getUC(j)
         if not (solution in scope):
-            scope[solution] = set()
-        scope[solution].add(UC)
+            scope[solution] = dict()
+            scope[solution]["id"] = get_cat_id(solution)
+            scope[solution]["set"] = dict()
+          
+        print(scope)
+        scope[solution]["set"][UC] = get_uc_id(UC)
     return scope
 
-
-    
-def insert_uc_cat(name, description):
-    
+def get_uc_id(UC):
     with connection.cursor() as cursor:
-        sql="INSERT INTO `use_case_cat` (`name`,`description`) VALUES (%s,%s);"
-        cursor.execute(sql, (name,description))
-    connection.commit()
-    
-def insert_uc(name, description, id_meas, id_sol):
-    
-    with connection.cursor() as cursor:
-        sql="""INSERT INTO use_case
-                            (name,description,id_meas,id_cat)
-                            VALUES (%s, %s, %s, %s);"""
-        cursor.execute(sql, (name,description,id_meas, id_sol))
-    connection.commit()
-    
+        sql = "SELECT id FROM use_case WHERE name = %s AND id_meas = %s;"
+        cursor.execute(sql, (UC, 25))
+        for row in cursor:
+            return row['id']
         
 def get_cat_id(name):
     
@@ -58,11 +50,5 @@ if __name__ == "__main__":
                                  charset='utf8',
                                  cursorclass=pymysql.cursors.DictCursor)
     
-    scope = getScope()
-    print(scope)
-    Sol_ID = dict()
-    for solution in scope:
-        insert_uc_cat(solution, "")
-        Sol_ID[solution] = get_cat_id(solution)
-        for uc in scope[solution]:
-            insert_uc(uc, "", 25, Sol_ID[solution])
+
+    print(getScope())
