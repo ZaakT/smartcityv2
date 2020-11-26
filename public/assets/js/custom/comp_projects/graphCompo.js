@@ -17,10 +17,16 @@ function drawGraphs(){
     projects = $('#data').data("projects");
     listCompo = $('#data').data("cat");
     bubbleData = $('#data').data("bubbleData");
-    bubbleName = $('#data').data("bubbleName");
     cat2Bubble = $('#data').data("catBubble");
+    dataIndicator = $('#data').data("dataIndicator");
+    console.log("hey");
     console.log(compoData);
-    console.log(bubbleName);
+    console.log(projects);
+    console.log(listCompo);
+    console.log(bubbleData);
+    console.log(cat2Bubble);
+    console.log(dataIndicator);
+    console.log("hey");
     for(let i = 0; i < listCompo.length ; i++){
         data = [];
         names = [];
@@ -41,7 +47,7 @@ function drawGraphs(){
             data.push(bubbleData[idProjTab[j]][i]);
             names.push(projects[idProjTab[j]]['name']);
         }
-        updateBubbleChart(data, names, "comp_bubble_"+i, bubbleName[i]);
+        updateBubbleChart(data, names, "comp_bubble_"+i, dataIndicator, cat2Bubble[i]);
 
     }
 
@@ -50,23 +56,26 @@ function drawGraphs(){
 }
 
 
-function updateBubbleChart(data, names, idCanvas, bubbleName){
+function updateBubbleChart(data, names, idCanvas, dataIndicator, indicators){
+    console.log(dataIndicator)
 
     var popCanvas = document.getElementById(idCanvas);
     dataset = []
     colors = getColorsArray(data);
     for(infoID in data){
         keys = Object.keys(data[infoID]);
-        dataset.push({x: data[infoID][keys[0]], y: data[infoID][keys[1]], r: 50, label: names[infoID] })
+        dataset.push({data: [{x: data[infoID][keys[0]], y: data[infoID][keys[1]], r: 10, label: infoID }],
+            label : infoID + ": " + names[infoID],
+            backgroundColor: colors[0][infoID],
+            borderColor : colors[1][infoID]
+        })
     }
-    dataset.push({x: 0, y: 0, r: 0, label: "" })
+    //dataset.push({x: 0, y: 0, r: 0, label: "" })
+    
+
+
     var popData = {
-    datasets: [{
-        label : ["label 1", "label 2"],
-        data: dataset,
-        backgroundColor: colors[0],
-        borderColor : colors[1]
-    }]
+    datasets: dataset
     };
 
     var bubbleChart = new Chart(popCanvas, {
@@ -74,13 +83,14 @@ function updateBubbleChart(data, names, idCanvas, bubbleName){
     data: popData,
     options: {
         legend: {
-        display: false
+        display: true,//false
      },
        tooltips: {
-        enabled: false,
+        enabled: true,
           callbacks: {
              label: function(t, d) {
-                return "";
+                return d.datasets[t.datasetIndex].label + 
+                ' ('+dataIndicator[indicators[0]]["name"] +': ' + t.xLabel + ' '+ dataIndicator[indicators[1]]["unit"] +', '+dataIndicator[indicators[1]]["name"]+': ' + t.yLabel +' '+ dataIndicator[indicators[1]]["unit"] + ')';
              }
           }
        },
@@ -88,13 +98,13 @@ function updateBubbleChart(data, names, idCanvas, bubbleName){
         yAxes: [{
             scaleLabel: {
               display: true,
-              labelString: bubbleName[1]
+              labelString: dataIndicator[indicators[1]]["name"] + ' (in '+dataIndicator[indicators[1]]["unit"]+')'
             }
         }],
         xAxes: [{
             scaleLabel: {
               display: true,
-              labelString: bubbleName[0]
+              labelString: dataIndicator[indicators[0]]["name"] + ' (in '+dataIndicator[indicators[0]]["unit"]+')'
             }
         }]
     }

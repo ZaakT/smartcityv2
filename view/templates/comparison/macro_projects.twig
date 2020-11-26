@@ -45,7 +45,7 @@
                 <tr>
                     <th scope="col" style="width: 20%;">Domain</th>
                     <th scope="col" style="width: 20%;">Solution</th>
-                    <th scope="col" style="width: 20%;">Context</th>
+                    <th scope="col" style="width: 20%;">Use Case</th>
                 </tr>
             </thead>
             <tbody>
@@ -141,7 +141,7 @@
 </div>
 {% endmacro %}
 
-{% macro insert_table_data(list_compo,compoData,projects) %}
+{% macro insert_table_data(list_compo,dataIndicator,compoData,projects) %}
 <div class="row text-center">
     <div class="offset-3 col-6 mt-3 mb-5 list-table">
         <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
@@ -149,7 +149,7 @@
                 <tr>
                     <th>Project</th>
                     {% for id_compo,compo in list_compo %}
-                            <th scope="col" class="dep_{{id_compo}}">{{ compo }}</th>
+                            <th scope="col" class="dep_{{id_compo}}">{{dataIndicator[compo]["name"]}}</th>
                     {% endfor %}
                 </tr>       
             </thead>
@@ -171,7 +171,7 @@
 
 {% endmacro %}
 
-{% macro sel_compo_gen(list_compo) %}
+{% macro sel_compo_gen(list_compo,dataIndicator) %}
 
 <div class="row text-center">
     <div class="offset-3 col-6 mt-3 mb-5 list-table">
@@ -185,7 +185,7 @@
             {% for id_compo,compo in list_compo %}
                 <tr>
                     <td class="check-col align-middle"><input type="checkbox" onclick="manageIndicator({{id_compo}});" class="compo" id='compo_{{ id_compo }}' name="compo_{{ compo }}" checked></td>
-                    <td class="text-capitalize">{{ compo }}</td>
+                    <td class="text-capitalize">{{ dataIndicator[compo]['name'] }}</td>
                 </tr>
             {% endfor %}
             <tbody>
@@ -194,8 +194,7 @@
 </div>
 
 {% endmacro %}
-{% macro insert_graphes(list_compo, list_bubble_name) %}
-
+{% macro insert_graphes(list_compo,list_bubble, dataIndicator) %}
 <div class="mt-5 container mx-auto ">
     {% set nb = 0 %}
     {% for id_compo,compo in list_compo  %}
@@ -204,7 +203,7 @@
         {% endif %}
         <div class="col dep_{{id_compo}}" width="45%">
             <div class="row justify-content-md-center">
-                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ compo }}</span></h3>
+                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ dataIndicator[compo]['name'] }}</span></h3>
             </div>
             <canvas class="comp_graph" id="comp_graph_{{id_compo}}"></canvas>
         </div>
@@ -219,13 +218,13 @@
 
     {% set nb = 0 %}
     {% set i = 0 %}
-    {% for names in list_bubble_name %}
+    {% for names in list_bubble %}
         {% if nb == 0 %}
             <div class = "row">
         {% endif %}
         <div class="col" width="45%">
             <div class="row justify-content-md-center">
-                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ names[0] }}/{{ names[1] }}</span></h3>
+                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ dataIndicator[names[0]]['name'] }} vs {{ dataIndicator[names[1]]['name'] }}</span></h3>
             </div>
             <canvas class="comp_bubble" id="comp_bubble_{{i}}"></canvas>
         </div>
