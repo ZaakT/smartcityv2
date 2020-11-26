@@ -322,6 +322,11 @@ function getCBValues($projID,$scope,$schedules,$keydates_proj, $side = "customer
     $revenuesTot = 0;
     $cashreleasingTot = 0;
     $widercashTot = 0;
+    //
+    $revenuesSuppEquipTot = 0;
+    $revenuesSuppDepTot = 0;
+    $revenuesSuppRecTot = 0;
+    //
     foreach ($scope as $i => $value) {
         for($j = 0; $j<count($scope[$i]); $j++){
             $ucID = $scope[$i][$j];
@@ -331,6 +336,11 @@ function getCBValues($projID,$scope,$schedules,$keydates_proj, $side = "customer
             $revenuesTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side)['tot'] ;
             $cashreleasingTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side)['tot'] ;
             $widercashTot += getCashInMonthYear($projID, $ucID, $projectYears, $scope, "wider_cash_benefits", $side)['tot'];
+            if($side == "supplier"){
+                $revenuesSuppEquipTot = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "equipment", $side)['tot'];
+                $revenuesSuppDepTot = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "deployment", $side)['tot'];
+                $revenuesSuppRecTot = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "operating", $side)['tot'];
+            }
         }
     }
     $capexTot = round($capexTot, 2);
@@ -339,14 +349,19 @@ function getCBValues($projID,$scope,$schedules,$keydates_proj, $side = "customer
     $revenuesTot = round($revenuesTot, 2);
     $cashreleasingTot = round($cashreleasingTot, 2);
     $widercashTot = round($widercashTot, 2);
-    $cashin = $revenuesTot + $cashreleasingTot + $widercashTot;
+    //
+    $revenuesSuppEquipTot = round($revenuesSuppEquipTot, 2);
+    $revenuesSuppDepTot = round($revenuesSuppDepTot, 2);
+    $revenuesSuppRecTot = round($revenuesSuppRecTot, 2);
+    //
+    $cashin = $revenuesTot + $cashreleasingTot + $widercashTot + $revenuesSuppEquipTot + $revenuesSuppDepTot + $revenuesSuppRecTot;
     $cashout = $capexTot + $implemTot + $opexTot;
     return ['capex'=>$capexTot,'implementation'=>$implemTot,'opex'=>$opexTot ,'revenues'=>$revenuesTot, "cashin"=>$cashin, "cashout"=>$cashout,
     'cashreleasing'=>$cashreleasingTot,'widercash'=>$widercashTot,'netcash'=>$netcashTot[0]['tot'],'netsoccash'=>$netsoccashTot[0]['tot'],
     'noncash'=>$ratingNonCash,'risks'=>$ratingRisks,'npv'=>$NPV,'socnpv'=>$SOCNPV,'roi'=>$ROI,'socroi'=>$SOCROI,'payback'=>$resPayback[0],'socpayback'=>$resSocPayback[0]];
 }
 
-function comparisonCategoriePage($twig,$is_connected, $cat){
+function comparisonCategoriePage($twig,$is_connected, $cat, $side="customer"){
     $cat2Indicator = [
         "invest"=>['capex','implementation'],
         "op"=>['opex','revenues','cashreleasing','widercash'],
@@ -387,7 +402,7 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
             $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
-            $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
+            $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj, $side);
             $compoData[$projID] = [];
             $bubbleData[$projID] = [];
             foreach ($cat2Indicator[$cat] as  $indicator) {
@@ -402,7 +417,7 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];       
         echo $twig->render('/output/comparison_items/projects_item/general_comp.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
-        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects, 
+        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects, "side"=>$side,
         "cat2Indicator"=>$cat2Indicator[$cat], 'bubbleData'=>$bubbleData, "cat2Bubble"=>$cat2Bubble[$cat], "list_bubble_name"=>$cat2BubbleName[$cat]));
         prereq_compProjects();
 

@@ -12,9 +12,8 @@
         <tbody>
 
 
-
             <tr>
-                <td><input type = "checkbox" id = "npv_check" name = "npv_check" oninput="checkSubmit()" {{"npv_check" in checkList or checkList|length == 0 ? "checked"}}></td>
+                <td><input type = "checkbox" id = "npv_check" name = "npv_check" oninput="checkSubmit()" {{"npv_check" in checkList or input|length == 0 ? "checked"}}></td>
                 <td class = "text-center">NPV</td>
                 <td scope="col">
                     <div class="input-group justify-content-center">
@@ -37,7 +36,7 @@
                 </td>
             </tr>
             <tr>
-                <td><input type = "checkbox" id = "roi_check" name = "roi_check" oninput="checkSubmit()" {{"roi_check" in checkList or checkList|length == 0 ? "checked"}}></td>
+                <td><input type = "checkbox" id = "roi_check" name = "roi_check" oninput="checkSubmit()" {{"roi_check" in checkList or input|length == 0 ? "checked"}}></td>
                 <td class = "text-center">ROI</td>
                 <td scope="col">
                     <div class="input-group justify-content-center">
@@ -60,7 +59,7 @@
                 </td>
             </tr> 
             <tr>
-                <td><input type = "checkbox" id = "operating_margin_check" name = "operating_margin_check" oninput="checkSubmit()" {{"operating_margin_check" in checkList or checkList|length == 0 ? "checked"}}></td>
+                <td><input type = "checkbox" id = "operating_margin_check" name = "operating_margin_check" oninput="checkSubmit()" {{"operating_margin_check" in checkList or input|length == 0 ? "checked"}}></td>
                 <td class = "text-center">Operating margin</td>
                 <td scope="col">
                     <div class="input-group justify-content-center">
