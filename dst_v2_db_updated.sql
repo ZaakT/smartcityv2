@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 20 nov. 2020 à 16:14
+-- Généré le :  jeu. 26 nov. 2020 à 14:13
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -27,22 +27,22 @@ DELIMITER $$
 -- Procédures
 --
 DROP PROCEDURE IF EXISTS `add_capex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT)  BEGIN
-                                        DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description, cat)
-                                            VALUES (capex_name,capex_desc, cat);
-                                        SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO capex_uc (id_item,id_uc)
-                                            VALUES (itemID,idUC);
-                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max)
-                                            VALUES (itemID,unit,source,range_min,range_max);
-                                    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255), IN `cat` INT)  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO capex_item (name,description, origine, side, cat)
+                                    VALUES (capex_name,capex_desc, origine, side, cat);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO capex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO capex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_cashreleasing`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO cashreleasing_item (name,description)
-                                    VALUES (cashreleasing_name,cashreleasing_desc);
+                                INSERT INTO cashreleasing_item (name,description, cat)
+                                    VALUES (cashreleasing_name,cashreleasing_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO cashreleasing_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -61,22 +61,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_entity` (IN `entity_name` VARCH
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_implem`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCHAR(255), IN `implem_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255), IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO implem_item (name,description, origine, side, cat)
-                                    VALUES (implem_name,implem_desc, origine, side, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO implem_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO implem_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCHAR(255), IN `implem_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255))  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO implem_item (name,description,cat)
+                                            VALUES (implem_name,implem_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO implem_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO implem_item_advice (id,unit,source,range_min,range_max, default_cost)
+                                            VALUES (itemID,unit,source,range_min,range_max, default_cost);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_noncash`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO noncash_item (name,description)
-                                    VALUES (noncash_name,noncash_desc);
+                                INSERT INTO noncash_item (name,description, cat)
+                                    VALUES (noncash_name,noncash_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO noncash_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -85,22 +85,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VAR
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_opex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255), IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO opex_item (name,description, origine, side, cat)
-                                    VALUES (opex_name,opex_desc, origine, side, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO opex_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO opex_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255))  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO opex_item (name,description,cat)
+                                            VALUES (opex_name,opex_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO opex_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO opex_item_advice (id,unit,source,range_min,range_max, default_cost)
+                                            VALUES (itemID,unit,source,range_min,range_max, default_cost);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO quantifiable_item (name,description)
-                                    VALUES (quantifiable_name,quantifiable_desc);
+                                INSERT INTO quantifiable_item (name,description, cat)
+                                    VALUES (quantifiable_name,quantifiable_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO quantifiable_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -109,10 +109,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO revenues_item (name,description)
-                                    VALUES (revenues_name,revenues_desc);
+                                INSERT INTO revenues_item (name,description, cat)
+                                    VALUES (revenues_name,revenues_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO revenues_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -121,10 +121,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` V
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_revenuesprotection`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `revenuesprotection_name` VARCHAR(255), IN `revenuesprotection_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `revenuesprotection_name` VARCHAR(255), IN `revenuesprotection_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO revenuesprotection_item (name,description)
-                                    VALUES (revenuesprotection_name,revenuesprotection_desc);
+                                INSERT INTO revenuesprotection_item (name,description, cat)
+                                    VALUES (revenuesprotection_name,revenuesprotection_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO revenuesprotection_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -133,10 +133,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `revenu
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_risk`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(255), IN `risk_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(255), IN `risk_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO risk_item (name,description)
-                                    VALUES (risk_name,risk_desc);
+                                INSERT INTO risk_item (name,description, cat)
+                                    VALUES (risk_name,risk_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO risk_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -166,10 +166,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_widercash`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name` VARCHAR(255), IN `widercash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT)  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name` VARCHAR(255), IN `widercash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
                                 DECLARE itemID INT;
-                                INSERT INTO widercash_item (name,description)
-                                    VALUES (widercash_name,widercash_desc);
+                                INSERT INTO widercash_item (name,description, cat)
+                                    VALUES (widercash_name,widercash_desc, cat);
                                 SET itemID = LAST_INSERT_ID();
                                 INSERT INTO widercash_uc (id_item,id_uc)
                                     VALUES (itemID,idUC);
@@ -408,7 +408,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -576,7 +576,12 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (178, 'test 2', '', 'from_ntt', 'customer', 'my Unit', 8),
 (179, 'my cap', '', 'from_ntt', 'supplier', 'number', 6),
 (180, 'new item', '', 'from_outside_ntt', 'supplier', 'number', 6),
-(181, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23);
+(181, 'Air Quality Sensor', '', 'from_outside_ntt', 'supplier', '#AQ Sensor', 23),
+(182, 'capex 01', '', 'from_ntt', 'customer', NULL, 30),
+(183, 'test default cost', '', 'from_ntt', 'projDev', NULL, 39),
+(184, 'test admin default cost', '', 'from_ntt', 'projDev', NULL, 7),
+(185, 'admin test 2', '', 'from_ntt', 'projDev', '', 2),
+(186, 'router 1', '', 'from_outside_ntt', 'supplier', '#', 43);
 
 -- --------------------------------------------------------
 
@@ -591,58 +596,62 @@ CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `source` text,
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
+  `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_advice`
 --
 
-INSERT INTO `capex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`) VALUES
-(2, 'percapexitem1', NULL, 0, 100),
-(3, 'per capexitem2', NULL, 0, 100),
-(4, 'per example', NULL, 5, 10),
-(5, 'per example', NULL, 7, 100),
-(12, '', '', 1, 56),
-(14, 'ver', 'vr', 3, 43),
-(16, '', '', 54, 54),
-(48, 'Per Steel Pole', 'https://www.alibaba.com/product-detail/XINTONG-6m-8-meter-height-street_60763795461.html?spm=a2700.7724857.normalList.20.1d3914e72DnSRo&s=p', 140, 530),
-(49, 'Per Smart Lampost', 'https://www.euractiv.com/section/digital/news/european-cities-want-10-million-smart-streetlamps/', 2, 6),
-(50, 'Per LED bulb', 'https://i-solar-street-light.en.made-in-china.com/product/djxmEvMVXIWL/China-Isolar-60W-8m-Battery-Hanging-Outdoor-Lighting-Solar-LED-Street-Light.html', 50, 150),
-(51, 'Per streetlight cable system', 'https://www.made-in-china.com/productdirectory.do?word=led+street+light+transformer&subaction=hunt&style=b&mode=and&code=0&comProvince=nolimit&order=0&isOpenCorrection=1', 10, 30),
-(52, 'Per remote control device', 'https://www.telensa.com/applications#street_lighting\n', 10, 15),
-(53, 'Per sensor', 'https://www.meterboxesdirect.co.uk/electric-meter-pole-top-box-360-252-140-mm.html\n', 40, 100),
-(54, 'Per Data collector', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400),
-(55, 'Per charger', ' https://www.amazon.com/dp/B01NCEIG1F/ref=sspa_dk_detail_3?psc=1&pd_rd_i=B01NCEIG1F\n', 465, 600),
-(56, 'Per connector', 'https://www.amazon.fr/dp/B00YT75GWW/ref=dp_cerb_1\n', 150, 200),
-(57, 'Per PV panel', 'https://www.alibaba.com/product-detail/Cheap-price-direct-from-factory-all_60603459369.html?spm=a2700.7724857.normalList.113.21262cd34L6WIS', 70, 150),
-(58, 'Per remote control', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210),
-(59, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400),
-(60, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400),
-(61, 'Per telemetry system', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210),
-(62, 'Per CCTV', 'https://wardmay-cctv.en.made-in-china.com/product/vCRJeUoPnLhy/China-1080P-4X-10X-Optical-Zoom-Outdoor-Bullet-Waterproof-IP-PTZ-Security-Camera.html', 90, 350),
-(63, 'Per recorder', 'https://www.security-camera-warehouse.com/the-admiral-4-channel-nvr-adm4p4.php', 150, 380),
-(64, 'Per monitor', 'https://www.ebay.co.uk/itm/Hanns-G-18-5-inch-Flat-Screen-Professional-Monitor-LED-LCD-PC-CCTV-Display-UK/291391010247?epid=1188645162&hash=item43d841f5c7:g:tTIAAOSwpDdU7O0K', 100, 140),
-(65, 'Per VoIP speakerphone ', 'https://www.commgear.com/security-systems/emergency-telephones/code-blue-ip5000-voip-speakerphone-upgrade-from-one-button-to-two-button-with-keypad.html', 300, 2),
-(66, 'Per concealed loudspeakers', 'https://www.amazon.com/Acoustic-Research-Outdoor-Wireless-AW826/dp/B003EV6OTS', 80, 230),
-(67, 'Per sensor', 'https://www.wunderground.com/cat6/purple-airs-250-air-pollution-monitor-gives-government-equipment-run-money\n', 200, 310),
-(68, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
-(69, 'Per sensor', 'https://www.reichelt.com/fr/fr/arduino-capteur-sonore-grove-grv-sound-sens-p191177.html?PROVID=2788&gclid=EAIaIQobChMI2vqCw_q14AIVE_hRCh1aiQaBEAQYBiABEgJu5fD_BwE&&r=1', 5, 10),
-(70, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
-(71, 'Per sensor', 'https://www.alibaba.com/product-detail/IP68-water-level-sensor_60701581079.html?spm=a2700.7724857.normalList.21.40be13e4NmLJJf&s=p', 30, 80),
-(72, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25),
-(73, 'Per light box', 'https://www.alibaba.com/product-detail/Outdoor-street-LED-middle-lamp-post_60549918471.html?spm=a2700.7724857.normalList.138.45f7f5c74p8TiE', 350, 620),
-(74, 'Per sensor', 'https://www.englishlampposts.co.uk/garden-lamp-posts-pir', 15, 25),
-(75, 'Per software', 'http://qulon.pro\n', 25, 85),
-(76, 'Per sensor', 'https://www.alibaba.com/product-detail/IoT-Smart-Parking-sensor-SGM-201_50041290513.html?spm=a2700.7724838.2017115.338.2b876201jEvMqY', 60, 115),
-(77, 'Per gateway', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400),
-(78, 'Per monitor', 'https://www.alibaba.com/product-detail/customized-7-segment-elevator-display-variable_1318854093.html?spm=a2700.7724838.2017115.151.ea412e94Sw6kMk', 20, 60),
-(79, 'Per antenna', 'https://www.alibaba.com/product-detail/All-in-one-body-led-street_60858254472.html?spm=a2700.galleryofferlist.normalList.187.77646241mK7Kzj', 15, 50),
-(80, 'Per antenna', 'http://www.l-com.com/wireless-antenna-24-ghz-6-dbi-omnidirectional-antenna-n-female-connector', 45, 140),
-(81, 'Per antenna', 'https://www.alibaba.com/product-detail/Antenna-Manufacturer-5G-5-8GHz-2x15_60625518394.html?spm=a2700.7724838.2017115.353.7c277109fTWItv', 30, 60),
-(82, 'unnniiittt', '', 0, 10),
-(161, '', '', 0, 0),
-(164, '', '', 0, 0);
+INSERT INTO `capex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`, `default_cost`) VALUES
+(2, 'percapexitem1', NULL, 0, 100, 0),
+(3, 'per capexitem2', NULL, 0, 100, 0),
+(4, 'per example', NULL, 5, 10, 0),
+(5, 'per example', NULL, 7, 100, 0),
+(12, '', '', 1, 56, 0),
+(14, 'ver', 'vr', 3, 43, 0),
+(16, '', '', 54, 54, 0),
+(48, 'Per Steel Pole', 'https://www.alibaba.com/product-detail/XINTONG-6m-8-meter-height-street_60763795461.html?spm=a2700.7724857.normalList.20.1d3914e72DnSRo&s=p', 140, 530, 0),
+(49, 'Per Smart Lampost', 'https://www.euractiv.com/section/digital/news/european-cities-want-10-million-smart-streetlamps/', 2, 6, 0),
+(50, 'Per LED bulb', 'https://i-solar-street-light.en.made-in-china.com/product/djxmEvMVXIWL/China-Isolar-60W-8m-Battery-Hanging-Outdoor-Lighting-Solar-LED-Street-Light.html', 50, 150, 0),
+(51, 'Per streetlight cable system', 'https://www.made-in-china.com/productdirectory.do?word=led+street+light+transformer&subaction=hunt&style=b&mode=and&code=0&comProvince=nolimit&order=0&isOpenCorrection=1', 10, 30, 0),
+(52, 'Per remote control device', 'https://www.telensa.com/applications#street_lighting\n', 10, 15, 0),
+(53, 'Per sensor', 'https://www.meterboxesdirect.co.uk/electric-meter-pole-top-box-360-252-140-mm.html\n', 40, 100, 0),
+(54, 'Per Data collector', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400, 0),
+(55, 'Per charger', ' https://www.amazon.com/dp/B01NCEIG1F/ref=sspa_dk_detail_3?psc=1&pd_rd_i=B01NCEIG1F\n', 465, 600, 0),
+(56, 'Per connector', 'https://www.amazon.fr/dp/B00YT75GWW/ref=dp_cerb_1\n', 150, 200, 0),
+(57, 'Per PV panel', 'https://www.alibaba.com/product-detail/Cheap-price-direct-from-factory-all_60603459369.html?spm=a2700.7724857.normalList.113.21262cd34L6WIS', 70, 150, 0),
+(58, 'Per remote control', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210, 0),
+(59, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400, 0),
+(60, 'Per battery', 'https://www.alibaba.com/product-detail/1kw-2kw-3kw-4kw-5kw-10kw_919057641.html?spm=a2700.7724838.2017005.6.6c254b77FmCO3R\n', 100, 400, 0),
+(61, 'Per telemetry system', 'https://www.amazon.co.uk/TOP-MAX-Wireless-Compatible-Control-Anywhere/dp/B077YF8LV6/ref=pd_day0_hl_107_23?_encoding=UTF8&pd_rd_i=B077YF8LV6&pd_rd_r=0fac8156-1a50-11e9-bd3a-1b03e59c87b4&pd_rd_w=aAYT7&pd_rd_wg=ep0A4&pf_rd_p=b082d07b-aaea-4f40-9ff3-d27463f74', 190, 210, 0),
+(62, 'Per CCTV', 'https://wardmay-cctv.en.made-in-china.com/product/vCRJeUoPnLhy/China-1080P-4X-10X-Optical-Zoom-Outdoor-Bullet-Waterproof-IP-PTZ-Security-Camera.html', 90, 350, 0),
+(63, 'Per recorder', 'https://www.security-camera-warehouse.com/the-admiral-4-channel-nvr-adm4p4.php', 150, 380, 0),
+(64, 'Per monitor', 'https://www.ebay.co.uk/itm/Hanns-G-18-5-inch-Flat-Screen-Professional-Monitor-LED-LCD-PC-CCTV-Display-UK/291391010247?epid=1188645162&hash=item43d841f5c7:g:tTIAAOSwpDdU7O0K', 100, 140, 0),
+(65, 'Per VoIP speakerphone ', 'https://www.commgear.com/security-systems/emergency-telephones/code-blue-ip5000-voip-speakerphone-upgrade-from-one-button-to-two-button-with-keypad.html', 300, 2, 0),
+(66, 'Per concealed loudspeakers', 'https://www.amazon.com/Acoustic-Research-Outdoor-Wireless-AW826/dp/B003EV6OTS', 80, 230, 0),
+(67, 'Per sensor', 'https://www.wunderground.com/cat6/purple-airs-250-air-pollution-monitor-gives-government-equipment-run-money\n', 200, 310, 0),
+(68, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25, 0),
+(69, 'Per sensor', 'https://www.reichelt.com/fr/fr/arduino-capteur-sonore-grove-grv-sound-sens-p191177.html?PROVID=2788&gclid=EAIaIQobChMI2vqCw_q14AIVE_hRCh1aiQaBEAQYBiABEgJu5fD_BwE&&r=1', 5, 10, 0),
+(70, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25, 0),
+(71, 'Per sensor', 'https://www.alibaba.com/product-detail/IP68-water-level-sensor_60701581079.html?spm=a2700.7724857.normalList.21.40be13e4NmLJJf&s=p', 30, 80, 0),
+(72, 'Per software', 'https://www.fr.paessler.com/prtg?utm_source=google&utm_medium=cpc&utm_campaign=ROW_FR_Search-nonBrand_broad_2&utm_adgroup=networking-softwares&utm_adnum=171032094950&utm_keyword=%2Bnetworking%20%2Bsoftwares&utm_device=c&utm_position=1t1&utm_campaignid=367', 10, 25, 0),
+(73, 'Per light box', 'https://www.alibaba.com/product-detail/Outdoor-street-LED-middle-lamp-post_60549918471.html?spm=a2700.7724857.normalList.138.45f7f5c74p8TiE', 350, 620, 0),
+(74, 'Per sensor', 'https://www.englishlampposts.co.uk/garden-lamp-posts-pir', 15, 25, 0),
+(75, 'Per software', 'http://qulon.pro\n', 25, 85, 0),
+(76, 'Per sensor', 'https://www.alibaba.com/product-detail/IoT-Smart-Parking-sensor-SGM-201_50041290513.html?spm=a2700.7724838.2017115.338.2b876201jEvMqY', 60, 115, 0),
+(77, 'Per gateway', 'https://buy.advantech.eu/Buy-Online/bymodel-UTX-3117.htm', 280, 400, 0),
+(78, 'Per monitor', 'https://www.alibaba.com/product-detail/customized-7-segment-elevator-display-variable_1318854093.html?spm=a2700.7724838.2017115.151.ea412e94Sw6kMk', 20, 60, 0),
+(79, 'Per antenna', 'https://www.alibaba.com/product-detail/All-in-one-body-led-street_60858254472.html?spm=a2700.galleryofferlist.normalList.187.77646241mK7Kzj', 15, 50, 0),
+(80, 'Per antenna', 'http://www.l-com.com/wireless-antenna-24-ghz-6-dbi-omnidirectional-antenna-n-female-connector', 45, 140, 0),
+(81, 'Per antenna', 'https://www.alibaba.com/product-detail/Antenna-Manufacturer-5G-5-8GHz-2x15_60625518394.html?spm=a2700.7724838.2017115.353.7c277109fTWItv', 30, 60, 0),
+(82, 'unnniiittt', '', 0, 10, 0),
+(161, '', '', 0, 0, 0),
+(164, '', '', 0, 0, 0),
+(183, '', '', 0, 0, 13),
+(184, '', '', 0, 0, 15),
+(185, '', '', 0, 0, 156);
 
 -- --------------------------------------------------------
 
@@ -656,7 +665,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -715,6 +724,7 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (94, 30),
 (95, 30),
 (96, 30),
+(182, 30),
 (97, 33),
 (98, 33),
 (99, 33),
@@ -797,7 +807,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (178, 54),
 (179, 54),
 (180, 54),
-(181, 54);
+(181, 54),
+(186, 56);
 
 -- --------------------------------------------------------
 
@@ -856,6 +867,8 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (173, -1),
 (175, -1),
 (181, -1),
+(182, -1),
+(186, -1),
 (3, 1),
 (4, 1),
 (5, 1),
@@ -941,6 +954,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (174, 41),
 (176, 41),
 (161, 48),
+(183, 48),
 (88, 66),
 (89, 66),
 (99, 66),
@@ -992,7 +1006,9 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (157, 67),
 (159, 67),
 (178, 67),
-(180, 67);
+(180, 67),
+(184, 67),
+(185, 67);
 
 -- --------------------------------------------------------
 
@@ -1007,7 +1023,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item`
@@ -1048,7 +1064,9 @@ INSERT INTO `cashreleasing_item` (`id`, `name`, `description`, `cat`) VALUES
 (33, 'CRB 12', '', 0),
 (34, 'CRB 12', '', 0),
 (35, 'CRB 12', '', 0),
-(36, 'CRB 12', '', 0);
+(36, 'CRB 12', '', 0),
+(37, 'itzem ', '', 55),
+(38, 'fire', '', 63);
 
 -- --------------------------------------------------------
 
@@ -1066,6 +1084,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
   `range_max_red_nb` double DEFAULT NULL,
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
+  `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
@@ -1073,16 +1092,16 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_advice` (
 -- Déchargement des données de la table `cashreleasing_item_advice`
 --
 
-INSERT INTO `cashreleasing_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range_min_red_nb`, `range_max_red_nb`, `range_min_red_cost`, `range_max_red_cost`) VALUES
-(1, 'per example', NULL, 15, 1.2, 1.8, 10, 11),
-(2, 'per example', NULL, 1, 2, 3, 4, 5),
-(3, 'per example', NULL, 2, 3, 4, 5, 6),
-(16, 'Kwh', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/', 0, 50, 70, 0, 0),
-(17, 'Per Light bulb', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/\n', 30, 0, 0, 50, 80),
-(18, 'Per Kwh', 'https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 0, 15, 50, 0, 0),
-(19, 'Per light bulb', ' https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 30, 45, 60, 0, 0),
-(20, 'Per Kwh', 'https://mysolarhome.us/solar-lamp-post/', 0, 40, 60, 0, 0),
-(21, 'Per Kwh', 'https://ledcorporations.com/led-lighting-news/the-cost-of-electricity-how-utility-companies-are-charging-consumers/\n', 0, 40, 60, 0, 0);
+INSERT INTO `cashreleasing_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range_min_red_nb`, `range_max_red_nb`, `range_min_red_cost`, `range_max_red_cost`, `default_cost`) VALUES
+(1, 'per example', NULL, 15, 1.2, 1.8, 10, 11, 0),
+(2, 'per example', NULL, 1, 2, 3, 4, 5, 0),
+(3, 'per example', NULL, 2, 3, 4, 5, 6, 0),
+(16, 'Kwh', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/', 0, 50, 70, 0, 0, 0),
+(17, 'Per Light bulb', 'http://www.eclairageprofessionnel.fr/relamping-led-transition-energetique/\n', 30, 0, 0, 50, 80, 0),
+(18, 'Per Kwh', 'https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 0, 15, 50, 0, 0, 0),
+(19, 'Per light bulb', ' https://www.lumenia.com/solutions/lumenia-cms-lum-central-management-system\n', 30, 45, 60, 0, 0, 0),
+(20, 'Per Kwh', 'https://mysolarhome.us/solar-lamp-post/', 0, 40, 60, 0, 0, 0),
+(21, 'Per Kwh', 'https://ledcorporations.com/led-lighting-news/the-cost-of-electricity-how-utility-companies-are-charging-consumers/\n', 0, 40, 60, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1096,7 +1115,7 @@ CREATE TABLE IF NOT EXISTS `cashreleasing_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `cashreleasing_item_user`
@@ -1119,6 +1138,7 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (15, 27),
 (22, 27),
 (23, 30),
+(37, 30),
 (24, 33),
 (25, 34),
 (26, 35),
@@ -1131,7 +1151,8 @@ INSERT INTO `cashreleasing_item_user` (`id`, `id_proj`) VALUES
 (33, 42),
 (34, 43),
 (35, 44),
-(36, 54);
+(36, 54),
+(38, 56);
 
 -- --------------------------------------------------------
 
@@ -1174,6 +1195,7 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (22, 16),
 (20, 17),
 (21, 18),
+(38, 48),
 (23, 67),
 (24, 67),
 (25, 67),
@@ -1187,7 +1209,8 @@ INSERT INTO `cashreleasing_uc` (`id_item`, `id_uc`) VALUES
 (33, 67),
 (34, 67),
 (35, 67),
-(36, 67);
+(36, 67),
+(37, 67);
 
 -- --------------------------------------------------------
 
@@ -1366,7 +1389,7 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (8, 0, 30000, 0, 20, 40, 12, 50000, 100000, 10, 30, 36, 12, 5, 1, 3, 9, 0, 0, ''),
 (21, NULL, NULL, NULL, NULL, NULL, NULL, 5000, 150000, 5, 50, 26, 5, NULL, NULL, NULL, NULL, 0, 30, ''),
 (23, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 20, 24, 2, NULL, NULL, NULL, NULL, 5, 20, ''),
-(30, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
+(30, 0, 0, 0, 0, 0, 0, 3000, 10000, 10, 70, 24, 12, 0, 0, 0, 0, 50, 80, 'npv_check-roi_check-operating_margin_check-payback_check-'),
 (38, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
 (39, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
 (40, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
@@ -1380,7 +1403,8 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (51, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 24, 18, NULL, NULL, NULL, NULL, 10, 30, ''),
 (52, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 24, 18, NULL, NULL, NULL, NULL, 10, 30, ''),
 (53, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 24, 18, NULL, NULL, NULL, NULL, 10, 30, ''),
-(54, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, '');
+(54, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
+(56, 0, 0, 0, 0, 0, 0, 500, 1000, 5, 20, 20, 12, 0, 0, 0, 0, 10, 40, 'npv_check-roi_check-operating_margin_check-payback_check-');
 
 -- --------------------------------------------------------
 
@@ -1616,7 +1640,7 @@ CREATE TABLE IF NOT EXISTS `implem_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item`
@@ -1721,7 +1745,9 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (105, 'Installation Router', '', 'from_outside_ntt', 'supplier', '#FTEs-days', 44),
 (106, 'Sensor 1 installation', '', 'from_outside_ntt', 'supplier', '#FTEs-days', 50),
 (107, 'e', '', 'from_ntt', 'supplier', 'INstalation', 18),
-(108, 'Engineering', '', 'internal', 'supplier', NULL, 24);
+(108, 'Engineering', '', 'internal', 'supplier', NULL, 24),
+(109, 'test dc', '', 'from_ntt', 'projDev', NULL, 28),
+(110, 'test 2', '', 'from_ntt', 'projDev', '', 20);
 
 -- --------------------------------------------------------
 
@@ -1736,48 +1762,51 @@ CREATE TABLE IF NOT EXISTS `implem_item_advice` (
   `source` text,
   `range_min` int(11) DEFAULT NULL,
   `range_max` int(11) DEFAULT NULL,
+  `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `implem_item_advice`
 --
 
-INSERT INTO `implem_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`) VALUES
-(1, 'per blabla', NULL, 50, 102),
-(3, 'per truc', NULL, 10, 20),
-(5, '', '', 13, 14),
-(7, 'vfg', '', 2, 21),
-(40, 'Per streetlight pole', 'https://www.ledsmaster.com/channel/How-Much-Do-Street-Lights-Cost-Replacing-and-Running-the-Street-Lamp--77.html', 1200, 2300),
-(41, 'Per smart lamppost', 'Internal research', 26, 87),
-(42, 'Per LED light', 'https://www.myledlightingguide.com/blog-the-cost-of-street-lights', 160, 240),
-(43, 'Per cabling system', 'https://blog.lightinus.com/comparing-traditional-street-lights-and-solar-energy-lights', 38, 90),
-(44, 'Per software', 'http://qulon.pro\n', 25, 85),
-(45, 'Per sensor', 'https://www.homeadvisor.com/cost/electrical/upgrade-an-electrical-panel/', 80, 170),
-(46, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 7100, 22000),
-(47, 'Per EVSE Charging point', 'https://www.ubitricity.co.uk/unternehmen/newsroom/simple-conversion-turn-street-lamps-electric-car-chargers-daily-mail/\n', 1000, 1600),
-(48, 'Per connector', 'https://www.homeadvisor.com/cost/garages/install-an-electric-vehicle-charging-station/', 380, 440),
-(49, 'Per PV panel', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/\n', 600, 1200),
-(50, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570),
-(51, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570),
-(52, 'Per CCTV system', 'https://www.fixr.com/costs/install-video-surveillance-cameras', 280, 400),
-(53, 'Per PTT', 'http://www.groundcontrol.com/Iridium_PTT_Push-To-Talk.htm', 1700, 3900),
-(54, 'Per Public speakers', 'https://porch.com/project-cost/cost-to-install-outdoor-speakers', 150, 280),
-(55, 'Per sensor', 'https://www.london.gov.uk/what-we-do/environment/pollution-and-air-quality/monitoring-and-predicting-air-pollution\n', 310, 750),
-(56, 'Per software', 'Internal research', 1000, 1120),
-(57, 'Per sensor', 'Internal research', 155, 375),
-(58, 'Per software', 'Internal research', 1000, 1120),
-(59, 'Per sensor', 'https://reliabilityweb.com/articles/entry/wireless_sensors_work_provide_a_cost-effective_alternative_to_traditio', 500, 1500),
-(60, 'Per software', 'Internal research', 1000, 1120),
-(61, 'Per Advertising Panel', 'https://just-print.co.uk/155-lamp-post-advertising-boards-24-x-16-50-pack.html', 170, 200),
-(62, 'Per traffic monitoring sensor', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/5A53F0D1919AA5EE8525798300819B6E?OpenDocument&Query=CApp', 260, 1300),
-(63, 'Per software', 'https://www.researchgate.net/publication/280078500_Intelligent_Traffic_Monitoring_System', 640, 1900),
-(64, 'Per sensor', 'https://www.itscosts.its.dot.gov/its/benecost.nsf/0/E4717C6F075BAAA38525789B00610ECC?OpenDocument&Query=Home', 310, 625),
-(65, 'Per gateway', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/F1112FA098133F3C85256DB100458923?OpenDocument&Query=CApp', 210, 835),
-(66, 'Per guidance system', 'Internal research', 64, 385),
-(67, 'Per Wifi antenna', 'https://its.umich.edu/projects/wifi-upgrade/project-funding', 300, 380),
-(68, 'Per antenna', 'https://www.repeaterstore.com/pages/custom-solutions', 400, 800),
-(69, 'Per 5G antenna', 'https://www.ctia.org/news/what-is-a-small-cell', 400, 800);
+INSERT INTO `implem_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`, `default_cost`) VALUES
+(1, 'per blabla', NULL, 50, 102, 0),
+(3, 'per truc', NULL, 10, 20, 0),
+(5, '', '', 13, 14, 0),
+(7, 'vfg', '', 2, 21, 0),
+(40, 'Per streetlight pole', 'https://www.ledsmaster.com/channel/How-Much-Do-Street-Lights-Cost-Replacing-and-Running-the-Street-Lamp--77.html', 1200, 2300, 0),
+(41, 'Per smart lamppost', 'Internal research', 26, 87, 0),
+(42, 'Per LED light', 'https://www.myledlightingguide.com/blog-the-cost-of-street-lights', 160, 240, 0),
+(43, 'Per cabling system', 'https://blog.lightinus.com/comparing-traditional-street-lights-and-solar-energy-lights', 38, 90, 0),
+(44, 'Per software', 'http://qulon.pro\n', 25, 85, 0),
+(45, 'Per sensor', 'https://www.homeadvisor.com/cost/electrical/upgrade-an-electrical-panel/', 80, 170, 0),
+(46, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 7100, 22000, 0),
+(47, 'Per EVSE Charging point', 'https://www.ubitricity.co.uk/unternehmen/newsroom/simple-conversion-turn-street-lamps-electric-car-chargers-daily-mail/\n', 1000, 1600, 0),
+(48, 'Per connector', 'https://www.homeadvisor.com/cost/garages/install-an-electric-vehicle-charging-station/', 380, 440, 0),
+(49, 'Per PV panel', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/\n', 600, 1200, 0),
+(50, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570, 0),
+(51, 'Per battery & remote control', 'https://www.energysage.com/solar/solar-energy-storage/what-do-solar-batteries-cost/\n', 310, 570, 0),
+(52, 'Per CCTV system', 'https://www.fixr.com/costs/install-video-surveillance-cameras', 280, 400, 0),
+(53, 'Per PTT', 'http://www.groundcontrol.com/Iridium_PTT_Push-To-Talk.htm', 1700, 3900, 0),
+(54, 'Per Public speakers', 'https://porch.com/project-cost/cost-to-install-outdoor-speakers', 150, 280, 0),
+(55, 'Per sensor', 'https://www.london.gov.uk/what-we-do/environment/pollution-and-air-quality/monitoring-and-predicting-air-pollution\n', 310, 750, 0),
+(56, 'Per software', 'Internal research', 1000, 1120, 0),
+(57, 'Per sensor', 'Internal research', 155, 375, 0),
+(58, 'Per software', 'Internal research', 1000, 1120, 0),
+(59, 'Per sensor', 'https://reliabilityweb.com/articles/entry/wireless_sensors_work_provide_a_cost-effective_alternative_to_traditio', 500, 1500, 0),
+(60, 'Per software', 'Internal research', 1000, 1120, 0),
+(61, 'Per Advertising Panel', 'https://just-print.co.uk/155-lamp-post-advertising-boards-24-x-16-50-pack.html', 170, 200, 0),
+(62, 'Per traffic monitoring sensor', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/5A53F0D1919AA5EE8525798300819B6E?OpenDocument&Query=CApp', 260, 1300, 0),
+(63, 'Per software', 'https://www.researchgate.net/publication/280078500_Intelligent_Traffic_Monitoring_System', 640, 1900, 0),
+(64, 'Per sensor', 'https://www.itscosts.its.dot.gov/its/benecost.nsf/0/E4717C6F075BAAA38525789B00610ECC?OpenDocument&Query=Home', 310, 625, 0),
+(65, 'Per gateway', 'https://www.itscosts.its.dot.gov/ITS/benecost.nsf/ID/F1112FA098133F3C85256DB100458923?OpenDocument&Query=CApp', 210, 835, 0),
+(66, 'Per guidance system', 'Internal research', 64, 385, 0),
+(67, 'Per Wifi antenna', 'https://its.umich.edu/projects/wifi-upgrade/project-funding', 300, 380, 0),
+(68, 'Per antenna', 'https://www.repeaterstore.com/pages/custom-solutions', 400, 800, 0),
+(69, 'Per 5G antenna', 'https://www.ctia.org/news/what-is-a-small-cell', 400, 800, 0),
+(109, '', '', 0, 0, 123),
+(110, '', '', 0, 0, 124);
 
 -- --------------------------------------------------------
 
@@ -2052,7 +2081,9 @@ INSERT INTO `implem_uc` (`id_item`, `id_uc`) VALUES
 (86, 67),
 (88, 67),
 (91, 67),
-(107, 67);
+(107, 67),
+(109, 67),
+(110, 67);
 
 -- --------------------------------------------------------
 
@@ -2203,6 +2234,7 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (159, 44, 67, 30, 20, 3),
 (160, 44, -1, 100, 50, 3),
 (161, 45, 48, 5, 10, 5),
+(161, 56, 48, 20, 120, 2),
 (162, 46, -1, 20, 17.02, 3),
 (163, 46, 41, 10, 255.32, 3),
 (164, 46, 41, 2, 1, 50),
@@ -2222,7 +2254,10 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (178, 54, 67, 11, 10, 12),
 (179, 54, 66, NULL, NULL, NULL),
 (180, 54, 67, 30, 20, 3),
-(181, 54, -1, 100, 50, 3);
+(181, 54, -1, 100, 50, 3),
+(182, 30, -1, NULL, NULL, NULL),
+(185, 30, 67, 0, 200, 0),
+(186, 56, -1, 20, 100, 3);
 
 -- --------------------------------------------------------
 
@@ -2282,7 +2317,6 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (18, 29, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (19, 27, 15, 'Per light bulb', 30, NULL, 86.5, 0, 5, 30, 50, '0001-01-01', 0),
 (20, 28, 17, 'Per Kwh', 15, NULL, 89.96, 1, 2, 1, 2, '2020-09-30', 0),
-(23, 30, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (24, 33, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (25, 34, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (26, 35, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
@@ -2294,7 +2328,9 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (32, 41, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (33, 42, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (34, 43, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
-(36, 54, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0);
+(36, 54, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
+(37, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -2350,6 +2386,7 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (28, 50, 17, 5, 17.3),
 (30, 70, 67, 100, 10),
 (30, 71, -1, NULL, NULL),
+(30, 110, 67, 0, 200),
 (40, 86, 67, NULL, NULL),
 (40, 87, -1, NULL, NULL),
 (40, 88, 67, NULL, NULL),
@@ -2429,7 +2466,8 @@ INSERT INTO `input_noncash` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `
 (18, 21, 9, NULL, NULL),
 (19, 21, 11, NULL, NULL),
 (20, 28, 17, 1, 10),
-(88, 27, 16, 3, 10);
+(88, 27, 16, 3, 10),
+(90, 30, 67, 3, 20);
 
 -- --------------------------------------------------------
 
@@ -2494,6 +2532,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (30, 55, 66, NULL, NULL, NULL, NULL, NULL),
 (30, 55, 67, 5, NULL, 5, 5, 5),
 (30, 56, -1, NULL, NULL, NULL, NULL, NULL),
+(30, 98, -1, NULL, NULL, NULL, NULL, NULL),
+(30, 100, 67, NULL, NULL, NULL, NULL, NULL),
+(30, 101, 67, NULL, NULL, NULL, NULL, NULL),
 (40, 75, -1, NULL, NULL, NULL, NULL, NULL),
 (40, 76, 67, NULL, NULL, NULL, NULL, NULL),
 (40, 77, -1, NULL, NULL, NULL, NULL, NULL),
@@ -2570,7 +2611,8 @@ INSERT INTO `input_quantifiable` (`id_item`, `id_proj`, `id_uc`, `unit_indicator
 (11, 21, 9, NULL, NULL, NULL, NULL),
 (12, 21, 11, NULL, NULL, NULL, NULL),
 (13, 28, 17, 'y', 1, 2, 5),
-(20, 27, 16, '1', 2, 5, 3);
+(20, 27, 16, '1', 2, 5, 3),
+(22, 30, 67, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2621,7 +2663,7 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (28, 22, 17, 5, NULL, 20.76, 1, 5, '2020-09-30', 0),
 (29, 23, 22, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (30, 27, 33, 0, NULL, 0, 0, 0, '2020-10-01', 2),
-(30, 50, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(30, 61, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (44, 0, 67, NULL, NULL, NULL, NULL, 59, '0001-01-01', 0),
 (51, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (52, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
@@ -2654,7 +2696,7 @@ CREATE TABLE IF NOT EXISTS `input_revenuesprotection` (
 --
 
 INSERT INTO `input_revenuesprotection` (`id_item`, `id_proj`, `id_uc`, `current_revenues`, `impact`) VALUES
-(1, 30, 67, 10, 15),
+(15, 30, 67, 10, 20),
 (2, 33, 67, 10, 15),
 (3, 34, 67, 10, 15),
 (4, 35, 67, 10, 15),
@@ -2706,7 +2748,8 @@ INSERT INTO `input_risk` (`id_item`, `id_proj`, `id_uc`, `expected_impact`, `pro
 (12, 21, 9, NULL, NULL),
 (13, 21, 11, NULL, NULL),
 (54, 28, 17, 2, 50),
-(55, 27, 16, 3, 20);
+(55, 27, 16, 3, 20),
+(57, 30, 67, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2760,7 +2803,6 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (22, 29, -1, 100, 20, 0, 0, 0, '0001-01-01', 0),
 (23, 29, -1, 20, 30, 0, 1, 2, '0001-01-01', 0),
 (24, 29, 22, 300, 10, 0, 0, 0, '0001-01-01', 0),
-(26, 30, -1, 10, 0, 0, 0, 0, '0001-01-01', 0),
 (30, 30, 67, 10, 10, 0, 0, 0, '0001-01-01', 0),
 (31, 30, 67, 15, 15, 0, 0, 0, '0001-01-01', 0),
 (32, 30, 67, 5, 50, 0, 0, 0, '0001-01-01', 0),
@@ -2792,6 +2834,7 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (59, 50, 41, 851.05, 0, 0, 0, 0, '0001-01-01', 0),
 (60, 50, 41, 1702.1, 0, 0, 0, 0, '0001-01-01', 0),
 (61, 51, -1, 851.05, 0, 0, 0, 0, '0001-01-01', 0),
+(62, 30, -1, 0, 0, NULL, 0, 0, NULL, NULL),
 (62, 51, -1, 1702.1, 1, 0, 0, 0, '0001-01-01', 0),
 (63, 51, -1, 2553.15, 1, 0, 0, 0, '0001-01-01', 0),
 (64, 46, 41, 0, 0, 0, 0, 0, '0001-01-01', 0),
@@ -2821,7 +2864,9 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (87, 54, 67, 5, 10, 0, 0, 5, '0001-01-01', 0),
 (88, 54, -1, 10, 20, 0, 0, 0, '0001-01-01', 0),
 (89, 54, -1, 10, 30, 0, 0, 0, '0001-01-01', 0),
-(90, 46, -1, 0, 0, 0, 0, 0, '0001-01-01', 0);
+(90, 46, -1, 0, 0, 0, 0, 0, '0001-01-01', 0),
+(91, 30, -1, 10, 2000, NULL, 0, 0, NULL, NULL),
+(92, 30, 62, 10, 1200, NULL, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2875,7 +2920,9 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (17, 26, 15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (17, 27, 15, 'Per Ton of carbon', 30, NULL, 86.5, 2, 10, 30, 0, '0001-01-01', 0),
 (18, 28, 17, 'Per Ton of carbon', 1, NULL, 3.46, 5, 6, 1, 2, '2020-09-30', 0),
-(26, 27, 16, '1', 3, NULL, 2, 2, 3, 5, 4, '2020-09-30', 0);
+(26, 27, 16, '1', 3, NULL, 2, 2, 3, 5, 4, '2020-09-30', 0),
+(28, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(29, 30, 62, 'test', 1200, NULL, 30, 30, 40, 13, 2, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -3219,7 +3266,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item` (
   `sources` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item`
@@ -3313,7 +3360,8 @@ INSERT INTO `noncash_item` (`id`, `name`, `description`, `sources`, `cat`) VALUE
 (85, 'Event, Cultural & Sports Facilities', '', NULL, 0),
 (86, 'Offices', '', NULL, 0),
 (87, 'Offices', '', NULL, 0),
-(88, 'gg', '', NULL, 0);
+(88, 'gg', '', NULL, 0),
+(90, 'NCI 01', '', NULL, 58);
 
 -- --------------------------------------------------------
 
@@ -3339,7 +3387,7 @@ CREATE TABLE IF NOT EXISTS `noncash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `noncash_item_user`
@@ -3364,7 +3412,8 @@ INSERT INTO `noncash_item_user` (`id`, `id_proj`) VALUES
 (17, 23),
 (88, 27),
 (89, 27),
-(20, 28);
+(20, 28),
+(90, 30);
 
 -- --------------------------------------------------------
 
@@ -3473,7 +3522,8 @@ INSERT INTO `noncash_uc` (`id_item`, `id_uc`) VALUES
 (84, 66),
 (85, 66),
 (86, 67),
-(87, 67);
+(87, 67),
+(90, 67);
 
 -- --------------------------------------------------------
 
@@ -3491,7 +3541,7 @@ CREATE TABLE IF NOT EXISTS `opex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item`
@@ -3591,7 +3641,11 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (94, 'Maintenance Sensor 1', '', 'from_outside_ntt', 'supplier', '#FTEs-days', 51),
 (95, 'Maintenance Sensor A', '', 'from_outside_ntt', 'supplier', 'per sensor', 45),
 (96, 'Maintenance Sensor 1', '', 'from_outside_ntt', 'supplier', '#FTEs-days', 51),
-(97, 'op', '', 'from_ntt', 'supplier', 'Number', 19);
+(97, 'op', '', 'from_ntt', 'supplier', 'Number', 19),
+(98, 'opex 1', '', 'from_outside_ntt', 'supplier', NULL, 45),
+(99, 'test dc 2', '', 'from_ntt', 'projDev', NULL, 29),
+(100, 'test 3', '', 'from_ntt', 'projDev', NULL, 60),
+(101, 'test 126', '', 'from_ntt', 'projDev', NULL, 60);
 
 -- --------------------------------------------------------
 
@@ -3606,52 +3660,56 @@ CREATE TABLE IF NOT EXISTS `opex_item_advice` (
   `source` text,
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
+  `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_advice`
 --
 
-INSERT INTO `opex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`) VALUES
-(1, 'per ...', NULL, 5, 8),
-(2, 'per ...', NULL, 2, 3),
-(3, 'per tructruc', NULL, 5, 4),
-(4, 'per blabla', '', 5, 6),
-(5, 'per bla', NULL, 2, 5),
-(21, 'Per Pole', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/', 5, 15),
-(22, 'Per smart Lampost', 'Internal research', 8, 23),
-(23, 'Per LED light', 'http://www.nyc.gov/html/dot/html/infrastructure/streetlights.shtml', 3, 4),
-(24, 'Per cabling system', 'Internal research', 3, 7),
-(25, 'Per sensor', 'Internal research', 6, 12),
-(26, 'Per software', 'Internal research', 312, 1062),
-(27, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 90, 275),
-(28, 'Per charging point', 'https://www.ohmhomenow.com/electric-vehicles/ev-charging-station-cost/\n', 7, 20),
-(29, 'Per charging point', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 20, 25),
-(30, 'Per EV charging point', 'https://www.reminetwork.com/articles/the-benefits-of-ev-charging-stations/\n', 270, 300),
-(31, 'Per PV panel', 'https://info.lightinus.com/solar-street-lights#solar_street_light_applications', 9, 11),
-(32, 'Per battery', 'Internal research', 4, 8),
-(33, 'Per battery', 'Internal research', 6, 11),
-(34, 'Per CCTV', 'Internal research', 2, 5),
-(35, 'Per CCTV camera', 'https://www.thumbtack.com/p/security-camera-installation-cost', 6, 19),
-(36, 'Per DVR/NVR', 'https://householdquotes.co.uk/cctv-installation/', 30, 55),
-(37, 'Per PTT device', 'Internal research', 4, 25),
-(38, 'Per public speakers', 'Internal research', 1, 3),
-(39, 'Per sensor', 'Internal research', 3, 4),
-(40, 'Per software', 'Internal research', 14, 64),
-(41, 'Per sensor', 'Internal research', 3, 4),
-(42, 'Per software', 'Internal research', 14, 64),
-(43, 'Per sensor', 'Internal research', 3, 4),
-(44, 'Per Software', 'Internal research', 14, 64),
-(45, 'Per banner', 'Internal research', 5, 8),
-(46, 'Per traffic sensor', 'https://www.quora.com/What-are-typical-maintenance-fees-as-a-percentage-of-up-front-license-costs-for-enterprise-software', 90, 290),
-(47, 'Per software', 'https://blog.capterra.com/how-much-does-network-monitoring-software-cost/', 8, 24),
-(48, 'Per sensor', 'Internal research', 5, 8),
-(49, 'Per gateway', 'Internal research', 7, 11),
-(50, 'Per guidance system', 'Internal research', 2, 5),
-(51, 'Per Wifi sensor', 'Internal research', 4, 5),
-(52, 'Per Antennas', 'Internal research', 5, 10),
-(53, 'Per 5G antenna', 'Internal research', 5, 10);
+INSERT INTO `opex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`, `default_cost`) VALUES
+(1, 'per ...', NULL, 5, 8, 0),
+(2, 'per ...', NULL, 2, 3, 0),
+(3, 'per tructruc', NULL, 5, 4, 0),
+(4, 'per blabla', '', 5, 6, 0),
+(5, 'per bla', NULL, 2, 5, 0),
+(21, 'Per Pole', 'https://www.streetlights-solar.com/2018/07/19/cost-comparison-between-solar-vs-traditional-lights/', 5, 15, 0),
+(22, 'Per smart Lampost', 'Internal research', 8, 23, 0),
+(23, 'Per LED light', 'http://www.nyc.gov/html/dot/html/infrastructure/streetlights.shtml', 3, 4, 0),
+(24, 'Per cabling system', 'Internal research', 3, 7, 0),
+(25, 'Per sensor', 'Internal research', 6, 12, 0),
+(26, 'Per software', 'Internal research', 312, 1062, 0),
+(27, 'Per gateway', 'http://democracy.cityoflondon.gov.uk/documents/s63133/Street%20Lighting%20Review%20G3-4%20Report%20-%20Final.pdf', 90, 275, 0),
+(28, 'Per charging point', 'https://www.ohmhomenow.com/electric-vehicles/ev-charging-station-cost/\n', 7, 20, 0),
+(29, 'Per charging point', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 20, 25, 0),
+(30, 'Per EV charging point', 'https://www.reminetwork.com/articles/the-benefits-of-ev-charging-stations/\n', 270, 300, 0),
+(31, 'Per PV panel', 'https://info.lightinus.com/solar-street-lights#solar_street_light_applications', 9, 11, 0),
+(32, 'Per battery', 'Internal research', 4, 8, 0),
+(33, 'Per battery', 'Internal research', 6, 11, 0),
+(34, 'Per CCTV', 'Internal research', 2, 5, 0),
+(35, 'Per CCTV camera', 'https://www.thumbtack.com/p/security-camera-installation-cost', 6, 19, 0),
+(36, 'Per DVR/NVR', 'https://householdquotes.co.uk/cctv-installation/', 30, 55, 0),
+(37, 'Per PTT device', 'Internal research', 4, 25, 0),
+(38, 'Per public speakers', 'Internal research', 1, 3, 0),
+(39, 'Per sensor', 'Internal research', 3, 4, 0),
+(40, 'Per software', 'Internal research', 14, 64, 0),
+(41, 'Per sensor', 'Internal research', 3, 4, 0),
+(42, 'Per software', 'Internal research', 14, 64, 0),
+(43, 'Per sensor', 'Internal research', 3, 4, 0),
+(44, 'Per Software', 'Internal research', 14, 64, 0),
+(45, 'Per banner', 'Internal research', 5, 8, 0),
+(46, 'Per traffic sensor', 'https://www.quora.com/What-are-typical-maintenance-fees-as-a-percentage-of-up-front-license-costs-for-enterprise-software', 90, 290, 0),
+(47, 'Per software', 'https://blog.capterra.com/how-much-does-network-monitoring-software-cost/', 8, 24, 0),
+(48, 'Per sensor', 'Internal research', 5, 8, 0),
+(49, 'Per gateway', 'Internal research', 7, 11, 0),
+(50, 'Per guidance system', 'Internal research', 2, 5, 0),
+(51, 'Per Wifi sensor', 'Internal research', 4, 5, 0),
+(52, 'Per Antennas', 'Internal research', 5, 10, 0),
+(53, 'Per 5G antenna', 'Internal research', 5, 10, 0),
+(99, '', '', 0, 0, 125),
+(100, '', '', 0, 0, 0),
+(101, '', '', 0, 0, 126);
 
 -- --------------------------------------------------------
 
@@ -3665,7 +3723,7 @@ CREATE TABLE IF NOT EXISTS `opex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=98 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `opex_item_user`
@@ -3694,6 +3752,7 @@ INSERT INTO `opex_item_user` (`id`, `id_proj`) VALUES
 (54, 29),
 (55, 30),
 (56, 30),
+(98, 30),
 (57, 33),
 (58, 33),
 (59, 33),
@@ -3843,6 +3902,7 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (91, -1),
 (93, -1),
 (95, -1),
+(98, -1),
 (1, 1),
 (2, 1),
 (6, 1),
@@ -3907,7 +3967,10 @@ INSERT INTO `opex_uc` (`id_item`, `id_uc`) VALUES
 (58, 67),
 (61, 67),
 (64, 67),
-(76, 67);
+(76, 67),
+(99, 67),
+(100, 67),
+(101, 67);
 
 -- --------------------------------------------------------
 
@@ -3993,7 +4056,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -4005,11 +4068,12 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1, 0),
 (28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0, 0),
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
-(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-12 14:11:54', 16, 1, 1, 0),
+(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-26 12:21:27', 16, 1, 1, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
 (46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(54, 'Las Vegas NTT Smart copy', '', NULL, NULL, NULL, '2020-11-18 16:42:27', '2020-11-18 16:42:28', 16, 1, 1, 0),
-(55, 'test', '', NULL, NULL, NULL, '2020-11-19 17:36:54', '2020-11-19 17:37:06', 16, 0, 0, 0);
+(54, 'Las Vegas NTT Smart copy', '', NULL, NULL, NULL, '2020-11-18 16:42:27', '2020-11-26 12:20:37', 16, 1, 1, 1),
+(55, 'test', '', NULL, NULL, NULL, '2020-11-19 17:36:54', '2020-11-26 11:41:57', 16, 0, 0, 1),
+(56, 'new test', '', NULL, NULL, NULL, '2020-11-26 11:42:06', '2020-11-26 12:26:04', 16, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -4062,7 +4126,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (52, '2020-11-01', 36, '2020-11-01', 6),
 (53, '2020-11-01', 36, '2020-11-01', 6),
 (54, '2020-11-01', 39, '2020-11-01', 7),
-(55, '2020-11-01', 36, '2020-11-01', 6);
+(55, '2020-11-01', 36, '2020-11-01', 6),
+(56, '2020-11-01', 48, '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -4286,7 +4351,8 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (54, 62, '2020-11-01', 5, '2023-12-01', '2020-11-01', 3),
 (54, 65, '2020-11-01', 2, '2024-06-01', '2020-11-01', 3),
 (54, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
-(54, 67, '2020-11-01', 6, '2024-02-01', '2020-11-01', 6);
+(54, 67, '2020-11-01', 6, '2024-02-01', '2020-11-01', 6),
+(56, 48, '2020-11-01', 3, '2024-11-01', '2020-11-01', 3);
 
 -- --------------------------------------------------------
 
@@ -4459,6 +4525,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (53, 0),
 (54, 0),
 (55, 0),
+(56, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -4499,7 +4566,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (52, 25),
 (53, 25),
 (54, 25),
-(55, 25);
+(55, 25),
+(56, 25);
 
 -- --------------------------------------------------------
 
@@ -4599,16 +4667,6 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (20, 29),
 (22, 29),
 (-1, 30),
-(33, 30),
-(49, 30),
-(50, 30),
-(55, 30),
-(56, 30),
-(57, 30),
-(58, 30),
-(59, 30),
-(60, 30),
-(61, 30),
 (62, 30),
 (64, 30),
 (65, 30),
@@ -4849,7 +4907,10 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (67, 54),
 (-1, 55),
 (47, 55),
-(48, 55);
+(48, 55),
+(-1, 56),
+(47, 56),
+(48, 56);
 
 -- --------------------------------------------------------
 
@@ -4864,7 +4925,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item`
@@ -4886,7 +4947,8 @@ INSERT INTO `quantifiable_item` (`id`, `name`, `description`, `cat`) VALUES
 (17, 'Airports', '', 0),
 (18, 'Public Roads', '', 0),
 (19, 'Private Roads', '', 0),
-(20, 'er df', '', 0);
+(20, 'er df', '', 0),
+(22, 'QNMB', '', 57);
 
 -- --------------------------------------------------------
 
@@ -4932,7 +4994,7 @@ CREATE TABLE IF NOT EXISTS `quantifiable_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quantifiable_item_user`
@@ -4950,7 +5012,8 @@ INSERT INTO `quantifiable_item_user` (`id`, `id_proj`) VALUES
 (10, 23),
 (20, 27),
 (21, 27),
-(13, 28);
+(13, 28),
+(22, 30);
 
 -- --------------------------------------------------------
 
@@ -4991,7 +5054,8 @@ INSERT INTO `quantifiable_uc` (`id_item`, `id_uc`) VALUES
 (16, 35),
 (17, 37),
 (18, 44),
-(19, 45);
+(19, 45),
+(22, 67);
 
 -- --------------------------------------------------------
 
@@ -5129,7 +5193,7 @@ CREATE TABLE IF NOT EXISTS `revenuesprotection_item` (
   `unit` varchar(256) DEFAULT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenuesprotection_item`
@@ -5149,7 +5213,8 @@ INSERT INTO `revenuesprotection_item` (`id`, `name`, `description`, `unit`, `cat
 (11, 'prot', '', NULL, 0),
 (12, 'prot', '', NULL, 0),
 (13, 'prot', '', NULL, 0),
-(14, 'prot', '', NULL, 0);
+(14, 'prot', '', NULL, 0),
+(15, 'item test', '', NULL, 54);
 
 -- --------------------------------------------------------
 
@@ -5182,7 +5247,8 @@ INSERT INTO `revenuesprotection_item_user` (`id`, `id_proj`) VALUES
 (11, 42),
 (12, 43),
 (13, 44),
-(14, 54);
+(14, 54),
+(15, 30);
 
 -- --------------------------------------------------------
 
@@ -5215,7 +5281,8 @@ INSERT INTO `revenuesprotection_uc` (`id_item`, `id_uc`) VALUES
 (11, 67),
 (12, 67),
 (13, 67),
-(14, 67);
+(14, 67),
+(15, 67);
 
 -- --------------------------------------------------------
 
@@ -5230,7 +5297,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -5292,7 +5359,8 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`, `cat`) VALUES
 (57, 'rev', '', 0),
 (58, 'rev', '', 0),
 (59, 'rev', '', 0),
-(60, 'rev', '', 0);
+(60, 'rev', '', 0),
+(61, 'item 1', '', 53);
 
 -- --------------------------------------------------------
 
@@ -5307,6 +5375,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `source` text,
   `range_min` double DEFAULT NULL,
   `range_max` double DEFAULT NULL,
+  `default_revenue` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 
@@ -5314,40 +5383,40 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
 -- Déchargement des données de la table `revenues_item_advice`
 --
 
-INSERT INTO `revenues_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`) VALUES
-(1, 'per example', NULL, 1, 10),
-(2, 'per example', NULL, 2, 20),
-(5, '43GVFD', '', 54, 543),
-(16, 'Per user', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 8, 10),
-(17, 'Per charging point', 'https://www.justpark.com/uk/parking/london/', 525, 875),
-(18, 'Per charging point', 'Internal research', 455, 470),
-(19, 'Per  Banner', 'https://www.hastings.gov.uk/press_media/advertising/lamppostbanners/', 130, 300),
-(20, 'Per wifi access point', 'https://nypost.com/2018/05/01/nycs-free-public-wi-fi-kiosks-arent-making-enough-money/', 5, 5),
-(24, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(25, '# of additional clients each month', '', 0, 0),
-(26, '# of additional non-local visitors in the park each month', '', 0, 0),
-(27, 'Current # of square foot of unused space', '', 0, 0),
-(28, 'Current # of square foot of unused space', '', 0, 0),
-(29, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(30, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(31, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(32, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(33, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(34, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(35, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(36, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(37, '# of WWD occurrences', '', 0, 0),
-(38, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(39, '# of WWD occurrences', '', 0, 0),
-(40, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(41, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(42, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(43, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(44, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(45, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(46, '# of additional clients each month', '', 0, 0),
-(47, '# of Giga Bites of data sold to third parties per month', '', 0, 0),
-(48, '# of additional clients each month', '', 0, 0);
+INSERT INTO `revenues_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max`, `default_revenue`) VALUES
+(1, 'per example', NULL, 1, 10, 0),
+(2, 'per example', NULL, 2, 20, 0),
+(5, '43GVFD', '', 54, 543, 0),
+(16, 'Per user', 'https://www.preciseparklink.com/news/top-10-benefits-of-installing-ev-chargers-in-ontario\n', 8, 10, 0),
+(17, 'Per charging point', 'https://www.justpark.com/uk/parking/london/', 525, 875, 0),
+(18, 'Per charging point', 'Internal research', 455, 470, 0),
+(19, 'Per  Banner', 'https://www.hastings.gov.uk/press_media/advertising/lamppostbanners/', 130, 300, 0),
+(20, 'Per wifi access point', 'https://nypost.com/2018/05/01/nycs-free-public-wi-fi-kiosks-arent-making-enough-money/', 5, 5, 0),
+(24, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(25, '# of additional clients each month', '', 0, 0, 0),
+(26, '# of additional non-local visitors in the park each month', '', 0, 0, 0),
+(27, 'Current # of square foot of unused space', '', 0, 0, 0),
+(28, 'Current # of square foot of unused space', '', 0, 0, 0),
+(29, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(30, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(31, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(32, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(33, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(34, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(35, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(36, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(37, '# of WWD occurrences', '', 0, 0, 0),
+(38, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(39, '# of WWD occurrences', '', 0, 0, 0),
+(40, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(41, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(42, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(43, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(44, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(45, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(46, '# of additional clients each month', '', 0, 0, 0),
+(47, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
+(48, '# of additional clients each month', '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -5361,7 +5430,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_user`
@@ -5387,6 +5456,7 @@ INSERT INTO `revenues_item_user` (`id`, `id_proj`) VALUES
 (22, 28),
 (23, 29),
 (50, 30),
+(61, 30),
 (51, 33),
 (52, 34),
 (53, 35),
@@ -5476,7 +5546,8 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (57, 67),
 (58, 67),
 (59, 67),
-(60, 67);
+(60, 67),
+(61, 67);
 
 -- --------------------------------------------------------
 
@@ -5548,7 +5619,7 @@ CREATE TABLE IF NOT EXISTS `risk_item` (
   `sources` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item`
@@ -5607,7 +5678,8 @@ INSERT INTO `risk_item` (`id`, `name`, `description`, `sources`, `cat`) VALUES
 (50, 'Increase in housing prices and district attractiveness', '', NULL, 0),
 (51, 'Potential Negative impact on health', '', NULL, 0),
 (54, 'risk', '', NULL, 0),
-(55, 'rrrrr', '', NULL, 0);
+(55, 'rrrrr', '', NULL, 0),
+(57, 'risk 1', '', NULL, 59);
 
 -- --------------------------------------------------------
 
@@ -5633,7 +5705,7 @@ CREATE TABLE IF NOT EXISTS `risk_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `risk_item_user`
@@ -5656,7 +5728,8 @@ INSERT INTO `risk_item_user` (`id`, `id_proj`) VALUES
 (53, 27),
 (55, 27),
 (56, 27),
-(54, 28);
+(54, 28),
+(57, 30);
 
 -- --------------------------------------------------------
 
@@ -5731,7 +5804,8 @@ INSERT INTO `risk_uc` (`id_item`, `id_uc`) VALUES
 (48, 29),
 (49, 29),
 (50, 30),
-(51, 30);
+(51, 30),
+(57, 67);
 
 -- --------------------------------------------------------
 
@@ -5872,7 +5946,8 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) 
 (51, '', '', '', ''),
 (52, '', '', '', ''),
 (53, '', '', '', ''),
-(54, 'C1', 'C2', 'name 4', 'Area 3');
+(54, 'C1', 'C2', 'name 4', 'Area 3'),
+(56, '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -5905,7 +5980,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `unit` varchar(256) NOT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -5984,7 +6059,9 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (87, 'Maintenance Sensor', 'operating', '', 'user', 'Sensors', 26),
 (88, 'dep test', 'deployment', '', 'user', 'test', 27),
 (89, 'dep test 2', 'deployment', '', 'user', 'test', 27),
-(90, 'Equi 1', 'equipment', '', 'user', '', 40);
+(90, 'Equi 1', 'equipment', '', 'user', '', 40),
+(91, 'Equip n1', 'equipment', '', 'user', 'test', 40),
+(92, 'test', 'equipment', '', 'user', 'bonjour', 62);
 
 -- --------------------------------------------------------
 
@@ -6080,7 +6157,9 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (87, 67),
 (88, -1),
 (89, -1),
-(90, -1);
+(90, -1),
+(91, -1),
+(92, 62);
 
 -- --------------------------------------------------------
 
@@ -6188,7 +6267,9 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (87, 54),
 (88, 54),
 (89, 54),
-(90, 46);
+(90, 46),
+(91, 30),
+(92, 30);
 
 -- --------------------------------------------------------
 
@@ -6428,10 +6509,11 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`, `selected`
 (15, 29, 0, -1, 1),
 (15, 29, 21, 22, 1),
 (16, 30, 0, -1, 1),
-(16, 30, 25, 33, 0),
-(16, 30, 25, 65, 0),
-(16, 30, 25, 66, 0),
-(16, 30, 25, 67, 0),
+(16, 30, 25, 33, 1),
+(16, 30, 25, 64, 1),
+(16, 30, 25, 65, 1),
+(16, 30, 25, 66, 1),
+(16, 30, 25, 67, 1),
 (16, 33, 0, -1, 1),
 (16, 33, 25, 33, 1),
 (16, 33, 25, 65, 1),
@@ -6510,7 +6592,10 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`, `selected`
 (16, 54, 25, 33, 1),
 (16, 54, 25, 65, 1),
 (16, 54, 25, 66, 1),
-(16, 54, 25, 67, 1);
+(16, 54, 25, 67, 1),
+(16, 56, 0, -1, 1),
+(16, 56, 25, 47, 1),
+(16, 56, 25, 48, 1);
 
 -- --------------------------------------------------------
 
@@ -7625,7 +7710,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case_cat`
@@ -7650,7 +7735,8 @@ INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (22, 'Health Check – Thermal Scan', ''),
 (23, 'Boundary Compliance', ''),
 (24, ' Plant Safety (Manufacturing)  ', ''),
-(25, 'Back to Work Package ', '');
+(25, 'Back to Work Package ', ''),
+(26, 'test', '');
 
 -- --------------------------------------------------------
 
@@ -7790,7 +7876,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item`
@@ -7819,7 +7905,9 @@ INSERT INTO `widercash_item` (`id`, `name`, `description`, `cat`) VALUES
 (23, 'Reduction of flood cost', '', 0),
 (24, 'Reduces number of traffic accidents', '', 0),
 (25, 'Reduction in congestion time due to traffic monitoring', '', 0),
-(26, 'ddd', '', 0);
+(26, 'ddd', '', 0),
+(28, 'WCB 1', '', 56),
+(29, 'wider', '', 61);
 
 -- --------------------------------------------------------
 
@@ -7837,6 +7925,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_advice` (
   `range_max_red_nb` double DEFAULT NULL,
   `range_min_red_cost` double DEFAULT NULL,
   `range_max_red_cost` double DEFAULT NULL,
+  `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
@@ -7844,22 +7933,22 @@ CREATE TABLE IF NOT EXISTS `widercash_item_advice` (
 -- Déchargement des données de la table `widercash_item_advice`
 --
 
-INSERT INTO `widercash_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range_min_red_nb`, `range_max_red_nb`, `range_min_red_cost`, `range_max_red_cost`) VALUES
-(1, 'per example', NULL, 2, 3, 4, 5, 6),
-(2, 'per example', NULL, 4, 5, 6, 7, 8),
-(6, 'thgfd', '', 0, 5, 45, 5, 45),
-(7, 'GEFRD', '', 4, 5, 6, 7, 8),
-(8, 'GRTFED', 'GTRFE', 5, 4, 3, 42, 2),
-(16, 'Per Ton of carbon', 'https://www.surrey.ca/city-services/4614.aspx', 16, 20, 40, 0, 0),
-(17, 'Per Ton of carbon', 'https://www.citintelly.com/intelligent-street-lighting-products/street-lighting-control-system/', 16, 20, 60, 0, 0),
-(18, 'Per Ton of carbon', 'https://www.smallbizdaily.com/4-ways-ev-charging-stations-can-benefit-business/\n', 16, 85, 100, 0, 0),
-(19, 'Per cabling system', 'https://reneweconomy.com.au/hidden-cost-of-rooftop-solar-who-should-pay-for-maintenance-99200/\n', 8, 10, 30, 0, 0),
-(20, 'Per crime (property, persons) ', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 4800, 10, 30, 0, 0),
-(21, 'Per Ton of carbon', 'https://www.epa.gov/air-research/deliberating-performance-targets-air-quality-sensors-workshop\n', 16, 20, 40, 0, 0),
-(22, 'Per safety investigation', 'https://www.oti.fi/en/oti/investigation-of-road-accidents/', 2415, 40, 60, 0, 0),
-(23, 'Per claimed inhabitant', 'http://www.libelium.com/smart_water_wsn_flood_detection/', 1310, 10, 20, 0, 0),
-(24, 'Per accident', 'https://www.researchgate.net/publication/12411590_Traffic_accident_reduction_by_monitoring_driver_behaviour_with_in-car_data_recorders', 14374, 10, 20, 0, 0),
-(25, 'Number of hours lost', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 8, 20, 50, 0, 0);
+INSERT INTO `widercash_item_advice` (`id`, `unit`, `source`, `unit_cost`, `range_min_red_nb`, `range_max_red_nb`, `range_min_red_cost`, `range_max_red_cost`, `default_cost`) VALUES
+(1, 'per example', NULL, 2, 3, 4, 5, 6, 0),
+(2, 'per example', NULL, 4, 5, 6, 7, 8, 0),
+(6, 'thgfd', '', 0, 5, 45, 5, 45, 0),
+(7, 'GEFRD', '', 4, 5, 6, 7, 8, 0),
+(8, 'GRTFED', 'GTRFE', 5, 4, 3, 42, 2, 0),
+(16, 'Per Ton of carbon', 'https://www.surrey.ca/city-services/4614.aspx', 16, 20, 40, 0, 0, 0),
+(17, 'Per Ton of carbon', 'https://www.citintelly.com/intelligent-street-lighting-products/street-lighting-control-system/', 16, 20, 60, 0, 0, 0),
+(18, 'Per Ton of carbon', 'https://www.smallbizdaily.com/4-ways-ev-charging-stations-can-benefit-business/\n', 16, 85, 100, 0, 0, 0),
+(19, 'Per cabling system', 'https://reneweconomy.com.au/hidden-cost-of-rooftop-solar-who-should-pay-for-maintenance-99200/\n', 8, 10, 30, 0, 0, 0),
+(20, 'Per crime (property, persons) ', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 4800, 10, 30, 0, 0, 0),
+(21, 'Per Ton of carbon', 'https://www.epa.gov/air-research/deliberating-performance-targets-air-quality-sensors-workshop\n', 16, 20, 40, 0, 0, 0),
+(22, 'Per safety investigation', 'https://www.oti.fi/en/oti/investigation-of-road-accidents/', 2415, 40, 60, 0, 0, 0),
+(23, 'Per claimed inhabitant', 'http://www.libelium.com/smart_water_wsn_flood_detection/', 1310, 10, 20, 0, 0, 0),
+(24, 'Per accident', 'https://www.researchgate.net/publication/12411590_Traffic_accident_reduction_by_monitoring_driver_behaviour_with_in-car_data_recorders', 14374, 10, 20, 0, 0, 0),
+(25, 'Number of hours lost', 'https://reolink.com/pros-cons-of-surveillance-cameras-in-public-places/', 8, 20, 50, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -7873,7 +7962,7 @@ CREATE TABLE IF NOT EXISTS `widercash_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `widercash_item_user`
@@ -7895,7 +7984,9 @@ INSERT INTO `widercash_item_user` (`id`, `id_proj`) VALUES
 (13, 23),
 (14, 23),
 (26, 27),
-(27, 27);
+(27, 27),
+(28, 30),
+(29, 30);
 
 -- --------------------------------------------------------
 
@@ -7942,7 +8033,9 @@ INSERT INTO `widercash_uc` (`id_item`, `id_uc`) VALUES
 (22, 23),
 (23, 24),
 (24, 26),
-(25, 26);
+(25, 26),
+(29, 62),
+(28, 67);
 
 -- --------------------------------------------------------
 
@@ -7958,7 +8051,7 @@ CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'supplier',
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
@@ -8004,7 +8097,18 @@ INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`, `side`) VALUES
 (49, 41, 'Sensors', 'capex', 'supplier'),
 (50, 41, 'Sensor Installation', 'deployment_costs', 'supplier'),
 (51, 41, 'Maintenance ', 'opex', 'supplier'),
-(52, 41, 'test admin', 'capex', 'supplier');
+(52, 41, 'test admin', 'capex', 'supplier'),
+(53, 67, 'cat 1', 'revenues', 'customer'),
+(54, 67, 'cat 2', 'revenuesProtection', 'customer'),
+(55, 67, 'my cat', 'cashreleasing', 'customer'),
+(56, 67, 'cat 1', 'widercash', 'customer'),
+(57, 67, 'cat 01', 'quantifiable', 'customer'),
+(58, 67, 'cat 1', 'noncash', 'customer'),
+(59, 67, 'cat 2', 'risks', 'customer'),
+(60, 67, 'cat 2', 'opex', 'supplier'),
+(61, 62, 'cat 1', 'widercash', 'customer'),
+(62, 62, 'Cat 1', 'equipment_revenues', 'supplier'),
+(63, 48, 'accident dim', 'cashreleasing', 'customer');
 
 -- --------------------------------------------------------
 

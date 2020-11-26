@@ -96,12 +96,18 @@ function updateBubbleChart(data, names, idCanvas, dataIndicator, indicators){
        },
        scales: {
         yAxes: [{
+            ticks: {
+                beginAtZero: true,
+            },
             scaleLabel: {
               display: true,
               labelString: dataIndicator[indicators[1]]["name"] + ' (in '+dataIndicator[indicators[1]]["unit"]+')'
             }
         }],
         xAxes: [{
+            ticks: {
+                beginAtZero: true,
+            },
             scaleLabel: {
               display: true,
               labelString: dataIndicator[indicators[0]]["name"] + ' (in '+dataIndicator[indicators[0]]["unit"]+')'
