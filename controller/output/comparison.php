@@ -354,6 +354,13 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
         "non_quant"=>['noncash','risks'],
         "finsoc_comp"=>['cashin','cashout','npv','socnpv','roi', 'socroi', 'payback', 'socpayback']];
 
+    $cat2Bubble = [
+        "invest"=>[],
+        "op"=>[],
+        "cash_flows"=>[],
+        "non_quant"=>[],
+        "finsoc_comp"=>[['cashin', "cashout"], ["npv", "socnpv"]]];
+
     $cat2IndicatorName = [
         "invest"=>['capex','implementation'],
         "op"=>['opex','revenues','cash releasing benefits','wider cash benefits'],
@@ -361,12 +368,20 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
         "non_quant"=>['non cash benefits','risks'],
         "finsoc_comp"=>['cash-in','cash-out','npv','societal npv','return over investment','societal return over investment','payback','societal payback']];
 
+    $cat2BubbleName = [
+        "invest"=>[],
+        "op"=>[],
+        "cash_flows"=>[],
+        "non_quant"=>[],
+        "finsoc_comp"=>[['cash-in','cash-out'],['npv','societal npv']]];
+            
     $user = getUser($_SESSION['username']);
     if(isset($_SESSION['selProjects']) && count($_SESSION['selProjects'])){
         $selProjects  = $_SESSION['selProjects'];
         $projects = getListProjects2($user[0]);
         $list_compo = $cat2IndicatorName[$cat];
         $compoData = [];
+        $bubbleData = [];
 
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
@@ -374,15 +389,21 @@ function comparisonCategoriePage($twig,$is_connected, $cat){
             $keydates_proj = isDev() ? getKeyDatesProj($schedules,$scope) : getKeyDatesProjSupplier($projID);
             $CB_values = getCBValues($projID,$scope,$schedules,$keydates_proj);
             $compoData[$projID] = [];
+            $bubbleData[$projID] = [];
             foreach ($cat2Indicator[$cat] as  $indicator) {
                 $compoData[$projID][$indicator] = $CB_values[$indicator];
             }
+            foreach ($cat2Bubble[$cat] as  $bubble) {
+                array_push($bubbleData[$projID], [$bubble[0] => $CB_values[$bubble[0]],$bubble[1] => $CB_values[$bubble[1]]]);
+            }
         } 
+
         $devises = getListDevises();
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];       
         echo $twig->render('/output/comparison_items/projects_item/general_comp.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
-        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects, "cat2Indicator"=>$cat2Indicator[$cat]));
+        'selDevName'=>$selDevName,'is_admin'=>$user[3],'list_compo'=>$list_compo,'compoData'=>$compoData,'projects'=>$projects, 
+        "cat2Indicator"=>$cat2Indicator[$cat], 'bubbleData'=>$bubbleData, "cat2Bubble"=>$cat2Bubble[$cat], "list_bubble_name"=>$cat2BubbleName[$cat]));
         prereq_compProjects();
 
     } else {

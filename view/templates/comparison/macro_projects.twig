@@ -194,7 +194,7 @@
 </div>
 
 {% endmacro %}
-{% macro insert_graphes(list_compo) %}
+{% macro insert_graphes(list_compo, list_bubble_name) %}
 
 <div class="mt-5 container mx-auto ">
     {% set nb = 0 %}
@@ -214,6 +214,28 @@
         {% else  %}
             {% set nb = nb + 1 %}
         {% endif %}
+    {% endfor %}
+
+
+    {% set nb = 0 %}
+    {% set i = 0 %}
+    {% for names in list_bubble_name %}
+        {% if nb == 0 %}
+            <div class = "row">
+        {% endif %}
+        <div class="col" width="45%">
+            <div class="row justify-content-md-center">
+                <h3 class=" justify-content-md-center"><span class="badge badge-secondary">{{ names[0] }}/{{ names[1] }}</span></h3>
+            </div>
+            <canvas class="comp_bubble" id="comp_bubble_{{i}}"></canvas>
+        </div>
+        {% if nb == 1 %}
+            </div>
+            {% set nb = 0 %}
+        {% else  %}
+            {% set nb = nb + 1 %}
+        {% endif %}
+        {% set i = i + 1 %}
     {% endfor %}
 </div>
 

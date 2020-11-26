@@ -31,7 +31,7 @@
         <h4 class="text-center text-dark">Investment Indicators Comparative Graph</h4>
     </div>
 </div>
-{{ macro.insert_graphes(list_compo) }}
+{{ macro.insert_graphes(list_compo, list_bubble_name) }}
 
 
 
@@ -39,7 +39,7 @@
 
 {% block scripts %}
     {{ parent() }}
-    <div id="data"  data-compo="{{ compoData|json_encode }}" data-list-compo="{{ list_compo|json_encode }}" data-projects="{{ projects|json_encode }}" data-cat="{{ cat2Indicator|json_encode }}" ></div>
+    <div id="data"  data-compo="{{ compoData|json_encode }}" data-list-compo="{{ list_compo|json_encode }}" data-projects="{{ projects|json_encode }}" data-cat="{{ cat2Indicator|json_encode }}" data-bubble-data="{{ bubbleData|json_encode }}" data-cat-bubble="{{ cat2Bubble|json_encode }}"  data-bubble-name="{{ list_bubble_name|json_encode }}" ></div>
     <script type="text/javascript" src="../../public/assets/js/custom/comp_projects/graphCompo.js"></script>
     <script type="text/javascript">setNewDeviseInvestment("{{selDevName}}","{{selDevSym}}");</script>
     <script>drawGraphs()</script>
