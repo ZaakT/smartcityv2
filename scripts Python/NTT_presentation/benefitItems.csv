@@ -1,0 +1,260 @@
+;;;;;;Quantifiable impact;;;;;;NQB;;;
+ID;Domain;Solution;Solution Abb;Use Case;Benefits Category;Impact min on Baseline Units Consumption (+/- %);Impact max on Baseline Units Consumption (+/- %);Impact min on Baseline $ Cost / Unit (+/- %);Impact max on Baseline $ Cost / Unit (+/- %);Impact min on existing revenues (%);Impact max on existing revenues (%);Impact (rating 1-10);Probability (0-100%);Baseline Cost per Unit (Monthly);Price per Unit (Monthly, ($)
+446;NTT Accelerate Smart Solutions;Missing Person;MP;Retail / Malls / Small shops;Cash Releasing Benefits;0%;0%;-1%;-1%;NA#;NA#;NA#;NA#;22 340,00;NA#
+506;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;1 500,00;NA#
+566;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;1 500,00;NA#
+927;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;1 500,00;NA#
+987;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;1 500,00;NA#
+507;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;20 000,00;NA#
+567;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;20 000,00;NA#
+926;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;200 000,00;NA#
+986;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Cash Releasing Benefits;0%;0%;-10%;-10%;NA#;NA#;NA#;NA#;200 000,00;NA#
+447;NTT Accelerate Smart Solutions;Missing Person;MP;Retail / Malls / Small shops;Cash Releasing Benefits;0%;0%;-20%;-50%;NA#;NA#;NA#;NA#;2 353,00;NA#
+21;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Cash Releasing Benefits;0%;0%;-30%;-30%;NA#;NA#;NA#;NA#;0,05;NA#
+266;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Cash Releasing Benefits;0%;0%;-50%;-50%;NA#;NA#;NA#;NA#;1 977,00;NA#
+265;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Cash Releasing Benefits;0%;0%;-75%;-75%;NA#;NA#;NA#;NA#;1 500,00;NA#
+204;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;Cash Releasing Benefits;-5%;-5%;0%;0%;NA#;NA#;NA#;NA#;2 730,00;NA#
+746;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Cash Releasing Benefits;-5%;-5%;0%;0%;NA#;NA#;NA#;NA#;3 700,00;NA#
+806;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Cash Releasing Benefits;-5%;-5%;0%;0%;NA#;NA#;NA#;NA#;3 700,00;NA#
+1046;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Roads;Cash Releasing Benefits;-5%;-5%;0%;0%;NA#;NA#;NA#;NA#;3 700,00;NA#
+1106;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;Cash Releasing Benefits;-5%;-5%;0%;0%;NA#;NA#;NA#;NA#;3 700,00;NA#
+84;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Cash Releasing Benefits;-7%;-7%;0%;0%;NA#;NA#;NA#;NA#;2 843,00;NA#
+145;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Cash Releasing Benefits;-7%;-7%;0%;0%;NA#;NA#;NA#;NA#;2 843,00;NA#
+205;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;Cash Releasing Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;12,00;NA#
+23;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Cash Releasing Benefits;-15%;-15%;0%;0%;NA#;NA#;NA#;NA#;0,13;NA#
+82;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Cash Releasing Benefits;-16%;-20%;0%;0%;NA#;NA#;NA#;NA#;0,13;NA#
+143;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Cash Releasing Benefits;-16%;-20%;0%;0%;NA#;NA#;NA#;NA#;0,13;NA#
+387;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Event, Cultural & Sports Facilities;Cash Releasing Benefits;-20%;-20%;0%;0%;NA#;NA#;NA#;NA#;0,13;NA#
+22;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Cash Releasing Benefits;-20%;-20%;0%;0%;NA#;NA#;NA#;NA#;4 500,00;NA#
+83;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Cash Releasing Benefits;-20%;-50%;0%;0%;NA#;NA#;NA#;NA#;2 353,00;NA#
+144;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Cash Releasing Benefits;-20%;-50%;0%;0%;NA#;NA#;NA#;NA#;2 353,00;NA#
+325;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Airports;Cash Releasing Benefits;-20%;-50%;0%;0%;NA#;NA#;NA#;NA#;2 353,00;NA#
+146;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Cash Releasing Benefits;-21%;-21%;0%;0%;NA#;NA#;NA#;NA#;4,00;NA#
+85;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Cash Releasing Benefits;-21%;-21%;0%;0%;NA#;NA#;NA#;NA#;8,00;NA#
+386;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Event, Cultural & Sports Facilities;Cash Releasing Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;82,30;NA#
+51;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;5;0,8;NA#;NA#
+52;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+53;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,9;NA#;NA#
+54;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,6;NA#;NA#
+55;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,8;NA#;NA#
+56;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;5;0,8;NA#;NA#
+112;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+113;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+114;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,9;NA#;NA#
+173;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+174;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+175;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,9;NA#;NA#
+234;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+295;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;5;0,8;NA#;NA#
+296;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+297;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,9;NA#;NA#
+298;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,6;NA#;NA#
+299;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,8;NA#;NA#
+416;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+417;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,8;NA#;NA#
+476;NTT Accelerate Smart Solutions;Missing Person;MP;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;9;0,8;NA#;NA#
+656;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;5;0,8;NA#;NA#
+716;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;5;0,8;NA#;NA#
+776;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,8;NA#;NA#
+777;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+778;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+836;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,8;NA#;NA#
+837;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+838;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,8;NA#;NA#
+1076;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Roads;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,6;NA#;NA#
+1077;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1136;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;6;0,6;NA#;NA#
+1137;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1196;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Airports;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1197;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Airports;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1256;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1257;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1316;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1317;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1376;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1377;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1436;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1437;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1496;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Airports;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1497;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Airports;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1556;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1557;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Parks;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1616;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1617;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1676;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1677;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1736;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1737;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1796;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1797;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1856;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1857;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1916;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1917;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+1976;NTT Accelerate Smart Solutions;Back to Work Package;BW;Factory/Manufact.;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+1977;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+2036;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+2037;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+2096;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+2097;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+2156;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
+2157;NTT Accelerate Smart Solutions;Back to Work Package;BW; Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+41;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Quantifiable, non monetizable benefits;20%;20%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+42;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Quantifiable, non monetizable benefits;20%;20%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+224;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;Quantifiable, non monetizable benefits;-40%;-88%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+345;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Airports;Quantifiable, non monetizable benefits;-40%;-88%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+766;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Quantifiable, non monetizable benefits;-40%;-88%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+826;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Quantifiable, non monetizable benefits;-40%;-88%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
+1156;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Airports;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1157;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Airports;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1216;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Parks;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1217;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Parks;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1276;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1277;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1336;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1337;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1396;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1397;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1456;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Airports;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1457;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Airports;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1516;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Parks;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1517;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Parks;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1576;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1577;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1636;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1637;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1696;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1697;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1756;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1757;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1816;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1817;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1876;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1877;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1936;NTT Accelerate Smart Solutions;Back to Work Package;BW;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1937;NTT Accelerate Smart Solutions;Back to Work Package;BW;Factory/Manufact.;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1996;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+1997;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+2056;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+2057;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+2116;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+2117;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;UC Revenues (Existing);NA#;NA#;NA#;NA#;5%;20%;NA#;NA#;NA#;NA#
+315;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Airports;UC Revenues (Existing);NA#;NA#;NA#;NA#;11%;11%;NA#;NA#;NA#;0,00
+436;NTT Accelerate Smart Solutions;Missing Person;MP;Retail / Malls / Small shops;UC Revenues (Existing);NA#;NA#;NA#;NA#;11%;11%;NA#;NA#;NA#;NA#
+184;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+245;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+305;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Airports;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+366;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Event, Cultural & Sports Facilities;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+426;NTT Accelerate Smart Solutions;Missing Person;MP;Retail / Malls / Small shops;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+486;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+546;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+606;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+666;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+726;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+786;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+846;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Areas/Plazas;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+906;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+966;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+1026;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+1086;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+1;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;3,00
+62;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Offices;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;4,00
+1027;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;7,00
+1087;NTT Accelerate Smart Solutions;Traffic – Origination and Destination;O-D;Public Areas/Plazas;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;7,00
+2;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;7,00
+607;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;10,00
+667;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;10,00
+3;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;34,00
+123;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;UC Revenues (New) ;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;4,00
+763;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-4%;-4%;NA#;NA#;NA#;NA#;0,21;NA#
+823;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-4%;-4%;NA#;NA#;NA#;NA#;0,21;NA#
+760;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-7%;-7%;NA#;NA#;NA#;NA#;11 000,00;NA#
+820;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-7%;-7%;NA#;NA#;NA#;NA#;11 000,00;NA#
+759;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-11%;-11%;NA#;NA#;NA#;NA#;19 800,00;NA#
+819;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-11%;-11%;NA#;NA#;NA#;NA#;19 800,00;NA#
+762;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;95,00;NA#
+822;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;95,00;NA#
+758;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;12 000,00;NA#
+818;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;12 000,00;NA#
+757;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;24 300,00;NA#
+817;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-15%;-15%;NA#;NA#;NA#;NA#;24 300,00;NA#
+876;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Areas/Plazas;Wider Cash Benefits;0%;0%;-25%;-25%;NA#;NA#;NA#;NA#;30,00;NA#
+936;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;0%;0%;-25%;-25%;NA#;NA#;NA#;NA#;122,00;NA#
+996;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;0%;0%;-25%;-25%;NA#;NA#;NA#;NA#;122,00;NA#
+761;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-32%;-32%;NA#;NA#;NA#;NA#;27 000,00;NA#
+821;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-32%;-32%;NA#;NA#;NA#;NA#;27 000,00;NA#
+756;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;-3%;-3%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+816;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;-3%;-3%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1176;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Airports;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1236;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Parks;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1296;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Retail / Malls / Small shops;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1356;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Event, Cultural & Sports Facilities;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1416;NTT Accelerate Smart Solutions;Health Check – Thermal Scan;HCTS;Offices;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1476;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Airports;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1536;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Parks;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1596;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Retail / Malls / Small shops;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1656;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Event, Cultural & Sports Facilities;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1716;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Factory/Manufact.;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1776;NTT Accelerate Smart Solutions;Boundary Compliance;BC;Offices;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1836;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Offices;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1896;NTT Accelerate Smart Solutions;Plant Safety (Manufacturing);PS;Factory/Manufact.;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+1956;NTT Accelerate Smart Solutions;Back to Work Package;BW;Factory/Manufact.;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+2016;NTT Accelerate Smart Solutions;Back to Work Package;BW;Retail / Malls / Small shops;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+2076;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+2136;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;Wider Cash Benefits;-5%;-20%;0%;0%;NA#;NA#;NA#;NA#;9 200 000,00;NA#
+637;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;3 372,00;NA#
+697;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;3 372,00;NA#
+938;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;3 372,00;NA#
+998;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;3 372,00;NA#
+636;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;4 850,00;NA#
+696;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;4 850,00;NA#
+937;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;4 850,00;NA#
+997;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;4 850,00;NA#
+638;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;21 123,00;NA#
+698;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;21 123,00;NA#
+939;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;21 123,00;NA#
+999;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;21 123,00;NA#
+639;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;66 109,00;NA#
+699;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;66 109,00;NA#
+940;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;66 109,00;NA#
+1000;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;66 109,00;NA#
+640;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;215 765,00;NA#
+700;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;215 765,00;NA#
+941;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;215 765,00;NA#
+1001;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;215 765,00;NA#
+641;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;468 005,00;NA#
+701;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;468 005,00;NA#
+942;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;468 005,00;NA#
+1002;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;468 005,00;NA#
+642;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 187 292,00;NA#
+702;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 187 292,00;NA#
+943;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 187 292,00;NA#
+1003;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 187 292,00;NA#
+643;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 659 114,00;NA#
+703;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 659 114,00;NA#
+944;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 659 114,00;NA#
+1004;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 659 114,00;NA#
+644;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 846 796,00;NA#
+704;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 846 796,00;NA#
+945;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 846 796,00;NA#
+1005;NTT Accelerate Smart Solutions;Traffic – Vehicle of Interest;TVI;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;1 846 796,00;NA#
+645;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;9 188 039,00;NA#
+705;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;Wider Cash Benefits;-10%;-10%;0%;0%;NA#;NA#;NA#;NA#;9 188 039,00;NA#
+764;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;-15%;-15%;0%;0%;NA#;NA#;NA#;NA#;10 137 500,00;NA#
+824;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;-15%;-15%;0%;0%;NA#;NA#;NA#;NA#;10 137 500,00;NA#
+32;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;450,00;NA#
+276;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;450,00;NA#
+517;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;450,00;NA#
+577;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;450,00;NA#
+34;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;700,00;NA#
+278;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;700,00;NA#
+519;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;700,00;NA#
+579;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;700,00;NA#
+33;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 500,00;NA#
+277;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 500,00;NA#
+518;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 500,00;NA#
+578;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 500,00;NA#
+31;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 100 000,00;NA#
+275;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 100 000,00;NA#
+516;NTT Accelerate Smart Solutions;Missing Person;MP;Public Areas/Plazas;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 100 000,00;NA#
+576;NTT Accelerate Smart Solutions;Missing Person;MP;Parks;Wider Cash Benefits;-30%;-30%;0%;0%;NA#;NA#;NA#;NA#;1 100 000,00;NA#

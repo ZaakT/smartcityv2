@@ -159,7 +159,7 @@
                         <td>{{projects[id_proj]['name']}}</td>
                         {% set id_compo = 0 %}
                         {% for data in projData %}
-                            <td class="dep_{{id_compo}}">{{data}}</td>
+                            <td class="dep_{{id_compo}}">{{data}} {{dataIndicator[list_compo[id_compo]]["unit"]}}</td>
                             {% set id_compo = id_compo + 1  %}
                         {% endfor %}
                     </tr>
