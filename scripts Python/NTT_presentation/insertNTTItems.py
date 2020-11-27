@@ -36,6 +36,7 @@ def get_xpex_cat_id(uc_id):
            res[row["xpex_type"]]=row['id_cat']
        
         return res
+    
 def getUcsInSolution(sol_id):
     with connection.cursor() as cursor:
         sql = "SELECT id, name  FROM use_case WHERE id_cat = %s AND id_meas = %s;"
@@ -322,7 +323,7 @@ if __name__ == "__main__":
                     xpexType = "Dep "+cash_type
                 if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
                     id_cat = scope[sol_name]["set"][uc_name]["list_xpex_cat_id"][excel_xpex_type_to_bdd_xpex_type(xpexType)]
-                    insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "#")
+                    # insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "#")
         
         
         

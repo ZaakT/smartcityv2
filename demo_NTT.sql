@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 27 nov. 2020 à 16:20
+-- Généré le :  ven. 27 nov. 2020 à 18:09
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -39,16 +39,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR
                             END$$
 
 DROP PROCEDURE IF EXISTS `add_cashreleasing`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO cashreleasing_item (name,description, cat)
-                                    VALUES (cashreleasing_name,cashreleasing_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO cashreleasing_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO cashreleasing_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `unit_cost` INT, IN `min_red_nb` INT, IN `max_red_nb` INT, IN `min_red_cost` INT, IN `max_red_cost` INT, IN `idUC` INT, IN `cat` INT, IN `default_cost` VARCHAR(255))  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO cashreleasing_item (name,description,cat)
+                                            VALUES (cashreleasing_name,cashreleasing_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO cashreleasing_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO cashreleasing_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost, default_cost)
+                                            VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost, default_cost);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_entity`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_entity` (IN `entity_name` VARCHAR(255), IN `entity_desc` VARCHAR(255), IN `idSource` INT, IN `idScen` INT)  BEGIN
@@ -73,16 +73,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_implem` (IN `implem_name` VARCH
                                     END$$
 
 DROP PROCEDURE IF EXISTS `add_noncash`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO noncash_item (name,description, cat)
-                                    VALUES (noncash_name,noncash_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO noncash_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO noncash_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_noncash` (IN `noncash_name` VARCHAR(255), IN `noncash_desc` VARCHAR(255), IN `idUC` INT, IN `cat` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO noncash_item (name,description,cat) 
+                                                VALUES (noncash_name,noncash_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO noncash_uc (id_item,id_uc) VALUES (itemID,idUC);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_opex`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(255), IN `opex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255))  BEGIN
@@ -97,28 +94,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_opex` (IN `opex_name` VARCHAR(2
                                     END$$
 
 DROP PROCEDURE IF EXISTS `add_quantifiable`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO quantifiable_item (name,description, cat)
-                                    VALUES (quantifiable_name,quantifiable_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO quantifiable_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO quantifiable_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_quantifiable` (IN `quantifiable_name` VARCHAR(255), IN `quantifiable_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `min_red_nb` INT, IN `max_red_nb` INT, IN `idUC` INT, IN `cat` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO quantifiable_item (name,description,cat)
+                                            VALUES (quantifiable_name,quantifiable_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO quantifiable_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO quantifiable_item_advice (id,unit,source,range_min_red_nb,range_max_red_nb)
+                                            VALUES (itemID,unit,source,min_red_nb,max_red_nb);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_revenues`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO revenues_item (name,description, cat)
-                                    VALUES (revenues_name,revenues_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO revenues_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO revenues_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` VARCHAR(255), IN `revenues_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_revenue` VARCHAR(255))  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO revenues_item (name,description,cat)
+                                            VALUES (revenues_name,revenues_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO revenues_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO revenues_item_advice (id,unit,source,range_min,range_max,default_revenue)
+                                            VALUES (itemID,unit,source,range_min,range_max,default_revenue);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_revenuesprotection`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `revenuesprotection_name` VARCHAR(255), IN `revenuesprotection_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
@@ -164,16 +161,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_supplier_revenue` (IN `revenue_
                                 END$$
 
 DROP PROCEDURE IF EXISTS `add_widercash`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name` VARCHAR(255), IN `widercash_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO widercash_item (name,description, cat)
-                                    VALUES (widercash_name,widercash_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO widercash_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO widercash_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name` VARCHAR(255), IN `widercash_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `unit_cost` INT, IN `min_red_nb` INT, IN `max_red_nb` INT, IN `min_red_cost` INT, IN `max_red_cost` INT, IN `idUC` INT, IN `cat` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO widercash_item (name,description,cat)
+                                            VALUES (widercash_name,widercash_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO widercash_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO widercash_item_advice (id,unit,source,unit_cost,range_min_red_nb,range_max_red_nb,range_min_red_cost,range_max_red_cost, default_cost)
+                                            VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost, default_cost);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `copy_xpex_user`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `copy_xpex_user` (IN `name` VARCHAR(255), IN `description` VARCHAR(255), IN `cat` VARCHAR(255), IN `id_proj` VARCHAR(255), IN `id_uc` VARCHAR(255), IN `unit_indicator` VARCHAR(255), IN `volume` VARCHAR(255), IN `volume_reduc` VARCHAR(255), IN `annual_var_volume` VARCHAR(255))  BEGIN

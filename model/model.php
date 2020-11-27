@@ -6407,8 +6407,8 @@ function insertItem($item,$catItem){
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description, cat)
-                                            VALUES (capex_name,capex_desc, cat);
+                                        INSERT INTO capex_item (name,description, cat, unit)
+                                            VALUES (capex_name,capex_desc, cat, unit);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO capex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -6437,8 +6437,8 @@ function insertItem($item,$catItem){
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO implem_item (name,description,cat)
-                                            VALUES (implem_name,implem_desc,cat);
+                                        INSERT INTO implem_item (name,description,cat, unit)
+                                            VALUES (implem_name,implem_desc,cat, unit);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO implem_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -6467,8 +6467,8 @@ function insertItem($item,$catItem){
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO opex_item (name,description,cat)
-                                            VALUES (opex_name,opex_desc,cat);
+                                        INSERT INTO opex_item (name,description,cat, unit)
+                                            VALUES (opex_name,opex_desc,cat, unit);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO opex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);

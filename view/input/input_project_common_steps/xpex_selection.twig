@@ -70,7 +70,6 @@
     {% endif %}
     
     {% set print = false %}
-    
     {% for categoryID in xpexCategories[xpexCategories|keys[0]]|keys %}
         {% for item in xpex_advice_from_ntt|merge(xpex_advice_from_outside_ntt)|merge(xpex_advice_internal) %}
             {% for subItem in item %}
