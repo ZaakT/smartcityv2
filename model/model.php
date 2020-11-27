@@ -6659,13 +6659,14 @@ function insertItem($item,$catItem){
                                 IN revenue_desc VARCHAR(255),
                                 IN idUC INT,
                                 IN type_value VARCHAR(255),
-                                IN cat INT
+                                IN cat INT,
+                                IN default_rev FLOAT
 
                                 )
                                 BEGIN
                                     DECLARE itemID INT;
-                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat)
-                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat);
+                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev)
+                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev);
                                     SET itemID = LAST_INSERT_ID();
                                     INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                         VALUES (itemID,idUC);

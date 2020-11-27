@@ -71,8 +71,8 @@ if __name__ == "__main__":
     
 
     scope = getScope()
-    l_NTTAcc_supp = ["capex", "opex", "deployment_revenues", "operating_revenues"]
-    l_inf_supp = ["deployment_costs", "equipment_revenues"]
+    l_NTTAcc_supp = ["deployment_costs", "opex", "deployment_revenues", "operating_revenues"]
+    l_inf_supp = ["capex", "equipment_revenues"]
     
     l_no_name_supp = [ ]
         
