@@ -58,8 +58,7 @@
 
 <form id="form_xpex" name="form_xpex" action="?A={{sideBarName}}&amp;A2={{type}}&amp;A3=selected&amp;projID={{projID}}&amp;ucID={{ucID}}" method="post" onsubmit="return countSelectedXpex(form_xpex);">
     {% set print = false %}
-    {% set print = false %}
-    {% for categoryID in xpexCategories[xpexCategories|keys[0]]|keys %}
+    {% for categoryID in list_xpex_cat_from_supplier[list_xpex_cat_from_supplier|keys[0]]|keys %}
         {% for item in xpex_supplier %}
             {% for subItem in item %}
                 {% if subItem['cat'] == categoryID %}{% set print = true %}{% endif %}
@@ -67,7 +66,7 @@
         {% endfor %}
     {% endfor %}
     {% if print %}
-    {{ list.list_xpex(xpex_supplier, [], [], projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, 'supplier', xpexCategories ) }}
+        {{ list.list_xpex(xpex_supplier, [], [], projID,ucID,selXpex, type, sideBarName, listUcID, listUcsName, 'supplier', list_xpex_cat_from_supplier ) }}
     {% endif %}
     
     {% set print = false %}

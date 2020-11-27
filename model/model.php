@@ -1040,10 +1040,10 @@ function getXpexCatByID($id_cat){
     return $req->fetch();
 }
 
-function insertXpexcCat($solID, $name, $xpexType, $side){
+function insertXpexcCat($ucID, $name, $xpexType, $side){
     $db = dbConnect();
     $req = $db->prepare('INSERT INTO xpex_cat (name,id_uc, xpex_type, side) VALUES (?,?,?,?)');
-    return $req->execute(array( $name,$solID, $xpexType,$side));   
+    return $req->execute(array( $name,$ucID, $xpexType,$side));   
 }
 
 function getColumnsName($tableName){

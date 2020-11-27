@@ -98,7 +98,7 @@ ID;Domain;Solution;Solution Abb;Use Case;Benefits Category;Impact min on Baselin
 2096;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
 2097;NTT Accelerate Smart Solutions;Back to Work Package;BW;Event, Cultural & Sports Facilities;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
 2156;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;8;0,8;NA#;NA#
-2157;NTT Accelerate Smart Solutions;Back to Work Package;BW; Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
+2157;NTT Accelerate Smart Solutions;Back to Work Package;BW;Offices;Non quantifiable benefits;NA#;NA#;NA#;NA#;NA#;NA#;4;0,4;NA#;NA#
 41;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Quantifiable, non monetizable benefits;20%;20%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
 42;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;Quantifiable, non monetizable benefits;20%;20%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
 224;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Retail / Malls / Small shops;Quantifiable, non monetizable benefits;-40%;-88%;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#
@@ -165,7 +165,7 @@ ID;Domain;Solution;Solution Abb;Use Case;Benefits Category;Impact min on Baselin
 607;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Public Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;10
 667;NTT Accelerate Smart Solutions;Wrong Direction;WWD;Private Roads;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;10
 3;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Parks;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;34
-123;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;UC Revenues (New) ;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;4
+123;NTT Accelerate Smart Solutions;Occupancy and Notification;O&N;Factory/Manufact.;UC Revenues (New);NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;NA#;4
 763;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-4%;-4%;NA#;NA#;NA#;NA#;0,21;NA#
 823;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Private Roads;Wider Cash Benefits;0%;0%;-4%;-4%;NA#;NA#;NA#;NA#;0,21;NA#
 760;NTT Accelerate Smart Solutions;Traffic – Vehicle Count;TVC;Public Roads;Wider Cash Benefits;0%;0%;-7%;-7%;NA#;NA#;NA#;NA#;11 000,00;NA#

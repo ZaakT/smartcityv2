@@ -87,7 +87,8 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             $nb_uc = $listXpex[12];
             $list_ratio = $listXpex[13];
             $uc = $listXpex[14];
-            $list_xpex_cat = $listXpex[16];
+            $list_xpex_cat = $listXpex[16]; 
+            $list_xpex_cat_from_supplier =  $listXpex[17];
 
 
             if(count($listUcID)!=1){
@@ -115,7 +116,8 @@ function xpex_selection($twig,$is_connected,$projID, $_ucID, $sideBarName, $type
             'part2'=>"Use Case",'selected2'=>$ucPrint, 'projID'=>$projID, 'ucID'=>$ucID,
             "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
             "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal,"xpex_supplier"=>$list_xpex_supplier,
-            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName, "xpexCategories"=>$list_xpex_cat ));
+            'isTaken'=>$isTaken,'selXpex'=>$list_selXpex, 'type'=>$type, 'projID'=>$projID, "sideBarName"=>$sideBarName, "listUcID"=>$listUcID, 
+            "listUcsName"=>$listUcsName, "xpexCategories"=>$list_xpex_cat, "list_xpex_cat_from_supplier"=>$list_xpex_cat_from_supplier ));
             prereq_ipc(1);
             prereq_CostBenefits();
             prereq_ipc_sup();
@@ -283,6 +285,8 @@ function xpex_selected($twig,$is_connected,$post, $type, $sideBarName, $side){
 
 
 function getListXpex($listUcID, $type, $projID, $side){
+    $xepx_cat_supplier_to_customer = ["capex"=>"equipment_revenues", "opex"=>"operating_revenues", "deployment_costs"=>"deployment_revenues"];
+
     $nb_uc= [];
     $list_xpex_advice = []; 
     $list_xpex_user = [];   
@@ -303,10 +307,15 @@ function getListXpex($listUcID, $type, $projID, $side){
     $list_selXpex = [];
 
     $list_sel_xpex_advice = [];
+
+    $list_xpex_cat_from_supplier = [];
     foreach ($listUcID as $ucID) {
         $uc = getUCByID($ucID);
         $list_xpex_supplier[$ucID]=[];
         $list_xpex_cat[$ucID] = getListXpexCat($type, $ucID,$side);
+        if($side == "customer" && isset($xepx_cat_supplier_to_customer[$type])){
+            $list_xpex_cat_from_supplier[$ucID] = getListXpexCat($xepx_cat_supplier_to_customer[$type], $ucID,"supplier");
+        }
         if($type=="capex"){
                 
             $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
@@ -444,7 +453,7 @@ function getListXpex($listUcID, $type, $projID, $side){
     }
     return [$list_xpex_advice, $list_xpex_user, $list_selXpex, $list_xpex_advice_from_ntt, $list_xpex_advice_from_outside_ntt, 
     $list_xpex_advice_internal, $list_xpex_user_from_ntt, $list_xpex_user_from_outside_ntt, $list_xpex_user_internal, $list_xpex_supplier, 
-    $list_selXpex, $list_sel_xpex_advice, $nb_uc, $list_ratio, $uc, $compo, $list_xpex_cat];
+    $list_selXpex, $list_sel_xpex_advice, $nb_uc, $list_ratio, $uc, $compo, $list_xpex_cat, $list_xpex_cat_from_supplier];
 }
 
 
@@ -494,7 +503,8 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 $uc = $listXpex[14];
                 $compo = $listXpex[15];
                 $list_xpex_cat = $listXpex[16];
-                    
+                $list_xpex_cat_from_supplier = $listXpex[17];
+
                 $list_limite_schedule = getProjetSchedule($projID, $ucID);  
 
 
@@ -506,7 +516,7 @@ function xpex_input($twig,$is_connected,$projID=0,$listUcID, $type="capex", $sid
                 "xpex_advice_from_ntt"=>$list_xpex_advice_from_ntt,"xpex_advice_from_outside_ntt"=>$list_xpex_advice_from_outside_ntt,"xpex_advice_internal"=>$list_xpex_advice_internal,
                 "xpex_user_from_ntt"=>$list_xpex_user_from_ntt,"xpex_user_from_outside_ntt"=>$list_xpex_user_from_outside_ntt,"xpex_user_internal"=>$list_xpex_user_internal, "xpex_supplier"=>$list_xpex_supplier
                 ,'compo'=>$compo,'ratio'=>$list_ratio,'nb_uc'=>$nb_uc, 'type'=>$type,  "sideBarName"=> $sideBarName, "listUcID"=>$listUcID, "listUcsName"=>$listUcsName, 
-                "list_limite_schedule"=>$list_limite_schedule, "xpexCategories"=>$list_xpex_cat));
+                "list_limite_schedule"=>$list_limite_schedule, "xpexCategories"=>$list_xpex_cat, "list_xpex_cat_from_supplier"=>$list_xpex_cat_from_supplier));
                 prereq_ipc(1);
                 prereq_CostBenefits();
                 prereq_ipc_sup();
