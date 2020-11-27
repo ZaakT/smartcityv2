@@ -71,18 +71,32 @@ if __name__ == "__main__":
     
 
     scope = getScope()
-    l_NTTAcc_supp = ["deployment_revenues", "operating_revenues"]
-    l_inf_supp = ["equipment_revenues"]
+    l_NTTAcc_supp = ["capex", "opex", "deployment_revenues", "operating_revenues"]
+    l_inf_supp = ["deployment_costs", "equipment_revenues"]
+    
+    l_no_name_supp = [ ]
+        
+    l_no_name_cust = ["capex", "opex", "revenues", "revenuesProtection", "cashreleasing", "widercash", "quantifiable", "noncash", "risks", "deployment_costs"]
     for sol_name in scope:
         id_sol = scope[sol_name]["id"]
+        test = True
         for uc_name in scope[sol_name]["set"]:
-            print(uc_name)
-            uc_id = scope[sol_name]["set"][uc_name]
-            for xpexType in l_NTTAcc_supp : 
-                insertXpexCat(uc_id, "NTT Accelerate SMART", xpexType, "supplier")
-            
-            for xpexType in l_inf_supp : 
-                insertXpexCat(uc_id, "Influenced", xpexType, "supplier")
+                print(uc_name)
+                uc_id = scope[sol_name]["set"][uc_name]
+                for xpexType in l_no_name_supp : 
+                    insertXpexCat(uc_id, "Category", xpexType, "supplier")
+                    
+                for xpexType in l_no_name_cust : 
+                    insertXpexCat(uc_id, "Category", xpexType, "customer")
+                
+                
+                if(test) :
+                    for xpexType in l_NTTAcc_supp : 
+                        insertXpexCat(uc_id, "NTT Accelerate SMART", xpexType, "supplier")
+                    
+                    for xpexType in l_inf_supp : 
+                        insertXpexCat(uc_id, "Influenced", xpexType, "supplier")
+                    test = False
             
             
             

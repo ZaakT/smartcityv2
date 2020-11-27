@@ -1016,7 +1016,6 @@ function getSolutionByUcID($ucID){
 
 function getDomainBySolutionID($solID){
     $db = dbConnect();
-    //use_case_cat
     $req = $db->prepare('SELECT id_cat
                         FROM use_case
                         WHERE id = ?');

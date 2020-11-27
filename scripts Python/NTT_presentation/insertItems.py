@@ -113,7 +113,7 @@ if __name__ == "__main__":
         uc_id = get_uc_id_from_scope(scope, sol_name, uc_name)
         inp = getInput(j)
         xpexType = getXpexType(j)
-        insertXpexData(xpexType, inp, uc_id)
+        # insertXpexData(xpexType, inp, uc_id)
         
         
         
