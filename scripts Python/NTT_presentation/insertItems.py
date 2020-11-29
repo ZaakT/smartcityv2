@@ -112,7 +112,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     IN max_red_cost INT,
                                     IN idUC INT,
                                     IN cat INT,
-                                    IN default_cost VARCHAR(255)
+                                    IN default_cost FLOAT
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
@@ -125,8 +125,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                             VALUES (itemID,unit,source,unit_cost,min_red_nb,max_red_nb,min_red_cost,max_red_cost, default_cost);
                                     END
                                     """)
-            sql = 'CALL add_cashreleasing(%s,%s,%s,%s, %s, %s,%s, %s,%s, %s,%s);'
-            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat, inp[8])
+            sql = 'CALL add_cashreleasing(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[1], inp[2], inp[3], uc_id, id_cat, inp[8])
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
