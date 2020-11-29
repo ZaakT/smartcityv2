@@ -313,6 +313,18 @@ function getListXpex($listUcID, $type, $projID, $side){
         $uc = getUCByID($ucID);
         $list_xpex_supplier[$ucID]=[];
         $list_xpex_cat[$ucID] = getListXpexCat($type, $ucID,$side);
+        if($side == "supplier"){
+            $solID = getSolutionByUcID($ucID)['id'];
+            $ucInSol = getUcInSol([$solID]);
+            //var_dump($ucInSol);
+            foreach ($ucInSol as $ucItem) {
+                if($ucItem['id'] != $ucID){
+                    //var_dump($ucItem['id']);
+                    //var_dump(getListXpexCat($type, $ucItem['id'],$side));
+                    array_merge($list_xpex_cat[$ucID], getListXpexCat($type, $ucItem['id'],$side));
+                }
+            }
+        }
         if($side == "customer" && isset($xepx_cat_supplier_to_customer[$type])){
             $list_xpex_cat_from_supplier[$ucID] = getListXpexCat($xepx_cat_supplier_to_customer[$type], $ucID,"supplier");
         }
@@ -441,6 +453,9 @@ function getListXpex($listUcID, $type, $projID, $side){
         $list_ratio[$ucID] = getRatioCompoCapex($list_sel_xpex_advice[$ucID],$compo['id']);
             //var_dump($list_ratio);
     }
+    //var_dump($list_xpex_advice);
+    //var_dump($list_xpex_advice_from_ntt);
+    //var_dump($list_xpex_cat);
     return [$list_xpex_advice, $list_xpex_user, $list_selXpex, $list_xpex_advice_from_ntt, $list_xpex_advice_from_outside_ntt, 
     $list_xpex_advice_internal, $list_xpex_user_from_ntt, $list_xpex_user_from_outside_ntt, $list_xpex_user_internal, $list_xpex_supplier, 
     $list_selXpex, $list_sel_xpex_advice, $nb_uc, $list_ratio, $uc, $compo, $list_xpex_cat, $list_xpex_cat_from_supplier];

@@ -641,6 +641,20 @@ function deleteZone($idZone){
 // ---------------------------------------- USE CASES ----------------------------------------
 
 
+function getUcInSol($list_measID){
+    $db = dbConnect();
+    $req = $db->prepare('SELECT id,name FROM use_case WHERE id_cat = ? ORDER BY name');
+    $list = [];
+    foreach ($list_measID as $measID) {
+        $req->execute(array($measID));
+        while ($row = $req->fetch()){
+            $uc = [intval($row['id']),$row['name'],'id'=>intval($row['id']),'name'=>$row['name']];
+            array_push($list,$uc);
+        }
+    }
+    return $list;
+}
+
 
 function getUC($list_measID){
     $db = dbConnect();
@@ -2324,7 +2338,7 @@ function getCapexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
+function getListCapexAdvice($uc_ID, $origine = "all", $side="projDev"){
 
     $db = dbConnect();
     $origine_selection = "";
@@ -2361,24 +2375,37 @@ function getListCapexAdvice($ucID, $origine = "all", $side="projDev"){
                             ORDER BY name
                             ");
 
-    $req->execute(array($ucID));
 
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $unit = $row['unit'];
-        $source = $row['source'];
-        $range_min = intval($row['range_min']);
-        $range_max = intval($row['range_max']);
-        $side = $row['side'];
-        $cat=$row['cat'];
-        $default_cost = $row['default_cost'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+    $ucIDList = [$uc_ID];
+        if(isSup() && $side != "customer"){
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUcInSol([$solID]);
+        foreach ($ucInSol as $ucItem) {
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
+        }
+    }
+
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID));
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $unit = $row['unit'];
+            $source = $row['source'];
+            $range_min = intval($row['range_min']);
+            $range_max = intval($row['range_max']);
+            $side = $row['side'];
+            $cat=$row['cat'];
+            $default_cost = $row['default_cost'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max,'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+            }
         }
     }
     //var_dump($list);
@@ -2444,11 +2471,13 @@ function getListCapexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
 
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+    if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }
     $req = $db->prepare("SELECT capex_item.id,name,description, side, cat
@@ -2733,7 +2762,7 @@ function getSupplierRevenueType($idItem){
 
 }
 
-function getListSupplierRevenuesAdvice($ucID, $revenueType){
+function getListSupplierRevenuesAdvice($uc_ID, $revenueType){
     $db = dbConnect();
     if($revenueType!="equipment" && $revenueType!="deployment" && $revenueType!="operating" ){ throw new Exception("1 wrong equipment type.");}
 
@@ -2747,18 +2776,28 @@ function getListSupplierRevenuesAdvice($ucID, $revenueType){
                             and supplier_revenues_item.type = ?
                         ORDER BY name
                             ;");
-    $req->execute(array($ucID, $revenueType));
 
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id_revenue']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $cat=$row['cat'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description, 'cat'=>$cat];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description, 'cat'=>$cat];
+    $ucIDList = [$uc_ID];
+    $solID = getSolutionByUcID($uc_ID)['id'];
+    $ucInSol = getUcInSol([$solID]);
+    foreach ($ucInSol as $ucItem) {
+        if($ucItem['id'] != $uc_ID){
+            array_push($ucIDList, $ucItem['id']);
+        }
+    }
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID, $revenueType));
+        while($row = $req->fetch()){
+            $id_item = intval($row['id_revenue']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $cat=$row['cat'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description, 'cat'=>$cat];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description, 'cat'=>$cat];
+            }
         }
     }
     //var_dump($list);
@@ -2981,7 +3020,7 @@ function getImplemUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
+function getListImplemAdvice($uc_ID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -3014,24 +3053,37 @@ function getListImplemAdvice($ucID, $origine = "all", $side="projDev"){
                                         $side_selection
                             ORDER BY name
                             ");
-    $req->execute(array($ucID));
 
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $unit = $row['unit'];
-        $source = $row['source'];
-        $range_min = intval($row['range_min']);
-        $range_max = intval($row['range_max']);
-        $side = $row['side'];
-        $cat=$row['cat'];
-        $default_cost = $row['default_cost'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+    $ucIDList = [$uc_ID];
+    if(isSup() && $side != "customer"){
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUcInSol([$solID]);
+        foreach ($ucInSol as $ucItem) {
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
+        }
+    }
+
+    foreach($ucIDList as $ucID){
+        $req->execute(array($ucID));
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $unit = $row['unit'];
+            $source = $row['source'];
+            $range_min = intval($row['range_min']);
+            $range_max = intval($row['range_max']);
+            $side = $row['side'];
+            $cat=$row['cat'];
+            $default_cost = $row['default_cost'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side,'cat'=>$cat,'default_cost'=>$default_cost];
+            }
         }
     }
     //var_dump($list);
@@ -3096,11 +3148,13 @@ function getListImplemUser( $projID,$uc_ID, $origine = "all", $side="projDev"){
 
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+        if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }
     $req = $db->prepare("SELECT implem_item.id,name,description, side, cat
@@ -3296,7 +3350,7 @@ function getOpexUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
-function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
+function getListOpexAdvice($uc_ID, $origine = "all", $side="projDev"){
     $db = dbConnect();
     $origine_selection = "";
     $side_selection = "";
@@ -3327,27 +3381,39 @@ function getListOpexAdvice($ucID, $origine = "all", $side="projDev"){
                                         $side_selection
                             ORDER BY name
                             ");
-    $req->execute(array($ucID));
 
     $list = [];
-    while($row = $req->fetch()){
-        $id_item = intval($row['id']);
-        $name = $row['name'];
-        $description = $row['description'];
-        $unit = $row['unit'];
-        $source = $row['source'];
-        $range_min = intval($row['range_min']);
-        $range_max = intval($row['range_max']);
-        $side = $row['side'];
-        $cat=$row['cat'];
-        $default_cost = $row['default_cost'];
-        if(array_key_exists($id_item,$list)){
-            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat,'default_cost'=>$default_cost];
-        } else {
-            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat,'default_cost'=>$default_cost];
+    $ucIDList = [$uc_ID];
+        if(isSup() && $side != "customer"){
+        $solID = getSolutionByUcID($uc_ID)['id'];
+        $ucInSol = getUcInSol([$solID]);
+        foreach ($ucInSol as $ucItem) {
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }
-    //var_dump($list);
+    foreach($ucIDList as $ucID){
+
+        $req->execute(array($ucID));
+        while($row = $req->fetch()){
+            $id_item = intval($row['id']);
+            $name = $row['name'];
+            $description = $row['description'];
+            $unit = $row['unit'];
+            $source = $row['source'];
+            $range_min = intval($row['range_min']);
+            $range_max = intval($row['range_max']);
+            $side = $row['side'];
+            $cat=$row['cat'];
+            $default_cost = $row['default_cost'];
+            if(array_key_exists($id_item,$list)){
+                $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat,'default_cost'=>$default_cost];
+            } else {
+                $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'range_min'=>$range_min,'range_max'=>$range_max, 'side'=>$side, 'cat'=>$cat,'default_cost'=>$default_cost];
+            }
+        }
+    }
     return $list;
 }
 
@@ -3409,11 +3475,13 @@ function getListOpexUser($projID,$uc_ID, $origine = "all", $side="projDev"){
   
     $list = [];
     $ucIDList = [$uc_ID];
-    if($side == "supplier"){
+        if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }
 
@@ -4088,11 +4156,13 @@ function getListCashReleasingUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    /*if($side == "supplier"){
+    /*    if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }*/
     $req = $db->prepare("SELECT cashreleasing_item.id,name,description, cat
@@ -4361,11 +4431,13 @@ function getListWiderCashUser($projID,$uc_ID){
     $db = dbConnect();    
     $list = [];
     $ucIDList = [$uc_ID];
-    /*if($side == "supplier"){
+    /*    if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }*/
     $req = $db->prepare("SELECT widercash_item.id,name,description, cat
@@ -4624,11 +4696,13 @@ function getListQuantifiableUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    /*if($side == "supplier"){
+    /*    if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }*/
     $req = $db->prepare("SELECT quantifiable_item.id,name,description, cat
@@ -4853,11 +4927,13 @@ function getListNonCashUser($projID,$uc_ID){
     $db = dbConnect();
     $list = [];
     $ucIDList = [$uc_ID];
-    /*if($side == "supplier"){
+    /*    if(isSup() && $side != "customer"){
         $solID = getSolutionByUcID($uc_ID)['id'];
-        $ucInSol = getUC([$solID]);
+        $ucInSol = getUcInSol([$solID]);
         foreach ($ucInSol as $ucItem) {
-            array_push($ucIDList, $ucItem['id']);
+            if($ucItem['id'] != $uc_ID){
+                array_push($ucIDList, $ucItem['id']);
+            }
         }
     }*/
     $req = $db->prepare("SELECT noncash_item.id,name,description, cat

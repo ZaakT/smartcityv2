@@ -1,5 +1,4 @@
 {% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc, listUcsName, ucID, Mode, selDevSym, categoryID) %}
-
 <tr id = "tr_{{ id_xpex }}" scope="row"  class = "cat_{{categoryID}}">
     
     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
@@ -40,7 +39,7 @@
             </td> 
             <td scope="col">
                 <div class="input-group justify-content-center">
-                   <input id="impact_{{id_xpex}}" name="impact100_{{id_xpex}}_{{ucID}}" class="text-center impact100 pt-1 pb-1" type="number" min=0 max = 100 step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['impact']}}" placeholder="{{ ratio[id_xpex]['impact']}}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
+                   <input id="impact_{{id_xpex}}" name="impact100_{{id_xpex}}_{{ucID}}" class="text-center impact100 pt-1 pb-1" type="number" min=0 max = 100 step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['impact'] ? selXpex[id_xpex]['impact'] : xpex[id_xpex]['default_impact'] }}" placeholder="{{ ratio[id_xpex]['impact']}}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">%</span>
                     </div>
