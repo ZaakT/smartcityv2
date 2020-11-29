@@ -126,7 +126,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     END
                                     """)
             sql = 'CALL add_cashreleasing(%s,%s,%s,%s, %s, %s,%s, %s,%s, %s,%s);'
-            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat)
+            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat, inp[8])
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
