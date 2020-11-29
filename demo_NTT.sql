@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  ven. 27 nov. 2020 à 18:09
+-- Généré le :  Dim 29 nov. 2020 à 13:54
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -118,16 +118,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenues` (IN `revenues_name` V
                                     END$$
 
 DROP PROCEDURE IF EXISTS `add_revenuesprotection`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `revenuesprotection_name` VARCHAR(255), IN `revenuesprotection_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
-                                DECLARE itemID INT;
-                                INSERT INTO revenuesprotection_item (name,description, cat)
-                                    VALUES (revenuesprotection_name,revenuesprotection_desc, cat);
-                                SET itemID = LAST_INSERT_ID();
-                                INSERT INTO revenuesprotection_uc (id_item,id_uc)
-                                    VALUES (itemID,idUC);
-                                INSERT INTO revenuesprotection_item_user (id,id_proj)
-                                    VALUES (itemID,idProj);
-                            END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_revenuesprotection` (IN `_name` VARCHAR(255), IN `_desc` VARCHAR(255), IN `idUC` INT, IN `cat` INT, IN `default_impact` INT)  BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO revenuesprotection_item (name,description,cat)
+                                            VALUES (_name,_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO revenuesprotection_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO revenuesprotection_item_advice (id, default_impact)
+                                            VALUES (itemID, default_impact);
+                                    END$$
 
 DROP PROCEDURE IF EXISTS `add_risk`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_risk` (IN `risk_name` VARCHAR(255), IN `risk_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `cat` INT)  BEGIN
@@ -173,15 +173,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_widercash` (IN `widercash_name`
                                     END$$
 
 DROP PROCEDURE IF EXISTS `copy_xpex_user`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `copy_xpex_user` (IN `name` VARCHAR(255), IN `description` VARCHAR(255), IN `cat` VARCHAR(255), IN `id_proj` VARCHAR(255), IN `id_uc` VARCHAR(255), IN `unit_indicator` VARCHAR(255), IN `volume` VARCHAR(255), IN `volume_reduc` VARCHAR(255), IN `annual_var_volume` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `copy_xpex_user` (IN `cat` VARCHAR(255), IN `description` VARCHAR(255), IN `name` VARCHAR(255), IN `id_proj` VARCHAR(255), IN `annual_var_volume` VARCHAR(255), IN `id_uc` VARCHAR(255), IN `unit_indicator` VARCHAR(255), IN `volume` VARCHAR(255), IN `volume_reduc` VARCHAR(255))  BEGIN
             DECLARE itemID INT;
-            INSERT INTO quantifiable_item (name,description,cat)
-                VALUES (name,description,cat);
+            INSERT INTO quantifiable_item (cat,description,name)
+                VALUES (cat,description,name);
             SET itemID = LAST_INSERT_ID();
             INSERT INTO quantifiable_item_user (id,id_proj)
                 VALUES (itemID,id_proj);
-            INSERT INTO input_quantifiable (id_item,id_proj,id_uc,unit_indicator,volume,volume_reduc,annual_var_volume)
-                VALUES (itemID,id_proj,id_uc,unit_indicator,volume,volume_reduc,annual_var_volume);  
+            INSERT INTO input_quantifiable (annual_var_volume,id_item,id_proj,id_uc,unit_indicator,volume,volume_reduc)
+                VALUES (annual_var_volume,itemID,id_proj,id_uc,unit_indicator,volume,volume_reduc);  
             INSERT INTO quantifiable_uc (id_item,id_uc)
                 VALUES (itemID,id_uc);
         END$$
@@ -1379,7 +1379,18 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (52, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 24, 18, NULL, NULL, NULL, NULL, 10, 30, ''),
 (53, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, 0, 0, 24, 18, NULL, NULL, NULL, NULL, 10, 30, ''),
 (54, NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 0, 0, 18, 12, NULL, NULL, NULL, NULL, 5, 25, ''),
-(56, 0, 0, 0, 0, 0, 0, 500, 1000, 5, 20, 20, 12, 0, 0, 0, 0, 10, 40, 'npv_check-roi_check-operating_margin_check-payback_check-');
+(56, 0, 0, 0, 0, 0, 0, 500, 1000, 5, 20, 20, 12, 0, 0, 0, 0, 10, 40, 'npv_check-roi_check-operating_margin_check-payback_check-'),
+(58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0');
 
 -- --------------------------------------------------------
 
@@ -3907,6 +3918,7 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (55, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (56, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (57, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(57, 116, 74, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (58, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
 
 -- --------------------------------------------------------
@@ -3943,7 +3955,29 @@ INSERT INTO `input_revenuesprotection` (`id_item`, `id_proj`, `id_uc`, `current_
 (11, 42, 67, 10, 15),
 (12, 43, 67, 10, 15),
 (0, 44, 67, 13, 15),
-(14, 54, 67, 10, 15);
+(14, 54, 67, 10, 15),
+(16, 57, 74, 0, 0),
+(19, 57, 74, 10, 30),
+(56, 58, 74, 0, 0),
+(57, 59, 74, 0, 0),
+(58, 60, 74, 0, 0),
+(59, 61, 74, 0, 0),
+(60, 62, 74, 0, 0),
+(61, 63, 74, 0, 0),
+(62, 64, 74, 0, 0),
+(63, 65, 74, 0, 0),
+(64, 66, 74, 0, 0),
+(65, 67, 74, 0, 0),
+(66, 68, 74, 0, 0),
+(67, 69, 74, 0, 0),
+(68, 70, 74, 0, 0),
+(69, 71, 74, 0, 0),
+(70, 72, 74, 0, 0),
+(19, 72, 74, 10, 30),
+(20, 57, 90, 130, 10),
+(71, 73, 74, 0, 0),
+(19, 73, 74, 10, 30),
+(20, 73, 90, 130, 10);
 
 -- --------------------------------------------------------
 
@@ -4080,7 +4114,23 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (85, 54, 67, 5, 50, 0, 0, 0, '0001-01-01', 0),
 (86, 54, 67, 10, 10, 0, 0, 0, '0001-01-01', 0),
 (87, 54, 67, 5, 10, 0, 0, 5, '0001-01-01', 0),
-(92, 30, 62, 10, 1200, NULL, 0, 0, NULL, NULL);
+(92, 30, 62, 10, 1200, NULL, 0, 0, NULL, NULL),
+(351, 58, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(352, 59, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(353, 60, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(354, 61, 41, 1702.1, 0, 0, 0, 0, '0001-01-01', 0),
+(355, 62, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(356, 63, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(357, 64, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(358, 65, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(359, 66, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(360, 67, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(361, 68, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(362, 69, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(363, 70, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(364, 71, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(365, 72, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(366, 73, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0);
 
 -- --------------------------------------------------------
 
@@ -6516,7 +6566,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -6530,11 +6580,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
 (30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-26 12:21:27', 16, 1, 1, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
-(46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(54, 'Las Vegas NTT Smart copy', '', NULL, NULL, NULL, '2020-11-18 16:42:27', '2020-11-26 12:20:37', 16, 1, 1, 1),
-(55, 'test', '', NULL, NULL, NULL, '2020-11-19 17:36:54', '2020-11-26 11:41:57', 16, 0, 0, 1),
-(56, 'new test', '', NULL, NULL, NULL, '2020-11-26 11:42:06', '2020-11-26 15:50:27', 16, 1, 1, 1),
-(57, 'test 2', '', NULL, NULL, NULL, '2020-11-27 14:20:31', '2020-11-27 14:21:17', 16, 0, 0, 0);
+(46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -6589,7 +6635,23 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (54, '2020-11-01', 39, '2020-11-01', 7),
 (55, '2020-11-01', 36, '2020-11-01', 6),
 (56, '2020-11-01', 48, '2020-11-01', 6),
-(57, '2020-11-01', 36, '2020-11-01', 6);
+(57, '2020-11-01', 36, '2020-11-01', 6),
+(58, '2020-11-01', 36, '2020-11-01', 6),
+(59, '2020-11-01', 36, '2020-11-01', 6),
+(60, '2020-11-01', 36, '2020-11-01', 6),
+(61, '2020-11-01', 36, '2020-11-01', 6),
+(62, '2020-11-01', 36, '2020-11-01', 6),
+(63, '2020-11-01', 36, '2020-11-01', 6),
+(64, '2020-11-01', 36, '2020-11-01', 6),
+(65, '2020-11-01', 36, '2020-11-01', 6),
+(66, '2020-11-01', 36, '2020-11-01', 6),
+(67, '2020-11-01', 36, '2020-11-01', 6),
+(68, '2020-11-01', 36, '2020-11-01', 6),
+(69, '2020-11-01', 36, '2020-11-01', 6),
+(70, '2020-11-01', 36, '2020-11-01', 6),
+(71, '2020-11-01', 36, '2020-11-01', 6),
+(72, '2020-11-01', 36, '2020-11-01', 6),
+(73, '2020-11-01', 36, '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -6815,7 +6877,23 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (54, 66, '2020-11-01', 5, '2024-03-01', '2020-11-01', 5),
 (54, 67, '2020-11-01', 6, '2024-02-01', '2020-11-01', 6),
 (56, 48, '2020-11-01', 3, '2024-11-01', '2020-11-01', 3),
-(57, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6);
+(57, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(58, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(59, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(60, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(61, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(62, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(63, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(64, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(65, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(66, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(67, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(68, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(69, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(70, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(71, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(72, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(73, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -6990,6 +7068,22 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (55, 0),
 (56, 0),
 (57, 0),
+(58, 0),
+(59, 0),
+(60, 0),
+(61, 0),
+(62, 0),
+(63, 0),
+(64, 0),
+(65, 0),
+(66, 0),
+(67, 0),
+(68, 0),
+(69, 0),
+(70, 0),
+(71, 0),
+(72, 0),
+(73, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -7032,7 +7126,23 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (54, 25),
 (55, 25),
 (56, 25),
-(57, 25);
+(57, 25),
+(58, 25),
+(59, 25),
+(60, 25),
+(61, 25),
+(62, 25),
+(63, 25),
+(64, 25),
+(65, 25),
+(66, 25),
+(67, 25),
+(68, 25),
+(69, 25),
+(70, 25),
+(71, 25),
+(72, 25),
+(73, 25);
 
 -- --------------------------------------------------------
 
@@ -7379,7 +7489,71 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 57),
 (87, 57),
 (89, 57),
-(90, 57);
+(90, 57),
+(-1, 58),
+(87, 58),
+(89, 58),
+(90, 58),
+(-1, 59),
+(87, 59),
+(89, 59),
+(90, 59),
+(-1, 60),
+(87, 60),
+(89, 60),
+(90, 60),
+(-1, 61),
+(87, 61),
+(89, 61),
+(90, 61),
+(-1, 62),
+(87, 62),
+(89, 62),
+(90, 62),
+(-1, 63),
+(87, 63),
+(89, 63),
+(90, 63),
+(-1, 64),
+(87, 64),
+(89, 64),
+(90, 64),
+(-1, 65),
+(87, 65),
+(89, 65),
+(90, 65),
+(-1, 66),
+(87, 66),
+(89, 66),
+(90, 66),
+(-1, 67),
+(87, 67),
+(89, 67),
+(90, 67),
+(-1, 68),
+(87, 68),
+(89, 68),
+(90, 68),
+(-1, 69),
+(87, 69),
+(89, 69),
+(90, 69),
+(-1, 70),
+(87, 70),
+(89, 70),
+(90, 70),
+(-1, 71),
+(87, 71),
+(89, 71),
+(90, 71),
+(-1, 72),
+(87, 72),
+(89, 72),
+(90, 72),
+(-1, 73),
+(87, 73),
+(89, 73),
+(90, 73);
 
 -- --------------------------------------------------------
 
@@ -7662,28 +7836,127 @@ CREATE TABLE IF NOT EXISTS `revenuesprotection_item` (
   `unit` varchar(256) DEFAULT NULL,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenuesprotection_item`
 --
 
 INSERT INTO `revenuesprotection_item` (`id`, `name`, `description`, `unit`, `cat`) VALUES
-(1, 'prot', '', NULL, 0),
-(2, 'prot', '', NULL, 0),
-(3, 'prot', '', NULL, 0),
-(4, 'prot', '', NULL, 0),
-(5, 'prot', '', NULL, 0),
-(6, 'prot', '', NULL, 0),
-(7, 'prot', '', NULL, 0),
-(8, 'prot', '', NULL, 0),
-(9, 'prot', '', NULL, 0),
-(10, 'prot', '', NULL, 0),
-(11, 'prot', '', NULL, 0),
-(12, 'prot', '', NULL, 0),
-(13, 'prot', '', NULL, 0),
-(14, 'prot', '', NULL, 0),
-(15, 'item test', '', NULL, 54);
+(21, 'Occupancy and Notification-Offices-7.8-Item #7', '', NULL, 293),
+(20, 'Occupancy and Notification-Offices-7.8-Item #6', '', NULL, 293),
+(19, 'new test', '', NULL, 155),
+(18, 'test 3', '', NULL, 155),
+(17, 'test 2', '', NULL, 467),
+(16, 'qre', '', NULL, 155),
+(15, 'item test', '', NULL, 54),
+(22, 'Occupancy and Notification-Offices-7.8-Item #8', '', NULL, 309),
+(23, 'Occupancy and Notification-Offices-7.8-Item #9', '', NULL, 309),
+(24, 'Occupancy and Notification-Offices-7.8-Item #10', '', NULL, 319),
+(25, 'Occupancy and Notification-Offices-7.9-Item #1', '', NULL, 319),
+(26, 'Occupancy and Notification-Offices-7.9-Item #2', '', NULL, 329),
+(27, 'Occupancy and Notification-Offices-7.9-Item #3', '', NULL, 329),
+(28, 'Occupancy and Notification-Offices-7.9-Item #4', '', NULL, 339),
+(29, 'Occupancy and Notification-Offices-7.9-Item #5', '', NULL, 339),
+(30, 'Occupancy and Notification-Offices-7.9-Item #6', '', NULL, 349),
+(31, 'Occupancy and Notification-Offices-7.9-Item #7', '', NULL, 349),
+(32, 'Occupancy and Notification-Offices-7.9-Item #8', '', NULL, 365),
+(33, 'Occupancy and Notification-Offices-7.9-Item #9', '', NULL, 365),
+(34, 'Occupancy and Notification-Offices-7.9-Item #10', '', NULL, 375),
+(35, 'Occupancy and Notification-Offices-7.9-Item #11', '', NULL, 375),
+(36, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #1', '', NULL, 385),
+(37, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #2', '', NULL, 385),
+(38, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #3', '', NULL, 395),
+(39, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #4', '', NULL, 395),
+(40, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #5', '', NULL, 405),
+(41, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #6', '', NULL, 405),
+(42, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #7', '', NULL, 415),
+(43, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #8', '', NULL, 415),
+(44, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #9', '', NULL, 431),
+(45, 'Occupancy and Notification-Factory/Manufact.-7.4-Item #10', '', NULL, 431),
+(46, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #1', '', NULL, 441),
+(47, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #2', '', NULL, 441),
+(48, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #3', '', NULL, 457),
+(49, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #4', '', NULL, 457),
+(50, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #5', '', NULL, 467),
+(51, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #6', '', NULL, 467),
+(52, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #7', '', NULL, 477),
+(53, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #8', '', NULL, 477),
+(54, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #9', '', NULL, 195),
+(55, 'Occupancy and Notification-Factory/Manufact.-7.5-Item #10', '', NULL, 67),
+(56, 'qre', '', NULL, 155),
+(57, 'qre', '', NULL, 155),
+(58, 'qre', '', NULL, 155),
+(59, 'qre', '', NULL, 155),
+(60, 'qre', '', NULL, 155),
+(61, 'qre', '', NULL, 155),
+(62, 'qre', '', NULL, 155),
+(63, 'qre', '', NULL, 155),
+(64, 'qre', '', NULL, 155),
+(65, 'qre', '', NULL, 155),
+(66, 'qre', '', NULL, 155),
+(67, 'qre', '', NULL, 155),
+(68, 'qre', '', NULL, 155),
+(69, 'qre', '', NULL, 155),
+(70, 'qre', '', NULL, 155),
+(71, 'qre', '', NULL, 155);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `revenuesprotection_item_advice`
+--
+
+DROP TABLE IF EXISTS `revenuesprotection_item_advice`;
+CREATE TABLE IF NOT EXISTS `revenuesprotection_item_advice` (
+  `id` int(11) NOT NULL,
+  `default_impact` int(11) NOT NULL DEFAULT '0',
+  `source` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `revenuesprotection_item_advice`
+--
+
+INSERT INTO `revenuesprotection_item_advice` (`id`, `default_impact`, `source`) VALUES
+(19, 0, ''),
+(20, 8, ''),
+(21, 8, ''),
+(22, 8, ''),
+(23, 8, ''),
+(24, 8, ''),
+(25, 8, ''),
+(26, 8, ''),
+(27, 8, ''),
+(28, 8, ''),
+(29, 8, ''),
+(30, 8, ''),
+(31, 8, ''),
+(32, 8, ''),
+(33, 8, ''),
+(34, 8, ''),
+(35, 8, ''),
+(36, 8, ''),
+(37, 8, ''),
+(38, 8, ''),
+(39, 8, ''),
+(40, 8, ''),
+(41, 8, ''),
+(42, 8, ''),
+(43, 8, ''),
+(44, 8, ''),
+(45, 8, ''),
+(46, 8, ''),
+(47, 8, ''),
+(48, 8, ''),
+(49, 8, ''),
+(50, 8, ''),
+(51, 8, ''),
+(52, 8, ''),
+(53, 8, ''),
+(54, 0, ''),
+(55, 0, '');
 
 -- --------------------------------------------------------
 
@@ -7717,7 +7990,24 @@ INSERT INTO `revenuesprotection_item_user` (`id`, `id_proj`) VALUES
 (12, 43),
 (13, 44),
 (14, 54),
-(15, 30);
+(15, 30),
+(16, 57),
+(56, 58),
+(57, 59),
+(58, 60),
+(59, 61),
+(60, 62),
+(61, 63),
+(62, 64),
+(63, 65),
+(64, 66),
+(65, 67),
+(66, 68),
+(67, 69),
+(68, 70),
+(69, 71),
+(70, 72),
+(71, 73);
 
 -- --------------------------------------------------------
 
@@ -7751,7 +8041,63 @@ INSERT INTO `revenuesprotection_uc` (`id_item`, `id_uc`) VALUES
 (12, 67),
 (13, 67),
 (14, 67),
-(15, 67);
+(15, 67),
+(16, 74),
+(17, 101),
+(18, 74),
+(19, 74),
+(20, 90),
+(21, 90),
+(22, 91),
+(23, 91),
+(24, 88),
+(25, 88),
+(26, 89),
+(27, 89),
+(28, 87),
+(29, 87),
+(30, 95),
+(31, 95),
+(32, 96),
+(33, 96),
+(34, 93),
+(35, 93),
+(36, 94),
+(37, 94),
+(38, 97),
+(39, 97),
+(40, 92),
+(41, 92),
+(42, 99),
+(43, 99),
+(44, 98),
+(45, 98),
+(46, 100),
+(47, 100),
+(48, 103),
+(49, 103),
+(50, 101),
+(51, 101),
+(52, 102),
+(53, 102),
+(54, 77),
+(55, 70),
+(56, 74),
+(57, 74),
+(58, 74),
+(59, 74),
+(60, 74),
+(61, 74),
+(62, 74),
+(63, 74),
+(64, 74),
+(65, 74),
+(66, 74),
+(67, 74),
+(68, 74),
+(69, 74),
+(70, 74),
+(71, 74);
 
 -- --------------------------------------------------------
 
@@ -7766,7 +8112,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item` (
   `description` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item`
@@ -7829,7 +8175,8 @@ INSERT INTO `revenues_item` (`id`, `name`, `description`, `cat`) VALUES
 (58, 'rev', '', 0),
 (59, 'rev', '', 0),
 (60, 'rev', '', 0),
-(61, 'item 1', '', 53);
+(61, 'item 1', '', 53),
+(62, 'test 4', '', 154);
 
 -- --------------------------------------------------------
 
@@ -7846,7 +8193,7 @@ CREATE TABLE IF NOT EXISTS `revenues_item_advice` (
   `range_max` double DEFAULT NULL,
   `default_revenue` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `revenues_item_advice`
@@ -7885,7 +8232,8 @@ INSERT INTO `revenues_item_advice` (`id`, `unit`, `source`, `range_min`, `range_
 (45, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
 (46, '# of additional clients each month', '', 0, 0, 0),
 (47, '# of Giga Bites of data sold to third parties per month', '', 0, 0, 0),
-(48, '# of additional clients each month', '', 0, 0, 0);
+(48, '# of additional clients each month', '', 0, 0, 0),
+(62, '', '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -8016,7 +8364,8 @@ INSERT INTO `revenues_uc` (`id_item`, `id_uc`) VALUES
 (58, 67),
 (59, 67),
 (60, 67),
-(61, 67);
+(61, 67),
+(62, 74);
 
 -- --------------------------------------------------------
 
@@ -8416,7 +8765,23 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) 
 (52, '', '', '', ''),
 (53, '', '', '', ''),
 (54, 'C1', 'C2', 'name 4', 'Area 3'),
-(56, '', '', '', '');
+(56, '', '', '', ''),
+(58, NULL, NULL, NULL, NULL),
+(59, NULL, NULL, NULL, NULL),
+(60, NULL, NULL, NULL, NULL),
+(61, NULL, NULL, NULL, NULL),
+(62, NULL, NULL, NULL, NULL),
+(63, NULL, NULL, NULL, NULL),
+(64, NULL, NULL, NULL, NULL),
+(65, NULL, NULL, NULL, NULL),
+(66, NULL, NULL, NULL, NULL),
+(67, NULL, NULL, NULL, NULL),
+(68, NULL, NULL, NULL, NULL),
+(69, NULL, NULL, NULL, NULL),
+(70, NULL, NULL, NULL, NULL),
+(71, NULL, NULL, NULL, NULL),
+(72, NULL, NULL, NULL, NULL),
+(73, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8450,7 +8815,7 @@ CREATE TABLE IF NOT EXISTS `supplier_revenues_item` (
   `cat` int(11) NOT NULL,
   `default_rev` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`item_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=367 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `supplier_revenues_item`
@@ -8769,7 +9134,23 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (347, 'O - ASU Range 451 - 500 - Deployment & set-up', 'deployment', '', 'advice', '', 250, 691367),
 (348, 'O - ASU Range 501 - 550 - Deployment & set-up', 'deployment', '', 'advice', '', 250, 747926),
 (349, 'O - ASU Range 551 - 600 - Deployment & set-up', 'deployment', '', 'advice', '', 250, 804484),
-(350, 'O - ASU Range 601 - 650 - Deployment & set-up', 'deployment', '', 'advice', '', 250, 861042);
+(350, 'O - ASU Range 601 - 650 - Deployment & set-up', 'deployment', '', 'advice', '', 250, 861042),
+(351, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(352, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(353, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(354, 'PaaS - 51 to 200 ASUs', 'operating', '', 'user', '#', 48, 0),
+(355, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(356, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(357, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(358, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(359, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(360, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(361, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(362, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(363, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(364, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(365, 'Camera', 'equipment', '', 'user', '#', 46, 0),
+(366, 'Camera', 'equipment', '', 'user', '#', 46, 0);
 
 -- --------------------------------------------------------
 
@@ -9125,7 +9506,23 @@ INSERT INTO `supplier_revenues_uc` (`id_revenue`, `id_uc`) VALUES
 (347, 84),
 (348, 84),
 (349, 84),
-(350, 84);
+(350, 84),
+(351, 41),
+(352, 41),
+(353, 41),
+(354, 41),
+(355, 41),
+(356, 41),
+(357, 41),
+(358, 41),
+(359, 41),
+(360, 41),
+(361, 41),
+(362, 41),
+(363, 41),
+(364, 41),
+(365, 41),
+(366, 41);
 
 -- --------------------------------------------------------
 
@@ -9207,6 +9604,21 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (42, 64),
 (42, 71),
 (42, 78),
+(42, 351),
+(42, 352),
+(42, 353),
+(42, 355),
+(42, 356),
+(42, 357),
+(42, 358),
+(42, 359),
+(42, 360),
+(42, 361),
+(42, 362),
+(42, 363),
+(42, 364),
+(42, 365),
+(42, 366),
 (43, 46),
 (43, 51),
 (43, 58),
@@ -9225,6 +9637,7 @@ INSERT INTO `supplier_revenues_user` (`id_revenue`, `id_proj`) VALUES
 (45, 67),
 (45, 74),
 (45, 81),
+(45, 354),
 (82, 54),
 (83, 54),
 (84, 54),
@@ -10561,7 +10974,7 @@ CREATE TABLE IF NOT EXISTS `use_case` (
   PRIMARY KEY (`id`),
   KEY `id_meas` (`id_meas`),
   KEY `id_cat` (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=140 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case`
@@ -10653,7 +11066,43 @@ INSERT INTO `use_case` (`id`, `name`, `description`, `id_meas`, `id_cat`) VALUES
 (100, 'Factory/Manufact.', '', 25, 36),
 (101, 'Event, Cultural & Sports Facilities', '', 25, 36),
 (102, 'Offices', '', 25, 36),
-(103, 'Retail / Malls / Small shops', '', 25, 36);
+(103, 'Retail / Malls / Small shops', '', 25, 36),
+(104, 'Parks', '', 25, 37),
+(105, 'Public Areas/Plazas', '', 25, 37),
+(106, 'Retail / Malls / Small shops', '', 25, 37),
+(107, 'Private Roads', '', 25, 38),
+(108, 'Public Roads', '', 25, 38),
+(109, 'Parks', '', 25, 39),
+(110, 'Event, Cultural & Sports Facilities', '', 25, 39),
+(111, 'Retail / Malls / Small shops', '', 25, 39),
+(112, 'Public Areas/Plazas', '', 25, 39),
+(113, 'Airports', '', 25, 39),
+(114, 'Factory/Manufact.', '', 25, 39),
+(115, 'Offices', '', 25, 39),
+(116, 'Private Roads', '', 25, 40),
+(117, 'Public Areas/Plazas', '', 25, 40),
+(118, 'Public Roads', '', 25, 40),
+(119, 'Public Areas/Plazas', '', 25, 41),
+(120, 'Public Roads', '', 25, 41),
+(121, 'Private Roads', '', 25, 42),
+(122, 'Public Roads', '', 25, 42),
+(123, 'Parks', '', 25, 43),
+(124, 'Event, Cultural & Sports Facilities', '', 25, 43),
+(125, 'Retail / Malls / Small shops', '', 25, 43),
+(126, 'Airports', '', 25, 43),
+(127, 'Offices', '', 25, 43),
+(128, 'Parks', '', 25, 44),
+(129, 'Event, Cultural & Sports Facilities', '', 25, 44),
+(130, 'Retail / Malls / Small shops', '', 25, 44),
+(131, 'Airports', '', 25, 44),
+(132, 'Factory/Manufact.', '', 25, 44),
+(133, 'Offices', '', 25, 44),
+(134, 'Factory/Manufact.', '', 25, 45),
+(135, 'Offices', '', 25, 45),
+(136, 'Offices', '', 25, 46),
+(137, 'Factory/Manufact.', '', 25, 46),
+(138, 'Event, Cultural & Sports Facilities', '', 25, 46),
+(139, 'Retail / Malls / Small shops', '', 25, 46);
 
 -- --------------------------------------------------------
 
@@ -10697,7 +11146,7 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `use_case_cat`
@@ -10709,17 +11158,7 @@ INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (9, 'Public Safety', ''),
 (11, 'Signage ', ''),
 (13, 'Movment Monitoring ', ''),
-(15, 'Ligthing', ''),
-(27, 'Missing Person', ''),
-(28, 'Traffic – Vehicle of Interest', ''),
-(29, 'Occupancy and Notification', ''),
-(30, 'Traffic – Vehicle Count', ''),
-(31, 'Traffic – Origination and Destination', ''),
-(32, 'Wrong Direction', ''),
-(33, 'Health Check – Thermal Scan', ''),
-(34, 'Boundary Compliance', ''),
-(35, 'Plant Safety (Manufacturing)', ''),
-(36, 'Back to Work Package', '');
+(15, 'Ligthing', '');
 
 -- --------------------------------------------------------
 
@@ -11034,7 +11473,7 @@ CREATE TABLE IF NOT EXISTS `xpex_cat` (
   `xpex_type` enum('equipment_revenues','deployment_revenues','operating_revenues','capex','opex','revenues','revenuesProtection','cashreleasing','widercash','quantifiable','noncash','risks','deployment_costs') NOT NULL,
   `side` enum('customer','supplier','projDev') NOT NULL DEFAULT 'supplier',
   PRIMARY KEY (`id_cat`)
-) ENGINE=InnoDB AUTO_INCREMENT=484 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=904 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `xpex_cat`
@@ -11498,7 +11937,427 @@ INSERT INTO `xpex_cat` (`id_cat`, `id_uc`, `name`, `xpex_type`, `side`) VALUES
 (480, 102, 'Category', 'quantifiable', 'customer'),
 (481, 102, 'Category', 'noncash', 'customer'),
 (482, 102, 'Category', 'risks', 'customer'),
-(483, 102, 'Category', 'deployment_costs', 'customer');
+(483, 102, 'Category', 'deployment_costs', 'customer'),
+(484, 106, 'Category', 'capex', 'customer'),
+(485, 106, 'Category', 'opex', 'customer'),
+(486, 106, 'Category', 'revenues', 'customer'),
+(487, 106, 'Category', 'revenuesProtection', 'customer'),
+(488, 106, 'Category', 'cashreleasing', 'customer'),
+(489, 106, 'Category', 'widercash', 'customer'),
+(490, 106, 'Category', 'quantifiable', 'customer'),
+(491, 106, 'Category', 'noncash', 'customer'),
+(492, 106, 'Category', 'risks', 'customer'),
+(493, 106, 'Category', 'deployment_costs', 'customer'),
+(494, 106, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(495, 106, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(496, 106, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(497, 106, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(498, 106, 'Influenced', 'capex', 'supplier'),
+(499, 106, 'Influenced', 'equipment_revenues', 'supplier'),
+(500, 105, 'Category', 'capex', 'customer'),
+(501, 105, 'Category', 'opex', 'customer'),
+(502, 105, 'Category', 'revenues', 'customer'),
+(503, 105, 'Category', 'revenuesProtection', 'customer'),
+(504, 105, 'Category', 'cashreleasing', 'customer'),
+(505, 105, 'Category', 'widercash', 'customer'),
+(506, 105, 'Category', 'quantifiable', 'customer'),
+(507, 105, 'Category', 'noncash', 'customer'),
+(508, 105, 'Category', 'risks', 'customer'),
+(509, 105, 'Category', 'deployment_costs', 'customer'),
+(510, 104, 'Category', 'capex', 'customer'),
+(511, 104, 'Category', 'opex', 'customer'),
+(512, 104, 'Category', 'revenues', 'customer'),
+(513, 104, 'Category', 'revenuesProtection', 'customer'),
+(514, 104, 'Category', 'cashreleasing', 'customer'),
+(515, 104, 'Category', 'widercash', 'customer'),
+(516, 104, 'Category', 'quantifiable', 'customer'),
+(517, 104, 'Category', 'noncash', 'customer'),
+(518, 104, 'Category', 'risks', 'customer'),
+(519, 104, 'Category', 'deployment_costs', 'customer'),
+(520, 108, 'Category', 'capex', 'customer'),
+(521, 108, 'Category', 'opex', 'customer'),
+(522, 108, 'Category', 'revenues', 'customer'),
+(523, 108, 'Category', 'revenuesProtection', 'customer'),
+(524, 108, 'Category', 'cashreleasing', 'customer'),
+(525, 108, 'Category', 'widercash', 'customer'),
+(526, 108, 'Category', 'quantifiable', 'customer'),
+(527, 108, 'Category', 'noncash', 'customer'),
+(528, 108, 'Category', 'risks', 'customer'),
+(529, 108, 'Category', 'deployment_costs', 'customer'),
+(530, 108, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(531, 108, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(532, 108, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(533, 108, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(534, 108, 'Influenced', 'capex', 'supplier'),
+(535, 108, 'Influenced', 'equipment_revenues', 'supplier'),
+(536, 107, 'Category', 'capex', 'customer'),
+(537, 107, 'Category', 'opex', 'customer'),
+(538, 107, 'Category', 'revenues', 'customer'),
+(539, 107, 'Category', 'revenuesProtection', 'customer'),
+(540, 107, 'Category', 'cashreleasing', 'customer'),
+(541, 107, 'Category', 'widercash', 'customer'),
+(542, 107, 'Category', 'quantifiable', 'customer'),
+(543, 107, 'Category', 'noncash', 'customer'),
+(544, 107, 'Category', 'risks', 'customer'),
+(545, 107, 'Category', 'deployment_costs', 'customer'),
+(546, 109, 'Category', 'capex', 'customer'),
+(547, 109, 'Category', 'opex', 'customer'),
+(548, 109, 'Category', 'revenues', 'customer'),
+(549, 109, 'Category', 'revenuesProtection', 'customer'),
+(550, 109, 'Category', 'cashreleasing', 'customer'),
+(551, 109, 'Category', 'widercash', 'customer'),
+(552, 109, 'Category', 'quantifiable', 'customer'),
+(553, 109, 'Category', 'noncash', 'customer'),
+(554, 109, 'Category', 'risks', 'customer'),
+(555, 109, 'Category', 'deployment_costs', 'customer'),
+(556, 109, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(557, 109, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(558, 109, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(559, 109, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(560, 109, 'Influenced', 'capex', 'supplier'),
+(561, 109, 'Influenced', 'equipment_revenues', 'supplier'),
+(562, 112, 'Category', 'capex', 'customer'),
+(563, 112, 'Category', 'opex', 'customer'),
+(564, 112, 'Category', 'revenues', 'customer'),
+(565, 112, 'Category', 'revenuesProtection', 'customer'),
+(566, 112, 'Category', 'cashreleasing', 'customer'),
+(567, 112, 'Category', 'widercash', 'customer'),
+(568, 112, 'Category', 'quantifiable', 'customer'),
+(569, 112, 'Category', 'noncash', 'customer'),
+(570, 112, 'Category', 'risks', 'customer'),
+(571, 112, 'Category', 'deployment_costs', 'customer'),
+(572, 111, 'Category', 'capex', 'customer'),
+(573, 111, 'Category', 'opex', 'customer'),
+(574, 111, 'Category', 'revenues', 'customer'),
+(575, 111, 'Category', 'revenuesProtection', 'customer'),
+(576, 111, 'Category', 'cashreleasing', 'customer'),
+(577, 111, 'Category', 'widercash', 'customer'),
+(578, 111, 'Category', 'quantifiable', 'customer'),
+(579, 111, 'Category', 'noncash', 'customer'),
+(580, 111, 'Category', 'risks', 'customer'),
+(581, 111, 'Category', 'deployment_costs', 'customer'),
+(582, 115, 'Category', 'capex', 'customer'),
+(583, 115, 'Category', 'opex', 'customer'),
+(584, 115, 'Category', 'revenues', 'customer'),
+(585, 115, 'Category', 'revenuesProtection', 'customer'),
+(586, 115, 'Category', 'cashreleasing', 'customer'),
+(587, 115, 'Category', 'widercash', 'customer'),
+(588, 115, 'Category', 'quantifiable', 'customer'),
+(589, 115, 'Category', 'noncash', 'customer'),
+(590, 115, 'Category', 'risks', 'customer'),
+(591, 115, 'Category', 'deployment_costs', 'customer'),
+(592, 114, 'Category', 'capex', 'customer'),
+(593, 114, 'Category', 'opex', 'customer'),
+(594, 114, 'Category', 'revenues', 'customer'),
+(595, 114, 'Category', 'revenuesProtection', 'customer'),
+(596, 114, 'Category', 'cashreleasing', 'customer'),
+(597, 114, 'Category', 'widercash', 'customer'),
+(598, 114, 'Category', 'quantifiable', 'customer'),
+(599, 114, 'Category', 'noncash', 'customer'),
+(600, 114, 'Category', 'risks', 'customer'),
+(601, 114, 'Category', 'deployment_costs', 'customer'),
+(602, 110, 'Category', 'capex', 'customer'),
+(603, 110, 'Category', 'opex', 'customer'),
+(604, 110, 'Category', 'revenues', 'customer'),
+(605, 110, 'Category', 'revenuesProtection', 'customer'),
+(606, 110, 'Category', 'cashreleasing', 'customer'),
+(607, 110, 'Category', 'widercash', 'customer'),
+(608, 110, 'Category', 'quantifiable', 'customer'),
+(609, 110, 'Category', 'noncash', 'customer'),
+(610, 110, 'Category', 'risks', 'customer'),
+(611, 110, 'Category', 'deployment_costs', 'customer'),
+(612, 113, 'Category', 'capex', 'customer'),
+(613, 113, 'Category', 'opex', 'customer'),
+(614, 113, 'Category', 'revenues', 'customer'),
+(615, 113, 'Category', 'revenuesProtection', 'customer'),
+(616, 113, 'Category', 'cashreleasing', 'customer'),
+(617, 113, 'Category', 'widercash', 'customer'),
+(618, 113, 'Category', 'quantifiable', 'customer'),
+(619, 113, 'Category', 'noncash', 'customer'),
+(620, 113, 'Category', 'risks', 'customer'),
+(621, 113, 'Category', 'deployment_costs', 'customer'),
+(622, 118, 'Category', 'capex', 'customer'),
+(623, 118, 'Category', 'opex', 'customer'),
+(624, 118, 'Category', 'revenues', 'customer'),
+(625, 118, 'Category', 'revenuesProtection', 'customer'),
+(626, 118, 'Category', 'cashreleasing', 'customer'),
+(627, 118, 'Category', 'widercash', 'customer'),
+(628, 118, 'Category', 'quantifiable', 'customer'),
+(629, 118, 'Category', 'noncash', 'customer'),
+(630, 118, 'Category', 'risks', 'customer'),
+(631, 118, 'Category', 'deployment_costs', 'customer'),
+(632, 118, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(633, 118, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(634, 118, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(635, 118, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(636, 118, 'Influenced', 'capex', 'supplier'),
+(637, 118, 'Influenced', 'equipment_revenues', 'supplier'),
+(638, 116, 'Category', 'capex', 'customer'),
+(639, 116, 'Category', 'opex', 'customer'),
+(640, 116, 'Category', 'revenues', 'customer'),
+(641, 116, 'Category', 'revenuesProtection', 'customer'),
+(642, 116, 'Category', 'cashreleasing', 'customer'),
+(643, 116, 'Category', 'widercash', 'customer'),
+(644, 116, 'Category', 'quantifiable', 'customer'),
+(645, 116, 'Category', 'noncash', 'customer'),
+(646, 116, 'Category', 'risks', 'customer'),
+(647, 116, 'Category', 'deployment_costs', 'customer'),
+(648, 117, 'Category', 'capex', 'customer'),
+(649, 117, 'Category', 'opex', 'customer'),
+(650, 117, 'Category', 'revenues', 'customer'),
+(651, 117, 'Category', 'revenuesProtection', 'customer'),
+(652, 117, 'Category', 'cashreleasing', 'customer'),
+(653, 117, 'Category', 'widercash', 'customer'),
+(654, 117, 'Category', 'quantifiable', 'customer'),
+(655, 117, 'Category', 'noncash', 'customer'),
+(656, 117, 'Category', 'risks', 'customer'),
+(657, 117, 'Category', 'deployment_costs', 'customer'),
+(658, 120, 'Category', 'capex', 'customer'),
+(659, 120, 'Category', 'opex', 'customer'),
+(660, 120, 'Category', 'revenues', 'customer'),
+(661, 120, 'Category', 'revenuesProtection', 'customer'),
+(662, 120, 'Category', 'cashreleasing', 'customer'),
+(663, 120, 'Category', 'widercash', 'customer'),
+(664, 120, 'Category', 'quantifiable', 'customer'),
+(665, 120, 'Category', 'noncash', 'customer'),
+(666, 120, 'Category', 'risks', 'customer'),
+(667, 120, 'Category', 'deployment_costs', 'customer'),
+(668, 120, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(669, 120, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(670, 120, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(671, 120, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(672, 120, 'Influenced', 'capex', 'supplier'),
+(673, 120, 'Influenced', 'equipment_revenues', 'supplier'),
+(674, 119, 'Category', 'capex', 'customer'),
+(675, 119, 'Category', 'opex', 'customer'),
+(676, 119, 'Category', 'revenues', 'customer'),
+(677, 119, 'Category', 'revenuesProtection', 'customer'),
+(678, 119, 'Category', 'cashreleasing', 'customer'),
+(679, 119, 'Category', 'widercash', 'customer'),
+(680, 119, 'Category', 'quantifiable', 'customer'),
+(681, 119, 'Category', 'noncash', 'customer'),
+(682, 119, 'Category', 'risks', 'customer'),
+(683, 119, 'Category', 'deployment_costs', 'customer'),
+(684, 122, 'Category', 'capex', 'customer'),
+(685, 122, 'Category', 'opex', 'customer'),
+(686, 122, 'Category', 'revenues', 'customer'),
+(687, 122, 'Category', 'revenuesProtection', 'customer'),
+(688, 122, 'Category', 'cashreleasing', 'customer'),
+(689, 122, 'Category', 'widercash', 'customer'),
+(690, 122, 'Category', 'quantifiable', 'customer'),
+(691, 122, 'Category', 'noncash', 'customer'),
+(692, 122, 'Category', 'risks', 'customer'),
+(693, 122, 'Category', 'deployment_costs', 'customer'),
+(694, 122, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(695, 122, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(696, 122, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(697, 122, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(698, 122, 'Influenced', 'capex', 'supplier'),
+(699, 122, 'Influenced', 'equipment_revenues', 'supplier'),
+(700, 121, 'Category', 'capex', 'customer'),
+(701, 121, 'Category', 'opex', 'customer'),
+(702, 121, 'Category', 'revenues', 'customer'),
+(703, 121, 'Category', 'revenuesProtection', 'customer'),
+(704, 121, 'Category', 'cashreleasing', 'customer'),
+(705, 121, 'Category', 'widercash', 'customer'),
+(706, 121, 'Category', 'quantifiable', 'customer'),
+(707, 121, 'Category', 'noncash', 'customer'),
+(708, 121, 'Category', 'risks', 'customer'),
+(709, 121, 'Category', 'deployment_costs', 'customer'),
+(710, 126, 'Category', 'capex', 'customer'),
+(711, 126, 'Category', 'opex', 'customer'),
+(712, 126, 'Category', 'revenues', 'customer'),
+(713, 126, 'Category', 'revenuesProtection', 'customer'),
+(714, 126, 'Category', 'cashreleasing', 'customer'),
+(715, 126, 'Category', 'widercash', 'customer'),
+(716, 126, 'Category', 'quantifiable', 'customer'),
+(717, 126, 'Category', 'noncash', 'customer'),
+(718, 126, 'Category', 'risks', 'customer'),
+(719, 126, 'Category', 'deployment_costs', 'customer'),
+(720, 126, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(721, 126, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(722, 126, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(723, 126, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(724, 126, 'Influenced', 'capex', 'supplier'),
+(725, 126, 'Influenced', 'equipment_revenues', 'supplier'),
+(726, 123, 'Category', 'capex', 'customer'),
+(727, 123, 'Category', 'opex', 'customer'),
+(728, 123, 'Category', 'revenues', 'customer'),
+(729, 123, 'Category', 'revenuesProtection', 'customer'),
+(730, 123, 'Category', 'cashreleasing', 'customer'),
+(731, 123, 'Category', 'widercash', 'customer'),
+(732, 123, 'Category', 'quantifiable', 'customer'),
+(733, 123, 'Category', 'noncash', 'customer'),
+(734, 123, 'Category', 'risks', 'customer'),
+(735, 123, 'Category', 'deployment_costs', 'customer'),
+(736, 125, 'Category', 'capex', 'customer'),
+(737, 125, 'Category', 'opex', 'customer'),
+(738, 125, 'Category', 'revenues', 'customer'),
+(739, 125, 'Category', 'revenuesProtection', 'customer'),
+(740, 125, 'Category', 'cashreleasing', 'customer'),
+(741, 125, 'Category', 'widercash', 'customer'),
+(742, 125, 'Category', 'quantifiable', 'customer'),
+(743, 125, 'Category', 'noncash', 'customer'),
+(744, 125, 'Category', 'risks', 'customer'),
+(745, 125, 'Category', 'deployment_costs', 'customer'),
+(746, 124, 'Category', 'capex', 'customer'),
+(747, 124, 'Category', 'opex', 'customer'),
+(748, 124, 'Category', 'revenues', 'customer'),
+(749, 124, 'Category', 'revenuesProtection', 'customer'),
+(750, 124, 'Category', 'cashreleasing', 'customer'),
+(751, 124, 'Category', 'widercash', 'customer'),
+(752, 124, 'Category', 'quantifiable', 'customer'),
+(753, 124, 'Category', 'noncash', 'customer'),
+(754, 124, 'Category', 'risks', 'customer'),
+(755, 124, 'Category', 'deployment_costs', 'customer'),
+(756, 127, 'Category', 'capex', 'customer'),
+(757, 127, 'Category', 'opex', 'customer'),
+(758, 127, 'Category', 'revenues', 'customer'),
+(759, 127, 'Category', 'revenuesProtection', 'customer'),
+(760, 127, 'Category', 'cashreleasing', 'customer'),
+(761, 127, 'Category', 'widercash', 'customer'),
+(762, 127, 'Category', 'quantifiable', 'customer'),
+(763, 127, 'Category', 'noncash', 'customer'),
+(764, 127, 'Category', 'risks', 'customer'),
+(765, 127, 'Category', 'deployment_costs', 'customer'),
+(766, 131, 'Category', 'capex', 'customer'),
+(767, 131, 'Category', 'opex', 'customer'),
+(768, 131, 'Category', 'revenues', 'customer'),
+(769, 131, 'Category', 'revenuesProtection', 'customer'),
+(770, 131, 'Category', 'cashreleasing', 'customer'),
+(771, 131, 'Category', 'widercash', 'customer'),
+(772, 131, 'Category', 'quantifiable', 'customer'),
+(773, 131, 'Category', 'noncash', 'customer'),
+(774, 131, 'Category', 'risks', 'customer'),
+(775, 131, 'Category', 'deployment_costs', 'customer'),
+(776, 131, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(777, 131, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(778, 131, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(779, 131, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(780, 131, 'Influenced', 'capex', 'supplier'),
+(781, 131, 'Influenced', 'equipment_revenues', 'supplier'),
+(782, 128, 'Category', 'capex', 'customer'),
+(783, 128, 'Category', 'opex', 'customer'),
+(784, 128, 'Category', 'revenues', 'customer'),
+(785, 128, 'Category', 'revenuesProtection', 'customer'),
+(786, 128, 'Category', 'cashreleasing', 'customer'),
+(787, 128, 'Category', 'widercash', 'customer'),
+(788, 128, 'Category', 'quantifiable', 'customer'),
+(789, 128, 'Category', 'noncash', 'customer'),
+(790, 128, 'Category', 'risks', 'customer'),
+(791, 128, 'Category', 'deployment_costs', 'customer'),
+(792, 130, 'Category', 'capex', 'customer'),
+(793, 130, 'Category', 'opex', 'customer'),
+(794, 130, 'Category', 'revenues', 'customer'),
+(795, 130, 'Category', 'revenuesProtection', 'customer'),
+(796, 130, 'Category', 'cashreleasing', 'customer'),
+(797, 130, 'Category', 'widercash', 'customer'),
+(798, 130, 'Category', 'quantifiable', 'customer'),
+(799, 130, 'Category', 'noncash', 'customer'),
+(800, 130, 'Category', 'risks', 'customer'),
+(801, 130, 'Category', 'deployment_costs', 'customer'),
+(802, 129, 'Category', 'capex', 'customer'),
+(803, 129, 'Category', 'opex', 'customer'),
+(804, 129, 'Category', 'revenues', 'customer'),
+(805, 129, 'Category', 'revenuesProtection', 'customer'),
+(806, 129, 'Category', 'cashreleasing', 'customer'),
+(807, 129, 'Category', 'widercash', 'customer'),
+(808, 129, 'Category', 'quantifiable', 'customer'),
+(809, 129, 'Category', 'noncash', 'customer'),
+(810, 129, 'Category', 'risks', 'customer'),
+(811, 129, 'Category', 'deployment_costs', 'customer'),
+(812, 132, 'Category', 'capex', 'customer'),
+(813, 132, 'Category', 'opex', 'customer'),
+(814, 132, 'Category', 'revenues', 'customer'),
+(815, 132, 'Category', 'revenuesProtection', 'customer'),
+(816, 132, 'Category', 'cashreleasing', 'customer'),
+(817, 132, 'Category', 'widercash', 'customer'),
+(818, 132, 'Category', 'quantifiable', 'customer'),
+(819, 132, 'Category', 'noncash', 'customer'),
+(820, 132, 'Category', 'risks', 'customer'),
+(821, 132, 'Category', 'deployment_costs', 'customer'),
+(822, 133, 'Category', 'capex', 'customer'),
+(823, 133, 'Category', 'opex', 'customer'),
+(824, 133, 'Category', 'revenues', 'customer'),
+(825, 133, 'Category', 'revenuesProtection', 'customer'),
+(826, 133, 'Category', 'cashreleasing', 'customer'),
+(827, 133, 'Category', 'widercash', 'customer'),
+(828, 133, 'Category', 'quantifiable', 'customer'),
+(829, 133, 'Category', 'noncash', 'customer'),
+(830, 133, 'Category', 'risks', 'customer'),
+(831, 133, 'Category', 'deployment_costs', 'customer'),
+(832, 135, 'Category', 'capex', 'customer'),
+(833, 135, 'Category', 'opex', 'customer'),
+(834, 135, 'Category', 'revenues', 'customer'),
+(835, 135, 'Category', 'revenuesProtection', 'customer'),
+(836, 135, 'Category', 'cashreleasing', 'customer'),
+(837, 135, 'Category', 'widercash', 'customer'),
+(838, 135, 'Category', 'quantifiable', 'customer'),
+(839, 135, 'Category', 'noncash', 'customer'),
+(840, 135, 'Category', 'risks', 'customer'),
+(841, 135, 'Category', 'deployment_costs', 'customer'),
+(842, 135, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(843, 135, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(844, 135, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(845, 135, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(846, 135, 'Influenced', 'capex', 'supplier'),
+(847, 135, 'Influenced', 'equipment_revenues', 'supplier'),
+(848, 134, 'Category', 'capex', 'customer'),
+(849, 134, 'Category', 'opex', 'customer'),
+(850, 134, 'Category', 'revenues', 'customer'),
+(851, 134, 'Category', 'revenuesProtection', 'customer'),
+(852, 134, 'Category', 'cashreleasing', 'customer'),
+(853, 134, 'Category', 'widercash', 'customer'),
+(854, 134, 'Category', 'quantifiable', 'customer'),
+(855, 134, 'Category', 'noncash', 'customer'),
+(856, 134, 'Category', 'risks', 'customer'),
+(857, 134, 'Category', 'deployment_costs', 'customer'),
+(858, 137, 'Category', 'capex', 'customer'),
+(859, 137, 'Category', 'opex', 'customer'),
+(860, 137, 'Category', 'revenues', 'customer'),
+(861, 137, 'Category', 'revenuesProtection', 'customer'),
+(862, 137, 'Category', 'cashreleasing', 'customer'),
+(863, 137, 'Category', 'widercash', 'customer'),
+(864, 137, 'Category', 'quantifiable', 'customer'),
+(865, 137, 'Category', 'noncash', 'customer'),
+(866, 137, 'Category', 'risks', 'customer'),
+(867, 137, 'Category', 'deployment_costs', 'customer'),
+(868, 137, 'NTT Accelerate SMART', 'deployment_costs', 'supplier'),
+(869, 137, 'NTT Accelerate SMART', 'opex', 'supplier'),
+(870, 137, 'NTT Accelerate SMART', 'deployment_revenues', 'supplier'),
+(871, 137, 'NTT Accelerate SMART', 'operating_revenues', 'supplier'),
+(872, 137, 'Influenced', 'capex', 'supplier'),
+(873, 137, 'Influenced', 'equipment_revenues', 'supplier'),
+(874, 139, 'Category', 'capex', 'customer'),
+(875, 139, 'Category', 'opex', 'customer'),
+(876, 139, 'Category', 'revenues', 'customer'),
+(877, 139, 'Category', 'revenuesProtection', 'customer'),
+(878, 139, 'Category', 'cashreleasing', 'customer'),
+(879, 139, 'Category', 'widercash', 'customer'),
+(880, 139, 'Category', 'quantifiable', 'customer'),
+(881, 139, 'Category', 'noncash', 'customer'),
+(882, 139, 'Category', 'risks', 'customer'),
+(883, 139, 'Category', 'deployment_costs', 'customer'),
+(884, 138, 'Category', 'capex', 'customer'),
+(885, 138, 'Category', 'opex', 'customer'),
+(886, 138, 'Category', 'revenues', 'customer'),
+(887, 138, 'Category', 'revenuesProtection', 'customer'),
+(888, 138, 'Category', 'cashreleasing', 'customer'),
+(889, 138, 'Category', 'widercash', 'customer'),
+(890, 138, 'Category', 'quantifiable', 'customer'),
+(891, 138, 'Category', 'noncash', 'customer'),
+(892, 138, 'Category', 'risks', 'customer'),
+(893, 138, 'Category', 'deployment_costs', 'customer'),
+(894, 136, 'Category', 'capex', 'customer'),
+(895, 136, 'Category', 'opex', 'customer'),
+(896, 136, 'Category', 'revenues', 'customer'),
+(897, 136, 'Category', 'revenuesProtection', 'customer'),
+(898, 136, 'Category', 'cashreleasing', 'customer'),
+(899, 136, 'Category', 'widercash', 'customer'),
+(900, 136, 'Category', 'quantifiable', 'customer'),
+(901, 136, 'Category', 'noncash', 'customer'),
+(902, 136, 'Category', 'risks', 'customer'),
+(903, 136, 'Category', 'deployment_costs', 'customer');
 
 -- --------------------------------------------------------
 

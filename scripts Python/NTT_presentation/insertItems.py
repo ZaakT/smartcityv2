@@ -128,7 +128,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_cashreleasing(%s,%s,%s,%s, %s, %s,%s, %s,%s, %s,%s);'
             toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat)
             print(toUpload)
-            # cursor.execute(sql, toUpload)
+            cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "UC Revenues (Existing)" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_revenuesprotection`;')
@@ -151,7 +151,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     END
                                     """)
             sql = 'CALL add_revenuesprotection(%s,%s,%s,%s,%s);'
-            toUpload = (xpex_name, "", uc_id, id_cat, (inp[5]-inp[4])/2)
+            toUpload = (xpex_name, "", uc_id, id_cat, (inp[5]+inp[4])/2)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -174,7 +174,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_noncash(%s,%s,%s,%s);'
             toUpload = (xpex_name, "", uc_id, id_cat)
             print(toUpload)
-            # cursor.execute(sql, toUpload)
+            cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Quantifiable, non monetizable benefits" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_quantifiable`;')
@@ -202,7 +202,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_quantifiable(%s,%s,%s,%s, %s,%s,%s,%s);'
             toUpload = (xpex_name, "", unit, "", inp[0], inp[2], uc_id, id_cat)
             print(toUpload)
-            # cursor.execute(sql, toUpload)
+            cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "UC Revenues (New)" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_revenues`;')
@@ -231,7 +231,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_revenues(%s,%s,%s,%s, %s, %s,%s, %s,%s);'
             toUpload = (xpex_name, "", uc_id, unit, "", 0, 0, id_cat, inp[9])
             print(toUpload)
-            # cursor.execute(sql, toUpload)
+            cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Wider Cash Benefits" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_widercash`;')
@@ -262,7 +262,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_widercash(%s,%s,%s,%s, %s, %s,%s, %s,%s, %s,%s);'
             toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat)
             print(toUpload)
-            # cursor.execute(sql, toUpload)
+            cursor.execute(sql, toUpload)
             connection.commit()
          else:
              print(xpexType)

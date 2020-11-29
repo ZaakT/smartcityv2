@@ -108,7 +108,8 @@ function duplicate_proj($post, $sideBarName, $A2){
     }
 
     //Now ... we have to duplicate the UC's items ... It will not be easy
-    duplicateXpexItems($projIDorigin,$newProj["id"]);
+    duplicateXpexUserItems($projIDorigin,$newProj["id"]);
+    duplicateXpexAdviceItems($projIDorigin,$newProj["id"]);
 
     //We duplicate the deal criteria 
     $inputNogoTargetOrigin = getDealCriteriaInputNogoTarget($projIDorigin);

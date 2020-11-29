@@ -1061,7 +1061,6 @@ function getColumnsName($tableName){
 }
 
 function createReqCopyXpex($columnsName){
-    //var_dump($columnsName);
 
     $colID = [];
     $tablePara = [];
@@ -1085,7 +1084,6 @@ function createReqCopyXpex($columnsName){
     }
 
     $tableValues[array_keys($columnsName)[1]][0]="itemID";
-    //var_dump(array_search("id_item", $columnsName[array_keys($columnsName)[2]]));
     $tableValues[array_keys($columnsName)[2]][array_search("id_item", $columnsName[array_keys($columnsName)[2]])]="itemID";
 
     $tableValues[array_keys($columnsName)[0]] = implode(",", $tableValues[array_keys($columnsName)[0]]);
@@ -1105,25 +1103,7 @@ function createReqCopyXpex($columnsName){
     $procedurePara =substr($procedurePara, 0, -3);
     $db = dbConnect();
 
-    //var_dump("drop");
     $db->exec('DROP PROCEDURE IF EXISTS `copy_xpex_user`;');
-    /*var_dump(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
-
-    )
-    BEGIN
-        DECLARE itemID INT;
-        INSERT INTO '.array_keys($columnsName)[0].' ('.$tablePara[array_keys($columnsName)[0]].')
-            VALUES ('.$tableValues[array_keys($columnsName)[0]].');
-        SET itemID = LAST_INSERT_ID();
-        INSERT INTO '.array_keys($columnsName)[1].' ('.$tablePara[array_keys($columnsName)[1]].')
-            VALUES ('.$tableValues[array_keys($columnsName)[1]].');
-        INSERT INTO '.array_keys($columnsName)[2].' ('.$tablePara[array_keys($columnsName)[2]].')
-            VALUES ('.$tableValues[array_keys($columnsName)[2]].');  
-        INSERT INTO '.array_keys($columnsName)[3].' ('.$tablePara[array_keys($columnsName)[3]].')
-            VALUES (itemID,id_uc);
-    END
-        ');*/
-
     $db->exec(' CREATE PROCEDURE `copy_xpex_user`('.$procedurePara.'
 
         )
@@ -1145,7 +1125,7 @@ function createReqCopyXpex($columnsName){
 }
 
 
-function duplicateXpexItems($projIDorigin,$newProjID){
+function duplicateXpexUserItems($projIDorigin,$newProjID){
     $tableId = [
         "capex",
         "opex",
@@ -1162,8 +1142,10 @@ function duplicateXpexItems($projIDorigin,$newProjID){
     $db = dbConnect();
     foreach ($tableId as  $tableName) {
         //var_dump($tableName);
+
+        //We select the User Items to copy 
         if($tableName != "supplier_revenues"){
-            $req = $db->prepare('SELECT * 
+            $reqUser = $db->prepare('SELECT * 
                 FROM '.$tableName.'_item
                 JOIN '.$tableName.'_item_user
                 ON '.$tableName.'_item_user.id = '.$tableName.'_item.id
@@ -1175,9 +1157,10 @@ function duplicateXpexItems($projIDorigin,$newProjID){
             $tableName.'_item_user'=>getColumnsName($tableName.'_item_user'), 
             'input_'.$tableName=>getColumnsName('input_'.$tableName), 
             $tableName.'_uc'=>getColumnsName($tableName.'_uc')];
-            $req->execute(array( $projIDorigin));  
+            $reqUser->execute(array( $projIDorigin));  
         }else{
-            $req = $db->prepare('SELECT * 
+            //This distinction is made because of the DB structure
+            $reqUser = $db->prepare('SELECT * 
                 FROM '.$tableName.'_item
                 JOIN '.$tableName.'_user
                 ON '.$tableName.'_user.id_revenue = '.$tableName.'_item.item_id
@@ -1187,22 +1170,16 @@ function duplicateXpexItems($projIDorigin,$newProjID){
                 AND supplier_revenues_item.advice_user = ?
                 GROUP BY '.$tableName.'_item.item_id');
 
-                //var_dump($req);
             $columnsName = [$tableName.'_item'=>getColumnsName($tableName.'_item'), 
             $tableName.'_user'=>getColumnsName($tableName.'_user'), 
             'input_'.$tableName=>getColumnsName('input_'.$tableName), 
             $tableName.'_uc'=>getColumnsName($tableName.'_uc')];
-            $req->execute(array( $projIDorigin,'user'));  
+            $reqUser->execute(array( $projIDorigin,'user'));  
 
         }
-        //var_dump($req);
-        //var_dump($projIDorigin);
-        //var_dump($columnsName);
         $procedureParaName = createReqCopyXpex($columnsName);
-        //var_dump($procedureParaName );
-        $reqCopy = $db->prepare('CALL copy_xpex_user('.implode(',', array_fill(0, count($procedureParaName),'?')).');');
-        while($row = $req->fetch()){
-            //var_dump($row);
+        $reqCopyUser = $db->prepare('CALL copy_xpex_user('.implode(',', array_fill(0, count($procedureParaName),'?')).');');
+        while($row = $reqUser->fetch()){
             $param = [];
             foreach ($procedureParaName as $paraName) {
                 if($paraName == 'id_proj'){
@@ -1213,18 +1190,7 @@ function duplicateXpexItems($projIDorigin,$newProjID){
             }
 
             if(!empty($row['id_proj'])){
-                //var_dump("coucou1");
-                //var_dump($param);
-                //var_dump($procedureParaName);
-                //var_dump($tableName);
-                $reqCopy->execute($param); 
-                //var_dump("coucou2");
-
-                /*var_dump($reqCopy);
-                //var_dump($row);
-                //var_dump($columnsName);
-                //var_dump($procedureParaName);
-                //var_dump($param);*/
+                $reqCopyUser->execute($param); 
             }
         }
 
@@ -1232,6 +1198,61 @@ function duplicateXpexItems($projIDorigin,$newProjID){
     }
 
 }
+
+
+function duplicateXpexAdviceItems($projIDorigin,$newProjID){
+    $db = dbConnect();
+    $tableId = [
+        "capex",
+        "opex",
+        "cashreleasing",
+        "implem",
+        "noncash",
+        "revenuesprotection",
+        "revenues",
+        "risk",
+        "supplier_revenues",
+        "widercash",
+        "quantifiable"
+    ];
+    foreach ($tableId as  $tableName) {
+        if($tableName != "supplier_revenues"){
+            $reqAdvice = $db->prepare('SELECT * 
+                FROM '.$tableName.'_item_advice
+                LEFT JOIN input_'.$tableName.'
+                ON  input_'.$tableName.'.id_item = '.$tableName.'_item_advice.id
+                WHERE input_'.$tableName.'.id_proj = ?
+                GROUP BY '.$tableName.'_item_advice.id');
+            $columnsName = getColumnsName('input_'.$tableName);
+            $reqAdvice->execute(array( $projIDorigin));  
+
+            //ENDIF 
+
+            //Generate the req for the insertion of the values
+            $reqCopy = $db->prepare("INSERT INTO input_".$tableName." (".implode(',', $columnsName).") VALUE (".implode(',', array_fill(0, count($columnsName),'?')).")");
+            
+
+            while($row = $reqAdvice->fetch()){
+                $param = [];
+                foreach ($columnsName as $paraName) {
+                    if($paraName == 'id_proj'){
+                        array_push($param,$newProjID);
+                    }else{
+                        array_push($param, $row[$paraName]);
+                    }
+                }
+    
+                if(!empty($row['id_proj'])){
+                    $reqCopy->execute($param); 
+                }
+            }
+
+        }else{
+
+        }
+    }
+}
+
 
 function getXpexTableName($xpex_type){
     $typeAdaptation = [
