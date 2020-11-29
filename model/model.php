@@ -2075,7 +2075,39 @@ function getRevenuesProtectionUserItem($projID,$ucID,$name){
     return $req->fetchAll();
 }
 
+function getListRevenuesProtectionItems($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT DISTINCT revenuesprotection_item.id,name,description,unit,default_impact, cat, source
+                            FROM revenuesprotection_item
+                            LEFT JOIN revenuesprotection_item_advice
+                                ON revenuesprotection_item.id = revenuesprotection_item_advice.id
+                            LEFT JOIN revenuesprotection_uc
+                                ON revenuesprotection_item.id = revenuesprotection_uc.id_item
+                                    
+                            WHERE revenuesprotection_uc.id_uc = ?
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
 
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $cat_id = intval($row['cat']);
+        $default_impact = intval($row['default_impact']);
+        $cat_name = getXpexCatByID($cat_id)['name'];;
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'default_impact'=>$default_impact,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'default_impact'=>$default_impact,'cat_id'=>$cat_id,'cat_name'=>$cat_name];
+        }
+    }
+    //var_dump($list);
+    return $list;
+}
 function getListRevenuesProtectionUser($projID,$ucID){
     $db = dbConnect();
 
@@ -2106,6 +2138,40 @@ function getListRevenuesProtectionUser($projID,$ucID){
     }
     return $list;
 }
+
+
+function getListRevenuesProtectionAdvice($ucID){
+    $db = dbConnect();
+    $req = $db->prepare("SELECT *
+                            FROM revenuesprotection_item_advice
+                            INNER JOIN revenuesprotection_uc
+                                INNER JOIN revenuesprotection_item
+                                    WHERE revenuesprotection_uc.id_uc = ?
+                                        and revenuesprotection_item.id = revenuesprotection_uc.id_item
+                                        and revenuesprotection_item.id = revenuesprotection_item_advice.id
+                            ORDER BY name
+                            ");
+    $req->execute(array($ucID));
+
+    $list = [];
+    while($row = $req->fetch()){
+        $id_item = intval($row['id']);
+        $name = $row['name'];
+        $description = $row['description'];
+        $unit = $row['unit'];
+        $source = $row['source'];
+        $cat=$row['cat'];
+        $default_impact = $row['default_impact'];
+        if(array_key_exists($id_item,$list)){
+            $list[$id_item] += ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'cat'=>$cat,'default_impact'=>$default_impact];
+        } else {
+            $list[$id_item] = ['name'=>$name,'description'=>$description,'unit'=>$unit,'source'=>$source,'cat'=>$cat,'default_impact'=>$default_impact];
+        }
+    }
+    return $list;
+}
+
+
 
 function getListSelRevenuesProtection($projID,$ucID){
     $db = dbConnect();
@@ -6375,6 +6441,9 @@ function getItemByNameAndCat($itemName,$catItem){
     } else if ($catItem == 'risks'){
         $req = $db->prepare('SELECT * FROM risks_item WHERE name = ?');
         $req->execute(array($itemName));
+    } else if ($catItem == 'revenuesProtection'){
+        $req = $db->prepare('SELECT * FROM revenuesprotection_item WHERE name = ?');
+        $req->execute(array($itemName));
     }else if ($catItem == 'equipment_revenue' || $catItem == 'deployment_revenue' || $catItem == 'operating_revenue'){
         $req = $db->prepare('SELECT * FROM supplier_revenues_item WHERE name = ? and type = ?');
         $req->execute(array($itemName, explode("_", $catItem)[0]));
@@ -6645,6 +6714,31 @@ function insertItem($item,$catItem){
                                     END
                                         ');
             $req = $db->prepare('CALL add_risks(?,?,?,?);');
+            $ret = $req->execute(array($item[0],$item[1],intval($item[2]),intval($item[3])));
+        
+            return $ret;
+            break;
+            
+        case 'revenuesProtection':
+            $db->exec('DROP PROCEDURE IF EXISTS `add_revenuesprotection`;');
+            $db->exec(' CREATE PROCEDURE `add_revenuesprotection`(
+                                    IN _name VARCHAR(255),
+                                    IN _desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN cat INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO revenuesprotection_item (name,description,cat)
+                                            VALUES (_name,_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO revenuesprotection_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO revenuesprotection_item_advice (id)
+                                            VALUES (itemID);
+                                    END
+                                        ');
+            $req = $db->prepare('CALL add_revenuesprotection(?,?,?,?);');
             $ret = $req->execute(array($item[0],$item[1],intval($item[2]),intval($item[3])));
         
             return $ret;

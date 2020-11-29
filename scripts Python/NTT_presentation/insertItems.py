@@ -131,7 +131,30 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "UC Revenues (Existing)" ):
-             pass
+            cursor.execute('DROP PROCEDURE IF EXISTS `add_revenuesprotection`;')
+            cursor.execute(""" CREATE PROCEDURE `add_revenuesprotection`(
+                                    IN _name VARCHAR(255),
+                                    IN _desc VARCHAR(255),
+                                    IN idUC INT,
+                                    IN cat INT,
+                                    IN default_impact INT
+                                    )
+                                    BEGIN
+                                        DECLARE itemID INT;
+                                        INSERT INTO revenuesprotection_item (name,description,cat)
+                                            VALUES (_name,_desc,cat);
+                                        SET itemID = LAST_INSERT_ID();
+                                        INSERT INTO revenuesprotection_uc (id_item,id_uc)
+                                            VALUES (itemID,idUC);
+                                        INSERT INTO revenuesprotection_item_advice (id, default_impact)
+                                            VALUES (itemID, default_impact);
+                                    END
+                                    """)
+            sql = 'CALL add_revenuesprotection(%s,%s,%s,%s,%s);'
+            toUpload = (xpex_name, "", uc_id, id_cat, (inp[5]-inp[4])/2)
+            print(toUpload)
+            cursor.execute(sql, toUpload)
+            connection.commit()
          elif(xpexType == "Non quantifiable benefits" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_noncash`;')
             cursor.execute(""" CREATE PROCEDURE `add_noncash`(

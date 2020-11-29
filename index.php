@@ -176,6 +176,8 @@ try{
                                 manage_item('implem',$twig,$is_connected); 
                             } elseif($_GET['A3']=='manage_revenues_item'){
                                 manage_item('revenues',$twig,$is_connected); 
+                            } elseif($_GET['A3']=='manage_revenuesProtection_item'){
+                                manage_item('revenuesProtection',$twig,$is_connected); 
                             } elseif($_GET['A3']=='create_item_1'){
                                 if(isset($_GET['cat'])){
                                     create_item1($twig,$is_connected,$_POST,$_GET['cat']);

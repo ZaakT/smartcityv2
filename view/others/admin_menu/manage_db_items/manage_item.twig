@@ -36,6 +36,9 @@
 {% elseif itemName == "risks" %}
     {% set itemShow = "Risks" %}
     {% set mode = "NewItem3" %}
+{% elseif itemName == "revenuesProtection" %}
+    {% set itemShow = "Revenue Protection" %}
+    {% set mode = "NewItem3" %}
 {% endif %}
 
 {% block title %}Manage {{itemShow}} Revenue{% endblock %}

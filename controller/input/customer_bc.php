@@ -372,20 +372,6 @@ function getListXpex($listUcID, $type, $projID, $side){
                 //We need here to select the revenues of the supplier and transform it in xpex
                 $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
             }
-        }elseif($type=="revenuesProtection"){
-            $list_xpex_advice[$ucID] = [];
-            $list_xpex_user[$ucID] = getListRevenuesProtectionUser($projID,$ucID);     
-            
-            $list_xpex_advice_from_ntt[$ucID] = [];
-            $list_xpex_advice_from_outside_ntt[$ucID] = [];
-            $list_xpex_advice_internal[$ucID] = []; 
-
-            $list_xpex_user_from_ntt[$ucID]  = getListRevenuesProtectionUser($projID,$ucID);    
-            $list_xpex_user_from_outside_ntt[$ucID] = []; 
-            $list_xpex_user_internal[$ucID]  = []; 
-            
-            $list_selXpex[$ucID] = getListSelRevenuesProtection($projID,$ucID); 
-
         }elseif($type=="equipment_revenues" || $type =="deployment_revenues" || $type =="operating_revenues"){
             
             $list_xpex_advice_from_outside_ntt[$ucID]  = [];
@@ -401,7 +387,7 @@ function getListXpex($listUcID, $type, $projID, $side){
 
             $list_xpex_advice[$ucID] = $list_xpex_advice_from_ntt[$ucID];
             
-        }elseif($type=="revenues" || $type =="cashreleasing" || $type =="widercash" || $type =="quantifiable" || $type =="noncash" || $type =="risks"){
+        }elseif($type=="revenues" || $type =="cashreleasing" || $type =="revenuesProtection" || $type =="widercash" || $type =="quantifiable" || $type =="noncash" || $type =="risks"){
             
             $list_xpex_advice_from_outside_ntt[$ucID]  = [];
             $list_xpex_advice_internal[$ucID]  = [];
@@ -413,6 +399,10 @@ function getListXpex($listUcID, $type, $projID, $side){
                 $list_selXpex[$ucID]  =getListSelRevenues($projID,$ucID);
                 $list_xpex_advice_from_ntt[$ucID]  = getListRevenuesAdvice($ucID);
                 $list_xpex_user_from_ntt[$ucID]  = getListRevenuesUser($projID,$ucID); 
+            }elseif($type=="revenuesProtection"){
+                $list_selXpex[$ucID]  = getListSelRevenuesProtection($projID,$ucID); 
+                $list_xpex_advice_from_ntt[$ucID]  = getListRevenuesProtectionAdvice($ucID); 
+                $list_xpex_user_from_ntt[$ucID]  = getListRevenuesProtectionUser($projID,$ucID);   
             }elseif($type=="cashreleasing"){
                 $list_selXpex[$ucID]  = getListSelCashReleasing($projID,$ucID); 
                 $list_xpex_advice_from_ntt[$ucID]  = getListCashReleasingAdvice($ucID); 
