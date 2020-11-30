@@ -36,6 +36,16 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <label for="origine" class="col-sm-3 col-form-label">Side</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="side" id="side" required>
+                                <option value = "projDev" {{isDev ? "selected"}}> Project Developper </option>
+                                <option value = "supplier" {{isSup ? "selected"}}> Supplier </option>
+                                <option value = "customer"> Customer </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <label for="unit" class="col-sm-3 col-form-label">Unit</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="unit" id="unit" aria-describedby="unitHelp" placeholder="Enter a unit">
@@ -108,6 +118,16 @@
                                         <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
                                     {% endfor %}
                                 {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="origine" class="col-sm-3 col-form-label">Side</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="side" id="side" required>
+                                <option value = "projDev" {{isDev ? "selected"}}> Project Developper </option>
+                                <option value = "supplier" {{isSup ? "selected"}}> Supplier </option>
+                                <option value = "customer"> Customer </option>
                             </select>
                         </div>
                     </div>
@@ -197,6 +217,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="origine" class="col-sm-3 col-form-label">Side</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="side" id="side" required>
+                                <option value = "projDev" {{isDev ? "selected"}}> Project Developper </option>
+                                <option value = "supplier" {{isSup ? "selected"}}> Supplier </option>
+                                <option value = "customer"> Customer </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-dark">Create</button>
@@ -244,6 +274,16 @@
                                         <option value="{{catID}}_{{ucID}}">{{ucID}} : {{listUC[ucID]["name"]}} -> {{catID}} : {{listCatXpex[ucID][catID]}}</option>
                                     {% endfor %}
                                 {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="origine" class="col-sm-3 col-form-label">Side</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" name="side" id="side" required>
+                                <option value = "projDev" {{isDev ? "selected"}}> Project Developper </option>
+                                <option value = "supplier" {{isSup ? "selected"}}> Supplier </option>
+                                <option value = "customer"> Customer </option>
                             </select>
                         </div>
                     </div>

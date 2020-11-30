@@ -330,10 +330,10 @@ function getListXpex($listUcID, $type, $projID, $side){
         }
         if($type=="capex"){
                 
-            $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", "projDev"); 
+            $list_xpex_advice[$ucID] = getListCapexAdvice($ucID, "all", $side); 
             $list_xpex_user[$ucID] = getListCapexUser($projID,$ucID, "all", $side);    
 
-            $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_ntt[$ucID] = getListCapexAdvice($ucID, "from_ntt", $side); 
             $list_xpex_advice_from_outside_ntt[$ucID] = getListCapexAdvice($ucID, "from_outside_ntt", $side); 
             $list_xpex_advice_internal[$ucID] = getListCapexAdvice($ucID, "internal", $side); 
 
@@ -350,10 +350,10 @@ function getListXpex($listUcID, $type, $projID, $side){
 
 
         }elseif($type=="opex"){
-            $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", "projDev"); 
+            $list_xpex_advice[$ucID] = getListOpexAdvice($ucID, "all", $side); 
             $list_xpex_user[$ucID] = getListOpexUser($projID,$ucID, "all", $side);    
 
-            $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_ntt[$ucID] = getListOpexAdvice($ucID, "from_ntt", $side); 
             $list_xpex_advice_from_outside_ntt[$ucID] = getListOpexAdvice($ucID, "from_outside_ntt", $side); 
             $list_xpex_advice_internal[$ucID] = getListOpexAdvice($ucID, "internal", $side); 
 
@@ -368,10 +368,10 @@ function getListXpex($listUcID, $type, $projID, $side){
                 $list_xpex_supplier[$ucID] = getListXpexSupplier($ucID, $projID, $list_selXpex[$ucID], $type);
             }
         }elseif($type=="deployment_costs"){
-            $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", "projDev");
+            $list_xpex_advice[$ucID] = getListImplemAdvice($ucID, "all", $side);
             $list_xpex_user[$ucID] = getListImplemUser($projID,$ucID, "all", $side);     
             
-            $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", "projDev"); 
+            $list_xpex_advice_from_ntt[$ucID] = getListImplemAdvice($ucID, "from_ntt", $side); 
             $list_xpex_advice_from_outside_ntt[$ucID] = getListImplemAdvice($ucID, "from_outside_ntt", $side); 
             $list_xpex_advice_internal[$ucID] = getListImplemAdvice($ucID, "internal", $side); 
 

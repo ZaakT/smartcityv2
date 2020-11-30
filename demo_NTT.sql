@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 30 nov. 2020 à 14:06
+-- Généré le :  lun. 30 nov. 2020 à 22:35
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -27,10 +27,10 @@ DELIMITER $$
 -- Procédures
 --
 DROP PROCEDURE IF EXISTS `add_capex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255), IN `side` VARCHAR(255))  BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description, cat, unit)
-                                            VALUES (capex_name,capex_desc, cat, unit);
+                                        INSERT INTO capex_item (name,description, cat, unit, side)
+                                            VALUES (capex_name,capex_desc, cat, unit, side);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO capex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -403,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=835 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=837 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -1205,7 +1205,9 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (831, 'Short-term retention storage - M', '', 'from_ntt', 'projDev', '# ASUs', 1294),
 (832, 'Short-term retention storage - M', '', 'from_ntt', 'projDev', '# ASUs', 1304),
 (833, 'Short-term retention storage - M', '', 'from_ntt', 'projDev', '# ASUs', 1292),
-(834, 'Short-term retention storage - M', '', 'from_ntt', 'projDev', '# ASUs', 1314);
+(834, 'Short-term retention storage - M', '', 'from_ntt', 'projDev', '# ASUs', 1314),
+(835, 'test cust', '', 'from_ntt', 'customer', '', 1304),
+(836, 'test cust 2', '', 'from_ntt', 'supplier', '', 1144);
 
 -- --------------------------------------------------------
 
@@ -1222,7 +1224,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_advice` (
   `range_max` int(11) DEFAULT NULL,
   `default_cost` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=835 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=837 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_advice`
@@ -1923,7 +1925,9 @@ INSERT INTO `capex_item_advice` (`id`, `unit`, `source`, `range_min`, `range_max
 (831, '# ASUs', '', 0, 0, 1050000),
 (832, '# ASUs', '', 0, 0, 1050000),
 (833, '# ASUs', '', 0, 0, 1050000),
-(834, '# ASUs', '', 0, 0, 1050000);
+(834, '# ASUs', '', 0, 0, 1050000),
+(835, '', '', 0, 0, 0),
+(836, '', '', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -2713,6 +2717,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (750, 163),
 (786, 163),
 (822, 163),
+(836, 163),
 (211, 164),
 (247, 164),
 (283, 164),
@@ -2893,6 +2898,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (760, 173),
 (796, 173),
 (832, 173),
+(835, 173),
 (221, 174),
 (257, 174),
 (293, 174),
@@ -14998,7 +15004,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -15012,7 +15018,8 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
 (46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(74, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-11-30 14:07:05', '2020-11-30 14:59:04', 16, 1, 0, 0);
+(74, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-11-30 14:07:05', '2020-11-30 14:59:04', 16, 1, 0, 0),
+(75, 'test', '', NULL, NULL, NULL, '2020-11-30 23:30:43', '2020-11-30 23:30:51', 16, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -15084,7 +15091,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (71, '2020-11-01', 36, '2020-11-01', 6),
 (72, '2020-11-01', 36, '2020-11-01', 6),
 (73, '2020-11-01', 36, '2020-11-01', 6),
-(74, '2020-11-01', 36, '2020-11-01', 3);
+(74, '2020-11-01', 36, '2020-11-01', 3),
+(75, '2020-11-01', 36, '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -15327,7 +15335,8 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (71, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
 (72, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
 (73, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
-(74, 143, '2020-11-01', 3, '2023-11-01', '2020-11-01', 6);
+(74, 143, '2020-11-01', 3, '2023-11-01', '2020-11-01', 6),
+(75, 163, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6);
 
 -- --------------------------------------------------------
 
@@ -15519,6 +15528,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (72, 0),
 (73, 0),
 (74, 0),
+(75, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -15578,7 +15588,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (71, 25),
 (72, 25),
 (73, 25),
-(74, 25);
+(74, 25),
+(75, 25);
 
 -- --------------------------------------------------------
 
@@ -15991,7 +16002,9 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (89, 73),
 (90, 73),
 (-1, 74),
-(143, 74);
+(143, 74),
+(-1, 75),
+(163, 75);
 
 -- --------------------------------------------------------
 
@@ -21454,21 +21467,9 @@ CREATE TABLE IF NOT EXISTS `use_case_cat` (
 
 INSERT INTO `use_case_cat` (`id`, `name`, `description`) VALUES
 (0, 'Project Overlay', NULL),
-(5, 'Lamppost', ''),
 (9, 'Public Safety', ''),
 (11, 'Signage ', ''),
-(13, 'Movment Monitoring ', ''),
-(15, 'Ligthing', ''),
-(47, 'Missing Person', ''),
-(48, 'Traffic – Vehicle of Interest', ''),
-(49, 'Occupancy and Notification', ''),
-(50, 'Traffic – Vehicle Count', ''),
-(51, 'Traffic – Origination and Destination', ''),
-(52, 'Wrong Direction', ''),
-(53, 'Health Check – Thermal Scan', ''),
-(54, 'Boundary Compliance', ''),
-(55, 'Plant Safety (Manufacturing)', ''),
-(56, 'Back to Work Package', '');
+(13, 'Movment Monitoring ', '');
 
 -- --------------------------------------------------------
 
