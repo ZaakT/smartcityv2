@@ -203,8 +203,8 @@ $GLOBALS['dicTrad']=[
     "key_dates" => [
         "en"=>"Key Dates"
     ],
-    "uses_cases" => [
-        "en"=>"Uses Cases"
+    "use_cases" => [
+        "en"=>"Use Cases"
     ], 
     "start_date" => [
         "en"=>"Start Date"

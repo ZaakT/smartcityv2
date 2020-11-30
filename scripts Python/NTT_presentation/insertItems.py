@@ -23,7 +23,6 @@ def getID(j: int):
     return data[0][j]
 
 def getName(item_id: int):
-    print(" ********************* "+str(benefits_db[9][int(item_id)+2]))
     return str(benefits_db[9][int(item_id)+2])
 
 def getUnit(item_id: int):

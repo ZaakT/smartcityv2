@@ -3,8 +3,11 @@
     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
     {% if type != "risks" and type != "noncash" %}
         {% if listUcsName|length > 1 %}<td scope="col">{{ listUcsName[ucID] }}</td>{% endif %}
-        
         <td scope="col"><input id="unit_{{id_xpex}}" name="unit_{{id_xpex}}_{{ucID}}" class="text-center unit pt-1 pb-1" type="text" oninput="checkXpexAll();" value= {% if type == "revenuesProtection" %} "{{selDevSym}}" {% elseif selXpex[id_xpex]['unit']%} "{{selXpex[id_xpex]['unit']}}" {% else %} "{{xpex[id_xpex]['unit']}}" {% endif %} placeholder="Unit" {{Mode == "supplier" or type == "revenuesProtection" ? "disabled"}} ></td> 
+        {#<td scope="col"><textare id="unit_{{id_xpex}}" name="unit_{{id_xpex}}_{{ucID}}" class="text-center unit pt-1 pb-1" type="text" oninput="checkXpexAll();" value= {% if type == "revenuesProtection" %} "{{selDevSym}}" {% elseif selXpex[id_xpex]['unit']%} "{{selXpex[id_xpex]['unit']}}" {% else %} "{{xpex[id_xpex]['unit']}}" {% endif %} placeholder="Unit" {{Mode == "supplier" or type == "revenuesProtection" ? "disabled"}} >
+        {% if type == "revenuesProtection" %} {{selDevSym}}" {% elseif selXpex[id_xpex]['unit']%} "{{selXpex[id_xpex]['unit']}}" {% else %} "{{xpex[id_xpex]['unit']}}" {% endif %}
+        </textarea>#}
+        </td> 
 
         {% if type != "quantifiable" and type != "revenues" and type != "revenuesProtection" %}
             <td scope="col">

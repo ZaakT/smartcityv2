@@ -996,7 +996,7 @@ try{
                             if(isset($_GET["A3"]) && $_GET["A3"]=="save_uc_confirm" && isset($_POST)){
                                 save_uc_selection_filter($twig,$is_connected, $_POST,$_GET['A']);    
                             }else{
-                                dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "customer");
+                                dashboards_summary($twig,$is_connected, $_SESSION['projID'], $_GET['A'], "supplier");
                             }
                         }else{
                             header('Location: ?A=supplier_dashboards&A2project_selection');
