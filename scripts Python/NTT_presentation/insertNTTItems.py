@@ -131,8 +131,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     """)
             sql = 'CALL add_revenues(%s,%s,%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Wider Cash Benefits" ):
              pass
@@ -162,8 +162,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     """)
             sql = 'CALL add_opex(%s,%s,%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Recurring" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;')
@@ -186,8 +186,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 END  """)
             sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, "operating", id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Capex" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_capex`;')
@@ -216,7 +216,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
             sql = 'CALL add_capex(%s,%s,%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0])
             print(toUpload)
-            cursor.execute(sql, toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Equipment" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;')
@@ -239,8 +239,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 END  """)
             sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, "equipment", id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Dep Cash-in" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_supplier_revenue`;')
@@ -263,8 +263,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 END  """)
             sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, "deployment", id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          elif(xpexType == "Dep Cash-out" ):
             cursor.execute('DROP PROCEDURE IF EXISTS `add_implem`;')
@@ -291,8 +291,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     END  """)
             sql = 'CALL add_implem(%s,%s,%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0])
-            print(toUpload)
-            cursor.execute(sql, toUpload)
+            # print(toUpload)
+            # cursor.execute(sql, toUpload)
             connection.commit()
          else:
              print(xpexType)
@@ -311,7 +311,7 @@ if __name__ == "__main__":
 
     scope = getScope()
     
-    for j in range(2, 260):
+    for j in range(2, 651):
         sol_name = getSolution(j)
         for uc_name in scope[sol_name]["set"]:
             uc_id = scope[sol_name]["set"][uc_name]["id"]
@@ -319,6 +319,7 @@ if __name__ == "__main__":
             for cash_type in ["Cash-in", "Cash-out"]:
                 inp = getInput(j, cash_type)
                 xpexType=getXpexType(j, cash_type)
+                print(xpexType)
                 if(xpexType == "Deployment & set-up"):
                     xpexType = "Dep "+cash_type
                 if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
