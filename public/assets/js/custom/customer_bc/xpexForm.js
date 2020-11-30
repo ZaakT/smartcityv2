@@ -71,7 +71,7 @@ function checkXpexInput(id, idAlert){
     var uc_end = $("#uc_end").text();
     if(tab.includes("volume")){
         //console.log(tab);
-        val = val ? parseInt(val) : -1 ;
+        val = val ? parseFloat(val) : -1 ;
         //console.log(val);
         if(val < 0){
             $("#"+id).css("background","salmon");
