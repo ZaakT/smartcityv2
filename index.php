@@ -800,7 +800,7 @@ try{
                 } else {  
                     \general\commonPage($twig,$is_connected, "?A=input_project_common_supplier&A2=schedule", "input_project_common_supplier");
                 }
-                prereq_navbar("supplier");
+                prereq_navbar("input");
             }
 
             // ---------- Input Project Common CUSTOMER ----------
@@ -892,7 +892,7 @@ try{
                     //input_project_common($twig,$is_connected);
                     \general\commonPage($twig,$is_connected, "?A=input_project_common&A2=capex", "input_project_common");
                 }
-                prereq_navbar("customer");
+                prereq_navbar("input");
             }
 
             
@@ -962,7 +962,7 @@ try{
                     \general\commonPage($twig,$is_connected, '?A=customer_dashboards&A2=summary', 'customer_dashboards');
 
                 }
-                prereq_navbar("customer");
+                prereq_navbar("output");
             }
 
             elseif($_GET['A']=='supplier_dashboards'){
@@ -1017,7 +1017,7 @@ try{
                 } else{
                     \general\commonPage($twig,$is_connected, '?A=supplier_dashboards&A2=summary', 'supplier_dashboards');
                 }
-                prereq_navbar("supplier");
+                prereq_navbar("output");
             }
 
             // ---------- INPUT USE CASE (SUPPLIER !!) ----------
@@ -1186,7 +1186,7 @@ try{
             }else {
                     input_use_case_supplier($twig,$is_connected);
                 }
-                prereq_navbar("supplier");
+                prereq_navbar("input");
             }
             // ---------- COMPARISON (SUPPLIER !!) ----------
             elseif($_GET['A']=='supplier_comparison') {
@@ -1206,6 +1206,7 @@ try{
                 }else{
                     projectComparison($twig,$is_connected);
                 }
+                prereq_navbar("comparison");
             
             }
             // ---------- COST BENEFITS ----------
@@ -1370,7 +1371,7 @@ try{
                 }
             
                 if(isSup()){
-                    prereq_navbar("customer");
+                    prereq_navbar("input");
                 }
             } 
 
@@ -1725,19 +1726,19 @@ try{
                 verifIsDev(); 
                 comparison($twig,$is_connected);  
             }
-            elseif($_GET['A']=='comp_projects'){ 
+            elseif($_GET['A']=='comp_projects' && isset($_GET['side'])){ 
                 //verifIsDev();
                 if(isset($_GET['A2'])){
                     if($_GET['A2']=="projects"){
-                        projects($twig,$is_connected);
+                        projects($twig,$is_connected, $_GET['side']);
                     } elseif($_GET['A2']=="projects_selected"){
-                        projects_selected($_POST);
+                        projects_selected($_POST, $_GET['side']);
                     } elseif($_GET['A2']=="summary"){
-                        projects_summary($twig,$is_connected);
-                    } elseif($_GET['A2']=="invest" || $_GET['A2']=="finsoc_comp" || $_GET['A2']=="cash_flows" || $_GET['A2']=="non_quant" || $_GET['A2']=="op"){
-                        comparisonCategoriePage($twig,$is_connected, $_GET['A2']);
+                        projects_summary($twig,$is_connected, $_GET['side']);
+                    } elseif(($_GET['A2']=="invest" || $_GET['A2']=="finsoc_comp" || $_GET['A2']=="cash_flows" || $_GET['A2']=="non_quant" || $_GET['A2']=="op")){
+                        comparisonCategoriePage($twig,$is_connected, $_GET['A2'], $_GET['side']);
                         //investment($twig,$is_connected);
-                    } elseif($_GET['A2']=="op"){
+                    } /*elseif($_GET['A2']=="op"){
                         comparisonCategoriePage($twig,$is_connected, $_GET['A2']);
                         //operations($twig,$is_connected);
                     } elseif($_GET['A2']=="cash_flows"){
@@ -1746,12 +1747,14 @@ try{
                         non_quant($twig,$is_connected);
                     } elseif($_GET['A2']=="finsoc_comp"){
                         finsoc_comp($twig,$is_connected);
-                    } else {
+                    } */else {
                         header('Location: ?A='.$_GET['A']);
                     }
                 } else {
                     comp_projects($twig,$is_connected); 
-                }          
+                }  
+                prereq_navbar("comparison");
+        
             }
             elseif($_GET['A']=='comp_finscen'){ 
                 verifIsDev();

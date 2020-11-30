@@ -25,7 +25,7 @@ function comp_projects($twig,$is_connected){
     'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3]));
 }
 
-function projects($twig,$is_connected){
+function projects($twig,$is_connected, $side = "customer"){
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
     $projects = getListProjects2($idUser);
@@ -33,10 +33,11 @@ function projects($twig,$is_connected){
     $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     
-    echo $twig->render('/output/comparison_items/projects_item/projects.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'projects'=>$projects));
+    echo $twig->render('/output/comparison_items/projects_item/projects.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+    'selDevName'=>$selDevName,'is_admin'=>$user[3],'projects'=>$projects, "side"=>$side));
 }
 
-function projects_selected($post){
+function projects_selected($post, $side = "customer"){
     if($post){
         $user = getUser($_SESSION['username']);
         $selProjects = [];
@@ -45,14 +46,14 @@ function projects_selected($post){
             array_push($selProjects,$idProj);
         }
         $_SESSION['selProjects'] = $selProjects;
-        header('Location: ?A=comp_projects&A2=summary');
+        header('Location: ?A=comp_projects&A2=summary&side='.$side);
     } else {
         throw new Exception("No project selected !");
     }
 }
 
 
-function projects_summary($twig,$is_connected){
+function projects_summary($twig,$is_connected, $side = "customer"){
     $user = getUser($_SESSION['username']);
     $idUser = $user[0];
     $projects = getListProjects2($idUser);
@@ -91,7 +92,9 @@ function projects_summary($twig,$is_connected){
         $devises = getListDevises();
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
-        echo $twig->render('/output/comparison_items/projects_item/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,'selDevName'=>$selDevName,'is_admin'=>$user[3],'projects'=>$projects,'selProjects'=>$selProjects,'projectsData'=>$projectsData,'measures'=>$measures,'ucs'=>$ucs,));
+        echo $twig->render('/output/comparison_items/projects_item/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
+        'selDevName'=>$selDevName,'is_admin'=>$user[3],'projects'=>$projects,'selProjects'=>$selProjects,'projectsData'=>$projectsData,'measures'=>$measures,
+        'ucs'=>$ucs,"side"=>$side));
         prereq_compProjects();
     } else {
         throw new Exception("There is no selected projects");

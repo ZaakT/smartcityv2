@@ -95,15 +95,23 @@
         <h4 class="nav-item text-center">- Output -<br>Comparison</h4>
         <a class="nav-item nav-link" id="comp_projects" href="?A=comp_projects">Compare Projects</a>
         <a class="nav-item nav-link" id="comp_finscen" href="?A=comp_finscen">Compare Financial&nbsp;Scenarios</a>
-    {% elseif page=="comp_projects" %}
-        <h4 class="nav-item text-center">- Output -<br>Compare Projects</h4>
-        <a class="nav-item nav-link" id="projects" href="?A=comp_projects&amp;A2=projects">Projects</a>
-        <a class="nav-item nav-link disabled" id="summary" href="?A=comp_projects&amp;A2=summary">Project Description</a>
-        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp">Project Comparison - Metrics Summary</a>
-        <a class="nav-item nav-link disabled" id="invest" href="?A=comp_projects&amp;A2=invest">Investment</a>
-        <a class="nav-item nav-link disabled" id="op" href="?A=comp_projects&amp;A2=op">Operations</a>
-        <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_projects&amp;A2=cash_flows">Cash Flows</a>
-        <a class="nav-item nav-link disabled" id="non_quant" href="?A=comp_projects&amp;A2=non_quant">Non Quantifiable</a>
+    {% elseif page=="comp_projects" or page=="comp_projects_customer" or page=="comp_projects_supplier"  %}
+        <h4 class="nav-item text-center">Compare Projects
+        {% set side = "customer" %}
+        {% if page == "comp_projects_supplier" %}
+            <br>- Supplier -
+            {% set side = "supplier" %}
+        {% elseif page == "comp_projects_customer" %}
+            <br>- Customer -
+        {% endif %}
+        </h4>
+        <a class="nav-item nav-link" id="projects" href="?A=comp_projects&amp;A2=projects&amp;side={{side}}">Projects</a>
+        <a class="nav-item nav-link disabled" id="summary" href="?A=comp_projects&amp;A2=summary&amp;side={{side}}">Project Description</a>
+        <a class="nav-item nav-link disabled" id="finsoc_comp" href="?A=comp_projects&amp;A2=finsoc_comp&amp;side={{side}}">Project Comparison - Metrics Summary</a>
+        <a class="nav-item nav-link disabled" id="invest" href="?A=comp_projects&amp;A2=invest&amp;side={{side}}">Investment</a>
+        <a class="nav-item nav-link disabled" id="op" href="?A=comp_projects&amp;A2=op&amp;side={{side}}">Operations</a>
+        <a class="nav-item nav-link disabled" id="cash_flows" href="?A=comp_projects&amp;A2=cash_flows&amp;side={{side}}">Cash Flows</a>
+        <a class="nav-item nav-link disabled" id="non_quant" href="?A=comp_projects&amp;A2=non_quant&amp;side={{side}}">Non Quantifiable</a>
     {% elseif page=="comp_finscen" %}
         <h4 class="nav-item text-center">- Output -<br>Compare Financial Scenarios</h4>
         <a class="nav-item nav-link" id="scenarios" href="?A=comp_finscen&amp;A2=scenarios">Scenarios</a>

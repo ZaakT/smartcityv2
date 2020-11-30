@@ -1,6 +1,5 @@
 {% macro sub_list_xpex(id_xpex, xpex, type, selXpex, nb_uc, listUcsName, ucID, Mode, selDevSym, categoryID) %}
 <tr id = "tr_{{ id_xpex }}" scope="row"  class = "cat_{{categoryID}}">
-    
     <td scope="col">{{ xpex[id_xpex]['name'] }}</td>
     {% if type != "risks" and type != "noncash" %}
 
@@ -11,7 +10,7 @@
         {% if type != "quantifiable" and type != "revenues" and type != "revenuesProtection" %}
             <td scope="col">
                 <div class="input-group justify-content-center">
-                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_cost'] ? selXpex[id_xpex]['unit_cost'] : xpex[id_xpex]['default_cost']}}" placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
+                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value={% if selXpex[id_xpex]['unit_cost'] %} "{{selXpex[id_xpex]['unit_cost']}}" {% elseif xpex[id_xpex]['default_cost'] %} "{{xpex[id_xpex]['default_cost']}}" {% else %} "{{xpex[id_xpex]['default_rev']}}" {% endif %} placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
                     </div>
@@ -21,7 +20,7 @@
         {% if type == "revenues" %}
             <td scope="col">
                 <div class="input-group justify-content-center">
-                   <input id="unitRev_{{id_xpex}}" name="unitRev_{{id_xpex}}_{{ucID}}" class="text-center unitRev pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_rev']}}" placeholder="{{ ratio[id_xpex]['unit_rev'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
+                   <input id="unitRev_{{id_xpex}}" name="unitRev_{{id_xpex}}_{{ucID}}" class="text-center unitRev pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['unit_rev'] ? selXpex[id_xpex]['unit_rev'] : xpex[id_xpex]['default_revenue'] }}" placeholder="{{ ratio[id_xpex]['unit_rev'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
                     </div>

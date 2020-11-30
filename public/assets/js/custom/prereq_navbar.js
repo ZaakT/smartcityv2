@@ -1,7 +1,3 @@
-function prereq_navbar(side){
-    if(side=="supplier"){
-        document.getElementById("navbarDropdownMenuLink_supplier").classList.add("active");
-    }else if(side=="customer"){
-        document.getElementById("navbarDropdownMenuLink_customer").classList.add("active");
-    }
+function prereq_navbar(part){
+        document.getElementById("navbarDropdownMenuLink_"+part).classList.add("active");
 }

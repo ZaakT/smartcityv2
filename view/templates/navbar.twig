@@ -133,28 +133,35 @@
       </li>
       {% endif %}
       {% if isSup %}
-      {#                  SUPPLIERS BC              #}
+      
       <li class="nav-item">
         <a class="nav-link" href="?A=project_sdesign&amp;A2=project">{{traduction.getText("project_initialization")}} <span class="sr-only">({{traduction.getText("current")}})</span></a>
       </li>
+      {#                  INPUT              #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_supplier" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >{{traduction.getText("supplier_bc")}} </a>
+        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_input" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Input </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=input_use_case_supplier&amp;A2=use_case_cb">Input </a>
-          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=supplier_dashboards&amp;A2=summary">{{traduction.getText("dashboards")}}</a>
+          <a class="dropdown-item" href="?A=input_use_case_supplier&amp;A2=use_case_cb">{{traduction.getText("supplier_bc")}} </a>
+          <a class="dropdown-item" href="?A=cost_benefits&amp;A2=use_case_cb">{{traduction.getText("customer_bc")}} </a>
         </div>
       </li>
-      {#                  CUSTOMERS BC              #}
+      {#                  OUTPUT              #}
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" or not hasPOSchedule ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_customer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{traduction.getText("customer_bc")}}</a>
+        <a class="nav-link dropdown-toggle {{GlobalProjID == "-1" or getNbConfirmedUC == 0 ? 'disabled' : ""}}" href="#" id="navbarDropdownMenuLink_output" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Output </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="?A=cost_benefits&amp;A2=use_case_cb">Input </a>
-          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=customer_dashboards&amp;A2=summary">{{traduction.getText("dashboards")}}</a>
+          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=supplier_dashboards&amp;A2=summary">{{traduction.getText("supplier_bc")}}</a>
+          <a class="dropdown-item {{getNbConfirmedUC == 0 ? "disabled"}}" href="?A=customer_dashboards&amp;A2=summary">{{traduction.getText("customer_bc")}}</a>
         </div>
       </li>     
       {#                  COMPARISON BC              #}
-      <a class="nav-link {#disabled#}" href="?A={#supplier_comparison#}comp_projects&amp;A2=projects"   aria-haspopup="true" aria-expanded="false">{{traduction.getText("comparison")}}</a>
 
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink_comparison" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Comparison </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item  {#disabled#}" href="?A={#supplier_comparison#}comp_projects&amp;A2=projects&amp;side=supplier" >{{traduction.getText("supplier_bc")}}</a>
+          <a class="dropdown-item  {#disabled#}" href="?A={#supplier_comparison#}comp_projects&amp;A2=projects&amp;side=customer" >{{traduction.getText("customer_bc")}}</a>
+        </div>
+      </li>
       {% endif %}
     </ul>
   </div>

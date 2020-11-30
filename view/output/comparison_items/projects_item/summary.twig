@@ -4,7 +4,7 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-{% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("comp_projects_"~ side) }}{% endblock %}
 
 {% import "/templates/comparison/macro_projects.twig" as macro %}
 
@@ -18,6 +18,6 @@
 {{ macro.summary_projects(projects,projectsData,measures,ucs) }}
 
 <div class="row m-3 text-center text-dark">
-    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=comp_projects&amp;A2=finsoc_comp');"></button>
+    <button class="btn btn-link offset-5 col-2 oi oi-arrow-circle-right next-button" title="arrow-circle-right" style="font-size:50px;" aria-hidden="true" onclick="window.location.assign('?A=comp_projects&amp;A2=finsoc_comp&amp;side={{side}}');"></button>
 </div>
 {% endblock %}

@@ -4,7 +4,7 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-{% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("comp_projects_" ~ side) }}{% endblock %}
 
 {% import "/templates/comparison/macro_projects.twig" as macro %}
 

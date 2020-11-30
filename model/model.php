@@ -2793,10 +2793,11 @@ function getListSupplierRevenuesAdvice($uc_ID, $revenueType){
             $name = $row['name'];
             $description = $row['description'];
             $cat=$row['cat'];
+            $default_rev = floatval($row['default_rev']);
             if(array_key_exists($id_item,$list)){
-                $list[$id_item] += ['name'=>$name,'description'=>$description, 'cat'=>$cat];
+                $list[$id_item] += ['name'=>$name,'description'=>$description, 'cat'=>$cat, 'default_rev' => $default_rev];
             } else {
-                $list[$id_item] = ['name'=>$name,'description'=>$description, 'cat'=>$cat];
+                $list[$id_item] = ['name'=>$name,'description'=>$description, 'cat'=>$cat, 'default_rev' => $default_rev];
             }
         }
     }

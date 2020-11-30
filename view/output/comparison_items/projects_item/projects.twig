@@ -4,7 +4,7 @@
 {% block navbar %}{{ navbar.navbar(is_connected,is_admin,devises) }}{% endblock %}
 
 {% import "/templates/sidebar.twig" as sidebar %}
-{% block sidebar %}{{ sidebar.sidebar("comp_projects") }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar("comp_projects_" ~ side) }}{% endblock %}
 
 {% import "/templates/comparison/macro_projects.twig" as macro %}
 
@@ -22,7 +22,7 @@
         <h4 class="text-danger text-center font-italic">Please create at least 2 projects in <a class="text-danger font-weight-bold" href="?A=project_design&amp;A2=ucm">"Project Scoping"</a>.</h4>
     </div>
     {% else %}    
-        <form class="col container-fluid" name="form_proj" id="form_proj" onsubmit="return countChecked_selProj('form_proj');" action="?A=comp_projects&amp;A2=projects_selected" method="post">
+        <form class="col container-fluid" name="form_proj" id="form_proj" onsubmit="return countChecked_selProj('form_proj');" action="?A=comp_projects&amp;A2=projects_selected&amp;side={{side}}" method="post">
             {{ macro.list_proj(projects) }}
             
             <div class="row mt-4 mb-0 text-center">
