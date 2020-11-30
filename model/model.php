@@ -5517,8 +5517,15 @@ function getTotXpexByUCAndOrigine($projID,$ucID, $xpex, $origine, $side = "projD
                             JOIN '.$xpex.'_item 
                             ON id_item=id
                             WHERE id_proj = ? and id_uc = ? and origine = ? and side = ?');
+    var_dump($req);
+    var_dump(array($projID,$ucID, $origine, $side));
     $req->execute(array($projID,$ucID, $origine, $side));
     $res = $req->fetch()['tot'];
+    var_dump($res);
+    if($xpex == "capex"){
+
+        var_dump($res);
+    }
     $tot = floatval($res);
     //var_dump("before ");
     //var_dump($tot);
