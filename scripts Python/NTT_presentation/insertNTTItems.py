@@ -59,7 +59,7 @@ def excel_xpex_type_to_bdd_xpex_type(xpex_type: str):
     
 def getScope():
     scope = dict()
-    for j in range(2, 260):
+    for j in range(2, 651):
         solution = getSolution(j)
         sol_id = get_cat_id(solution)
         sub_list_UC = getUcsInSolution(sol_id)
@@ -311,22 +311,26 @@ if __name__ == "__main__":
 
     scope = getScope()
     
+    non = []
     for j in range(2, 651):
         sol_name = getSolution(j)
-        if(sol_name in scope):
-            for uc_name in scope[sol_name]["set"]:
-                uc_id = scope[sol_name]["set"][uc_name]["id"]
-                ucName = getName(j)
-                for cash_type in ["Cash-in", "Cash-out"]:
-                    inp = getInput(j, cash_type)
-                    xpexType=getXpexType(j, cash_type)
-                    print(xpexType)
-                    if(xpexType == "Deployment & set-up"):
-                        xpexType = "Dep "+cash_type
-                    if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
-                        id_cat = scope[sol_name]["set"][uc_name]["list_xpex_cat_id"][excel_xpex_type_to_bdd_xpex_type(xpexType)]
-                        insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "#")
-            
-            
-        
+        if sol_name == "ALL": 
+            list_sol = scope.keys()
+        else:
+            list_sol = [sol_name]
+        for sol_name in list_sol:
+            if(sol_name in scope):
+                for uc_name in scope[sol_name]["set"]:
+                    uc_id = scope[sol_name]["set"][uc_name]["id"]
+                    ucName = getName(j)
+                    for cash_type in ["Cash-in", "Cash-out"]:
+                        inp = getInput(j, cash_type)
+                        xpexType=getXpexType(j, cash_type)
+                        print(xpexType)
+                        if(xpexType == "Deployment & set-up"):
+                            xpexType = "Dep "+cash_type
+                        if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
+                            id_cat = scope[sol_name]["set"][uc_name]["list_xpex_cat_id"][excel_xpex_type_to_bdd_xpex_type(xpexType)]
+                            insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "#")
+                # pass
     
