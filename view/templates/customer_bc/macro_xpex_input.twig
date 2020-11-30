@@ -44,7 +44,7 @@
                 </div>
             </td> 
         {% else %}
-            <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}_{{ucID}}" class="text-center volume pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{{ selXpex[id_xpex]['volume']}}" placeholder="{{ ratio[id_xpex]['val'] }}"{{Mode == "supplier" ? "disabled"}}></td> 
+            <td scope="col"><input id="vol_{{id_xpex}}" name="vol_{{id_xpex}}_{{ucID}}" class="text-center volume pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value="{#{ selXpex[id_xpex]['volume']}#}1.7" placeholder="{{ ratio[id_xpex]['val'] }}"{{Mode == "supplier" ? "disabled"}}></td> 
         {% endif %}
 
         {% if type =="opex" or type == "operating_revenues"   or type == "cashreleasing" or type == "widercash" %}

@@ -2531,7 +2531,7 @@ function getListSelCapex($projID,$ucID, $side = "supplier"){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $period = intval($row['period']);
         $unit = $row['unit'];
         if(array_key_exists($id_item,$list)){
@@ -2871,7 +2871,7 @@ function getListSelSupplierRevenues($projID,$ucID, $revenueType){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $anVarVol = intval($row['anVarVol']);
         $anVarCost = intval($row['anVarCost']);
         $unit = $row['unit'];
@@ -3206,7 +3206,7 @@ function getListSelImplem($projID,$ucID, $side = "supplier"){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $unit = $row['unit'];
         
         if(array_key_exists($id_item,$list)){
@@ -3537,7 +3537,7 @@ function getListSelOpex($projID,$ucID, $side = "supplier"){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarCost = floatval($row['annual_variation_unitcost']);
         $unit = $row['unit'];
@@ -3901,7 +3901,7 @@ function getListSelRevenues($projID,$ucID){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_rev = convertGBPToDev(floatval($row['revenues_per_unit']));
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $anVarVol = floatval($row['annual_variation_volume']);
         $anVarRev = floatval($row['annual_variation_unitcost']);
         $revenue_start_date = date_create($row['revenue_start_date'])->format('Y-m-d');
@@ -4211,7 +4211,7 @@ function getListSelCashReleasing($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $unit_indic = $row['unit_indicator'];
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
         $unit_cost_red = floatval($row['unit_cost_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
@@ -4485,7 +4485,7 @@ function getListSelWiderCash($projID,$ucID){
         $id_item = intval($row['id_item']);
         $unit_cost = convertGBPToDev(floatval($row['unit_cost']));
         $unit_indic = $row['unit_indicator'];
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
         $unit_cost_red = floatval($row['unit_cost_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
@@ -4750,7 +4750,7 @@ function getListSelQuantifiable($projID,$ucID){
     while($row = $req->fetch()){
         $id_item = intval($row['id_item']);
         $unit_indic = $row['unit_indicator'];
-        $volume = intval($row['volume']);
+        $volume = floatval($row['volume']);
         $vol_red = floatval($row['volume_reduc']);
         $anVarVol = floatval($row['annual_var_volume']);
         if(array_key_exists($id_item,$list)){
