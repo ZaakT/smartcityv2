@@ -2,7 +2,7 @@ import pymysql.cursors
 import pandas
 
 
-data = pandas.read_csv('C:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
+data = pandas.read_csv('D:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
 
 
 def getSolution(j: int):

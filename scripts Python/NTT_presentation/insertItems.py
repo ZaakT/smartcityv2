@@ -2,8 +2,8 @@ import pymysql.cursors
 import pandas
 
 
-data = pandas.read_csv('C:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/benefitItems.csv', sep=';', engine='python', header=None)
-benefits_db = pandas.read_csv('C:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/benefits_db.csv', sep=';', engine='python', header=None)
+data = pandas.read_csv('D:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/benefitItems.csv', sep=';', engine='python', header=None)
+benefits_db = pandas.read_csv('D:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/benefits_db.csv', sep=';', engine='python', header=None)
 
 
 def getSolution(j: int):
