@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 30 nov. 2020 à 10:59
+-- Généré le :  lun. 30 nov. 2020 à 12:34
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -3431,7 +3431,8 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
 (70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
 (72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
-(73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0');
+(73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(75, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 24, 6, 0, 0, 0, 0, 0, 20, 'npv_check-operating_margin_check-payback_check-');
 
 -- --------------------------------------------------------
 
@@ -4687,7 +4688,7 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (1035, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 1103),
 (1036, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 1088),
 (1037, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 965),
-(1038, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 950),
+(1038, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', '# ASUs', 950),
 (1039, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 965),
 (1040, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 950),
 (1041, 'TVI - ASU Range 101 - 150 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 965),
@@ -8670,7 +8671,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (178, 54, 67, 11, 10, 12),
 (179, 54, 66, NULL, NULL, NULL),
 (180, 54, 67, 30, 20, 3),
-(185, 30, 67, 0, 200, 0);
+(185, 30, 67, 0, 200, 0),
+(754, 74, 167, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -8743,7 +8745,9 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (34, 43, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (36, 54, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (37, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
-(38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0);
+(38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0),
+(42, 75, 144, '', 1, NULL, 1500, 0, 10, 0, 0, '2020-09-30', 0),
+(46, 75, 144, '', 1, NULL, 200000, 0, 10, 0, 0, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -8818,6 +8822,7 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (73, 0, -1, NULL, NULL),
 (74, 0, 67, 100, 10),
 (75, 0, -1, NULL, NULL),
+(75, 1038, 144, 1, 72900),
 (76, 0, 67, 100, 10),
 (77, 0, -1, NULL, NULL),
 (78, 0, 67, 100, 10),
@@ -8972,7 +8977,8 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (72, 0, 66, NULL, NULL, NULL, NULL, NULL),
 (73, 0, -1, NULL, NULL, NULL, NULL, NULL),
 (74, 0, 66, NULL, NULL, NULL, NULL, NULL),
-(75, 0, -1, NULL, NULL, NULL, NULL, NULL);
+(75, 0, -1, NULL, NULL, NULL, NULL, NULL),
+(75, 1017, 144, 1, NULL, 9844, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -9287,9 +9293,12 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (364, 71, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (365, 72, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (366, 73, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(490, 75, 158, 64638, 1, NULL, 0, 0, NULL, NULL),
+(530, 75, 158, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(692, 75, 144, 96957, 1, NULL, 0, 0, NULL, NULL),
+(732, 75, 144, 13093, 1, NULL, 0, 0, NULL, NULL),
 (834, 74, 167, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(855, 74, 167, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(1155, 74, 167, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+(1155, 74, 167, 722222, 10, NULL, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -9346,7 +9355,17 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (26, 27, 16, '1', 3, NULL, 2, 2, 3, 5, 4, '2020-09-30', 0),
 (28, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (29, 30, 62, 'test', 1200, NULL, 30, 30, 40, 13, 2, '2020-09-30', 0),
-(57, 74, 167, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
+(43, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(57, 74, 167, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(68, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(72, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(76, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(80, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(84, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(88, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(92, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(96, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(100, 75, 144, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
 
 -- --------------------------------------------------------
 
@@ -11115,7 +11134,7 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (1014, 'O - ASU Range 1951 - 2000 - PaaS', '', 'from_ntt', 'projDev', NULL, 1095),
 (1015, 'O - ASU Range 1951 - 2000 - PaaS', '', 'from_ntt', 'projDev', NULL, 1089),
 (1016, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', NULL, 957),
-(1017, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', NULL, 951),
+(1017, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', '# ASUs', 951),
 (1018, 'TVI - ASU Range 51 - 100 - PaaS', '', 'from_ntt', 'projDev', NULL, 957),
 (1019, 'TVI - ASU Range 51 - 100 - PaaS', '', 'from_ntt', 'projDev', NULL, 951),
 (1020, 'TVI - ASU Range 101 - 150 - PaaS', '', 'from_ntt', 'projDev', NULL, 957),
@@ -14994,7 +15013,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -15006,10 +15025,10 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (27, 'Montreal Area', '', 5, NULL, NULL, '2020-10-20 10:02:33', '2020-11-02 11:53:51', 13, 1, 1, 0),
 (28, 'test no size', '', 5, NULL, NULL, '2020-10-23 15:44:02', '2020-10-23 16:20:32', 13, 1, 0, 0),
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
-(30, 'Las Vegas NTT Smart', '', NULL, NULL, NULL, '2020-10-26 17:04:17', '2020-11-26 12:21:27', 16, 1, 1, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
 (46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(74, 'test', '', NULL, NULL, NULL, '2020-11-30 11:50:35', '2020-11-30 11:55:12', 16, 0, 0, 0);
+(74, 'test', '', NULL, NULL, NULL, '2020-11-30 11:50:35', '2020-11-30 12:00:41', 16, 0, 0, 0),
+(75, 'Las Vegas Wrong Direction', '', NULL, NULL, NULL, '2020-11-30 12:09:22', '2020-11-30 13:32:08', 16, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -15081,7 +15100,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (71, '2020-11-01', 36, '2020-11-01', 6),
 (72, '2020-11-01', 36, '2020-11-01', 6),
 (73, '2020-11-01', 36, '2020-11-01', 6),
-(74, '2020-11-01', 36, '2020-11-01', 6);
+(74, '2020-11-01', 36, '2020-11-01', 6),
+(75, '2020-11-01', 36, '2020-11-01', 3);
 
 -- --------------------------------------------------------
 
@@ -15324,7 +15344,9 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (71, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
 (72, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
 (73, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
-(74, 167, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6);
+(74, 167, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
+(75, 144, '2020-11-01', 3, '2023-11-01', '2020-11-01', 0),
+(75, 158, '2020-11-01', 3, '2023-11-01', '2020-11-01', 0);
 
 -- --------------------------------------------------------
 
@@ -15516,6 +15538,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (72, 0),
 (73, 0),
 (74, 0),
+(75, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -15575,7 +15598,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (71, 25),
 (72, 25),
 (73, 25),
-(74, 25);
+(74, 25),
+(75, 25);
 
 -- --------------------------------------------------------
 
@@ -15990,7 +16014,9 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 74),
 (164, 74),
 (165, 74),
-(167, 74);
+(167, 74),
+(-1, 75),
+(144, 75);
 
 -- --------------------------------------------------------
 
@@ -17419,7 +17445,8 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) 
 (70, NULL, NULL, NULL, NULL),
 (71, NULL, NULL, NULL, NULL),
 (72, NULL, NULL, NULL, NULL),
-(73, NULL, NULL, NULL, NULL);
+(73, NULL, NULL, NULL, NULL),
+(75, 'USA', 'Las Vegas', 'City of Las Vegas', '');
 
 -- --------------------------------------------------------
 
@@ -17434,7 +17461,18 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
   `type` enum('customerDepartment','customerTeam','supplierBusinessUnit','supplierTeam') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=127 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_perimeter_data`
+--
+
+INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
+(75, 'Information Technology', 'customerDepartment', 122),
+(75, 'Director of IT', 'customerTeam', 123),
+(75, 'NTT Accelerate SMART', 'supplierBusinessUnit', 124),
+(75, 'William Baver', 'supplierTeam', 125),
+(75, 'Harsha Kikkeri', 'supplierTeam', 126);
 
 -- --------------------------------------------------------
 
@@ -17912,7 +17950,7 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (487, 'MP - ASU Range 1851 - 1900 - PaaS', 'operating', '', 'advice', '', 917, 379398),
 (488, 'MP - ASU Range 1901 - 1950 - PaaS', 'operating', '', 'advice', '', 917, 392491),
 (489, 'MP - ASU Range 1951 - 2000 - PaaS', 'operating', '', 'advice', '', 917, 395622),
-(490, 'WWD - ASU Range 3 - 50 - Deployment & set-up', 'deployment', '', 'advice', '', 1116, 64638),
+(490, 'WWD - ASU Range 3 - 50 - Deployment & set-up', 'deployment', '', 'advice', '# ASUs ', 1116, 64638),
 (491, 'WWD - ASU Range 51 - 100 - Deployment & set-up', 'deployment', '', 'advice', '', 1116, 130805),
 (492, 'WWD - ASU Range 101 - 150 - Deployment & set-up', 'deployment', '', 'advice', '', 1116, 168511),
 (493, 'WWD - ASU Range 151 - 200 - Deployment & set-up', 'deployment', '', 'advice', '', 1116, 206216),
@@ -18115,7 +18153,7 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (689, 'O - ASU Range 1851 - 1900 - PaaS', 'operating', '', 'advice', '', 1091, 498370),
 (690, 'O - ASU Range 1901 - 1950 - PaaS', 'operating', '', 'advice', '', 1091, 514593),
 (691, 'O - ASU Range 1951 - 2000 - PaaS', 'operating', '', 'advice', '', 1091, 520855),
-(692, 'TVI - ASU Range 1 - 50 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 96957),
+(692, 'TVI - ASU Range 1 - 50 - Deployment & set-up', 'deployment', '', 'advice', '# ASUs', 952, 96957),
 (693, 'TVI - ASU Range 51 - 100 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 181977),
 (694, 'TVI - ASU Range 101 - 150 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 238535),
 (695, 'TVI - ASU Range 151 - 200 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 295094),
@@ -18155,7 +18193,7 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (729, 'TVI - ASU Range 1851 - 1900 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 2331920),
 (730, 'TVI - ASU Range 1901 - 1950 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 2388480),
 (731, 'TVI - ASU Range 1951 - 2000 - Deployment & set-up', 'deployment', '', 'advice', '', 952, 2445040),
-(732, 'TVI - ASU Range 1 - 50 - PaaS', 'operating', '', 'advice', '', 953, 13093),
+(732, 'TVI - ASU Range 1 - 50 - PaaS', 'operating', '', 'advice', '# ASUs', 953, 13093),
 (733, 'TVI - ASU Range 51 - 100 - PaaS', 'operating', '', 'advice', '', 953, 33301),
 (734, 'TVI - ASU Range 101 - 150 - PaaS', 'operating', '', 'advice', '', 953, 46393),
 (735, 'TVI - ASU Range 151 - 200 - PaaS', 'operating', '', 'advice', '', 953, 49524),
