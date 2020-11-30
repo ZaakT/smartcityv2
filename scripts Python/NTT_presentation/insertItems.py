@@ -16,17 +16,18 @@ def getXpexType(j : int):
     return data[5][j]
 
 def getInput(j: int):
-    return [float(num.replace(' ', '').replace(',', '.').replace('%', '')) if not num == "NA#" else "NA#"  for num in data.loc[j, 6:16].to_list()]
+    return [float(num.replace(' ', '').replace(',', '.').replace('%', '')) if not num == "NA#" else 0  for num in data.loc[j, 6:16].to_list()]
      
 
 def getID(j: int):
-    return data.loc[0][j]
+    return data[0][j]
 
 def getName(item_id: int):
-    return benefits_db[1][item_id+2]
+    print(" ********************* "+str(benefits_db[9][int(item_id)+2]))
+    return str(benefits_db[9][int(item_id)+2])
 
 def getUnit(item_id: int):
-    return str(benefits_db[10][item_id+2]).replace('nan', '')
+    return str(benefits_db[10][int(item_id)+2]).replace('nan', '')
 
 def excel_xpex_type_to_bdd_xpex_type(xpex_type: str):
     return {"Opex":"opex",
@@ -126,7 +127,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     END
                                     """)
             sql = 'CALL add_cashreleasing(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
-            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[1], inp[2], inp[3], uc_id, id_cat, inp[8])
+
+            toUpload = (xpex_name, "", unit, "",inp[8], -float(inp[0]), -float(inp[1]), -float(inp[2]), -float(inp[3]), uc_id, id_cat, inp[8])
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -260,7 +262,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     END
                                     """)
             sql = 'CALL add_widercash(%s,%s,%s,%s, %s, %s,%s, %s,%s, %s,%s);'
-            toUpload = (xpex_name, "", unit, "",inp[8], inp[0], inp[2], inp[3], inp[4], uc_id, id_cat)
+            print(inp)
+            toUpload = (xpex_name, "", unit, "",inp[8], -float(inp[0]), -float(inp[2]), -float(inp[3]), -float(inp[4]), uc_id, id_cat)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -286,8 +289,8 @@ if __name__ == "__main__":
         uc_name = getUC(j)
         uc_id = get_uc_id_from_scope(scope, sol_name, uc_name)['id']
         inp = getInput(j)
-        unit = getUnit(j)
-        xpex_name = getName(j)
+        unit = getUnit(getID(j))
+        xpex_name = getName(getID(j))
         xpexType = getXpexType(j)
         id_cat = scope[sol_name]["set"][uc_name]['list_xpex_cat_id'][excel_xpex_type_to_bdd_xpex_type(xpexType)]
         insertXpexData(xpexType, inp, uc_id, id_cat, uc_name, unit, xpex_name)

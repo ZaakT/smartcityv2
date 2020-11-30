@@ -331,6 +331,6 @@ if __name__ == "__main__":
                             xpexType = "Dep "+cash_type
                         if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
                             id_cat = scope[sol_name]["set"][uc_name]["list_xpex_cat_id"][excel_xpex_type_to_bdd_xpex_type(xpexType)]
-                            insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "#")
+                            insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "# ASUs")
                 # pass
     
