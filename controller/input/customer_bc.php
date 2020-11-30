@@ -651,7 +651,6 @@ function delete_xpex_user($idXpex, $type, $sideBarName){
 
 function xpex_inputed($post, $sideBarName, $type){
     if($post){
-        //var_dump($post);
         if(isset($_SESSION['projID'])){
             $projID = $_SESSION['projID'];
             if(isset($post['useCase'])){ //Input porject common
@@ -829,7 +828,7 @@ function xpex_inputed($post, $sideBarName, $type){
             update_ModifDate_proj($projID);
             
             if($sideBarName=="input_project_common" or $sideBarName=="input_project_common_supplier" or $sideBarName == "input_use_case_supplier"){
-                header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
+               // header('Location: ?A='.$sideBarName.'&A2='.$type.'&projID='.$projID.'&ucID='.$ucID);
             }elseif($sideBarName=="input_use_case" or $sideBarName=="cost_benefits"){
             //$type=="revenues" || $type =="cashreleasing" || $type =="widercash" || $type =="quantifiable" || $type =="noncash" || $type =="risks"
                 $next=["capex"=>"deployment_costs", 

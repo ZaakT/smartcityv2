@@ -4318,7 +4318,6 @@ function insertCashReleasingInputed($projID,$ucID,$list){
                             WHERE id_proj = ? and id_uc = ? and id_item = ?");
 
     foreach ($list as $id_item => $data) {
-        //var_dump($data);
         $ret = $req->execute(array($data['unit'],$data['volume'],convertDevToGBP($data['unit_cost']),$data['vol_red'],$data['unit_cost_red'],$data['anVarVol'],$data['anVarCost'],   '2020-09-30' , '0' ,$projID,$ucID,$id_item));
 
     }

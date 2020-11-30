@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 30 nov. 2020 à 13:08
+-- Généré le :  lun. 30 nov. 2020 à 14:06
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -4686,7 +4686,7 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (1034, 'O - ASU Range 1901 - 1950 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 1088),
 (1035, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 1103),
 (1036, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 1088),
-(1037, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 950),
+(1037, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', '# ASU s', 950),
 (1038, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 965),
 (1039, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 950),
 (1040, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'from_ntt', 'projDev', NULL, 965),
@@ -8529,7 +8529,7 @@ CREATE TABLE IF NOT EXISTS `input_capex` (
   `id_item` int(11) NOT NULL,
   `id_proj` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `unit_cost` double DEFAULT NULL,
   `period` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_item`,`id_proj`,`id_uc`),
@@ -8684,7 +8684,7 @@ CREATE TABLE IF NOT EXISTS `input_cashreleasing` (
   `id_proj` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
   `unit_indicator` varchar(255) DEFAULT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `ratio` int(11) DEFAULT NULL,
   `unit_cost` double DEFAULT NULL,
   `volume_reduc` double DEFAULT NULL,
@@ -8743,7 +8743,10 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (34, 43, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (36, 54, 67, 'test', 2, NULL, 1, 5, 10, 4, 3, '2020-09-30', 0),
 (37, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
-(38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0);
+(38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0),
+(42, 74, 143, '# of missing persons each month - kidnapping', 12.6, NULL, 1500, 0, 10, 0, 0, '2020-09-30', 0),
+(46, 74, 143, '# of missing persons each month - escape criminals', 5.5, NULL, 200000, 0, 10, 0, 0, '2020-09-30', 0),
+(67, 74, 149, 'Current # of security staff performing video monitoring', 1.3, NULL, 2353, 35, 0, 0, 0, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -8756,7 +8759,7 @@ CREATE TABLE IF NOT EXISTS `input_implem` (
   `id_proj` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `unit_cost` double DEFAULT NULL,
   PRIMARY KEY (`id_proj`,`id_item`,`id_uc`),
   KEY `id_item` (`id_item`),
@@ -8817,6 +8820,7 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (72, 0, 67, 100, 10),
 (73, 0, -1, NULL, NULL),
 (74, 0, 67, 100, 10),
+(74, 1037, 143, 1, 72900),
 (75, 0, -1, NULL, NULL),
 (76, 0, 67, 100, 10),
 (77, 0, -1, NULL, NULL),
@@ -8885,7 +8889,7 @@ CREATE TABLE IF NOT EXISTS `input_opex` (
   `id_proj` int(11) NOT NULL,
   `id_item` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `ratio` int(11) DEFAULT NULL,
   `unit_cost` double DEFAULT NULL,
   `annual_variation_volume` double DEFAULT NULL,
@@ -8972,6 +8976,7 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (72, 0, 66, NULL, NULL, NULL, NULL, NULL),
 (73, 0, -1, NULL, NULL, NULL, NULL, NULL),
 (74, 0, 66, NULL, NULL, NULL, NULL, NULL),
+(74, 1016, 143, 1, NULL, 9844, 0, 0),
 (75, 0, -1, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -9074,7 +9079,8 @@ INSERT INTO `input_revenues` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, 
 (56, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (57, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (57, 116, 74, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
-(58, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
+(58, 0, 67, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
+(74, 75, 143, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
 
 -- --------------------------------------------------------
 
@@ -9186,7 +9192,7 @@ CREATE TABLE IF NOT EXISTS `input_supplier_revenues` (
   `id_proj` int(10) UNSIGNED NOT NULL,
   `id_uc` int(10) NOT NULL,
   `unit_cost` float DEFAULT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `margin` float DEFAULT NULL,
   `anVarVol` int(11) DEFAULT NULL,
   `anVarCost` int(11) DEFAULT NULL,
@@ -9285,7 +9291,9 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (363, 70, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (364, 71, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (365, 72, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
-(366, 73, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0);
+(366, 73, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
+(692, 74, 143, 96957, 1, NULL, 0, 0, NULL, NULL),
+(732, 74, 143, 13093, 1, NULL, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -9299,7 +9307,7 @@ CREATE TABLE IF NOT EXISTS `input_widercash` (
   `id_proj` int(11) NOT NULL,
   `id_uc` int(11) NOT NULL,
   `unit_indicator` varchar(255) DEFAULT NULL,
-  `volume` int(11) DEFAULT NULL,
+  `volume` float DEFAULT NULL,
   `ratio` int(11) DEFAULT NULL,
   `unit_cost` double DEFAULT NULL,
   `volume_reduc` double DEFAULT NULL,
@@ -9342,7 +9350,7 @@ INSERT INTO `input_widercash` (`id_item`, `id_proj`, `id_uc`, `unit_indicator`, 
 (26, 27, 16, '1', 3, NULL, 2, 2, 3, 5, 4, '2020-09-30', 0),
 (28, 30, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0),
 (29, 30, 62, 'test', 1200, NULL, 30, 30, 40, 13, 2, '2020-09-30', 0),
-(43, 74, 143, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
+(43, 74, 143, '# of insured cars each month', 1.5, NULL, 122, 12.5, 12.5, 0, 0, '2020-09-30', 0);
 
 -- --------------------------------------------------------
 
@@ -11110,7 +11118,7 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (1013, 'O - ASU Range 1901 - 1950 - PaaS', '', 'from_ntt', 'projDev', NULL, 1089),
 (1014, 'O - ASU Range 1951 - 2000 - PaaS', '', 'from_ntt', 'projDev', NULL, 1095),
 (1015, 'O - ASU Range 1951 - 2000 - PaaS', '', 'from_ntt', 'projDev', NULL, 1089),
-(1016, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', NULL, 951),
+(1016, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', '# ASUs', 951),
 (1017, 'TVI - ASU Range 1 - 50 - PaaS', '', 'from_ntt', 'projDev', NULL, 957),
 (1018, 'TVI - ASU Range 51 - 100 - PaaS', '', 'from_ntt', 'projDev', NULL, 951),
 (1019, 'TVI - ASU Range 51 - 100 - PaaS', '', 'from_ntt', 'projDev', NULL, 957),
@@ -15004,7 +15012,7 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
 (46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(74, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-11-30 14:07:05', '2020-11-30 14:08:13', 16, 1, 0, 0);
+(74, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-11-30 14:07:05', '2020-11-30 14:59:04', 16, 1, 0, 0);
 
 -- --------------------------------------------------------
 
