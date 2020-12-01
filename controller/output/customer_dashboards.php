@@ -474,7 +474,6 @@ function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine
             //$xpex += getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine, "projDev");
         }
 
-        var_dump($xpex);
         $capexPerMonth = calcCapexPerMonth($implemRepart,$xpex);
         if($periode == "month"){
             return $capexPerMonth;
@@ -491,7 +490,6 @@ function xpexSubTot($projID,$ucID, $implemRepart, $projectYears, $type, $origine
         return calcOpexTot($opexPerMonth,$projectYears);
     }elseif($type=="implem"){
         $xpex =  getTotXpexByUCAndOrigine($projID,$ucID, $type, $origine, $side);
-        var_dump($xpex);
         $implemPerMonth = calcImplemPerMonth($implemRepart,$xpex);
         if($periode == "month"){
             return $implemPerMonth;
@@ -665,7 +663,6 @@ function getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, $perio
      //Cash-out Opex
  
     $opex_from_nttTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "from_ntt","opex", $side, $periode);
-    var_dump( $opex_from_nttTot );
     $opex_from_outside_nttTot = getCashOutYear($projID, $ucID, $projectYears, $scope, "from_outside_ntt","opex", $side, $periode);
 
     $opex_internalTot =  getCashOutYear($projID, $ucID, $projectYears, $scope, "internal","opex", $side, $periode);
