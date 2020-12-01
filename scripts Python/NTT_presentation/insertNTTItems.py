@@ -59,7 +59,7 @@ def excel_xpex_type_to_bdd_xpex_type(xpex_type: str):
     
 def getScope():
     scope = dict()
-    for j in range(2, 651):
+    for j in range(1, 651):
         solution = getSolution(j)
         sol_id = get_cat_id(solution)
         sub_list_UC = getUcsInSolution(sol_id)
@@ -203,19 +203,20 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 IN idUC INT,
                                 IN type_value VARCHAR(255),
                                 IN cat INT,
-                                IN default_rev FLOAT
+                                IN default_rev FLOAT,
+                                IN unit VARCHAR(255)
 
                                 )
                                 BEGIN
                                     DECLARE itemID INT;
-                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev)
-                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev);
+                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev, unit)
+                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev, unit);
                                     SET itemID = LAST_INSERT_ID();
                                     INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                         VALUES (itemID,idUC);
                                 END  """)
-            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, "equipment", id_cat, inp[0])
+            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s,%s);'
+            toUpload = (ucName, "", uc_id, "equipment", id_cat, inp[0], unit)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -227,19 +228,20 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 IN idUC INT,
                                 IN type_value VARCHAR(255),
                                 IN cat INT,
-                                IN default_rev FLOAT
+                                IN default_rev FLOAT,
+                                IN unit VARCHAR(255)
 
                                 )
                                 BEGIN
                                     DECLARE itemID INT;
-                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev)
-                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev);
+                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev, unit)
+                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev, unit);
                                     SET itemID = LAST_INSERT_ID();
                                     INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                         VALUES (itemID,idUC);
                                 END  """)
             sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, "deployment", id_cat, inp[0])
+            toUpload = (ucName, "", uc_id, "deployment", id_cat, inp[0], unit)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
