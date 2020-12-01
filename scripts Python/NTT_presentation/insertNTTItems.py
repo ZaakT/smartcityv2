@@ -2,7 +2,7 @@ import pymysql.cursors
 import pandas
 
 
-data = pandas.read_csv('D:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
+data = pandas.read_csv('C:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
 
 
 def getSolution(j: int):
@@ -268,7 +268,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                         INSERT INTO implem_item_advice (id,unit,source,range_min,range_max, default_cost)
                                             VALUES (itemID,unit,source,range_min,range_max, default_cost);
                                     END  """)
-            sql = 'CALL add_implem(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+            sql = 'CALL add_implem(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side, origine)
             print(toUpload)
             cursor.execute(sql, toUpload)
