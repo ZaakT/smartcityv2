@@ -17,15 +17,11 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
     $keydates_proj = getKeyDatesProjSupplier($projID);
     $list=[];
     $revenues = getListSelRevenues($projID,$ucID);
-    var_dump($revenues);
     $projectDates = createProjectDates($keydates_proj[0],$keydates_proj[2]);
 
     foreach ($revenues as $itemID => $revenue) {
         $schedule = getProjetSchedule($projID,$ucID);
-        var_dump($schedule);
-        var_dump($revenue);
-        if(isset($schedule[0]) && isset($revenues['volume']) && $revenues['volume']>0){
-            var_dump("on rentre");
+        if(isset($schedule[0]) && isset($revenue['volume']) && $revenue['volume']>0){
             //$schedule = $schedule[0];
             $rev_start = date_create($revenue['revenue_start_date'])->format("m/Y");
             $rev_end = date_create($schedule['uc_end'])->format("m/Y");
@@ -40,9 +36,7 @@ function getCutomserRevenueItemByMonth($projID,$ucID){
             //var_dump($ramp_up_end);
             $revenueSchedule = getRevenueRepartition($keydates_proj[0], $rev_start, $ramp_up_end, $rev_end, $projectDates);
             $i=0;
-            var_dump($revenueSchedule);
             foreach ($revenueSchedule as $date => $prop) {
-                var_dump($prop);
                 $list[$itemID][$date] = $prop * $revenue['unit_rev'] *$revenue['volume']*pow(1+$revenue['anVarVol'],$i/12)*pow(1+$revenue['anVarRev'],$i/12) ;
                 $i++;
             }
@@ -574,7 +568,6 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
     
         }elseif($item == "revenues" && $side == "customer"){
             $ItemRevenuesPerMonth = getCutomserRevenueItemByMonth($projID,$ucID);
-            var_dump($ItemRevenuesPerMonth);
             foreach ($projectDates as $date) {
                 $revenuesPerMonth[$date] = 0;
                 foreach ($ItemRevenuesPerMonth as $revenue) {
@@ -684,7 +677,6 @@ function getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, $perio
      if($side == "customer"){
          //Cash-in : Revenues
          $revenues = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "revenues", $side, $periode);
-         var_dump($revenues);
          //Cash-in : Cash Realeasing Benefits
          $cash_realeasing_benefits = getCashInMonthYear($projID, $ucID, $projectYears, $scope, "cash_realeasing_benefits", $side, $periode);
  
