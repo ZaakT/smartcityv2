@@ -94,7 +94,6 @@ function projects_summary($twig,$is_connected, $side = "customer"){
 
             $projectsData[$projID] = ['scope'=>$scope,"solutionsSize"=>$solutionsSize,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration];
         }
-        var_dump($UCsSelected);
         $measures = getListMeasures();
         $devises = getListDevises();
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];

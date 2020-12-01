@@ -46,13 +46,18 @@
                     <td>{{ucName}}
                 {% for projID, projData in projectsData %}
                     <td>
-                        {% for listUC in projData["scope"] %}
-                            {% if ucID in listUC %}
-                                <div class = "text-center">
-                                    X
-                                </div>
+                        <div class = "text-center">
+                            {% set check = false %}
+                            {% for listUC in projData["scope"] %}
+                                {% if ucID in listUC %}
+                                        <span class="oi oi-check text-success"></span>
+                                        {% set check = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if not check %}
+                                <span class="oi oi-x text-danger"></span>
                             {% endif %}
-                        {% endfor %}
+                        </div>
                     </td>
                 {% endfor %}
                 </tr>
