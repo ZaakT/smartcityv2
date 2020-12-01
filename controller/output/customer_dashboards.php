@@ -644,7 +644,7 @@ function getCashInMonthYear($projID, $ucID, $projectYears, $scope, $item,$side, 
             return calcRevenuesTot($revenuesPerMonth,$projectYears); //ok
         }
     }
-    throw new Exception("0 Error in getCashInMonthYear() : $item");
+    //throw new Exception("0 Error in getCashInMonthYear() : $item");
 }
 
 function getUcDataYearMonth($projID, $ucID, $projectYears, $scope, $side, $periode, $list){

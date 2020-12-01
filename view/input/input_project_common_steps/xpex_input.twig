@@ -18,15 +18,27 @@
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 
 {% if type == "capex" %}
-    {% set lorem = "Input Project Investment / Fixed asset items' Unit cost and Volumes procured from #{companyName} and outside of #{companyName}." %}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Input Project Investment / Fixed asset items' Unit cost and Volumes procured from #{companyName}." %}
+    {% else %}
+        {% set lorem = "Input Project Investment / Fixed asset items' Unit cost and Volumes procured from main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "deployment_costs" %}
-    {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from #{companyName} and outside of #{companyName}." %}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from #{companyName}." %}
+    {% else %}
+        {% set lorem = "Input Project Deployment & Set up cost items' Unit cost and Volumes procured from main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "opex" %}
-    {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from #{companyName} and outside of #{companyName}." %}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from #{companyName}." %}
+    {% else %}
+        {% set lorem = "Input Project Opex / running costs, Volumes and annual variations procured from main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "equipment_revenues" %}
-    {% set lorem = "For each Equipment Revenue item, please input Unit Costs and  Volumes (per month) to be generated from the sale of such equipment item(s)." %}
+    {% set lorem = "For each Equipment Revenue item, please input Reference Unit, Unit Costs and number of units." %}
 {% elseif type == "deployment_revenues" %}
-    {% set lorem = "For each Deployment Revenue item, please input Unit Costs and  Volumes (per month) to be generated from such deployment item(s)." %}
+    {% set lorem = "For each Deployment Revenue item, please input Unit Costs and number of units." %}
 {% elseif type == "operating_revenues" %}
     {% set lorem = "For each Operating Revenue item, please input Unit Costs, Volumes (per month) and annual variations impacting such revenue item(s)." %}
 {% elseif type == "revenues" %}
@@ -42,7 +54,7 @@
 {% elseif type == "risks" %}
     {% set lorem = "For the chosen Use Case, input expected Impact Rating (from 1-Low to 10-High) for the Risk items, and select % probability of occurrence to calculate Risk impact." %}
 {% elseif type == "revenuesProtection" %}
-    {% set lorem = "lorem" %}
+    {% set lorem = "Please select revenues protected including baseline and % impact." %}
 {% endif %}
 
 

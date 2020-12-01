@@ -15,18 +15,29 @@
 {{ second_bar.second_bar(username,is_admin,selDevName,selDevSym,part,selected,part2,selected2) }}
 {#{ucID}#}
 {% if type == "capex" %}
-    {% set lorem = "Create and provide short description of Investment / Fixed assets procured from #{companyName} or from third parties." %}
-    {{coucou1}}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Create and provide short description of Investment / Fixed assets procured from #{companyName}." %}
+    {% else %}
+        {% set lorem = "Create and provide short description of Investment / Fixed assets procured from main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "deployment_costs" %}
-    {% set lorem = "Create and provide short description of Deployment & Set up cost items provided by #{companyName} or by third parties." %}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Create and provide short description of Deployment & Set up cost items provided by #{companyName}." %}
+    {% else %}
+        {% set lorem = "Create and provide short description of Deployment & Set up cost items provided by main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "opex" %}
-    {% set lorem = "Create and provide short description of Opex / running cost procured from #{companyName} or from third parties." %}
+    {% if sideBarName == "input_use_case_supplier" %}
+        {% set lorem = "Create and provide short description of Opex / running cost procured from #{companyName}." %}
+    {% else %}
+        {% set lorem = "Create and provide short description of Opex / running cost procured from main and third party supplier(s)." %}
+    {% endif %}
 {% elseif type == "equipment_revenues" %}
-    {% set lorem = "For the selected Use Case, please input and provide a short description of the relevant revenue items for custom equipment provided in connection with the supplied solution." %}
+    {% set lorem = "For the selected Use Case, please select the relevant revenue items for equipment provided in connection with the supplied solution." %}
 {% elseif type == "deployment_revenues" %}
-    {% set lorem = "For the selected Use Case, please input and provide a short description of the relevant deployment revenue items in connection with the supplied solution." %}
+    {% set lorem = "For the selected Use Case, please select the relevant deployment revenue items in connection with the supplied solution." %}
 {% elseif type == "operating_revenues" %}
-    {% set lorem = "For the selected Use Case, please input and provide a short description of the relevant Revenue items from Operations in connection with the supplied solution." %}
+    {% set lorem = "For the selected Use Case, please select the relevant Revenue items from Operations in connection with the supplied solution." %}
 {% elseif type == "revenues" %}
     {% set lorem = "For the chosen Use Case, select the relevant Revenue items and create any new item(s) as appropriate, providing a short description of the item(s)." %}
 {% elseif type == "cashreleasing" %}
@@ -40,7 +51,7 @@
 {% elseif type == "risks" %}
     {% set lorem = "For the chosen Use Case, select the relevant Risk item(s) and create any new items as appropriate, providing a short description of the item(s)." %}
 {% elseif type == "revenuesProtection" %}
-    {% set lorem = "lorem" %}
+    {% set lorem = "Please select or create revenue protection item(s)" %}
 {% endif %}
 
 

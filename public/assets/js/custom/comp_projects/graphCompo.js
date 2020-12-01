@@ -122,7 +122,7 @@ function updateBubbleChart(data, names, idCanvas, dataIndicator, indicators){
 
 function updateBarChart(data, names, idCanvas){
     colors = getColorsArray(data);
-    //console.log(data);
+    //console.log(data);.toLocaleString()
     var chart = new Chart(idCanvas, {
         type: 'bar',
         data: {
@@ -143,9 +143,25 @@ function updateBarChart(data, names, idCanvas){
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
+                        callback: function(value, index, values) {
+                            return value.toLocaleString();
+                              /*if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
+                                  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' '+currency;
+                              } else {
+                                  return value+' '+currency;
+                              }*/
+                          }
                     }
                 }]
-            }
+            },
+            plugins: {
+                datalabels: {
+                display: true,
+                formatter: (value, ctx) => {
+                                return value.toLocaleString();
+                            }
+                        }
+                }
 
         }
     });

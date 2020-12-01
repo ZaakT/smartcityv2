@@ -371,8 +371,9 @@ function comparisonCategoriePage($twig,$is_connected, $cat, $side="customer"){
     $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
     $dataIndicator = [
         'capex'=>["name"=>"Capex", "unit"=>$selDevSym],
-        'implementation'=>["Implementation"=>"Capex", "unit"=>$selDevSym],
+        'implementation'=>["name"=>"Implementation", "unit"=>$selDevSym],
         'opex'=>["name"=>"Opex", "unit"=>$selDevSym],
+        'revenues'=>["name"=>"Revenue", "unit"=>$selDevSym],
         'cashreleasing'=>["name"=>"Cash Releasing Benefits", "unit"=>$selDevSym],
         'widercash'=>["name"=>"Wider Cash Benefits", "unit"=>$selDevSym],
         'netcash'=>["name"=>"Net Cash", "unit"=>$selDevSym],
@@ -385,8 +386,8 @@ function comparisonCategoriePage($twig,$is_connected, $cat, $side="customer"){
         'socnpv'=>["name"=>"Societal NPV", "unit"=>$selDevSym],
         'roi'=>["name"=>"ROI", "unit"=>"%"],
         'socroi'=>["name"=>"Societal ROI", "unit"=>"%"],
-        'payback'=>["name"=>"Payback", "unit"=>"months"],
-        'socpayback'=>["name"=>"Societal Payback", "unit"=>"months"],
+        'payback'=>["name"=>"Payback", "unit"=>"month(s)"],
+        'socpayback'=>["name"=>"Societal Payback", "unit"=>"month(s)"],
 
     ];
     $cat2Indicator = [
@@ -430,7 +431,7 @@ function comparisonCategoriePage($twig,$is_connected, $cat, $side="customer"){
        
         echo $twig->render('/output/comparison_items/projects_item/general_comp.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
         'selDevName'=>$selDevName,'is_admin'=>$user[3],'compoData'=>$compoData,'projects'=>$projects, "side"=>$side, "list_compo" => $cat2Indicator[$cat],"list_bubble" => $cat2Bubble[$cat],
-        "cat2Indicator"=>$cat2Indicator[$cat], 'bubbleData'=>$bubbleData, "cat2Bubble"=>$cat2Bubble[$cat], "dataIndicator"=>$dataIndicator));
+        "cat2Indicator"=>$cat2Indicator[$cat], 'bubbleData'=>$bubbleData, "cat2Bubble"=>$cat2Bubble[$cat], "dataIndicator"=>$dataIndicator, "cat"=>$cat));
         prereq_compProjects();
 
     } else {

@@ -143,7 +143,7 @@
 
 {% macro insert_table_data(list_compo,dataIndicator,compoData,projects) %}
 <div class="row text-center">
-    <div class="offset-3 col-6 mt-3 mb-5 list-table">
+    <div class=" col mt-3 mb-5 list-table">
         <table id="sel_compo" class='table table-sm table-bordered table-striped table-responsive-lg'>
             <thead class="thead-dark text-center sticky-top">
                 <tr>
@@ -159,7 +159,7 @@
                         <td>{{projects[id_proj]['name']}}</td>
                         {% set id_compo = 0 %}
                         {% for data in projData %}
-                            <td class="dep_{{id_compo}}">{{data}} {{dataIndicator[list_compo[id_compo]]["unit"]}}</td>
+                            <td class="dep_{{id_compo}}">{{data|number_format(0, '.', ' ')}} {{dataIndicator[list_compo[id_compo]]["unit"]}}</td>
                             {% set id_compo = id_compo + 1  %}
                         {% endfor %}
                     </tr>

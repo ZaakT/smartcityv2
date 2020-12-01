@@ -11,11 +11,39 @@
 {% block title %}Compare Projects - Investment Indicators{% endblock %}
 
 
-{% set lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet varius neque, eget facilisis urna. Nunc sit amet libero varius erat interdum tempus. Morbi elit diam, malesuada vel iaculis at, fermentum sed metus. Quisque finibus urna et lorem varius aliquam. Aliquam molestie massa non lorem tincidunt aliquam. Fusce ullamcorper euismod arcu eu laoreet. Sed nec faucibus sem. " %}
+{% set lorem = "Please select the relevant indicators below to generate project comparison diagrams. " %}
+{#% if cat == "finsoc_comp" %}
+    {% set lorem %}
+        
+    {% endset %}
+{% elseif cat == "invest" %}
+    {% set lorem %}
+        Please select the relevant indicators below to generate project comparison diagrams.
+    {% endset %}
+{% elseif cat == "op" %}
+    {% set lorem %}
+        
+    {% endset %}
+{% elseif cat == "cash_flows" %}
+    {% set lorem %}
+        
+    {% endset %}
+{% elseif cat == "non_quant" %}
+    {% set lorem %}
+        
+    {% endset %}
+{% endif %#}
+
 {% block content %}
-<div class="row jumbotron text-light m-5 bg-dark p-3">
-    <h5 class="text-justify">{{lorem|nl2br}}</h5>
+<div class="row jumbotron text-light bg-dark m-5 p-3">
+    <div class = "col text-center">
+        <h5>{{lorem|nl2br}}</h5>
+    </div>
 </div>
+
+
+
+{{ macro.insert_table_data(list_compo,dataIndicator,compoData, projects) }}
 
 <div class="row">
     <div class="col">
@@ -23,12 +51,11 @@
     </div>
 </div>
 
-{{ macro.insert_table_data(list_compo,dataIndicator,compoData, projects) }}
 
 {{ macro.sel_compo_gen(list_compo, dataIndicator) }}
 <div class="row mt-5">
     <div class="col">
-        <h4 class="text-center text-dark">Investment Indicators Comparative Graph</h4>
+        <h4 class="text-center text-dark">Indicators Comparative Graph</h4>
     </div>
 </div>
 {{ macro.insert_graphes(list_compo,list_bubble, dataIndicator) }}
