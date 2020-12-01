@@ -2,7 +2,7 @@ import pymysql.cursors
 import pandas
 
 
-data = pandas.read_csv('C:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
+data = pandas.read_csv('D:/wamp64/www/smartcityv2/scripts Python/NTT_presentation/NTTItems.csv', sep=';', engine='python', header=None)
 
 
 def getSolution(j: int):
@@ -93,7 +93,7 @@ def get_uc_id_from_scope(scope :dict, sol_name: str, uc_name: str):
     return scope[sol_name]["set"][uc_name]
 
 
-def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: str, unit: str, side: str):
+def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: str, unit: str, side: str, origine: str):
     with connection.cursor() as cursor:
          if(xpexType == "Cash Releasing Benefits" ):
              pass
@@ -121,12 +121,13 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     IN range_max INT,
                                     IN cat INT,
                                     IN default_cost VARCHAR(255),
-                                    IN side VARCHAR(255)
+                                    IN side VARCHAR(255),
+                                    IN origine VARCHAR(255)
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO opex_item (name,description,cat, side)
-                                            VALUES (opex_name,opex_desc,cat, side);
+                                        INSERT INTO opex_item (name,description,cat, side, origine)
+                                            VALUES (opex_name,opex_desc,cat, side, origine);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO opex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -134,8 +135,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                             VALUES (itemID,unit,source,range_min,range_max, default_cost);
                                     END
                                     """)
-            sql = 'CALL add_opex(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side)
+            sql = 'CALL add_opex(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side, origine)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -175,12 +176,13 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     IN range_max INT,
                                     IN cat INT,
                                     IN default_cost VARCHAR(255),
-                                    IN side VARCHAR(255)
+                                    IN side VARCHAR(255),
+                                    IN origine VARCHAR(255)
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description, cat, unit, side)
-                                            VALUES (capex_name,capex_desc, cat, unit, side);
+                                        INSERT INTO capex_item (name,description, cat, unit, side, origine)
+                                            VALUES (capex_name,capex_desc, cat, unit, side, origine);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO capex_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -188,8 +190,8 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                             VALUES (itemID,unit,source,range_min,range_max, default_cost);
                                     END
                                     """)
-            sql = 'CALL add_capex(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side)
+            sql = 'CALL add_capex(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
+            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side, origine)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -253,12 +255,13 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     IN range_max INT,
                                     IN cat INT,
                                     IN default_cost VARCHAR(255),
-                                    IN side VARCHAR(255)
+                                    IN side VARCHAR(255),
+                                    IN origine VARCHAR(255)
                                     )
                                     BEGIN
                                         DECLARE itemID INT;
-                                        INSERT INTO implem_item (name,description,cat, side)
-                                            VALUES (implem_name,implem_desc,cat, side);
+                                        INSERT INTO implem_item (name,description,cat, side, origine)
+                                            VALUES (implem_name,implem_desc,cat, side, origine);
                                         SET itemID = LAST_INSERT_ID();
                                         INSERT INTO implem_uc (id_item,id_uc)
                                             VALUES (itemID,idUC);
@@ -266,7 +269,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                             VALUES (itemID,unit,source,range_min,range_max, default_cost);
                                     END  """)
             sql = 'CALL add_implem(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side)
+            toUpload = (ucName, "", uc_id, unit, "", inp[3], inp[4], id_cat, inp[0], side, origine)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -307,6 +310,7 @@ if __name__ == "__main__":
                             xpexType = "Dep "+cash_type
                         if(excel_xpex_type_to_bdd_xpex_type(xpexType) in scope[sol_name]["set"][uc_name]["list_xpex_cat_id"]): 
                             id_cat = scope[sol_name]["set"][uc_name]["list_xpex_cat_id"][excel_xpex_type_to_bdd_xpex_type(xpexType)]
-                            insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "# ASUs", "supplier")
+                            origine = "from_outside_ntt" if xpexType == "Capex" else "internal"                            
+                            insertXpexData(xpexType, inp, uc_id, id_cat, ucName, "# ASUs", "supplier", origine)
                 # pass
     
