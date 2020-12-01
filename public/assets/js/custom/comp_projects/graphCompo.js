@@ -35,7 +35,7 @@ function drawGraphs(){
             data.push(compoData[idProjTab[j]][listCompo[i]]);
             names.push(projects[idProjTab[j]]['name']);
         }
-        updateBarChart(data, names, "comp_graph_"+i);
+        updateBarChart(data, names, "comp_graph_"+i, dataIndicator, listCompo[i]);
     }
 
     for(let i = 0; i<cat2Bubble.length; i++){
@@ -98,19 +98,25 @@ function updateBubbleChart(data, names, idCanvas, dataIndicator, indicators){
         yAxes: [{
             ticks: {
                 beginAtZero: true,
+                callback: function(value, index, values) {
+                    return value.toLocaleString()+ ' ' + dataIndicator[indicators[1]]["unit"];
+                  }
             },
             scaleLabel: {
               display: true,
-              labelString: dataIndicator[indicators[1]]["name"] + ' (in '+dataIndicator[indicators[1]]["unit"]+')'
+              labelString: dataIndicator[indicators[1]]["name"] 
             }
         }],
         xAxes: [{
             ticks: {
                 beginAtZero: true,
+                callback: function(value, index, values) {
+                    return value.toLocaleString()+ ' ' + dataIndicator[indicators[0]]["unit"];
+                  }
             },
             scaleLabel: {
               display: true,
-              labelString: dataIndicator[indicators[0]]["name"] + ' (in '+dataIndicator[indicators[0]]["unit"]+')'
+              labelString: dataIndicator[indicators[0]]["name"] 
             }
         }]
     }
@@ -120,7 +126,7 @@ function updateBubbleChart(data, names, idCanvas, dataIndicator, indicators){
     
 }
 
-function updateBarChart(data, names, idCanvas){
+function updateBarChart(data, names, idCanvas, dataIndicator, indicators){
     colors = getColorsArray(data);
     //console.log(data);.toLocaleString()
     var chart = new Chart(idCanvas, {
@@ -144,7 +150,7 @@ function updateBarChart(data, names, idCanvas){
                     ticks: {
                         beginAtZero: true,
                         callback: function(value, index, values) {
-                            return value.toLocaleString();
+                            return value.toLocaleString()+ ' ' + dataIndicator[indicators]["unit"];
                               /*if (parseInt(value) >= 1000||parseInt(value) <= -1000) {
                                   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' '+currency;
                               } else {

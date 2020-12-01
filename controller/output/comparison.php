@@ -60,6 +60,8 @@ function projects_summary($twig,$is_connected, $side = "customer"){
     if(isset($_SESSION['selProjects'])){
         $selProjects  = $_SESSION['selProjects'];
         $projectsData = [];
+        $UCsSelected = [];
+        $ucs = getListUCs();
         foreach($selProjects as $key => $projID){
             $scope = getListSelScope($projID);
             $schedules = getListSelDates($projID);
@@ -83,18 +85,23 @@ function projects_summary($twig,$is_connected, $side = "customer"){
                     }else{
                         $solutionsSize[$sol['id']] = ["name"=>$sol['name'], "nb"=>1];
                     }
+
+                    if(!isset($UCsSelected[$ucID])){
+                        $UCsSelected[$ucID] = $sol['name']." / ".$ucs[$ucID]['name'];
+                    }
                 }
             }
+
             $projectsData[$projID] = ['scope'=>$scope,"solutionsSize"=>$solutionsSize,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration];
         }
+        var_dump($UCsSelected);
         $measures = getListMeasures();
-        $ucs = getListUCs();
         $devises = getListDevises();
         $selDevName = isset($_SESSION['devise_name']) ? $_SESSION['devise_name'] : $devises[1]['name'];
         $selDevSym = isset($_SESSION['devise_symbol']) ? $_SESSION['devise_symbol'] :  $devises[1]['symbol'];
         echo $twig->render('/output/comparison_items/projects_item/summary.twig',array('is_connected'=>$is_connected,'devises'=>$devises,'selDevSym'=>$selDevSym,
         'selDevName'=>$selDevName,'is_admin'=>$user[3],'projects'=>$projects,'selProjects'=>$selProjects,'projectsData'=>$projectsData,'measures'=>$measures,
-        'ucs'=>$ucs,"side"=>$side));
+        'ucs'=>$ucs,"side"=>$side, "UCsSelected"=>$UCsSelected));
         prereq_compProjects();
     } else {
         throw new Exception("There is no selected projects");

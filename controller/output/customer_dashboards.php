@@ -756,7 +756,7 @@ $equipment, $deployment, $operating, $periode){
     $expYear = explode("/", $year); 
     foreach ($projectYears as $yearKey) {
         $exp = explode("/", $yearKey);
-        if((($year>$yearKey &&  $periode == "year") || ($periode == "month" && ($expYear[1]>$exp[1] || ($expYear[1]==$exp[1] && $expYear[0]>$exp[0]) ))) && $yearKey!="tot"){
+        if((($year>=$yearKey &&  $periode == "year") || ($periode == "month" && ($expYear[1]>$exp[1] || ($expYear[1]==$exp[1] && $expYear[0]>=$exp[0]) ))) && $yearKey!="tot"){
             $net_cumulated_cash += $equipment[$yearKey]+ $deployment[$yearKey] + $operating[$yearKey] - ($capex_from_nttTot[$yearKey] + $implem_internalTot[$yearKey]+$implem_from_outside_nttTot[$yearKey] + $opex_internalTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]); 
 
         }
@@ -803,7 +803,7 @@ $UC_revenues, $cash_realeasing_benefits, $wider_cash_benefits, $periode){
     $expYear = explode("/", $year); 
     foreach ($projectYears as $yearKey) {
         $exp = explode("/", $yearKey);
-        if((($year>$yearKey &&  $periode == "year") || ($periode == "month" && ($expYear[1]>$exp[1] || ($expYear[1]==$exp[1] && $expYear[0]>$exp[0]) ))) && $yearKey!="tot"){
+        if((($year>=$yearKey &&  $periode == "year") || ($periode == "month" && ($expYear[1]>$exp[1] || ($expYear[1]==$exp[1] && $expYear[0]>=$exp[0]) ))) && $yearKey!="tot"){
             $net_cumulated_cash += $UC_revenues[$yearKey]+ $cash_realeasing_benefits[$yearKey] - ($capex_from_nttTot[$yearKey] + $capex_from_outside_nttTot[$yearKey] + $opex_from_nttTot[$yearKey]+$opex_from_outside_nttTot[$yearKey]+$opex_internalTot[$yearKey] + $implem_from_nttTot[$yearKey]+$implem_from_outside_nttTot[$yearKey]+$implem_internalTot[$yearKey]); 
             $wider_cumulated_cash_benefits += $wider_cash_benefits[$yearKey];
         }

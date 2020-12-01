@@ -31,6 +31,38 @@
 </div>
 {% endmacro %}
 
+{% macro scope(UCs, proj, projectsData, UCsSelected) %}
+    <div class="col list-table summary_projects">
+        <table class='table table-sm table-bordered table-striped table-responsive-lg '>
+            <thead class="thead-dark text-center sticky-top">
+                <th> Use Case </th>
+                {% for projID, projData in projectsData %}
+                    <th scope="col">{{proj[projID]['name']}}</th>
+                {% endfor %}
+            </thead>
+            <tbody>
+            {% for ucID, ucName in UCsSelected %}
+                <tr>
+                    <td>{{ucName}}
+                {% for projID, projData in projectsData %}
+                    <td>
+                        {% for listUC in projData["scope"] %}
+                            {% if ucID in listUC %}
+                                <div class = "text-center">
+                                    X
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endmacro %}
+
 {% macro summary_projects(projects,projectsData,measures,ucs) %}
 <div class="row text-center">
     <div class="col mt-5 mx-5 list-table summary_projects">
