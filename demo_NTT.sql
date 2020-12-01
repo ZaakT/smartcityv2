@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mar. 01 déc. 2020 à 10:10
+-- Généré le :  mar. 01 déc. 2020 à 12:04
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -27,16 +27,16 @@ DELIMITER $$
 -- Procédures
 --
 DROP PROCEDURE IF EXISTS `add_capex`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `range_min` INT, IN `range_max` INT, IN `cat` INT, IN `default_cost` VARCHAR(255), IN `side` VARCHAR(255), IN `origine` VARCHAR(255))  BEGIN
-                                        DECLARE itemID INT;
-                                        INSERT INTO capex_item (name,description, cat, unit, side, origine)
-                                            VALUES (capex_name,capex_desc, cat, unit, side, origine);
-                                        SET itemID = LAST_INSERT_ID();
-                                        INSERT INTO capex_uc (id_item,id_uc)
-                                            VALUES (itemID,idUC);
-                                        INSERT INTO capex_item_advice (id,unit,source,range_min,range_max, default_cost)
-                                            VALUES (itemID,unit,source,range_min,range_max, default_cost);
-                                    END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `add_capex` (IN `capex_name` VARCHAR(255), IN `capex_desc` VARCHAR(255), IN `idUC` INT, IN `idProj` INT, IN `origine` VARCHAR(255), IN `side` VARCHAR(255), IN `cat` INT)  BEGIN
+                                DECLARE itemID INT;
+                                INSERT INTO capex_item (name,description, origine, side, cat)
+                                    VALUES (capex_name,capex_desc, origine, side, cat);
+                                SET itemID = LAST_INSERT_ID();
+                                INSERT INTO capex_uc (id_item,id_uc)
+                                    VALUES (itemID,idUC);
+                                INSERT INTO capex_item_user (id,id_proj)
+                                    VALUES (itemID,idProj);
+                            END$$
 
 DROP PROCEDURE IF EXISTS `add_cashreleasing`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `add_cashreleasing` (IN `cashreleasing_name` VARCHAR(255), IN `cashreleasing_desc` VARCHAR(255), IN `unit` VARCHAR(255), IN `source` VARCHAR(255), IN `unit_cost` INT, IN `min_red_nb` INT, IN `max_red_nb` INT, IN `min_red_cost` INT, IN `max_red_cost` INT, IN `idUC` INT, IN `cat` INT, IN `default_cost` FLOAT)  BEGIN
@@ -403,7 +403,7 @@ CREATE TABLE IF NOT EXISTS `capex_item` (
   `unit` text,
   `cat` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1485 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1486 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item`
@@ -1856,7 +1856,8 @@ INSERT INTO `capex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`
 (1481, 'Short-term retention storage - M', '', 'from_outside_ntt', 'supplier', '# ASUs', 1714),
 (1482, 'Short-term retention storage - M', '', 'from_outside_ntt', 'supplier', '# ASUs', 1734),
 (1483, 'Short-term retention storage - M', '', 'from_outside_ntt', 'supplier', '# ASUs', 1724),
-(1484, 'Short-term retention storage - M', '', 'from_outside_ntt', 'supplier', '# ASUs', 1712);
+(1484, 'Short-term retention storage - M', '', 'from_outside_ntt', 'supplier', '# ASUs', 1712),
+(1485, 'test', '', 'from_ntt', 'customer', ' bonjour', 1606);
 
 -- --------------------------------------------------------
 
@@ -3238,7 +3239,7 @@ CREATE TABLE IF NOT EXISTS `capex_item_user` (
   `id_proj` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `id_proj` (`id_proj`)
-) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1486 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `capex_item_user`
@@ -3381,7 +3382,8 @@ INSERT INTO `capex_item_user` (`id`, `id_proj`) VALUES
 (179, 54),
 (180, 54),
 (181, 54),
-(186, 56);
+(186, 56),
+(1485, 76);
 
 -- --------------------------------------------------------
 
@@ -4718,6 +4720,7 @@ INSERT INTO `capex_uc` (`id_item`, `id_uc`) VALUES
 (1403, 202),
 (1439, 202),
 (1475, 202),
+(1485, 202),
 (864, 203),
 (900, 203),
 (936, 203),
@@ -5478,7 +5481,8 @@ INSERT INTO `deal_criteria_input_nogo_target` (`id`, `societal_npv_nogo`, `socie
 (69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
 (70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
 (72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
-(73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0');
+(73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '0'),
+(77, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 12, 6, 0, 0, 0, 0, 5, 20, 'npv_check-operating_margin_check-payback_check-');
 
 -- --------------------------------------------------------
 
@@ -7772,7 +7776,7 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (2071, 'O - ASU Range 1901 - 1950 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1523),
 (2072, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1508),
 (2073, 'O - ASU Range 1951 - 2000 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1523),
-(2074, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1370),
+(2074, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', '# ASUs', 1370),
 (2075, 'TVI - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1385),
 (2076, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1370),
 (2077, 'TVI - ASU Range 51 - 100 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1385),
@@ -8010,7 +8014,7 @@ INSERT INTO `implem_item` (`id`, `name`, `description`, `origine`, `side`, `unit
 (2308, 'HCTS - ASU Range 2026 - 2100 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1595),
 (2309, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1641),
 (2310, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1631),
-(2311, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1616),
+(2311, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', '', 1616),
 (2312, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1661),
 (2313, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1671),
 (2314, 'BC - ASU Range 1 - 50 - Deployment & set-up', '', 'internal', 'supplier', NULL, 1651),
@@ -13832,7 +13836,8 @@ INSERT INTO `input_capex` (`id_item`, `id_proj`, `id_uc`, `volume`, `unit_cost`,
 (179, 54, 66, NULL, NULL, NULL),
 (180, 54, 67, 30, 20, 3),
 (185, 30, 67, 0, 200, 0),
-(1403, 76, 202, 1, 650000, 0);
+(1403, 76, 202, 0, 650000, 0),
+(1485, 76, 202, 0, 10, 0);
 
 -- --------------------------------------------------------
 
@@ -13908,7 +13913,8 @@ INSERT INTO `input_cashreleasing` (`id_item`, `id_proj`, `id_uc`, `unit_indicato
 (38, 56, 48, '#', 30, NULL, 10000, 50, 30, 0, 0, '2020-09-30', 0),
 (42, 74, 143, '# of missing persons each month - kidnapping', 12.6, NULL, 1500, 0, 10, 0, 0, '2020-09-30', 0),
 (46, 74, 143, '# of missing persons each month - escape criminals', 5.5, NULL, 200000, 0, 10, 0, 0, '2020-09-30', 0),
-(67, 74, 149, 'Current # of security staff performing video monitoring', 1.3, NULL, 2353, 35, 0, 0, 0, '2020-09-30', 0);
+(67, 74, 149, 'Current # of security staff performing video monitoring', 1.3, NULL, 2353, 35, 0, 0, 0, '2020-09-30', 0),
+(78, 77, 179, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0001-01-01', 0);
 
 -- --------------------------------------------------------
 
@@ -13985,7 +13991,9 @@ INSERT INTO `input_implem` (`id_proj`, `id_item`, `id_uc`, `volume`, `unit_cost`
 (74, 1037, 143, 1, 72900),
 (75, 0, -1, NULL, NULL),
 (76, 0, 67, 100, 10),
+(76, 2311, 202, 0, 150120),
 (77, 0, -1, NULL, NULL),
+(77, 2074, 179, 1, 72900),
 (78, 0, 67, 100, 10),
 (79, 0, -1, NULL, NULL),
 (80, 0, 67, 100, 10),
@@ -14139,7 +14147,9 @@ INSERT INTO `input_opex` (`id_proj`, `id_item`, `id_uc`, `volume`, `ratio`, `uni
 (73, 0, -1, NULL, NULL, NULL, NULL, NULL),
 (74, 0, 66, NULL, NULL, NULL, NULL, NULL),
 (74, 1016, 143, 1, NULL, 9844, 0, 0),
-(75, 0, -1, NULL, NULL, NULL, NULL, NULL);
+(75, 0, -1, NULL, NULL, NULL, NULL, NULL),
+(76, 2297, 202, 1, NULL, 11588, 0, 0),
+(77, 2060, 179, 1, NULL, 9844, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -14455,7 +14465,10 @@ INSERT INTO `input_supplier_revenues` (`id_item`, `id_proj`, `id_uc`, `unit_cost
 (365, 72, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (366, 73, 41, 1702.1, 10, 0, 0, 0, '0001-01-01', 0),
 (692, 74, 143, 96957, 1, NULL, 0, 0, NULL, NULL),
-(732, 74, 143, 13093, 1, NULL, 0, 0, NULL, NULL);
+(732, 74, 143, 13093, 1, NULL, 0, 0, NULL, NULL),
+(1503, 77, 179, 96957, 1, NULL, 0, 0, NULL, NULL),
+(1543, 77, 179, 13093, 1, NULL, 0, 0, NULL, NULL),
+(1966, 76, 205, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -17460,7 +17473,7 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (2057, 'O - ASU Range 1901 - 1950 - PaaS', '', 'internal', 'supplier', NULL, 1515),
 (2058, 'O - ASU Range 1951 - 2000 - PaaS', '', 'internal', 'supplier', NULL, 1509),
 (2059, 'O - ASU Range 1951 - 2000 - PaaS', '', 'internal', 'supplier', NULL, 1515),
-(2060, 'TVI - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1371),
+(2060, 'TVI - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', '# ASUs', 1371),
 (2061, 'TVI - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1377),
 (2062, 'TVI - ASU Range 51 - 100 - PaaS', '', 'internal', 'supplier', NULL, 1371),
 (2063, 'TVI - ASU Range 51 - 100 - PaaS', '', 'internal', 'supplier', NULL, 1377),
@@ -17697,7 +17710,7 @@ INSERT INTO `opex_item` (`id`, `name`, `description`, `origine`, `side`, `unit`,
 (2294, 'HCTS - ASU Range 2026 - 2100 - PaaS', '', 'internal', 'supplier', NULL, 1587),
 (2295, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1633),
 (2296, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1623),
-(2297, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1617),
+(2297, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', '# ASUs', 1617),
 (2298, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1653),
 (2299, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1663),
 (2300, 'BC - ASU Range 1 - 50 - PaaS', '', 'internal', 'supplier', NULL, 1643),
@@ -23429,7 +23442,7 @@ CREATE TABLE IF NOT EXISTS `project` (
   `hide` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `id_user` (`id_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `project`
@@ -23443,9 +23456,9 @@ INSERT INTO `project` (`id`, `name`, `description`, `discount_rate`, `weight_ban
 (29, 'my Proj', '', NULL, NULL, NULL, '2020-10-23 16:34:27', '2020-10-26 15:08:25', 15, 1, 0, 0),
 (32, 'Test number 2', 'Monday 09', NULL, NULL, NULL, '2020-11-09 13:46:52', '2020-11-12 11:50:47', 16, 1, 0, 0),
 (46, 'SMART Bedrock ', '', NULL, NULL, NULL, '2020-11-16 14:48:30', '2020-11-19 12:20:23', 16, 1, 1, 0),
-(74, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-11-30 14:07:05', '2020-11-30 14:59:04', 16, 1, 0, 0),
 (75, 'test', '', NULL, NULL, NULL, '2020-11-30 23:30:43', '2020-11-30 23:30:51', 16, 0, 0, 0),
-(76, 'test 2', '', NULL, NULL, NULL, '2020-12-01 11:08:58', '2020-12-01 11:10:22', 16, 0, 1, 0);
+(76, 'test 2', '', NULL, NULL, NULL, '2020-12-01 11:08:58', '2020-12-01 11:45:10', 16, 0, 1, 0),
+(77, 'Las Vegas TVI', '', NULL, NULL, NULL, '2020-12-01 11:27:21', '2020-12-01 11:33:41', 16, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -23519,7 +23532,8 @@ INSERT INTO `project_dates` (`id_project`, `start_date`, `duration`, `deploy_sta
 (73, '2020-11-01', 36, '2020-11-01', 6),
 (74, '2020-11-01', 36, '2020-11-01', 3),
 (75, '2020-11-01', 36, '2020-11-01', 6),
-(76, '2020-12-01', 36, '2020-12-01', 6);
+(76, '2020-12-01', 36, '2020-12-01', 6),
+(77, '2020-11-01', 36, '2020-11-01', 3);
 
 -- --------------------------------------------------------
 
@@ -23764,7 +23778,8 @@ INSERT INTO `project_schedule` (`id_project`, `id_uc`, `deploy_start`, `deployme
 (73, 90, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
 (74, 143, '2020-11-01', 3, '2023-11-01', '2020-11-01', 6),
 (75, 163, '2020-11-01', 6, '2023-11-01', '2020-11-01', 6),
-(76, 202, '2020-12-01', 6, '2023-12-01', '2020-12-01', 6);
+(76, 202, '2020-12-01', 6, '2023-12-01', '2020-12-01', 6),
+(77, 179, '2020-11-01', 3, '2023-11-01', '2020-11-01', 0);
 
 -- --------------------------------------------------------
 
@@ -23958,6 +23973,7 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (74, 0),
 (75, 0),
 (76, 0),
+(77, 0),
 (1, 1),
 (4, 1),
 (5, 1),
@@ -24019,7 +24035,8 @@ INSERT INTO `proj_sel_measure` (`id_proj`, `id_meas`) VALUES
 (73, 25),
 (74, 25),
 (75, 25),
-(76, 25);
+(76, 25),
+(77, 25);
 
 -- --------------------------------------------------------
 
@@ -24436,7 +24453,9 @@ INSERT INTO `proj_sel_usecase` (`id_uc`, `id_proj`) VALUES
 (-1, 75),
 (163, 75),
 (-1, 76),
-(202, 76);
+(202, 76),
+(-1, 77),
+(179, 77);
 
 -- --------------------------------------------------------
 
@@ -26067,7 +26086,8 @@ INSERT INTO `supplier_perimeter` (`proj_id`, `country`, `city`, `name`, `area`) 
 (71, NULL, NULL, NULL, NULL),
 (72, NULL, NULL, NULL, NULL),
 (73, NULL, NULL, NULL, NULL),
-(74, 'USA', 'Las Vegas ', '', '');
+(74, 'USA', 'Las Vegas ', '', ''),
+(77, 'usa', 'Las Vegas', '', '');
 
 -- --------------------------------------------------------
 
@@ -26082,7 +26102,14 @@ CREATE TABLE IF NOT EXISTS `supplier_perimeter_data` (
   `type` enum('customerDepartment','customerTeam','supplierBusinessUnit','supplierTeam') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=123 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `supplier_perimeter_data`
+--
+
+INSERT INTO `supplier_perimeter_data` (`proj_id`, `data`, `type`, `id`) VALUES
+(77, 'IT', 'customerDepartment', 122);
 
 -- --------------------------------------------------------
 
@@ -27575,7 +27602,7 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (1500, 'O - ASU Range 1851 - 1900 - PaaS', 'operating', '', 'advice', '', 1511, 498370),
 (1501, 'O - ASU Range 1901 - 1950 - PaaS', 'operating', '', 'advice', '', 1511, 514593),
 (1502, 'O - ASU Range 1951 - 2000 - PaaS', 'operating', '', 'advice', '', 1511, 520855),
-(1503, 'TVI - ASU Range 1 - 50 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 96957),
+(1503, 'TVI - ASU Range 1 - 50 - Deployment & set-up', 'deployment', '', 'advice', '# ASUs', 1372, 96957),
 (1504, 'TVI - ASU Range 51 - 100 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 181977),
 (1505, 'TVI - ASU Range 101 - 150 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 238535),
 (1506, 'TVI - ASU Range 151 - 200 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 295094),
@@ -27615,7 +27642,7 @@ INSERT INTO `supplier_revenues_item` (`item_id`, `name`, `type`, `description`, 
 (1540, 'TVI - ASU Range 1851 - 1900 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 2331920),
 (1541, 'TVI - ASU Range 1901 - 1950 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 2388480),
 (1542, 'TVI - ASU Range 1951 - 2000 - Deployment & set-up', 'deployment', '', 'advice', '', 1372, 2445040),
-(1543, 'TVI - ASU Range 1 - 50 - PaaS', 'operating', '', 'advice', '', 1373, 13093),
+(1543, 'TVI - ASU Range 1 - 50 - PaaS', 'operating', '', 'advice', '# ASUs', 1373, 13093),
 (1544, 'TVI - ASU Range 51 - 100 - PaaS', 'operating', '', 'advice', '', 1373, 33301),
 (1545, 'TVI - ASU Range 101 - 150 - PaaS', 'operating', '', 'advice', '', 1373, 46393),
 (1546, 'TVI - ASU Range 151 - 200 - PaaS', 'operating', '', 'advice', '', 1373, 49524),
@@ -30509,7 +30536,9 @@ INSERT INTO `uc_confirmed` (`user_id`, `proj_id`, `meas_id`, `uc_id`, `selected`
 (16, 56, 25, 47, 1),
 (16, 56, 25, 48, 1),
 (16, 76, 0, -1, 1),
-(16, 76, 25, 202, 1);
+(16, 76, 25, 202, 1),
+(16, 77, 0, -1, 1),
+(16, 77, 25, 179, 1);
 
 -- --------------------------------------------------------
 
