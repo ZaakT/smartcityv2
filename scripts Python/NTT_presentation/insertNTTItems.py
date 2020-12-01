@@ -148,19 +148,20 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                 IN idUC INT,
                                 IN type_value VARCHAR(255),
                                 IN cat INT,
-                                IN default_rev FLOAT
+                                IN default_rev FLOAT,
+                                IN unit VARCHAR(255)
 
                                 )
                                 BEGIN
                                     DECLARE itemID INT;
-                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev)
-                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev);
+                                    INSERT INTO supplier_revenues_item (name,description, type, advice_user,cat,default_rev, unit)
+                                        VALUES (revenue_name,revenue_desc, type_value, "advice",cat,default_rev, unit);
                                     SET itemID = LAST_INSERT_ID();
                                     INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                         VALUES (itemID,idUC);
                                 END  """)
-            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
-            toUpload = (ucName, "", uc_id, "operating", id_cat, inp[0])
+            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s,%s);'
+            toUpload = (ucName, "", uc_id, "operating", id_cat, inp[0], unit)
             print(toUpload)
             cursor.execute(sql, toUpload)
             connection.commit()
@@ -240,7 +241,7 @@ def insertXpexData(xpexType: str, inp: list, uc_id: int, id_cat: int, ucName: st
                                     INSERT INTO supplier_revenues_uc (id_revenue,id_uc)
                                         VALUES (itemID,idUC);
                                 END  """)
-            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s);'
+            sql = 'CALL add_supplier_revenue(%s,%s,%s,%s,%s,%s,%s);'
             toUpload = (ucName, "", uc_id, "deployment", id_cat, inp[0], unit)
             print(toUpload)
             cursor.execute(sql, toUpload)
@@ -293,7 +294,7 @@ if __name__ == "__main__":
     scope = getScope()
     
     non = []
-    for j in range(2, 651):
+    for j in range(1, 651):
         sol_name = getSolution(j)
         if sol_name == "ALL": 
             list_sol = scope.keys()

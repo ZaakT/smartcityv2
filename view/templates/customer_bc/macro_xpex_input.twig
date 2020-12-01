@@ -14,7 +14,7 @@
         {% if type != "quantifiable" and type != "revenues" and type != "revenuesProtection" %}
             <td scope="col">
                 <div class="input-group justify-content-center">
-                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value={% if selXpex[id_xpex]['unit_cost'] %} "{{selXpex[id_xpex]['unit_cost']}}" {% elseif xpex[id_xpex]['unit_cost'] %} "{{xpex[id_xpex]['unit_cost']}}" {% elseif xpex[id_xpex]['default_cost'] %} "{{xpex[id_xpex]['default_cost']}}" {% else %} "{{xpex[id_xpex]['default_rev']}}" {% endif %} placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
+                   <input id="unitCost_{{id_xpex}}" name="unitCost_{{id_xpex}}_{{ucID}}" class="text-center unitCost pt-1 pb-1" type="number" min=0  step=0.001 required oninput="checkXpexAll();" value={% if selXpex[id_xpex]['unit_cost'] and selXpex[id_xpex]['unit_cost']!=0 %} "{{selXpex[id_xpex]['unit_cost']}}" {% elseif xpex[id_xpex]['unit_cost'] %} "{{xpex[id_xpex]['unit_cost']}}" {% elseif xpex[id_xpex]['default_cost'] %} "{{xpex[id_xpex]['default_cost']}}" {% else %} "{{xpex[id_xpex]['default_rev']}}" {% endif %} placeholder="{{ ratio[id_xpex]['val'] }}" {{Mode == "supplier" ? "disabled"}} style="width:60%;">
                     <div class="input-group-append">
                         <span class="input-group-text">{{selDevSym}}</span>
                     </div>
