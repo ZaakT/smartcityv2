@@ -51,8 +51,10 @@
         <a class="nav-item nav-link disabled" id="quantifiable" href="?A=cost_benefits&amp;A2=quantifiable&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="quantif-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Quantifiable Non Monetizable Benefits</a>
         <a class="nav-item nav-link disabled" id="noncash" href="?A=cost_benefits&amp;A2=noncash&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="ncb-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Non Cash Benefits</a>
         <a class="nav-item nav-link disabled" id="risks" href="?A=cost_benefits&amp;A2=risks&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="risks-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Risks</a>
+        {% if isDev %}
         <div class="dropdown-divider"></div>
         <a class="nav-item nav-link disabled" id="summary" href="?A=cost_benefits&amp;A2=summary&amp;projID={{ selectID }}">Summary</a>
+        {% endif %}
 
 
 
@@ -186,9 +188,11 @@
         <a class="nav-item nav-link disabled" id="capex" href="?A=input_use_case_supplier&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_use_case_supplier&amp;A2=deployment_costs&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_use_case_supplier&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
+        {% if isDev %}
         <div class="dropdown-divider"></div>
         <a class="nav-item nav-link disabled" id="summary" href="?A=input_use_case_supplier&amp;A2=summary&amp;projID={{selectID}}"><span id="summary-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Summary</a>
-    
+        {% endif %}
+
     {% elseif page=="supplier_comparison" %}
         <h4 class="nav-item text-center">Supplier BC <br>Input Use Case</h4>
         <a class="nav-item nav-link" id="supplier_comparison" href="?A=supplier_comparison"></span>Projects Selection</a>

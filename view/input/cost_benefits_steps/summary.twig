@@ -5,13 +5,13 @@
 {% import "/templates/cost_benefits_in/macro_summary.twig" as list %}
 {% import "/templates/cost_benefits_in/modal_summary.twig" as modal %}
 
-
+{% if isSup %}{% set sideBarNameToShow = "" %}{% else %}{% set sideBarNameToShow = sideBarName %}{% endif %}
 
 
 
 {% block title %}Project Scoping - Summary{% endblock %}
 
-{% block sidebar %}{{ sidebar.sidebar(sideBarName,projID,ucID) }}{% endblock %}
+{% block sidebar %}{{ sidebar.sidebar(sideBarNameToShow,projID,ucID) }}{% endblock %}
 
 {% block content %}
 
