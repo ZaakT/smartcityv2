@@ -37,7 +37,7 @@
         <h4 class="nav-item text-center"> {% if isDev %} {{'- Input -\n Cost Benefits'|nl2br}} {% else %}{{'Customer BC - Input'|nl2br}} {% endif %}</h4>        
         <div class="dropdown-divider"></div>
         <h4 class = "nav-item text-center">Cash-out</h4>
-        <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=cost_benefits&amp;A2=capex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Equipment</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=cost_benefits&amp;A2=deployment_costs&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="implem-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>{{isDev ? "Implementation" : "Deployment"}}</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=cost_benefits&amp;A2=opex&amp;projID={{ selectID }}&amp;ucID={{ selectID2 }}">&nbsp;&nbsp;&nbsp;<span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         <div class="dropdown-divider"></div>
@@ -135,7 +135,7 @@
     <!-- - Customer BC -->
     {% elseif page=="input_project_common" %}
         <h4 class="nav-item text-center">Customer BC - Input </h4>
-        <a class="nav-item nav-link disabled" id="capex" href="?A=input_project_common&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=input_project_common&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Equipment</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_project_common&amp;A2=deployment_costs&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment Costs</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_project_common&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         {#<a class="nav-item nav-link disabled" id="deal_criteria" href="?A=input_project_common&amp;A2=deal_criteria&amp;projID={{selectID}}"><span id="deal_criteria-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deal Criteria</a>#}
@@ -161,7 +161,7 @@
 
         <div class="dropdown-divider"></div>
         <h4 class = "nav-item text-center">Cash-out</h4>
-        <a class="dropdown-item disabled" id="capex" href="?A=input_project_common_supplier&amp;A2=capex&amp;projID={{selectID}}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="dropdown-item disabled" id="capex" href="?A=input_project_common_supplier&amp;A2=capex&amp;projID={{selectID}}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Equipment</a>
         <a class="dropdown-item disabled" id="deployment_costs" href="?A=input_project_common_supplier&amp;A2=deployment_costs&amp;projID={{selectID}}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment</a>
         <a class="dropdown-item disabled" id="opex" href="?A=input_project_common_supplier&amp;A2=opex&amp;projID={{selectID}}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         <div class="dropdown-divider"></div>
@@ -185,7 +185,7 @@
         
         <div class="dropdown-divider"></div>
         <h4 class = "nav-item text-center">Cash-Out</h4>
-        <a class="nav-item nav-link disabled" id="capex" href="?A=input_use_case_supplier&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Capex</a>
+        <a class="nav-item nav-link disabled" id="capex" href="?A=input_use_case_supplier&amp;A2=capex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="capex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Equipment</a>
         <a class="nav-item nav-link disabled" id="deployment_costs" href="?A=input_use_case_supplier&amp;A2=deployment_costs&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="deployment_costs-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Deployment</a>
         <a class="nav-item nav-link disabled" id="opex" href="?A=input_use_case_supplier&amp;A2=opex&amp;projID={{selectID}}&amp;ucID={{ selectID2 }}"><span id="opex-item" class="progress-item oi oi-check d-none mr-2" title="check" aria-hidden="true"></span>Opex</a>
         {% if isDev %}
@@ -239,7 +239,7 @@
             <a href="#UCInputSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-item nav-link"><span class="oi oi-spreadsheet nav-link" title="spreadsheet" aria-hidden="true"></span>Cost Benefits Items</a>
             <ul class="collapse list-unstyled" id="UCInputSubmenu">
                 <li>
-                    <a class="nav-item nav-link" id="manage_capex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_capex_item">Capex Item</a>
+                    <a class="nav-item nav-link" id="manage_capex_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_capex_item">Equipment Item</a>
                 </li>
                 <li>
                    <a class="nav-item nav-link" id="manage_implem_item" href="?A=admin&amp;A2=manage_db&amp;A3=manage_implem_item">Implementation Item</a>

@@ -2832,8 +2832,8 @@ function getListSupplierRevenuesUser($uc_ID, $projID, $revenueType){
                         ORDER BY name
                             ;");
 
-
     foreach($ucIDList as $ucID){
+
         $req->execute(array($ucID, $revenueType, $projID));
 
         while($row = $req->fetch()){
@@ -2848,7 +2848,6 @@ function getListSupplierRevenuesUser($uc_ID, $projID, $revenueType){
             }
         }
     }
-    //var_dump($list);
     return $list;
 }
 
@@ -3682,12 +3681,16 @@ function getListXpexSupplier($ucID, $projID, $list_selXpex, $xpexType){
         throw new Exception(" 3.1 : wrong xpex type !: ".$xpexType);
     }
     $list =getListSupplierRevenuesUser($ucID, $projID, $revenueType);  
-    foreach($list as $xpexID=>$xpexData){
-        if(!isset($list_selXpex[$xpexID])){
-            unset($list[$xpexID]);
+    $list_advice = getListSupplierRevenuesAdvice($ucID, $revenueType);
+    $list_test = [];
+    foreach($list_selXpex as $xpexID=>$xpexData){
+        if(isset($list[$xpexID])){
+            $list_test[$xpexID] = $list[$xpexID];
+        }elseif(isset($list_advice[$xpexID])){
+            $list_test[$xpexID] = $list_advice[$xpexID];
         }
     }
-    return $list;
+    return $list_test;
 }
 // ------------------------------------ PROJECR KEY DATES (COMMON SCHEDULE) ------------------
 function getProjetKeyDates($projID) {

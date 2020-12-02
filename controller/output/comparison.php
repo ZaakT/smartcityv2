@@ -91,8 +91,10 @@ function projects_summary($twig,$is_connected, $side = "customer"){
                     }
                 }
             }
-
-            $projectsData[$projID] = ['scope'=>$scope,"solutionsSize"=>$solutionsSize,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration];
+            $keydates_proj = getKeyDatesProjSupplier($projID);
+            $projectYears = getYears($keydates_proj[0],$keydates_proj[2]);
+            //var_dump(getNetCumulatedCash($projID, $scope, $projectYears, $side, "year"));
+            $projectsData[$projID] = ['scope'=>$scope,"solutionsSize"=>$solutionsSize,'start_date'=>$start_date,'duration_Y'=>$duration_Y,'duration_M'=>$duration_M,'duration'=>$duration, 'cumul_net_cash'=>0];
         }
         $measures = getListMeasures();
         $devises = getListDevises();

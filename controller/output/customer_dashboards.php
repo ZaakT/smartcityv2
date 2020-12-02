@@ -860,14 +860,12 @@ function dashboards_use_case_details($twig,$is_connected, $projID, $sideBarName,
             $ucsData= getUcsData($projID, $selScope, $projectYears, $scope, $side);    
             
 
-            /*foreach ($selScope as $measID => $listUcs) {
+            foreach ($selScope as $measID => $listUcs) {
                 foreach ($listUcs as $ucID) {
-                    if(!hasSchedule($projID, $ucID)){
-                        $list_ucs[$ucID]['name'].= " (no Data)";
+                    $list_ucs[$ucID]['name']= $ucID != -1 ? getSolutionByUcID($ucID)['name']." / ".$list_ucs[$ucID]['name'] : $list_ucs[$ucID]['name'];
 
-                    }
                 }
-            }*/
+            }
             //print_r($ucsData);   
             
             $months = getMonthsProj($projID, $scope);
@@ -983,6 +981,7 @@ function dashboards_non_monetizable($twig,$is_connected, $projID){
                         
                     }
                     if(empty($data[$ucID])){
+                        $ucs[$ucID]['name']= $ucID != -1 ? getSolutionByUcID($ucID)['name']." / ".$ucs[$ucID]['name'] : $ucs[$ucID]['name'];
                         $ucs[$ucID]['name'].=" (no data to show)";
                     }
                 }
@@ -1041,6 +1040,7 @@ function dashboards_qualitative($twig,$is_connected, $projID){
                         $nonCashMean = $nonCashMean/$nbNonCash;
                         array_push($data[$ucID], ["Mean", $nonCashMean]);
                     }else{
+                        $ucs[$ucID]['name']= $ucID != -1 ? getSolutionByUcID($ucID)['name']." / ".$ucs[$ucID]['name'] : $ucs[$ucID]['name'];
                         $ucs[$ucID]['name'].=" (no data to show)";
                     }
                 

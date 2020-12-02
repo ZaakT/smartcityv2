@@ -31,28 +31,10 @@
                 </div>  
 
                 {# # OF UC #}
-                {% if side == "supplier" %}
                 <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">{{traduction.getText("bankability")}}</h3>
-                    {{ macros.project_score(bankability_lineNames, sideBarName, bankability_target['nogo']['checked']) }}
-                    {#{ table.table(bankability_lineNames, bankabakity_colNames, selDevSym, "table", "", "") }#}
-                        <div class="text-center">
-                            <span id="errorInput" style="color:red;"></span>
-                        </div>
-                </div> 
-                {% elseif side == "customer" %}
-                <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">{{traduction.getText("financial_bankability")}}</h3>
-                    {{ macros.project_score(bankability_lineNames1, sideBarName) }}
-                </div> 
-                                <div class="dash-bg-light container-fluid p-3 mt-4">
-                <h3 class="dash-title mb-3">{{traduction.getText("societal_bankability")}}</h3>
-                    {{ macros.project_score(bankability_lineNames2, sideBarName) }}
-                        <div class="text-center">
-                            <span id="errorInput" style="color:red;"></span>
-                        </div>
-                </div> 
-                {% endif %}   
+                <h3 class="dash-title mb-3">Cumulated Net Cash</h3>
+                    <span id="chart_cumul_net_cash"><span>
+                </div>    
             </div>            
             
             {# BUGDET #}
@@ -65,19 +47,15 @@
             <div class="dash-bg container-fluid m-1 ml-2 p-4">
                 {# KEY DATES #}
                 <div class="dash-bg-light container-fluid p-3">
+                <h3 class="dash-title mb-3">Schedule</h3>
                     {{ macros.key_dates(scope,ucs,keydates_uc,uc_completed, propKeyDates) }}
                 </div>
-            </div>            
+            </div>    
             <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                    <div class="dash-bg-light container-fluid p-3">
-                        <h3 class="dash-title mb-3">{% if sideBarName == "customer_dashboards" %} {{traduction.getText("benef_breakdown")}} {% else %} {{traduction.getText("cash-in")}}  {% endif %} {{traduction.getText("dashboard_summary_1")}}</h3>
-                        <canvas id="repartitionOfBenefits" height="150px"/> 
-                    </div>
-            </div>
-            <div class="dash-bg container-fluid m-1 ml-2 mt-4 p-4">
-                    <div class="dash-bg-light container-fluid p-3">
-                        {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
-                    </div>
+                <div class="dash-bg-light container-fluid p-3">
+                <h3 class="dash-title mb-3">Key Financials</h3>
+                    {{ macros.costbenefits(years, cumulnetcashTot, cumulnetsoccashTot) }}
+                </div>
             </div>
 
 

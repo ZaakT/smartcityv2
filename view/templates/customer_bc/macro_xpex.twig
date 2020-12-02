@@ -72,12 +72,18 @@
 
                 {% if print1 or print2 or print3 %}
                     <tr class="table-primary" onclick = "hide({{categoryID}});" style="cursor: pointer;" >
-                        <td>
-                            <span class="oi oi-chevron-bottom cat_{{categoryID}}" title="oi-chevron-bottom" aria-hidden="true"></span>
-                            <span hidden="true" class="oi oi-chevron-left cat_{{categoryID}}" title="oi-chevron-left" aria-hidden="true"></span>
-                        </td>
                         
-                        <td colspan="{{size}}"> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></td>
+                        <td colspan="100%">
+                            <div class="row justify-content-md-center">
+                                <div>
+                                    <span class="oi oi-chevron-bottom cat_{{categoryID}}" title="oi-chevron-bottom" aria-hidden="true"></span>
+                                    <span hidden="true" class="oi oi-chevron-left cat_{{categoryID}}" title="oi-chevron-left" aria-hidden="true"></span> 
+                                </div>
+                                <div class = "col-md-auto">
+                                    <h5> <strong> {{xpexCategories[xpexCategories|keys[0]][categoryID]}} </strong></h5>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     
 

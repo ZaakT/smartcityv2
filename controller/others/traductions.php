@@ -119,7 +119,7 @@ $GLOBALS['dicTrad']=[
     ],
     # *** xPex ***
     "capex" => [
-        "en"=>"Capex"
+        "en"=>"Equipment"
     ],
     "opex" => [
         "en"=>"Opex"

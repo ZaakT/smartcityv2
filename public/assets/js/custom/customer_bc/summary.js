@@ -298,25 +298,32 @@ function updateBankability(){
   if(data.length==0){
     $("#errorInput").text("Error: make sure Deal Criteria is completed.");
   }else{
-    $("#display_operatingMargin").text(data.operating_margin_target+" %");
-    $("#display_payback").text(data.payback_target+" months");
-    $("#display_societalPayback").text(data.societal_payback_target+" months");
-    $("#display_roi").text(data.roi_target+" %");
-    $("#display_societalRoi").text(data.societal_roi_target+" %");
-    $("#display_npv").text(selDevSym+" "+data.npv_target);  
-    $("#display_societalNpv").text(selDevSym+" "+data.societal_npv_target);
-    $("#display_nqb").text(data.nqbr_target+"/10");
-    $("#display_risk").text(data.rr_target+"/10");
-
-    $("#current_operatingMargin").text(current.fin_operating_margin+" %");
-    $("#current_payback").text(current.fin_payback+" months");
-    $("#current_societalPayback").text(current.fin_societal_payback+" months");
-    $("#current_roi").text(current.fin_roi+" %");
-    $("#current_societalRoi").text(current.fin_societal_roi+" %");
-    $("#current_npv").text(selDevSym+" "+Math.round(current.fin_npv));  
-    $("#current_societalNpv").text(selDevSym+" "+current.fin_societal_npv);
-    $("#current_nqb").text(current.nqb.toFixed(2)+"/10");
-    $("#current_risk").text(current.rating_risks.toFixed(2)+"/10");
+    $("#display_operatingMargin").text(data.operating_margin_target.toLocaleString()+" %");
+    $("#display_payback").text(data.payback_target.toLocaleString()+" months");
+    $("#display_societalPayback").text(data.societal_payback_target.toLocaleString()+" months");
+    $("#display_roi").text(data.roi_target.toLocaleString()+" %");
+    $("#display_societalRoi").text(data.societal_roi_target.toLocaleString()+" %");
+    $("#display_npv").text(selDevSym+" "+data.npv_target).toLocaleString();  
+    $("#display_societalNpv").text(selDevSym+" "+data.societal_npv_target.toLocaleString());
+    if(data.nqbr_target>=0){
+      $("#display_nqb").text(data.nqbr_target.toLocaleString()+"/10");
+    }
+    if(data.rr_target>=0){
+      $("#display_risk").text(data.rr_target.toLocaleString()+"/10");
+    }
+    //$("#current_operatingMargin").text(current.fin_operating_margin.toLocaleString()+" %");
+    $("#current_payback").text(current.fin_payback.toLocaleString()+" months");
+    $("#current_societalPayback").text(current.fin_societal_payback.toLocaleString()+" months");
+    $("#current_roi").text(current.fin_roi.toLocaleString()+" %");
+    $("#current_societalRoi").text(current.fin_societal_roi.toLocaleString()+" %");
+    $("#current_npv").text(selDevSym+" "+Math.round(current.fin_npv).toLocaleString());  
+    $("#current_societalNpv").text(selDevSym+" "+current.fin_societal_npv.toLocaleString());
+    if(data.nqb>=0){
+      $("#current_nqb").text(current.nqb.toFixed(2).toLocaleString()+"/10");
+    }
+    if(data.rating_risks>=0){
+      $("#current_risk").text(current.rating_risks.toFixed(2).toLocaleString()+"/10");
+    }
   }
 
 }
@@ -534,5 +541,6 @@ var repartitionOfBenefits = new Chart($('#repartitionOfBenefits'), {
     }
   }
 });
+
 
 
